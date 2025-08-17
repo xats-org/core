@@ -36,19 +36,13 @@ The latest released version of the JSON Schema should be available using the url
 
 ### b. Documentation
 
-Complete schema documentation can be found in the docs repository. Documentation in this repository pertains to the development of
-the schema itself and other components that are core to the schema.
+Complete schema documentation can be found in this repository. Documentation is organized to serve both contributors and consumers of the schema.
 
 - **[Contributing Guide](./CONTRIBUTING.md):** Document explaining the process and rules for contributing to this project.
 - **[Architectural Decision Record (ADR)](./docs/ARCHITECTURE.md)**: Rationale for the architecture of xats and related components.
-
-The docs repository contains documentation aimed at consumers of the schema. This is a separate repository to the
-core repository. If all repositories are cloned together, it can be found in a sibling directory to the core project in 
-a folder called docs. Documentation in that repository (with locations relative to this repo) includes:
-
-- **[Quickstart Tutorial](../docs/guides/quickstart-tutorial.md):** The best place to start. A hands-on guide to creating your first `xats` document.
-- **[Authoring Guide](../docs/guides/authoring-guide.md):** Best practices for authors and AI agents creating `xats` content.
-- **[Schema Reference Guide](../docs/reference/index.md):** The complete, exhaustive reference for every object and property in the schema.
+- **[Quickstart Tutorial](./docs/QUICKSTART_TUTORIAL.md):** The best place to start. A hands-on guide to creating your first `xats` document.
+- **[Authoring Guide](./docs/guides/authoring-guide.md):** Best practices for authors and AI agents creating `xats` content.
+- **[Schema Reference Guide](./docs/reference/index.md):** The complete, exhaustive reference for every object and property in the schema.
 
 ### c. A Minimal Example
 

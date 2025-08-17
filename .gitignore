@@ -34,8 +34,96 @@
 ehthumbs.db
 Thumbs.db
 
-# Other
+# IDE and Editor files
+## VSCode
+.vscode/
+*.code-workspace
+.history/
+*.vsix
+
+## JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+## Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+## Vim
+*.swp
+*.swo
+*~
+.*.swp
+.*.swo
+
+## Emacs
+*~
+\#*\#
+.\#*
+.emacs.desktop
+.emacs.desktop.lock
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+.yarn/
+.pnp.*
+.yarn-integrity
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.Python
+venv/
+env/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Build outputs
+dist/
+build/
+out/
+target/
+
+# Claude-specific
+.claude/.mcp.json*
+.claude/settings.local.json*
+.claude/memory/agents/
+.claude/memory/meetings/
+.claude/memory/issues/
+.claude/memory/decisions/
+.claude/memory/context/
+.claude/memory/designs/
+
+# Project-specific
 .notes
-.claude
 CLAUDE.md
 .mcp.json
+core.code-workspace
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+tmp/
+temp/
