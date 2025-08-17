@@ -19,7 +19,15 @@ You are conducting an issue triage session for the xats project. Your role is to
 - **labels** (optional): Filter to specific issue types
 - **milestone** (optional): Focus on a particular release
 
-## Memory Integration
+## GitHub Issue Requirements
+
+### MANDATORY for All Issues
+1. **Milestone**: Must be assigned (v0.1.0, v0.2.0, v0.3.0, or future versions)
+2. **Project**: Add to xats-core project (https://github.com/orgs/xats-org/projects/2)
+3. **Labels**: Minimum of priority:X and type:X
+4. **Relationships**: Document dependencies and related issues
+
+### Memory Integration
 
 ### Before Triage
 1. Load previous triage decisions for consistency
@@ -28,6 +36,8 @@ You are conducting an issue triage session for the xats project. Your role is to
 
 ### During Triage
 1. Create/update issue memory: `.claude/memory/issues/issue-XXX/`
+2. Ensure all mandatory metadata is present
+3. Add relationships: `Depends on #X`, `Blocks #Y`, `Related to #Z`
 2. Record triage rationale and board input
 3. Track priority changes and reasons
 

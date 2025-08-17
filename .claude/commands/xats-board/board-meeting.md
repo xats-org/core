@@ -51,15 +51,15 @@ Based on the topic, invoke the relevant agents:
 4. Gather recent stakeholder feedback if applicable
 
 ### During Meeting
-1. Create meeting folder: `.claude/memory/meetings/YYYY-MM-DD/`
-2. Save agenda with topics
+1. Create meeting folder: `.claude/memory/meetings/YYYY-MM-DD-HHMM/` (24-hour format)
+2. Save agenda with topics to `agenda.md`
 3. Record discussion points in real-time
 4. Track decisions and dissenting opinions
 
 ### After Meeting
-1. Save meeting minutes to memory
-2. Update decision records
-3. Create action items with assignees
+1. Save meeting minutes to `.claude/memory/meetings/YYYY-MM-DD-HHMM/minutes.md`
+2. Save action items to `.claude/memory/meetings/YYYY-MM-DD-HHMM/action-items.json`
+3. Update decision records in `.claude/memory/decisions/`
 4. Update shared context with outcomes
 
 ## Process
@@ -74,8 +74,21 @@ Based on the topic, invoke the relevant agents:
 
 ## Output
 
-- **Meeting Minutes**: Document saved to `.claude/memory/meetings/YYYY-MM-DD/minutes.md`
-- **Action Items**: JSON file with tasks and assignees saved to memory
-- **GitHub Issues**: Created for concrete tasks requiring implementation
+- **Meeting Minutes**: Document saved to `.claude/memory/meetings/YYYY-MM-DD-HHMM/minutes.md`
+- **Action Items**: JSON file saved to `.claude/memory/meetings/YYYY-MM-DD-HHMM/action-items.json`
+- **GitHub Issues**: Created with MANDATORY metadata:
+  - Milestone (v0.1.0, v0.2.0, or v0.3.0)
+  - Project (xats-core)
+  - Labels (priority, type, component)
+  - Relationships (dependencies, related issues)
 - **Decision Record**: ADR if architectural decision made, saved to `.claude/memory/decisions/`
 - **Context Update**: Shared context updated with meeting outcomes
+
+## GitHub Issue Requirements
+
+When creating issues from board meetings:
+1. **Always assign milestone** based on target version
+2. **Always add labels**: priority:X, type:X, component:X
+3. **Document relationships** in issue body (Depends on #X, Blocks #Y)
+4. **Add to xats-core project** (if permissions allow)
+5. **Include acceptance criteria** in issue body
