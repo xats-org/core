@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/core/blocks/definition",
+  "title": "Definition Block",
+  "description": "A semantic callout block for defining key terms",
+  "type": "object",
+  "properties": {
+    "blockType": {
+      "const": "https://xats.org/core/blocks/definition",
+      "description": "The URI identifier for this block type"
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "term": {
+          "type": "string",
+          "description": "The term being defined"
+        },
+        "definition": {
+          "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
+          "description": "The definition of the term as a SemanticText object"
+        }
+      },
+      "required": ["term", "definition"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["blockType", "content"],
+  "examples": [
+    {
+      "blockType": "https://xats.org/core/blocks/definition",
+      "content": {
+        "term": "Mitochondria",
+        "definition": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "Membrane-bound organelles found in eukaryotic cells that generate most of the cell's supply of "
+            },
+            {
+              "type": "emphasis",
+              "text": "adenosine triphosphate (ATP)"
+            },
+            {
+              "type": "text",
+              "text": ", used as a source of chemical energy."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "blockType": "https://xats.org/core/blocks/definition",
+      "content": {
+        "term": "Photosynthesis",
+        "definition": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "The process by which green plants and some other organisms use sunlight to synthesize foods from carbon dioxide and water."
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
