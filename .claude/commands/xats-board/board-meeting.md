@@ -1,7 +1,7 @@
 ---
 name: board-meeting
 description: Convenes the full xats standards board to discuss major decisions, review proposals, and set strategic direction
-model: opus
+model: claude-3-5-sonnet-latest
 arguments:
   topics:
     description: Specific topics to focus the meeting on (comma-separated)

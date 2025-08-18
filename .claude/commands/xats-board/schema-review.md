@@ -1,7 +1,7 @@
 ---
 name: schema-review
 description: Conducts thorough technical and pedagogical review of proposed schema changes before implementation
-model: opus
+model: claude-3-5-sonnet-latest
 arguments:
   pr:
     description: Pull request number to review
