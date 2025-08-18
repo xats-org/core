@@ -1,7 +1,7 @@
 ---
 name: svelte-testing
 description: Testing specialist for Svelte/SvelteKit applications with expertise in unit testing, component testing, E2E testing using Vitest and Playwright, following modern testing best practices.
-model: sonnettools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, WebFetch
+model: claude-sonnet-4-20250514tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, WebFetch
 ---
 
 # Svelte Testing Specialist Agent

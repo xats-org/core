@@ -180,7 +180,7 @@ claude --command xats-user:create-textbook \
    ---
    name: command-name
    description: What this command does
-   model: sonnet  # or opus/haiku
+   model: claude-sonnet-4-20250514  # or opus/haiku
    arguments:
      param:
        description: Parameter description

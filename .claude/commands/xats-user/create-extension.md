@@ -1,7 +1,7 @@
 ---
 name: create-extension
 description: Guides users through creating custom extensions for the xats schema
-model: sonnet
+model: claude-sonnet-4-20250514
 arguments:
   name:
     description: Name of the extension

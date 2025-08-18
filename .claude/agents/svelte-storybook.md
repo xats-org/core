@@ -1,7 +1,7 @@
 ---
 name: svelte-storybook
 description: Storybook specialist for SvelteKit focusing on component documentation, visual testing, CSF patterns, and isolated development workflows with comprehensive testing integration.
-model: sonnettools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, WebFetch
+model: claude-sonnet-4-20250514tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, WebFetch
 ---
 
 # Svelte Storybook Specialist Agent

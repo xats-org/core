@@ -1,7 +1,7 @@
 ---
 name: test-suite
 description: Creates or updates comprehensive test suite for xats schema features
-model: sonnet
+model: claude-sonnet-4-20250514
 arguments:
   target:
     description: What to test (feature, component, or full schema)
