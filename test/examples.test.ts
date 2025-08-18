@@ -5,8 +5,8 @@
 
 import { describe, it, expect, beforeAll } from 'vitest';
 import { readdirSync, readFileSync, existsSync, mkdirSync, writeFileSync } from 'fs';
-import { join, basename } from 'path';
-import { validateXatsFile, validateXats } from '../src/validator.js';
+import { join } from 'path';
+import { validateXatsFile } from '../src/validator.js';
 
 const EXAMPLES_DIR = join(process.cwd(), 'examples');
 const INVALID_EXAMPLES_DIR = join(EXAMPLES_DIR, 'invalid');
@@ -66,7 +66,7 @@ describe('Example Document Validation', () => {
             const content = JSON.parse(readFileSync(filePath, 'utf8'));
             
             // Helper function to check blockTypes recursively
-            function checkBlockTypes(obj: any): string[] {
+            function checkBlockTypes(obj: unknown): string[] {
               const blockTypes: string[] = [];
               
               if (obj && typeof obj === 'object') {
@@ -76,7 +76,7 @@ describe('Example Document Validation', () => {
                 
                 for (const key in obj) {
                   if (Array.isArray(obj[key])) {
-                    obj[key].forEach((item: any) => {
+                    obj[key].forEach((item: unknown) => {
                       blockTypes.push(...checkBlockTypes(item));
                     });
                   } else if (typeof obj[key] === 'object') {
@@ -102,7 +102,7 @@ describe('Example Document Validation', () => {
             
             // Collect all IDs in the document
             const ids = new Set<string>();
-            function collectIds(obj: any) {
+            function collectIds(obj: unknown) {
               if (obj && typeof obj === 'object') {
                 if (obj.id) {
                   ids.add(obj.id);
@@ -119,7 +119,7 @@ describe('Example Document Validation', () => {
             collectIds(content);
             
             // Check all references point to existing IDs
-            function checkReferences(obj: any) {
+            function checkReferences(obj: unknown) {
               if (obj && typeof obj === 'object') {
                 if (obj.type === 'reference' && obj.target) {
                   expect(ids.has(obj.target)).toBe(true);
@@ -140,11 +140,11 @@ describe('Example Document Validation', () => {
             const content = JSON.parse(readFileSync(filePath, 'utf8'));
             
             // Check all SemanticText objects
-            function checkSemanticText(obj: any) {
+            function checkSemanticText(obj: unknown) {
               if (obj && typeof obj === 'object') {
                 if (obj.runs && Array.isArray(obj.runs)) {
                   // Each run should have a type
-                  obj.runs.forEach((run: any) => {
+                  obj.runs.forEach((run: unknown) => {
                     expect(run).toHaveProperty('type');
                     expect(['text', 'reference', 'citation', 'emphasis', 'strong']).toContain(run.type);
                     

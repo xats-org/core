@@ -11,11 +11,11 @@ import { tmpdir } from 'os';
 
 const PROJECT_ROOT = resolve(process.cwd());
 const CLI_PATH = resolve(PROJECT_ROOT, 'bin/validate.js');
-const EXAMPLES_DIR = resolve(PROJECT_ROOT, 'examples');
 
 /**
- * Execute CLI command and return result
+ * Execute CLI command and return result (unused but kept for potential future use)
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function execCLI(command: string, options: { cwd?: string } = {}): {
   stdout: string;
   stderr: string;
@@ -28,11 +28,12 @@ function execCLI(command: string, options: { cwd?: string } = {}): {
       stdio: ['pipe', 'pipe', 'pipe']
     });
     return { stdout, stderr: '', exitCode: 0 };
-  } catch (error: any) {
+  } catch (error) {
+    const e = error as { stdout?: string; stderr?: string; status?: number };
     return {
-      stdout: error.stdout || '',
-      stderr: error.stderr || '',
-      exitCode: error.status || 1
+      stdout: e.stdout || '',
+      stderr: e.stderr || '',
+      exitCode: e.status || 1
     };
   }
 }
