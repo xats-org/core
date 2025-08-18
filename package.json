@@ -9,7 +9,7 @@
     "xats-validate": "./bin/validate.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "dev": "tsc --watch",
     "test": "vitest",
     "test:run": "vitest run",
@@ -17,7 +17,11 @@
     "validate": "node bin/validate.js",
     "lint": "eslint src test --ext .ts,.js",
     "lint:fix": "eslint src test --ext .ts,.js --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "release": "./scripts/release.sh",
+    "release:patch": "./scripts/release.sh patch",
+    "release:minor": "./scripts/release.sh minor",
+    "release:major": "./scripts/release.sh major"
   },
   "keywords": [
     "xats",
@@ -60,6 +64,7 @@
     "bin/",
     "schemas/",
     "README.md",
-    "LICENSE.md"
+    "LICENSE.md",
+    "CHANGELOG.md"
   ]
 }

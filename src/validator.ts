@@ -145,6 +145,7 @@ export class XatsValidator {
     }
 
     try {
+      // Resolve schema path relative to project root (up one level from dist)
       const schemaPath = resolve(__dirname, `../schemas/${version}/xats.json`);
       const schemaContent = readFileSync(schemaPath, 'utf-8');
       const schema = JSON.parse(schemaContent) as AnySchemaObject;

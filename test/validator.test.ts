@@ -9,7 +9,7 @@ import {
   createValidator, 
   validateXats, 
   validateXatsFile
-} from '../src/validator.js';
+} from '../dist/validator.js';
 
 describe('XatsValidator', () => {
   let validator: XatsValidator;
@@ -97,9 +97,9 @@ describe('XatsValidator', () => {
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
       
-      const errorMessages = result.errors.map(e => e.message);
-      expect(errorMessages.some(msg => msg.includes('subject'))).toBe(true);
-      expect(errorMessages.some(msg => msg.includes('bodyMatter'))).toBe(true);
+      const errorMessages = result.errors.map((e: any) => e.message);
+      expect(errorMessages.some((msg: any) => msg.includes('subject'))).toBe(true);
+      expect(errorMessages.some((msg: any) => msg.includes('bodyMatter'))).toBe(true);
     });
 
     it('should reject document with invalid schema version', async () => {
@@ -119,7 +119,7 @@ describe('XatsValidator', () => {
       const result = await validator.validate(invalidDoc);
       
       expect(result.isValid).toBe(false);
-      expect(result.errors.some(e => 
+      expect(result.errors.some((e: any) => 
         e.message.includes('Failed to load schema version 999.0.0') ||
         e.message.includes('no such file')
       )).toBe(true);
@@ -169,7 +169,7 @@ describe('XatsValidator', () => {
       const result = await validator.validateFile(filePath);
       
       expect(result.isValid).toBe(false);
-      expect(result.errors.some(e => 
+      expect(result.errors.some((e: any) => 
         e.message.includes('parse') || e.message.includes('JSON')
       )).toBe(true);
     });
@@ -179,7 +179,7 @@ describe('XatsValidator', () => {
       const result = await validator.validateFile(filePath);
       
       expect(result.isValid).toBe(false);
-      expect(result.errors.some(e => 
+      expect(result.errors.some((e: any) => 
         e.message.includes('ENOENT') || e.message.includes('no such file')
       )).toBe(true);
     });
@@ -270,7 +270,7 @@ describe('Error handling', () => {
     expect(result.isValid).toBe(false);
     expect(result.errors.length).toBeGreaterThan(0);
     
-    result.errors.forEach(error => {
+    result.errors.forEach((error: any) => {
       expect(error).toHaveProperty('path');
       expect(error).toHaveProperty('message');
       expect(typeof error.path).toBe('string');
@@ -285,7 +285,7 @@ describe('Error handling', () => {
     const result = await validator.validate({}, { schemaVersion: 'non-existent' });
     
     expect(result.isValid).toBe(false);
-    expect(result.errors.some(e => 
+    expect(result.errors.some((e: any) => 
       e.message.includes('Failed to load schema')
     )).toBe(true);
   });
@@ -341,7 +341,7 @@ describe('Performance', () => {
     const totalTime = endTime - startTime;
     
     // All validations should succeed
-    results.forEach(result => {
+    results.forEach((result: any) => {
       expect(result.isValid).toBe(true);
     });
     
