@@ -1,250 +1,59 @@
 {
+  "$comment": "Example of adaptive learning pathways in xats",
   "schemaVersion": "0.1.0",
   "bibliographicEntry": {
-    "id": "textbook-main",
+    "id": "adaptive-math-2024",
     "type": "book",
-    "title": "Adaptive Learning Mathematics",
+    "title": "Adaptive Mathematics Learning",
     "author": [
       {
-        "family": "Smith",
-        "given": "Jane"
+        "family": "Johnson",
+        "given": "Emily"
       }
     ],
     "issued": {
-      "date-parts": [[2025]]
+      "date-parts": [[2024]]
     }
   },
   "subject": "Mathematics",
-  "targetAudience": "High School Students",
   "bodyMatter": {
     "contents": [
       {
         "id": "chapter-1",
+        "label": "1",
         "title": "Introduction to Algebra",
-        "label": "Chapter 1",
         "sections": [
           {
             "id": "section-1-1",
-            "title": "Variables and Expressions",
-            "content": [
-              {
-                "id": "intro-1-1",
-                "blockType": "https://xats.org/core/blocks/paragraph",
-                "content": {
-                  "runs": [
-                    {
-                      "type": "text",
-                      "text": "In this section, we'll explore the fundamentals of algebraic variables and expressions."
-                    }
-                  ]
-                }
-              },
-              {
-                "id": "quiz-1-1",
-                "blockType": "https://xats.org/core/blocks/assessment",
-                "content": {
-                  "assessmentType": "quiz",
-                  "questions": [
-                    {
-                      "id": "q1",
-                      "text": "What is 2x + 3 when x = 5?",
-                      "correctAnswer": "13"
-                    }
-                  ]
-                }
-              }
-            ],
+            "label": "1.1",
+            "title": "Basic Equations",
             "pathways": [
               {
-                "trigger": {
-                  "triggerType": "https://xats.org/core/triggers/onAssessment",
-                  "sourceId": "quiz-1-1"
-                },
-                "rules": [
-                  {
-                    "condition": "score < 60 AND attempts < 3",
-                    "destinationId": "section-1-1-remedial",
-                    "pathwayType": "https://xats.org/core/pathways/remedial"
-                  },
-                  {
-                    "condition": "score < 60 AND attempts >= 3",
-                    "destinationId": "section-1-1-tutor",
-                    "pathwayType": "https://xats.org/core/pathways/remedial"
-                  },
-                  {
-                    "condition": "score >= 60 AND score < 80",
-                    "destinationId": "section-1-1-practice",
-                    "pathwayType": "https://xats.org/core/pathways/standard"
-                  },
-                  {
-                    "condition": "score >= 80 AND time_spent < 120",
-                    "destinationId": "section-1-2-advanced",
-                    "pathwayType": "https://xats.org/core/pathways/enrichment"
-                  },
-                  {
-                    "condition": "score >= 80",
-                    "destinationId": "section-1-2",
-                    "pathwayType": "https://xats.org/core/pathways/standard"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "id": "section-1-1-remedial",
-            "title": "Review: Variables Basics",
-            "content": [
-              {
-                "id": "remedial-content",
-                "blockType": "https://xats.org/core/blocks/paragraph",
-                "content": {
-                  "runs": [
-                    {
-                      "type": "text",
-                      "text": "Let's review the basics of variables with simpler examples."
-                    }
-                  ]
-                }
-              }
-            ],
-            "pathways": [
-              {
-                "trigger": {
-                  "triggerType": "https://xats.org/core/triggers/onCompletion"
-                },
-                "rules": [
-                  {
-                    "condition": "true",
-                    "destinationId": "section-1-1",
-                    "pathwayType": "https://xats.org/core/pathways/standard"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "id": "section-1-1-practice",
-            "title": "Additional Practice Problems",
-            "content": [
-              {
-                "id": "practice-content",
-                "blockType": "https://xats.org/core/blocks/paragraph",
-                "content": {
-                  "runs": [
-                    {
-                      "type": "text",
-                      "text": "Here are additional practice problems to strengthen your understanding."
-                    }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "id": "section-1-2",
-            "title": "Solving Linear Equations",
-            "content": [
-              {
-                "id": "intro-1-2",
-                "blockType": "https://xats.org/core/blocks/paragraph",
-                "content": {
-                  "runs": [
-                    {
-                      "type": "text",
-                      "text": "Now we'll learn how to solve linear equations step by step."
-                    }
-                  ]
-                }
-              }
-            ],
-            "pathways": [
-              {
-                "trigger": {
-                  "triggerType": "https://xats.org/core/triggers/onCompletion"
-                },
-                "rules": [
-                  {
-                    "condition": "user_choice == \"challenge\" AND count(objectives_met) >= 2",
-                    "destinationId": "section-1-challenge",
-                    "pathwayType": "https://xats.org/core/pathways/enrichment"
-                  },
-                  {
-                    "condition": "user_choice == \"review\"",
-                    "destinationId": "section-1-review",
-                    "pathwayType": "https://xats.org/core/pathways/standard"
-                  },
-                  {
-                    "condition": "true",
-                    "destinationId": "chapter-2",
-                    "pathwayType": "https://xats.org/core/pathways/standard"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "id": "section-1-2-advanced",
-            "title": "Advanced: Systems of Equations",
-            "content": [
-              {
-                "id": "advanced-content",
-                "blockType": "https://xats.org/core/blocks/paragraph",
-                "content": {
-                  "runs": [
-                    {
-                      "type": "text",
-                      "text": "You're ready for an advanced topic! Let's explore systems of equations."
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ],
-        "pathways": [
-          {
-            "trigger": {
-              "triggerType": "https://xats.org/core/triggers/onCompletion"
-            },
-            "rules": [
-              {
-                "condition": "completion_percentage >= 90 AND avg(score, prev_score) >= 85",
-                "destinationId": "bonus-chapter",
-                "pathwayType": "https://xats.org/core/pathways/enrichment"
+                "id": "pathway-remedial",
+                "condition": "assessment.score < 0.6 AND assessment.attempts < 3",
+                "targetId": "section-1-1-remedial",
+                "description": "Additional practice for struggling students"
               },
               {
-                "condition": "completion_percentage >= 70",
-                "destinationId": "chapter-2",
-                "pathwayType": "https://xats.org/core/pathways/standard"
-              },
-              {
-                "condition": "NOT exists(score) OR completion_percentage < 70",
-                "destinationId": "chapter-1-review",
-                "pathwayType": "https://xats.org/core/pathways/remedial"
+                "id": "pathway-advanced",
+                "condition": "assessment.score >= 0.9",
+                "targetId": "section-1-2",
+                "description": "Skip to advanced content"
               }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "chapter-2",
-        "title": "Geometry Fundamentals",
-        "label": "Chapter 2",
-        "sections": [
-          {
-            "id": "section-2-1",
-            "title": "Points, Lines, and Angles",
+            ],
             "content": [
               {
-                "id": "intro-2-1",
+                "id": "block-intro",
                 "blockType": "https://xats.org/core/blocks/paragraph",
                 "content": {
-                  "runs": [
-                    {
-                      "type": "text",
-                      "text": "Welcome to geometry! We'll start with the basic building blocks."
-                    }
-                  ]
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Welcome to basic equations. We'll start with simple linear equations."
+                      }
+                    ]
+                  }
                 }
               }
             ]
