@@ -129,8 +129,8 @@ describe('LTI 1.3 Extension Schema', () => {
 
     it('should have grade passback configured on assessments', () => {
       const chapter = ltiIntegrationExample.bodyMatter.contents[0];
-      const assessmentSection = chapter.sections.find(s => s.id === 'bonding-concepts');
-      const assessment = assessmentSection.content.find(c => c.blockType.includes('multipleChoice'));
+      const assessmentSection = chapter.sections.find((s: any) => s.id === 'bonding-concepts');
+      const assessment = assessmentSection.content.find((c: any) => c.blockType.includes('multipleChoice'));
       
       expect(assessment.extensions).toHaveProperty('ltiGradePassback');
       expect(assessment.extensions.ltiGradePassback.enabled).toBe(true);
@@ -156,7 +156,7 @@ describe('LTI 1.3 Extension Schema', () => {
       
       // Check pathway rules use LTI variables
       const rules = pathway.rules;
-      expect(rules.some(rule => rule.condition.includes('lti_score_percentage'))).toBe(true);
+      expect(rules.some((rule: any) => rule.condition.includes('lti_score_percentage'))).toBe(true);
     });
   });
 
@@ -164,7 +164,7 @@ describe('LTI 1.3 Extension Schema', () => {
     it('should validate Canvas platform registration', () => {
       const ltiConfig = ltiIntegrationExample.extensions.ltiConfiguration;
       const canvasRegistration = ltiConfig.platformRegistrations.find(
-        p => p.platformId === 'https://canvas.university.edu'
+        (p: any) => p.platformId === 'https://canvas.university.edu'
       );
       
       expect(canvasRegistration).toBeDefined();
@@ -238,7 +238,7 @@ describe('LTI 1.3 Extension Schema', () => {
       const contentItems = chapter.extensions.ltiDeepLinking.contentItems;
       
       // Verify xatsResourceId references exist in document
-      contentItems.forEach(item => {
+      contentItems.forEach((item: any) => {
         if (item.xatsResourceId) {
           // Should find matching ID in document structure
           const resourceExists = findResourceById(ltiIntegrationExample, item.xatsResourceId);
@@ -256,7 +256,7 @@ describe('LTI 1.3 Extension Schema', () => {
       expect(ltiConfig.loginInitiationUrl).toMatch(/^https:\/\//);
       expect(ltiConfig.jwksUrl).toMatch(/^https:\/\//);
       
-      ltiConfig.redirectUris.forEach(uri => {
+      ltiConfig.redirectUris.forEach((uri: any) => {
         expect(uri).toMatch(/^https:\/\//);
       });
     });
@@ -278,8 +278,8 @@ describe('LTI 1.3 Extension Schema', () => {
 });
 
 // Helper function to find resource by ID in document structure
-function findResourceById(doc, targetId) {
-  function searchObject(obj) {
+function findResourceById(doc: any, targetId: any) {
+  function searchObject(obj: any): boolean {
     if (typeof obj !== 'object' || obj === null) return false;
     
     if (obj.id === targetId) return true;
@@ -315,7 +315,7 @@ describe('LTI Pathway Integration', () => {
     const chapter = ltiIntegrationExample.bodyMatter.contents[0];
     const pathway = chapter.pathways[0];
     
-    const ltiConditions = pathway.rules.filter(rule => 
+    const ltiConditions = pathway.rules.filter((rule: any) => 
       rule.condition.includes('lti_score_percentage') ||
       rule.condition.includes('lti_attempts')
     );
@@ -323,7 +323,7 @@ describe('LTI Pathway Integration', () => {
     expect(ltiConditions.length).toBeGreaterThan(0);
     
     // Validate condition syntax
-    ltiConditions.forEach(rule => {
+    ltiConditions.forEach((rule: any) => {
       expect(rule.condition).toMatch(/lti_\w+/);
       expect(rule).toHaveProperty('destinationId');
       expect(rule).toHaveProperty('pathwayType');
