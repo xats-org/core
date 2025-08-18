@@ -1,56 +1,41 @@
 {
-  "$comment": "Example of adaptive learning pathways in xats",
   "schemaVersion": "0.1.0",
   "bibliographicEntry": {
-    "id": "adaptive-math-2024",
+    "id": "example-001",
     "type": "book",
-    "title": "Adaptive Mathematics Learning",
+    "title": "Example Textbook",
     "author": [
       {
-        "family": "Johnson",
-        "given": "Emily"
+        "family": "Smith",
+        "given": "John"
       }
     ],
     "issued": {
       "date-parts": [[2024]]
     }
   },
-  "subject": "Mathematics",
+  "subject": "Computer Science",
   "bodyMatter": {
     "contents": [
       {
         "id": "chapter-1",
         "label": "1",
-        "title": "Introduction to Algebra",
+        "title": "Introduction",
         "sections": [
           {
             "id": "section-1-1",
             "label": "1.1",
-            "title": "Basic Equations",
-            "pathways": [
-              {
-                "id": "pathway-remedial",
-                "condition": "assessment.score < 0.6 AND assessment.attempts < 3",
-                "targetId": "section-1-1-remedial",
-                "description": "Additional practice for struggling students"
-              },
-              {
-                "id": "pathway-advanced",
-                "condition": "assessment.score >= 0.9",
-                "targetId": "section-1-2",
-                "description": "Skip to advanced content"
-              }
-            ],
+            "title": "Getting Started",
             "content": [
               {
-                "id": "block-intro",
+                "id": "block-1",
                 "blockType": "https://xats.org/core/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
                       {
                         "type": "text",
-                        "text": "Welcome to basic equations. We'll start with simple linear equations."
+                        "text": "This is an example document demonstrating adaptive pathways."
                       }
                     ]
                   }
