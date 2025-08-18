@@ -1,0 +1,203 @@
+{
+  "meeting": "Stakeholder Feedback Session",
+  "date": "2025-08-18",
+  "action_items": [
+    {
+      "id": "AF-001",
+      "priority": "CRITICAL",
+      "title": "Emergency Assessment Framework Sprint",
+      "description": "Implement core assessment block types (multiple choice, short answer, essay) with cognitive metadata",
+      "assigned_to": ["xats-schema-engineer", "xats-assessment-specialist"],
+      "due_date": "2025-09-15",
+      "milestone": "v0.2.0",
+      "dependencies": [],
+      "success_criteria": [
+        "5+ assessment block types defined",
+        "Cognitive level tagging implemented",
+        "Validation tests passing"
+      ]
+    },
+    {
+      "id": "AF-002",
+      "priority": "CRITICAL",
+      "title": "WCAG 2.1 AA Compliance Implementation",
+      "description": "Fix all accessibility failures to achieve 100% WCAG 2.1 AA compliance",
+      "assigned_to": ["xats-accessibility-champion", "xats-schema-engineer"],
+      "due_date": "2025-09-28",
+      "milestone": "v0.2.0",
+      "dependencies": [],
+      "success_criteria": [
+        "Language tags throughout schema",
+        "Enhanced alt text system",
+        "Math accessibility support",
+        "Pass automated WCAG audit"
+      ]
+    },
+    {
+      "id": "AF-003",
+      "priority": "CRITICAL",
+      "title": "Rights Management Extension Design",
+      "description": "Create standardized extensions for copyright, licensing, and usage permissions",
+      "assigned_to": ["xats-publishing-expert", "xats-schema-engineer"],
+      "due_date": "2025-09-01",
+      "milestone": "v0.2.0",
+      "dependencies": [],
+      "success_criteria": [
+        "Rights metadata schema defined",
+        "Publisher requirements met",
+        "Legal review completed"
+      ]
+    },
+    {
+      "id": "AF-004",
+      "priority": "HIGH",
+      "title": "LTI 1.3 Integration Specification",
+      "description": "Define LTI support for grade passback and SSO",
+      "assigned_to": ["xats-lms-integrator", "xats-dev-lead"],
+      "due_date": "2025-10-01",
+      "milestone": "v0.2.0",
+      "dependencies": ["AF-001"],
+      "success_criteria": [
+        "LTI 1.3 spec documented",
+        "Grade passback working",
+        "SSO implementation guide"
+      ]
+    },
+    {
+      "id": "AF-005",
+      "priority": "HIGH",
+      "title": "Simplified Authoring Syntax Development",
+      "description": "Create markdown-like syntax that compiles to xats JSON",
+      "assigned_to": ["xats-content-author", "xats-dev-lead"],
+      "due_date": "2025-10-15",
+      "milestone": "v0.2.0",
+      "dependencies": [],
+      "success_criteria": [
+        "Syntax specification complete",
+        "Compiler prototype working",
+        "Author documentation written"
+      ]
+    },
+    {
+      "id": "AF-006",
+      "priority": "HIGH",
+      "title": "Conversion Tool Development",
+      "description": "Build Word and LaTeX to xats converters",
+      "assigned_to": ["xats-dev-lead", "xats-implementation-guide"],
+      "due_date": "2025-10-30",
+      "milestone": "v0.2.0",
+      "dependencies": ["AF-005"],
+      "success_criteria": [
+        "Word importer functional",
+        "LaTeX importer functional",
+        "80% content preservation"
+      ]
+    },
+    {
+      "id": "AF-007",
+      "priority": "MEDIUM",
+      "title": "Essential Content Blocks Implementation",
+      "description": "Add definition, example, warning, procedure, sidebar block types",
+      "assigned_to": ["xats-schema-engineer", "xats-content-author"],
+      "due_date": "2025-09-20",
+      "milestone": "v0.2.0",
+      "dependencies": [],
+      "success_criteria": [
+        "5+ new block types defined",
+        "Examples created",
+        "Tests passing"
+      ]
+    },
+    {
+      "id": "AF-008",
+      "priority": "MEDIUM",
+      "title": "Student Annotation System Design",
+      "description": "Design system for notes, bookmarks, and highlights",
+      "assigned_to": ["xats-student-advocate", "xats-schema-engineer"],
+      "due_date": "2025-10-15",
+      "milestone": "v0.2.0",
+      "dependencies": [],
+      "success_criteria": [
+        "Annotation schema defined",
+        "Privacy considerations addressed",
+        "Sync mechanism designed"
+      ]
+    },
+    {
+      "id": "AF-009",
+      "priority": "HIGH",
+      "title": "Common Cartridge Export Implementation",
+      "description": "Build xats to Common Cartridge converter for LMS import",
+      "assigned_to": ["xats-lms-integrator", "xats-dev-lead"],
+      "due_date": "2025-11-01",
+      "milestone": "v0.2.0",
+      "dependencies": ["AF-001", "AF-004"],
+      "success_criteria": [
+        "Converter implemented",
+        "3+ LMS tested",
+        "Documentation complete"
+      ]
+    },
+    {
+      "id": "AF-010",
+      "priority": "LOW",
+      "title": "xAPI Foundation Planning",
+      "description": "Design basic analytics integration with xAPI",
+      "assigned_to": ["xats-ai-education-expert", "xats-lms-integrator"],
+      "due_date": "2025-11-15",
+      "milestone": "v0.2.0",
+      "dependencies": ["AF-001"],
+      "success_criteria": [
+        "xAPI profile drafted",
+        "Event catalog defined",
+        "Privacy framework established"
+      ]
+    },
+    {
+      "id": "AF-011",
+      "priority": "CRITICAL",
+      "title": "v0.2.0 Milestone Reorganization",
+      "description": "Update GitHub issues and project board to reflect new priorities",
+      "assigned_to": ["xats-project-steward"],
+      "due_date": "2025-08-20",
+      "milestone": "v0.2.0",
+      "dependencies": [],
+      "success_criteria": [
+        "All blockers assigned to v0.2.0",
+        "Timeline updated",
+        "Team notified"
+      ]
+    },
+    {
+      "id": "AF-012",
+      "priority": "HIGH",
+      "title": "Partner Identification and Outreach",
+      "description": "Identify and contact potential pilot partners",
+      "assigned_to": ["xats-project-steward", "xats-academic-administrator"],
+      "due_date": "2025-09-01",
+      "milestone": "v0.2.0",
+      "dependencies": [],
+      "success_criteria": [
+        "5+ institutions contacted",
+        "2+ publishers engaged",
+        "1+ disability org partnership"
+      ]
+    }
+  ],
+  "summary": {
+    "total_items": 12,
+    "critical": 4,
+    "high": 5,
+    "medium": 2,
+    "low": 1,
+    "v0.2.0_items": 12,
+    "v0.3.0_items": 0
+  },
+  "next_steps": [
+    "Board review of stakeholder feedback",
+    "Approval of v0.2.0 reprioritization",
+    "Working group formation",
+    "Resource allocation decisions",
+    "Communication to community"
+  ]
+}
