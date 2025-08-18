@@ -107,7 +107,8 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
     });
 
     it('should require long descriptions for complex images', () => {
-      const complexImageTypes = ['chart', 'diagram', 'graph', 'map'];
+      // Complex image types that need detailed descriptions
+      // const complexImageTypes = ['chart', 'diagram', 'graph', 'map'];
       
       const document: XatsDocument = {
         schemaVersion: '0.1.0',
@@ -206,7 +207,7 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
       expect(tableBlock.content.headers.length, 'Table must have at least one header').toBeGreaterThan(0);
       
       // Test header scope attributes (enhanced requirement)
-      tableBlock.content.headers.forEach((header: any, index: number) => {
+      tableBlock.content.headers.forEach((header: any) => {
         if (header.scope) {
           expect(['col', 'row', 'colgroup', 'rowgroup']).toContain(header.scope);
         }
@@ -515,7 +516,7 @@ describe('WCAG Validation Utilities', () => {
   /**
    * Utility function to check alt text quality
    */
-  function validateAltTextQuality(altText: string, context?: string): {
+  function validateAltTextQuality(altText: string): {
     isValid: boolean;
     issues: string[];
   } {

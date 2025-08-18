@@ -184,7 +184,7 @@ abstract class ValidationRule {
  */
 class TextAlternativesRule extends ValidationRule {
   wcagCriterion = '1.1.1';
-  level: 'A' = 'A';
+  level = 'A' as const;
 
   validate(document: any): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
@@ -192,7 +192,7 @@ class TextAlternativesRule extends ValidationRule {
 
     // Check image resources
     if (document.resources) {
-      document.resources.forEach((resource: any, index: number) => {
+      document.resources.forEach((resource: any) => {
         if (resource.type === 'https://xats.org/core/resources/image') {
           if (!resource.altText) {
             errors.push(this.createError(
@@ -306,7 +306,7 @@ class TextAlternativesRule extends ValidationRule {
  */
 class InfoAndRelationshipsRule extends ValidationRule {
   wcagCriterion = '1.3.1';
-  level: 'A' = 'A';
+  level = 'A' as const;
 
   validate(document: any): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
@@ -329,7 +329,7 @@ class InfoAndRelationshipsRule extends ValidationRule {
   }
 
   private validateContentBlocks(blocks: any[], errors: ValidationError[], warnings: ValidationWarning[]): void {
-    blocks.forEach((block: any, index: number) => {
+    blocks.forEach((block: any) => {
       if (block.blockType === 'https://xats.org/core/blocks/heading') {
         if (!block.content.level && !block.accessibilityMetadata?.headingLevel) {
           errors.push(this.createError(
@@ -389,7 +389,7 @@ class InfoAndRelationshipsRule extends ValidationRule {
  */
 class MeaningfulSequenceRule extends ValidationRule {
   wcagCriterion = '1.3.2';
-  level: 'A' = 'A';
+  level = 'A' as const;
 
   validate(document: any): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
@@ -413,7 +413,7 @@ class MeaningfulSequenceRule extends ValidationRule {
   private validateSectionSequence(blocks: any[], errors: ValidationError[], warnings: ValidationWarning[], sectionId: string): void {
     let previousHeadingLevel = 0;
 
-    blocks.forEach((block: any, index: number) => {
+    blocks.forEach((block: any) => {
       if (block.blockType === 'https://xats.org/core/blocks/heading') {
         const currentLevel = block.content.level || block.accessibilityMetadata?.headingLevel || 0;
         
@@ -452,7 +452,7 @@ class MeaningfulSequenceRule extends ValidationRule {
  */
 class BypassBlocksRule extends ValidationRule {
   wcagCriterion = '2.4.1';
-  level: 'A' = 'A';
+  level = 'A' as const;
 
   validate(document: any): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
@@ -494,7 +494,7 @@ class BypassBlocksRule extends ValidationRule {
  */
 class FocusOrderRule extends ValidationRule {
   wcagCriterion = '2.4.3';
-  level: 'A' = 'A';
+  level = 'A' as const;
 
   validate(document: any): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
@@ -576,7 +576,7 @@ class FocusOrderRule extends ValidationRule {
  */
 class HeadingsAndLabelsRule extends ValidationRule {
   wcagCriterion = '2.4.6';
-  level: 'AA' = 'AA';
+  level = 'AA' as const;
 
   validate(document: any): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
@@ -593,7 +593,7 @@ class HeadingsAndLabelsRule extends ValidationRule {
         if (item.sections) {
           item.sections.forEach((section: any) => {
             if (section.content) {
-              section.content.forEach((block: any, index: number) => {
+              section.content.forEach((block: any) => {
                 if (block.blockType === 'https://xats.org/core/blocks/heading') {
                   this.validateHeadingContent(block, index, errors, warnings);
                 }
@@ -667,7 +667,7 @@ class HeadingsAndLabelsRule extends ValidationRule {
  */
 class LanguageOfPageRule extends ValidationRule {
   wcagCriterion = '3.1.1';
-  level: 'A' = 'A';
+  level = 'A' as const;
 
   validate(document: any): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
@@ -710,7 +710,7 @@ class LanguageOfPageRule extends ValidationRule {
  */
 class LanguageOfPartsRule extends ValidationRule {
   wcagCriterion = '3.1.2';
-  level: 'AA' = 'AA';
+  level = 'AA' as const;
 
   validate(document: any): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];

@@ -18,7 +18,7 @@
     "test:accessibility:full": "vitest run test/accessibility/",
     "test:accessibility:integration": "vitest run test/accessibility/ --reporter=verbose",
     "validate": "node bin/validate.js",
-    "validate:wcag": "node -e \"const {WcagValidatorCLI} = require('./test/accessibility/wcag-validation-rules.ts'); const cli = new WcagValidatorCLI(); process.argv.slice(2).forEach(file => cli.validateFile(file).then(result => console.log(cli.generateReport(result))));\"",
+    "validate:wcag": "npx ts-node test/accessibility/wcag-validation-rules.ts",
     "lint": "eslint src test --ext .ts,.js",
     "lint:fix": "eslint src test --ext .ts,.js --fix",
     "typecheck": "tsc --noEmit",
