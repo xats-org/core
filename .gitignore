@@ -108,20 +108,14 @@ test/**/*.js.map
 test/**/*.d.ts
 test/**/*.d.ts.map
 
-# Claude-specific
+# Claude-specific (keeping secrets private)
 .claude/.mcp.json*
 .claude/settings.local.json*
-.claude/memory/agents/
-.claude/memory/meetings/
-.claude/memory/issues/
-.claude/memory/decisions/
-.claude/memory/context/
-.claude/memory/designs/
+.mcp.json
+settings.local.json
 
 # Project-specific
 .notes
-CLAUDE.md
-.mcp.json
 core.code-workspace
 
 # Temporary files
