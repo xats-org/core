@@ -105,6 +105,7 @@ jobs:
           script: |
             const pr = context.payload.pull_request;
             const issues = [];
+            const warnings = [];
             
             // Check if PR links to an issue
             const body = pr.body || '';
@@ -119,13 +120,48 @@ jobs:
               issues.push('❌ **REQUIRED**: PR must be assigned to a milestone (v0.1.0, v0.2.0, or v0.3.0)');
             }
             
-            // Check title format
-            if (!pr.title.match(/^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+/)) {
-              issues.push('ℹ️ Consider using conventional commit format in title (e.g., "feat: add new feature")');
+            // Validate target branch strategy
+            const targetBranch = pr.base.ref;
+            const sourceBranch = pr.head.ref;
+            
+            if (targetBranch === 'main') {
+              // PRs to main should only come from version branches
+              const isFromVersionBranch = /^v\d+\.\d+\.\d+$/.test(sourceBranch);
+              if (!isFromVersionBranch) {
+                warnings.push('⚠️ PRs to `main` should typically come from version branches (v0.1.0, v0.2.0, etc.) for releases');
+                warnings.push('💡 Consider targeting a version branch instead for feature development');
+              }
+            } else if (/^v\d+\.\d+\.\d+$/.test(targetBranch)) {
+              // PR targeting version branch - this is expected for development
+              console.log(`✅ PR correctly targets version branch: ${targetBranch}`);
+            } else {
+              warnings.push(`⚠️ Unusual target branch: ${targetBranch}. Expected 'main' or version branch (v0.1.0, etc.)`);
             }
             
-            if (issues.length > 0) {
-              const comment = `## PR Checklist Reminder\n\n${issues.join('\n')}\n\nSee our [Contributing Guidelines](CONTRIBUTING.md) for more details.`;
+            // Check title format
+            if (!pr.title.match(/^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+/)) {
+              warnings.push('ℹ️ Consider using conventional commit format in title (e.g., "feat: add new feature")');
+            }
+            
+            // Compile feedback
+            const allFeedback = [...issues, ...warnings];
+            
+            if (allFeedback.length > 0) {
+              let comment = '## PR Checklist Reminder\n\n';
+              
+              if (issues.length > 0) {
+                comment += '### Required Changes\n' + issues.join('\n') + '\n\n';
+              }
+              
+              if (warnings.length > 0) {
+                comment += '### Suggestions\n' + warnings.join('\n') + '\n\n';
+              }
+              
+              comment += '### Branching Strategy\n';
+              comment += '- 🎯 **Version branches** (v0.1.0, v0.2.0): Active development\n';
+              comment += '- 📦 **Main branch**: Latest stable release\n';
+              comment += '- 🔄 **Workflow**: Develop on version branches → Merge to main for release\n\n';
+              comment += 'See our [Contributing Guidelines](CONTRIBUTING.md) for more details.';
               
               await github.rest.issues.createComment({
                 owner: context.repo.owner,

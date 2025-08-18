@@ -22,11 +22,41 @@ Please be as detailed as possible. For bugs, include steps to reproduce the issu
 
 ### Proposing Changes
 
+**Important: We use a version-based branching strategy. The `main` branch contains the latest stable release. Active development happens on version branches (e.g., `v0.2.0`).**
+
+#### For New Features and Enhancements:
+
 1.  **Fork the repository** on GitHub.
-2.  **Create a new branch** for your changes (`git checkout -b feature/my-new-feature`).
-3.  **Make your changes** to the schema or documentation.
-4.  **Submit a pull request (PR)** to the `main` branch.
-5.  **Link the PR to the relevant issue.**
+2.  **Check out the current development branch** (e.g., `v0.2.0`):
+    ```bash
+    git checkout v0.2.0
+    git pull origin v0.2.0
+    ```
+3.  **Create a new feature branch** from the version branch:
+    ```bash
+    git checkout -b feature/issue-NUMBER-description
+    ```
+4.  **Make your changes** to the schema or documentation.
+5.  **Submit a pull request (PR)** targeting the **version branch** (not `main`):
+    ```bash
+    gh pr create --base v0.2.0 --title "feat: your feature" --body "Closes #NUMBER"
+    ```
+6.  **Ensure your PR has a milestone** matching the target version (e.g., `v0.2.0`).
+
+#### For Hotfixes to Stable Release:
+
+1.  **Create a hotfix branch** from `main`:
+    ```bash
+    git checkout main
+    git pull origin main
+    git checkout -b hotfix/v0.1.1-description
+    ```
+2.  **Make your fix** and test thoroughly.
+3.  **Submit a PR** to `main`:
+    ```bash
+    gh pr create --base main --title "fix: critical issue" --body "Fixes #NUMBER"
+    ```
+4.  **After merging**, forward-port the fix to active development branches.
 
 A member of the standards committee will review your PR. We may suggest some changes or improvements.
 
@@ -49,7 +79,23 @@ The bar for adding a new URI to the core vocabulary is high, as it must be broad
 
 ## Versioning Strategy
 
-The **xats** standard follows **Semantic Versioning (SemVer)**.
+The **xats** standard follows **Semantic Versioning (SemVer)** with a structured branching model:
+
+### Version Numbers
 - **MAJOR** version (e.g., `1.0.0` -> `2.0.0`) for incompatible, breaking changes to the schema.
 - **MINOR** version (e.g., `1.0.0` -> `1.1.0`) for adding new, backward-compatible functionality.
 - **PATCH** version (e.g., `1.0.0` -> `1.0.1`) for backward-compatible bug fixes or clarifications in the documentation.
+
+### Branch Structure
+- **`main`** - Contains the latest stable release (currently v0.1.0)
+- **Version branches** (e.g., `v0.2.0`, `v0.3.0`) - Active development for upcoming releases
+- **Feature branches** - Created from version branches for specific features
+- **Hotfix branches** - Created from `main` for critical fixes to stable releases
+- **Release candidate branches** (e.g., `v0.2.0-rc1`) - Pre-release testing
+
+### Current Development Status
+- **Stable Release**: v0.1.0 (on `main`)
+- **Active Development**: v0.2.0 (on `v0.2.0` branch)
+- **Future Planning**: v0.3.0 (on `v0.3.0` branch)
+
+All version branches are preserved permanently for historical reference. Schemas are maintained in version-specific directories (e.g., `/schemas/v0.1.0/`, `/schemas/v0.2.0/`).

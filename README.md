@@ -1,7 +1,8 @@
 # Extensible Academic Textbook Schema (xats)
 
-**Version:** 0.1.0
-**Status:** In Development
+**Stable Version:** 0.1.0 (on `main` branch)
+**Development Version:** 0.2.0 (on `v0.2.0` branch)
+**Status:** Active Development
 **Pronunciation:** "cats"
 
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
@@ -28,11 +29,12 @@ To understand the "why" behind the schema's design, please read the full **[Arch
 
 ### a. The Schema
 
-The official JSON Schema file for the current version can be found at:
-**[`/core/schemas/0.1.0/xats.json`](./core/schemas/0.1.0/xats.json)**
+The official JSON Schema files are organized by version:
+- **Stable Release (v0.1.0):** [`/schemas/v0.1.0/xats.json`](./schemas/v0.1.0/xats.json)
+- **Development (v0.2.0):** [`/schemas/v0.2.0/xats.json`](./schemas/v0.2.0/xats.json) (on `v0.2.0` branch)
 
-The latest released version of the JSON Schema should be available using the url:
-"[https://xats.org/core/schemas/latest/xats.json](https://xats.org/core/schemas/latest/xats.json)"
+The latest stable version of the JSON Schema is available at:
+"[https://xats.org/schemas/latest/xats.json](https://xats.org/schemas/latest/xats.json)"
 
 ### b. Documentation
 
@@ -100,6 +102,15 @@ All contributors are expected to uphold our **[Code of Conduct](./CODE_OF_CONDUC
 
 ---
 
-## 5. Project Vision
+## 5. Version Management
+
+The xats project uses a structured branching model:
+- **`main` branch:** Contains the latest stable release (currently v0.1.0)
+- **Version branches:** Active development (e.g., `v0.2.0` for current development)
+- **Permanent history:** All version branches are preserved for reference
+
+For contributing, please see our **[Contributing Guide](./CONTRIBUTING.md)** for detailed branching and PR guidelines.
+
+## 6. Project Vision
 
 To see the future direction of the standard, including planned features and long-term goals for the ecosystem, please read our **[Project Roadmap](./docs/ROADMAP.md)**.
