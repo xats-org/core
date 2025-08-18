@@ -8,8 +8,7 @@ import {
   XatsValidator, 
   createValidator, 
   validateXats, 
-  validateXatsFile,
-  type ValidationResult 
+  validateXatsFile
 } from '../src/validator.js';
 
 describe('XatsValidator', () => {

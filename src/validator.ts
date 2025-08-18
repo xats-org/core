@@ -44,7 +44,7 @@ export class XatsValidator {
       loadSchema: this.loadSchema.bind(this),
       formats: {
         // Custom format for URIs in xats context
-        'xats-uri': /^https:\/\/xats\.org\/[\w\-\/\.]+$/
+        'xats-uri': /^https:\/\/xats.org\/[\w\-/.]+$/
       }
     });
 
@@ -180,7 +180,7 @@ export class XatsValidator {
    */
   private async loadSchema(uri: string): Promise<AnySchemaObject> {
     // Extract version from URI
-    const match = uri.match(/\/schemas\/([^\/]+)\/schema\.json$/);
+    const match = uri.match(/\/schemas\/([^/]+)\/schema.json$/);
     if (!match) {
       throw new Error(`Invalid schema URI: ${uri}`);
     }
