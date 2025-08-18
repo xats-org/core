@@ -277,24 +277,65 @@
       ]
     },
     "Pathway": {
+      "description": "Defines conditional routing rules for adaptive learning paths. See https://xats.org/specs/pathway-condition-grammar for the complete condition grammar specification.",
       "type": "object",
       "properties": {
         "trigger": {
+          "description": "Defines the event that initiates evaluation of the pathway rules.",
           "type": "object",
           "properties": {
-            "triggerType": { "description": "A URI identifying the event that triggers this pathway.", "type": "string", "format": "uri" },
-            "sourceId": { "type": "string" }
+            "triggerType": { 
+              "description": "A URI identifying the event that triggers this pathway. Common types: onCompletion, onAssessment.", 
+              "type": "string", 
+              "format": "uri",
+              "examples": [
+                "https://xats.org/core/triggers/onCompletion",
+                "https://xats.org/core/triggers/onAssessment"
+              ]
+            },
+            "sourceId": { 
+              "description": "The ID of the source element (e.g., assessment block) providing data for rule evaluation. Required when triggerType is onAssessment.",
+              "type": "string" 
+            }
           },
           "required": ["triggerType"]
         },
         "rules": {
+          "description": "An ordered list of routing rules. The first rule whose condition evaluates to true determines the destination.",
           "type": "array",
+          "minItems": 1,
           "items": {
             "type": "object",
             "properties": {
-              "condition": { "type": "string" },
-              "destinationId": { "type": "string" },
-              "pathwayType": { "description": "A URI identifying the pedagogical purpose of this pathway.", "type": "string", "format": "uri" }
+              "condition": { 
+                "description": "A boolean expression following the xats Pathway Condition Grammar. Variables include: score, attempts, time_spent, passed, completed, objectives_met, user_choice, etc. Operators: ==, !=, <, >, <=, >=, AND, OR, NOT, IN, NOT IN. Functions: min, max, avg, count, exists, all, any.",
+                "type": "string",
+                "pattern": "^(?!\\s*$).+",
+                "examples": [
+                  "score >= 70",
+                  "score < 70 AND attempts >= 3",
+                  "score >= 80 OR time_spent > 600",
+                  "user_choice == \"advanced\" AND score >= 85",
+                  "count(objectives_met) >= 3",
+                  "\"obj-1\" IN objectives_met",
+                  "NOT passed AND attempts < 3"
+                ]
+              },
+              "destinationId": { 
+                "description": "The ID of the target structural container or content block to navigate to when this rule's condition is true.",
+                "type": "string" 
+              },
+              "pathwayType": { 
+                "description": "A URI identifying the pedagogical purpose of this pathway (e.g., remedial, standard, enrichment, prerequisite).", 
+                "type": "string", 
+                "format": "uri",
+                "examples": [
+                  "https://xats.org/core/pathways/remedial",
+                  "https://xats.org/core/pathways/standard",
+                  "https://xats.org/core/pathways/enrichment",
+                  "https://xats.org/core/pathways/prerequisite"
+                ]
+              }
             },
             "required": ["condition", "destinationId"]
           }

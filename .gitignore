@@ -103,6 +103,10 @@ dist/
 build/
 out/
 target/
+test/**/*.js
+test/**/*.js.map
+test/**/*.d.ts
+test/**/*.d.ts.map
 
 # Claude-specific
 .claude/.mcp.json*

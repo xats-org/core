@@ -37,7 +37,7 @@ The `trigger` defines *when* the pathway's rules should be evaluated.
 
 The `rules` array contains one or more routing instructions. A renderer evaluates the rules in order and directs the learner to the destination of the *first* rule whose condition is met.
 
-- **`condition` (string, required):** A machine-evaluatable expression. The syntax of this string is not strictly defined by the standard, allowing for flexibility in implementation (e.g., simple `score < 70` or more complex JavaScript expressions).
+- **`condition` (string, required):** A machine-evaluatable expression following the [xats Pathway Condition Grammar](./pathway-condition-grammar.md). The grammar defines a formal syntax for boolean expressions with variables (e.g., `score`, `attempts`), operators (e.g., `<`, `>=`, `AND`, `OR`), and functions (e.g., `count()`, `exists()`). Examples: `score >= 70`, `score < 70 AND attempts >= 3`, `count(objectives_met) >= 3`.
 - **`destinationId` (string, required):** The `id` of the target `Unit`, `Chapter`, `Section`, or `ContentBlock` to which the learner should be routed.
 - **`pathwayType` (URI, optional):** A semantic hint about the pedagogical purpose of the path. This allows a renderer to message the transition appropriately (e.g., "Let's review a concept" vs. "Ready for a challenge?").
 

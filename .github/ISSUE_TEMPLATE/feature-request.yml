@@ -1,0 +1,143 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for the xats schema
+title: "[Feature]: "
+labels: ["type:feature", "status:triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please provide detailed information to help us understand your proposal.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component would this feature affect?
+      options:
+        - Schema Definition
+        - Core Vocabulary
+        - Documentation
+        - Examples
+        - Extensions
+        - Tools/Utilities
+        - Workflow/Process
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Type
+      description: What type of feature is this?
+      options:
+        - New Schema Property
+        - New Block Type
+        - New Content Type
+        - Enhancement to Existing Feature
+        - Developer Tool
+        - Documentation Improvement
+        - Process Improvement
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? What's the pain point you're experiencing?
+      placeholder: Describe the current limitation or problem this feature would address
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your proposed solution in detail
+      placeholder: |
+        - What should the feature do?
+        - How should it work?
+        - What would the API/schema look like?
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: Use Cases
+      description: Provide specific use cases where this feature would be valuable
+      placeholder: |
+        1. When creating textbooks for...
+        2. When rendering content with...
+        3. When integrating with...
+    validations:
+      required: true
+
+  - type: textarea
+    id: example-schema
+    attributes:
+      label: Example Schema/Usage
+      description: If applicable, provide example schema definition or usage
+      render: json
+      placeholder: |
+        {
+          "blockType": "https://xats.org/core/blocks/newFeature",
+          "content": {
+            // example of how this would work
+          }
+        }
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What alternatives have you considered? Why is this approach preferred?
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this feature to you?
+      options:
+        - Critical (blocking my work)
+        - High (significant improvement)
+        - Medium (nice to have)
+        - Low (minor enhancement)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Target Milestone
+      description: Which release would this feature fit best?
+      options:
+        - v0.1.0 (Core functionality)
+        - v0.2.0 (Assessment framework)
+        - v0.3.0 (Extended features)
+        - Future release
+        - Not sure
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: stakeholders
+    attributes:
+      label: Stakeholder Impact
+      description: Which stakeholders would benefit from this feature?
+      options:
+        - label: Content Authors (textbook writers)
+        - label: Publishers (commercial publishing)
+        - label: Educators (teachers, instructors)
+        - label: Students (learners)
+        - label: Developers (tool builders)
+        - label: Accessibility Users
+        - label: AI/ML Applications
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or references that would help explain this feature
