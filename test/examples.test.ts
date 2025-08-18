@@ -70,17 +70,18 @@ describe('Example Document Validation', () => {
               const blockTypes: string[] = [];
               
               if (obj && typeof obj === 'object') {
-                if (obj.blockType) {
-                  blockTypes.push(obj.blockType);
+                const objAsAny = obj as any;
+                if (objAsAny.blockType) {
+                  blockTypes.push(objAsAny.blockType);
                 }
                 
-                for (const key in obj) {
-                  if (Array.isArray(obj[key])) {
-                    obj[key].forEach((item: unknown) => {
+                for (const key in objAsAny) {
+                  if (Array.isArray(objAsAny[key])) {
+                    objAsAny[key].forEach((item: unknown) => {
                       blockTypes.push(...checkBlockTypes(item));
                     });
-                  } else if (typeof obj[key] === 'object') {
-                    blockTypes.push(...checkBlockTypes(obj[key]));
+                  } else if (typeof objAsAny[key] === 'object') {
+                    blockTypes.push(...checkBlockTypes(objAsAny[key]));
                   }
                 }
               }
@@ -104,14 +105,15 @@ describe('Example Document Validation', () => {
             const ids = new Set<string>();
             function collectIds(obj: unknown) {
               if (obj && typeof obj === 'object') {
-                if (obj.id) {
-                  ids.add(obj.id);
+                const objAsAny = obj as any;
+                if (objAsAny.id) {
+                  ids.add(objAsAny.id);
                 }
-                for (const key in obj) {
-                  if (Array.isArray(obj[key])) {
-                    obj[key].forEach(collectIds);
-                  } else if (typeof obj[key] === 'object') {
-                    collectIds(obj[key]);
+                for (const key in objAsAny) {
+                  if (Array.isArray(objAsAny[key])) {
+                    objAsAny[key].forEach(collectIds);
+                  } else if (typeof objAsAny[key] === 'object') {
+                    collectIds(objAsAny[key]);
                   }
                 }
               }
@@ -121,14 +123,15 @@ describe('Example Document Validation', () => {
             // Check all references point to existing IDs
             function checkReferences(obj: unknown) {
               if (obj && typeof obj === 'object') {
-                if (obj.type === 'reference' && obj.target) {
-                  expect(ids.has(obj.target)).toBe(true);
+                const objAsAny = obj as any;
+                if (objAsAny.type === 'reference' && objAsAny.target) {
+                  expect(ids.has(objAsAny.target)).toBe(true);
                 }
-                for (const key in obj) {
-                  if (Array.isArray(obj[key])) {
-                    obj[key].forEach(checkReferences);
-                  } else if (typeof obj[key] === 'object') {
-                    checkReferences(obj[key]);
+                for (const key in objAsAny) {
+                  if (Array.isArray(objAsAny[key])) {
+                    objAsAny[key].forEach(checkReferences);
+                  } else if (typeof objAsAny[key] === 'object') {
+                    checkReferences(objAsAny[key]);
                   }
                 }
               }
@@ -142,9 +145,10 @@ describe('Example Document Validation', () => {
             // Check all SemanticText objects
             function checkSemanticText(obj: unknown) {
               if (obj && typeof obj === 'object') {
-                if (obj.runs && Array.isArray(obj.runs)) {
+                const objAsAny = obj as any;
+                if (objAsAny.runs && Array.isArray(objAsAny.runs)) {
                   // Each run should have a type
-                  obj.runs.forEach((run: unknown) => {
+                  objAsAny.runs.forEach((run: any) => {
                     expect(run).toHaveProperty('type');
                     expect(['text', 'reference', 'citation', 'emphasis', 'strong']).toContain(run.type);
                     
@@ -168,11 +172,11 @@ describe('Example Document Validation', () => {
                   });
                 }
                 
-                for (const key in obj) {
-                  if (Array.isArray(obj[key])) {
-                    obj[key].forEach(checkSemanticText);
-                  } else if (typeof obj[key] === 'object') {
-                    checkSemanticText(obj[key]);
+                for (const key in objAsAny) {
+                  if (Array.isArray(objAsAny[key])) {
+                    objAsAny[key].forEach(checkSemanticText);
+                  } else if (typeof objAsAny[key] === 'object') {
+                    checkSemanticText(objAsAny[key]);
                   }
                 }
               }
