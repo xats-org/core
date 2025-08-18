@@ -9,7 +9,7 @@ import {
   createValidator, 
   validateXats, 
   validateXatsFile
-} from '../src/validator';
+} from '../src/validator.js';
 
 describe('XatsValidator', () => {
   let validator: XatsValidator;
