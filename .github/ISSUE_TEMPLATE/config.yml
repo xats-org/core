@@ -1,0 +1,14 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📚 Documentation
+    url: https://github.com/xats-org/core/tree/main/docs
+    about: Browse the full documentation and guides
+  - name: 💬 Discussions
+    url: https://github.com/xats-org/core/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 🏗️ Project Board
+    url: https://github.com/orgs/xats-org/projects/2
+    about: View the xats-core project board and roadmap
+  - name: 📋 Board Meetings
+    url: https://github.com/xats-org/core/tree/main/.claude/memory/meetings
+    about: View xats Standards Board meeting minutes and decisions

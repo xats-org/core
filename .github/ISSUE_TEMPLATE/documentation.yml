@@ -1,0 +1,137 @@
+name: Documentation Improvement
+description: Report missing, unclear, or incorrect documentation
+title: "[Docs]: "
+labels: ["type:documentation", "status:triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation! Clear docs are essential for schema adoption.
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation needs improvement?
+      options:
+        - API/Schema Reference
+        - Getting Started Guide
+        - Tutorial/Examples
+        - Architecture Documentation
+        - Contributing Guidelines
+        - README
+        - Code Comments
+        - Error Messages
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Documentation Location
+      description: Where is this documentation located?
+      placeholder: "e.g., /docs/reference/ContentBlock.md, README.md section 3, schema comments"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      description: What kind of documentation issue is this?
+      options:
+        - Missing Information
+        - Incorrect Information
+        - Unclear/Confusing
+        - Outdated Content
+        - Broken Links
+        - Formatting Issues
+        - Spelling/Grammar
+        - Example Needed
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Issue Description
+      description: Describe the documentation problem in detail
+      placeholder: |
+        What specific information is missing, incorrect, or unclear?
+        What made this confusing or problematic for you?
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-content
+    attributes:
+      label: Current Content
+      description: Quote or describe the current documentation content (if applicable)
+      render: markdown
+
+  - type: textarea
+    id: suggested-improvement
+    attributes:
+      label: Suggested Improvement
+      description: How would you improve this documentation?
+      placeholder: |
+        - What information should be added?
+        - How could it be explained more clearly?
+        - What examples would help?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: User Context
+      description: What were you trying to do when you encountered this documentation issue?
+      placeholder: |
+        - What was your goal?
+        - What documentation were you looking for?
+        - What level of experience do you have with xats?
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Target Audience
+      description: Who would benefit most from this documentation improvement?
+      options:
+        - New Users/Beginners
+        - Content Authors
+        - Developers/Implementers
+        - Publishers
+        - Educators
+        - Schema Contributors
+        - All Users
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this documentation fix?
+      options:
+        - Critical (blocking adoption/usage)
+        - High (causes significant confusion)
+        - Medium (moderate improvement)
+        - Low (minor polish)
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Example Content/References
+      description: Provide example content, links to good documentation, or other references that would help
+      render: markdown
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other information that would help us improve this documentation

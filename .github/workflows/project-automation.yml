@@ -1,0 +1,136 @@
+name: Project Automation
+
+on:
+  issues:
+    types: [opened, edited, labeled, assigned, milestoned]
+  pull_request:
+    types: [opened, edited, labeled, assigned, milestoned, ready_for_review]
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    steps:
+      - name: Auto-label issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Auto-label new issues based on title/content
+            const title = context.payload.issue?.title?.toLowerCase() || context.payload.pull_request?.title?.toLowerCase() || '';
+            const body = context.payload.issue?.body?.toLowerCase() || context.payload.pull_request?.body?.toLowerCase() || '';
+            
+            const labels = [];
+            
+            // Component labels
+            if (title.includes('schema') || body.includes('schema')) {
+              labels.push('component:schema');
+            }
+            if (title.includes('doc') || title.includes('documentation') || body.includes('documentation')) {
+              labels.push('component:documentation');
+            }
+            if (title.includes('example') || body.includes('example')) {
+              labels.push('component:examples');
+            }
+            if (title.includes('test') || title.includes('validation') || body.includes('validation')) {
+              labels.push('component:validation');
+            }
+            if (title.includes('ci') || title.includes('workflow') || title.includes('action')) {
+              labels.push('component:ci-cd');
+            }
+            
+            // Priority hints (can be overridden manually)
+            if (title.includes('critical') || title.includes('urgent') || body.includes('blocking')) {
+              labels.push('priority:1');
+            } else if (title.includes('high') || title.includes('important')) {
+              labels.push('priority:2');  
+            } else if (title.includes('low') || title.includes('minor')) {
+              labels.push('priority:4');
+            } else {
+              labels.push('priority:3'); // default to medium
+            }
+            
+            // Add milestone hint based on content
+            if (title.includes('core') || title.includes('foundation') || title.includes('basic')) {
+              // Suggest v0.1.0 - but don't auto-assign milestones
+              console.log('Consider v0.1.0 milestone for core functionality');
+            }
+            
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.issue?.number || context.payload.pull_request?.number,
+                labels: labels
+              });
+            }
+
+  milestone-reminder:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened' && github.event.issue && !github.event.issue.milestone
+    steps:
+      - name: Remind about milestone assignment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `👋 Thanks for creating this issue!
+            
+            **Reminder**: Please assign this issue to a milestone:
+            - 🎯 **v0.1.0** (Due 2025-09-30): Core functionality and infrastructure
+            - 🎓 **v0.2.0** (Due 2025-11-30): Assessment framework and pedagogy  
+            - 🚀 **v0.3.0** (Due 2026-01-31): Extended features and ecosystem
+            
+            This helps with project planning and prioritization. You can assign a milestone using the sidebar or by commenting \`/milestone v0.1.0\`.`;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: comment
+            });
+
+  validate-pr:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request
+    steps:
+      - name: Check PR requirements
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const issues = [];
+            
+            // Check if PR links to an issue
+            const body = pr.body || '';
+            const hasIssueReference = /(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#\d+/i.test(body);
+            
+            if (!hasIssueReference) {
+              issues.push('❌ PR should reference an issue using "Closes #123" or "Fixes #123"');
+            }
+            
+            // Check if milestone is assigned
+            if (!pr.milestone) {
+              issues.push('❌ PR should be assigned to a milestone');
+            }
+            
+            // Check title format
+            if (!pr.title.match(/^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+/)) {
+              issues.push('ℹ️ Consider using conventional commit format in title (e.g., "feat: add new feature")');
+            }
+            
+            if (issues.length > 0) {
+              const comment = `## PR Checklist Reminder\n\n${issues.join('\n')}\n\nSee our [Contributing Guidelines](CONTRIBUTING.md) for more details.`;
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: comment
+              });
+            }
