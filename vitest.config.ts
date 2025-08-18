@@ -1,6 +1,11 @@
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  resolve: {
+    extensionAlias: {
+      '.js': ['.js', '.ts']
+    }
+  },
   test: {
     // Environment setup
     environment: 'node',
