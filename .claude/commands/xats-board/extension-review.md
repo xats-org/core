@@ -1,7 +1,7 @@
 ---
 name: extension-review
 description: Reviews proposals for extensions to the core xats schema, ensuring quality and compatibility
-model: claude-3-5-sonnet-latest
+model: claude-3-opus-20240229
 arguments:
   extension:
     description: Name or path of the extension to review

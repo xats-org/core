@@ -1,7 +1,7 @@
 ---
 name: stakeholder-feedback
 description: Gathers and synthesizes feedback from different stakeholder groups to inform schema development
-model: claude-3-5-sonnet-latest
+model: claude-3-opus-20240229
 arguments:
   groups:
     description: Specific stakeholder groups to consult (comma-separated)

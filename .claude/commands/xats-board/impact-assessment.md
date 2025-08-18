@@ -1,7 +1,7 @@
 ---
 name: impact-assessment
 description: Analyzes the comprehensive impact of proposed changes on all stakeholders and systems
-model: claude-3-5-sonnet-latest
+model: claude-3-opus-20240229
 arguments:
   change:
     description: Description of the proposed change to assess

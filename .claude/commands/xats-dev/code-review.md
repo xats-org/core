@@ -1,7 +1,7 @@
 ---
 name: code-review
 description: Performs comprehensive code review of xats schema changes and implementations
-model: claude-3-5-sonnet-latest
+model: claude-3-opus-20240229
 arguments:
   pr:
     description: Pull request number to review
