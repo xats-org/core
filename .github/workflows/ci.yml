@@ -35,13 +35,10 @@ jobs:
       run: npm run build
       
     - name: Run tests
-      run: |
-        echo "Tests temporarily disabled - test files need to be properly created"
-        echo "Validation works locally but test infrastructure needs completion"
+      run: npm run test:run
       
     - name: Run tests with coverage
-      run: |
-        echo "Coverage tests temporarily disabled"
+      run: npm run test:coverage
       if: matrix.node-version == 20
       
     - name: Upload coverage to Codecov
@@ -76,8 +73,7 @@ jobs:
   validate-examples:
     name: Validate Example Documents
     runs-on: ubuntu-latest
-    # Remove dependency on test job since it's having issues
-    # needs: [test]
+    needs: [test]
     
     steps:
     - name: Checkout code
@@ -97,11 +93,11 @@ jobs:
       
     - name: Validate test fixtures
       run: |
-        npm run validate test/fixtures/valid-minimal.json || echo "Validation test skipped"
+        npm run validate test/fixtures/valid-minimal.json
         
     - name: Validate example documents
       run: |
-        npm run validate examples/adaptive-pathway-example.json || echo "Example validation skipped"
+        npm run validate examples/adaptive-pathway-example.json
         
     - name: Test CLI help and version
       run: |
@@ -191,8 +187,7 @@ jobs:
   integration:
     name: Integration Tests
     runs-on: ubuntu-latest
-    # Remove dependency on build job until test issues are resolved
-    # needs: [build]
+    needs: [build]
     
     steps:
     - name: Checkout code
@@ -219,13 +214,13 @@ jobs:
     - name: Test validation workflow
       run: |
         # Test valid document
-        xats-validate test/fixtures/valid-minimal.json || echo "Valid test skipped"
+        xats-validate test/fixtures/valid-minimal.json
         
         # Test invalid document (should fail)
-        ! xats-validate test/fixtures/invalid-missing-required.json || echo "Invalid test skipped"
+        ! xats-validate test/fixtures/invalid-missing-required.json
         
         # Test versions command
-        xats-validate versions || echo "Versions test skipped"
+        xats-validate versions
         
         # Test schema command
         xats-validate schema

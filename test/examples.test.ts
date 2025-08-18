@@ -6,7 +6,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { readdirSync, readFileSync, existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { validateXatsFile } from '../src/validator.js';
+import { validateXatsFile } from '../dist/src/validator.js';
 
 const EXAMPLES_DIR = join(process.cwd(), 'examples');
 const INVALID_EXAMPLES_DIR = join(EXAMPLES_DIR, 'invalid');
