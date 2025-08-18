@@ -114,9 +114,9 @@ jobs:
               issues.push('❌ PR should reference an issue using "Closes #123" or "Fixes #123"');
             }
             
-            // Check if milestone is assigned
+            // Check if milestone is assigned (REQUIRED)
             if (!pr.milestone) {
-              issues.push('❌ PR should be assigned to a milestone');
+              issues.push('❌ **REQUIRED**: PR must be assigned to a milestone (v0.1.0, v0.2.0, or v0.3.0)');
             }
             
             // Check title format
