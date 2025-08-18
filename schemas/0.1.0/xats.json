@@ -351,9 +351,206 @@
           "properties": {
             "blockType": { "type": "string", "format": "uri" },
             "linkedObjectiveIds": { "type": "array", "items": { "type": "string" } },
-            "content": {}
+            "content": {
+              "description": "The content of the block. Structure depends on blockType.",
+              "type": "object"
+            }
           },
-          "required": ["blockType", "content"]
+          "required": ["blockType", "content"],
+          "if": {
+            "properties": {
+              "blockType": {
+                "enum": [
+                  "https://xats.org/core/blocks/paragraph",
+                  "https://xats.org/core/blocks/heading",
+                  "https://xats.org/core/blocks/blockquote"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "content": {
+                "type": "object",
+                "properties": {
+                  "text": { "$ref": "#/definitions/SemanticText" }
+                },
+                "required": ["text"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "else": {
+            "if": {
+              "properties": {
+                "blockType": {
+                  "enum": [
+                    "https://xats.org/core/blocks/list"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "content": {
+                  "type": "object",
+                  "properties": {
+                    "listType": { 
+                      "type": "string",
+                      "enum": ["ordered", "unordered"]
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": { "$ref": "#/definitions/SemanticText" },
+                          "subItems": {
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/ContentBlock" }
+                          }
+                        },
+                        "required": ["text"]
+                      }
+                    }
+                  },
+                  "required": ["listType", "items"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "else": {
+              "if": {
+                "properties": {
+                  "blockType": {
+                    "enum": [
+                      "https://xats.org/core/blocks/codeBlock"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "content": {
+                    "type": "object",
+                    "properties": {
+                      "language": { "type": "string" },
+                      "code": { "type": "string" }
+                    },
+                    "required": ["code"],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "else": {
+                "if": {
+                  "properties": {
+                    "blockType": {
+                      "enum": [
+                        "https://xats.org/core/blocks/mathBlock"
+                      ]
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "notation": { 
+                          "type": "string",
+                          "enum": ["latex", "mathml", "asciimath"]
+                        },
+                        "expression": { "type": "string" }
+                      },
+                      "required": ["notation", "expression"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "else": {
+                  "if": {
+                    "properties": {
+                      "blockType": {
+                        "enum": [
+                          "https://xats.org/core/blocks/table"
+                        ]
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "content": {
+                        "type": "object",
+                        "properties": {
+                          "caption": { "$ref": "#/definitions/SemanticText" },
+                          "headers": {
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/SemanticText" }
+                          },
+                          "rows": {
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "items": { "$ref": "#/definitions/SemanticText" }
+                            }
+                          }
+                        },
+                        "required": ["rows"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "else": {
+                    "if": {
+                      "properties": {
+                        "blockType": {
+                          "enum": [
+                            "https://xats.org/core/blocks/figure"
+                          ]
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "content": {
+                          "type": "object",
+                          "properties": {
+                            "resourceId": { "type": "string" },
+                            "caption": { "$ref": "#/definitions/SemanticText" },
+                            "altText": { "type": "string" }
+                          },
+                          "required": ["resourceId"],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "else": {
+                      "if": {
+                        "properties": {
+                          "blockType": {
+                            "type": "string",
+                            "pattern": "^https://xats\\.org/core/placeholders/"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "content": {
+                            "type": "object",
+                            "properties": {
+                              "placeholder": { "type": "boolean" }
+                            },
+                            "additionalProperties": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     },
