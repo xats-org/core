@@ -1,7 +1,7 @@
 ---
 name: schema-implement
 description: Implements a new feature or change in the xats schema with full development workflow
-model: claude-3-opus-20240229
+model: claude-opus-4-1-20250805
 arguments:
   feature:
     description: The feature or change to implement

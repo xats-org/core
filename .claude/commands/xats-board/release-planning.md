@@ -1,7 +1,7 @@
 ---
 name: release-planning
 description: Plans and coordinates schema version releases, managing features, timelines, and stakeholder communications
-model: claude-3-opus-20240229
+model: claude-opus-4-1-20250805
 arguments:
   version:
     description: Target version to plan for

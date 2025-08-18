@@ -1,7 +1,7 @@
 ---
 name: issue-triage
 description: Reviews and prioritizes GitHub issues with input from relevant board members, assigns milestones and labels
-model: claude-3-opus-20240229
+model: claude-opus-4-1-20250805
 arguments:
   labels:
     description: Filter issues by specific labels

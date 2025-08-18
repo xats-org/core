@@ -1,7 +1,7 @@
 ---
 name: schema-review
 description: Conducts thorough technical and pedagogical review of proposed schema changes before implementation
-model: claude-3-opus-20240229
+model: claude-opus-4-1-20250805
 arguments:
   pr:
     description: Pull request number to review
