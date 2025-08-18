@@ -132,7 +132,7 @@ export class XatsValidator {
    * Get available schema versions
    */
   getAvailableVersions(): string[] {
-    return ['0.1.0']; // Hardcoded for now, could be dynamic
+    return ['0.1.0', '0.2.0']; // Hardcoded for now, could be dynamic
   }
 
   /**
