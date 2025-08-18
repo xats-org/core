@@ -12,7 +12,7 @@ export {
   type ValidationResult,
   type ValidationError,
   type ValidatorOptions
-} from './validator.js';
+} from './validator';
 
 // Version information
 export const version = '0.1.0';
