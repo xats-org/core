@@ -486,7 +486,7 @@ describe('Pattern and Format Validation', () => {
                     },
                     rules: [
                       {
-                        condition: condition, // Valid condition pattern
+                        condition, // Valid condition pattern
                         destinationId: 'next-section'
                       }
                     ]
@@ -544,7 +544,7 @@ describe('Pattern and Format Validation', () => {
       };
 
       // This tests the pattern validation for placeholder blockTypes
-      const result = await validator.validate(doc);
+      await validator.validate(doc);
       // The schema allows additional properties in placeholder content,
       // so this should be valid if the pattern matches
     });
@@ -616,7 +616,7 @@ describe('Pattern and Format Validation', () => {
         bodyMatter: { contents: [] }
       };
 
-      const result = await validator.validate(doc);
+      await validator.validate(doc);
       // This tests how the validator handles relative URIs
       // The result depends on the URI validation implementation
     });
@@ -640,7 +640,7 @@ describe('Pattern and Format Validation', () => {
         bodyMatter: { contents: [] }
       };
 
-      const result = await validator.validate(doc);
+      await validator.validate(doc);
       // This tests how the validator handles scheme-less URIs
     });
 
@@ -678,7 +678,7 @@ describe('Pattern and Format Validation', () => {
         }
       };
 
-      const result = await validator.validate(doc);
+      await validator.validate(doc);
       // This tests how the validator handles URIs with query parameters
     });
 
@@ -701,7 +701,7 @@ describe('Pattern and Format Validation', () => {
         bodyMatter: { contents: [] }
       };
 
-      const result = await validator.validate(doc);
+      await validator.validate(doc);
       // This tests how the validator handles internationalized domain names
     });
 
@@ -830,7 +830,7 @@ describe('Pattern and Format Validation', () => {
 
   describe('Format Validation Edge Cases', () => {
     it('should handle very long URIs', async () => {
-      const longUri = 'https://example.com/' + 'a'.repeat(2000) + '/block';
+      const longUri = `https://example.com/${  'a'.repeat(2000)  }/block`;
       
       const doc = {
         schemaVersion: '0.1.0',

@@ -672,7 +672,7 @@ describe('Type Constraint Validation', () => {
         }
       };
 
-      const result = await validator.validate(doc);
+      await validator.validate(doc);
       // Note: This might pass if the schema allows mixed content.
       // The test validates the structure is checked.
     });
@@ -938,7 +938,7 @@ describe('Type Constraint Validation', () => {
         bodyMatter: { contents: [] }
       };
 
-      const result = await validator.validate(doc);
+      await validator.validate(doc);
       // Note: Schema may or may not allow null for optional fields
       // This test validates the behavior is consistent
     });

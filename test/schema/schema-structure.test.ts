@@ -163,9 +163,9 @@ describe('Schema Structure Validation', () => {
         
         // Should have either type, allOf, or oneOf
         const hasValidStructure = 
-          definition.hasOwnProperty('type') ||
-          definition.hasOwnProperty('allOf') ||
-          definition.hasOwnProperty('oneOf');
+          Object.prototype.hasOwnProperty.call(definition, 'type') ||
+          Object.prototype.hasOwnProperty.call(definition, 'allOf') ||
+          Object.prototype.hasOwnProperty.call(definition, 'oneOf');
         
         expect(hasValidStructure).toBe(true);
         
@@ -319,7 +319,6 @@ describe('Schema Structure Validation', () => {
 
   // Helper function to extract content block schema for specific block types
   function getContentBlockSchema(blockType: string): any {
-    const contentBlockDef = schemaContent.definitions.ContentBlock;
     
     // For testing purposes, return a simple mock structure
     // In practice, this would navigate the complex if/then/else chains

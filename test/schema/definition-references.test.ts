@@ -9,17 +9,14 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { createValidator } from '../../dist/validator.js';
 
 describe('Definition Reference Validation', () => {
   let schemaContent: any;
-  let validator: any;
 
   beforeAll(() => {
     const schemaPath = resolve(process.cwd(), 'schemas/0.1.0/xats.json');
     const schemaText = readFileSync(schemaPath, 'utf-8');
     schemaContent = JSON.parse(schemaText);
-    validator = createValidator();
   });
 
   describe('XatsObject Inheritance', () => {

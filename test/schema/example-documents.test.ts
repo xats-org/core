@@ -330,7 +330,7 @@ describe('Example Document Validation', () => {
         }
       };
 
-      const result = await validator.validate(invalidDoc);
+      await validator.validate(invalidDoc);
       // Note: The schema may allow this depending on oneOf implementation
       // This test documents the expected behavior
     });
