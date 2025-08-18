@@ -1,0 +1,602 @@
+{
+  "schemaVersion": "0.2.0",
+  "language": "en",
+  "rights": {
+    "license": "https://xats.org/licenses/cc-by-sa-4.0",
+    "copyright": "© 2025 Educational Publishers Inc.",
+    "holder": "Educational Publishers Inc.",
+    "year": "2025",
+    "permissions": {
+      "redistribute": true,
+      "modify": true,
+      "commercialUse": false,
+      "derivatives": true
+    },
+    "attribution": {
+      "required": true,
+      "text": "Based on 'Introduction to Data Science' by Educational Publishers Inc., licensed under CC BY-SA 4.0"
+    }
+  },
+  "bibliographicEntry": {
+    "id": "textbook-001",
+    "type": "book",
+    "title": "Introduction to Data Science with Assessments",
+    "author": [
+      {
+        "family": "Smith",
+        "given": "Jane"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [2025, 8, 18]
+      ]
+    },
+    "publisher": "Educational Publishers Inc.",
+    "ISBN": "978-0-123456-78-9"
+  },
+  "subject": "Data Science",
+  "bodyMatter": {
+    "type": "chapters",
+    "contents": [
+      {
+        "id": "chapter-1",
+        "type": "Chapter",
+        "label": "Chapter 1",
+        "title": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "Introduction to Data Science"
+            }
+          ]
+        },
+        "language": "en",
+        "learningObjectives": [
+          {
+            "id": "obj-1-1",
+            "objective": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Understand the fundamental concepts of data science"
+                }
+              ]
+            },
+            "bloomsLevel": "understand"
+          },
+          {
+            "id": "obj-1-2",
+            "objective": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Apply basic Python programming for data analysis"
+                }
+              ]
+            },
+            "bloomsLevel": "apply"
+          }
+        ],
+        "contents": [
+          {
+            "id": "section-1-1",
+            "type": "Section",
+            "label": "1.1",
+            "title": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "What is Data Science?"
+                }
+              ]
+            },
+            "language": "en",
+            "accessibilityMetadata": {
+              "landmarkType": "main",
+              "ariaLabel": "Main content section 1.1"
+            },
+            "contents": [
+              {
+                "id": "skip-nav-1",
+                "blockType": "https://xats.org/core/blocks/skipNavigation",
+                "content": {
+                  "targetId": "assessment-1",
+                  "label": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Skip to assessment"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "para-1",
+                "blockType": "https://xats.org/core/blocks/paragraph",
+                "content": {
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Data science is an interdisciplinary field that uses scientific methods, processes, algorithms, and systems to extract knowledge from data."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "math-example-1",
+                "blockType": "https://xats.org/core/blocks/mathBlock",
+                "content": {
+                  "notation": "LaTeX",
+                  "expression": "\\mu = \\frac{1}{n} \\sum_{i=1}^{n} x_i",
+                  "altText": "The mean mu equals one over n times the sum from i equals 1 to n of x sub i",
+                  "speechText": "mean equals the sum of all values divided by the count",
+                  "stepByStepExplanation": [
+                    {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "Step 1: Add all values together"
+                        }
+                      ]
+                    },
+                    {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "Step 2: Divide by the total count"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "table-1",
+                "blockType": "https://xats.org/core/blocks/table",
+                "content": {
+                  "caption": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Common Data Science Tools"
+                      }
+                    ]
+                  },
+                  "summary": "A 3-column table listing popular data science tools, their primary use cases, and difficulty levels",
+                  "headers": [
+                    {
+                      "text": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Tool"
+                          }
+                        ]
+                      },
+                      "scope": "col"
+                    },
+                    {
+                      "text": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Use Case"
+                          }
+                        ]
+                      },
+                      "scope": "col"
+                    },
+                    {
+                      "text": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Difficulty"
+                          }
+                        ]
+                      },
+                      "scope": "col"
+                    }
+                  ],
+                  "rows": [
+                    [
+                      {
+                        "text": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Python"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "text": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "General purpose"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "text": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Beginner"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "text": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "R"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "text": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Statistical analysis"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "text": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Intermediate"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  ]
+                }
+              },
+              {
+                "id": "assessment-1",
+                "blockType": "https://xats.org/core/blocks/multipleChoice",
+                "linkedObjectiveIds": ["obj-1-1"],
+                "content": {
+                  "question": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Which of the following best describes data science?"
+                      }
+                    ]
+                  },
+                  "options": [
+                    {
+                      "id": "a",
+                      "text": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "A field focused only on statistics"
+                          }
+                        ]
+                      },
+                      "isCorrect": false
+                    },
+                    {
+                      "id": "b",
+                      "text": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "An interdisciplinary field that extracts knowledge from data"
+                          }
+                        ]
+                      },
+                      "isCorrect": true
+                    },
+                    {
+                      "id": "c",
+                      "text": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "A programming language"
+                          }
+                        ]
+                      },
+                      "isCorrect": false
+                    },
+                    {
+                      "id": "d",
+                      "text": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "A type of database"
+                          }
+                        ]
+                      },
+                      "isCorrect": false
+                    }
+                  ],
+                  "allowMultiple": false,
+                  "randomizeOptions": true,
+                  "feedback": {
+                    "correct": {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "Correct! Data science is indeed an interdisciplinary field."
+                        }
+                      ]
+                    },
+                    "incorrect": {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "Not quite. Data science combines multiple disciplines to extract insights from data."
+                        }
+                      ]
+                    }
+                  },
+                  "scoring": {
+                    "points": 10,
+                    "scoringMethod": "automatic",
+                    "partialCredit": false
+                  },
+                  "cognitiveMetadata": {
+                    "bloomsLevel": "understand",
+                    "difficultyLevel": 2,
+                    "estimatedTimeSeconds": 60,
+                    "cognitiveLoad": "low"
+                  },
+                  "accessibilitySettings": {
+                    "extendedTimeMultiplier": 1.5,
+                    "screenReaderOptimized": true,
+                    "keyboardNavigable": true,
+                    "highContrastSupport": true
+                  }
+                }
+              },
+              {
+                "id": "assessment-2",
+                "blockType": "https://xats.org/core/blocks/shortAnswer",
+                "linkedObjectiveIds": ["obj-1-2"],
+                "content": {
+                  "question": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Write a Python function name that would calculate the mean of a list."
+                      }
+                    ]
+                  },
+                  "answerFormat": "text",
+                  "expectedAnswers": [
+                    "mean",
+                    "calculate_mean",
+                    "get_mean",
+                    "avg",
+                    "average"
+                  ],
+                  "caseSensitive": false,
+                  "minLength": 3,
+                  "maxLength": 50,
+                  "feedback": {
+                    "correct": {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "Good! That's a valid function name for calculating the mean."
+                        }
+                      ]
+                    },
+                    "incorrect": {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "Try thinking of descriptive names like 'mean' or 'calculate_mean'."
+                        }
+                      ]
+                    }
+                  },
+                  "scoring": {
+                    "points": 5,
+                    "scoringMethod": "automatic",
+                    "partialCredit": false
+                  },
+                  "cognitiveMetadata": {
+                    "bloomsLevel": "apply",
+                    "difficultyLevel": 2,
+                    "estimatedTimeSeconds": 30,
+                    "cognitiveLoad": "low"
+                  },
+                  "accessibilitySettings": {
+                    "extendedTimeMultiplier": 2,
+                    "screenReaderOptimized": true,
+                    "keyboardNavigable": true
+                  }
+                }
+              },
+              {
+                "id": "assessment-3",
+                "blockType": "https://xats.org/core/blocks/essayPrompt",
+                "linkedObjectiveIds": ["obj-1-1", "obj-1-2"],
+                "content": {
+                  "question": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Explain how data science differs from traditional statistics and provide an example of a real-world application."
+                      }
+                    ]
+                  },
+                  "prompt": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "In your response, address the following points:\n1. Key differences between data science and statistics\n2. The role of programming in data science\n3. A specific real-world example with explanation\n\nYour essay should be 200-300 words."
+                      }
+                    ]
+                  },
+                  "minWords": 200,
+                  "maxWords": 300,
+                  "rubric": {
+                    "criteria": [
+                      {
+                        "id": "understanding",
+                        "name": "Understanding of Concepts",
+                        "description": "Demonstrates clear understanding of data science vs statistics",
+                        "weight": 0.4,
+                        "levels": [
+                          {
+                            "score": 4,
+                            "description": "Excellent understanding with nuanced comparison"
+                          },
+                          {
+                            "score": 3,
+                            "description": "Good understanding with clear distinctions"
+                          },
+                          {
+                            "score": 2,
+                            "description": "Basic understanding with some confusion"
+                          },
+                          {
+                            "score": 1,
+                            "description": "Poor understanding or major misconceptions"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "example",
+                        "name": "Real-World Example",
+                        "description": "Provides relevant and well-explained example",
+                        "weight": 0.3,
+                        "levels": [
+                          {
+                            "score": 4,
+                            "description": "Excellent example with detailed explanation"
+                          },
+                          {
+                            "score": 3,
+                            "description": "Good example with adequate explanation"
+                          },
+                          {
+                            "score": 2,
+                            "description": "Basic example with minimal explanation"
+                          },
+                          {
+                            "score": 1,
+                            "description": "Poor or irrelevant example"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "writing",
+                        "name": "Writing Quality",
+                        "description": "Clarity, organization, and grammar",
+                        "weight": 0.3,
+                        "levels": [
+                          {
+                            "score": 4,
+                            "description": "Excellent writing with clear organization"
+                          },
+                          {
+                            "score": 3,
+                            "description": "Good writing with minor issues"
+                          },
+                          {
+                            "score": 2,
+                            "description": "Adequate writing with some clarity issues"
+                          },
+                          {
+                            "score": 1,
+                            "description": "Poor writing that impedes understanding"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "scoring": {
+                    "points": 25,
+                    "scoringMethod": "manual",
+                    "partialCredit": true
+                  },
+                  "cognitiveMetadata": {
+                    "bloomsLevel": "analyze",
+                    "difficultyLevel": 3,
+                    "estimatedTimeSeconds": 900,
+                    "cognitiveLoad": "high"
+                  },
+                  "accessibilitySettings": {
+                    "extendedTimeMultiplier": 2,
+                    "screenReaderOptimized": true,
+                    "keyboardNavigable": true,
+                    "spellCheckAllowed": true,
+                    "dictionaryAllowed": true
+                  }
+                }
+              }
+            ],
+            "pathways": [
+              {
+                "id": "pathway-1",
+                "name": "Remedial Path",
+                "description": {
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Additional resources for students needing more support"
+                    }
+                  ]
+                },
+                "conditions": [
+                  {
+                    "type": "onAssessment",
+                    "assessmentId": "assessment-1",
+                    "operator": "less_than",
+                    "value": 60,
+                    "target": "section-remedial-1"
+                  }
+                ]
+              },
+              {
+                "id": "pathway-2",
+                "name": "Advanced Path",
+                "description": {
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Enrichment content for high-performing students"
+                    }
+                  ]
+                },
+                "conditions": [
+                  {
+                    "type": "onAssessment",
+                    "assessmentId": "assessment-1",
+                    "operator": "greater_than_or_equal",
+                    "value": 90,
+                    "target": "section-advanced-1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

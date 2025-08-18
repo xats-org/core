@@ -1,0 +1,861 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/schemas/0.2.0/schema.json",
+  "title": "Extensible Academic Textbook Schema",
+  "description": "The root structure for a textbook, designed for extensibility and machine readability.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "description": "The semantic version of the xats schema this document conforms to.",
+      "type": "string",
+      "enum": ["0.1.0", "0.2.0"]
+    },
+    "bibliographicEntry": {
+      "description": "The primary CSL-JSON entry for the textbook itself.",
+      "$ref": "#/definitions/CslDataItem"
+    },
+    "citationStyle": {
+      "description": "The identifier for the Citation Style Language (CSL) style to be used (e.g., 'apa.csl').",
+      "type": "string"
+    },
+    "subject": { "type": "string" },
+    "targetAudience": { "type": "string" },
+    "learningOutcomes": {
+      "description": "The broad, high-level capabilities a student should possess after completing the textbook.",
+      "type": "array",
+      "items": { "$ref": "#/definitions/LearningOutcome" }
+    },
+    "resources": {
+      "description": "A centralized repository of shared assets (images, videos, etc.) that can be referenced throughout the book.",
+      "type": "array",
+      "items": { "$ref": "#/definitions/Resource" }
+    },
+    "frontMatter": { "$ref": "#/definitions/FrontMatter" },
+    "bodyMatter": { "$ref": "#/definitions/BodyMatter" },
+    "backMatter": { "$ref": "#/definitions/BackMatter" }
+  },
+  "required": ["schemaVersion", "bibliographicEntry", "subject", "bodyMatter"],
+
+  "definitions": {
+    "XatsObject": {
+      "description": "The most fundamental base object, providing universal metadata properties for all addressable components.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "description": { "description": "An optional internal description or author note for this object.", "type": "string" },
+        "tags": { "description": "An optional array of keywords for search and categorization.", "type": "array", "items": { "type": "string" } },
+        "citationIds": {
+          "description": "An array of CSL-JSON item IDs that are sources for this object.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "renderingHints": {
+          "description": "An array of hints to guide the renderer on presentational intent.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/RenderingHint" }
+        },
+        "extensions": { "description": "A container for non-standard, custom data.", "type": "object" }
+      },
+      "required": ["id"]
+    },
+    "RenderingHint": {
+      "type": "object",
+      "properties": {
+        "hintType": { "description": "A URI identifying the rendering hint.", "type": "string", "format": "uri" },
+        "value": { "description": "The value for the specified hint." }
+      },
+      "required": ["hintType", "value"]
+    },
+    "StructuralContainer": {
+      "description": "A base definition for all structural components of the textbook body, containing common properties.",
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "label": { "description": "The display label for this container (e.g., 'III', 'A.1', 'Part 1').", "type": "string" },
+            "title": { "type": "string" },
+            "linkedObjectiveIds": { "type": "array", "items": { "type": "string" } },
+            "pathways": { "type": "array", "items": { "$ref": "#/definitions/Pathway" } }
+          },
+          "required": ["title"]
+        }
+      ]
+    },
+    "SemanticText": {
+      "description": "A structured text object composed of an array of runs, allowing for in-line references and other semantic features.",
+      "type": "object",
+      "properties": {
+        "runs": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "$ref": "#/definitions/TextRun" },
+              { "$ref": "#/definitions/ReferenceRun" },
+              { "$ref": "#/definitions/CitationRun" },
+              { "$ref": "#/definitions/EmphasisRun" },
+              { "$ref": "#/definitions/StrongRun" }
+            ]
+          }
+        }
+      },
+      "required": ["runs"]
+    },
+    "TextRun": {
+      "type": "object",
+      "properties": { "type": { "const": "text" }, "text": { "type": "string" } }, "required": ["type", "text"]
+    },
+    "ReferenceRun": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "reference" },
+        "text": { "type": "string" },
+        "refId": { "type": "string" }
+      },
+      "required": ["type", "text", "refId"]
+    },
+    "CitationRun": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "citation" },
+        "refId": { "description": "The ID of the CSL-JSON item in the bibliography.", "type": "string" }
+      },
+      "required": ["type", "refId"]
+    },
+    "EmphasisRun": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "emphasis" },
+        "text": { "type": "string" }
+      },
+      "required": ["type", "text"]
+    },
+    "StrongRun": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "strong" },
+        "text": { "type": "string" }
+      },
+      "required": ["type", "text"]
+    },
+    "CslDataItem": {
+      "description": "A single bibliographic entry that must conform to the Citation Style Language (CSL-JSON) schema. The 'id' property is required for in-line linking.",
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/citation-style-language/schema/master/csl-data.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" }
+          },
+          "required": ["id"]
+        }
+      ]
+    },
+    "LearningOutcome": {
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": { "subItems": { "type": "array", "items": { "$ref": "#/definitions/LearningOutcome" } } }
+        }
+      ]
+    },
+    "LearningObjective": {
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "linkedOutcomeId": { "type": "string" },
+            "subItems": { "type": "array", "items": { "$ref": "#/definitions/LearningObjective" } }
+          }
+        }
+      ]
+    },
+    "Resource": {
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "description": "A URI identifying the type of resource. Core types are defined at xats.org.", "type": "string", "format": "uri" },
+            "url": { "type": "string", "format": "uri" },
+            "altText": { "type": "string" }
+          },
+          "required": ["type", "url"]
+        }
+      ]
+    },
+    "FrontMatter": {
+      "type": "object",
+      "properties": {
+        "sections": {
+          "description": "An array of sections for content like a Preface, Dedication, or a placeholder for a Table of Contents.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/Section" }
+        },
+        "extensions": { "type": "object" }
+      }
+    },
+    "BodyMatter": {
+      "type": "object",
+      "properties": {
+        "contents": {
+          "description": "The main instructional content of the textbook.",
+          "oneOf": [
+            { "type": "array", "items": { "$ref": "#/definitions/Unit" } },
+            { "type": "array", "items": { "$ref": "#/definitions/Chapter" } }
+          ]
+        },
+        "extensions": { "type": "object" }
+      },
+      "required": ["contents"]
+    },
+    "BackMatter": {
+      "type": "object",
+      "properties": {
+        "sections": {
+          "description": "An array of sections for content like an Appendix, Author's Note, or a placeholder for a Bibliography.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/Section" }
+        },
+        "glossary": { "type": "array", "items": { "$ref": "#/definitions/KeyTerm" } },
+        "bibliography": {
+          "description": "The raw CSL-JSON data for all bibliographic entries.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/CslDataItem" }
+        },
+        "extensions": { "type": "object" }
+      }
+    },
+    "Unit": {
+      "allOf": [
+        { "$ref": "#/definitions/StructuralContainer" },
+        {
+          "type": "object",
+          "properties": {
+            "introduction": { "$ref": "#/definitions/SemanticText" },
+            "contents": {
+              "oneOf": [
+                { "type": "array", "items": { "$ref": "#/definitions/Unit" } },
+                { "type": "array", "items": { "$ref": "#/definitions/Chapter" } }
+              ]
+            }
+          },
+          "required": ["contents"]
+        }
+      ]
+    },
+    "Chapter": {
+      "allOf": [
+        { "$ref": "#/definitions/StructuralContainer" },
+        {
+          "type": "object",
+          "properties": {
+            "introduction": { "$ref": "#/definitions/SemanticText" },
+            "learningObjectives": { "type": "array", "items": { "$ref": "#/definitions/LearningObjective" } },
+            "sections": { "type": "array", "items": { "$ref": "#/definitions/Section" } },
+            "summary": { "$ref": "#/definitions/SemanticText" },
+            "keyTerms": { "type": "array", "items": { "$ref": "#/definitions/KeyTerm" } }
+          },
+          "required": ["sections"]
+        }
+      ]
+    },
+    "Section": {
+      "allOf": [
+        { "$ref": "#/definitions/StructuralContainer" },
+        {
+          "type": "object",
+          "properties": {
+            "content": { "type": "array", "items": { "$ref": "#/definitions/ContentBlock" } }
+          },
+          "required": ["content"]
+        }
+      ]
+    },
+    "Pathway": {
+      "description": "Defines conditional routing rules for adaptive learning paths. See https://xats.org/specs/pathway-condition-grammar for the complete condition grammar specification.",
+      "type": "object",
+      "properties": {
+        "trigger": {
+          "description": "Defines the event that initiates evaluation of the pathway rules.",
+          "type": "object",
+          "properties": {
+            "triggerType": { 
+              "description": "A URI identifying the event that triggers this pathway. Common types: onCompletion, onAssessment.", 
+              "type": "string", 
+              "format": "uri",
+              "examples": [
+                "https://xats.org/core/triggers/onCompletion",
+                "https://xats.org/core/triggers/onAssessment"
+              ]
+            },
+            "sourceId": { 
+              "description": "The ID of the source element (e.g., assessment block) providing data for rule evaluation. Required when triggerType is onAssessment.",
+              "type": "string" 
+            }
+          },
+          "required": ["triggerType"]
+        },
+        "rules": {
+          "description": "An ordered list of routing rules. The first rule whose condition evaluates to true determines the destination.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "condition": { 
+                "description": "A boolean expression following the xats Pathway Condition Grammar. Variables include: score, attempts, time_spent, passed, completed, objectives_met, user_choice, etc. Operators: ==, !=, <, >, <=, >=, AND, OR, NOT, IN, NOT IN. Functions: min, max, avg, count, exists, all, any.",
+                "type": "string",
+                "pattern": "^(?!\\s*$).+",
+                "examples": [
+                  "score >= 70",
+                  "score < 70 AND attempts >= 3",
+                  "score >= 80 OR time_spent > 600",
+                  "user_choice == \"advanced\" AND score >= 85",
+                  "count(objectives_met) >= 3",
+                  "\"obj-1\" IN objectives_met",
+                  "NOT passed AND attempts < 3"
+                ]
+              },
+              "destinationId": { 
+                "description": "The ID of the target structural container or content block to navigate to when this rule's condition is true.",
+                "type": "string" 
+              },
+              "pathwayType": { 
+                "description": "A URI identifying the pedagogical purpose of this pathway (e.g., remedial, standard, enrichment, prerequisite).", 
+                "type": "string", 
+                "format": "uri",
+                "examples": [
+                  "https://xats.org/core/pathways/remedial",
+                  "https://xats.org/core/pathways/standard",
+                  "https://xats.org/core/pathways/enrichment",
+                  "https://xats.org/core/pathways/prerequisite"
+                ]
+              }
+            },
+            "required": ["condition", "destinationId"]
+          }
+        }
+      },
+      "required": ["trigger", "rules"]
+    },
+    "ContentBlock": {
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "blockType": { "type": "string", "format": "uri" },
+            "linkedObjectiveIds": { "type": "array", "items": { "type": "string" } },
+            "content": {
+              "description": "The content of the block. Structure depends on blockType.",
+              "type": "object"
+            }
+          },
+          "required": ["blockType", "content"],
+          "if": {
+            "properties": {
+              "blockType": {
+                "enum": [
+                  "https://xats.org/core/blocks/paragraph",
+                  "https://xats.org/core/blocks/heading",
+                  "https://xats.org/core/blocks/blockquote"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "content": {
+                "type": "object",
+                "properties": {
+                  "text": { "$ref": "#/definitions/SemanticText" }
+                },
+                "required": ["text"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "else": {
+            "if": {
+              "properties": {
+                "blockType": {
+                  "enum": [
+                    "https://xats.org/core/blocks/list"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "content": {
+                  "type": "object",
+                  "properties": {
+                    "listType": { 
+                      "type": "string",
+                      "enum": ["ordered", "unordered"]
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": { "$ref": "#/definitions/SemanticText" },
+                          "subItems": {
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/ContentBlock" }
+                          }
+                        },
+                        "required": ["text"]
+                      }
+                    }
+                  },
+                  "required": ["listType", "items"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "else": {
+              "if": {
+                "properties": {
+                  "blockType": {
+                    "enum": [
+                      "https://xats.org/core/blocks/codeBlock"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "content": {
+                    "type": "object",
+                    "properties": {
+                      "language": { "type": "string" },
+                      "code": { "type": "string" }
+                    },
+                    "required": ["code"],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "else": {
+                "if": {
+                  "properties": {
+                    "blockType": {
+                      "enum": [
+                        "https://xats.org/core/blocks/mathBlock"
+                      ]
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "notation": { 
+                          "type": "string",
+                          "enum": ["latex", "mathml", "asciimath"]
+                        },
+                        "expression": { "type": "string" }
+                      },
+                      "required": ["notation", "expression"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "else": {
+                  "if": {
+                    "properties": {
+                      "blockType": {
+                        "enum": [
+                          "https://xats.org/core/blocks/table"
+                        ]
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "content": {
+                        "type": "object",
+                        "properties": {
+                          "caption": { "$ref": "#/definitions/SemanticText" },
+                          "headers": {
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/SemanticText" }
+                          },
+                          "rows": {
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "items": { "$ref": "#/definitions/SemanticText" }
+                            }
+                          }
+                        },
+                        "required": ["rows"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "else": {
+                    "if": {
+                      "properties": {
+                        "blockType": {
+                          "enum": [
+                            "https://xats.org/core/blocks/figure"
+                          ]
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "content": {
+                          "type": "object",
+                          "properties": {
+                            "resourceId": { "type": "string" },
+                            "caption": { "$ref": "#/definitions/SemanticText" },
+                            "altText": { "type": "string" }
+                          },
+                          "required": ["resourceId"],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "else": {
+                      "if": {
+                        "properties": {
+                          "blockType": {
+                            "const": "https://xats.org/core/blocks/multipleChoice"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "content": { "$ref": "#/definitions/MultipleChoiceContent" }
+                        }
+                      },
+                      "else": {
+                        "if": {
+                          "properties": {
+                            "blockType": {
+                              "const": "https://xats.org/core/blocks/shortAnswer"
+                            }
+                          }
+                        },
+                        "then": {
+                          "properties": {
+                            "content": { "$ref": "#/definitions/ShortAnswerContent" }
+                          }
+                        },
+                        "else": {
+                          "if": {
+                            "properties": {
+                              "blockType": {
+                                "const": "https://xats.org/core/blocks/essayPrompt"
+                              }
+                            }
+                          },
+                          "then": {
+                            "properties": {
+                              "content": { "$ref": "#/definitions/EssayPromptContent" }
+                            }
+                          },
+                          "else": {
+                            "if": {
+                              "properties": {
+                                "blockType": {
+                                  "type": "string",
+                                  "pattern": "^https://xats\\.org/core/placeholders/"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "content": {
+                                  "type": "object",
+                                  "properties": {
+                                    "placeholder": { "type": "boolean" }
+                                  },
+                                  "additionalProperties": true
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "KeyTerm": {
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "term": { "type": "string" },
+            "definition": { "$ref": "#/definitions/SemanticText" }
+          },
+          "required": ["term", "definition"]
+        }
+      ]
+    },
+    "CognitiveMetadata": {
+      "description": "Cognitive and pedagogical metadata for assessment items.",
+      "type": "object",
+      "properties": {
+        "bloomsLevel": {
+          "description": "Bloom's taxonomy cognitive level.",
+          "type": "string",
+          "enum": ["remember", "understand", "apply", "analyze", "evaluate", "create"]
+        },
+        "difficulty": {
+          "description": "Difficulty level from 1 (easiest) to 5 (hardest).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "estimatedTimeMinutes": {
+          "description": "Estimated completion time in minutes.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "cognitiveLoad": {
+          "description": "Expected cognitive load level.",
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "prerequisites": {
+          "description": "Array of prerequisite learning objective IDs.",
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["bloomsLevel", "difficulty", "estimatedTimeMinutes"],
+      "additionalProperties": false
+    },
+    "ScoringStructure": {
+      "description": "Defines how the assessment item should be scored.",
+      "type": "object",
+      "properties": {
+        "points": {
+          "description": "Maximum points available for this assessment.",
+          "type": "number",
+          "minimum": 0
+        },
+        "scoringMethod": {
+          "description": "Method used to calculate the score.",
+          "type": "string",
+          "enum": ["automatic", "manual", "hybrid"]
+        },
+        "partialCredit": {
+          "description": "Whether partial credit is awarded.",
+          "type": "boolean"
+        },
+        "attempts": {
+          "description": "Number of attempts allowed. Use -1 for unlimited attempts.",
+          "type": "integer",
+          "minimum": -1
+        },
+        "penaltyPerAttempt": {
+          "description": "Point penalty per incorrect attempt (0-1 as fraction of total points).",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": ["points", "scoringMethod"],
+      "additionalProperties": false
+    },
+    "FeedbackStructure": {
+      "description": "Defines feedback provided to students for assessment items.",
+      "type": "object",
+      "properties": {
+        "immediate": {
+          "description": "Feedback shown immediately after answering.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "onCorrect": {
+          "description": "Feedback shown when answer is correct.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "onIncorrect": {
+          "description": "Feedback shown when answer is incorrect.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "onPartial": {
+          "description": "Feedback shown when partial credit is earned.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "hints": {
+          "description": "Array of progressive hints available to students.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "text": { "$ref": "#/definitions/SemanticText" },
+              "pointPenalty": {
+                "description": "Points deducted for using this hint.",
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": ["id", "text"]
+          }
+        },
+        "explanations": {
+          "description": "Detailed explanations for each answer option (for multiple choice).",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "optionId": { "type": "string" },
+              "explanation": { "$ref": "#/definitions/SemanticText" }
+            },
+            "required": ["optionId", "explanation"]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "EssayRubric": {
+      "description": "Scoring rubric for essay assessments.",
+      "type": "object",
+      "properties": {
+        "criteria": {
+          "description": "Array of scoring criteria.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "description": { "$ref": "#/definitions/SemanticText" },
+              "weight": {
+                "description": "Relative weight of this criterion (0-1).",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "levels": {
+                "description": "Performance levels for this criterion.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "level": { "type": "string" },
+                    "points": { "type": "number" },
+                    "description": { "$ref": "#/definitions/SemanticText" }
+                  },
+                  "required": ["level", "points", "description"]
+                }
+              }
+            },
+            "required": ["id", "name", "description", "weight", "levels"]
+          }
+        },
+        "totalPoints": {
+          "description": "Total points available across all criteria.",
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": ["criteria", "totalPoints"],
+      "additionalProperties": false
+    },
+    "MultipleChoiceContent": {
+      "description": "Content structure for multiple choice assessment blocks.",
+      "type": "object",
+      "properties": {
+        "question": { "$ref": "#/definitions/SemanticText" },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "text": { "$ref": "#/definitions/SemanticText" },
+              "correct": { "type": "boolean" }
+            },
+            "required": ["id", "text", "correct"]
+          }
+        },
+        "multipleCorrect": { 
+          "type": "boolean",
+          "description": "Whether multiple options can be correct (checkbox vs radio)"
+        },
+        "cognitiveMetadata": { "$ref": "#/definitions/CognitiveMetadata" },
+        "scoring": { "$ref": "#/definitions/ScoringStructure" },
+        "feedback": { "$ref": "#/definitions/FeedbackStructure" }
+      },
+      "required": ["question", "options", "cognitiveMetadata", "scoring"],
+      "additionalProperties": false
+    },
+    "ShortAnswerContent": {
+      "description": "Content structure for short answer assessment blocks.",
+      "type": "object",
+      "properties": {
+        "question": { "$ref": "#/definitions/SemanticText" },
+        "answerFormat": {
+          "type": "string",
+          "enum": ["text", "numeric", "equation"],
+          "description": "Expected format of the answer"
+        },
+        "expectedAnswers": {
+          "type": "array",
+          "description": "Array of acceptable answers for automatic scoring",
+          "items": { "type": "string" }
+        },
+        "caseSensitive": {
+          "type": "boolean",
+          "description": "Whether answer matching should be case sensitive"
+        },
+        "maxLength": {
+          "type": "integer",
+          "description": "Maximum character length for the answer"
+        },
+        "cognitiveMetadata": { "$ref": "#/definitions/CognitiveMetadata" },
+        "scoring": { "$ref": "#/definitions/ScoringStructure" },
+        "feedback": { "$ref": "#/definitions/FeedbackStructure" }
+      },
+      "required": ["question", "answerFormat", "cognitiveMetadata", "scoring"],
+      "additionalProperties": false
+    },
+    "EssayPromptContent": {
+      "description": "Content structure for essay prompt assessment blocks.",
+      "type": "object",
+      "properties": {
+        "question": { "$ref": "#/definitions/SemanticText" },
+        "prompt": { 
+          "$ref": "#/definitions/SemanticText",
+          "description": "Detailed essay prompt or writing instructions"
+        },
+        "rubric": { "$ref": "#/definitions/EssayRubric" },
+        "minWordCount": {
+          "type": "integer",
+          "description": "Minimum required word count"
+        },
+        "maxWordCount": {
+          "type": "integer", 
+          "description": "Maximum allowed word count"
+        },
+        "cognitiveMetadata": { "$ref": "#/definitions/CognitiveMetadata" },
+        "scoring": { "$ref": "#/definitions/ScoringStructure" },
+        "feedback": { "$ref": "#/definitions/FeedbackStructure" }
+      },
+      "required": ["question", "prompt", "rubric", "cognitiveMetadata", "scoring"],
+      "additionalProperties": false
+    }
+  }
+}
