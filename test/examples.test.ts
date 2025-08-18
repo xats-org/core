@@ -367,7 +367,7 @@ describe('Example Document Validation', () => {
           
           // Skip error message check for files that pass validation
           if (file !== 'unknown-blocktypes.json') {
-            result.errors.forEach(error => {
+            result.errors.forEach((error: any) => {
               expect(error).toHaveProperty('path');
               expect(error).toHaveProperty('message');
               expect(error.message).toBeTruthy();
@@ -436,7 +436,7 @@ describe('Example Document Validation', () => {
       expect(duration).toBeLessThan(2000);
       
       // Check that validations completed
-      results.forEach(result => {
+      results.forEach((result: any) => {
         expect(result).toHaveProperty('isValid');
         expect(result).toHaveProperty('errors');
       });
