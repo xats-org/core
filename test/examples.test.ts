@@ -31,10 +31,10 @@ describe('Example Document Validation', () => {
           
           it('should validate against current schema version', async () => {
             const result = await validateXatsFile(filePath);
-            expect(result.isValid).toBe(true);
             if (!result.isValid) {
-              console.error(`Validation errors for ${file}:`, result.errors);
+              console.error(`Validation errors for ${file}:`, JSON.stringify(result.errors, null, 2));
             }
+            expect(result.isValid).toBe(true);
           });
 
           it('should have all required fields', async () => {

@@ -53,6 +53,9 @@ export class XatsValidator {
     
     // Add basic CSL schema for offline validation
     this.addBasicCslSchema();
+    
+    // Add LTI extension schema for LTI integration
+    this.addLtiExtensionSchema();
   }
 
   /**
@@ -180,7 +183,14 @@ export class XatsValidator {
    * Dynamic schema loading (for AJV)
    */
   private async loadSchema(uri: string): Promise<AnySchemaObject> {
-    // Extract version from URI
+    // Handle LTI extension schema
+    if (uri === 'https://xats.org/extensions/lti-1.3/schema.json') {
+      const ltiSchemaPath = resolve(__dirname, '../extensions/lti-1.3.json');
+      const ltiSchema = JSON.parse(readFileSync(ltiSchemaPath, 'utf8'));
+      return ltiSchema;
+    }
+
+    // Extract version from URI for main xats schemas
     const match = uri.match(/\/schemas\/([^/]+)\/schema.json$/);
     if (!match) {
       throw new Error(`Invalid schema URI: ${uri}`);
@@ -228,6 +238,20 @@ export class XatsValidator {
     };
 
     this.ajv.addSchema(basicCslSchema);
+  }
+
+  /**
+   * Add LTI extension schema for LTI integration support
+   */
+  private addLtiExtensionSchema(): void {
+    try {
+      const ltiSchemaPath = resolve(__dirname, '../extensions/lti-1.3.json');
+      const ltiSchema = JSON.parse(readFileSync(ltiSchemaPath, 'utf8'));
+      this.ajv.addSchema(ltiSchema, 'https://xats.org/extensions/lti-1.3/schema.json');
+    } catch (error) {
+      // LTI extension schema is optional - don't fail validation if it's not available
+      console.warn('LTI extension schema not found - LTI validation features disabled');
+    }
   }
 }
 
