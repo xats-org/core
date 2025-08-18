@@ -8,7 +8,7 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { validateXatsFile } from '../dist/validator.js';
+import { validateXatsFile } from '../dist/src/validator.js';
 import { readFileSync, statSync, readdirSync } from 'fs';
 import { resolve, join } from 'path';
 
