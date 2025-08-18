@@ -1,7 +1,7 @@
 ---
 name: create-textbook
 description: Helps users create a complete xats-compliant textbook from scratch or existing content
-model: sonnet
+model: claude-sonnet-4-20250514
 arguments:
   title:
     description: Title of the textbook

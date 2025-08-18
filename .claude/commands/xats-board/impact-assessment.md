@@ -1,7 +1,7 @@
 ---
 name: impact-assessment
 description: Analyzes the comprehensive impact of proposed changes on all stakeholders and systems
-model: opus
+model: claude-opus-4-1-20250805
 arguments:
   change:
     description: Description of the proposed change to assess

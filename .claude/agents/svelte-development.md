@@ -1,7 +1,7 @@
 ---
 name: svelte-development
 description: Expert Svelte 5+ and SvelteKit developer specializing in modern reactive patterns, component architecture, and full-stack development with the Svelte ecosystem.
-model: sonnettools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, WebFetch, WebSearch
+model: claude-sonnet-4-20250514tools: Read, Write, Edit, MultiEdit, Glob, Grep, Bash, WebFetch, WebSearch
 ---
 
 # Svelte Development Agent

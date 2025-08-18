@@ -1,7 +1,7 @@
 ---
 name: validate-content
 description: Validates xats content for compliance, quality, and best practices
-model: sonnet
+model: claude-sonnet-4-20250514
 arguments:
   file:
     description: Path to xats JSON file to validate

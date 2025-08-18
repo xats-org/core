@@ -1,7 +1,7 @@
 ---
 name: feature-ideation
 description: Facilitates creative brainstorming sessions with relevant board members to generate innovative features for the xats schema
-model: opus
+model: claude-opus-4-1-20250805
 arguments:
   topics:
     description: Specific areas or problems to ideate on (comma-separated)
