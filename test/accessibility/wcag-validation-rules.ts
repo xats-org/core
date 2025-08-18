@@ -20,8 +20,8 @@ interface ValidationError {
   severity: 'critical' | 'major' | 'minor';
   message: string;
   location: string;
-  elementId?: string;
-  suggestedFix?: string;
+  elementId?: string | undefined;
+  suggestedFix?: string | undefined;
 }
 
 interface ValidationWarning {
@@ -157,15 +157,15 @@ abstract class ValidationRule {
   abstract level: 'A' | 'AA' | 'AAA';
   abstract validate(document: any): { errors: ValidationError[]; warnings: ValidationWarning[] };
 
-  protected createError(severity: 'critical' | 'major' | 'minor', message: string, location: string, elementId?: string, suggestedFix?: string): ValidationError {
+  protected createError(severity: 'critical' | 'major' | 'minor', message: string, location: string, elementId?: string | undefined, suggestedFix?: string | undefined): ValidationError {
     return {
       wcagCriterion: this.wcagCriterion,
       level: this.level,
       severity,
       message,
       location,
-      elementId,
-      suggestedFix
+      elementId: elementId || undefined,
+      suggestedFix: suggestedFix || undefined
     };
   }
 
@@ -192,7 +192,7 @@ class TextAlternativesRule extends ValidationRule {
 
     // Check image resources
     if (document.resources) {
-      document.resources.forEach((resource: any) => {
+      document.resources.forEach((resource: any, index: number) => {
         if (resource.type === 'https://xats.org/core/resources/image') {
           if (!resource.altText) {
             errors.push(this.createError(
@@ -237,7 +237,7 @@ class TextAlternativesRule extends ValidationRule {
   }
 
   private validateContentBlocks(contents: any[], errors: ValidationError[], warnings: ValidationWarning[]): void {
-    contents.forEach((item, index) => {
+    contents.forEach((item) => {
       if (item.sections) {
         item.sections.forEach((section: any) => {
           this.validateContentBlocks(section.content || [], errors, warnings);
@@ -318,7 +318,7 @@ class InfoAndRelationshipsRule extends ValidationRule {
   }
 
   private validateStructuralElements(contents: any[], errors: ValidationError[], warnings: ValidationWarning[]): void {
-    contents.forEach((item, index) => {
+    contents.forEach((item) => {
       // Validate headings have proper level specification
       if (item.sections) {
         item.sections.forEach((section: any) => {
@@ -329,7 +329,7 @@ class InfoAndRelationshipsRule extends ValidationRule {
   }
 
   private validateContentBlocks(blocks: any[], errors: ValidationError[], warnings: ValidationWarning[]): void {
-    blocks.forEach((block: any) => {
+    blocks.forEach((block: any, index: number) => {
       if (block.blockType === 'https://xats.org/core/blocks/heading') {
         if (!block.content.level && !block.accessibilityMetadata?.headingLevel) {
           errors.push(this.createError(
@@ -401,7 +401,7 @@ class MeaningfulSequenceRule extends ValidationRule {
   }
 
   private validateContentSequence(contents: any[], errors: ValidationError[], warnings: ValidationWarning[]): void {
-    contents.forEach((item, index) => {
+    contents.forEach((item) => {
       if (item.sections) {
         item.sections.forEach((section: any) => {
           this.validateSectionSequence(section.content || [], errors, warnings, section.id);
@@ -413,7 +413,7 @@ class MeaningfulSequenceRule extends ValidationRule {
   private validateSectionSequence(blocks: any[], errors: ValidationError[], warnings: ValidationWarning[], sectionId: string): void {
     let previousHeadingLevel = 0;
 
-    blocks.forEach((block: any) => {
+    blocks.forEach((block: any, index: number) => {
       if (block.blockType === 'https://xats.org/core/blocks/heading') {
         const currentLevel = block.content.level || block.accessibilityMetadata?.headingLevel || 0;
         
@@ -593,7 +593,7 @@ class HeadingsAndLabelsRule extends ValidationRule {
         if (item.sections) {
           item.sections.forEach((section: any) => {
             if (section.content) {
-              section.content.forEach((block: any) => {
+              section.content.forEach((block: any, index: number) => {
                 if (block.blockType === 'https://xats.org/core/blocks/heading') {
                   this.validateHeadingContent(block, index, errors, warnings);
                 }
@@ -718,12 +718,12 @@ class LanguageOfPartsRule extends ValidationRule {
 
     const documentLanguage = document.language || document.bibliographicEntry?.language || 'en';
     
-    this.validateContentLanguages(document.bodyMatter?.contents || [], documentLanguage, errors, warnings);
+    this.validateContentLanguages(document.bodyMatter?.contents || [], documentLanguage, errors);
 
     return { errors, warnings };
   }
 
-  private validateContentLanguages(contents: any[], documentLanguage: string, errors: ValidationError[], warnings: ValidationWarning[]): void {
+  private validateContentLanguages(contents: any[], documentLanguage: string, errors: ValidationError[]): void {
     const searchContent = (items: any[]) => {
       items.forEach(item => {
         if (item.language && item.language !== documentLanguage) {

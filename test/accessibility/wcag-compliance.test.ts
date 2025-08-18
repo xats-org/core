@@ -3,7 +3,7 @@
  * Tests specific WCAG success criteria against xats documents
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 
@@ -12,6 +12,7 @@ interface XatsDocument {
   schemaVersion: string;
   bibliographicEntry: any;
   subject: string;
+  language?: string;
   bodyMatter: {
     contents: any[];
   };
