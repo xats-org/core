@@ -243,7 +243,7 @@ describe('Performance Validation', () => {
       // Memory usage should not continuously increase
       const firstReading = memoryReadings[0];
       const lastReading = memoryReadings[memoryReadings.length - 1];
-      const memoryIncrease = lastReading - firstReading;
+      const memoryIncrease = (lastReading ?? 0) - (firstReading ?? 0);
       
       // Should not increase by more than 50MB over 5 validations
       expect(memoryIncrease).toBeLessThan(50 * 1024 * 1024);
@@ -269,8 +269,18 @@ describe('Performance Validation', () => {
       // Check that performance scales reasonably
       // Time should not increase exponentially
       for (let i = 1; i < times.length; i++) {
-        const ratio = times[i] / times[i - 1];
-        const sizeRatio = sizes[i] / sizes[i - 1];
+        const prevTime = times[i - 1];
+        const currTime = times[i];
+        const prevSize = sizes[i - 1];
+        const currSize = sizes[i];
+        
+        if (prevTime === undefined || currTime === undefined || 
+            prevSize === undefined || currSize === undefined) {
+          continue;
+        }
+        
+        const ratio = currTime / prevTime;
+        const sizeRatio = currSize / prevSize;
         
         // Time ratio should scale reasonably with size ratio
         // Allow for variance in performance measurements on different systems
