@@ -1,0 +1,627 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/extensions/lti-1.3/schema.json",
+  "title": "LTI 1.3 Extension for xats",
+  "description": "Learning Tools Interoperability 1.3 extension definitions for xats documents, enabling LMS integration with grade passback, deep linking, and platform registration.",
+  "type": "object",
+  
+  "definitions": {
+    "LtiConfiguration": {
+      "description": "Top-level LTI 1.3 tool configuration and platform registration metadata.",
+      "type": "object",
+      "properties": {
+        "toolTitle": {
+          "description": "Human-readable title for the LTI tool.",
+          "type": "string"
+        },
+        "toolDescription": {
+          "description": "Description of the tool for LMS administrators.",
+          "type": "string"
+        },
+        "toolVersion": {
+          "description": "Version of the tool implementation.",
+          "type": "string"
+        },
+        "toolUrl": {
+          "description": "Base URL for the tool.",
+          "type": "string",
+          "format": "uri"
+        },
+        "launchUrl": {
+          "description": "Default launch URL for LTI resource links.",
+          "type": "string",
+          "format": "uri"
+        },
+        "loginInitiationUrl": {
+          "description": "URL for OpenID Connect login initiation.",
+          "type": "string",
+          "format": "uri"
+        },
+        "redirectUris": {
+          "description": "Valid redirect URIs for OAuth 2.0 flows.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "jwksUrl": {
+          "description": "URL to the tool's JSON Web Key Set for signature verification.",
+          "type": "string",
+          "format": "uri"
+        },
+        "customParameters": {
+          "description": "Custom parameters to include in LTI launches.",
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z][a-zA-Z0-9_]*$": {
+              "type": "string"
+            }
+          }
+        },
+        "privacyLevel": {
+          "description": "Privacy level for user data sharing.",
+          "type": "string",
+          "enum": ["public", "email_only", "name_only", "anonymous"]
+        },
+        "platformRegistrations": {
+          "description": "Platform-specific registration configurations.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/LtiPlatformRegistration" }
+        },
+        "supportedServices": {
+          "description": "LTI Advantage services supported by this tool.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem",
+              "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly",
+              "https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly",
+              "https://purl.imsglobal.org/spec/lti-ags/scope/score",
+              "https://purl.imsglobal.org/spec/lti-dl/scope/deeplinking"
+            ]
+          }
+        },
+        "targetLinkUri": {
+          "description": "Default target link URI for resource launches.",
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": ["toolTitle", "launchUrl", "loginInitiationUrl", "redirectUris", "jwksUrl"],
+      "additionalProperties": false
+    },
+    
+    "LtiPlatformRegistration": {
+      "description": "Registration details for a specific LTI platform.",
+      "type": "object",
+      "properties": {
+        "platformId": {
+          "description": "Unique identifier for the platform (issuer).",
+          "type": "string",
+          "format": "uri"
+        },
+        "clientId": {
+          "description": "OAuth 2.0 client ID assigned by the platform.",
+          "type": "string"
+        },
+        "deploymentIds": {
+          "description": "Array of deployment IDs for this platform registration.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "keySetUrl": {
+          "description": "URL to platform's public key set for JWT verification.",
+          "type": "string",
+          "format": "uri"
+        },
+        "authTokenUrl": {
+          "description": "OAuth 2.0 token endpoint for service authentication.",
+          "type": "string",
+          "format": "uri"
+        },
+        "authLoginUrl": {
+          "description": "OpenID Connect authorization endpoint.",
+          "type": "string",
+          "format": "uri"
+        },
+        "serviceEndpoints": { "$ref": "#/definitions/LtiServiceEndpoints" },
+        "customClaims": {
+          "description": "Platform-specific custom claims to include in launches.",
+          "type": "object"
+        }
+      },
+      "required": ["platformId", "clientId", "deploymentIds", "keySetUrl", "authTokenUrl", "authLoginUrl"],
+      "additionalProperties": false
+    },
+    
+    "LtiServiceEndpoints": {
+      "description": "LTI Advantage service endpoint URLs and scopes.",
+      "type": "object",
+      "properties": {
+        "lineitemsUrl": {
+          "description": "Assignment and Grade Services line items endpoint.",
+          "type": "string",
+          "format": "uri"
+        },
+        "lineitemUrl": {
+          "description": "Specific line item endpoint (when launching associated resource).",
+          "type": "string",
+          "format": "uri"
+        },
+        "deepLinkingUrl": {
+          "description": "Deep Linking service endpoint.",
+          "type": "string",
+          "format": "uri"
+        },
+        "scopes": {
+          "description": "Available scopes for service access.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "LtiLaunchMetadata": {
+      "description": "LTI launch-specific metadata for content blocks and assessments.",
+      "type": "object",
+      "properties": {
+        "resourceLinkId": {
+          "description": "Unique identifier for this resource link within the platform.",
+          "type": "string"
+        },
+        "resourceLinkTitle": {
+          "description": "Title for this resource link in the platform.",
+          "type": "string"
+        },
+        "resourceLinkDescription": {
+          "description": "Description of this resource link.",
+          "type": "string"
+        },
+        "targetLinkUri": {
+          "description": "Specific target URI for launching this resource.",
+          "type": "string",
+          "format": "uri"
+        },
+        "customParameters": {
+          "description": "Custom parameters specific to this resource launch.",
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z][a-zA-Z0-9_]*$": {
+              "type": "string"
+            }
+          }
+        },
+        "presentationHints": {
+          "description": "Hints for how to present this resource.",
+          "type": "object",
+          "properties": {
+            "documentTarget": {
+              "description": "Where to open the resource.",
+              "type": "string",
+              "enum": ["iframe", "window", "embed"]
+            },
+            "displayWidth": {
+              "description": "Preferred display width in pixels.",
+              "type": "integer",
+              "minimum": 1
+            },
+            "displayHeight": {
+              "description": "Preferred display height in pixels.",
+              "type": "integer",
+              "minimum": 1
+            },
+            "windowFeatures": {
+              "description": "JavaScript window.open features string.",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "available": {
+          "description": "When this resource becomes available (ISO 8601).",
+          "type": "string",
+          "format": "date-time"
+        },
+        "submission": {
+          "description": "When submissions are due (ISO 8601).",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "LtiGradePassback": {
+      "description": "Grade passback configuration for LTI Assignment and Grade Services.",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Whether grade passback is enabled for this assessment.",
+          "type": "boolean",
+          "default": true
+        },
+        "lineItemConfig": {
+          "description": "Configuration for creating/updating the grade book line item.",
+          "type": "object",
+          "properties": {
+            "scoreMaximum": {
+              "description": "Maximum possible score for this assessment.",
+              "type": "number",
+              "minimum": 0
+            },
+            "label": {
+              "description": "Label for the gradebook column.",
+              "type": "string"
+            },
+            "tag": {
+              "description": "Tag to identify this line item.",
+              "type": "string"
+            },
+            "resourceId": {
+              "description": "Tool's identifier for the resource.",
+              "type": "string"
+            },
+            "resourceLinkId": {
+              "description": "Platform's resource link identifier.",
+              "type": "string"
+            },
+            "startDateTime": {
+              "description": "When the assignment becomes available (ISO 8601).",
+              "type": "string",
+              "format": "date-time"
+            },
+            "endDateTime": {
+              "description": "When the assignment is due (ISO 8601).",
+              "type": "string",
+              "format": "date-time"
+            },
+            "submissionReview": {
+              "description": "Submission review configuration.",
+              "type": "object",
+              "properties": {
+                "reviewableStatus": {
+                  "description": "Statuses that allow review.",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["InProgress", "Submitted", "Completed"]
+                  }
+                },
+                "label": {
+                  "description": "Label for review interface.",
+                  "type": "string"
+                },
+                "url": {
+                  "description": "URL for reviewing submissions.",
+                  "type": "string",
+                  "format": "uri"
+                },
+                "custom": {
+                  "description": "Custom parameters for review launches.",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": ["scoreMaximum", "label"],
+          "additionalProperties": false
+        },
+        "scoreFormat": {
+          "description": "Format for score reporting.",
+          "type": "string",
+          "enum": ["decimal", "percentage", "lettergrade", "passfail"]
+        },
+        "includeMetadata": {
+          "description": "Additional metadata to include in score reports.",
+          "type": "object",
+          "properties": {
+            "timestamp": {
+              "description": "Include submission timestamp.",
+              "type": "boolean",
+              "default": true
+            },
+            "activityProgress": {
+              "description": "Include activity progress status.",
+              "type": "boolean",
+              "default": true
+            },
+            "gradingProgress": {
+              "description": "Include grading progress status.",
+              "type": "boolean",
+              "default": true
+            },
+            "comment": {
+              "description": "Include text comment with score.",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "retryBehavior": {
+          "description": "Behavior for handling retry attempts.",
+          "type": "object",
+          "properties": {
+            "onFailure": {
+              "description": "Action to take when grade passback fails.",
+              "type": "string",
+              "enum": ["retry", "log", "ignore"]
+            },
+            "maxRetries": {
+              "description": "Maximum number of retry attempts.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "retryDelay": {
+              "description": "Delay between retries in seconds.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 300
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["enabled", "lineItemConfig"],
+      "additionalProperties": false
+    },
+    
+    "LtiDeepLinking": {
+      "description": "Deep Linking 2.0 configuration for content selection.",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Whether deep linking is enabled for this content.",
+          "type": "boolean",
+          "default": false
+        },
+        "acceptTypes": {
+          "description": "Content types that can be accepted via deep linking.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ltiResourceLink",
+              "link", 
+              "file",
+              "html",
+              "image"
+            ]
+          }
+        },
+        "acceptMediaTypes": {
+          "description": "MIME types that can be accepted.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "acceptPresentationDocumentTargets": {
+          "description": "Presentation targets that can be accepted.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["iframe", "window", "embed"]
+          }
+        },
+        "autoCreate": {
+          "description": "Whether to automatically create assignments from line item content.",
+          "type": "boolean",
+          "default": false
+        },
+        "title": {
+          "description": "Title for deep linking selection interface.",
+          "type": "string"
+        },
+        "text": {
+          "description": "Descriptive text for deep linking selection.",
+          "type": "string"
+        },
+        "returnUrl": {
+          "description": "URL to return to after deep linking.",
+          "type": "string",
+          "format": "uri"
+        },
+        "data": {
+          "description": "Opaque data to be returned with deep linking response.",
+          "type": "string"
+        },
+        "contentItems": {
+          "description": "Pre-configured content items available for selection.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/LtiContentItem" }
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "LtiContentItem": {
+      "description": "A content item that can be selected via deep linking.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "Type of content item.",
+          "type": "string",
+          "enum": ["ltiResourceLink", "link", "file", "html", "image"]
+        },
+        "title": {
+          "description": "Title of the content item.",
+          "type": "string"
+        },
+        "text": {
+          "description": "Descriptive text for the content item.",
+          "type": "string"
+        },
+        "url": {
+          "description": "URL for the content item.",
+          "type": "string",
+          "format": "uri"
+        },
+        "icon": {
+          "description": "Icon URL for the content item.",
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer", 
+              "minimum": 1
+            }
+          },
+          "required": ["url"],
+          "additionalProperties": false
+        },
+        "thumbnail": {
+          "description": "Thumbnail image for the content item.",
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": ["url"],
+          "additionalProperties": false
+        },
+        "custom": {
+          "description": "Custom parameters for this content item.",
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z][a-zA-Z0-9_]*$": {
+              "type": "string"
+            }
+          }
+        },
+        "lineItem": {
+          "description": "Line item configuration for creating assignments.",
+          "type": "object",
+          "properties": {
+            "scoreMaximum": {
+              "type": "number",
+              "minimum": 0
+            },
+            "label": {
+              "type": "string"
+            },
+            "resourceId": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            },
+            "startDateTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "endDateTime": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        },
+        "available": {
+          "description": "When this item becomes available (ISO 8601).",
+          "type": "string",
+          "format": "date-time"
+        },
+        "submission": {
+          "description": "When submissions are due (ISO 8601).",
+          "type": "string",
+          "format": "date-time"
+        },
+        "xatsResourceId": {
+          "description": "Reference to a xats resource (Unit, Chapter, Section, or ContentBlock ID).",
+          "type": "string"
+        }
+      },
+      "required": ["type", "title"],
+      "additionalProperties": false
+    },
+
+    "LtiPathwayIntegration": {
+      "description": "Integration configuration for xats pathways with LTI grade data.",
+      "type": "object",
+      "properties": {
+        "useGradeData": {
+          "description": "Whether to use LTI grade data in pathway conditions.",
+          "type": "boolean",
+          "default": false
+        },
+        "gradeVariables": {
+          "description": "Mapping of LTI grade variables to pathway condition variables.",
+          "type": "object",
+          "properties": {
+            "scoreGiven": {
+              "description": "Variable name for the raw score received.",
+              "type": "string",
+              "default": "lti_score_given"
+            },
+            "scoreMaximum": {
+              "description": "Variable name for the maximum possible score.",
+              "type": "string",
+              "default": "lti_score_maximum"
+            },
+            "scorePercentage": {
+              "description": "Variable name for the percentage score.",
+              "type": "string",
+              "default": "lti_score_percentage"
+            },
+            "activityProgress": {
+              "description": "Variable name for activity progress status.",
+              "type": "string",
+              "default": "lti_activity_progress"
+            },
+            "gradingProgress": {
+              "description": "Variable name for grading progress status.",
+              "type": "string",
+              "default": "lti_grading_progress"
+            }
+          },
+          "additionalProperties": false
+        },
+        "conditionExamples": {
+          "description": "Example pathway conditions using LTI data.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "condition": {
+                "type": "string"
+              }
+            },
+            "required": ["description", "condition"]
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
