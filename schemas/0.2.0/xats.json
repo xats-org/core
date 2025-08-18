@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://xats.org/schemas/0.2.0/schema.json",
-  "title": "Extensible Academic Textbook Schema",
-  "description": "The root structure for a textbook, designed for extensibility and machine readability.",
+  "title": "Extensible Academic Textbook Schema v0.2.0",
+  "description": "The root structure for a textbook, designed for extensibility and machine readability. Version 0.2.0 includes comprehensive assessment framework and LTI 1.3 integration support for LMS interoperability with grade passback, deep linking, and platform registration capabilities.",
   "type": "object",
   "properties": {
     "schemaVersion": {
@@ -36,7 +36,18 @@
     },
     "frontMatter": { "$ref": "#/definitions/FrontMatter" },
     "bodyMatter": { "$ref": "#/definitions/BodyMatter" },
-    "backMatter": { "$ref": "#/definitions/BackMatter" }
+    "backMatter": { "$ref": "#/definitions/BackMatter" },
+    "extensions": {
+      "description": "Extensions for additional functionality. Use 'ltiConfiguration' property for LTI 1.3 tool setup.",
+      "type": "object",
+      "properties": {
+        "ltiConfiguration": {
+          "description": "LTI 1.3 tool configuration and platform registration metadata.",
+          "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiConfiguration"
+        }
+      },
+      "additionalProperties": true
+    }
   },
   "required": ["schemaVersion", "bibliographicEntry", "subject", "bodyMatter"],
 
@@ -78,7 +89,33 @@
           "description": "Rights and licensing information for this object. Inherits from parent container if not specified.",
           "$ref": "#/definitions/RightsMetadata"
         },
-        "extensions": { "description": "A container for non-standard, custom data.", "type": "object" }
+        "extensions": { 
+          "description": "A container for non-standard, custom data. Common extensions include LTI 1.3 integration metadata.",
+          "type": "object",
+          "properties": {
+            "ltiConfiguration": {
+              "description": "LTI 1.3 tool configuration and platform registration metadata. Use at document root level.",
+              "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiConfiguration"
+            },
+            "ltiLaunchMetadata": {
+              "description": "LTI launch-specific metadata for content blocks and assessments.",
+              "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiLaunchMetadata"
+            },
+            "ltiGradePassback": {
+              "description": "Grade passback configuration for LTI Assignment and Grade Services. Use on assessment blocks.",
+              "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiGradePassback"
+            },
+            "ltiDeepLinking": {
+              "description": "Deep Linking 2.0 configuration for content selection. Use on structural containers.",
+              "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiDeepLinking"
+            },
+            "ltiPathwayIntegration": {
+              "description": "Integration configuration for xats pathways with LTI grade data.",
+              "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiPathwayIntegration"
+            }
+          },
+          "additionalProperties": true
+        }
       },
       "required": ["id", "language"]
     },
