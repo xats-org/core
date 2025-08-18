@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/core/placeholders/tableOfContents",
+  "title": "Table of Contents Placeholder",
+  "description": "A marker indicating where a generated Table of Contents should be inserted",
+  "type": "object",
+  "properties": {
+    "blockType": {
+      "const": "https://xats.org/core/placeholders/tableOfContents",
+      "description": "The URI identifier for this placeholder type"
+    },
+    "content": {
+      "type": "object",
+      "description": "Empty object as placeholder for generated content",
+      "additionalProperties": false
+    }
+  },
+  "required": ["blockType", "content"],
+  "examples": [
+    {
+      "blockType": "https://xats.org/core/placeholders/tableOfContents",
+      "content": {}
+    }
+  ]
+}

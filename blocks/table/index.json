@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/core/blocks/table",
+  "title": "Table Block",
+  "description": "A block for displaying tabular data",
+  "type": "object",
+  "properties": {
+    "blockType": {
+      "const": "https://xats.org/core/blocks/table",
+      "description": "The URI identifier for this block type"
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "caption": {
+          "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
+          "description": "Caption for the table"
+        },
+        "headers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of column header strings"
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText"
+            }
+          },
+          "description": "Array of rows, where each row is an array of SemanticText cells"
+        }
+      },
+      "required": ["caption", "headers", "rows"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["blockType", "content"],
+  "examples": [
+    {
+      "blockType": "https://xats.org/core/blocks/table",
+      "content": {
+        "caption": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "Table 2.1: Comparison of prokaryotic and eukaryotic cells"
+            }
+          ]
+        },
+        "headers": ["Feature", "Prokaryotic", "Eukaryotic"],
+        "rows": [
+          [
+            {
+              "runs": [{ "type": "text", "text": "Nucleus" }]
+            },
+            {
+              "runs": [{ "type": "text", "text": "Absent" }]
+            },
+            {
+              "runs": [{ "type": "text", "text": "Present" }]
+            }
+          ],
+          [
+            {
+              "runs": [{ "type": "text", "text": "Cell size" }]
+            },
+            {
+              "runs": [{ "type": "text", "text": "1-10 ¼m" }]
+            },
+            {
+              "runs": [{ "type": "text", "text": "10-100 ¼m" }]
+            }
+          ],
+          [
+            {
+              "runs": [{ "type": "text", "text": "Organelles" }]
+            },
+            {
+              "runs": [{ "type": "text", "text": "None" }]
+            },
+            {
+              "runs": [{ "type": "text", "text": "Many types" }]
+            }
+          ]
+        ]
+      }
+    }
+  ]
+}

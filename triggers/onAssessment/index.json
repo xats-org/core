@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/core/triggers/onAssessment",
+  "title": "On Assessment Trigger",
+  "description": "A trigger that fires based on assessment results",
+  "type": "object",
+  "properties": {
+    "triggerType": {
+      "const": "https://xats.org/core/triggers/onAssessment",
+      "description": "The URI identifier for this trigger type"
+    },
+    "sourceId": {
+      "type": "string",
+      "description": "The ID of the assessment that triggers this pathway"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "assessmentType": {
+          "type": "string",
+          "enum": ["quiz", "test", "assignment", "selfAssessment", "peerAssessment"],
+          "description": "The type of assessment"
+        },
+        "scoreThreshold": {
+          "type": "object",
+          "properties": {
+            "min": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Minimum score percentage"
+            },
+            "max": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Maximum score percentage"
+            }
+          },
+          "description": "Score range that triggers this pathway"
+        },
+        "attemptNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Which attempt number this trigger applies to"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "required": ["triggerType"],
+  "examples": [
+    {
+      "triggerType": "https://xats.org/core/triggers/onAssessment",
+      "sourceId": "quiz-3.2",
+      "metadata": {
+        "assessmentType": "quiz",
+        "scoreThreshold": {
+          "min": 0,
+          "max": 70
+        },
+        "attemptNumber": 1
+      }
+    },
+    {
+      "triggerType": "https://xats.org/core/triggers/onAssessment",
+      "sourceId": "chapter-test-5",
+      "metadata": {
+        "assessmentType": "test",
+        "scoreThreshold": {
+          "min": 90,
+          "max": 100
+        }
+      }
+    }
+  ]
+}

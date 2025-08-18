@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/core/blocks/heading",
+  "title": "Heading Block",
+  "description": "A block for section headings and subheadings",
+  "type": "object",
+  "properties": {
+    "blockType": {
+      "const": "https://xats.org/core/blocks/heading",
+      "description": "The URI identifier for this block type"
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "description": "The heading level (1-6, where 1 is the highest level)"
+        },
+        "text": {
+          "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
+          "description": "The heading text content"
+        }
+      },
+      "required": ["level", "text"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["blockType", "content"],
+  "examples": [
+    {
+      "blockType": "https://xats.org/core/blocks/heading",
+      "content": {
+        "level": 1,
+        "text": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "Introduction to Cell Biology"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "blockType": "https://xats.org/core/blocks/heading",
+      "content": {
+        "level": 3,
+        "text": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "The "
+            },
+            {
+              "type": "emphasis",
+              "text": "Endoplasmic Reticulum"
+            },
+            {
+              "type": "text",
+              "text": " and Protein Synthesis"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

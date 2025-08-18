@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/core/placeholders/bibliography",
+  "title": "Bibliography Placeholder",
+  "description": "A marker indicating where the formatted bibliography should be inserted",
+  "type": "object",
+  "properties": {
+    "blockType": {
+      "const": "https://xats.org/core/placeholders/bibliography",
+      "description": "The URI identifier for this placeholder type"
+    },
+    "content": {
+      "type": "object",
+      "description": "Empty object as placeholder for generated bibliography",
+      "additionalProperties": false
+    }
+  },
+  "required": ["blockType", "content"],
+  "examples": [
+    {
+      "blockType": "https://xats.org/core/placeholders/bibliography",
+      "content": {}
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/core/blocks/mathBlock",
+  "title": "Math Block",
+  "description": "A block for displaying mathematical equations and formulas",
+  "type": "object",
+  "properties": {
+    "blockType": {
+      "const": "https://xats.org/core/blocks/mathBlock",
+      "description": "The URI identifier for this block type"
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["latex", "mathml", "asciimath"],
+          "description": "The format of the mathematical notation"
+        },
+        "math": {
+          "type": "string",
+          "description": "The mathematical expression in the specified format"
+        },
+        "display": {
+          "type": "string",
+          "enum": ["block", "inline"],
+          "default": "block",
+          "description": "Whether to display as a block equation or inline"
+        },
+        "caption": {
+          "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
+          "description": "Optional caption or equation number"
+        }
+      },
+      "required": ["format", "math"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["blockType", "content"],
+  "examples": [
+    {
+      "blockType": "https://xats.org/core/blocks/mathBlock",
+      "content": {
+        "format": "latex",
+        "math": "E = mc^2",
+        "display": "block",
+        "caption": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "Equation 1.1: Einstein's mass-energy equivalence"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "blockType": "https://xats.org/core/blocks/mathBlock",
+      "content": {
+        "format": "latex",
+        "math": "\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}",
+        "display": "block",
+        "caption": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "The Gaussian integral"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "blockType": "https://xats.org/core/blocks/mathBlock",
+      "content": {
+        "format": "latex",
+        "math": "\\frac{d}{dx} \\sin(x) = \\cos(x)",
+        "display": "inline"
+      }
+    }
+  ]
+}
