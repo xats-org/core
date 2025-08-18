@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/schemas/0.2.0/schema.json",
+  "$id": "https://xats.org/schemas/0.1.0/schema.json",
   "title": "Extensible Academic Textbook Schema",
   "description": "The root structure for a textbook, designed for extensibility and machine readability.",
   "type": "object",
@@ -8,7 +8,7 @@
     "schemaVersion": {
       "description": "The semantic version of the xats schema this document conforms to.",
       "type": "string",
-      "enum": ["0.1.0", "0.2.0"]
+      "const": "0.1.0"
     },
     "bibliographicEntry": {
       "description": "The primary CSL-JSON entry for the textbook itself.",
@@ -529,61 +529,19 @@
                       "if": {
                         "properties": {
                           "blockType": {
-                            "const": "https://xats.org/core/blocks/multipleChoice"
+                            "type": "string",
+                            "pattern": "^https://xats\\.org/core/placeholders/"
                           }
                         }
                       },
                       "then": {
                         "properties": {
-                          "content": { "$ref": "#/definitions/MultipleChoiceContent" }
-                        }
-                      },
-                      "else": {
-                        "if": {
-                          "properties": {
-                            "blockType": {
-                              "const": "https://xats.org/core/blocks/shortAnswer"
-                            }
-                          }
-                        },
-                        "then": {
-                          "properties": {
-                            "content": { "$ref": "#/definitions/ShortAnswerContent" }
-                          }
-                        },
-                        "else": {
-                          "if": {
+                          "content": {
+                            "type": "object",
                             "properties": {
-                              "blockType": {
-                                "const": "https://xats.org/core/blocks/essayPrompt"
-                              }
-                            }
-                          },
-                          "then": {
-                            "properties": {
-                              "content": { "$ref": "#/definitions/EssayPromptContent" }
-                            }
-                          },
-                          "else": {
-                            "if": {
-                              "properties": {
-                                "blockType": {
-                                  "type": "string",
-                                  "pattern": "^https://xats\\.org/core/placeholders/"
-                                }
-                              }
+                              "placeholder": { "type": "boolean" }
                             },
-                            "then": {
-                              "properties": {
-                                "content": {
-                                  "type": "object",
-                                  "properties": {
-                                    "placeholder": { "type": "boolean" }
-                                  },
-                                  "additionalProperties": true
-                                }
-                              }
-                            }
+                            "additionalProperties": true
                           }
                         }
                       }
@@ -608,254 +566,6 @@
           "required": ["term", "definition"]
         }
       ]
-    },
-    "CognitiveMetadata": {
-      "description": "Cognitive and pedagogical metadata for assessment items.",
-      "type": "object",
-      "properties": {
-        "bloomsLevel": {
-          "description": "Bloom's taxonomy cognitive level.",
-          "type": "string",
-          "enum": ["remember", "understand", "apply", "analyze", "evaluate", "create"]
-        },
-        "difficulty": {
-          "description": "Difficulty level from 1 (easiest) to 5 (hardest).",
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 5
-        },
-        "estimatedTimeMinutes": {
-          "description": "Estimated completion time in minutes.",
-          "type": "integer",
-          "minimum": 1
-        },
-        "cognitiveLoad": {
-          "description": "Expected cognitive load level.",
-          "type": "string",
-          "enum": ["low", "medium", "high"]
-        },
-        "prerequisites": {
-          "description": "Array of prerequisite learning objective IDs.",
-          "type": "array",
-          "items": { "type": "string" }
-        }
-      },
-      "required": ["bloomsLevel", "difficulty", "estimatedTimeMinutes"],
-      "additionalProperties": false
-    },
-    "ScoringStructure": {
-      "description": "Defines how the assessment item should be scored.",
-      "type": "object",
-      "properties": {
-        "points": {
-          "description": "Maximum points available for this assessment.",
-          "type": "number",
-          "minimum": 0
-        },
-        "scoringMethod": {
-          "description": "Method used to calculate the score.",
-          "type": "string",
-          "enum": ["automatic", "manual", "hybrid"]
-        },
-        "partialCredit": {
-          "description": "Whether partial credit is awarded.",
-          "type": "boolean"
-        },
-        "attempts": {
-          "description": "Number of attempts allowed. Use -1 for unlimited attempts.",
-          "type": "integer",
-          "minimum": -1
-        },
-        "penaltyPerAttempt": {
-          "description": "Point penalty per incorrect attempt (0-1 as fraction of total points).",
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1
-        }
-      },
-      "required": ["points", "scoringMethod"],
-      "additionalProperties": false
-    },
-    "FeedbackStructure": {
-      "description": "Defines feedback provided to students for assessment items.",
-      "type": "object",
-      "properties": {
-        "immediate": {
-          "description": "Feedback shown immediately after answering.",
-          "$ref": "#/definitions/SemanticText"
-        },
-        "onCorrect": {
-          "description": "Feedback shown when answer is correct.",
-          "$ref": "#/definitions/SemanticText"
-        },
-        "onIncorrect": {
-          "description": "Feedback shown when answer is incorrect.",
-          "$ref": "#/definitions/SemanticText"
-        },
-        "onPartial": {
-          "description": "Feedback shown when partial credit is earned.",
-          "$ref": "#/definitions/SemanticText"
-        },
-        "hints": {
-          "description": "Array of progressive hints available to students.",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "string" },
-              "text": { "$ref": "#/definitions/SemanticText" },
-              "pointPenalty": {
-                "description": "Points deducted for using this hint.",
-                "type": "number",
-                "minimum": 0
-              }
-            },
-            "required": ["id", "text"]
-          }
-        },
-        "explanations": {
-          "description": "Detailed explanations for each answer option (for multiple choice).",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "optionId": { "type": "string" },
-              "explanation": { "$ref": "#/definitions/SemanticText" }
-            },
-            "required": ["optionId", "explanation"]
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    "EssayRubric": {
-      "description": "Scoring rubric for essay assessments.",
-      "type": "object",
-      "properties": {
-        "criteria": {
-          "description": "Array of scoring criteria.",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "string" },
-              "name": { "type": "string" },
-              "description": { "$ref": "#/definitions/SemanticText" },
-              "weight": {
-                "description": "Relative weight of this criterion (0-1).",
-                "type": "number",
-                "minimum": 0,
-                "maximum": 1
-              },
-              "levels": {
-                "description": "Performance levels for this criterion.",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "level": { "type": "string" },
-                    "points": { "type": "number" },
-                    "description": { "$ref": "#/definitions/SemanticText" }
-                  },
-                  "required": ["level", "points", "description"]
-                }
-              }
-            },
-            "required": ["id", "name", "description", "weight", "levels"]
-          }
-        },
-        "totalPoints": {
-          "description": "Total points available across all criteria.",
-          "type": "number",
-          "minimum": 0
-        }
-      },
-      "required": ["criteria", "totalPoints"],
-      "additionalProperties": false
-    },
-    "MultipleChoiceContent": {
-      "description": "Content structure for multiple choice assessment blocks.",
-      "type": "object",
-      "properties": {
-        "question": { "$ref": "#/definitions/SemanticText" },
-        "options": {
-          "type": "array",
-          "minItems": 2,
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "string" },
-              "text": { "$ref": "#/definitions/SemanticText" },
-              "correct": { "type": "boolean" }
-            },
-            "required": ["id", "text", "correct"]
-          }
-        },
-        "multipleCorrect": { 
-          "type": "boolean",
-          "description": "Whether multiple options can be correct (checkbox vs radio)"
-        },
-        "cognitiveMetadata": { "$ref": "#/definitions/CognitiveMetadata" },
-        "scoring": { "$ref": "#/definitions/ScoringStructure" },
-        "feedback": { "$ref": "#/definitions/FeedbackStructure" }
-      },
-      "required": ["question", "options", "cognitiveMetadata", "scoring"],
-      "additionalProperties": false
-    },
-    "ShortAnswerContent": {
-      "description": "Content structure for short answer assessment blocks.",
-      "type": "object",
-      "properties": {
-        "question": { "$ref": "#/definitions/SemanticText" },
-        "answerFormat": {
-          "type": "string",
-          "enum": ["text", "numeric", "equation"],
-          "description": "Expected format of the answer"
-        },
-        "expectedAnswers": {
-          "type": "array",
-          "description": "Array of acceptable answers for automatic scoring",
-          "items": { "type": "string" }
-        },
-        "caseSensitive": {
-          "type": "boolean",
-          "description": "Whether answer matching should be case sensitive"
-        },
-        "maxLength": {
-          "type": "integer",
-          "description": "Maximum character length for the answer"
-        },
-        "cognitiveMetadata": { "$ref": "#/definitions/CognitiveMetadata" },
-        "scoring": { "$ref": "#/definitions/ScoringStructure" },
-        "feedback": { "$ref": "#/definitions/FeedbackStructure" }
-      },
-      "required": ["question", "answerFormat", "cognitiveMetadata", "scoring"],
-      "additionalProperties": false
-    },
-    "EssayPromptContent": {
-      "description": "Content structure for essay prompt assessment blocks.",
-      "type": "object",
-      "properties": {
-        "question": { "$ref": "#/definitions/SemanticText" },
-        "prompt": { 
-          "$ref": "#/definitions/SemanticText",
-          "description": "Detailed essay prompt or writing instructions"
-        },
-        "rubric": { "$ref": "#/definitions/EssayRubric" },
-        "minWordCount": {
-          "type": "integer",
-          "description": "Minimum required word count"
-        },
-        "maxWordCount": {
-          "type": "integer", 
-          "description": "Maximum allowed word count"
-        },
-        "cognitiveMetadata": { "$ref": "#/definitions/CognitiveMetadata" },
-        "scoring": { "$ref": "#/definitions/ScoringStructure" },
-        "feedback": { "$ref": "#/definitions/FeedbackStructure" }
-      },
-      "required": ["question", "prompt", "rubric", "cognitiveMetadata", "scoring"],
-      "additionalProperties": false
     }
   }
 }
