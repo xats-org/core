@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 123,
+  "bibliographicEntry": {
+    "id": "invalid-002",
+    "type": "book",
+    "title": "Wrong Types",
+    "author": [
+      {
+        "family": "Test",
+        "given": "Author"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    }
+  },
+  "subject": [
+    "Should",
+    "be",
+    "string"
+  ],
+  "bodyMatter": "Should be object"
+}

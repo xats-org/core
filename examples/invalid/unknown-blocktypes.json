@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "0.1.0",
+  "bibliographicEntry": {
+    "id": "invalid-005",
+    "type": "book",
+    "title": "Unknown Block Types",
+    "author": [
+      {
+        "family": "Test",
+        "given": "Author"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    }
+  },
+  "subject": "Testing",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "ch1",
+        "label": "1",
+        "title": "Chapter 1",
+        "sections": [
+          {
+            "id": "s1",
+            "label": "1.1",
+            "title": "Section 1",
+            "content": [
+              {
+                "id": "p1",
+                "blockType": "https://example.com/unknown/block/type",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Unknown block type"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
