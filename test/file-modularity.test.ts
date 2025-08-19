@@ -376,8 +376,8 @@ describe('Error Reporting', () => {
     const result = await validator.validate(mainPath);
 
     expect(result.errors.length).toBeGreaterThan(0);
-    expect(result.errors[0].path).toBeDefined();
-    expect(result.errors[0].message).toBeDefined();
+    expect(result.errors[0]?.path).toBeDefined();
+    expect(result.errors[0]?.message).toBeDefined();
   });
 
   it('should distinguish between different types of validation errors', async () => {

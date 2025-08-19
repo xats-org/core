@@ -89,8 +89,8 @@ describe('File Modularity Performance Benchmarks', () => {
         const prev = benchmarkResults[i - 1];
         const current = benchmarkResults[i];
         
-        const fileRatio = current.totalFiles / prev.totalFiles;
-        const timeRatio = current.loadTime / prev.loadTime;
+        const fileRatio = current!.totalFiles / prev!.totalFiles;
+        const timeRatio = current!.loadTime / prev!.loadTime;
         
         // Time ratio should be less than 2x the file ratio (sub-linear scaling)
         expect(timeRatio).toBeLessThan(fileRatio * 2);
