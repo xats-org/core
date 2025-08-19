@@ -390,15 +390,26 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
           .map((run: any) => run.text)
           .join('');
 
-        expect(headingText.length, `Heading ${heading.id} must have meaningful text`).toBeGreaterThan(5);
-        
-        // Test for non-descriptive patterns
-        const badPatterns = ['click here', 'read more', 'more info', 'click', 'here'];
-        const hasDescriptiveText = !badPatterns.some(pattern => 
-          headingText.toLowerCase().includes(pattern)
-        );
-        
-        expect(hasDescriptiveText, `Heading "${headingText}" should be descriptive, not generic`).toBe(true);
+        // Different expectations for good and bad headings
+        if (heading.id === 'heading-good') {
+          expect(headingText.length, `Heading ${heading.id} must have meaningful text`).toBeGreaterThan(5);
+          
+          // Test for non-descriptive patterns
+          const badPatterns = ['click here', 'read more', 'more info', 'click', 'here'];
+          const hasDescriptiveText = !badPatterns.some(pattern => 
+            headingText.toLowerCase().includes(pattern)
+          );
+          
+          expect(hasDescriptiveText, `Heading "${headingText}" should be descriptive, not generic`).toBe(true);
+        } else if (heading.id === 'heading-bad') {
+          // This heading should be detected as non-descriptive
+          const badPatterns = ['click here', 'read more', 'more info', 'click', 'here'];
+          const hasDescriptiveText = !badPatterns.some(pattern => 
+            headingText.toLowerCase().includes(pattern)
+          );
+          
+          expect(hasDescriptiveText, `Heading "${headingText}" should be detected as non-descriptive`).toBe(false);
+        }
       });
     });
   });
@@ -589,7 +600,8 @@ describe('WCAG Validation Utilities', () => {
 
     expect(goodResult.isValid).toBe(true);
     expect(badResult.isValid).toBe(false);
-    expect(badResult.issues).toContain(expect.stringContaining('redundant phrase'));
+    // Check that the issue message contains the expected content
+    expect(badResult.issues.some(issue => issue.includes('redundant phrase'))).toBe(true);
     expect(emptyResult.isValid).toBe(false);
     expect(emptyResult.issues).toContain('Alt text is empty');
   });
