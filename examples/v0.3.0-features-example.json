@@ -208,15 +208,36 @@
                   },
                   "guidingQuestions": [
                     {
-                      "question": "What information did you prioritize when making your recommendation?",
+                      "question": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "What information did you prioritize when making your recommendation?"
+                          }
+                        ]
+                      },
                       "purpose": "Identify decision-making patterns"
                     },
                     {
-                      "question": "What assumptions did you make about the startup ecosystem?",
+                      "question": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "What assumptions did you make about the startup ecosystem?"
+                          }
+                        ]
+                      },
                       "purpose": "Surface implicit biases"
                     },
                     {
-                      "question": "How confident are you in your recommendation and why?",
+                      "question": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "How confident are you in your recommendation and why?"
+                          }
+                        ]
+                      },
                       "purpose": "Assess certainty calibration"
                     }
                   ],
@@ -224,8 +245,22 @@
                   "timing": "after-learning",
                   "scaffolding": {
                     "examples": [
-                      "I prioritized customer retention metrics because...",
-                      "I assumed that the venture capital environment..."
+                      {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "I prioritized customer retention metrics because..."
+                          }
+                        ]
+                      },
+                      {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "I assumed that the venture capital environment..."
+                          }
+                        ]
+                      }
                     ],
                     "sentence_starters": [
                       "The most important factor I considered was...",
@@ -233,14 +268,7 @@
                       "My recommendation would change if..."
                     ]
                   },
-                  "estimatedTimeMinutes": 10,
-                  "pedagogicalMetadata": {
-                    "instructionalMethod": "reflection",
-                    "learningTheory": "metacognitive",
-                    "targetAudience": {
-                      "educationLevel": "graduate"
-                    }
-                  }
+                  "estimatedTimeMinutes": 10
                 }
               },
               {
@@ -304,11 +332,25 @@
                   },
                   "guidingQuestions": [
                     {
-                      "question": "What frameworks or models will you use to structure your analysis?",
+                      "question": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "What frameworks or models will you use to structure your analysis?"
+                          }
+                        ]
+                      },
                       "purpose": "Activate prior knowledge"
                     },
                     {
-                      "question": "How will you identify and challenge your assumptions?",
+                      "question": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "How will you identify and challenge your assumptions?"
+                          }
+                        ]
+                      },
                       "purpose": "Promote critical thinking"
                     }
                   ],
