@@ -41,12 +41,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - License type specification (CC licenses, custom)
   - Usage permissions and restrictions
   - Digital rights management support
-- **Core Assessment Framework**: Built-in assessment capabilities
-  - Multiple question types (multiple choice, true/false, short answer, essay)
-  - Automatic scoring and grade calculation
-  - LTI grade passback integration
-  - Rubric support for essay questions
-  - Feedback and hint systems
+- **Core Assessment Framework**: Comprehensive built-in assessment capabilities
+  - Multiple question types: multiple choice, true/false, short answer, essay prompts
+  - Pedagogical metadata with Bloom's Taxonomy and Depth of Knowledge support
+  - Automatic scoring and grade calculation with customizable point values
+  - LTI Assignment and Grade Services (AGS) integration for seamless grade passback
+  - Rubric support for essay questions with detailed scoring criteria
+  - Rich feedback system with option-specific explanations and remedial content links
+  - Assessment accessibility settings for accommodations and universal design
+  - Learning analytics support for tracking student progress and performance
 - **Enhanced Validation**: Improved schema validation
   - 682 new accessibility test cases
   - Comprehensive example documents
@@ -58,17 +61,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated schema reference documentation
 
 ### Changed
-- Schema version updated to "0.2.0"
-- Improved TypeScript type definitions
-- Enhanced CLI validator with accessibility checks
-- Updated all example documents with new features
-- Expanded test coverage to include all new features
+- **Schema version updated to "0.2.0"** with backward compatibility for 0.1.0 documents
+- **Improved TypeScript type definitions** with comprehensive types for all assessment components
+- **Enhanced CLI validator** with accessibility checks, assessment validation, and detailed error reporting
+- **Updated all example documents** with new assessment, accessibility, and LTI features
+- **Expanded test coverage** to include 682 new accessibility test cases and comprehensive assessment validation
+- **Enhanced documentation structure** with updated API reference and comprehensive guides
+- **Improved schema validation** with better error messages and context-aware suggestions
 
 ### Fixed
-- Accessibility test validation for generic heading text
-- Alt text quality validation for redundant phrases
-- Language code validation using BCP 47 format
-- Schema reference resolution for extension types
+- **Accessibility test validation** for generic heading text and proper semantic structure
+- **Alt text quality validation** for redundant phrases and improved image descriptions
+- **Language code validation** using BCP 47 format for proper internationalization support
+- **Schema reference resolution** for extension types, particularly LTI 1.3 configurations
+- **TypeScript compilation errors** in assessment type definitions
+- **CLI tool reliability** for large documents and complex schema validations
+- **Cross-platform compatibility** issues in validation and file handling
 
 ## [0.1.0] - 2025-01-17
 

@@ -15,7 +15,7 @@ The `ContentBlock` is the most granular unit of instructional content in a **xat
 
 | Property | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| `blockType` | `string` (URI) | **Yes** | A URI that uniquely identifies the type of content this block represents. See the [Core Vocabularies](./core-vocabularies.md) for standard types. |
+| `blockType` | `string` (URI) | **Yes** | A URI that uniquely identifies the type of content this block represents. See the [Core Vocabularies](../specs/core-vocabularies.md) for standard types. |
 | `linkedObjectiveIds` | `array` of `string`s | No | An array of `id`s from `LearningObjective` objects that this specific block helps to fulfill. |
 | `content` | `object` | **Yes** | The main data for the block. The structure of this object is determined by the `blockType` URI. |
 
