@@ -11,7 +11,7 @@
  */
 
 import { readFileSync, existsSync, statSync } from 'fs';
-import { resolve, dirname, join, relative, isAbsolute, normalize } from 'path';
+import { resolve, dirname, relative, isAbsolute, normalize } from 'path';
 import { performance } from 'perf_hooks';
 import { createHash } from 'crypto';
 import type { ValidationResult, ValidationError, ValidatorOptions } from './validator.js';

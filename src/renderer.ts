@@ -336,7 +336,7 @@ export class XatsHtmlRenderer {
 
     // Skip navigation (if enabled)
     if (this.options.includeSkipNavigation) {
-      htmlParts.push(this.generateSkipNavigation(document));
+      htmlParts.push(this.generateSkipNavigation());
     }
 
     // Document header
@@ -381,7 +381,7 @@ export class XatsHtmlRenderer {
     return headParts.join('\n');
   }
 
-  private generateSkipNavigation(document: XatsDocument): string {
+  private generateSkipNavigation(): string {
     return `
       <nav class="${this.cssClasses.skipNavigation}" aria-label="Skip navigation">
         <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -627,14 +627,14 @@ export class XatsHtmlRenderer {
       default:
         // Handle placeholder blocks and unknown blocks
         if (block.blockType.includes('placeholders')) {
-          content = this.renderPlaceholder(block.blockType, block.content);
+          content = this.renderPlaceholder(block.blockType);
         } else {
           content = this.renderUnknownBlock(block);
         }
         break;
     }
 
-    return wrapper + content + '</div>';
+    return `${wrapper}${content}</div>`;
   }
 
   private renderSemanticText(text: SemanticText): string {
@@ -654,11 +654,12 @@ export class XatsHtmlRenderer {
         case 'reference':
           parts.push(`<a href="#${run.refId}" class="${this.cssClasses.reference}">${this.escapeHtml(run.text)}</a>`);
           break;
-        case 'citation':
+        case 'citation': {
           const citation = this.citations.get(run.refId);
           const citationText = citation ? this.formatInlineCitation(citation) : `[${run.refId}]`;
           parts.push(`<a href="#cite-${run.refId}" class="${this.cssClasses.citation}">${citationText}</a>`);
           break;
+        }
         case 'index':
           parts.push(this.renderIndexRun(run));
           break;
@@ -934,7 +935,7 @@ export class XatsHtmlRenderer {
     return parts.join('\n');
   }
 
-  private renderPlaceholder(blockType: string, content: any): string {
+  private renderPlaceholder(blockType: string): string {
     if (blockType.includes('tableOfContents')) {
       return '<div class="toc-placeholder">[Table of Contents will be generated here]</div>';
     } else if (blockType.includes('bibliography')) {
@@ -999,7 +1000,7 @@ export class XatsHtmlRenderer {
     const authors = this.formatAuthors(citation.author || []);
     const year = citation.issued?.['date-parts']?.[0]?.[0] || '';
     
-    return `${authors}${authors && year ? ' (' + year + ')' : ''}. ${title}.`;
+    return `${authors}${authors && year ? ` (${year})` : ''}. ${title}.`;
   }
 
   private formatInlineCitation(citation: CslDataItem): string {
