@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Example Textbook</title>
+<meta name="generator" content="xats-html-renderer">
+<meta name="schema-version" content="0.1.0">
+<style>
+
+      /* xats HTML Renderer Default Styles */
+      
+      /* Reset and base styles */
+      .xats-document {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        font-family: Georgia, 'Times New Roman', serif;
+        line-height: 1.6;
+        color: #333;
+      }
+      
+      /* Skip navigation */
+      .xats-skip-navigation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #000;
+        z-index: 1000;
+      }
+      
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        color: white;
+        text-decoration: none;
+        padding: 8px;
+      }
+      
+      .skip-link:focus {
+        position: static;
+        left: auto;
+      }
+      
+      /* Document header */
+      .xats-header {
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 2rem;
+        margin-bottom: 3rem;
+      }
+      
+      .xats-header h1 {
+        font-size: 2.5rem;
+        margin: 0 0 1rem 0;
+        color: #2c3e50;
+      }
+      
+      .authors {
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 1rem;
+      }
+      
+      .document-metadata {
+        font-size: 0.9rem;
+        color: #888;
+      }
+      
+      .subject, .target-audience {
+        margin-right: 2rem;
+      }
+      
+      /* Main content structure */
+      .xats-main {
+        min-height: 60vh;
+      }
+      
+      /* Structural containers */
+      .xats-unit {
+        margin: 3rem 0;
+        border-left: 4px solid #3498db;
+        padding-left: 2rem;
+      }
+      
+      .xats-chapter {
+        margin: 2.5rem 0;
+        border-left: 3px solid #2ecc71;
+        padding-left: 1.5rem;
+      }
+      
+      .xats-section {
+        margin: 2rem 0;
+        padding-left: 1rem;
+      }
+      
+      /* Labels and titles */
+      .unit-label, .chapter-label, .section-label {
+        display: inline-block;
+        font-weight: bold;
+        color: #666;
+        margin-right: 0.5rem;
+        font-size: 0.9em;
+      }
+      
+      /* Content blocks */
+      .xats-content-block {
+        margin: 1.5rem 0;
+      }
+      
+      .xats-paragraph {
+        margin: 1rem 0;
+        text-align: justify;
+      }
+      
+      .xats-heading {
+        margin: 2rem 0 1rem 0;
+        color: #2c3e50;
+      }
+      
+      .xats-list {
+        margin: 1rem 0;
+        padding-left: 2rem;
+      }
+      
+      .xats-list-item {
+        margin: 0.5rem 0;
+      }
+      
+      .xats-blockquote {
+        margin: 1.5rem 2rem;
+        padding: 1rem 2rem;
+        background: #f8f9fa;
+        border-left: 4px solid #e9ecef;
+        font-style: italic;
+      }
+      
+      .xats-code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        padding: 1rem;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+      }
+      
+      .xats-math-block {
+        text-align: center;
+        margin: 1.5rem 0;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 4px;
+      }
+      
+      .xats-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+      }
+      
+      .xats-table th,
+      .xats-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border: 1px solid #dee2e6;
+      }
+      
+      .xats-table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+      }
+      
+      .xats-table caption {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        text-align: left;
+      }
+      
+      .xats-figure {
+        margin: 2rem 0;
+        text-align: center;
+      }
+      
+      .xats-figure img,
+      .xats-figure video,
+      .xats-figure audio {
+        max-width: 100%;
+        height: auto;
+      }
+      
+      .xats-figure figcaption {
+        margin-top: 0.5rem;
+        font-style: italic;
+        color: #666;
+      }
+      
+      /* Semantic text runs */
+      .xats-emphasis {
+        font-style: italic;
+      }
+      
+      .xats-strong {
+        font-weight: bold;
+      }
+      
+      .xats-reference {
+        color: #3498db;
+        text-decoration: underline;
+      }
+      
+      .xats-reference:hover {
+        color: #2980b9;
+      }
+      
+      .xats-citation {
+        color: #e74c3c;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      
+      .xats-citation:hover {
+        text-decoration: underline;
+      }
+      
+      .xats-index {
+        background: #fff3cd;
+        padding: 0 2px;
+        border-radius: 2px;
+        cursor: help;
+      }
+      
+      /* v0.3.0 Features */
+      
+      /* Case Study */
+      .xats-case-study {
+        border: 2px solid #f39c12;
+        border-radius: 8px;
+        padding: 2rem;
+        margin: 2rem 0;
+        background: #fefcf3;
+      }
+      
+      .xats-case-study header h4 {
+        color: #d68910;
+        margin: 0 0 1.5rem 0;
+        font-size: 1.5rem;
+      }
+      
+      .case-scenario,
+      .case-background,
+      .case-stakeholders,
+      .case-timeline,
+      .case-questions {
+        margin: 1.5rem 0;
+      }
+      
+      .case-scenario h5,
+      .case-background h5,
+      .case-stakeholders h5,
+      .case-timeline h5,
+      .case-questions h5 {
+        color: #b7950b;
+        font-size: 1.1rem;
+        margin: 0 0 0.75rem 0;
+        border-bottom: 1px solid #f1c40f;
+        padding-bottom: 0.25rem;
+      }
+      
+      .stakeholder {
+        margin: 1rem 0;
+        padding: 1rem;
+        background: white;
+        border-radius: 4px;
+        border-left: 3px solid #f39c12;
+      }
+      
+      .stakeholder h6 {
+        margin: 0 0 0.5rem 0;
+        color: #d68910;
+      }
+      
+      .stakeholder .role {
+        font-weight: normal;
+        color: #666;
+      }
+      
+      .motivations {
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 0.5rem;
+      }
+      
+      .timeline {
+        position: relative;
+        padding-left: 2rem;
+      }
+      
+      .timeline-event {
+        margin: 1rem 0;
+        position: relative;
+      }
+      
+      .timeline-event::before {
+        content: '';
+        position: absolute;
+        left: -1.5rem;
+        top: 0.5rem;
+        width: 10px;
+        height: 10px;
+        background: #f39c12;
+        border-radius: 50%;
+      }
+      
+      .event-date {
+        font-weight: bold;
+        color: #d68910;
+        font-size: 0.9rem;
+      }
+      
+      .event-significance {
+        font-size: 0.85rem;
+        color: #666;
+        font-style: italic;
+      }
+      
+      .case-questions ol {
+        counter-reset: question;
+      }
+      
+      .case-question {
+        margin: 1rem 0;
+        padding: 0.75rem;
+        background: white;
+        border-radius: 4px;
+        position: relative;
+      }
+      
+      .case-question::before {
+        counter-increment: question;
+        content: counter(question);
+        position: absolute;
+        left: -2rem;
+        top: 0.75rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        background: #f39c12;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        font-size: 0.8rem;
+        line-height: 1.5rem;
+        font-weight: bold;
+      }
+      
+      .question-hints {
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        background: #f8f9fa;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        color: #666;
+      }
+      
+      .case-metadata {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid #f1c40f;
+        font-size: 0.9rem;
+        color: #666;
+      }
+      
+      /* Metacognitive Prompt */
+      .xats-metacognitive-prompt {
+        border: 2px solid #9b59b6;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        background: #f8f5ff;
+      }
+      
+      .xats-metacognitive-prompt header h4 {
+        color: #8e44ad;
+        margin: 0 0 1rem 0;
+        font-size: 1.2rem;
+      }
+      
+      .main-prompt {
+        font-size: 1.1rem;
+        margin: 1rem 0;
+        padding: 1rem;
+        background: white;
+        border-radius: 4px;
+        border-left: 4px solid #9b59b6;
+      }
+      
+      .prompt-context {
+        margin: 1rem 0;
+        padding: 0.75rem;
+        background: rgba(155, 89, 182, 0.1);
+        border-radius: 4px;
+        font-size: 0.95rem;
+      }
+      
+      .guiding-questions h5 {
+        color: #8e44ad;
+        margin: 1rem 0 0.5rem 0;
+        font-size: 1rem;
+      }
+      
+      .guiding-questions li {
+        margin: 0.5rem 0;
+        padding-left: 0.5rem;
+      }
+      
+      .sentence-starters,
+      .example-responses {
+        margin: 1rem 0;
+      }
+      
+      .sentence-starters h5,
+      .example-responses h5 {
+        color: #8e44ad;
+        margin: 0 0 0.5rem 0;
+        font-size: 0.95rem;
+      }
+      
+      .sentence-starters ul {
+        margin: 0.5rem 0;
+      }
+      
+      .sentence-starters li {
+        font-style: italic;
+        color: #666;
+      }
+      
+      .example {
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+        background: white;
+        border-radius: 4px;
+        font-style: italic;
+        color: #666;
+      }
+      
+      .prompt-metadata {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid #d1c4e9;
+        font-size: 0.85rem;
+        color: #666;
+      }
+      
+      /* Footer */
+      .xats-footer {
+        margin-top: 4rem;
+        padding-top: 2rem;
+        border-top: 2px solid #e0e0e0;
+      }
+      
+      /* Bibliography */
+      .bibliography h2 {
+        color: #2c3e50;
+        margin: 2rem 0 1rem 0;
+      }
+      
+      .bibliography ul {
+        list-style: none;
+        padding: 0;
+      }
+      
+      .bibliography li {
+        margin: 1rem 0;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e9ecef;
+      }
+      
+      /* Index */
+      .index h2 {
+        color: #2c3e50;
+        margin: 2rem 0 1rem 0;
+      }
+      
+      .index-entries {
+        column-count: 2;
+        column-gap: 2rem;
+      }
+      
+      .index-term {
+        break-inside: avoid;
+        margin: 0.5rem 0;
+      }
+      
+      .index-term .term {
+        font-weight: bold;
+        display: block;
+      }
+      
+      .index-subterm {
+        margin-left: 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .index-subterm .subterm {
+        font-style: italic;
+      }
+      
+      .cross-references,
+      .redirect {
+        font-size: 0.85rem;
+        color: #666;
+        margin-left: 1rem;
+      }
+      
+      /* Learning objectives */
+      .learning-objectives {
+        background: #e8f4f8;
+        border: 1px solid #bee5eb;
+        border-radius: 4px;
+        padding: 1rem;
+        margin: 1.5rem 0;
+      }
+      
+      .learning-objectives h3 {
+        color: #0c5460;
+        margin: 0 0 0.75rem 0;
+        font-size: 1.1rem;
+      }
+      
+      /* Key terms */
+      .key-terms {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 4px;
+        padding: 1rem;
+        margin: 1.5rem 0;
+      }
+      
+      .key-terms h3 {
+        color: #856404;
+        margin: 0 0 0.75rem 0;
+        font-size: 1.1rem;
+      }
+      
+      .key-terms dt {
+        font-weight: bold;
+        color: #856404;
+        margin: 0.75rem 0 0.25rem 0;
+      }
+      
+      .key-terms dd {
+        margin: 0 0 0.75rem 1rem;
+      }
+      
+      /* Rights info */
+      .rights-info {
+        margin: 2rem 0;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 4px;
+        font-size: 0.9rem;
+      }
+      
+      .rights-info h3 {
+        margin: 0 0 1rem 0;
+        font-size: 1rem;
+      }
+      
+      .license,
+      .copyright {
+        margin: 0.5rem 0;
+      }
+      
+      .rights-statement {
+        margin: 1rem 0 0 0;
+        font-style: italic;
+        color: #666;
+      }
+      
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .xats-document {
+          padding: 1rem;
+        }
+        
+        .xats-header h1 {
+          font-size: 2rem;
+        }
+        
+        .xats-unit,
+        .xats-chapter {
+          padding-left: 1rem;
+        }
+        
+        .index-entries {
+          column-count: 1;
+        }
+        
+        .timeline {
+          padding-left: 1rem;
+        }
+        
+        .case-question::before {
+          position: static;
+          display: inline-block;
+          margin-right: 0.5rem;
+          margin-bottom: 0.5rem;
+        }
+      }
+      
+      /* Print styles */
+      @media print {
+        .xats-skip-navigation {
+          display: none;
+        }
+        
+        .xats-document {
+          max-width: none;
+          padding: 0;
+        }
+        
+        .xats-unit,
+        .xats-chapter,
+        .xats-section {
+          page-break-inside: avoid;
+        }
+        
+        .xats-case-study,
+        .xats-metacognitive-prompt {
+          page-break-inside: avoid;
+        }
+      }
+    
+</style>
+</head>
+<body>
+
+      <nav class="xats-skip-navigation" aria-label="Skip navigation">
+        <a href="#main-content" class="skip-link">Skip to main content</a>
+        <a href="#table-of-contents" class="skip-link">Skip to table of contents</a>
+        <a href="#bibliography" class="skip-link">Skip to bibliography</a>
+      </nav>
+    
+
+      <header class="xats-header">
+        <h1>Example Textbook</h1>
+        <div class="authors">John Smith</div>
+        <div class="document-metadata">
+          <span class="subject">Computer Science</span>
+          
+        </div>
+      </header>
+    
+<main id="main-content" class="xats-main">
+<div class="body-matter">
+<section class="xats-chapter" id="chapter-1">
+<header>
+<span class="chapter-label">1</span>
+<h2>Introduction</h2>
+</header>
+<div class="chapter-sections">
+<section class="xats-section" id="section-1-1">
+<header>
+<span class="section-label">1.1</span>
+<h3>Getting Started</h3>
+</header>
+<div class="section-content">
+<div class="xats-content-block block-type-paragraph" id="block-1"><p class="xats-paragraph">This is an example document demonstrating adaptive pathways.</p></div>
+</div>
+</section>
+</div>
+</section>
+</div>
+</main>
+<footer class="xats-footer">
+</footer>
+</body>
+</html>

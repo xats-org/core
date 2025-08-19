@@ -6,7 +6,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "xats-validate": "./bin/validate.js"
+    "xats-validate": "./bin/validate.js",
+    "xats-render": "./bin/render.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

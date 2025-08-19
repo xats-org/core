@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "main-textbook",
+  "language": "en",
+  "bibliographicEntry": {
+    "id": "main-book",
+    "type": "book",
+    "title": "Introduction to Computer Science",
+    "author": [
+      {
+        "family": "Smith",
+        "given": "John"
+      }
+    ],
+    "issued": {
+      "date-parts": [[2023]]
+    },
+    "publisher": "Academic Press"
+  },
+  "subject": "Computer Science",
+  "targetAudience": "Undergraduate students",
+  "bodyMatter": {
+    "contents": [
+      {
+        "$ref": "./chapters/chapter1.json",
+        "xats:refMetadata": {
+          "title": "Introduction to Programming",
+          "authors": ["John Smith"],
+          "version": "1.0"
+        }
+      },
+      {
+        "$ref": "./chapters/chapter2.json",
+        "xats:refMetadata": {
+          "title": "Data Structures",
+          "authors": ["John Smith"],
+          "version": "1.0"
+        }
+      }
+    ]
+  }
+}

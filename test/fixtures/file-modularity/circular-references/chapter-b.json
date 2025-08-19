@@ -1,0 +1,10 @@
+{
+  "id": "chapter-b", 
+  "language": "en",
+  "title": "Chapter B",
+  "sections": [
+    {
+      "$ref": "./chapter-a.json"
+    }
+  ]
+}

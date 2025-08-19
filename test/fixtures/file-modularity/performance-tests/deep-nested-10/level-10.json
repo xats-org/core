@@ -1,0 +1,29 @@
+{
+  "id": "level-10",
+  "language": "en",
+  "title": "Level 10",
+  "sections": [
+    {
+      "id": "final-section",
+      "language": "en",
+      "title": "Final Section",
+      "content": [
+        {
+          "id": "final-paragraph",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "This is the final section at depth 10."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

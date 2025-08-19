@@ -1,0 +1,254 @@
+{
+  "$schema": "https://xats.org/schemas/0.3.0/xats.json",
+  "schemaVersion": "0.3.0",
+  "bibliographicEntry": {
+    "id": "adaptive-calculus-2025",
+    "type": "book",
+    "title": "Adaptive Calculus I",
+    "author": [{"family": "Johnson", "given": "Robert"}],
+    "issued": {"date-parts": [[2025, 1, 1]]}
+  },
+  "subject": "Mathematics",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "chapter-derivatives",
+        "label": {
+          "runs": [{"type": "text", "text": "Chapter 3"}]
+        },
+        "title": {
+          "runs": [{"type": "text", "text": "Introduction to Derivatives"}]
+        },
+        "contents": [
+          {
+            "id": "section-derivative-definition",
+            "label": {
+              "runs": [{"type": "text", "text": "Section 3.1"}]
+            },
+            "title": {
+              "runs": [{"type": "text", "text": "The Definition of a Derivative"}]
+            },
+            "blocks": [
+              {
+                "id": "adaptive-definition",
+                "blockType": "https://xats.org/core/blocks/paragraph",
+                "content": {
+                  "runs": [
+                    {"type": "text", "text": "The derivative of a function "},
+                    {"type": "emphasis", "text": "f"},
+                    {"type": "text", "text": " at a point "},
+                    {"type": "emphasis", "text": "x"},
+                    {"type": "text", "text": " is the limit of the difference quotient as h approaches 0."}
+                  ]
+                },
+                "extensions": {
+                  "https://xats.org/extensions/content-transformation": {
+                    "transformations": [
+                      {
+                        "id": "visual-learner",
+                        "type": "style-adaptation",
+                        "condition": {
+                          "learningStyle": "visual"
+                        },
+                        "output": {
+                          "blockType": "https://xats.org/core/blocks/figure",
+                          "content": {
+                            "mediaUrl": "https://example.edu/derivatives/visual-limit.svg",
+                            "altText": "Interactive graph showing the limit definition of a derivative",
+                            "caption": {
+                              "runs": [{"type": "text", "text": "Visualizing the derivative as the slope of the tangent line"}]
+                            }
+                          },
+                          "additionalContent": {
+                            "interactive": true,
+                            "controls": ["zoom", "animate", "trace"]
+                          }
+                        }
+                      },
+                      {
+                        "id": "simplified-version",
+                        "type": "complexity-reduction",
+                        "condition": {
+                          "difficultyPreference": "beginner"
+                        },
+                        "output": {
+                          "content": {
+                            "runs": [
+                              {"type": "text", "text": "A derivative tells us how fast something is changing. Think of it like measuring speed - it's the rate of change of position over time."}
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "id": "advanced-version",
+                        "type": "complexity-enhancement",
+                        "condition": {
+                          "difficultyPreference": "advanced"
+                        },
+                        "output": {
+                          "content": {
+                            "runs": [
+                              {"type": "text", "text": "Formally, f'(x) = lim[h→0] (f(x+h) - f(x))/h, provided this limit exists. This definition extends naturally to the Fréchet derivative in Banach spaces."}
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "math-block-derivative",
+                "blockType": "https://xats.org/core/blocks/mathBlock",
+                "content": {
+                  "mathType": "latex",
+                  "expression": "f'(x) = \\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h}"
+                },
+                "extensions": {
+                  "https://xats.org/extensions/content-transformation": {
+                    "transformations": [
+                      {
+                        "id": "step-by-step",
+                        "type": "procedural-expansion",
+                        "condition": {
+                          "requestStepByStep": true
+                        },
+                        "output": {
+                          "steps": [
+                            {
+                              "description": "Start with the difference quotient",
+                              "expression": "\\frac{f(x + h) - f(x)}{h}"
+                            },
+                            {
+                              "description": "As h gets smaller, this ratio approaches the instantaneous rate of change",
+                              "expression": "\\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h}"
+                            },
+                            {
+                              "description": "This limit, if it exists, is the derivative",
+                              "expression": "f'(x)"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "id": "notation-variants",
+                        "type": "notation-adaptation",
+                        "condition": {
+                          "notationPreference": "leibniz"
+                        },
+                        "output": {
+                          "expression": "\\frac{dy}{dx} = \\lim_{\\Delta x \\to 0} \\frac{\\Delta y}{\\Delta x}"
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "example-problem",
+                "blockType": "https://xats.org/core/blocks/example",
+                "content": {
+                  "title": {
+                    "runs": [{"type": "text", "text": "Example: Finding the Derivative of x²"}]
+                  },
+                  "content": {
+                    "runs": [{"type": "text", "text": "Let's find the derivative of f(x) = x² using the definition."}]
+                  }
+                },
+                "extensions": {
+                  "https://xats.org/extensions/content-transformation": {
+                    "transformations": [
+                      {
+                        "id": "worked-solution",
+                        "type": "solution-generation",
+                        "condition": {
+                          "showSolution": true
+                        },
+                        "output": {
+                          "solutionSteps": [
+                            "f(x) = x²",
+                            "f(x + h) = (x + h)² = x² + 2xh + h²",
+                            "f(x + h) - f(x) = x² + 2xh + h² - x² = 2xh + h²",
+                            "(f(x + h) - f(x))/h = (2xh + h²)/h = 2x + h",
+                            "lim[h→0] (2x + h) = 2x",
+                            "Therefore, f'(x) = 2x"
+                          ]
+                        }
+                      },
+                      {
+                        "id": "practice-problems",
+                        "type": "problem-generation",
+                        "condition": {
+                          "generateSimilar": true
+                        },
+                        "output": {
+                          "problems": [
+                            "Find the derivative of f(x) = x³",
+                            "Find the derivative of f(x) = 3x² + 2x",
+                            "Find the derivative of f(x) = √x"
+                          ],
+                          "difficulty": "progressive"
+                        }
+                      }
+                    ],
+                    "adaptivePathways": [
+                      {
+                        "id": "mastery-path",
+                        "trigger": {
+                          "type": "assessment-score",
+                          "threshold": 0.9
+                        },
+                        "transformation": {
+                          "skipTo": "section-derivative-rules",
+                          "message": "Great job! You've mastered the definition. Let's move on to derivative rules."
+                        }
+                      },
+                      {
+                        "id": "remediation-path",
+                        "trigger": {
+                          "type": "assessment-score",
+                          "threshold": 0.5,
+                          "operator": "less-than"
+                        },
+                        "transformation": {
+                          "insertContent": "review-limits-section",
+                          "message": "Let's review limits first to strengthen your foundation."
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "extensions": {
+          "https://xats.org/extensions/content-transformation": {
+            "transformationRules": {
+              "language": {
+                "supported": ["en", "es", "fr", "de", "zh"],
+                "autoDetect": true,
+                "fallback": "en"
+              },
+              "accessibility": {
+                "screenReaderOptimized": true,
+                "highContrastMode": "available",
+                "fontSizeAdjustable": true
+              },
+              "format": {
+                "outputs": ["html", "pdf", "epub", "docx", "latex"],
+                "preserveSemantics": true,
+                "responsiveDesign": true
+              }
+            },
+            "personalization": {
+              "trackPreferences": true,
+              "adaptToPerformance": true,
+              "suggestOptimalPath": true
+            }
+          }
+        }
+      }
+    ]
+  }
+}

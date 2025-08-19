@@ -1,0 +1,36 @@
+{
+  "id": "chapter-1",
+  "language": "en",
+  "title": "Introduction to Programming",
+  "sections": [
+    {
+      "$ref": "./sections/section1-1.json",
+      "xats:refMetadata": {
+        "title": "What is Programming?",
+        "version": "1.0"
+      }
+    },
+    {
+      "id": "section-1-2",
+      "language": "en",
+      "title": "Programming Languages",
+      "content": [
+        {
+          "id": "paragraph-1-2-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Programming languages are formal languages designed to communicate instructions to a computer."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

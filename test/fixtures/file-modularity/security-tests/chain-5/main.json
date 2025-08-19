@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "chain-main",
+  "language": "en",
+  "bibliographicEntry": {
+    "id": "chain-book",
+    "type": "book",
+    "title": "Reference Chain Test (5 levels)",
+    "author": [
+      {
+        "family": "Test",
+        "given": "Author"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2023
+        ]
+      ]
+    },
+    "publisher": "Test Press"
+  },
+  "subject": "Chain Testing",
+  "bodyMatter": {
+    "contents": [
+      {
+        "$ref": "./level-1.json"
+      }
+    ]
+  }
+}

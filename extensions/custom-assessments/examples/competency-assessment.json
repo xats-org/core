@@ -1,0 +1,331 @@
+{
+  "$schema": "https://xats.org/schemas/0.3.0/xats.json",
+  "schemaVersion": "0.3.0",
+  "bibliographicEntry": {
+    "id": "nursing-competency-2025",
+    "type": "book",
+    "title": "Clinical Nursing Competency Assessment",
+    "author": [{"family": "Williams", "given": "Sarah"}],
+    "issued": {"date-parts": [[2025, 1, 1]]}
+  },
+  "subject": "Nursing",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "module-patient-assessment",
+        "label": {
+          "runs": [{"type": "text", "text": "Module 3"}]
+        },
+        "title": {
+          "runs": [{"type": "text", "text": "Patient Assessment Competencies"}]
+        },
+        "contents": [
+          {
+            "id": "section-vital-signs",
+            "label": {
+              "runs": [{"type": "text", "text": "Section 3.1"}]
+            },
+            "title": {
+              "runs": [{"type": "text", "text": "Vital Signs Assessment"}]
+            },
+            "blocks": [
+              {
+                "id": "intro-vital-signs",
+                "blockType": "https://xats.org/core/blocks/paragraph",
+                "content": {
+                  "runs": [
+                    {"type": "text", "text": "Accurate vital signs assessment is fundamental to patient care. This competency assessment evaluates your ability to measure, interpret, and respond to vital signs."}
+                  ]
+                }
+              },
+              {
+                "id": "simulation-assessment",
+                "blockType": "https://xats.org/extensions/custom-assessments/simulation",
+                "content": {
+                  "assessmentType": "competency-based",
+                  "simulationType": "virtual-patient",
+                  "scenario": {
+                    "id": "post-op-patient",
+                    "title": "Post-Operative Patient Assessment",
+                    "description": "Assess a 65-year-old patient 4 hours post-abdominal surgery",
+                    "patientProfile": {
+                      "age": 65,
+                      "gender": "female",
+                      "medicalHistory": ["hypertension", "type-2-diabetes"],
+                      "currentMedications": ["metoprolol", "metformin"],
+                      "surgicalProcedure": "laparoscopic cholecystectomy"
+                    },
+                    "initialVitals": {
+                      "bloodPressure": "145/92",
+                      "heartRate": 98,
+                      "respiratoryRate": 22,
+                      "temperature": 37.8,
+                      "oxygenSaturation": 94,
+                      "painScore": 7
+                    }
+                  },
+                  "tasks": [
+                    {
+                      "id": "task-1",
+                      "description": "Perform comprehensive vital signs assessment",
+                      "requiredActions": [
+                        "Check blood pressure",
+                        "Measure heart rate and rhythm",
+                        "Count respiratory rate",
+                        "Measure temperature",
+                        "Check oxygen saturation",
+                        "Assess pain level"
+                      ],
+                      "timeLimit": 600,
+                      "criticalErrors": [
+                        "Failure to wash hands",
+                        "Incorrect cuff size selection",
+                        "Not checking bilateral blood pressure",
+                        "Missing signs of respiratory distress"
+                      ]
+                    },
+                    {
+                      "id": "task-2",
+                      "description": "Interpret findings and identify concerns",
+                      "requiredIdentifications": [
+                        "Elevated blood pressure",
+                        "Tachypnea",
+                        "Low oxygen saturation",
+                        "Moderate to severe pain"
+                      ],
+                      "decisionPoints": [
+                        {
+                          "situation": "Patient reports chest tightness",
+                          "correctAction": "Perform ECG and notify physician",
+                          "distractors": [
+                            "Continue routine assessment",
+                            "Give pain medication only",
+                            "Reposition patient"
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "rubric": {
+                    "performanceLevels": [
+                      {
+                        "level": "expert",
+                        "score": 90,
+                        "criteria": [
+                          "Completes all tasks within time limit",
+                          "No critical errors",
+                          "Demonstrates clinical reasoning",
+                          "Appropriate prioritization"
+                        ]
+                      },
+                      {
+                        "level": "proficient",
+                        "score": 80,
+                        "criteria": [
+                          "Completes most tasks correctly",
+                          "Minor non-critical errors only",
+                          "Good clinical judgment"
+                        ]
+                      },
+                      {
+                        "level": "developing",
+                        "score": 70,
+                        "criteria": [
+                          "Completes basic tasks",
+                          "Some errors in technique",
+                          "Needs prompting for complex decisions"
+                        ]
+                      },
+                      {
+                        "level": "novice",
+                        "score": 60,
+                        "criteria": [
+                          "Requires significant guidance",
+                          "Multiple technique errors",
+                          "Limited clinical reasoning"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "extensions": {
+                  "https://xats.org/extensions/custom-assessments": {
+                    "competencyMapping": {
+                      "framework": "QSEN",
+                      "competencies": [
+                        {
+                          "id": "patient-centered-care",
+                          "weight": 0.3,
+                          "indicators": [
+                            "Respects patient preferences",
+                            "Provides comfort measures",
+                            "Communicates effectively"
+                          ]
+                        },
+                        {
+                          "id": "safety",
+                          "weight": 0.4,
+                          "indicators": [
+                            "Follows safety protocols",
+                            "Identifies risks",
+                            "Prevents errors"
+                          ]
+                        },
+                        {
+                          "id": "informatics",
+                          "weight": 0.3,
+                          "indicators": [
+                            "Documents accurately",
+                            "Uses technology appropriately",
+                            "Interprets data correctly"
+                          ]
+                        }
+                      ]
+                    },
+                    "adaptiveDifficulty": {
+                      "enabled": true,
+                      "algorithm": "item-response-theory",
+                      "parameters": {
+                        "initialDifficulty": 0.5,
+                        "adjustmentRate": 0.1,
+                        "confidenceThreshold": 0.95
+                      }
+                    },
+                    "feedbackSystem": {
+                      "immediate": true,
+                      "detailed": true,
+                      "videoRemediation": true,
+                      "peerComparison": false
+                    }
+                  }
+                }
+              },
+              {
+                "id": "portfolio-assessment",
+                "blockType": "https://xats.org/extensions/custom-assessments/portfolio",
+                "content": {
+                  "assessmentType": "portfolio",
+                  "requirements": {
+                    "artifacts": [
+                      {
+                        "type": "case-study",
+                        "quantity": 3,
+                        "description": "Documented patient assessments with reflection"
+                      },
+                      {
+                        "type": "skill-demonstration",
+                        "quantity": 5,
+                        "description": "Video recordings of vital signs procedures"
+                      },
+                      {
+                        "type": "reflection-journal",
+                        "quantity": 10,
+                        "description": "Weekly reflections on clinical experiences"
+                      }
+                    ],
+                    "evaluationCriteria": {
+                      "technicalSkills": 0.4,
+                      "clinicalReasoning": 0.3,
+                      "communication": 0.15,
+                      "professionalism": 0.15
+                    }
+                  }
+                },
+                "extensions": {
+                  "https://xats.org/extensions/custom-assessments": {
+                    "portfolioFeatures": {
+                      "collaborativeReview": true,
+                      "peerFeedback": true,
+                      "mentorGuidance": true,
+                      "progressTracking": {
+                        "milestones": [
+                          "Basic Skills Mastery",
+                          "Complex Scenario Management",
+                          "Independent Practice Ready"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "peer-assessment",
+                "blockType": "https://xats.org/extensions/custom-assessments/peer-review",
+                "content": {
+                  "assessmentType": "peer-evaluation",
+                  "structure": {
+                    "evaluators": 3,
+                    "anonymity": "double-blind",
+                    "rounds": 2
+                  },
+                  "criteria": [
+                    {
+                      "dimension": "Clinical Knowledge",
+                      "weight": 0.25,
+                      "scale": {
+                        "type": "likert",
+                        "points": 5,
+                        "descriptors": {
+                          "1": "Needs significant improvement",
+                          "3": "Meets expectations",
+                          "5": "Exceeds expectations"
+                        }
+                      }
+                    },
+                    {
+                      "dimension": "Teamwork",
+                      "weight": 0.25,
+                      "scale": {
+                        "type": "behaviorally-anchored",
+                        "anchors": [
+                          "Rarely collaborates with team",
+                          "Collaborates when asked",
+                          "Actively seeks collaboration",
+                          "Leads collaborative efforts"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "extensions": {
+                  "https://xats.org/extensions/custom-assessments": {
+                    "qualityAssurance": {
+                      "interRaterReliability": true,
+                      "biasDetection": true,
+                      "calibrationExercises": true
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "extensions": {
+          "https://xats.org/extensions/custom-assessments": {
+            "assessmentStrategy": {
+              "multiModal": true,
+              "authenticAssessment": true,
+              "continuousEvaluation": true,
+              "standardsAligned": ["NCLEX-RN", "QSEN", "NLN"],
+              "credentialing": {
+                "badgesEnabled": true,
+                "certificateGeneration": true,
+                "blockchainVerification": false
+              }
+            },
+            "dataCollection": {
+              "performanceAnalytics": true,
+              "competencyGapAnalysis": true,
+              "predictiveModeling": true,
+              "dashboards": {
+                "student": "competency-progress",
+                "instructor": "cohort-analysis",
+                "program": "curriculum-mapping"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

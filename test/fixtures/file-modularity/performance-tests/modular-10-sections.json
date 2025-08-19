@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "modular-textbook-10",
+  "language": "en",
+  "bibliographicEntry": {
+    "id": "modular-book-10",
+    "type": "book",
+    "title": "Modular Performance Test Textbook (10 sections)",
+    "author": [
+      {
+        "family": "Test",
+        "given": "Author"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2023
+        ]
+      ]
+    },
+    "publisher": "Test Press"
+  },
+  "subject": "Performance Testing",
+  "bodyMatter": {
+    "contents": [
+      {
+        "$ref": "./modular-10-chapters/chapter-1.json",
+        "xats:refMetadata": {
+          "title": "Chapter 1",
+          "version": "1.0"
+        }
+      }
+    ]
+  }
+}

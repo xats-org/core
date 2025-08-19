@@ -1,0 +1,198 @@
+{
+  "$schema": "https://xats.org/schemas/0.3.0/xats.json",
+  "schemaVersion": "0.3.0",
+  "bibliographicEntry": {
+    "id": "intro-to-data-science-2025",
+    "type": "book",
+    "title": "Introduction to Data Science",
+    "author": [{"family": "Smith", "given": "Jane"}],
+    "issued": {"date-parts": [[2025, 1, 1]]}
+  },
+  "subject": "Data Science",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "chapter-1",
+        "label": {
+          "runs": [{"type": "text", "text": "Chapter 1"}]
+        },
+        "title": {
+          "runs": [{"type": "text", "text": "Getting Started with Data Science"}]
+        },
+        "contents": [
+          {
+            "id": "section-1-1",
+            "label": {
+              "runs": [{"type": "text", "text": "Section 1.1"}]
+            },
+            "title": {
+              "runs": [{"type": "text", "text": "What is Data Science?"}]
+            },
+            "blocks": [
+              {
+                "id": "block-1",
+                "blockType": "https://xats.org/core/blocks/paragraph",
+                "content": {
+                  "runs": [
+                    {"type": "text", "text": "Data science combines mathematics, statistics, and computer science to extract insights from data."}
+                  ]
+                },
+                "extensions": {
+                  "https://xats.org/extensions/analytics-tracking": {
+                    "eventTracking": {
+                      "enabled": true,
+                      "events": [
+                        {
+                          "type": "content_view",
+                          "properties": {
+                            "content_type": "paragraph",
+                            "section_id": "section-1-1",
+                            "learning_objective": "understand-data-science-definition"
+                          }
+                        }
+                      ]
+                    },
+                    "progressTracking": {
+                      "weight": 1,
+                      "completionCriteria": {
+                        "type": "time_spent",
+                        "minimumSeconds": 30
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "interactive-quiz-1",
+                "blockType": "https://xats.org/core/blocks/assessment",
+                "content": {
+                  "assessmentType": "formative",
+                  "questions": [
+                    {
+                      "id": "q1",
+                      "questionText": {
+                        "runs": [{"type": "text", "text": "What fields does data science combine?"}]
+                      },
+                      "questionType": "multiple-choice",
+                      "options": [
+                        {"id": "a", "text": {"runs": [{"type": "text", "text": "Mathematics, Statistics, Computer Science"}]}},
+                        {"id": "b", "text": {"runs": [{"type": "text", "text": "Biology, Chemistry, Physics"}]}},
+                        {"id": "c", "text": {"runs": [{"type": "text", "text": "History, Literature, Art"}]}}
+                      ],
+                      "correctAnswer": "a"
+                    }
+                  ]
+                },
+                "extensions": {
+                  "https://xats.org/extensions/analytics-tracking": {
+                    "assessmentAnalytics": {
+                      "trackAttempts": true,
+                      "trackTimeToComplete": true,
+                      "trackHints": true,
+                      "anonymizeData": false,
+                      "dataRetention": {
+                        "rawData": 180,
+                        "aggregatedData": 365
+                      }
+                    },
+                    "learningAnalytics": {
+                      "masteryThreshold": 0.8,
+                      "difficultyLevel": "beginner",
+                      "bloomsTaxonomy": "remember",
+                      "estimatedTime": 60
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "extensions": {
+          "https://xats.org/extensions/analytics-tracking": {
+            "chapterAnalytics": {
+              "trackingId": "chapter-1-analytics",
+              "objectives": [
+                {
+                  "id": "obj-1",
+                  "description": "Understand the fundamentals of data science",
+                  "measurableOutcomes": [
+                    "Define data science",
+                    "Identify key components",
+                    "Explain applications"
+                  ]
+                }
+              ],
+              "engagementMetrics": {
+                "minimumEngagementTime": 300,
+                "interactionPoints": ["quiz", "video", "discussion"],
+                "completionWeight": 10
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "extensions": {
+    "https://xats.org/extensions/analytics-tracking": {
+      "globalSettings": {
+        "provider": "custom",
+        "endpoint": "https://analytics.example.edu/api/v1",
+        "apiKey": "${ANALYTICS_API_KEY}",
+        "batchSize": 100,
+        "flushInterval": 30000,
+        "debug": false
+      },
+      "privacySettings": {
+        "consentRequired": true,
+        "gdprCompliant": true,
+        "dataMinimization": true,
+        "userRights": ["access", "deletion", "portability", "rectification"]
+      },
+      "dashboards": [
+        {
+          "id": "instructor-dashboard",
+          "name": "Instructor Analytics Dashboard",
+          "widgets": [
+            {
+              "type": "progress-overview",
+              "dataSource": "chapter-completion",
+              "visualization": "bar-chart"
+            },
+            {
+              "type": "engagement-heatmap",
+              "dataSource": "content-interactions",
+              "visualization": "heatmap"
+            },
+            {
+              "type": "assessment-performance",
+              "dataSource": "quiz-results",
+              "visualization": "line-graph"
+            }
+          ]
+        },
+        {
+          "id": "student-dashboard",
+          "name": "My Learning Progress",
+          "widgets": [
+            {
+              "type": "personal-progress",
+              "dataSource": "individual-completion",
+              "visualization": "progress-bar"
+            },
+            {
+              "type": "time-spent",
+              "dataSource": "engagement-time",
+              "visualization": "pie-chart"
+            },
+            {
+              "type": "mastery-indicators",
+              "dataSource": "learning-objectives",
+              "visualization": "radar-chart"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
