@@ -1,0 +1,59 @@
+{
+  "$schema": "https://xats.org/schemas/0.3.0/xats.json",
+  "schemaVersion": "0.3.0",
+  "bibliographicEntry": {
+    "id": "physics-101-2025",
+    "type": "book",
+    "title": "Introduction to Physics",
+    "author": [
+      {
+        "family": "Smith",
+        "given": "Jane"
+      },
+      {
+        "family": "Johnson",
+        "given": "Robert"
+      }
+    ],
+    "issued": {
+      "date-parts": [[2025]]
+    },
+    "publisher": "Academic Press",
+    "ISBN": "978-0-123456-78-9"
+  },
+  "subject": "Physics",
+  "targetAudience": "Undergraduate students in introductory physics courses",
+  "learningOutcomes": [
+    {
+      "outcomeType": "https://xats.org/core/outcomes/knowledge",
+      "description": {
+        "runs": [
+          {
+            "type": "text",
+            "text": "Understand fundamental principles of mechanics, thermodynamics, and electromagnetism"
+          }
+        ]
+      }
+    }
+  ],
+  "bodyMatter": {
+    "contents": [
+      {
+        "$ref": "./chapters/chapter-01-mechanics.json",
+        "xats:refMetadata": {
+          "title": "Classical Mechanics",
+          "authors": ["Jane Smith"],
+          "lastModified": "2025-08-18T23:33:00Z"
+        }
+      },
+      {
+        "$ref": "./chapters/chapter-02-thermodynamics.json",
+        "xats:refMetadata": {
+          "title": "Thermodynamics",
+          "authors": ["Robert Johnson"],
+          "lastModified": "2025-08-18T23:33:00Z"
+        }
+      }
+    ]
+  }
+}

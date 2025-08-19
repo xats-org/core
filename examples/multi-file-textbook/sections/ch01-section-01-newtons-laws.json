@@ -1,0 +1,70 @@
+{
+  "$schema": "https://xats.org/schemas/0.3.0/xats.json#/definitions/Section",
+  "type": "Section",
+  "id": "ch01-section-01",
+  "label": "1.1",
+  "title": "Newton's Laws of Motion",
+  "contents": [
+    {
+      "blockType": "https://xats.org/core/blocks/heading",
+      "content": {
+        "level": 3,
+        "text": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "First Law: Law of Inertia"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "blockType": "https://xats.org/core/blocks/paragraph",
+      "content": {
+        "text": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "An object at rest stays at rest and an object in motion stays in motion with the same speed and in the same direction unless acted upon by an unbalanced force."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "blockType": "https://xats.org/core/blocks/heading",
+      "content": {
+        "level": 3,
+        "text": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "Second Law: F = ma"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "blockType": "https://xats.org/core/blocks/paragraph",
+      "content": {
+        "text": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "The acceleration of an object is directly proportional to the net force acting on the object and inversely proportional to its mass."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "blockType": "https://xats.org/core/blocks/mathBlock",
+      "content": {
+        "expression": "\\vec{F} = m\\vec{a}",
+        "format": "latex"
+      }
+    }
+  ]
+}
