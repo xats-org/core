@@ -1,0 +1,326 @@
+{
+  "schemaVersion": "0.3.0",
+  "bibliographicEntry": {
+    "id": "v030-example",
+    "type": "book",
+    "title": "Advanced Pedagogy with xats v0.3.0",
+    "author": [
+      {
+        "given": "Example",
+        "family": "Author"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [2025, 8, 19]
+      ]
+    }
+  },
+  "subject": "Educational Technology",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "ch-1",
+        "label": "1",
+        "title": "Case-Based Learning and Reflection",
+        "language": "en",
+        "sections": [
+          {
+            "id": "sec-1-1",
+            "label": "1.1",
+            "title": "Introduction to Case Studies",
+            "language": "en",
+            "content": [
+              {
+                "language": "en",
+                "id": "para-1",
+                "blockType": "https://xats.org/core/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "This chapter demonstrates the new "
+                      },
+                      {
+                        "type": "index",
+                        "text": "case study",
+                        "indexTerm": "case study",
+                        "subTerm": "pedagogy",
+                        "crossReferences": ["problem-based learning", "authentic assessment"],
+                        "indexId": "idx-case-study-pedagogy"
+                      },
+                      {
+                        "type": "text",
+                        "text": " and "
+                      },
+                      {
+                        "type": "index",
+                        "text": "metacognitive prompts",
+                        "indexTerm": "metacognitive prompts",
+                        "crossReferences": ["self-reflection", "learning strategies"],
+                        "indexId": "idx-metacognitive"
+                      },
+                      {
+                        "type": "text",
+                        "text": " features introduced in v0.3.0."
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "language": "en",
+                "id": "case-1",
+                "blockType": "https://xats.org/core/blocks/caseStudy",
+                "content": {
+                  "title": {
+                    "runs": [{"type": "text", "text": "TechStart Inc: A Startup's Pivot Decision"}]
+                  },
+                  "scenario": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "TechStart Inc, a 2-year-old startup with 15 employees, has developed an AI-powered project management tool. After 18 months of development and $2M in funding, they have 50 paying customers but are struggling to achieve product-market fit. The board is pressuring the CEO to consider pivoting to a different market segment or product focus."
+                      }
+                    ]
+                  },
+                  "background": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Founded in 2023, TechStart initially targeted enterprise customers but found the sales cycle too long. They shifted to SMBs but face intense competition from established players. The team has 8 months of runway remaining."
+                      }
+                    ]
+                  },
+                  "stakeholders": [
+                    {
+                      "name": "Sarah Chen",
+                      "role": "CEO and Co-founder",
+                      "description": {"runs": [{"type": "text", "text": "Former product manager at Google, deeply invested in the original vision"}]},
+                      "motivations": ["Prove the concept works", "Maintain team morale", "Satisfy investors"]
+                    },
+                    {
+                      "name": "Mark Rodriguez",
+                      "role": "Lead Investor",
+                      "description": {"runs": [{"type": "text", "text": "Partner at Valley Ventures, has invested $1.5M"}]},
+                      "motivations": ["Achieve 10x return", "Minimize losses", "Maintain portfolio reputation"]
+                    },
+                    {
+                      "name": "The Development Team",
+                      "role": "Engineers and Designers",
+                      "description": {"runs": [{"type": "text", "text": "Highly skilled team that has worked on the product for 18 months"}]},
+                      "motivations": ["Job security", "Work on meaningful projects", "Stock options value"]
+                    }
+                  ],
+                  "timeline": [
+                    {
+                      "date": "2023-01",
+                      "event": {"runs": [{"type": "text", "text": "Company founded"}]},
+                      "significance": "Initial vision focused on enterprise market"
+                    },
+                    {
+                      "date": "2023-06",
+                      "event": {"runs": [{"type": "text", "text": "Seed funding raised"}]},
+                      "significance": "$2M raised based on enterprise strategy"
+                    },
+                    {
+                      "date": "2024-01",
+                      "event": {"runs": [{"type": "text", "text": "Pivot to SMB market"}]},
+                      "significance": "First major strategy shift"
+                    },
+                    {
+                      "date": "2025-01",
+                      "event": {"runs": [{"type": "text", "text": "Current decision point"}]},
+                      "significance": "50 customers, 8 months runway"
+                    }
+                  ],
+                  "questions": [
+                    {
+                      "id": "q1",
+                      "question": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "What are the key indicators that suggest TechStart should or should not pivot?"
+                          }
+                        ]
+                      },
+                      "type": "analysis",
+                      "cognitiveLevel": "analyze"
+                    },
+                    {
+                      "id": "q2",
+                      "question": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "How should Sarah balance the competing interests of different stakeholders?"
+                          }
+                        ]
+                      },
+                      "type": "evaluation",
+                      "cognitiveLevel": "evaluate"
+                    },
+                    {
+                      "id": "q3",
+                      "question": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Design a 90-day action plan for TechStart, whether they pivot or persist."
+                          }
+                        ]
+                      },
+                      "type": "recommendation",
+                      "cognitiveLevel": "create"
+                    }
+                  ],
+                  "resources": [],
+                  "learningObjectives": ["strategic-decision-making", "stakeholder-analysis", "startup-dynamics"],
+                  "difficultyLevel": "intermediate",
+                  "estimatedTimeMinutes": 45,
+                  "pedagogicalMetadata": {
+                    "instructionalMethods": ["case-based-learning"],
+                    "learningTheories": ["constructivism"],
+                    "assessmentTypes": ["authentic"],
+                    "targetAudience": {
+                      "educationLevel": "graduate",
+                      "priorKnowledge": "intermediate",
+                      "specializations": ["business", "entrepreneurship"]
+                    }
+                  }
+                }
+              },
+              {
+                "language": "en",
+                "id": "prompt-1",
+                "blockType": "https://xats.org/core/blocks/metacognitivePrompt",
+                "content": {
+                  "promptType": "self-assessment",
+                  "prompt": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "After analyzing the TechStart case, reflect on your decision-making process."
+                      }
+                    ]
+                  },
+                  "guidingQuestions": [
+                    {
+                      "question": "What information did you prioritize when making your recommendation?",
+                      "purpose": "Identify decision-making patterns"
+                    },
+                    {
+                      "question": "What assumptions did you make about the startup ecosystem?",
+                      "purpose": "Surface implicit biases"
+                    },
+                    {
+                      "question": "How confident are you in your recommendation and why?",
+                      "purpose": "Assess certainty calibration"
+                    }
+                  ],
+                  "responseFormat": "written-reflection",
+                  "timing": "after-learning",
+                  "scaffolding": {
+                    "examples": [
+                      "I prioritized customer retention metrics because...",
+                      "I assumed that the venture capital environment..."
+                    ],
+                    "sentence_starters": [
+                      "The most important factor I considered was...",
+                      "I found it challenging to...",
+                      "My recommendation would change if..."
+                    ]
+                  },
+                  "estimatedTimeMinutes": 10,
+                  "pedagogicalMetadata": {
+                    "instructionalMethod": "reflection",
+                    "learningTheory": "metacognitive",
+                    "targetAudience": {
+                      "educationLevel": "graduate"
+                    }
+                  }
+                }
+              },
+              {
+                "language": "en",
+                "id": "para-2",
+                "blockType": "https://xats.org/core/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "The integration of "
+                      },
+                      {
+                        "type": "index",
+                        "text": "authentic assessment",
+                        "indexTerm": "authentic assessment",
+                        "redirectTo": "case study",
+                        "indexId": "idx-authentic-assessment"
+                      },
+                      {
+                        "type": "text",
+                        "text": " with metacognitive reflection represents best practices in modern "
+                      },
+                      {
+                        "type": "index",
+                        "text": "pedagogy",
+                        "indexTerm": "pedagogy",
+                        "subTerm": "higher education",
+                        "indexId": "idx-pedagogy-higher-ed"
+                      },
+                      {
+                        "type": "text",
+                        "text": "."
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "sec-1-2",
+            "label": "1.2",
+            "title": "Advanced Metacognitive Strategies",
+            "language": "en",
+            "content": [
+              {
+                "language": "en",
+                "id": "prompt-2",
+                "blockType": "https://xats.org/core/blocks/metacognitivePrompt",
+                "content": {
+                  "promptType": "learning-strategy",
+                  "prompt": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Before beginning the next case study, plan your approach to analyzing complex business scenarios."
+                      }
+                    ]
+                  },
+                  "guidingQuestions": [
+                    {
+                      "question": "What frameworks or models will you use to structure your analysis?",
+                      "purpose": "Activate prior knowledge"
+                    },
+                    {
+                      "question": "How will you identify and challenge your assumptions?",
+                      "purpose": "Promote critical thinking"
+                    }
+                  ],
+                  "responseFormat": "structured-form",
+                  "timing": "before-learning",
+                  "estimatedTimeMinutes": 5
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
