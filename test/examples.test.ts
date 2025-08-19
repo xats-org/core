@@ -150,7 +150,7 @@ describe('Example Document Validation', () => {
                   // Each run should have a type
                   objAsAny.runs.forEach((run: any) => {
                     expect(run).toHaveProperty('type');
-                    expect(['text', 'reference', 'citation', 'emphasis', 'strong']).toContain(run.type);
+                    expect(['text', 'reference', 'citation', 'emphasis', 'strong', 'index']).toContain(run.type);
                     
                     // Text runs should have text property
                     if (run.type === 'text') {

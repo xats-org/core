@@ -1,6 +1,9 @@
 # xats Schema Reference Guide
 
-Welcome to the official technical reference for the **Extensible Academic Textbook Schema (xats)**. This guide provides a detailed, item-by-item explanation of every object and property within the `v0.2.0` schema, including the comprehensive assessment framework, accessibility features, and LTI 1.3 integration support.
+Welcome to the official technical reference for the **Extensible Academic Textbook Schema (xats)**. This guide provides a detailed, item-by-item explanation of every object and property within the schema, including the comprehensive assessment framework, accessibility features, and LTI 1.3 integration support.
+
+**Current Version:** v0.3.0  
+**Previous Versions:** v0.2.0, v0.1.0
 
 Use the links below to navigate to the detailed specification for each definition.
 
@@ -27,6 +30,7 @@ Use the links below to navigate to the detailed specification for each definitio
 - [LearningOutcome](./LearningOutcome.md) - Broad capabilities students should possess
 - [LearningObjective](./LearningObjective.md) - Specific, measurable learning goals
 - [Pathway](./Pathway.md) - Adaptive learning routes with conditional logic
+- [PedagogicalMetadata](./PedagogicalMetadata.md) - Cognitive and pedagogical classification *(v0.2.0)*
 
 ## Content Components
 - [Resource](./Resource.md) - Shared multimedia assets and files
@@ -68,6 +72,12 @@ Use the links below to navigate to the detailed specification for each definitio
 - [BackMatter](./BackMatter.md) - Appendices, glossary, bibliography
 
 ---
+
+## What's New in v0.3.0
+
+- **Formal Indexing Support**: New `IndexRun` type in SemanticText for professional publishing
+- **Case Study Blocks**: Structured content type for case-based learning scenarios
+- **Metacognitive Prompt Blocks**: Self-reflection and metacognitive assessment support
 
 ## What's New in v0.2.0
 

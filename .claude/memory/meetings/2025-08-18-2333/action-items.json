@@ -1,0 +1,143 @@
+{
+  "meetingId": "2025-08-18-2333",
+  "meetingTitle": "File Modularity for v0.3.0",
+  "createdDate": "2025-08-18",
+  "actionItems": [
+    {
+      "id": "AI-001",
+      "title": "Create detailed technical specification document",
+      "description": "Document the complete technical specification for file modularity including JSON Schema extensions, reference syntax, metadata format, and security controls",
+      "assignee": "xats-schema-engineer",
+      "priority": "high",
+      "status": "pending",
+      "dueDate": "2025-09-01",
+      "milestone": "v0.3.0",
+      "dependencies": [],
+      "tags": ["specification", "schema", "references"]
+    },
+    {
+      "id": "AI-002", 
+      "title": "Design validation framework architecture",
+      "description": "Create architectural design for two-phase validation system, dependency resolution engine, and cross-file validation strategies",
+      "assignee": "xats-validation-engineer",
+      "priority": "high",
+      "status": "pending", 
+      "dueDate": "2025-09-01",
+      "milestone": "v0.3.0",
+      "dependencies": ["AI-001"],
+      "tags": ["validation", "architecture", "dependencies"]
+    },
+    {
+      "id": "AI-003",
+      "title": "Create GitHub issues for Phase 1 implementation",
+      "description": "Break down Phase 1 requirements into specific GitHub issues with clear acceptance criteria, labels, and milestone assignments",
+      "assignee": "xats-project-steward", 
+      "priority": "high",
+      "status": "pending",
+      "dueDate": "2025-08-25",
+      "milestone": "v0.3.0",
+      "dependencies": ["AI-001"],
+      "tags": ["project-management", "issues", "planning"]
+    },
+    {
+      "id": "AI-004",
+      "title": "Review and approve technical specification",
+      "description": "All board members review the technical specification document and provide formal approval before implementation begins",
+      "assignee": "all-board-members",
+      "priority": "high", 
+      "status": "pending",
+      "dueDate": "2025-09-08",
+      "milestone": "v0.3.0",
+      "dependencies": ["AI-001", "AI-002"],
+      "tags": ["review", "approval", "governance"]
+    },
+    {
+      "id": "AI-005",
+      "title": "Extend xats schema to support references and metadata", 
+      "description": "Implement JSON Schema extensions for $ref support, reference metadata schema, validation configuration, and build manifest format",
+      "assignee": "xats-schema-engineer",
+      "priority": "medium",
+      "status": "pending",
+      "dueDate": "2025-09-22",
+      "milestone": "v0.3.0", 
+      "dependencies": ["AI-004"],
+      "tags": ["schema", "implementation", "json-schema"]
+    },
+    {
+      "id": "AI-006",
+      "title": "Implement reference resolution and validation library",
+      "description": "Create reference implementation library for resolving file references, validating cross-file dependencies, and providing error reporting",
+      "assignee": "xats-validation-engineer",
+      "priority": "medium",
+      "status": "pending",
+      "dueDate": "2025-09-29", 
+      "milestone": "v0.3.0",
+      "dependencies": ["AI-005"],
+      "tags": ["validation", "implementation", "library"]
+    },
+    {
+      "id": "AI-007",
+      "title": "Create authoring guide and implementation examples",
+      "description": "Develop comprehensive documentation including file organization patterns, reference syntax examples, and best practices for modular content creation",
+      "assignee": "xats-doc-writer",
+      "priority": "medium",
+      "status": "pending", 
+      "dueDate": "2025-09-29",
+      "milestone": "v0.3.0",
+      "dependencies": ["AI-005"],
+      "tags": ["documentation", "examples", "authoring"]
+    },
+    {
+      "id": "AI-008",
+      "title": "Create comprehensive test suite for reference patterns",
+      "description": "Develop test cases covering valid/invalid reference patterns, circular dependencies, missing files, security edge cases, and performance scenarios",
+      "assignee": "xats-validation-engineer", 
+      "priority": "medium",
+      "status": "pending",
+      "dueDate": "2025-10-06",
+      "milestone": "v0.3.0",
+      "dependencies": ["AI-006"],
+      "tags": ["testing", "quality-assurance", "edge-cases"]
+    },
+    {
+      "id": "AI-009",
+      "title": "Conduct community beta testing",
+      "description": "Organize beta testing program with select content authors to validate usability, identify issues, and gather feedback on modular authoring workflow",
+      "assignee": "xats-content-author",
+      "priority": "low",
+      "status": "pending",
+      "dueDate": "2025-10-20", 
+      "milestone": "v0.3.0",
+      "dependencies": ["AI-008"],
+      "tags": ["community", "testing", "feedback"]
+    },
+    {
+      "id": "AI-010",
+      "title": "Conduct independent security audit",
+      "description": "Arrange third-party security review of file reference implementation, focusing on sandboxing, path traversal prevention, and content integrity controls",
+      "assignee": "xats-project-steward",
+      "priority": "high", 
+      "status": "pending",
+      "dueDate": "2025-10-27",
+      "milestone": "v0.3.0",
+      "dependencies": ["AI-008"],
+      "tags": ["security", "audit", "compliance"]
+    }
+  ],
+  "summary": {
+    "totalActionItems": 10,
+    "highPriority": 4,
+    "mediumPriority": 4, 
+    "lowPriority": 1,
+    "assignees": [
+      "xats-schema-engineer",
+      "xats-validation-engineer", 
+      "xats-project-steward",
+      "xats-doc-writer",
+      "xats-content-author",
+      "all-board-members"
+    ],
+    "milestones": ["v0.3.0"],
+    "estimatedCompletionDate": "2025-10-27"
+  }
+}

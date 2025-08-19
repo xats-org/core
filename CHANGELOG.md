@@ -19,6 +19,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.3.0] - Unreleased
+
+### Added
+- **Formal Indexing Support**: Complete implementation of IndexRun for professional publishing
+  - New `IndexRun` type in SemanticText for marking indexable terms
+  - Support for hierarchical indexing with sub-terms
+  - Cross-references and "See also" functionality
+  - Redirect support for index aliases
+- **Case Study Blocks**: New structured content type for case-based learning
+  - Comprehensive scenario and background support
+  - Stakeholder perspectives and timelines
+  - Analysis questions and discussion prompts
+  - Learning objectives integration
+- **Metacognitive Prompt Blocks**: Self-reflection and metacognitive support
+  - 8 distinct prompt types for different cognitive activities
+  - Scaffolding with example responses
+  - Self-assessment integration
+  - Progress tracking support
+
+### Changed
+- Updated schema to version 0.3.0 with backward compatibility
+- Enhanced SemanticText to support nested IndexRun elements
+- Expanded block types with case study and metacognitive prompt support
+
 ## [0.2.0] - 2025-01-20
 
 ### Added
