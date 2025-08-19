@@ -1,0 +1,163 @@
+{
+  "schemaVersion": "0.3.0",
+  "bibliographicEntry": {
+    "id": "physics-interactive-demo",
+    "type": "book",
+    "title": "Interactive Physics Demonstrations",
+    "author": [
+      { "family": "Smith", "given": "Dr. Jane" }
+    ],
+    "issued": { "date-parts": [[2024]] }
+  },
+  "subject": "Physics",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "oscillations-unit",
+        "containerType": "unit",
+        "label": "Unit 3",
+        "title": {
+          "runs": [
+            { "type": "text", "content": "Oscillations and Waves" }
+          ]
+        },
+        "contents": [
+          {
+            "id": "pendulum-chapter",
+            "containerType": "chapter", 
+            "label": "Chapter 3.1",
+            "title": {
+              "runs": [
+                { "type": "text", "content": "Simple Pendulum Motion" }
+              ]
+            },
+            "learningObjectives": [
+              {
+                "id": "obj-1",
+                "description": "Understand the relationship between pendulum length and period",
+                "level": "understand"
+              },
+              {
+                "id": "obj-2", 
+                "description": "Analyze energy transformations in oscillatory motion",
+                "level": "analyze"
+              }
+            ],
+            "contents": [
+              {
+                "id": "pendulum-intro",
+                "containerType": "section",
+                "label": "3.1.1",
+                "title": {
+                  "runs": [
+                    { "type": "text", "content": "Introduction to Pendulum Motion" }
+                  ]
+                },
+                "contents": [
+                  {
+                    "id": "pendulum-theory",
+                    "blockType": "https://xats.org/core/blocks/paragraph",
+                    "content": {
+                      "text": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "content": "A simple pendulum consists of a mass (called a bob) suspended from a fixed point by a string or rod of negligible mass. When displaced from its equilibrium position and released, the pendulum oscillates back and forth under the influence of gravity."
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "id": "pendulum-simulation",
+                    "blockType": "https://xats.org/core/blocks/interactive",
+                    "content": {
+                      "title": {
+                        "runs": [
+                          { "type": "text", "content": "Interactive Pendulum Simulation" }
+                        ]
+                      },
+                      "description": "Explore how different parameters affect pendulum motion"
+                    },
+                    "extensions": {
+                      "interactiveWidget": {
+                        "widgetType": "simulation",
+                        "title": "Simple Pendulum Simulator",
+                        "description": "Interactive simulation showing pendulum motion with adjustable length, mass, and gravity",
+                        "provider": "phet-simulations",
+                        "src": "https://phet.colorado.edu/sims/html/pendulum-lab/latest/pendulum-lab_en.html",
+                        "version": "1.0.0",
+                        "dimensions": {
+                          "width": "800px",
+                          "height": "600px",
+                          "responsive": true
+                        },
+                        "parameters": {
+                          "pendulumLength": 1.0,
+                          "mass": 0.5,
+                          "gravity": 9.8,
+                          "damping": 0.0,
+                          "showGrid": true,
+                          "showRuler": true,
+                          "showTimer": true,
+                          "showEnergyGraph": true
+                        },
+                        "interactivity": {
+                          "allowUserInput": true,
+                          "resetable": true,
+                          "saveState": false,
+                          "sharable": false,
+                          "fullscreenEnabled": true
+                        },
+                        "learningObjectives": [
+                          "Understand relationship between pendulum length and period",
+                          "Observe effects of gravity on pendulum motion",
+                          "Analyze energy transformations in oscillatory motion",
+                          "Investigate the effect of damping on oscillations"
+                        ],
+                        "dataCollection": {
+                          "enabled": true,
+                          "events": ["load", "parameter-change", "reset", "user-input"],
+                          "privacyLevel": "anonymous"
+                        },
+                        "accessibility": {
+                          "keyboardNavigable": true,
+                          "screenReaderSupport": "basic",
+                          "alternativeDescription": "Interactive pendulum simulation with controls for adjusting length, mass, gravity, and damping. Shows real-time motion, measurements, and energy graphs.",
+                          "reducedMotion": true
+                        },
+                        "fallback": {
+                          "type": "image",
+                          "content": "/images/pendulum-diagram.png",
+                          "altText": "Diagram showing simple pendulum with labeled components: bob mass, string length, and angle of displacement"
+                        },
+                        "security": {
+                          "sandbox": ["allow-scripts", "allow-same-origin"],
+                          "trustedDomains": ["phet.colorado.edu"]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "id": "pendulum-analysis",
+                    "blockType": "https://xats.org/core/blocks/paragraph",
+                    "content": {
+                      "text": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "content": "Use the simulation above to investigate how changing the pendulum length affects the period of oscillation. Try different values and observe the relationship. For small angles (less than 15°), the period is given by the equation T = 2π√(L/g), where T is the period, L is the length, and g is gravitational acceleration."
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

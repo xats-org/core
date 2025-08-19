@@ -1,0 +1,117 @@
+{
+  "id": "chapter-1",
+  "language": "en",
+  "title": "Chapter 1",
+  "sections": [
+    {
+      "id": "section-1",
+      "language": "en",
+      "title": "Section 1",
+      "content": [
+        {
+          "id": "paragraph-1-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 1 in chapter 1."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-2",
+      "language": "en",
+      "title": "Section 2",
+      "content": [
+        {
+          "id": "paragraph-2-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 2 in chapter 1."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-3",
+      "language": "en",
+      "title": "Section 3",
+      "content": [
+        {
+          "id": "paragraph-3-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 3 in chapter 1."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-4",
+      "language": "en",
+      "title": "Section 4",
+      "content": [
+        {
+          "id": "paragraph-4-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 4 in chapter 1."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-5",
+      "language": "en",
+      "title": "Section 5",
+      "content": [
+        {
+          "id": "paragraph-5-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 5 in chapter 1."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

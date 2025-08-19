@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "circular-main",
+  "language": "en",
+  "bibliographicEntry": {
+    "id": "circular-book",
+    "type": "book", 
+    "title": "Circular References Test",
+    "author": [{"family": "Test", "given": "Author"}],
+    "issued": {"date-parts": [[2023]]},
+    "publisher": "Test Press"
+  },
+  "subject": "Testing",
+  "bodyMatter": {
+    "contents": [
+      {
+        "$ref": "./chapter-a.json"
+      }
+    ]
+  }
+}

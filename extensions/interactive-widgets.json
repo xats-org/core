@@ -1,0 +1,378 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/extensions/interactive-widgets/schema.json",
+  "title": "Interactive Widgets Extension for xats",
+  "description": "Extension for embedding interactive simulations, diagrams, and visualizations in xats documents.",
+  "type": "object",
+
+  "definitions": {
+    "InteractiveWidget": {
+      "description": "Configuration for an interactive widget embedded in educational content.",
+      "type": "object",
+      "properties": {
+        "widgetType": {
+          "description": "The type of interactive widget.",
+          "type": "string",
+          "enum": [
+            "simulation",
+            "diagram", 
+            "chart",
+            "graph",
+            "timeline",
+            "map",
+            "3d-model",
+            "calculator",
+            "game",
+            "virtual-lab"
+          ]
+        },
+        "title": {
+          "description": "Human-readable title for the widget.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what the widget demonstrates or teaches.",
+          "type": "string"
+        },
+        "provider": {
+          "description": "The service or library providing the widget.",
+          "type": "string",
+          "enum": [
+            "phet-simulations",
+            "geogebra",
+            "desmos",
+            "plotly",
+            "d3",
+            "threejs",
+            "unity-webgl",
+            "custom"
+          ]
+        },
+        "src": {
+          "description": "Source URL or embedded code for the widget.",
+          "type": "string"
+        },
+        "version": {
+          "description": "Version of the widget or provider library.",
+          "type": "string"
+        },
+        "dimensions": {
+          "description": "Preferred display dimensions for the widget.",
+          "type": "object",
+          "properties": {
+            "width": {
+              "description": "Preferred width in pixels or CSS units.",
+              "type": "string"
+            },
+            "height": {
+              "description": "Preferred height in pixels or CSS units.",
+              "type": "string"
+            },
+            "aspectRatio": {
+              "description": "Aspect ratio as width:height (e.g., '16:9').",
+              "type": "string",
+              "pattern": "^\\d+:\\d+$"
+            },
+            "responsive": {
+              "description": "Whether the widget should scale responsively.",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "parameters": {
+          "description": "Configuration parameters specific to the widget type.",
+          "type": "object",
+          "additionalProperties": true
+        },
+        "interactivity": {
+          "description": "Configuration for user interaction capabilities.",
+          "type": "object",
+          "properties": {
+            "allowUserInput": {
+              "description": "Whether users can provide input to the widget.",
+              "type": "boolean",
+              "default": true
+            },
+            "saveState": {
+              "description": "Whether user interactions should be saved.",
+              "type": "boolean",
+              "default": false
+            },
+            "resetable": {
+              "description": "Whether users can reset the widget to initial state.",
+              "type": "boolean",
+              "default": true
+            },
+            "sharable": {
+              "description": "Whether users can share their widget configurations.",
+              "type": "boolean",
+              "default": false
+            },
+            "fullscreenEnabled": {
+              "description": "Whether widget supports fullscreen mode.",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "learningObjectives": {
+          "description": "Specific learning objectives addressed by this widget.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dataCollection": {
+          "description": "Configuration for collecting interaction data for analytics.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether to collect interaction data.",
+              "type": "boolean",
+              "default": false
+            },
+            "events": {
+              "description": "Types of interaction events to track.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "load",
+                  "play",
+                  "pause",
+                  "reset",
+                  "parameter-change",
+                  "user-input",
+                  "completion",
+                  "error"
+                ]
+              }
+            },
+            "privacyLevel": {
+              "description": "Level of data privacy for collection.",
+              "type": "string",
+              "enum": ["anonymous", "pseudonymous", "identified"],
+              "default": "anonymous"
+            }
+          },
+          "additionalProperties": false
+        },
+        "fallback": {
+          "description": "Fallback content when widget cannot load.",
+          "type": "object",
+          "properties": {
+            "type": {
+              "description": "Type of fallback content.",
+              "type": "string",
+              "enum": ["image", "video", "text", "link"]
+            },
+            "content": {
+              "description": "Fallback content (URL, text, etc.).",
+              "type": "string"
+            },
+            "altText": {
+              "description": "Alt text for accessibility.",
+              "type": "string"
+            }
+          },
+          "required": ["type", "content"],
+          "additionalProperties": false
+        },
+        "accessibility": {
+          "description": "Accessibility features and metadata for the widget.",
+          "type": "object",
+          "properties": {
+            "keyboardNavigable": {
+              "description": "Whether widget supports keyboard navigation.",
+              "type": "boolean",
+              "default": false
+            },
+            "screenReaderSupport": {
+              "description": "Level of screen reader support.",
+              "type": "string",
+              "enum": ["none", "basic", "full"],
+              "default": "none"
+            },
+            "alternativeDescription": {
+              "description": "Detailed description for non-visual users.",
+              "type": "string"
+            },
+            "captionsAvailable": {
+              "description": "Whether captions/subtitles are available for audio content.",
+              "type": "boolean",
+              "default": false
+            },
+            "highContrast": {
+              "description": "Whether widget supports high contrast mode.",
+              "type": "boolean",
+              "default": false
+            },
+            "reducedMotion": {
+              "description": "Whether widget respects reduced motion preferences.",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "security": {
+          "description": "Security settings for widget execution.",
+          "type": "object",
+          "properties": {
+            "sandbox": {
+              "description": "Iframe sandbox attributes for security.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "allow-forms",
+                  "allow-same-origin", 
+                  "allow-scripts",
+                  "allow-popups",
+                  "allow-modals",
+                  "allow-downloads"
+                ]
+              }
+            },
+            "csp": {
+              "description": "Content Security Policy directives.",
+              "type": "string"
+            },
+            "trustedDomains": {
+              "description": "List of trusted domains for widget content.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "hostname"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["widgetType", "title", "provider", "src"],
+      "additionalProperties": false
+    },
+
+    "WidgetPreset": {
+      "description": "Pre-configured widget setups for common educational scenarios.",
+      "type": "object",
+      "properties": {
+        "presetId": {
+          "description": "Unique identifier for the preset.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Human-readable name for the preset.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what the preset demonstrates.",
+          "type": "string"
+        },
+        "subject": {
+          "description": "Primary subject area for the preset.",
+          "type": "string"
+        },
+        "gradeLevel": {
+          "description": "Target grade level range.",
+          "type": "string"
+        },
+        "widget": {
+          "description": "The widget configuration for this preset.",
+          "$ref": "#/definitions/InteractiveWidget"
+        },
+        "instructionalNotes": {
+          "description": "Notes for instructors on how to use the preset.",
+          "type": "string"
+        },
+        "extensions": {
+          "description": "Additional metadata or integrations.",
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": ["presetId", "name", "widget"],
+      "additionalProperties": false
+    },
+
+    "WidgetCollection": {
+      "description": "A curated collection of related widgets for a learning unit.",
+      "type": "object",
+      "properties": {
+        "collectionId": {
+          "description": "Unique identifier for the collection.",
+          "type": "string"
+        },
+        "title": {
+          "description": "Title of the widget collection.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the collection's educational purpose.",
+          "type": "string"
+        },
+        "widgets": {
+          "description": "Array of widgets in this collection.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InteractiveWidget"
+          }
+        },
+        "sequence": {
+          "description": "Recommended order for using the widgets.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "widgetIndex": {
+                "description": "Index of widget in the widgets array.",
+                "type": "integer",
+                "minimum": 0
+              },
+              "instructions": {
+                "description": "Instructions for this step.",
+                "type": "string"
+              },
+              "duration": {
+                "description": "Estimated time in minutes.",
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": ["widgetIndex"],
+            "additionalProperties": false
+          }
+        },
+        "assessmentIntegration": {
+          "description": "How widgets integrate with assessments.",
+          "type": "object",
+          "properties": {
+            "collectResponses": {
+              "description": "Whether widget interactions count as assessment responses.",
+              "type": "boolean",
+              "default": false
+            },
+            "gradingRubric": {
+              "description": "Rubric for evaluating widget-based work.",
+              "type": "string"
+            },
+            "completionCriteria": {
+              "description": "Criteria for considering widget interaction complete.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["collectionId", "title", "widgets"],
+      "additionalProperties": false
+    }
+  }
+}

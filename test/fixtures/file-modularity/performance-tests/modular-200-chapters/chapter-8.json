@@ -1,0 +1,227 @@
+{
+  "id": "chapter-8",
+  "language": "en",
+  "title": "Chapter 8",
+  "sections": [
+    {
+      "id": "section-71",
+      "language": "en",
+      "title": "Section 71",
+      "content": [
+        {
+          "id": "paragraph-71-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 71 in chapter 8."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-72",
+      "language": "en",
+      "title": "Section 72",
+      "content": [
+        {
+          "id": "paragraph-72-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 72 in chapter 8."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-73",
+      "language": "en",
+      "title": "Section 73",
+      "content": [
+        {
+          "id": "paragraph-73-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 73 in chapter 8."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-74",
+      "language": "en",
+      "title": "Section 74",
+      "content": [
+        {
+          "id": "paragraph-74-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 74 in chapter 8."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-75",
+      "language": "en",
+      "title": "Section 75",
+      "content": [
+        {
+          "id": "paragraph-75-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 75 in chapter 8."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-76",
+      "language": "en",
+      "title": "Section 76",
+      "content": [
+        {
+          "id": "paragraph-76-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 76 in chapter 8."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-77",
+      "language": "en",
+      "title": "Section 77",
+      "content": [
+        {
+          "id": "paragraph-77-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 77 in chapter 8."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-78",
+      "language": "en",
+      "title": "Section 78",
+      "content": [
+        {
+          "id": "paragraph-78-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 78 in chapter 8."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-79",
+      "language": "en",
+      "title": "Section 79",
+      "content": [
+        {
+          "id": "paragraph-79-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 79 in chapter 8."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-80",
+      "language": "en",
+      "title": "Section 80",
+      "content": [
+        {
+          "id": "paragraph-80-1",
+          "language": "en",
+          "blockType": "https://xats.org/core/blocks/paragraph",
+          "content": {
+            "text": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Content for section 80 in chapter 8."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "level-5",
+  "language": "en",
+  "title": "Level 5",
+  "sections": [
+    {
+      "$ref": "./level-6.json"
+    }
+  ]
+}

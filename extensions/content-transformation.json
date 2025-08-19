@@ -1,0 +1,717 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/extensions/content-transformation/schema.json",
+  "title": "Content Transformation Extension for xats",
+  "description": "Extension for transforming content between different formats and xats documents, including markdown conversion, import/export utilities, and content migration tools.",
+  "type": "object",
+
+  "definitions": {
+    "TransformationRule": {
+      "description": "Defines how content should be transformed from source format to xats.",
+      "type": "object",
+      "properties": {
+        "ruleId": {
+          "description": "Unique identifier for this transformation rule.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Human-readable name for the rule.",
+          "type": "string"
+        },
+        "sourceFormat": {
+          "description": "The source format being transformed from.",
+          "type": "string",
+          "enum": [
+            "markdown", 
+            "html", 
+            "docx", 
+            "latex", 
+            "txt", 
+            "csv", 
+            "json",
+            "xml",
+            "epub",
+            "pdf"
+          ]
+        },
+        "targetBlockType": {
+          "description": "The xats block type to create from this source.",
+          "type": "string"
+        },
+        "pattern": {
+          "description": "Regular expression or pattern to match in source content.",
+          "type": "string"
+        },
+        "transformation": {
+          "description": "Transformation configuration.",
+          "type": "object",
+          "properties": {
+            "extractText": {
+              "description": "How to extract text content.",
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "enum": ["regex", "css-selector", "xpath", "custom"]
+                },
+                "selector": {
+                  "type": "string"
+                },
+                "flags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "parseMetadata": {
+              "description": "How to extract metadata from content.",
+              "type": "object",
+              "properties": {
+                "frontmatter": {
+                  "description": "Extract YAML/TOML frontmatter.",
+                  "type": "boolean",
+                  "default": false
+                },
+                "attributes": {
+                  "description": "HTML attributes to preserve as metadata.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "customExtractors": {
+                  "description": "Custom metadata extraction rules.",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "preserveFormatting": {
+              "description": "Which formatting elements to preserve.",
+              "type": "object",
+              "properties": {
+                "emphasis": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "strong": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "links": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "code": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "math": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "citations": {
+                  "type": "boolean",
+                  "default": true
+                }
+              },
+              "additionalProperties": false
+            },
+            "structureMapping": {
+              "description": "How to map source structure to xats containers.",
+              "type": "object",
+              "properties": {
+                "headingLevels": {
+                  "description": "Map heading levels to container types.",
+                  "type": "object",
+                  "patternProperties": {
+                    "^h[1-6]$": {
+                      "type": "string",
+                      "enum": ["unit", "chapter", "section"]
+                    }
+                  }
+                },
+                "listTypes": {
+                  "description": "How to handle different list types.",
+                  "type": "object",
+                  "properties": {
+                    "unordered": {
+                      "type": "string",
+                      "default": "https://xats.org/core/blocks/list"
+                    },
+                    "ordered": {
+                      "type": "string", 
+                      "default": "https://xats.org/core/blocks/list"
+                    },
+                    "definition": {
+                      "type": "string",
+                      "default": "https://xats.org/core/blocks/list"
+                    }
+                  }
+                },
+                "tableHandling": {
+                  "description": "How to process tables.",
+                  "type": "object",
+                  "properties": {
+                    "detectHeaders": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "preserveAlignment": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "maxColumns": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "postProcessing": {
+          "description": "Post-processing steps to apply after transformation.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": {
+                "type": "string",
+                "enum": [
+                  "validate-schema",
+                  "resolve-references", 
+                  "generate-ids",
+                  "normalize-text",
+                  "extract-citations",
+                  "cleanup-html",
+                  "optimize-images"
+                ]
+              },
+              "config": {
+                "type": "object"
+              }
+            },
+            "required": ["step"],
+            "additionalProperties": false
+          }
+        },
+        "priority": {
+          "description": "Priority for applying this rule (higher numbers first).",
+          "type": "integer",
+          "default": 0
+        },
+        "enabled": {
+          "description": "Whether this rule is currently enabled.",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["ruleId", "sourceFormat", "targetBlockType"],
+      "additionalProperties": false
+    },
+
+    "ImportConfiguration": {
+      "description": "Configuration for importing content into xats format.",
+      "type": "object",
+      "properties": {
+        "importId": {
+          "description": "Unique identifier for this import configuration.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Human-readable name for the import type.",
+          "type": "string"
+        },
+        "sourceFormat": {
+          "description": "Source format for the import.",
+          "type": "string"
+        },
+        "documentStructure": {
+          "description": "How to map document structure to xats containers.",
+          "type": "object",
+          "properties": {
+            "detectStructure": {
+              "description": "Whether to automatically detect document structure.",
+              "type": "boolean",
+              "default": true
+            },
+            "defaultContainer": {
+              "description": "Default container type for unstructured content.",
+              "type": "string",
+              "enum": ["unit", "chapter", "section"],
+              "default": "section"
+            },
+            "titleExtraction": {
+              "description": "How to extract titles for containers.",
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "enum": ["heading", "filename", "first-line", "custom"]
+                },
+                "pattern": {
+                  "type": "string"
+                },
+                "fallback": {
+                  "type": "string"
+                }
+              }
+            },
+            "chapterDetection": {
+              "description": "Rules for detecting chapter boundaries.",
+              "type": "object",
+              "properties": {
+                "headingLevel": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 6
+                },
+                "keywords": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "pageBreaks": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "metadataExtraction": {
+          "description": "Configuration for extracting document metadata.",
+          "type": "object",
+          "properties": {
+            "bibliographicData": {
+              "description": "How to extract bibliographic information.",
+              "type": "object",
+              "properties": {
+                "title": {
+                  "description": "Pattern for extracting document title.",
+                  "type": "string"
+                },
+                "authors": {
+                  "description": "Pattern for extracting author information.",
+                  "type": "string"
+                },
+                "date": {
+                  "description": "Pattern for extracting publication date.",
+                  "type": "string"
+                },
+                "isbn": {
+                  "description": "Pattern for extracting ISBN.",
+                  "type": "string"
+                },
+                "publisher": {
+                  "description": "Pattern for extracting publisher.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "subject": {
+              "description": "How to determine subject classification.",
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "enum": ["manual", "keyword-based", "ml-classification", "metadata"]
+                },
+                "keywords": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "subject": {
+                        "type": "string"
+                      },
+                      "terms": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "fallback": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "contentProcessing": {
+          "description": "Content processing and cleanup options.",
+          "type": "object",
+          "properties": {
+            "imageHandling": {
+              "description": "How to process images during import.",
+              "type": "object",
+              "properties": {
+                "extractImages": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "optimizeImages": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "maxWidth": {
+                  "type": "integer"
+                },
+                "format": {
+                  "type": "string",
+                  "enum": ["preserve", "webp", "png", "jpg"]
+                },
+                "altTextGeneration": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            },
+            "linkProcessing": {
+              "description": "How to handle links during import.",
+              "type": "object",
+              "properties": {
+                "resolveRelativeLinks": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "convertToReferences": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "validateLinks": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            },
+            "textCleaning": {
+              "description": "Text cleaning and normalization options.",
+              "type": "object",
+              "properties": {
+                "removeExtraWhitespace": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "normalizeQuotes": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "fixEncoding": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "removeComments": {
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "transformationRules": {
+          "description": "Array of transformation rules to apply.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TransformationRule"
+          }
+        },
+        "validation": {
+          "description": "Validation settings for imported content.",
+          "type": "object",
+          "properties": {
+            "strictMode": {
+              "type": "boolean",
+              "default": false
+            },
+            "requiredFields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "schemaValidation": {
+              "type": "boolean",
+              "default": true
+            },
+            "warningsAsErrors": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      "required": ["importId", "sourceFormat"],
+      "additionalProperties": false
+    },
+
+    "ExportConfiguration": {
+      "description": "Configuration for exporting xats content to other formats.",
+      "type": "object",
+      "properties": {
+        "exportId": {
+          "description": "Unique identifier for this export configuration.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Human-readable name for the export format.",
+          "type": "string"
+        },
+        "targetFormat": {
+          "description": "Target format for the export.",
+          "type": "string",
+          "enum": [
+            "markdown",
+            "html",
+            "epub",
+            "pdf",
+            "docx", 
+            "latex",
+            "json",
+            "scorm",
+            "common-cartridge"
+          ]
+        },
+        "outputStructure": {
+          "description": "How to structure the output content.",
+          "type": "object",
+          "properties": {
+            "singleFile": {
+              "description": "Whether to export as single file or multiple files.",
+              "type": "boolean",
+              "default": true
+            },
+            "preserveHierarchy": {
+              "description": "Whether to preserve xats container hierarchy.",
+              "type": "boolean",
+              "default": true
+            },
+            "includeMetadata": {
+              "description": "Whether to include xats metadata in output.",
+              "type": "boolean",
+              "default": true
+            },
+            "fileNaming": {
+              "description": "Convention for naming output files.",
+              "type": "object",
+              "properties": {
+                "pattern": {
+                  "type": "string",
+                  "default": "{title}_{chapter}_{section}"
+                },
+                "sanitization": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "maxLength": {
+                  "type": "integer",
+                  "default": 50
+                }
+              }
+            }
+          }
+        },
+        "contentMapping": {
+          "description": "How to map xats content to target format.",
+          "type": "object",
+          "properties": {
+            "blockTypeMapping": {
+              "description": "Map xats block types to target format elements.",
+              "type": "object",
+              "patternProperties": {
+                "^https://": {
+                  "type": "object",
+                  "properties": {
+                    "element": {
+                      "type": "string"
+                    },
+                    "attributes": {
+                      "type": "object"
+                    },
+                    "template": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "semanticTextMapping": {
+              "description": "How to handle SemanticText runs.",
+              "type": "object",
+              "properties": {
+                "preserveRunTypes": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "fallbackFormatting": {
+                  "type": "object",
+                  "properties": {
+                    "emphasis": {
+                      "type": "string"
+                    },
+                    "strong": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "resourceHandling": {
+          "description": "How to handle images and other resources.",
+          "type": "object",
+          "properties": {
+            "embedResources": {
+              "type": "boolean",
+              "default": false
+            },
+            "resourceDirectory": {
+              "type": "string",
+              "default": "resources"
+            },
+            "optimizeImages": {
+              "type": "boolean",
+              "default": false
+            },
+            "copyResources": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+        "templates": {
+          "description": "Templates for generating output content.",
+          "type": "object",
+          "properties": {
+            "documentTemplate": {
+              "type": "string"
+            },
+            "chapterTemplate": {
+              "type": "string"
+            },
+            "sectionTemplate": {
+              "type": "string"
+            },
+            "customTemplates": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "required": ["exportId", "targetFormat"],
+      "additionalProperties": false
+    },
+
+    "MigrationRule": {
+      "description": "Rules for migrating content between xats schema versions.",
+      "type": "object",
+      "properties": {
+        "ruleId": {
+          "description": "Unique identifier for the migration rule.",
+          "type": "string"
+        },
+        "sourceVersion": {
+          "description": "Source schema version pattern.",
+          "type": "string"
+        },
+        "targetVersion": {
+          "description": "Target schema version.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what this migration does.",
+          "type": "string"
+        },
+        "transformations": {
+          "description": "Array of transformations to apply.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "description": "JSON path to the property being transformed.",
+                "type": "string"
+              },
+              "operation": {
+                "description": "Type of transformation operation.",
+                "type": "string",
+                "enum": ["rename", "move", "transform", "add", "remove", "validate"]
+              },
+              "from": {
+                "description": "Source property or value.",
+                "type": "string"
+              },
+              "to": {
+                "description": "Target property or value.",
+                "type": "string"
+              },
+              "transformer": {
+                "description": "Custom transformation function name.",
+                "type": "string"
+              },
+              "conditions": {
+                "description": "Conditions for when to apply this transformation.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "property": {
+                      "type": "string"
+                    },
+                    "operator": {
+                      "type": "string",
+                      "enum": ["equals", "contains", "exists", "not-exists", "matches"]
+                    },
+                    "value": {
+                      "description": "Value to compare against."
+                    }
+                  }
+                }
+              }
+            },
+            "required": ["path", "operation"],
+            "additionalProperties": false
+          }
+        },
+        "rollback": {
+          "description": "Rollback instructions for this migration.",
+          "type": "object",
+          "properties": {
+            "supported": {
+              "type": "boolean"
+            },
+            "instructions": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": ["ruleId", "sourceVersion", "targetVersion"],
+      "additionalProperties": false
+    }
+  }
+}

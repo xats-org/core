@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "security-test",
+  "language": "en",
+  "bibliographicEntry": {
+    "id": "security-book",
+    "type": "book",
+    "title": "Security Test",
+    "author": [
+      {
+        "family": "Test",
+        "given": "Author"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2023
+        ]
+      ]
+    },
+    "publisher": "Test Press"
+  },
+  "subject": "Security Testing",
+  "bodyMatter": {
+    "contents": [
+      {
+        "$ref": "./%2e%2e/%2e%2e/sensitive.json"
+      }
+    ]
+  }
+}

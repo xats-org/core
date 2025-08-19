@@ -344,26 +344,14 @@
       "properties": {
         "contents": {
           "description": "The main instructional content of the textbook. Supports both inline content and external file references.",
-          "oneOf": [
-            { 
-              "type": "array", 
-              "items": { 
-                "oneOf": [
-                  { "$ref": "#/definitions/Unit" },
-                  { "$ref": "#/definitions/FileReference" }
-                ]
-              } 
-            },
-            { 
-              "type": "array", 
-              "items": { 
-                "oneOf": [
-                  { "$ref": "#/definitions/Chapter" },
-                  { "$ref": "#/definitions/FileReference" }
-                ]
-              } 
-            }
-          ]
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "$ref": "#/definitions/Unit" },
+              { "$ref": "#/definitions/Chapter" },
+              { "$ref": "#/definitions/FileReference" }
+            ]
+          }
         },
         "extensions": { "type": "object" }
       },
@@ -394,26 +382,14 @@
           "properties": {
             "introduction": { "$ref": "#/definitions/SemanticText" },
             "contents": {
-              "oneOf": [
-                { 
-                  "type": "array", 
-                  "items": { 
-                    "oneOf": [
-                      { "$ref": "#/definitions/Unit" },
-                      { "$ref": "#/definitions/FileReference" }
-                    ]
-                  } 
-                },
-                { 
-                  "type": "array", 
-                  "items": { 
-                    "oneOf": [
-                      { "$ref": "#/definitions/Chapter" },
-                      { "$ref": "#/definitions/FileReference" }
-                    ]
-                  } 
-                }
-              ]
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  { "$ref": "#/definitions/Unit" },
+                  { "$ref": "#/definitions/Chapter" },
+                  { "$ref": "#/definitions/FileReference" }
+                ]
+              }
             }
           },
           "required": ["contents"]

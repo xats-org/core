@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "modular-textbook-100",
+  "language": "en",
+  "bibliographicEntry": {
+    "id": "modular-book-100",
+    "type": "book",
+    "title": "Modular Performance Test Textbook (100 sections)",
+    "author": [
+      {
+        "family": "Test",
+        "given": "Author"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2023
+        ]
+      ]
+    },
+    "publisher": "Test Press"
+  },
+  "subject": "Performance Testing",
+  "bodyMatter": {
+    "contents": [
+      {
+        "$ref": "./modular-100-chapters/chapter-1.json",
+        "xats:refMetadata": {
+          "title": "Chapter 1",
+          "version": "1.0"
+        }
+      },
+      {
+        "$ref": "./modular-100-chapters/chapter-2.json",
+        "xats:refMetadata": {
+          "title": "Chapter 2",
+          "version": "1.0"
+        }
+      },
+      {
+        "$ref": "./modular-100-chapters/chapter-3.json",
+        "xats:refMetadata": {
+          "title": "Chapter 3",
+          "version": "1.0"
+        }
+      },
+      {
+        "$ref": "./modular-100-chapters/chapter-4.json",
+        "xats:refMetadata": {
+          "title": "Chapter 4",
+          "version": "1.0"
+        }
+      },
+      {
+        "$ref": "./modular-100-chapters/chapter-5.json",
+        "xats:refMetadata": {
+          "title": "Chapter 5",
+          "version": "1.0"
+        }
+      },
+      {
+        "$ref": "./modular-100-chapters/chapter-6.json",
+        "xats:refMetadata": {
+          "title": "Chapter 6",
+          "version": "1.0"
+        }
+      },
+      {
+        "$ref": "./modular-100-chapters/chapter-7.json",
+        "xats:refMetadata": {
+          "title": "Chapter 7",
+          "version": "1.0"
+        }
+      },
+      {
+        "$ref": "./modular-100-chapters/chapter-8.json",
+        "xats:refMetadata": {
+          "title": "Chapter 8",
+          "version": "1.0"
+        }
+      },
+      {
+        "$ref": "./modular-100-chapters/chapter-9.json",
+        "xats:refMetadata": {
+          "title": "Chapter 9",
+          "version": "1.0"
+        }
+      },
+      {
+        "$ref": "./modular-100-chapters/chapter-10.json",
+        "xats:refMetadata": {
+          "title": "Chapter 10",
+          "version": "1.0"
+        }
+      }
+    ]
+  }
+}

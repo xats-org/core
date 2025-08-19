@@ -1,0 +1,814 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/extensions/analytics-tracking/schema.json",
+  "title": "Analytics Tracking Extension for xats",
+  "description": "Extension for collecting and tracking learner interactions, progress, and performance data in xats educational content.",
+  "type": "object",
+
+  "definitions": {
+    "AnalyticsConfiguration": {
+      "description": "Global analytics configuration for the entire xats document.",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Whether analytics tracking is enabled for this document.",
+          "type": "boolean",
+          "default": true
+        },
+        "trackingId": {
+          "description": "Unique identifier for this document's analytics tracking.",
+          "type": "string"
+        },
+        "provider": {
+          "description": "Analytics service provider.",
+          "type": "string",
+          "enum": [
+            "google-analytics",
+            "mixpanel",
+            "amplitude",
+            "segment",
+            "xapi",
+            "caliper",
+            "custom"
+          ]
+        },
+        "providerConfig": {
+          "description": "Provider-specific configuration.",
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "description": "API key for the analytics service.",
+              "type": "string"
+            },
+            "endpoint": {
+              "description": "Analytics endpoint URL.",
+              "type": "string",
+              "format": "uri"
+            },
+            "projectId": {
+              "description": "Project or app identifier.",
+              "type": "string"
+            },
+            "customProperties": {
+              "description": "Additional provider-specific properties.",
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "dataRetention": {
+          "description": "Data retention policy configuration.",
+          "type": "object",
+          "properties": {
+            "period": {
+              "description": "How long to retain analytics data (in days).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3650
+            },
+            "anonymizeAfter": {
+              "description": "Days after which to anonymize personal data.",
+              "type": "integer",
+              "minimum": 1
+            },
+            "autoDelete": {
+              "description": "Whether to automatically delete old data.",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "privacySettings": {
+          "description": "Privacy and consent management settings.",
+          "type": "object",
+          "properties": {
+            "requireConsent": {
+              "description": "Whether user consent is required for tracking.",
+              "type": "boolean",
+              "default": true
+            },
+            "consentTypes": {
+              "description": "Types of consent to collect.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "analytics",
+                  "performance", 
+                  "personalization",
+                  "marketing",
+                  "research"
+                ]
+              }
+            },
+            "anonymizeIp": {
+              "description": "Whether to anonymize IP addresses.",
+              "type": "boolean",
+              "default": true
+            },
+            "respectDNT": {
+              "description": "Whether to respect Do Not Track headers.",
+              "type": "boolean",
+              "default": true
+            },
+            "dataProcessingRegion": {
+              "description": "Region for data processing compliance.",
+              "type": "string",
+              "enum": ["us", "eu", "uk", "ca", "au", "global"]
+            }
+          },
+          "additionalProperties": false
+        },
+        "globalEventTracking": {
+          "description": "Events to track globally across the document.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "document_load",
+              "document_unload",
+              "scroll_depth",
+              "time_on_page",
+              "navigation",
+              "search",
+              "print",
+              "download"
+            ]
+          }
+        },
+        "learnerIdentification": {
+          "description": "How to identify learners for tracking.",
+          "type": "object",
+          "properties": {
+            "method": {
+              "description": "Method for learner identification.",
+              "type": "string",
+              "enum": ["anonymous", "pseudonymous", "authenticated", "lti"]
+            },
+            "cookieExpiry": {
+              "description": "Cookie expiry time in days for anonymous tracking.",
+              "type": "integer",
+              "default": 365
+            },
+            "hashUserIds": {
+              "description": "Whether to hash user IDs for privacy.",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "realTimeTracking": {
+          "description": "Real-time analytics configuration.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether to send events in real-time.",
+              "type": "boolean",
+              "default": false
+            },
+            "batchSize": {
+              "description": "Number of events to batch before sending.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            },
+            "flushInterval": {
+              "description": "Interval in seconds to flush batched events.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 300,
+              "default": 30
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["trackingId", "provider"],
+      "additionalProperties": false
+    },
+
+    "ContentAnalytics": {
+      "description": "Analytics configuration for specific content blocks or containers.",
+      "type": "object",
+      "properties": {
+        "trackingEnabled": {
+          "description": "Whether to track interactions with this content.",
+          "type": "boolean",
+          "default": true
+        },
+        "contentId": {
+          "description": "Unique identifier for this content in analytics.",
+          "type": "string"
+        },
+        "contentType": {
+          "description": "Type of content for analytics categorization.",
+          "type": "string",
+          "enum": [
+            "text",
+            "image",
+            "video", 
+            "audio",
+            "interactive",
+            "assessment",
+            "simulation",
+            "diagram",
+            "table",
+            "list",
+            "code",
+            "math",
+            "citation"
+          ]
+        },
+        "learningObjectives": {
+          "description": "Learning objectives associated with this content.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "difficulty": {
+          "description": "Difficulty level of this content.",
+          "type": "string",
+          "enum": ["beginner", "intermediate", "advanced", "expert"]
+        },
+        "estimatedDuration": {
+          "description": "Estimated time in minutes to consume this content.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "prerequisites": {
+          "description": "Content IDs that should be completed before this content.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "trackingEvents": {
+          "description": "Specific events to track for this content.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "view",
+              "start",
+              "complete",
+              "pause",
+              "resume",
+              "seek",
+              "interact",
+              "answer",
+              "submit",
+              "retry",
+              "hint",
+              "bookmark",
+              "share",
+              "note",
+              "highlight",
+              "print"
+            ]
+          }
+        },
+        "customDimensions": {
+          "description": "Custom dimensions for analytics reporting.",
+          "type": "object",
+          "properties": {
+            "subject": {
+              "type": "string"
+            },
+            "topic": {
+              "type": "string" 
+            },
+            "gradeLevel": {
+              "type": "string"
+            },
+            "language": {
+              "type": "string"
+            },
+            "accessibility": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": true
+        },
+        "performanceMetrics": {
+          "description": "Performance metrics to collect for this content.",
+          "type": "object",
+          "properties": {
+            "loadTime": {
+              "description": "Track content loading time.",
+              "type": "boolean",
+              "default": false
+            },
+            "renderTime": {
+              "description": "Track content rendering time.",
+              "type": "boolean", 
+              "default": false
+            },
+            "interactionLatency": {
+              "description": "Track interaction response time.",
+              "type": "boolean",
+              "default": false
+            },
+            "memoryUsage": {
+              "description": "Track memory usage for complex content.",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "adaptiveMetrics": {
+          "description": "Metrics for adaptive learning algorithms.",
+          "type": "object",
+          "properties": {
+            "masteryThreshold": {
+              "description": "Score threshold to consider content mastered.",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "difficultyAdjustment": {
+              "description": "How content difficulty should be adjusted based on performance.",
+              "type": "string",
+              "enum": ["none", "automatic", "suggested"]
+            },
+            "prerequisiteWeight": {
+              "description": "Weight of prerequisite completion in adaptive decisions.",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "AssessmentAnalytics": {
+      "description": "Specialized analytics configuration for assessment content.",
+      "type": "object",
+      "properties": {
+        "assessmentId": {
+          "description": "Unique identifier for this assessment.",
+          "type": "string"
+        },
+        "assessmentType": {
+          "description": "Type of assessment for analytics purposes.",
+          "type": "string",
+          "enum": [
+            "formative",
+            "summative", 
+            "diagnostic",
+            "benchmark",
+            "practice",
+            "quiz",
+            "exam",
+            "survey"
+          ]
+        },
+        "gradingMetrics": {
+          "description": "Metrics to collect about grading and scoring.",
+          "type": "object",
+          "properties": {
+            "trackAttempts": {
+              "description": "Track number of attempts for each question/assessment.",
+              "type": "boolean",
+              "default": true
+            },
+            "trackTimePerQuestion": {
+              "description": "Track time spent on each question.",
+              "type": "boolean",
+              "default": true
+            },
+            "trackAnswerChanges": {
+              "description": "Track when learners change their answers.",
+              "type": "boolean",
+              "default": false
+            },
+            "trackPartialCredit": {
+              "description": "Track partial credit scoring details.",
+              "type": "boolean",
+              "default": false
+            },
+            "trackHintUsage": {
+              "description": "Track usage of hints or help features.",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "learningAnalytics": {
+          "description": "Learning analytics specific to assessments.",
+          "type": "object",
+          "properties": {
+            "knowledgeTracing": {
+              "description": "Enable Bayesian knowledge tracing.",
+              "type": "boolean",
+              "default": false
+            },
+            "skillMapping": {
+              "description": "Map questions to specific skills or concepts.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "questionId": {
+                    "type": "string"
+                  },
+                  "skills": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["questionId", "skills"]
+              }
+            },
+            "misconceptionDetection": {
+              "description": "Track common misconceptions based on wrong answers.",
+              "type": "boolean",
+              "default": false
+            },
+            "adaptiveScoring": {
+              "description": "Use adaptive algorithms for scoring.",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "proctoring": {
+          "description": "Proctoring and academic integrity monitoring.",
+          "type": "object",
+          "properties": {
+            "enableMonitoring": {
+              "description": "Enable basic monitoring features.",
+              "type": "boolean",
+              "default": false
+            },
+            "trackFocusLoss": {
+              "description": "Track when learner loses focus on assessment.",
+              "type": "boolean",
+              "default": false
+            },
+            "trackTabChanges": {
+              "description": "Track browser tab changes during assessment.",
+              "type": "boolean",
+              "default": false
+            },
+            "timeoutSettings": {
+              "description": "Timeout configuration for assessments.",
+              "type": "object",
+              "properties": {
+                "warningTime": {
+                  "description": "Minutes before timeout to show warning.",
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "autoSubmit": {
+                  "description": "Whether to auto-submit on timeout.",
+                  "type": "boolean",
+                  "default": true
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["assessmentId", "assessmentType"],
+      "additionalProperties": false
+    },
+
+    "InteractionEvent": {
+      "description": "Schema for interaction event data structure.",
+      "type": "object",
+      "properties": {
+        "eventId": {
+          "description": "Unique identifier for this event.",
+          "type": "string"
+        },
+        "timestamp": {
+          "description": "ISO 8601 timestamp when the event occurred.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "eventType": {
+          "description": "Type of interaction event.",
+          "type": "string"
+        },
+        "userId": {
+          "description": "Identifier for the user (may be hashed).",
+          "type": "string"
+        },
+        "sessionId": {
+          "description": "Session identifier for this learning session.",
+          "type": "string"
+        },
+        "contentId": {
+          "description": "Identifier for the content that was interacted with.",
+          "type": "string"
+        },
+        "documentId": {
+          "description": "Identifier for the xats document.",
+          "type": "string"
+        },
+        "containerPath": {
+          "description": "Path to the content within the document hierarchy.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "eventData": {
+          "description": "Event-specific data payload.",
+          "type": "object",
+          "additionalProperties": true
+        },
+        "context": {
+          "description": "Context information about the learning environment.",
+          "type": "object",
+          "properties": {
+            "userAgent": {
+              "type": "string"
+            },
+            "screenResolution": {
+              "type": "string"
+            },
+            "language": {
+              "type": "string"
+            },
+            "referrer": {
+              "type": "string"
+            },
+            "platform": {
+              "type": "string"
+            },
+            "device": {
+              "type": "string",
+              "enum": ["desktop", "tablet", "mobile", "unknown"]
+            }
+          },
+          "additionalProperties": false
+        },
+        "performance": {
+          "description": "Performance metrics for this interaction.",
+          "type": "object",
+          "properties": {
+            "loadTime": {
+              "description": "Time taken to load content (ms).",
+              "type": "integer",
+              "minimum": 0
+            },
+            "renderTime": {
+              "description": "Time taken to render content (ms).",
+              "type": "integer",
+              "minimum": 0
+            },
+            "responseTime": {
+              "description": "Time taken for user to respond (ms).",
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["eventId", "timestamp", "eventType", "contentId"],
+      "additionalProperties": false
+    },
+
+    "ProgressTracking": {
+      "description": "Configuration for tracking learner progress through content.",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Whether progress tracking is enabled.",
+          "type": "boolean",
+          "default": true
+        },
+        "progressType": {
+          "description": "Type of progress tracking to use.",
+          "type": "string",
+          "enum": ["time-based", "interaction-based", "completion-based", "mastery-based"]
+        },
+        "completionCriteria": {
+          "description": "Criteria for marking content as completed.",
+          "type": "object",
+          "properties": {
+            "minTimeSpent": {
+              "description": "Minimum time in seconds to spend on content.",
+              "type": "integer",
+              "minimum": 1
+            },
+            "minInteractions": {
+              "description": "Minimum number of interactions required.",
+              "type": "integer",
+              "minimum": 1
+            },
+            "requiredEvents": {
+              "description": "Specific events that must occur for completion.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "masteryScore": {
+              "description": "Score threshold for mastery-based completion.",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "progressPersistence": {
+          "description": "How to persist progress data.",
+          "type": "object",
+          "properties": {
+            "storage": {
+              "description": "Where to store progress data.",
+              "type": "string",
+              "enum": ["localStorage", "sessionStorage", "cookie", "server"]
+            },
+            "syncFrequency": {
+              "description": "How often to sync progress to server (seconds).",
+              "type": "integer",
+              "minimum": 1
+            },
+            "offlineSupport": {
+              "description": "Whether to support offline progress tracking.",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "milestones": {
+          "description": "Progress milestones to track.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "threshold": {
+                "description": "Progress percentage threshold (0-100).",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "reward": {
+                "description": "Optional reward for reaching milestone.",
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["badge", "certificate", "points", "unlock"]
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "required": ["id", "name", "threshold"]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "ReportingConfiguration": {
+      "description": "Configuration for analytics reporting and dashboards.",
+      "type": "object",
+      "properties": {
+        "dashboards": {
+          "description": "Dashboard configurations for different audiences.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "audience": {
+                "type": "string",
+                "enum": ["learner", "instructor", "administrator", "researcher"]
+              },
+              "metrics": {
+                "description": "Metrics to display on this dashboard.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "completion_rate",
+                    "time_spent", 
+                    "engagement_score",
+                    "performance_score",
+                    "progress_velocity",
+                    "difficulty_ratings",
+                    "learning_paths",
+                    "social_interactions",
+                    "resource_usage",
+                    "error_patterns"
+                  ]
+                }
+              },
+              "filters": {
+                "description": "Available filters for the dashboard.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["date", "select", "text", "number"]
+                    },
+                    "options": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": ["field", "label", "type"]
+                }
+              },
+              "refreshInterval": {
+                "description": "Dashboard refresh interval in seconds.",
+                "type": "integer",
+                "minimum": 60
+              }
+            },
+            "required": ["id", "name", "audience", "metrics"]
+          }
+        },
+        "exports": {
+          "description": "Data export configurations.",
+          "type": "object",
+          "properties": {
+            "formats": {
+              "description": "Supported export formats.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["csv", "json", "xml", "pdf", "xapi"]
+              }
+            },
+            "scheduledReports": {
+              "description": "Scheduled report configurations.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "frequency": {
+                    "type": "string",
+                    "enum": ["daily", "weekly", "monthly", "quarterly"]
+                  },
+                  "recipients": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "email"
+                    }
+                  },
+                  "metrics": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

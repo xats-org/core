@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "parent-traversal-test",
+  "language": "en",
+  "bibliographicEntry": {
+    "id": "traversal-book",
+    "type": "book",
+    "title": "Parent Traversal Test",
+    "author": [{"family": "Test", "given": "Author"}],
+    "issued": {"date-parts": [[2023]]},
+    "publisher": "Test Press"
+  },
+  "subject": "Testing",
+  "bodyMatter": {
+    "contents": [
+      {
+        "$ref": "../../../package.json"
+      }
+    ]
+  }
+}

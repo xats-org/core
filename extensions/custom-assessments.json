@@ -1,0 +1,1184 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/extensions/custom-assessments/schema.json",
+  "title": "Custom Assessment Types Extension for xats",
+  "description": "Extension for creating advanced assessment types beyond the core xats assessment framework, including adaptive assessments, peer assessments, portfolio assessments, and specialized evaluation methods.",
+  "type": "object",
+
+  "definitions": {
+    "AdaptiveAssessment": {
+      "description": "Adaptive assessment that adjusts difficulty based on learner performance.",
+      "type": "object",
+      "properties": {
+        "assessmentId": {
+          "description": "Unique identifier for this adaptive assessment.",
+          "type": "string"
+        },
+        "title": {
+          "description": "Title of the adaptive assessment.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what this assessment measures.",
+          "type": "string"
+        },
+        "adaptiveEngine": {
+          "description": "Configuration for the adaptive algorithm.",
+          "type": "object",
+          "properties": {
+            "algorithm": {
+              "description": "Type of adaptive algorithm to use.",
+              "type": "string",
+              "enum": [
+                "item-response-theory",
+                "bayesian-knowledge-tracing",
+                "cognitive-diagnosis",
+                "computerized-adaptive-testing",
+                "difficulty-adjustment"
+              ]
+            },
+            "initialDifficulty": {
+              "description": "Starting difficulty level (0-1).",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "targetPrecision": {
+              "description": "Target measurement precision.",
+              "type": "number",
+              "minimum": 0.1,
+              "maximum": 1
+            },
+            "maxQuestions": {
+              "description": "Maximum number of questions to ask.",
+              "type": "integer",
+              "minimum": 5,
+              "maximum": 100
+            },
+            "minQuestions": {
+              "description": "Minimum number of questions to ask.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "stopCriteria": {
+              "description": "Criteria for stopping the adaptive test.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["precision", "max_questions", "time_limit", "mastery_threshold"]
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "required": ["type", "value"]
+              }
+            },
+            "itemSelectionStrategy": {
+              "description": "Strategy for selecting the next item.",
+              "type": "string",
+              "enum": ["maximum-information", "random", "content-balanced", "exposure-controlled"]
+            }
+          },
+          "required": ["algorithm"],
+          "additionalProperties": false
+        },
+        "questionPool": {
+          "description": "Pool of questions available for adaptive selection.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "difficulty": {
+                "description": "Item difficulty parameter (-3 to +3 in IRT).",
+                "type": "number",
+                "minimum": -3,
+                "maximum": 3
+              },
+              "discrimination": {
+                "description": "Item discrimination parameter (0-3 in IRT).",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 3
+              },
+              "guessing": {
+                "description": "Guessing parameter for multiple choice (0-1).",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "content": {
+                "description": "Question content using xats ContentBlock structure.",
+                "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/ContentBlock"
+              },
+              "learningObjectives": {
+                "description": "Learning objectives this question assesses.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "cognitive_level": {
+                "description": "Bloom's taxonomy level.",
+                "type": "string",
+                "enum": ["remember", "understand", "apply", "analyze", "evaluate", "create"]
+              },
+              "exposure_count": {
+                "description": "Number of times this item has been used.",
+                "type": "integer",
+                "minimum": 0
+              },
+              "last_calibration": {
+                "description": "Date when item parameters were last calibrated.",
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": ["id", "difficulty", "content"],
+            "additionalProperties": false
+          }
+        },
+        "scoringModel": {
+          "description": "How to calculate and report scores.",
+          "type": "object",
+          "properties": {
+            "scale": {
+              "description": "Score scale information.",
+              "type": "object",
+              "properties": {
+                "min": {
+                  "type": "number"
+                },
+                "max": {
+                  "type": "number"
+                },
+                "mean": {
+                  "type": "number"
+                },
+                "standardDeviation": {
+                  "type": "number"
+                }
+              }
+            },
+            "reportedMetrics": {
+              "description": "Metrics to include in score report.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "theta_estimate",
+                  "standard_error",
+                  "percentile_rank",
+                  "scale_score",
+                  "confidence_interval",
+                  "mastery_probability",
+                  "growth_measure"
+                ]
+              }
+            },
+            "confidenceLevel": {
+              "description": "Confidence level for confidence intervals (0-1).",
+              "type": "number",
+              "minimum": 0.8,
+              "maximum": 0.99,
+              "default": 0.95
+            }
+          },
+          "additionalProperties": false
+        },
+        "feedbackSettings": {
+          "description": "Configuration for adaptive feedback.",
+          "type": "object",
+          "properties": {
+            "immediate": {
+              "description": "Provide immediate feedback after each question.",
+              "type": "boolean",
+              "default": true
+            },
+            "detailed": {
+              "description": "Provide detailed explanations.",
+              "type": "boolean",
+              "default": false
+            },
+            "adaptive": {
+              "description": "Adapt feedback based on performance.",
+              "type": "boolean",
+              "default": true
+            },
+            "encouragement": {
+              "description": "Include motivational messages.",
+              "type": "boolean",
+              "default": true
+            },
+            "hintSystem": {
+              "description": "Configuration for adaptive hints.",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "maxHints": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "hintPenalty": {
+                  "description": "Score penalty for using hints (0-1).",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "required": ["assessmentId", "title", "adaptiveEngine", "questionPool"],
+      "additionalProperties": false
+    },
+
+    "PeerAssessment": {
+      "description": "Assessment where learners evaluate each other's work.",
+      "type": "object",
+      "properties": {
+        "assessmentId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "assignmentPrompt": {
+          "description": "The task or prompt for learners to complete.",
+          "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+        },
+        "submissionGuidelines": {
+          "description": "Guidelines for what to submit.",
+          "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+        },
+        "peerReviewConfiguration": {
+          "description": "Configuration for the peer review process.",
+          "type": "object",
+          "properties": {
+            "reviewersPerSubmission": {
+              "description": "Number of peers who review each submission.",
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 10,
+              "default": 3
+            },
+            "reviewsPerReviewer": {
+              "description": "Number of submissions each peer reviews.",
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 10,
+              "default": 3
+            },
+            "assignmentMethod": {
+              "description": "How to assign submissions to reviewers.",
+              "type": "string",
+              "enum": ["random", "skill-based", "geographic", "manual", "ai-matched"],
+              "default": "random"
+            },
+            "anonymity": {
+              "description": "Level of anonymity in peer review.",
+              "type": "string",
+              "enum": ["fully-anonymous", "single-blind", "double-blind", "open"],
+              "default": "single-blind"
+            },
+            "calibrationPhase": {
+              "description": "Use calibration submissions to train reviewers.",
+              "type": "boolean",
+              "default": false
+            },
+            "reviewQualityControl": {
+              "description": "Mechanisms to ensure review quality.",
+              "type": "object",
+              "properties": {
+                "moderatorReview": {
+                  "description": "Have moderator review a sample of peer reviews.",
+                  "type": "boolean",
+                  "default": false
+                },
+                "flaggingSystem": {
+                  "description": "Allow flagging of inappropriate reviews.",
+                  "type": "boolean",
+                  "default": true
+                },
+                "minimumReviewLength": {
+                  "description": "Minimum character count for review comments.",
+                  "type": "integer",
+                  "minimum": 50
+                },
+                "reviewerRating": {
+                  "description": "Allow rating the quality of reviews.",
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "rubric": {
+          "description": "Evaluation rubric for peer reviewers.",
+          "type": "object",
+          "properties": {
+            "criteria": {
+              "description": "Evaluation criteria.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "weight": {
+                    "description": "Weight of this criterion (0-1).",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "levels": {
+                    "description": "Performance levels for this criterion.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "score": {
+                          "type": "number"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["score", "label"]
+                    },
+                    "minItems": 2
+                  }
+                },
+                "required": ["id", "name", "levels"]
+              }
+            },
+            "overallRating": {
+              "description": "Include an overall rating scale.",
+              "type": "boolean",
+              "default": true
+            },
+            "commentRequirements": {
+              "description": "Requirements for written feedback.",
+              "type": "object",
+              "properties": {
+                "required": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "minLength": {
+                  "type": "integer",
+                  "minimum": 10
+                },
+                "maxLength": {
+                  "type": "integer",
+                  "minimum": 100
+                },
+                "structured": {
+                  "description": "Require structured feedback (e.g., strengths/weaknesses).",
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            }
+          },
+          "required": ["criteria"],
+          "additionalProperties": false
+        },
+        "timeline": {
+          "description": "Timeline for submission and review phases.",
+          "type": "object",
+          "properties": {
+            "submissionDeadline": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "reviewStartDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "reviewDeadline": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "appealDeadline": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "finalGradeRelease": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": ["submissionDeadline", "reviewDeadline"],
+          "additionalProperties": false
+        },
+        "gradingMethod": {
+          "description": "How to calculate final grades from peer reviews.",
+          "type": "object",
+          "properties": {
+            "aggregationMethod": {
+              "type": "string",
+              "enum": ["mean", "median", "weighted-mean", "trimmed-mean", "bayesian"],
+              "default": "mean"
+            },
+            "outlierDetection": {
+              "description": "Method for detecting outlier reviews.",
+              "type": "string",
+              "enum": ["none", "standard-deviation", "interquartile-range", "consensus"],
+              "default": "standard-deviation"
+            },
+            "reviewerWeighting": {
+              "description": "Whether to weight reviews based on reviewer quality.",
+              "type": "boolean",
+              "default": false
+            },
+            "minimumReviews": {
+              "description": "Minimum reviews needed for valid grade.",
+              "type": "integer",
+              "minimum": 1,
+              "default": 2
+            }
+          }
+        }
+      },
+      "required": ["assessmentId", "title", "assignmentPrompt", "peerReviewConfiguration", "rubric"],
+      "additionalProperties": false
+    },
+
+    "PortfolioAssessment": {
+      "description": "Assessment based on a collection of learner work over time.",
+      "type": "object",
+      "properties": {
+        "assessmentId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "portfolioStructure": {
+          "description": "Required structure and organization of the portfolio.",
+          "type": "object",
+          "properties": {
+            "requiredSections": {
+              "description": "Sections that must be included in the portfolio.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "required": {
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "minArtifacts": {
+                    "description": "Minimum number of artifacts in this section.",
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "maxArtifacts": {
+                    "description": "Maximum number of artifacts in this section.",
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "artifactTypes": {
+                    "description": "Allowed types of artifacts.",
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["text", "image", "video", "audio", "document", "code", "data", "presentation"]
+                    }
+                  }
+                },
+                "required": ["id", "name"]
+              }
+            },
+            "reflectionRequirement": {
+              "description": "Requirements for reflective writing.",
+              "type": "object",
+              "properties": {
+                "required": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "frequency": {
+                  "type": "string",
+                  "enum": ["per-artifact", "per-section", "overall", "periodic"]
+                },
+                "minLength": {
+                  "type": "integer",
+                  "minimum": 50
+                },
+                "guidingQuestions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "organizationMethod": {
+              "description": "How artifacts should be organized.",
+              "type": "string",
+              "enum": ["chronological", "thematic", "by-competency", "by-quality", "custom"],
+              "default": "thematic"
+            },
+            "presentationFormat": {
+              "description": "Required format for portfolio presentation.",
+              "type": "string",
+              "enum": ["digital", "physical", "mixed", "any"],
+              "default": "digital"
+            }
+          }
+        },
+        "artifactRequirements": {
+          "description": "Requirements for individual artifacts.",
+          "type": "object",
+          "properties": {
+            "totalArtifacts": {
+              "description": "Total number of artifacts required.",
+              "type": "object",
+              "properties": {
+                "min": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "max": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "artifactMetadata": {
+              "description": "Required metadata for each artifact.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string"
+                  },
+                  "required": {
+                    "type": "boolean"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": ["text", "date", "select", "multiselect", "number"]
+                  },
+                  "options": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["field", "type"]
+              }
+            },
+            "qualityStandards": {
+              "description": "Minimum quality standards for artifacts.",
+              "type": "object",
+              "properties": {
+                "originalWork": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "citationRequired": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "minimumEffort": {
+                  "type": "string"
+                },
+                "technicalRequirements": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        },
+        "evaluationCriteria": {
+          "description": "How the portfolio will be evaluated.",
+          "type": "object",
+          "properties": {
+            "holistic": {
+              "description": "Evaluate portfolio as a whole.",
+              "type": "boolean",
+              "default": true
+            },
+            "analytic": {
+              "description": "Evaluate individual components separately.",
+              "type": "boolean",
+              "default": false
+            },
+            "criteria": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "dimension": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "weight": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "levels": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "score": {
+                          "type": "number"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": ["dimension", "levels"]
+              }
+            },
+            "growth_emphasis": {
+              "description": "Emphasize growth over absolute performance.",
+              "type": "boolean",
+              "default": false
+            },
+            "peer_feedback": {
+              "description": "Include peer feedback in evaluation.",
+              "type": "boolean",
+              "default": false
+            },
+            "self_assessment": {
+              "description": "Include learner self-assessment.",
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+        "submissionProcess": {
+          "description": "Process for submitting and managing portfolios.",
+          "type": "object",
+          "properties": {
+            "drafts_allowed": {
+              "type": "boolean",
+              "default": true
+            },
+            "revision_cycles": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "feedback_points": {
+              "description": "Points in process where feedback is provided.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["initial-submission", "mid-process", "pre-final", "final"]
+              }
+            },
+            "collaborative_features": {
+              "description": "Allow collaboration on portfolio elements.",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      },
+      "required": ["assessmentId", "title", "portfolioStructure", "evaluationCriteria"],
+      "additionalProperties": false
+    },
+
+    "GameBasedAssessment": {
+      "description": "Assessment integrated into game mechanics and narrative.",
+      "type": "object",
+      "properties": {
+        "assessmentId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "gameFramework": {
+          "description": "Game framework and mechanics.",
+          "type": "object",
+          "properties": {
+            "gameType": {
+              "type": "string",
+              "enum": ["simulation", "role-playing", "strategy", "puzzle", "adventure", "quiz-game", "virtual-world"]
+            },
+            "narrative": {
+              "description": "Game narrative and storyline.",
+              "type": "object",
+              "properties": {
+                "theme": {
+                  "type": "string"
+                },
+                "setting": {
+                  "type": "string"
+                },
+                "characters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "role": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "progression": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "stage": {
+                        "type": "string"
+                      },
+                      "objectives": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "assessmentTasks": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "gameMechanics": {
+              "description": "Core game mechanics.",
+              "type": "object",
+              "properties": {
+                "pointSystem": {
+                  "description": "How points/scores are awarded.",
+                  "type": "object",
+                  "properties": {
+                    "basePoints": {
+                      "type": "integer"
+                    },
+                    "bonusMultipliers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "condition": {
+                            "type": "string"
+                          },
+                          "multiplier": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "penalties": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "condition": {
+                            "type": "string"
+                          },
+                          "penalty": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "progression": {
+                  "description": "How players advance through the game.",
+                  "type": "object",
+                  "properties": {
+                    "levels": {
+                      "type": "boolean"
+                    },
+                    "achievements": {
+                      "type": "boolean"
+                    },
+                    "unlockables": {
+                      "type": "boolean"
+                    },
+                    "branching": {
+                      "description": "Multiple paths based on choices/performance.",
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "collaboration": {
+                  "description": "Multi-player or team-based elements.",
+                  "type": "object",
+                  "properties": {
+                    "teamBased": {
+                      "type": "boolean"
+                    },
+                    "peerInteraction": {
+                      "type": "boolean"
+                    },
+                    "competition": {
+                      "type": "boolean"
+                    },
+                    "cooperation": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "assessmentIntegration": {
+          "description": "How assessment is woven into game experience.",
+          "type": "object",
+          "properties": {
+            "stealth_assessment": {
+              "description": "Assessment embedded invisibly in gameplay.",
+              "type": "boolean",
+              "default": true
+            },
+            "explicit_tasks": {
+              "description": "Clearly marked assessment tasks.",
+              "type": "boolean",
+              "default": false
+            },
+            "continuous_monitoring": {
+              "description": "Monitor performance throughout gameplay.",
+              "type": "boolean",
+              "default": true
+            },
+            "decision_tracking": {
+              "description": "Track player decisions and strategies.",
+              "type": "boolean",
+              "default": true
+            },
+            "evidence_collection": {
+              "description": "Types of evidence to collect.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "choices_made",
+                  "time_spent",
+                  "help_seeking",
+                  "strategy_used",
+                  "collaboration_quality",
+                  "problem_solving_process",
+                  "creativity_indicators",
+                  "persistence_measures"
+                ]
+              }
+            }
+          }
+        },
+        "competencyMapping": {
+          "description": "How game activities map to learning competencies.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "competencyId": {
+                "type": "string"
+              },
+              "competencyName": {
+                "type": "string"
+              },
+              "gameActivities": {
+                "description": "Game activities that demonstrate this competency.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "activityId": {
+                      "type": "string"
+                    },
+                    "activityType": {
+                      "type": "string"
+                    },
+                    "evidenceIndicators": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "proficiencyLevels": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "level": {
+                            "type": "string"
+                          },
+                          "criteria": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "required": ["competencyId", "competencyName", "gameActivities"]
+          }
+        },
+        "analyticsConfiguration": {
+          "description": "Specialized analytics for game-based assessment.",
+          "type": "object",
+          "properties": {
+            "behavioral_tracking": {
+              "type": "boolean",
+              "default": true
+            },
+            "pathway_analysis": {
+              "type": "boolean",
+              "default": true
+            },
+            "engagement_metrics": {
+              "type": "boolean",
+              "default": true
+            },
+            "social_network_analysis": {
+              "type": "boolean",
+              "default": false
+            },
+            "real_time_feedback": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      },
+      "required": ["assessmentId", "title", "gameFramework", "assessmentIntegration", "competencyMapping"],
+      "additionalProperties": false
+    },
+
+    "SituationalJudgmentTest": {
+      "description": "Assessment presenting realistic scenarios requiring judgment decisions.",
+      "type": "object",
+      "properties": {
+        "assessmentId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "domain": {
+          "description": "Professional or academic domain for scenarios.",
+          "type": "string"
+        },
+        "scenarios": {
+          "description": "Collection of situational scenarios.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "scenarioId": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "context": {
+                "description": "Background and setting for the scenario.",
+                "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+              },
+              "situation": {
+                "description": "The specific situation requiring judgment.",
+                "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+              },
+              "stakeholders": {
+                "description": "People or groups affected by decisions.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "interests": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "responseOptions": {
+                "description": "Possible response actions.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "optionId": {
+                      "type": "string"
+                    },
+                    "action": {
+                      "description": "The action being considered.",
+                      "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+                    },
+                    "effectiveness": {
+                      "description": "Expert rating of effectiveness (1-5).",
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "competencies": {
+                      "description": "Competencies demonstrated by this choice.",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "consequences": {
+                      "description": "Likely outcomes of this action.",
+                      "type": "object",
+                      "properties": {
+                        "positive": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "negative": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "unintended": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": ["optionId", "action", "effectiveness"]
+                }
+              },
+              "expertRationale": {
+                "description": "Expert explanation of best responses.",
+                "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+              },
+              "metadata": {
+                "type": "object",
+                "properties": {
+                  "difficulty": {
+                    "type": "string",
+                    "enum": ["novice", "intermediate", "expert"]
+                  },
+                  "complexity": {
+                    "type": "string",
+                    "enum": ["low", "moderate", "high"]
+                  },
+                  "ambiguity": {
+                    "type": "string",
+                    "enum": ["clear", "moderate", "high"]
+                  },
+                  "timeConstraint": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "required": ["scenarioId", "context", "situation", "responseOptions"]
+          }
+        },
+        "scoringMethod": {
+          "description": "How to score situational judgment responses.",
+          "type": "object",
+          "properties": {
+            "method": {
+              "type": "string",
+              "enum": ["expert-consensus", "behavioral-outcomes", "hybrid", "competency-based"]
+            },
+            "responseFormat": {
+              "type": "string",
+              "enum": ["rank-order", "rate-all", "select-best", "select-worst", "most-least"]
+            },
+            "weightingScheme": {
+              "description": "How to weight different competencies.",
+              "type": "object",
+              "additionalProperties": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          }
+        }
+      },
+      "required": ["assessmentId", "title", "domain", "scenarios", "scoringMethod"],
+      "additionalProperties": false
+    }
+  }
+}

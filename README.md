@@ -10,7 +10,7 @@
 
 **The Modern Standard for Academic and Educational Content**
 
-[Documentation](./docs) • [Quick Start](./docs/QUICKSTART_TUTORIAL.md) • [Schema Reference](./docs/reference/index.md) • [Examples](./examples) • [Contributing](./CONTRIBUTING.md)
+[Documentation](./docs) • [Quick Start](./docs/QUICKSTART_TUTORIAL.md) • [Schema Reference](./docs/reference/index.md) • [Migration Guide](./docs/guides/migration-guide.md) • [Examples](./examples) • [Contributing](./CONTRIBUTING.md)
 
 </div>
 
@@ -208,7 +208,10 @@ const { valid, errors } = await validateDocument(document);
 | **[Authoring Guide](./docs/guides/authoring-guide.md)** | Best practices for content creation |
 | **[Schema Reference](./docs/reference/index.md)** | Complete API reference |
 | **[Architecture](./docs/ARCHITECTURE.md)** | Design decisions and rationale |
-| **[Migration Guide](./docs/guides/migration-guide.md)** | Migrating from v0.1.0 to v0.2.0 |
+| **[Migration Guide](./docs/guides/migration-guide.md)** | Comprehensive migration between all versions |
+| **[Schema Versioning Policy](./docs/specs/schema-versioning-policy.md)** | Official versioning strategy and compatibility |
+| **[Version Compatibility Matrix](./docs/specs/version-compatibility-matrix.md)** | Feature availability across versions |
+| **[Migration Tools Reference](./docs/specs/migration-tools.md)** | Complete migration tooling guide |
 | **[Extension Guide](./docs/guides/extension-guide.md)** | Creating custom extensions |
 | **[LTI Integration](./docs/guides/lti-integration.md)** | LMS integration guide |
 | **[Accessibility Guide](./docs/guides/accessibility-guide.md)** | WCAG compliance guide |
@@ -231,11 +234,18 @@ xats-org/core/
 
 ## 🔄 Version Management
 
-| Branch | Version | Status | Description |
-|--------|---------|--------|-------------|
-| `main` | v0.2.0 | Stable | Latest stable release with assessment framework & LTI support |
-| `v0.3.0` | v0.3.0 | Development | Active development (indexing, case studies, metacognitive prompts) |
-| `v0.4.0` | v0.4.0 | Planning | Future features (production workflows, analytics) |
+| Version | Status | Support Level | Key Features |
+|---------|--------|---------------|--------------|
+| **v0.3.0** | 🚧 Development | Full | IndexRun, Case Studies, Metacognitive Prompts |
+| **v0.2.0** | ✅ Stable | Full | WCAG AA, LTI 1.3, Assessments, Rights Management |
+| **v0.1.0** | 🔒 Security Only | Security Only | Core schema, Basic content types |
+
+**Migration Support:** All versions are forward-compatible. Documents automatically work with newer schema versions.
+
+**Key Documents:**
+- 📋 [Versioning Policy](./docs/specs/schema-versioning-policy.md) - Semantic versioning and compatibility guarantees
+- 🔄 [Migration Guide](./docs/guides/migration-guide.md) - Step-by-step migration instructions
+- 📊 [Compatibility Matrix](./docs/specs/version-compatibility-matrix.md) - Feature availability by version
 
 ## 🤝 Contributing
 

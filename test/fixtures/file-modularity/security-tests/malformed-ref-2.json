@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "malformed-ref-test",
+  "language": "en",
+  "bibliographicEntry": {
+    "id": "test-book",
+    "type": "book",
+    "title": "Test",
+    "author": [
+      {
+        "family": "Test",
+        "given": "Author"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2023
+        ]
+      ]
+    },
+    "publisher": "Test"
+  },
+  "subject": "Testing",
+  "bodyMatter": {
+    "contents": [
+      {
+        "$ref": ""
+      }
+    ]
+  }
+}

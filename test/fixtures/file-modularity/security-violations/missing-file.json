@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "missing-file-test",
+  "language": "en",
+  "bibliographicEntry": {
+    "id": "missing-book",
+    "type": "book",
+    "title": "Missing File Test",
+    "author": [{"family": "Test", "given": "Author"}],
+    "issued": {"date-parts": [[2023]]},
+    "publisher": "Test Press"
+  },
+  "subject": "Testing",
+  "bodyMatter": {
+    "contents": [
+      {
+        "$ref": "./does-not-exist.json"
+      }
+    ]
+  }
+}
