@@ -24,6 +24,7 @@ The **eXtensible Academic Text Standard (xats)** is a modern, JSON-based schema 
 - 📚 **Rich Educational Metadata**: Built-in support for learning objectives, assessments, and pedagogical structures
 - ♿ **Accessibility First**: 100% WCAG 2.1 AA compliant with comprehensive accessibility features
 - 🔌 **LMS Integration**: Native LTI 1.3 support for seamless Learning Management System integration
+- 📊 **Assessment Framework**: Comprehensive built-in assessment system with multiple question types
 - 🔐 **Rights Management**: Comprehensive licensing and copyright management for publishers
 - 🚀 **Extensible Architecture**: Domain-specific extensions without breaking compatibility
 
@@ -119,39 +120,75 @@ const { valid, errors } = await validateDocument(document);
     "issued": {"date-parts": [[2025, 1]]}
   },
   "subject": "Biology",
-  "language": "en-US",
-  "accessibility": {
-    "wcagLevel": "AA",
-    "features": ["altText", "structuralNavigation", "readingOrder"]
-  },
   "bodyMatter": {
     "contents": [
       {
         "id": "ch-1",
-        "label": "Chapter 1",
+        "language": "en",
+        "label": "Chapter 1", 
         "title": "Introduction to Cell Biology",
         "learningObjectives": [
           {
             "id": "lo-1-1",
+            "language": "en",
             "description": "Understand the basic structure of a cell"
           }
         ],
         "sections": [
           {
             "id": "sec-1-1",
+            "language": "en",
             "title": "What is a Cell?",
             "content": [
               {
                 "id": "para-1",
+                "language": "en",
                 "blockType": "https://xats.org/core/blocks/paragraph",
                 "content": {
-                  "runs": [
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "A cell is the smallest unit of life."
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "assessment-1",
+                "language": "en",
+                "blockType": "https://xats.org/core/blocks/multipleChoice",
+                "content": {
+                  "question": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "What is the basic unit of life?"
+                      }
+                    ]
+                  },
+                  "options": [
                     {
-                      "type": "text",
-                      "text": "A cell is the smallest unit of life.",
-                      "language": "en-US"
+                      "id": "opt-a",
+                      "text": {"runs": [{"type": "text", "text": "Cell"}]},
+                      "correct": true
+                    },
+                    {
+                      "id": "opt-b",
+                      "text": {"runs": [{"type": "text", "text": "Tissue"}]},
+                      "correct": false
                     }
-                  ]
+                  ],
+                  "cognitiveMetadata": {
+                    "bloomsLevel": "remember",
+                    "difficulty": 1,
+                    "estimatedTimeMinutes": 1
+                  },
+                  "scoring": {
+                    "points": 10,
+                    "scoringMethod": "automatic"
+                  }
                 }
               }
             ]
@@ -196,8 +233,9 @@ xats-org/core/
 
 | Branch | Version | Status | Description |
 |--------|---------|--------|-------------|
-| `main` | v0.2.0 | Stable | Latest stable release |
-| `v0.3.0` | v0.3.0 | Planning | Future features (indexing, case studies) |
+| `main` | v0.2.0 | Stable | Latest stable release with assessment framework & LTI support |
+| `v0.3.0` | v0.3.0 | Development | Active development (indexing, case studies, metacognitive prompts) |
+| `v0.4.0` | v0.4.0 | Planning | Future features (production workflows, analytics) |
 
 ## 🤝 Contributing
 
@@ -229,12 +267,13 @@ npm run validate examples/
 
 ## 📈 Roadmap
 
-### v0.2.0 (Released)
+### v0.2.0 (Current Stable Release)
 - ✅ 100% WCAG 2.1 AA compliance
-- ✅ LTI 1.3 integration
+- ✅ LTI 1.3 integration with grade passback
 - ✅ Rights management extension
-- ✅ Core assessment framework
-- ✅ Professional documentation
+- ✅ Core assessment framework with multiple question types
+- ✅ Enhanced validation and TypeScript support
+- ✅ Comprehensive documentation updates
 
 ### v0.3.0 (Planned)
 - 📑 Formal indexing support
