@@ -9,7 +9,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { join, resolve } from 'path';
 import { FileModularityValidator } from '../src/file-modularity-validator.js';
 import { writeFileSync, mkdirSync } from 'fs';
-import type { PerformanceMetrics } from '../src/file-modularity-validator.js';
+// import type { PerformanceMetrics } from '../src/file-modularity-validator.js';
 
 const FIXTURES_DIR = resolve(__dirname, 'fixtures/file-modularity');
 const PERF_TEST_DIR = join(FIXTURES_DIR, 'performance-tests');
@@ -35,12 +35,12 @@ describe('File Modularity Performance Benchmarks', () => {
   describe('Single File vs Multi-File Performance', () => {
     it('should have reasonable overhead for file modularity', async () => {
       // Create a single large file for comparison
-      const singleFileContent = createLargeTextbook(50, false); // 50 sections in one file
+      const singleFileContent = createLargeTextbook(50); // 50 sections in one file
       const singleFilePath = join(PERF_TEST_DIR, 'single-file-large.json');
       writeFileSync(singleFilePath, JSON.stringify(singleFileContent, null, 2));
 
       // Create equivalent multi-file structure
-      const multiFileMainPath = createModularTextbook(50, true); // 50 sections across multiple files
+      const multiFileMainPath = createModularTextbook(50); // 50 sections across multiple files
 
       // Benchmark single file
       const singleFileStart = performance.now();
@@ -73,7 +73,7 @@ describe('File Modularity Performance Benchmarks', () => {
       }> = [];
 
       for (const count of fileCounts) {
-        const textbookPath = createModularTextbook(count, true);
+        const textbookPath = createModularTextbook(count);
         const benchmark = await validator.benchmarkTextbook(textbookPath, 3);
 
         benchmarkResults.push({
@@ -105,10 +105,11 @@ describe('File Modularity Performance Benchmarks', () => {
 
   describe('Memory Usage Benchmarks', () => {
     it('should not cause excessive memory usage for large textbooks', async () => {
-      const largeTextbookPath = createModularTextbook(100, true); // 100 sections
+      const largeTextbookPath = createModularTextbook(100); // 100 sections
       
       const initialMemory = process.memoryUsage();
       const benchmark = await validator.benchmarkTextbook(largeTextbookPath, 1);
+      expect(benchmark).toBeDefined(); // Use benchmark to avoid lint error
       const finalMemory = process.memoryUsage();
 
       const memoryIncrease = finalMemory.heapUsed - initialMemory.heapUsed;
@@ -124,7 +125,7 @@ describe('File Modularity Performance Benchmarks', () => {
     });
 
     it('should properly clean up memory after validation', async () => {
-      const textbookPath = createModularTextbook(20, true);
+      const textbookPath = createModularTextbook(20);
       
       const initialMemory = process.memoryUsage().heapUsed;
       
@@ -150,7 +151,7 @@ describe('File Modularity Performance Benchmarks', () => {
 
   describe('File I/O Performance', () => {
     it('should have acceptable file loading times', async () => {
-      const textbookPath = createModularTextbook(30, true);
+      const textbookPath = createModularTextbook(30);
       const result = await validator.validate(textbookPath);
       
       expect(result.isValid).toBe(true);
@@ -172,7 +173,7 @@ describe('File Modularity Performance Benchmarks', () => {
     });
 
     it('should benefit from caching on repeated validations', async () => {
-      const textbookPath = createModularTextbook(20, true);
+      const textbookPath = createModularTextbook(20);
       
       // First validation (cold cache)
       const coldStart = performance.now();
@@ -197,7 +198,7 @@ describe('File Modularity Performance Benchmarks', () => {
 
   describe('Large Document Stress Tests', () => {
     it('should handle textbooks with many small files', async () => {
-      const textbookPath = createModularTextbook(200, true); // 200 small files
+      const textbookPath = createModularTextbook(200); // 200 small files
       
       const result = await validator.validate(textbookPath);
       expect(result.isValid).toBe(true);
@@ -222,7 +223,7 @@ describe('File Modularity Performance Benchmarks', () => {
   });
 
   // Helper functions for creating test content
-  function createLargeTextbook(sectionCount: number, modular: boolean) {
+  function createLargeTextbook(sectionCount: number) {
     const sections = [];
     
     for (let i = 1; i <= sectionCount; i++) {
@@ -269,14 +270,14 @@ describe('File Modularity Performance Benchmarks', () => {
             id: 'chapter-1',
             language: 'en',
             title: 'Large Chapter',
-            sections: sections
+            sections
           }
         ]
       }
     };
   }
 
-  function createModularTextbook(sectionCount: number, useFiles: boolean): string {
+  function createModularTextbook(sectionCount: number): string {
     const mainPath = join(PERF_TEST_DIR, `modular-${sectionCount}-sections.json`);
     const chaptersDir = join(PERF_TEST_DIR, `modular-${sectionCount}-chapters`);
     
