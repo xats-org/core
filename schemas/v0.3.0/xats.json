@@ -1,0 +1,1544 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/schemas/0.3.0/schema.json",
+  "title": "Extensible Academic Textbook Schema v0.3.0",
+  "description": "The root structure for a textbook, designed for extensibility and machine readability. Version 0.3.0 adds file modularity support for managing large textbooks across multiple files, while maintaining all v0.2.0 features including assessment framework and LTI 1.3 integration.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "description": "The semantic version of the xats schema this document conforms to.",
+      "type": "string",
+      "enum": ["0.1.0", "0.2.0", "0.3.0"]
+    },
+    "bibliographicEntry": {
+      "description": "The primary CSL-JSON entry for the textbook itself.",
+      "$ref": "#/definitions/CslDataItem"
+    },
+    "citationStyle": {
+      "description": "The identifier for the Citation Style Language (CSL) style to be used (e.g., 'apa.csl').",
+      "type": "string"
+    },
+    "subject": { "type": "string" },
+    "targetAudience": { "type": "string" },
+    "learningOutcomes": {
+      "description": "The broad, high-level capabilities a student should possess after completing the textbook.",
+      "type": "array",
+      "items": { "$ref": "#/definitions/LearningOutcome" }
+    },
+    "resources": {
+      "description": "A centralized repository of shared assets (images, videos, etc.) that can be referenced throughout the book.",
+      "type": "array",
+      "items": { "$ref": "#/definitions/Resource" }
+    },
+    "rights": {
+      "description": "Default rights and licensing information for the entire document. Individual elements can override with more specific rights.",
+      "$ref": "#/definitions/RightsMetadata"
+    },
+    "frontMatter": { "$ref": "#/definitions/FrontMatter" },
+    "bodyMatter": { "$ref": "#/definitions/BodyMatter" },
+    "backMatter": { "$ref": "#/definitions/BackMatter" },
+    "extensions": {
+      "description": "Extensions for additional functionality. Use 'ltiConfiguration' property for LTI 1.3 tool setup.",
+      "type": "object",
+      "properties": {
+        "ltiConfiguration": {
+          "description": "LTI 1.3 tool configuration and platform registration metadata.",
+          "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiConfiguration"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "required": ["schemaVersion", "bibliographicEntry", "subject", "bodyMatter"],
+
+  "definitions": {
+    "XatsObject": {
+      "description": "The most fundamental base object, providing universal metadata properties for all addressable components.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "description": { "description": "An optional internal description or author note for this object.", "type": "string" },
+        "tags": { "description": "An optional array of keywords for search and categorization.", "type": "array", "items": { "type": "string" } },
+        "citationIds": {
+          "description": "An array of CSL-JSON item IDs that are sources for this object.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "renderingHints": {
+          "description": "An array of hints to guide the renderer on presentational intent.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/RenderingHint" }
+        },
+        "language": {
+          "description": "ISO 639-1 language code for the content of this object. Required for WCAG 3.1.1 compliance.",
+          "type": "string",
+          "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+          "examples": ["en", "es", "fr", "zh-CN", "ar-SA"]
+        },
+        "textDirection": {
+          "description": "Text direction for content. Required for proper rendering of RTL languages. WCAG 3.1.2 compliance.",
+          "type": "string",
+          "enum": ["ltr", "rtl", "auto"],
+          "default": "ltr"
+        },
+        "accessibilityMetadata": {
+          "description": "Accessibility-specific metadata for this object.",
+          "$ref": "#/definitions/AccessibilityMetadata"
+        },
+        "rights": {
+          "description": "Rights and licensing information for this object. Inherits from parent container if not specified.",
+          "$ref": "#/definitions/RightsMetadata"
+        },
+        "extensions": { 
+          "description": "A container for non-standard, custom data. Common extensions include LTI 1.3 integration metadata.",
+          "type": "object",
+          "properties": {
+            "ltiConfiguration": {
+              "description": "LTI 1.3 tool configuration and platform registration metadata. Use at document root level.",
+              "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiConfiguration"
+            },
+            "ltiLaunchMetadata": {
+              "description": "LTI launch-specific metadata for content blocks and assessments.",
+              "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiLaunchMetadata"
+            },
+            "ltiGradePassback": {
+              "description": "Grade passback configuration for LTI Assignment and Grade Services. Use on assessment blocks.",
+              "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiGradePassback"
+            },
+            "ltiDeepLinking": {
+              "description": "Deep Linking 2.0 configuration for content selection. Use on structural containers.",
+              "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiDeepLinking"
+            },
+            "ltiPathwayIntegration": {
+              "description": "Integration configuration for xats pathways with LTI grade data.",
+              "$ref": "https://xats.org/extensions/lti-1.3/schema.json#/definitions/LtiPathwayIntegration"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "required": ["id", "language"]
+    },
+    "RenderingHint": {
+      "type": "object",
+      "properties": {
+        "hintType": { "description": "A URI identifying the rendering hint.", "type": "string", "format": "uri" },
+        "value": { "description": "The value for the specified hint." }
+      },
+      "required": ["hintType", "value"]
+    },
+    "StructuralContainer": {
+      "description": "A base definition for all structural components of the textbook body, containing common properties.",
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "label": { "description": "The display label for this container (e.g., 'III', 'A.1', 'Part 1').", "type": "string" },
+            "title": { "type": "string" },
+            "linkedObjectiveIds": { "type": "array", "items": { "type": "string" } },
+            "pathways": { "type": "array", "items": { "$ref": "#/definitions/Pathway" } }
+          },
+          "required": ["title"]
+        }
+      ]
+    },
+    "SemanticText": {
+      "description": "A structured text object composed of an array of runs, allowing for in-line references and other semantic features.",
+      "type": "object",
+      "properties": {
+        "runs": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "$ref": "#/definitions/TextRun" },
+              { "$ref": "#/definitions/ReferenceRun" },
+              { "$ref": "#/definitions/CitationRun" },
+              { "$ref": "#/definitions/EmphasisRun" },
+              { "$ref": "#/definitions/StrongRun" }
+            ]
+          }
+        }
+      },
+      "required": ["runs"]
+    },
+    "TextRun": {
+      "type": "object",
+      "properties": { "type": { "const": "text" }, "text": { "type": "string" } }, "required": ["type", "text"]
+    },
+    "ReferenceRun": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "reference" },
+        "text": { "type": "string" },
+        "refId": { "type": "string" }
+      },
+      "required": ["type", "text", "refId"]
+    },
+    "CitationRun": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "citation" },
+        "refId": { "description": "The ID of the CSL-JSON item in the bibliography.", "type": "string" }
+      },
+      "required": ["type", "refId"]
+    },
+    "EmphasisRun": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "emphasis" },
+        "text": { "type": "string" }
+      },
+      "required": ["type", "text"]
+    },
+    "StrongRun": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "strong" },
+        "text": { "type": "string" }
+      },
+      "required": ["type", "text"]
+    },
+    "CslDataItem": {
+      "description": "A single bibliographic entry that must conform to the Citation Style Language (CSL-JSON) schema. The 'id' property is required for in-line linking.",
+      "allOf": [
+        {
+          "$ref": "https://raw.githubusercontent.com/citation-style-language/schema/master/csl-data.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" }
+          },
+          "required": ["id"]
+        }
+      ]
+    },
+    "LearningOutcome": {
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": { "subItems": { "type": "array", "items": { "$ref": "#/definitions/LearningOutcome" } } }
+        }
+      ]
+    },
+    "LearningObjective": {
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "linkedOutcomeId": { "type": "string" },
+            "subItems": { "type": "array", "items": { "$ref": "#/definitions/LearningObjective" } }
+          }
+        }
+      ]
+    },
+    "Resource": {
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "description": "A URI identifying the type of resource. Core types are defined at xats.org.", "type": "string", "format": "uri" },
+            "url": { "type": "string", "format": "uri" },
+            "altText": { 
+              "description": "Alternative text for the resource. REQUIRED for WCAG 1.1.1 compliance.",
+              "type": "string",
+              "minLength": 1
+            },
+            "longDescription": {
+              "description": "Extended description for complex content (charts, diagrams, etc.). WCAG 1.1.1 compliance.",
+              "type": "string"
+            },
+            "transcript": {
+              "description": "Full text transcript for audio content. WCAG 1.2.1 compliance.",
+              "type": "string"
+            },
+            "captions": {
+              "description": "Captions for video content. WCAG 1.2.2 compliance.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$" },
+                  "url": { "type": "string", "format": "uri" },
+                  "format": { "type": "string", "enum": ["srt", "vtt", "ttml", "dfxp"] }
+                },
+                "required": ["language", "url", "format"]
+              }
+            },
+            "audioDescription": {
+              "description": "Audio description track URL for video content. WCAG 1.2.5 compliance.",
+              "type": "object",
+              "properties": {
+                "url": { "type": "string", "format": "uri" },
+                "language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$" }
+              },
+              "required": ["url", "language"]
+            },
+            "signLanguage": {
+              "description": "Sign language interpretation for audio/video content. WCAG 1.2.6 compliance.",
+              "type": "object",
+              "properties": {
+                "url": { "type": "string", "format": "uri" },
+                "language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$" },
+                "signSystem": { "type": "string", "examples": ["ASL", "BSL", "LSF", "DGS"] }
+              },
+              "required": ["url", "language", "signSystem"]
+            },
+            "resourceRights": {
+              "description": "Specific rights and licensing for this individual resource. Overrides document-level rights.",
+              "$ref": "#/definitions/RightsMetadata"
+            }
+          },
+          "required": ["type", "url", "altText"]
+        }
+      ]
+    },
+    "FrontMatter": {
+      "type": "object",
+      "properties": {
+        "sections": {
+          "description": "An array of sections for content like a Preface, Dedication, or a placeholder for a Table of Contents.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/Section" }
+        },
+        "extensions": { "type": "object" }
+      }
+    },
+    "BodyMatter": {
+      "type": "object",
+      "properties": {
+        "contents": {
+          "description": "The main instructional content of the textbook. Supports both inline content and external file references.",
+          "oneOf": [
+            { 
+              "type": "array", 
+              "items": { 
+                "oneOf": [
+                  { "$ref": "#/definitions/Unit" },
+                  { "$ref": "#/definitions/FileReference" }
+                ]
+              } 
+            },
+            { 
+              "type": "array", 
+              "items": { 
+                "oneOf": [
+                  { "$ref": "#/definitions/Chapter" },
+                  { "$ref": "#/definitions/FileReference" }
+                ]
+              } 
+            }
+          ]
+        },
+        "extensions": { "type": "object" }
+      },
+      "required": ["contents"]
+    },
+    "BackMatter": {
+      "type": "object",
+      "properties": {
+        "sections": {
+          "description": "An array of sections for content like an Appendix, Author's Note, or a placeholder for a Bibliography.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/Section" }
+        },
+        "glossary": { "type": "array", "items": { "$ref": "#/definitions/KeyTerm" } },
+        "bibliography": {
+          "description": "The raw CSL-JSON data for all bibliographic entries.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/CslDataItem" }
+        },
+        "extensions": { "type": "object" }
+      }
+    },
+    "Unit": {
+      "allOf": [
+        { "$ref": "#/definitions/StructuralContainer" },
+        {
+          "type": "object",
+          "properties": {
+            "introduction": { "$ref": "#/definitions/SemanticText" },
+            "contents": {
+              "oneOf": [
+                { 
+                  "type": "array", 
+                  "items": { 
+                    "oneOf": [
+                      { "$ref": "#/definitions/Unit" },
+                      { "$ref": "#/definitions/FileReference" }
+                    ]
+                  } 
+                },
+                { 
+                  "type": "array", 
+                  "items": { 
+                    "oneOf": [
+                      { "$ref": "#/definitions/Chapter" },
+                      { "$ref": "#/definitions/FileReference" }
+                    ]
+                  } 
+                }
+              ]
+            }
+          },
+          "required": ["contents"]
+        }
+      ]
+    },
+    "Chapter": {
+      "allOf": [
+        { "$ref": "#/definitions/StructuralContainer" },
+        {
+          "type": "object",
+          "properties": {
+            "introduction": { "$ref": "#/definitions/SemanticText" },
+            "learningObjectives": { "type": "array", "items": { "$ref": "#/definitions/LearningObjective" } },
+            "sections": { 
+              "type": "array", 
+              "items": { 
+                "oneOf": [
+                  { "$ref": "#/definitions/Section" },
+                  { "$ref": "#/definitions/FileReference" }
+                ]
+              } 
+            },
+            "summary": { "$ref": "#/definitions/SemanticText" },
+            "keyTerms": { "type": "array", "items": { "$ref": "#/definitions/KeyTerm" } }
+          },
+          "required": ["sections"]
+        }
+      ]
+    },
+    "Section": {
+      "allOf": [
+        { "$ref": "#/definitions/StructuralContainer" },
+        {
+          "type": "object",
+          "properties": {
+            "content": { "type": "array", "items": { "$ref": "#/definitions/ContentBlock" } }
+          },
+          "required": ["content"]
+        }
+      ]
+    },
+    "Pathway": {
+      "description": "Defines conditional routing rules for adaptive learning paths. See https://xats.org/specs/pathway-condition-grammar for the complete condition grammar specification.",
+      "type": "object",
+      "properties": {
+        "trigger": {
+          "description": "Defines the event that initiates evaluation of the pathway rules.",
+          "type": "object",
+          "properties": {
+            "triggerType": { 
+              "description": "A URI identifying the event that triggers this pathway. Common types: onCompletion, onAssessment.", 
+              "type": "string", 
+              "format": "uri",
+              "examples": [
+                "https://xats.org/core/triggers/onCompletion",
+                "https://xats.org/core/triggers/onAssessment"
+              ]
+            },
+            "sourceId": { 
+              "description": "The ID of the source element (e.g., assessment block) providing data for rule evaluation. Required when triggerType is onAssessment.",
+              "type": "string" 
+            }
+          },
+          "required": ["triggerType"]
+        },
+        "rules": {
+          "description": "An ordered list of routing rules. The first rule whose condition evaluates to true determines the destination.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "condition": { 
+                "description": "A boolean expression following the xats Pathway Condition Grammar. Variables include: score, attempts, time_spent, passed, completed, objectives_met, user_choice, etc. Operators: ==, !=, <, >, <=, >=, AND, OR, NOT, IN, NOT IN. Functions: min, max, avg, count, exists, all, any.",
+                "type": "string",
+                "pattern": "^(?!\\s*$).+",
+                "examples": [
+                  "score >= 70",
+                  "score < 70 AND attempts >= 3",
+                  "score >= 80 OR time_spent > 600",
+                  "user_choice == \"advanced\" AND score >= 85",
+                  "count(objectives_met) >= 3",
+                  "\"obj-1\" IN objectives_met",
+                  "NOT passed AND attempts < 3"
+                ]
+              },
+              "destinationId": { 
+                "description": "The ID of the target structural container or content block to navigate to when this rule's condition is true.",
+                "type": "string" 
+              },
+              "pathwayType": { 
+                "description": "A URI identifying the pedagogical purpose of this pathway (e.g., remedial, standard, enrichment, prerequisite).", 
+                "type": "string", 
+                "format": "uri",
+                "examples": [
+                  "https://xats.org/core/pathways/remedial",
+                  "https://xats.org/core/pathways/standard",
+                  "https://xats.org/core/pathways/enrichment",
+                  "https://xats.org/core/pathways/prerequisite"
+                ]
+              }
+            },
+            "required": ["condition", "destinationId"]
+          }
+        }
+      },
+      "required": ["trigger", "rules"]
+    },
+    "FileReference": {
+      "description": "A reference to an external JSON file containing xats content. Supports modular document composition.",
+      "type": "object",
+      "properties": {
+        "$ref": {
+          "description": "Relative path to the external JSON file. Must be within the document root directory.",
+          "type": "string",
+          "pattern": "^\\./[^\\.].*\\.json$"
+        },
+        "xats:refMetadata": {
+          "description": "Optional metadata about the referenced content for caching and validation.",
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "authors": { "type": "array", "items": { "type": "string" } },
+            "lastModified": { "type": "string", "format": "date-time" },
+            "checksum": { "type": "string" },
+            "version": { "type": "string" }
+          }
+        }
+      },
+      "required": ["$ref"]
+    },
+    "ContentBlock": {
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "blockType": { "type": "string", "format": "uri" },
+            "linkedObjectiveIds": { "type": "array", "items": { "type": "string" } },
+            "content": {
+              "description": "The content of the block. Structure depends on blockType.",
+              "type": "object"
+            }
+          },
+          "required": ["blockType", "content"],
+          "if": {
+            "properties": {
+              "blockType": {
+                "enum": [
+                  "https://xats.org/core/blocks/paragraph",
+                  "https://xats.org/core/blocks/heading",
+                  "https://xats.org/core/blocks/blockquote"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "content": {
+                "type": "object",
+                "properties": {
+                  "text": { "$ref": "#/definitions/SemanticText" }
+                },
+                "required": ["text"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "else": {
+            "if": {
+              "properties": {
+                "blockType": {
+                  "enum": [
+                    "https://xats.org/core/blocks/list"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "content": {
+                  "type": "object",
+                  "properties": {
+                    "listType": { 
+                      "type": "string",
+                      "enum": ["ordered", "unordered"]
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "text": { "$ref": "#/definitions/SemanticText" },
+                          "subItems": {
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/ContentBlock" }
+                          }
+                        },
+                        "required": ["text"]
+                      }
+                    }
+                  },
+                  "required": ["listType", "items"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "else": {
+              "if": {
+                "properties": {
+                  "blockType": {
+                    "enum": [
+                      "https://xats.org/core/blocks/codeBlock"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "content": {
+                    "type": "object",
+                    "properties": {
+                      "language": { "type": "string" },
+                      "code": { "type": "string" }
+                    },
+                    "required": ["code"],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "else": {
+                "if": {
+                  "properties": {
+                    "blockType": {
+                      "enum": [
+                        "https://xats.org/core/blocks/mathBlock"
+                      ]
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "notation": { 
+                          "type": "string",
+                          "enum": ["latex", "mathml", "asciimath"]
+                        },
+                        "expression": { "type": "string" },
+                        "altText": {
+                          "description": "Alternative text description of the mathematical expression. REQUIRED for WCAG 1.1.1 compliance.",
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "speechText": {
+                          "description": "Text suitable for speech synthesis (how the math should be read aloud).",
+                          "type": "string"
+                        },
+                        "stepByStepExplanation": {
+                          "description": "Detailed step-by-step explanation for complex mathematical content.",
+                          "$ref": "#/definitions/SemanticText"
+                        },
+                        "simplifiedNotation": {
+                          "description": "Simplified or alternative notation for cognitive accessibility.",
+                          "type": "string"
+                        }
+                      },
+                      "required": ["notation", "expression", "altText"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "else": {
+                  "if": {
+                    "properties": {
+                      "blockType": {
+                        "enum": [
+                          "https://xats.org/core/blocks/table"
+                        ]
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "content": {
+                        "type": "object",
+                        "properties": {
+                          "caption": { 
+                            "description": "Table caption. REQUIRED for WCAG 1.3.1 compliance.",
+                            "$ref": "#/definitions/SemanticText"
+                          },
+                          "summary": {
+                            "description": "Summary of table structure and content for screen readers. WCAG 1.3.1 compliance.",
+                            "$ref": "#/definitions/SemanticText"
+                          },
+                          "headers": {
+                            "type": "array",
+                            "items": { 
+                              "allOf": [
+                                { "$ref": "#/definitions/SemanticText" },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "scope": {
+                                      "description": "Defines whether this header applies to row or column. WCAG 1.3.1 compliance.",
+                                      "type": "string",
+                                      "enum": ["row", "col", "rowgroup", "colgroup"]
+                                    },
+                                    "abbr": {
+                                      "description": "Abbreviated form of the header for screen readers.",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "rows": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "isHeader": {
+                                  "description": "Whether this row contains header cells.",
+                                  "type": "boolean",
+                                  "default": false
+                                },
+                                "cells": {
+                                  "type": "array",
+                                  "items": {
+                                    "allOf": [
+                                      { "$ref": "#/definitions/SemanticText" },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "isHeader": {
+                                            "description": "Whether this cell is a header cell.",
+                                            "type": "boolean",
+                                            "default": false
+                                          },
+                                          "scope": {
+                                            "description": "Scope of header cell if isHeader is true.",
+                                            "type": "string",
+                                            "enum": ["row", "col", "rowgroup", "colgroup"]
+                                          },
+                                          "colspan": {
+                                            "description": "Number of columns this cell spans.",
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "default": 1
+                                          },
+                                          "rowspan": {
+                                            "description": "Number of rows this cell spans.",
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "default": 1
+                                          },
+                                          "associatedHeaders": {
+                                            "description": "IDs of header cells that apply to this cell. For complex tables.",
+                                            "type": "array",
+                                            "items": { "type": "string" }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": ["cells"]
+                            }
+                          }
+                        },
+                        "required": ["caption", "rows"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "else": {
+                    "if": {
+                      "properties": {
+                        "blockType": {
+                          "enum": [
+                            "https://xats.org/core/blocks/figure"
+                          ]
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "content": {
+                          "type": "object",
+                          "properties": {
+                            "resourceId": { "type": "string" },
+                            "caption": { "$ref": "#/definitions/SemanticText" },
+                            "altText": { 
+                              "description": "Alternative text for the figure. REQUIRED for WCAG 1.1.1 compliance.",
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "longDescription": {
+                              "description": "Extended description for complex figures. WCAG 1.1.1 compliance.",
+                              "$ref": "#/definitions/SemanticText"
+                            }
+                          },
+                          "required": ["resourceId", "altText"],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "else": {
+                      "if": {
+                        "properties": {
+                          "blockType": {
+                            "const": "https://xats.org/core/blocks/multipleChoice"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "content": { "$ref": "#/definitions/MultipleChoiceContent" }
+                        }
+                      },
+                      "else": {
+                        "if": {
+                          "properties": {
+                            "blockType": {
+                              "const": "https://xats.org/core/blocks/shortAnswer"
+                            }
+                          }
+                        },
+                        "then": {
+                          "properties": {
+                            "content": { "$ref": "#/definitions/ShortAnswerContent" }
+                          }
+                        },
+                        "else": {
+                          "if": {
+                            "properties": {
+                              "blockType": {
+                                "const": "https://xats.org/core/blocks/essayPrompt"
+                              }
+                            }
+                          },
+                          "then": {
+                            "properties": {
+                              "content": { "$ref": "#/definitions/EssayPromptContent" }
+                            }
+                          },
+                          "else": {
+                            "if": {
+                              "properties": {
+                                "blockType": {
+                                  "const": "https://xats.org/core/blocks/navigation"
+                                }
+                              }
+                            },
+                            "then": {
+                              "properties": {
+                                "content": { "$ref": "#/definitions/NavigationContent" }
+                              }
+                            },
+                            "else": {
+                              "if": {
+                                "properties": {
+                                  "blockType": {
+                                    "const": "https://xats.org/core/blocks/skipNavigation"
+                                  }
+                                }
+                              },
+                              "then": {
+                                "properties": {
+                                  "content": { "$ref": "#/definitions/SkipNavigationContent" }
+                                }
+                              },
+                              "else": {
+                                "if": {
+                                  "properties": {
+                                    "blockType": {
+                                      "type": "string",
+                                      "pattern": "^https://xats\\.org/core/placeholders/"
+                                    }
+                                  }
+                                },
+                                "then": {
+                                  "properties": {
+                                    "content": {
+                                      "type": "object",
+                                      "properties": {
+                                        "placeholder": { "type": "boolean" }
+                                      },
+                                      "additionalProperties": true
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "KeyTerm": {
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "term": { "type": "string" },
+            "definition": { "$ref": "#/definitions/SemanticText" }
+          },
+          "required": ["term", "definition"]
+        }
+      ]
+    },
+    "CognitiveMetadata": {
+      "description": "Cognitive and pedagogical metadata for assessment items.",
+      "type": "object",
+      "properties": {
+        "bloomsLevel": {
+          "description": "Bloom's taxonomy cognitive level.",
+          "type": "string",
+          "enum": ["remember", "understand", "apply", "analyze", "evaluate", "create"]
+        },
+        "difficulty": {
+          "description": "Difficulty level from 1 (easiest) to 5 (hardest).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "estimatedTimeMinutes": {
+          "description": "Estimated completion time in minutes.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "cognitiveLoad": {
+          "description": "Expected cognitive load level.",
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "prerequisites": {
+          "description": "Array of prerequisite learning objective IDs.",
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["bloomsLevel", "difficulty", "estimatedTimeMinutes"],
+      "additionalProperties": false
+    },
+    "ScoringStructure": {
+      "description": "Defines how the assessment item should be scored.",
+      "type": "object",
+      "properties": {
+        "points": {
+          "description": "Maximum points available for this assessment.",
+          "type": "number",
+          "minimum": 0
+        },
+        "scoringMethod": {
+          "description": "Method used to calculate the score.",
+          "type": "string",
+          "enum": ["automatic", "manual", "hybrid"]
+        },
+        "partialCredit": {
+          "description": "Whether partial credit is awarded.",
+          "type": "boolean"
+        },
+        "attempts": {
+          "description": "Number of attempts allowed. Use -1 for unlimited attempts.",
+          "type": "integer",
+          "minimum": -1
+        },
+        "penaltyPerAttempt": {
+          "description": "Point penalty per incorrect attempt (0-1 as fraction of total points).",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": ["points", "scoringMethod"],
+      "additionalProperties": false
+    },
+    "FeedbackStructure": {
+      "description": "Defines feedback provided to students for assessment items.",
+      "type": "object",
+      "properties": {
+        "immediate": {
+          "description": "Feedback shown immediately after answering.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "onCorrect": {
+          "description": "Feedback shown when answer is correct.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "onIncorrect": {
+          "description": "Feedback shown when answer is incorrect.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "onPartial": {
+          "description": "Feedback shown when partial credit is earned.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "hints": {
+          "description": "Array of progressive hints available to students.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "text": { "$ref": "#/definitions/SemanticText" },
+              "pointPenalty": {
+                "description": "Points deducted for using this hint.",
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": ["id", "text"]
+          }
+        },
+        "explanations": {
+          "description": "Detailed explanations for each answer option (for multiple choice).",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "optionId": { "type": "string" },
+              "explanation": { "$ref": "#/definitions/SemanticText" }
+            },
+            "required": ["optionId", "explanation"]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "EssayRubric": {
+      "description": "Scoring rubric for essay assessments.",
+      "type": "object",
+      "properties": {
+        "criteria": {
+          "description": "Array of scoring criteria.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "description": { "$ref": "#/definitions/SemanticText" },
+              "weight": {
+                "description": "Relative weight of this criterion (0-1).",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "levels": {
+                "description": "Performance levels for this criterion.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "level": { "type": "string" },
+                    "points": { "type": "number" },
+                    "description": { "$ref": "#/definitions/SemanticText" }
+                  },
+                  "required": ["level", "points", "description"]
+                }
+              }
+            },
+            "required": ["id", "name", "description", "weight", "levels"]
+          }
+        },
+        "totalPoints": {
+          "description": "Total points available across all criteria.",
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": ["criteria", "totalPoints"],
+      "additionalProperties": false
+    },
+    "MultipleChoiceContent": {
+      "description": "Content structure for multiple choice assessment blocks.",
+      "type": "object",
+      "properties": {
+        "question": { "$ref": "#/definitions/SemanticText" },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "text": { "$ref": "#/definitions/SemanticText" },
+              "correct": { "type": "boolean" }
+            },
+            "required": ["id", "text", "correct"]
+          }
+        },
+        "multipleCorrect": { 
+          "type": "boolean",
+          "description": "Whether multiple options can be correct (checkbox vs radio)"
+        },
+        "cognitiveMetadata": { "$ref": "#/definitions/CognitiveMetadata" },
+        "scoring": { "$ref": "#/definitions/ScoringStructure" },
+        "feedback": { "$ref": "#/definitions/FeedbackStructure" },
+        "accessibilitySettings": {
+          "description": "Accessibility settings for this assessment item.",
+          "$ref": "#/definitions/AssessmentAccessibilitySettings"
+        }
+      },
+      "required": ["question", "options", "cognitiveMetadata", "scoring"],
+      "additionalProperties": false
+    },
+    "ShortAnswerContent": {
+      "description": "Content structure for short answer assessment blocks.",
+      "type": "object",
+      "properties": {
+        "question": { "$ref": "#/definitions/SemanticText" },
+        "answerFormat": {
+          "type": "string",
+          "enum": ["text", "numeric", "equation"],
+          "description": "Expected format of the answer"
+        },
+        "expectedAnswers": {
+          "type": "array",
+          "description": "Array of acceptable answers for automatic scoring",
+          "items": { "type": "string" }
+        },
+        "caseSensitive": {
+          "type": "boolean",
+          "description": "Whether answer matching should be case sensitive"
+        },
+        "maxLength": {
+          "type": "integer",
+          "description": "Maximum character length for the answer"
+        },
+        "cognitiveMetadata": { "$ref": "#/definitions/CognitiveMetadata" },
+        "scoring": { "$ref": "#/definitions/ScoringStructure" },
+        "feedback": { "$ref": "#/definitions/FeedbackStructure" },
+        "accessibilitySettings": {
+          "description": "Accessibility settings for this assessment item.",
+          "$ref": "#/definitions/AssessmentAccessibilitySettings"
+        }
+      },
+      "required": ["question", "answerFormat", "cognitiveMetadata", "scoring"],
+      "additionalProperties": false
+    },
+    "EssayPromptContent": {
+      "description": "Content structure for essay prompt assessment blocks.",
+      "type": "object",
+      "properties": {
+        "question": { "$ref": "#/definitions/SemanticText" },
+        "prompt": { 
+          "$ref": "#/definitions/SemanticText",
+          "description": "Detailed essay prompt or writing instructions"
+        },
+        "rubric": { "$ref": "#/definitions/EssayRubric" },
+        "minWordCount": {
+          "type": "integer",
+          "description": "Minimum required word count"
+        },
+        "maxWordCount": {
+          "type": "integer", 
+          "description": "Maximum allowed word count"
+        },
+        "cognitiveMetadata": { "$ref": "#/definitions/CognitiveMetadata" },
+        "scoring": { "$ref": "#/definitions/ScoringStructure" },
+        "feedback": { "$ref": "#/definitions/FeedbackStructure" },
+        "accessibilitySettings": {
+          "description": "Accessibility settings for this assessment item.",
+          "$ref": "#/definitions/AssessmentAccessibilitySettings"
+        }
+      },
+      "required": ["question", "prompt", "rubric", "cognitiveMetadata", "scoring"],
+      "additionalProperties": false
+    },
+    "NavigationContent": {
+      "description": "Content structure for navigation blocks providing semantic navigation landmarks.",
+      "type": "object",
+      "properties": {
+        "navigationLabel": {
+          "description": "Accessible label for the navigation area (WCAG 2.4.1).",
+          "type": "string"
+        },
+        "navigationItems": {
+          "description": "Array of navigation items.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "$ref": "#/definitions/SemanticText" },
+              "destinationId": { 
+                "description": "ID of the target structural container or content block.",
+                "type": "string" 
+              },
+              "level": {
+                "description": "Hierarchical level of this navigation item (1-6).",
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 6
+              },
+              "subItems": {
+                "description": "Nested navigation items.",
+                "type": "array",
+                "items": { "$ref": "#/definitions/NavigationItem" }
+              }
+            },
+            "required": ["id", "label", "destinationId", "level"]
+          }
+        }
+      },
+      "required": ["navigationLabel", "navigationItems"],
+      "additionalProperties": false
+    },
+    "NavigationItem": {
+      "description": "Individual navigation item that can be nested.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "$ref": "#/definitions/SemanticText" },
+        "destinationId": { "type": "string" },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6
+        },
+        "subItems": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/NavigationItem" }
+        }
+      },
+      "required": ["id", "label", "destinationId", "level"],
+      "additionalProperties": false
+    },
+    "SkipNavigationContent": {
+      "description": "Content structure for skip navigation blocks (WCAG 2.4.1).",
+      "type": "object",
+      "properties": {
+        "skipLinks": {
+          "description": "Array of skip links for keyboard navigation.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "label": {
+                "description": "Text shown for the skip link (e.g., 'Skip to main content').",
+                "type": "string"
+              },
+              "destinationId": {
+                "description": "ID of the target element to skip to.",
+                "type": "string"
+              },
+              "accessKey": {
+                "description": "Optional access key for keyboard shortcut.",
+                "type": "string",
+                "maxLength": 1
+              }
+            },
+            "required": ["id", "label", "destinationId"]
+          }
+        },
+        "visible": {
+          "description": "Whether skip links should be visible by default (false = show on focus).",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": ["skipLinks"],
+      "additionalProperties": false
+    },
+    "AssessmentAccessibilitySettings": {
+      "description": "Shared accessibility settings for assessment items (WCAG compliance).",
+      "type": "object",
+      "properties": {
+        "extendedTime": {
+          "description": "Extended time multiplier for students with disabilities (WCAG 2.2.6).",
+          "type": "number",
+          "minimum": 1,
+          "default": 1
+        },
+        "allowScreenReader": {
+          "description": "Whether screen reader use is permitted (WCAG 4.1.3).",
+          "type": "boolean",
+          "default": true
+        },
+        "allowKeyboardOnly": {
+          "description": "Whether the assessment can be completed with keyboard only (WCAG 2.1.1).",
+          "type": "boolean",
+          "default": true
+        },
+        "highContrast": {
+          "description": "Whether high contrast mode is available (WCAG 1.4.3).",
+          "type": "boolean",
+          "default": true
+        },
+        "textToSpeech": {
+          "description": "Whether text-to-speech is available for question and options.",
+          "type": "boolean",
+          "default": false
+        },
+        "alternativeInputMethods": {
+          "description": "Alternative input methods supported (voice, switch, eye tracking).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["voice", "switch", "eye-tracking", "head-mouse", "sip-puff"]
+          }
+        },
+        "cognitiveSupports": {
+          "description": "Cognitive accessibility supports available.",
+          "type": "object",
+          "properties": {
+            "allowCalculator": {
+              "description": "Whether calculator use is permitted.",
+              "type": "boolean",
+              "default": false
+            },
+            "allowDictionary": {
+              "description": "Whether dictionary use is permitted.",
+              "type": "boolean",
+              "default": false
+            },
+            "simplifiedInstructions": {
+              "description": "Whether simplified instructions are available.",
+              "type": "boolean",
+              "default": false
+            },
+            "readAloud": {
+              "description": "Whether instructions can be read aloud.",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "AccessibilityMetadata": {
+      "description": "Accessibility-specific metadata to support WCAG compliance and assistive technologies.",
+      "type": "object",
+      "properties": {
+        "role": {
+          "description": "ARIA role for this element (WCAG 4.1.2).",
+          "type": "string",
+          "examples": ["main", "navigation", "complementary", "banner", "contentinfo", "region"]
+        },
+        "ariaLabel": {
+          "description": "Accessible name for this element when the visible text is insufficient (WCAG 4.1.2).",
+          "type": "string"
+        },
+        "ariaDescribedBy": {
+          "description": "IDs of elements that describe this object (WCAG 1.3.1).",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "landmarkType": {
+          "description": "Semantic landmark type for navigation (WCAG 2.4.1).",
+          "type": "string",
+          "enum": ["banner", "main", "navigation", "complementary", "contentinfo", "search", "form", "region"]
+        },
+        "skipTarget": {
+          "description": "Whether this element can be targeted by skip navigation links (WCAG 2.4.1).",
+          "type": "boolean",
+          "default": false
+        },
+        "headingLevel": {
+          "description": "Semantic heading level (1-6) for proper document structure (WCAG 2.4.6).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6
+        },
+        "cognitiveSupport": {
+          "description": "Cognitive accessibility features.",
+          "type": "object",
+          "properties": {
+            "complexityLevel": {
+              "description": "Content complexity level for cognitive load management.",
+              "type": "string",
+              "enum": ["simple", "moderate", "complex", "advanced"]
+            },
+            "readingLevel": {
+              "description": "Estimated reading level (grade level).",
+              "type": "number",
+              "minimum": 1
+            },
+            "simplifiedVersionAvailable": {
+              "description": "Whether a simplified version of this content exists.",
+              "type": "boolean",
+              "default": false
+            },
+            "summaryAvailable": {
+              "description": "Whether a summary version of this content exists.",
+              "type": "boolean", 
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "RightsMetadata": {
+      "description": "Comprehensive rights and intellectual property metadata for content and resources. Supports commercial adoption through clear licensing, copyright, and usage permissions.",
+      "type": "object",
+      "properties": {
+        "license": {
+          "description": "Primary license governing the use of this content. Must be a valid URI from the xats license vocabulary.",
+          "type": "string",
+          "format": "uri",
+          "examples": [
+            "https://xats.org/licenses/cc-by-4.0",
+            "https://xats.org/licenses/cc-by-sa-4.0",
+            "https://xats.org/licenses/cc-by-nc-4.0",
+            "https://xats.org/licenses/proprietary",
+            "https://xats.org/licenses/public-domain",
+            "https://xats.org/licenses/educational-use-only"
+          ]
+        },
+        "copyrightHolder": {
+          "description": "Primary copyright holder or owner of the intellectual property.",
+          "type": "string"
+        },
+        "copyrightYear": {
+          "description": "Year or range of years for the copyright (e.g., '2023', '2020-2023').",
+          "type": "string",
+          "pattern": "^\\d{4}(-\\d{4})?$",
+          "examples": ["2023", "2020-2023"]
+        },
+        "additionalCopyrightHolders": {
+          "description": "Additional copyright holders or contributors with specific rights.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "year": { "type": "string", "pattern": "^\\d{4}(-\\d{4})?$" },
+              "contribution": { "type": "string" }
+            },
+            "required": ["name", "year"]
+          }
+        },
+        "permissions": {
+          "description": "Specific permissions granted for this content.",
+          "type": "object",
+          "properties": {
+            "redistribute": {
+              "description": "Whether redistribution is permitted.",
+              "type": "boolean"
+            },
+            "modify": {
+              "description": "Whether modification/adaptation is permitted.",
+              "type": "boolean"
+            },
+            "commercialUse": {
+              "description": "Whether commercial use is permitted.",
+              "type": "boolean"
+            },
+            "createDerivatives": {
+              "description": "Whether derivative works may be created.",
+              "type": "boolean"
+            },
+            "shareAlike": {
+              "description": "Whether derivative works must be shared under the same license.",
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "restrictions": {
+          "description": "Specific restrictions or conditions on usage.",
+          "type": "object",
+          "properties": {
+            "noCommercialUse": {
+              "description": "Commercial use is explicitly prohibited.",
+              "type": "boolean"
+            },
+            "noDerivatives": {
+              "description": "Creating derivative works is prohibited.",
+              "type": "boolean"
+            },
+            "educationalUseOnly": {
+              "description": "Content may only be used for educational purposes.",
+              "type": "boolean"
+            },
+            "institutionalUseOnly": {
+              "description": "Content may only be used within specific institutions.",
+              "type": "boolean"
+            },
+            "geographicRestrictions": {
+              "description": "Geographic regions where usage restrictions apply.",
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "additionalProperties": false
+        },
+        "attribution": {
+          "description": "Required attribution information and format.",
+          "type": "object",
+          "properties": {
+            "required": {
+              "description": "Whether attribution is required.",
+              "type": "boolean"
+            },
+            "format": {
+              "description": "Specific format or text required for attribution.",
+              "type": "string"
+            },
+            "includeUrl": {
+              "description": "Whether the source URL must be included in attribution.",
+              "type": "boolean"
+            },
+            "includeLicense": {
+              "description": "Whether the license must be mentioned in attribution.",
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "expirationDate": {
+          "description": "Optional expiration date after which rights may change (ISO 8601 format).",
+          "type": "string",
+          "format": "date"
+        },
+        "licenseUrl": {
+          "description": "URL to the full license text or legal document.",
+          "type": "string",
+          "format": "uri"
+        },
+        "rightsStatement": {
+          "description": "Human-readable rights statement or additional legal information.",
+          "type": "string"
+        },
+        "contactInfo": {
+          "description": "Contact information for licensing inquiries or permissions.",
+          "type": "object",
+          "properties": {
+            "email": { "type": "string", "format": "email" },
+            "organization": { "type": "string" },
+            "url": { "type": "string", "format": "uri" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["license"],
+      "additionalProperties": false
+    }
+  }
+}
