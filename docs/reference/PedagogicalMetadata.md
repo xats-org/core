@@ -79,6 +79,15 @@ Examples:
 - Skills: `["problem-solving", "critical-thinking"]`
 - Topics: `["photosynthesis", "cell-biology"]`
 
+### `itemType` (string, optional)
+The pedagogical purpose of this assessment item.
+
+Values:
+- `formative`: For ongoing assessment during learning
+- `summative`: For evaluation at the end of instruction
+- `diagnostic`: To identify learning needs or gaps
+- `practice`: For skill reinforcement and review
+
 ## Example: Basic Assessment Metadata
 
 ```json
@@ -105,7 +114,8 @@ Examples:
     "depthOfKnowledge": 3,
     "prerequisites": ["obj-algebra-basics", "obj-graphing"],
     "learningObjectives": ["obj-systems-of-equations"],
-    "tags": ["algebra", "systems-of-equations", "problem-solving"]
+    "tags": ["algebra", "systems-of-equations", "problem-solving"],
+    "itemType": "summative"
   }
 }
 ```

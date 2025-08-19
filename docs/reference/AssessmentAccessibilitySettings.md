@@ -20,6 +20,14 @@ Properties:
 
 **WCAG Reference:** 2.2.1 (Timing Adjustable), 2.2.6 (Timeouts)
 
+### `allowedTime` (integer, optional)
+Maximum time allowed for this assessment in seconds.
+
+### `timeExtensionFactor` (number, optional)
+Multiplier for extended time (e.g., 1.5 for time-and-a-half).
+
+**Minimum:** 1.0
+
 ### `responseFormat` (object, optional)
 Alternative response format options.
 
@@ -44,6 +52,11 @@ Whether the assessment can be completed using only keyboard navigation.
 **Default:** `true`  
 **WCAG Reference:** 2.1.1 (Keyboard)
 
+### `keyboardAccessible` (boolean, optional)
+Whether the assessment can be completed with keyboard only (WCAG 2.1.1).
+
+**Default:** `true`
+
 ### `screenReaderOptimized` (boolean, optional)
 Whether the assessment has been optimized for screen reader users.
 
@@ -55,6 +68,11 @@ Optimizations include:
 
 **Default:** `true`  
 **WCAG Reference:** 4.1.2 (Name, Role, Value), 4.1.3 (Status Messages)
+
+### `screenReaderCompatible` (boolean, optional)
+Whether the assessment works with screen reader technology.
+
+**Default:** `true`
 
 ### `colorIndependent` (boolean, optional)
 Whether the assessment can be understood without color perception.
@@ -84,6 +102,16 @@ Alternative assessment format options.
 
 Values: `braille`, `large-print`, `audio`, `tactile-graphics`, `sign-language`
 
+### `readAloudSupport` (boolean, optional)
+Whether text-to-speech is available for this assessment.
+
+**Default:** `false`
+
+### `simplifiedLanguage` (boolean, optional)
+Whether a simplified language version is available.
+
+**Default:** `false`
+
 ### `navigationSupports` (object, optional)
 Navigation assistance features.
 
@@ -93,7 +121,7 @@ Properties:
 - `allowBookmarks` (boolean): Enable bookmarking questions
 - `providesWarnings` (boolean): Warn before submission or timeout
 
-## Example
+## Example: Comprehensive Accessibility Settings
 
 ```json
 {
@@ -103,6 +131,8 @@ Properties:
       "unlimited": false,
       "pauseAllowed": true
     },
+    "allowedTime": 300,
+    "timeExtensionFactor": 1.5,
     "responseFormat": {
       "allowOralResponse": true,
       "allowDrawing": false,
@@ -116,7 +146,9 @@ Properties:
       "font": "OpenDyslexic"
     },
     "allowKeyboardOnly": true,
+    "keyboardAccessible": true,
     "screenReaderOptimized": true,
+    "screenReaderCompatible": true,
     "colorIndependent": true,
     "motionIndependent": true,
     "cognitiveSupports": {
@@ -128,6 +160,8 @@ Properties:
       "chunkedPresentation": true
     },
     "alternativeFormats": ["large-print", "audio"],
+    "readAloudSupport": true,
+    "simplifiedLanguage": false,
     "navigationSupports": {
       "allowReview": true,
       "showProgress": true,
@@ -135,6 +169,20 @@ Properties:
       "providesWarnings": true
     }
   }
+}
+```
+
+## Example: Basic Accessibility Settings
+
+```json
+{
+  "allowedTime": 300,
+  "timeExtensionFactor": 1.5,
+  "keyboardAccessible": true,
+  "screenReaderCompatible": true,
+  "alternativeFormats": ["large-print", "audio"],
+  "readAloudSupport": true,
+  "simplifiedLanguage": false
 }
 ```
 

@@ -40,6 +40,11 @@ Best practices:
 - For incorrect answers: Explain the misconception
 - Keep feedback constructive and educational
 
+### `explanation` (SemanticText, optional)
+Detailed explanation of why this option is correct or incorrect.
+
+Provides deeper understanding beyond immediate feedback, often used in review modes or detailed explanations.
+
 ### `partialCredit` (number, optional)
 Partial credit value if this option is selected.
 
@@ -93,7 +98,7 @@ Common uses:
 }
 ```
 
-## Example: Rich Content Options
+## Example: Rich Content Options with Detailed Explanations
 
 ```json
 {
@@ -108,7 +113,17 @@ Common uses:
         ]
       },
       "isCorrect": true,
-      "partialCredit": 1.0
+      "partialCredit": 1.0,
+      "feedback": {
+        "runs": [
+          {"type": "text", "text": "Correct! This is Einstein's famous mass-energy equivalence equation."}
+        ]
+      },
+      "explanation": {
+        "runs": [
+          {"type": "text", "text": "Einstein's equation E=mc² demonstrates that mass and energy are interchangeable. The equation shows that a small amount of mass (m) can be converted into a tremendous amount of energy (E) when multiplied by the speed of light squared (c²)."}
+        ]
+      }
     },
     {
       "id": "opt-2",
@@ -125,12 +140,51 @@ Common uses:
           {"type": "text", "text": "This is Newton's second law of motion, not Einstein's mass-energy equation."}
         ]
       },
+      "explanation": {
+        "runs": [
+          {"type": "text", "text": "F = ma is Newton's second law of motion, which relates force (F) to mass (m) and acceleration (a). While it involves mass, it describes mechanical motion rather than the equivalence between mass and energy."}
+        ]
+      },
       "metadata": {
         "distractorType": "formula-confusion",
         "commonMisconception": "confusing-physics-equations"
       }
     }
   ]
+}
+```
+
+## Example: Biology Assessment with Comprehensive Feedback
+
+```json
+{
+  "id": "opt-correct",
+  "content": {
+    "runs": [
+      {
+        "type": "text",
+        "text": "Adenosine triphosphate (ATP)",
+        "language": "en-US"
+      }
+    ]
+  },
+  "isCorrect": true,
+  "feedback": {
+    "runs": [
+      {
+        "type": "text", 
+        "text": "Correct! ATP is the primary energy currency of cells."
+      }
+    ]
+  },
+  "explanation": {
+    "runs": [
+      {
+        "type": "text",
+        "text": "Mitochondria produce ATP through cellular respiration, converting glucose and oxygen into usable energy for cellular processes."
+      }
+    ]
+  }
 }
 ```
 

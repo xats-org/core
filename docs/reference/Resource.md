@@ -15,6 +15,6 @@ A `Resource` is an entry in the centralized `resources` repository. It defines a
 
 | Property | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| `type` | `string` (URI) | **Yes** | A URI identifying the type of resource. See [Core Vocabularies](./core-vocabularies.md). |
+| `type` | `string` (URI) | **Yes** | A URI identifying the type of resource. See [Core Vocabularies](../specs/core-vocabularies.md). |
 | `url` | `string` (URI) | **Yes** | The URL where the resource file can be found. |
 | `altText` | `string` | No | For `image` types, a textual description for accessibility (WCAG). |

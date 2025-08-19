@@ -1,6 +1,6 @@
 # xats Quickstart Tutorial
 
-**Version:** 1.0 (for xats schema v0.1.0)
+**Version:** 2.0 (for xats schema v0.2.0)
 **Audience:** First-time authors and developers.
 
 ---
@@ -40,7 +40,7 @@ Every `xats` document starts with a root object that defines its version and cor
 
 ```json
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "bibliographicEntry": {
     "id": "my-first-xats-book",
     "type": "book",
@@ -80,7 +80,7 @@ Chapters are the primary organizational units in xats. Each chapter must have an
 
 ```json
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "bibliographicEntry": {
     "id": "my-first-xats-book",
     "type": "book",
@@ -125,7 +125,7 @@ Sections contain the actual content blocks. Let's add a section with a paragraph
 
 ```json
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "bibliographicEntry": {
     "id": "my-first-xats-book",
     "type": "book",
@@ -341,7 +341,7 @@ Here's a complete, valid xats document combining all the concepts:
 
 ```json
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "bibliographicEntry": {
     "id": "quickstart-tutorial-2025",
     "type": "book",
@@ -862,7 +862,7 @@ xats-validate -f *.xats.json || exit 1
 ### Essential Structure
 ```json
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "bibliographicEntry": { /* CSL-JSON */ },
   "subject": "string",
   "bodyMatter": {

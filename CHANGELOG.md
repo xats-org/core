@@ -19,53 +19,88 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## [0.2.0] - 2025-08-19
+## [0.3.0] - Unreleased
 
 ### Added
-- **Assessment Framework**: Comprehensive assessment support with multiple question types
-  - Multiple choice questions (single and multiple response)
-  - Short answer questions with validation patterns
-  - Essay prompts with rubric support
-- **Accessibility Features**: WCAG 2.1 Level AA compliance
-  - `AccessibilityMetadata` for comprehensive accessibility information
-  - `AssessmentAccessibilitySettings` for assessment-specific accommodations
-  - Support for alternative formats, cognitive supports, and time extensions
-  - Screen reader optimization and keyboard navigation
-- **Pedagogical Metadata**: Cognitive and learning classification
-  - Bloom's Taxonomy level tagging
-  - Difficulty ratings (1-5 scale)
-  - Estimated completion times
-  - Prerequisite tracking
-  - Learning objective alignment
-- **LTI 1.3 Integration**: Learning Tools Interoperability support
-  - Platform registration and tool configuration
-  - Grade passback for assessments
-  - Deep linking capabilities
-- **Rights Management**: Content licensing and copyright tracking
-  - Document-level and element-level rights metadata
-  - Support for Creative Commons and custom licenses
-
-### Documentation
-- Reference documentation for new v0.2.0 objects:
-  - `AccessibilityMetadata` - Comprehensive accessibility information
-  - `AssessmentAccessibilitySettings` - Assessment-specific accommodations
-  - `MultipleChoiceContent` - Multiple choice question structure
-  - `PedagogicalMetadata` - Cognitive and pedagogical classification
-  - `AnswerOption` - Individual answer option structure
-- LTI 1.3 integration guide
-- Rights management examples
-- Comprehensive v0.2.0 example documents
+- **Formal Indexing Support**: Complete implementation of IndexRun for professional publishing
+  - New `IndexRun` type in SemanticText for marking indexable terms
+  - Support for hierarchical indexing with sub-terms
+  - Cross-references and "See also" functionality
+  - Redirect support for index aliases
+- **Case Study Blocks**: New structured content type for case-based learning
+  - Comprehensive scenario and background support
+  - Stakeholder perspectives and timelines
+  - Analysis questions and discussion prompts
+  - Learning objectives integration
+- **Metacognitive Prompt Blocks**: Self-reflection and metacognitive support
+  - 8 distinct prompt types for different cognitive activities
+  - Scaffolding with example responses
+  - Self-assessment integration
+  - Progress tracking support
 
 ### Changed
-- Schema version now accepts both "0.1.0" and "0.2.0"
-- Enhanced `XatsObject` with accessibility and rights metadata
-- Improved extension system with LTI configuration support
+- Updated schema to version 0.3.0 with backward compatibility
+- Enhanced SemanticText to support nested IndexRun elements
+- Expanded block types with case study and metacognitive prompt support
 
-### Technical Improvements
-- Full backward compatibility with v0.1.0 documents
-- Enhanced validation for assessment content
-- Performance optimizations for large documents
-- Comprehensive test coverage for all new features
+## [0.2.0] - 2025-01-20
+
+### Added
+- **100% WCAG 2.1 AA Compliance**: Comprehensive accessibility support with full conformance
+  - Language identification for all content elements
+  - Enhanced alt text and long descriptions for images
+  - Proper heading hierarchy validation
+  - Structural navigation support
+  - Reading order specification
+  - Skip navigation links
+  - Keyboard accessibility features
+- **LTI 1.3 Integration**: Native support for Learning Management Systems
+  - Full LTI 1.3 Advantage implementation
+  - Assignment and Grade Services (AGS) for grade passback
+  - Deep Linking 2.0 for content selection
+  - Names and Role Provisioning Services (NRPS)
+  - Platform-specific configurations for Canvas, Blackboard, Moodle
+- **Rights Management Extension**: Comprehensive copyright and licensing
+  - Copyright holder and year tracking
+  - License type specification (CC licenses, custom)
+  - Usage permissions and restrictions
+  - Digital rights management support
+- **Core Assessment Framework**: Comprehensive built-in assessment capabilities
+  - Multiple question types: multiple choice, true/false, short answer, essay prompts
+  - Pedagogical metadata with Bloom's Taxonomy and Depth of Knowledge support
+  - Automatic scoring and grade calculation with customizable point values
+  - LTI Assignment and Grade Services (AGS) integration for seamless grade passback
+  - Rubric support for essay questions with detailed scoring criteria
+  - Rich feedback system with option-specific explanations and remedial content links
+  - Assessment accessibility settings for accommodations and universal design
+  - Learning analytics support for tracking student progress and performance
+- **Enhanced Validation**: Improved schema validation
+  - 682 new accessibility test cases
+  - Comprehensive example documents
+  - Better error messages and diagnostics
+- **Documentation**: Comprehensive guides and references
+  - Migration guide from v0.1.0
+  - Accessibility guide with WCAG compliance
+  - LTI integration guide with platform examples
+  - Updated schema reference documentation
+
+### Changed
+- **Schema version updated to "0.2.0"** with backward compatibility for 0.1.0 documents
+- **Improved TypeScript type definitions** with comprehensive types for all assessment components
+- **Enhanced CLI validator** with accessibility checks, assessment validation, and detailed error reporting
+- **Updated all example documents** with new assessment, accessibility, and LTI features
+- **Expanded test coverage** to include 682 new accessibility test cases and comprehensive assessment validation
+- **Enhanced documentation structure** with updated API reference and comprehensive guides
+- **Improved schema validation** with better error messages and context-aware suggestions
+
+### Fixed
+- **Accessibility test validation** for generic heading text and proper semantic structure
+- **Alt text quality validation** for redundant phrases and improved image descriptions
+- **Language code validation** using BCP 47 format for proper internationalization support
+- **Schema reference resolution** for extension types, particularly LTI 1.3 configurations
+- **TypeScript compilation errors** in assessment type definitions
+- **CLI tool reliability** for large documents and complex schema validations
+- **Cross-platform compatibility** issues in validation and file handling
 
 ## [0.1.0] - 2025-01-17
 

@@ -1,0 +1,50 @@
+{
+  "meeting_date": "2025-08-17",
+  "meeting_time": "15:00",
+  "action_items": [
+    {
+      "id": 1,
+      "assignee": "xats-schema-engineer",
+      "task": "Begin implementing core vocabulary definitions",
+      "issue": "#6",
+      "priority": "CRITICAL",
+      "due": "2025-08-24"
+    },
+    {
+      "id": 2,
+      "assignee": "xats-validation-engineer",
+      "task": "Setup basic test infrastructure",
+      "issue": "#7",
+      "priority": "CRITICAL",
+      "due": "2025-08-24"
+    },
+    {
+      "id": 3,
+      "assignee": "xats-doc-writer",
+      "task": "Create first valid example document",
+      "issue": "#8",
+      "priority": "CRITICAL",
+      "due": "2025-08-24"
+    },
+    {
+      "id": 4,
+      "assignee": "xats-project-steward",
+      "task": "Setup GitHub project board and milestones",
+      "issue": "#11",
+      "priority": "HIGH",
+      "due": "2025-08-20"
+    },
+    {
+      "id": 5,
+      "assignee": "xats-schema-engineer",
+      "task": "Fix ContentBlock validation issue",
+      "issue": "#9",
+      "priority": "HIGH",
+      "due": "2025-08-31"
+    }
+  ],
+  "next_meeting": {
+    "date": "TBD",
+    "agenda": "Review progress on critical issues #6, #7, #8"
+  }
+}

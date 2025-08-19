@@ -235,6 +235,63 @@ See [AssessmentAccessibilitySettings](./AssessmentAccessibilitySettings.md) for 
 }
 ```
 
+## Example: Biology Assessment with Rich Metadata
+
+```json
+{
+  "question": {
+    "runs": [
+      {
+        "type": "text",
+        "text": "What is the primary function of mitochondria in cells?"
+      }
+    ]
+  },
+  "options": [
+    {
+      "id": "opt-a",
+      "content": {
+        "runs": [{"type": "text", "text": "Energy production"}]
+      },
+      "isCorrect": true
+    },
+    {
+      "id": "opt-b", 
+      "content": {
+        "runs": [{"type": "text", "text": "Protein synthesis"}]
+      },
+      "isCorrect": false
+    },
+    {
+      "id": "opt-c",
+      "content": {
+        "runs": [{"type": "text", "text": "DNA replication"}]
+      },
+      "isCorrect": false
+    }
+  ],
+  "multipleCorrect": false,
+  "cognitive": {
+    "bloomsLevel": "understand",
+    "difficulty": 2,
+    "estimatedTime": "PT2M"
+  },
+  "scoring": {
+    "points": 10,
+    "scoringMethod": "automatic",
+    "attempts": 3
+  },
+  "feedback": {
+    "onCorrect": {
+      "runs": [{"type": "text", "text": "Correct! Mitochondria are the powerhouses of the cell."}]
+    },
+    "onIncorrect": {
+      "runs": [{"type": "text", "text": "Not quite. Think about cellular energy production."}]
+    }
+  }
+}
+```
+
 ## Scoring Strategies
 
 ### Single Answer Questions
@@ -301,6 +358,16 @@ See [AssessmentAccessibilitySettings](./AssessmentAccessibilitySettings.md) for 
 - [PedagogicalMetadata](./PedagogicalMetadata.md) - Cognitive metadata structure
 - [AssessmentAccessibilitySettings](./AssessmentAccessibilitySettings.md) - Accessibility settings
 - [SemanticText](./SemanticText.md) - Text content structure
+- [ScoringStructure](./ScoringStructure.md) - Required for scoring configuration
+- [FeedbackStructure](./FeedbackStructure.md) - Optional feedback configuration
+- [ContentBlock](./ContentBlock.md) - Contains multiple choice content when blockType is multipleChoice
+
+## Notes
+
+- Use `multipleCorrect: true` for questions where students can select multiple correct answers (checkbox interface)
+- Use `multipleCorrect: false` or omit for single-correct-answer questions (radio button interface)
+- All options should have unique IDs within the question for proper scoring and feedback
+- Automatic scoring works best with predetermined correct answers
 
 ## Schema Definition
 

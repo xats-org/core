@@ -1,6 +1,6 @@
 # xats Project Roadmap
 
-**Version:** 1.0 (for xats schema v0.1.0)
+**Version:** 2.0 (for xats schema v0.2.0)
 **Status:** Living Document
 
 ---
@@ -15,27 +15,65 @@ This document outlines the future direction for the **Extensible Academic Textbo
 
 This phase focuses on implementing the most critical missing features to make **xats** a viable platform for creating and distributing high-quality, pedagogically sound educational content.
 
-### a. Formal Assessment Vocabulary & Pedagogical Metadata (v0.2.0)
+### a. ✅ Formal Assessment Vocabulary & Pedagogical Metadata (v0.2.0 - COMPLETED)
 
-The current standard enables pathways based on assessments but does not define the assessments themselves. This is the highest priority, with a strong emphasis on moving beyond simple knowledge recall.
+**COMPLETED:** The comprehensive assessment framework has been implemented with full pedagogical metadata support.
 
-**Planned `blockType` URIs:**
-- `https://xats.org/core/blocks/assessment/multipleChoice`
-- `https://xats.org/core/blocks/assessment/multipleResponse`
-- `https://xats.org/core/blocks/assessment/shortAnswer`
-- `https://xats.org/core/blocks/assessment/essayPrompt`
+**Implemented `blockType` URIs:**
+- ✅ `https://xats.org/core/blocks/multipleChoice`
+- ✅ `https://xats.org/core/blocks/shortAnswer`
+- ✅ `https://xats.org/core/blocks/essayPrompt`
 
-**Critical Enhancements for Pedagogical Rigor:**
-- **Cognitive Level Tagging:** The `content` schema for each assessment type must include an optional field for pedagogical metadata. This will allow authors to tag questions with established frameworks, such as **Bloom's Taxonomy** (`"cognitiveLevel": "Applying"`) or **Depth of Knowledge** (`"dok": 2`).
-- **Targeted Feedback:** The structure must support not just correct/incorrect answers, but also targeted, explanatory feedback for specific incorrect answers (distractors), linking them to remedial content.
+**Completed Enhancements for Pedagogical Rigor:**
+- ✅ **Cognitive Metadata:** Full support for Bloom's Taxonomy levels, difficulty scaling (1-5), and estimated time requirements
+- ✅ **Comprehensive Scoring:** Point values, scoring methods (automatic/manual/hybrid), attempt limits, and penalty structures
+- ✅ **Rich Feedback System:** Complete feedback with correct/incorrect responses, hints with point penalties, and detailed explanations
+- ✅ **Essay Rubrics:** Structured scoring criteria with performance levels and weighted evaluation
+- ✅ **Assessment Analytics:** Built-in support for learning analytics through detailed metadata
+- ✅ **Accessibility Compliance:** Comprehensive WCAG 2.1 AA compliance for all assessment types with `AssessmentAccessibilitySettings`
 
-### b. Support for Authentic & Formative Assessment (v0.3.0)
+### b. Support for Authentic & Formative Assessment (v0.3.0 - IN PROGRESS)
 
-To support modern pedagogy, we must move beyond traditional testing formats.
+To support modern pedagogy, we are expanding beyond traditional testing formats.
 - **New `blockType` for Case Studies:** A core `blockType` (`.../blocks/caseStudy`) will be introduced to structure case-based problems, a cornerstone of higher education in fields like business, law, and medicine.
 - **Metacognitive Prompts:** A new `blockType` (`.../blocks/metacognitivePrompt`) will be defined for prompts that encourage student self-reflection (e.g., "What was the most challenging concept in this section and why?").
+- **Performance Tasks:** Extended assessment activities that require multiple steps and real-world application.
 
-### c. Formal Indexing Support (v0.3.0)
+### c. ✅ Enhanced Accessibility & Navigation (v0.2.0 - COMPLETED)
+
+**COMPLETED:** Comprehensive accessibility framework ensuring WCAG 2.1 AA compliance.
+
+**Implemented Features:**
+- ✅ **Language Support:** Required `language` property with ISO 639-1 codes for WCAG 3.1.1 compliance
+- ✅ **Text Direction:** `textDirection` property for proper RTL language rendering (WCAG 3.1.2)
+- ✅ **Accessibility Metadata:** Rich `AccessibilityMetadata` with ARIA roles, labels, and landmarks
+- ✅ **Navigation Components:** `NavigationContent` and `SkipNavigationContent` for keyboard accessibility
+- ✅ **Cognitive Support:** Reading levels, complexity indicators, and simplified content options
+- ✅ **Assessment Accessibility:** `AssessmentAccessibilitySettings` with extended time, screen reader support, and alternative input methods
+
+### d. ✅ Rights Management & Content Licensing (v0.2.0 - COMPLETED)
+
+**COMPLETED:** Complete intellectual property and licensing framework for commercial publishing.
+
+**Implemented Features:**
+- ✅ **Comprehensive Rights Metadata:** License URIs, copyright holders, and usage permissions
+- ✅ **Commercial Publishing Support:** Clear permissions for redistribution, modification, and commercial use
+- ✅ **Attribution Framework:** Required attribution formats and license inclusion requirements
+- ✅ **Geographic Restrictions:** Support for region-specific licensing agreements
+- ✅ **Rights Inheritance:** Object-level rights that can override document-level defaults
+
+### e. ✅ LTI 1.3 Integration Framework (v0.2.0 - COMPLETED)
+
+**COMPLETED:** Foundation for Learning Management System integration through extensions.
+
+**Implemented Features:**
+- ✅ **Extension Framework:** Structured extension system with LTI 1.3 schema references
+- ✅ **Grade Passback Support:** `ltiGradePassback` extension for Assignment and Grade Services
+- ✅ **Deep Linking Support:** `ltiDeepLinking` extension for content selection
+- ✅ **Platform Registration:** `ltiConfiguration` for tool setup and registration
+- ✅ **Pathway Integration:** `ltiPathwayIntegration` for adaptive learning with grade data
+
+### f. Formal Indexing Support (v0.3.0)
 
 The current `index` placeholder is a simple marker. A more advanced system is needed for professional publishing.
 - **New `IndexRun`:** A new run type will be added to `SemanticText` to allow authors to tag a specific word or phrase as indexable.
