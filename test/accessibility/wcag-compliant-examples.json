@@ -1,0 +1,630 @@
+{
+  "description": "Test examples demonstrating WCAG 2.1 AA compliance patterns for xats documents",
+  "examples": {
+    "minimal_compliant_v0.1.0": {
+      "description": "Minimal document that passes WCAG tests with current v0.1.0 schema",
+      "document": {
+        "schemaVersion": "0.1.0",
+        "bibliographicEntry": {
+          "id": "wcag-compliant-minimal",
+          "type": "book",
+          "title": "WCAG Compliant Textbook",
+          "author": [{"family": "Test", "given": "Author"}],
+          "issued": {"date-parts": [[2025]]}
+        },
+        "subject": "Accessibility Testing",
+        "bodyMatter": {
+          "contents": [
+            {
+              "id": "chapter-1",
+              "title": "Introduction to Accessibility",
+              "sections": [
+                {
+                  "id": "section-1",
+                  "title": "Basic Concepts",
+                  "content": [
+                    {
+                      "id": "paragraph-1",
+                      "blockType": "https://xats.org/core/blocks/paragraph",
+                      "content": {
+                        "text": {
+                          "runs": [
+                            {"type": "text", "text": "This is a properly structured paragraph with "},
+                            {"type": "strong", "text": "strong emphasis"},
+                            {"type": "text", "text": " and "},
+                            {"type": "emphasis", "text": "italic emphasis"},
+                            {"type": "text", "text": "."}
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "resources": [
+          {
+            "id": "example-image",
+            "type": "https://xats.org/core/resources/image",
+            "url": "https://example.com/accessible-diagram.svg",
+            "altText": "Flowchart showing the accessibility testing process with five connected steps: Plan, Design, Develop, Test, and Deploy"
+          }
+        ]
+      },
+      "wcag_compliance": {
+        "passes": [
+          "1.1.1 - Image has alt text",
+          "1.3.2 - Content maintains reading order",
+          "Basic semantic structure maintained"
+        ],
+        "fails": [
+          "3.1.1 - No language identification",
+          "2.4.6 - No heading levels specified"
+        ]
+      }
+    },
+    "enhanced_compliant_v0.2.0": {
+      "description": "Enhanced document showing full WCAG compliance with proposed v0.2.0 features",
+      "document": {
+        "schemaVersion": "0.2.0",
+        "language": "en-US",
+        "bibliographicEntry": {
+          "id": "wcag-enhanced-compliant",
+          "type": "book",
+          "title": "Fully Accessible Mathematics Textbook",
+          "author": [{"family": "Accessibility", "given": "Expert"}],
+          "issued": {"date-parts": [[2025]]},
+          "language": "en-US"
+        },
+        "subject": "Mathematics",
+        "targetAudience": "High School Students",
+        "bodyMatter": {
+          "contents": [
+            {
+              "id": "chapter-1",
+              "language": "en-US",
+              "title": "Quadratic Functions",
+              "accessibilityMetadata": {
+                "landmarkRole": "main",
+                "headingLevel": 1
+              },
+              "sections": [
+                {
+                  "id": "skip-navigation",
+                  "language": "en-US",
+                  "title": "Navigation Links",
+                  "accessibilityMetadata": {
+                    "landmarkRole": "navigation"
+                  },
+                  "content": [
+                    {
+                      "id": "skip-nav-block",
+                      "language": "en-US",
+                      "blockType": "https://xats.org/core/blocks/skipNavigation",
+                      "content": {
+                        "skipLinks": [
+                          {
+                            "id": "skip-to-main",
+                            "label": "Skip to main content",
+                            "destinationId": "main-section",
+                            "keyboardShortcut": "Alt+M"
+                          },
+                          {
+                            "id": "skip-to-examples",
+                            "label": "Skip to practice examples",
+                            "destinationId": "examples-section",
+                            "keyboardShortcut": "Alt+E"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "main-section",
+                  "language": "en-US",
+                  "title": "Understanding Quadratic Functions",
+                  "accessibilityMetadata": {
+                    "landmarkRole": "main",
+                    "skipTarget": true,
+                    "headingLevel": 2
+                  },
+                  "content": [
+                    {
+                      "id": "main-heading",
+                      "language": "en-US",
+                      "blockType": "https://xats.org/core/blocks/heading",
+                      "accessibilityMetadata": {
+                        "headingLevel": 2
+                      },
+                      "content": {
+                        "text": {
+                          "runs": [{"type": "text", "text": "Understanding Quadratic Functions"}]
+                        },
+                        "level": 2
+                      }
+                    },
+                    {
+                      "id": "intro-paragraph",
+                      "language": "en-US",
+                      "blockType": "https://xats.org/core/blocks/paragraph",
+                      "content": {
+                        "text": {
+                          "runs": [
+                            {"type": "text", "text": "A quadratic function is a polynomial function of degree 2, typically written as "},
+                            {"type": "strong", "text": "f(x) = ax² + bx + c"},
+                            {"type": "text", "text": " where "},
+                            {"type": "emphasis", "text": "a ≠ 0"},
+                            {"type": "text", "text": "."}
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "id": "quadratic-formula",
+                      "language": "en-US",
+                      "blockType": "https://xats.org/core/blocks/mathBlock",
+                      "content": {
+                        "notation": "latex",
+                        "expression": "f(x) = ax^2 + bx + c",
+                        "altText": "f of x equals a x squared plus b x plus c",
+                        "speechText": "The function f of x equals a times x squared plus b times x plus c, where a is not equal to zero",
+                        "tactileDescription": "Standard quadratic function form with three terms: quadratic term ax², linear term bx, and constant term c"
+                      }
+                    },
+                    {
+                      "id": "data-table",
+                      "language": "en-US",
+                      "blockType": "https://xats.org/core/blocks/table",
+                      "content": {
+                        "caption": {
+                          "runs": [{"type": "text", "text": "Sample values for f(x) = x²"}]
+                        },
+                        "headers": [
+                          {
+                            "id": "header-x",
+                            "text": {"runs": [{"type": "text", "text": "x"}]},
+                            "scope": "col"
+                          },
+                          {
+                            "id": "header-fx",
+                            "text": {"runs": [{"type": "text", "text": "f(x)"}]},
+                            "scope": "col"
+                          }
+                        ],
+                        "rows": [
+                          [
+                            {
+                              "text": {"runs": [{"type": "text", "text": "-2"}]},
+                              "headers": "header-x"
+                            },
+                            {
+                              "text": {"runs": [{"type": "text", "text": "4"}]},
+                              "headers": "header-fx"
+                            }
+                          ],
+                          [
+                            {
+                              "text": {"runs": [{"type": "text", "text": "-1"}]},
+                              "headers": "header-x"
+                            },
+                            {
+                              "text": {"runs": [{"type": "text", "text": "1"}]},
+                              "headers": "header-fx"
+                            }
+                          ],
+                          [
+                            {
+                              "text": {"runs": [{"type": "text", "text": "0"}]},
+                              "headers": "header-x"
+                            },
+                            {
+                              "text": {"runs": [{"type": "text", "text": "0"}]},
+                              "headers": "header-fx"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    {
+                      "id": "function-graph",
+                      "language": "en-US",
+                      "blockType": "https://xats.org/core/blocks/figure",
+                      "content": {
+                        "resourceId": "parabola-graph",
+                        "altText": "Graph of quadratic function showing upward-opening parabola",
+                        "caption": {
+                          "runs": [
+                            {"type": "text", "text": "Figure 1.1: Graph of "},
+                            {"type": "emphasis", "text": "f(x) = x²"},
+                            {"type": "text", "text": " showing characteristic parabola shape"}
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "multilingual-section",
+                  "language": "en-US",
+                  "title": "International Perspective",
+                  "accessibilityMetadata": {
+                    "headingLevel": 2
+                  },
+                  "content": [
+                    {
+                      "id": "english-explanation",
+                      "language": "en-US",
+                      "blockType": "https://xats.org/core/blocks/paragraph",
+                      "content": {
+                        "text": {
+                          "runs": [{"type": "text", "text": "Quadratic functions are fundamental in mathematics."}]
+                        }
+                      }
+                    },
+                    {
+                      "id": "spanish-explanation",
+                      "language": "es",
+                      "blockType": "https://xats.org/core/blocks/paragraph",
+                      "content": {
+                        "text": {
+                          "runs": [{"type": "text", "text": "Las funciones cuadráticas son fundamentales en matemáticas."}]
+                        }
+                      }
+                    },
+                    {
+                      "id": "french-explanation",
+                      "language": "fr",
+                      "blockType": "https://xats.org/core/blocks/paragraph",
+                      "content": {
+                        "text": {
+                          "runs": [{"type": "text", "text": "Les fonctions quadratiques sont fondamentales en mathématiques."}]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "examples-section",
+                  "language": "en-US",
+                  "title": "Practice Examples",
+                  "accessibilityMetadata": {
+                    "skipTarget": true,
+                    "headingLevel": 2,
+                    "landmarkRole": "complementary"
+                  },
+                  "content": [
+                    {
+                      "id": "example-list",
+                      "language": "en-US",
+                      "blockType": "https://xats.org/core/blocks/list",
+                      "content": {
+                        "listType": "ordered",
+                        "items": [
+                          {
+                            "text": {
+                              "runs": [{"type": "text", "text": "Find the vertex of f(x) = x² - 4x + 3"}]
+                            }
+                          },
+                          {
+                            "text": {
+                              "runs": [{"type": "text", "text": "Graph the function g(x) = -2x² + 8x - 6"}]
+                            }
+                          },
+                          {
+                            "text": {
+                              "runs": [{"type": "text", "text": "Determine the axis of symmetry for h(x) = 3x² + 6x + 1"}]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "resources": [
+          {
+            "id": "parabola-graph",
+            "language": "en-US",
+            "type": "https://xats.org/core/resources/image",
+            "url": "https://example.com/parabola-detailed.svg",
+            "altText": "Graph showing parabola y = x² with vertex at origin and points plotted",
+            "longDescription": "A coordinate plane displaying the quadratic function y = x². The parabola opens upward with its vertex located at the origin (0,0). The curve is symmetric about the y-axis. Key points are plotted and labeled: (-2,4), (-1,1), (0,0), (1,1), and (2,4). The graph includes a coordinate grid with x-axis ranging from -3 to 3 and y-axis from -1 to 5. The characteristic U-shape of a quadratic function with positive leading coefficient is clearly visible.",
+            "speechText": "Interactive graph of y equals x squared. Use arrow keys to explore plotted points. Press Enter on a point to hear its coordinates.",
+            "tactileDescription": "Raised line graph showing symmetrical U-shaped curve. Central depression at origin, rising equally on both sides. Five tactile markers indicate key coordinate points."
+          }
+        ]
+      },
+      "wcag_compliance": {
+        "passes": [
+          "1.1.1 - Comprehensive alt text with long descriptions",
+          "1.3.1 - Proper heading structure and table headers",
+          "1.3.2 - Logical content sequence maintained",
+          "2.4.1 - Skip navigation implemented", 
+          "2.4.3 - Focus order specified where relevant",
+          "2.4.6 - Descriptive headings and labels",
+          "3.1.1 - Document language identified",
+          "3.1.2 - Multi-language content properly marked"
+        ],
+        "implementation_notes": [
+          "Uses proposed accessibility metadata framework",
+          "Demonstrates enhanced resource definitions",
+          "Shows proper semantic markup throughout",
+          "Includes cognitive accessibility features"
+        ]
+      }
+    },
+    "assessment_accessibility": {
+      "description": "Example showing accessible assessment content",
+      "document": {
+        "schemaVersion": "0.2.0",
+        "language": "en-US",
+        "bibliographicEntry": {
+          "id": "accessible-assessment",
+          "type": "book",
+          "title": "Accessible Math Assessment"
+        },
+        "subject": "Mathematics Assessment",
+        "bodyMatter": {
+          "contents": [
+            {
+              "id": "assessment-chapter",
+              "language": "en-US",
+              "title": "Chapter Assessment",
+              "sections": [
+                {
+                  "id": "assessment-section",
+                  "language": "en-US",
+                  "title": "Quadratic Functions Quiz",
+                  "accessibilityMetadata": {
+                    "landmarkRole": "main",
+                    "headingLevel": 1
+                  },
+                  "content": [
+                    {
+                      "id": "mc-question-1",
+                      "language": "en-US",
+                      "blockType": "https://xats.org/core/blocks/multipleChoice",
+                      "accessibilityMetadata": {
+                        "focusable": true,
+                        "tabOrder": 1
+                      },
+                      "content": {
+                        "question": {
+                          "runs": [
+                            {"type": "text", "text": "What is the vertex of the quadratic function "},
+                            {"type": "emphasis", "text": "f(x) = x² - 4x + 3"},
+                            {"type": "text", "text": "?"}
+                          ]
+                        },
+                        "options": [
+                          {
+                            "id": "option-a",
+                            "text": {"runs": [{"type": "text", "text": "(2, -1)"}]},
+                            "correct": true
+                          },
+                          {
+                            "id": "option-b",
+                            "text": {"runs": [{"type": "text", "text": "(-2, 1)"}]},
+                            "correct": false
+                          },
+                          {
+                            "id": "option-c",
+                            "text": {"runs": [{"type": "text", "text": "(4, 3)"}]},
+                            "correct": false
+                          }
+                        ],
+                        "cognitiveMetadata": {
+                          "bloomsLevel": "apply",
+                          "difficulty": 3,
+                          "estimatedTimeMinutes": 3
+                        },
+                        "accessibilitySettings": {
+                          "extendedTime": 1.5,
+                          "allowScreenReader": true,
+                          "allowKeyboardOnly": true,
+                          "highContrast": true,
+                          "textToSpeech": true,
+                          "cognitiveSupports": {
+                            "allowCalculator": true,
+                            "simplifiedInstructions": true,
+                            "readAloud": true,
+                            "highlightKeyTerms": true
+                          }
+                        },
+                        "alternativeFormats": {
+                          "largeText": {
+                            "fontSize": "18pt",
+                            "fontFamily": "Arial, sans-serif"
+                          },
+                          "braille": {
+                            "mathNotation": "Nemeth",
+                            "includeGraphicDescriptions": true
+                          },
+                          "audio": {
+                            "speakingRate": "normal",
+                            "includeSpelling": true,
+                            "pauseDuration": 2
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "fill-blank-1",
+                      "language": "en-US",
+                      "blockType": "https://xats.org/core/blocks/fillInBlank",
+                      "accessibilityMetadata": {
+                        "focusable": true,
+                        "tabOrder": 2
+                      },
+                      "content": {
+                        "question": {
+                          "runs": [
+                            {"type": "text", "text": "The axis of symmetry for f(x) = 2x² - 8x + 6 is x = "},
+                            {"type": "emphasis", "text": "_____"},
+                            {"type": "text", "text": "."}
+                          ]
+                        },
+                        "correctAnswers": ["2", "two"],
+                        "inputLabel": "Enter the x-coordinate of the axis of symmetry",
+                        "inputType": "number",
+                        "accessibilitySettings": {
+                          "screenReaderInstructions": "Fill in the blank with the x-coordinate of the axis of symmetry. You may enter a number or spell it out.",
+                          "keyboardInstructions": "Use tab to navigate to the input field, type your answer, then press tab to continue to the next question.",
+                          "validation": {
+                            "announceErrors": true,
+                            "errorMessage": "Please enter a valid number for the axis of symmetry.",
+                            "successMessage": "Correct! The axis of symmetry is at x = 2."
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "wcag_compliance": {
+        "passes": [
+          "1.1.1 - Assessment instructions clearly labeled",
+          "1.3.1 - Form fields properly associated with labels",
+          "2.4.3 - Tab order specified for interactive elements",
+          "2.4.6 - Form labels are descriptive",
+          "3.1.1 - Language specified for all content",
+          "Cognitive accessibility features included",
+          "Multiple input methods supported",
+          "Alternative formats provided"
+        ],
+        "accessibility_features": [
+          "Extended time accommodations",
+          "Screen reader compatibility", 
+          "Keyboard-only navigation",
+          "High contrast support",
+          "Text-to-speech integration",
+          "Cognitive load reduction",
+          "Multiple answer formats",
+          "Clear error messaging"
+        ]
+      }
+    }
+  },
+  "test_cases": {
+    "automated_validation": {
+      "language_identification": {
+        "test_name": "WCAG 3.1.1 & 3.1.2 Language Tests",
+        "requirements": [
+          "Document must have primary language",
+          "Content parts in different languages must be marked",
+          "Language codes must follow BCP 47 format"
+        ],
+        "test_cases": [
+          {
+            "description": "Document with primary language",
+            "passes": {"language": "en-US"},
+            "fails": {}
+          },
+          {
+            "description": "Mixed language content",
+            "content": [
+              {"language": "en", "text": "English text"},
+              {"language": "es", "text": "Spanish text"},
+              {"language": "fr", "text": "French text"}
+            ]
+          }
+        ]
+      },
+      "alternative_text": {
+        "test_name": "WCAG 1.1.1 Text Alternatives",
+        "requirements": [
+          "All images must have alt text",
+          "Alt text must be meaningful (>3 chars)",
+          "Complex images should have long descriptions",
+          "Math expressions need text alternatives"
+        ],
+        "test_cases": [
+          {
+            "description": "Basic image with alt text",
+            "resource": {
+              "type": "image",
+              "altText": "Bar chart showing increasing sales trends"
+            },
+            "should_pass": true
+          },
+          {
+            "description": "Image without alt text",
+            "resource": {
+              "type": "image",
+              "url": "chart.png"
+            },
+            "should_pass": false,
+            "expected_error": "WCAG 1.1.1 VIOLATION: Missing alt text"
+          },
+          {
+            "description": "Complex image with long description",
+            "resource": {
+              "type": "image", 
+              "altText": "Complex organizational chart",
+              "longDescription": "Detailed hierarchy showing CEO at top, 3 VPs below, each with 2-3 directors reporting to them..."
+            },
+            "should_pass": true
+          }
+        ]
+      },
+      "heading_structure": {
+        "test_name": "WCAG 1.3.1 & 2.4.6 Heading Tests",
+        "requirements": [
+          "Headings must have level specification",
+          "Heading hierarchy must not skip levels",
+          "Heading text must be descriptive"
+        ],
+        "test_cases": [
+          {
+            "description": "Proper heading hierarchy",
+            "headings": [
+              {"level": 1, "text": "Chapter 1: Introduction"},
+              {"level": 2, "text": "Section 1.1: Basic Concepts"},
+              {"level": 3, "text": "Subsection 1.1.1: Definitions"}
+            ],
+            "should_pass": true
+          },
+          {
+            "description": "Skipped heading level",
+            "headings": [
+              {"level": 1, "text": "Chapter 1"},
+              {"level": 3, "text": "Subsection"}
+            ],
+            "should_pass": false,
+            "expected_error": "Heading hierarchy violation: skipped level 2"
+          }
+        ]
+      }
+    },
+    "manual_testing_scenarios": {
+      "screen_reader_navigation": [
+        "Navigate through document structure using heading navigation",
+        "Verify table headers are announced correctly",
+        "Test skip links functionality",
+        "Verify alt text quality and comprehension"
+      ],
+      "keyboard_navigation": [
+        "Tab through all interactive elements in logical order",
+        "Verify focus indicators are visible", 
+        "Test keyboard shortcuts for skip navigation",
+        "Ensure all functionality available via keyboard"
+      ],
+      "cognitive_accessibility": [
+        "Test with simplified language versions",
+        "Verify cognitive load indicators are helpful",
+        "Test extended time accommodations",
+        "Verify clear error messages and instructions"
+      ]
+    }
+  }
+}
