@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/stable-v0.1.0-blue.svg)](https://github.com/xats-org/core/releases)
-[![Development](https://img.shields.io/badge/development-v0.2.0-orange.svg)](https://github.com/xats-org/core/tree/v0.2.0)
+[![Version](https://img.shields.io/badge/stable-v0.2.0-blue.svg)](https://github.com/xats-org/core/releases)
+[![Development](https://img.shields.io/badge/development-v0.3.0-orange.svg)](https://github.com/xats-org/core/tree/v0.3.0)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![CI Status](https://img.shields.io/github/actions/workflow/status/xats-org/core/ci.yml?branch=v0.2.0&label=CI)](https://github.com/xats-org/core/actions)
 [![npm version](https://img.shields.io/npm/v/@xats-org/core.svg)](https://www.npmjs.com/package/@xats-org/core)
@@ -196,8 +196,7 @@ xats-org/core/
 
 | Branch | Version | Status | Description |
 |--------|---------|--------|-------------|
-| `main` | v0.1.0 | Stable | Latest stable release |
-| `v0.2.0` | v0.2.0 | RC | Release candidate with full WCAG & LTI support |
+| `main` | v0.2.0 | Stable | Latest stable release |
 | `v0.3.0` | v0.3.0 | Planning | Future features (indexing, case studies) |
 
 ## 🤝 Contributing
@@ -230,12 +229,12 @@ npm run validate examples/
 
 ## 📈 Roadmap
 
-### v0.2.0 (Current Development)
+### v0.2.0 (Released)
 - ✅ 100% WCAG 2.1 AA compliance
 - ✅ LTI 1.3 integration
 - ✅ Rights management extension
 - ✅ Core assessment framework
-- 🔄 Documentation updates
+- ✅ Professional documentation
 
 ### v0.3.0 (Planned)
 - 📑 Formal indexing support
