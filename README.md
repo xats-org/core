@@ -1,84 +1,155 @@
-# Extensible Academic Textbook Schema (xats)
+# xats: eXtensible Academic Text Standard
 
-**Stable Version:** 0.1.0 (on `main` branch)
-**Development Version:** 0.2.0 (on `v0.2.0` branch)
-**Status:** Active Development
-**Pronunciation:** "cats"
+<div align="center">
 
+[![Version](https://img.shields.io/badge/stable-v0.1.0-blue.svg)](https://github.com/xats-org/core/releases)
+[![Development](https://img.shields.io/badge/development-v0.2.0-orange.svg)](https://github.com/xats-org/core/tree/v0.2.0)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/xats-org/core/ci.yml?branch=v0.2.0&label=CI)](https://github.com/xats-org/core/actions)
+[![npm version](https://img.shields.io/npm/v/@xats-org/core.svg)](https://www.npmjs.com/package/@xats-org/core)
+
+**The Modern Standard for Academic and Educational Content**
+
+[Documentation](./docs) • [Quick Start](./docs/QUICKSTART_TUTORIAL.md) • [Schema Reference](./docs/reference/index.md) • [Examples](./examples) • [Contributing](./CONTRIBUTING.md)
+
+</div>
 
 ---
 
-## 1. Abstract
+## 🎯 What is xats?
 
-The **Extensible Academic Textbook Schema (xats)** is a JSON-based standard for defining the structure and content of educational materials. It is designed from the ground up to be a universal, machine-readable blueprint for a new generation of AI-driven educational tools. Its core purpose is to create a deeply semantic, interconnected, and extensible format that allows AI agents to reliably generate, deconstruct, and repurpose educational content into a wide array of products, such as videos, quizzes, and personalized learning paths.
+The **eXtensible Academic Text Standard (xats)** is a modern, JSON-based schema designed specifically for educational and academic content. Built from the ground up for the AI era, xats enables:
 
-This project is a community-driven effort to create an open standard for the future of educational publishing.
+- 🤖 **AI-Native Design**: Deeply semantic structure optimized for AI processing and generation
+- 📚 **Rich Educational Metadata**: Built-in support for learning objectives, assessments, and pedagogical structures
+- ♿ **Accessibility First**: 100% WCAG 2.1 AA compliant with comprehensive accessibility features
+- 🔌 **LMS Integration**: Native LTI 1.3 support for seamless Learning Management System integration
+- 🔐 **Rights Management**: Comprehensive licensing and copyright management for publishers
+- 🚀 **Extensible Architecture**: Domain-specific extensions without breaking compatibility
 
----
+## 📊 How xats Compares
 
-## 2. The `xats` Philosophy
+### Comparison with Academic/Textbook Content Standards
 
-Traditional document formats are designed for human consumption and visual layout. They are often "black boxes" to machines, making it difficult to parse their underlying pedagogical structure. **xats** was created to solve this problem by adhering to a set of core architectural principles.
+| Feature | **xats** | JATS/BITS | DocBook | EPUB/EDUPUB | DITA |
+|---------|----------|-----------|---------|-------------|------|
+| **Format** | JSON | XML | XML | XHTML/XML | XML |
+| **Primary Focus** | Educational textbooks | Journal articles/STM books | Technical documentation | E-books | Modular technical content |
+| **Learning Objectives** | ✅ Native support | ❌ No | ❌ No | ⚠️ Limited | ❌ No |
+| **Assessment Framework** | ✅ Built-in | ❌ No | ❌ No | ⚠️ Basic | ❌ No |
+| **Adaptive Learning Paths** | ✅ Native pathways | ❌ No | ❌ No | ❌ No | ⚠️ Conditional only |
+| **WCAG 2.1 AA Compliance** | ✅ 100% compliant | ⚠️ Partial | ⚠️ Partial | ✅ Good | ⚠️ Partial |
+| **LTI 1.3 Integration** | ✅ Native | ❌ No | ❌ No | ❌ No | ❌ No |
+| **AI Processing** | ✅ Optimized | ⚠️ Possible | ⚠️ Possible | ⚠️ Limited | ⚠️ Complex |
+| **Interactive Content** | ✅ Extensible | ❌ Limited | ⚠️ Basic | ✅ Good | ⚠️ Documentation only |
+| **Rights Management** | ✅ Comprehensive | ⚠️ Basic | ⚠️ Basic | ✅ Good | ⚠️ Limited |
+| **Semantic Richness** | ✅ Deep semantics | ✅ Academic focused | ✅ Technical focused | ⚠️ Presentation focused | ✅ Structured |
+| **Authoring Complexity** | ✅ Simple JSON | ⚠️ Complex XML | ⚠️ Complex XML | ⚠️ Moderate | ❌ Very complex |
+| **Extensibility** | ✅ JSON extensions | ✅ DTD/Schema | ✅ Customization | ⚠️ Limited | ✅ Specialization |
 
-To understand the "why" behind the schema's design, please read the full **[Architectural Decision Record (ADR)](./docs/ARCHITECTURE.md)**.
+### Key Advantages of xats
 
----
+#### 🎓 **Purpose-Built for Education**
+Unlike general-purpose formats, xats is designed specifically for academic and educational content with native support for:
+- Learning objectives and outcomes
+- Multiple assessment types
+- Adaptive learning pathways
+- Student progress tracking
+- Prerequisite management
 
-## 3. Getting Started
+#### 🤝 **Modern Integration Ready**
+- **LMS Integration**: Native LTI 1.3 support for Canvas, Blackboard, Moodle, etc.
+- **API-First**: JSON format works seamlessly with modern web APIs
+- **Version Control Friendly**: Human-readable JSON works well with Git
+- **Cloud Native**: Optimized for distributed systems and microservices
 
-### a. The Schema
+#### ♿ **Accessibility Excellence**
+- 100% WCAG 2.1 AA compliant
+- Comprehensive alt text support
+- Language identification for all content
+- Semantic structure for screen readers
+- Keyboard navigation support
 
-The official JSON Schema files are organized by version:
-- **Stable Release (v0.1.0):** [`/schemas/v0.1.0/xats.json`](./schemas/v0.1.0/xats.json)
-- **Development (v0.2.0):** [`/schemas/v0.2.0/xats.json`](./schemas/v0.2.0/xats.json) (on `v0.2.0` branch)
+## 🚀 Quick Start
 
-The latest stable version of the JSON Schema is available at:
-"[https://xats.org/schemas/latest/xats.json](https://xats.org/schemas/latest/xats.json)"
+### Installation
 
-### b. Documentation
+```bash
+npm install -g @xats-org/core
+```
 
-Complete schema documentation can be found in this repository. Documentation is organized to serve both contributors and consumers of the schema.
+### Validate a Document
 
-- **[Contributing Guide](./CONTRIBUTING.md):** Document explaining the process and rules for contributing to this project.
-- **[Architectural Decision Record (ADR)](./docs/ARCHITECTURE.md)**: Rationale for the architecture of xats and related components.
-- **[Quickstart Tutorial](./docs/QUICKSTART_TUTORIAL.md):** The best place to start. A hands-on guide to creating your first `xats` document.
-- **[Authoring Guide](./docs/guides/authoring-guide.md):** Best practices for authors and AI agents creating `xats` content.
-- **[Schema Reference Guide](./docs/reference/index.md):** The complete, exhaustive reference for every object and property in the schema.
+```bash
+xats-validate my-textbook.json
+```
 
-### c. A Minimal Example
+### Programmatic Usage
 
-This example shows a simple, valid `xats` document with a single chapter and section.
+```javascript
+import { validateDocument } from '@xats-org/core';
+
+const document = {
+  schemaVersion: "0.2.0",
+  bibliographicEntry: {
+    id: "calculus-101",
+    type: "book",
+    title: "Introduction to Calculus"
+  },
+  subject: "Mathematics",
+  bodyMatter: {
+    contents: [/* ... */]
+  }
+};
+
+const { valid, errors } = await validateDocument(document);
+```
+
+## 📖 Example Document
 
 ```json
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "bibliographicEntry": {
-    "id": "example-book-01",
+    "id": "biology-fundamentals",
     "type": "book",
-    "title": "A Brief Introduction"
+    "title": "Biology Fundamentals",
+    "author": [{"family": "Smith", "given": "Jane"}],
+    "publisher": "Academic Press",
+    "issued": {"date-parts": [[2025, 1]]}
   },
-  "subject": "Example",
+  "subject": "Biology",
+  "language": "en-US",
+  "accessibility": {
+    "wcagLevel": "AA",
+    "features": ["altText", "structuralNavigation", "readingOrder"]
+  },
   "bodyMatter": {
     "contents": [
       {
         "id": "ch-1",
-        "label": "1",
-        "title": "The First Chapter",
+        "label": "Chapter 1",
+        "title": "Introduction to Cell Biology",
+        "learningObjectives": [
+          {
+            "id": "lo-1-1",
+            "description": "Understand the basic structure of a cell"
+          }
+        ],
         "sections": [
           {
             "id": "sec-1-1",
-            "label": "1.1",
-            "title": "Hello, xats",
+            "title": "What is a Cell?",
             "content": [
               {
-                "id": "block-1-1-a",
-                "blockType": "[https://xats.org/core/blocks/paragraph](https://xats.org/core/blocks/paragraph)",
+                "id": "para-1",
+                "blockType": "https://xats.org/core/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
                       "type": "text",
-                      "text": "This is the first paragraph."
+                      "text": "A cell is the smallest unit of life.",
+                      "language": "en-US"
                     }
                   ]
                 }
@@ -92,25 +163,121 @@ This example shows a simple, valid `xats` document with a single chapter and sec
 }
 ```
 
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[Quick Start Tutorial](./docs/QUICKSTART_TUTORIAL.md)** | Get started with your first xats document |
+| **[Authoring Guide](./docs/guides/authoring-guide.md)** | Best practices for content creation |
+| **[Schema Reference](./docs/reference/index.md)** | Complete API reference |
+| **[Architecture](./docs/ARCHITECTURE.md)** | Design decisions and rationale |
+| **[Migration Guide](./docs/guides/migration-guide.md)** | Migrating from v0.1.0 to v0.2.0 |
+| **[Extension Guide](./docs/guides/extension-guide.md)** | Creating custom extensions |
+| **[LTI Integration](./docs/guides/lti-integration.md)** | LMS integration guide |
+| **[Accessibility Guide](./docs/guides/accessibility-guide.md)** | WCAG compliance guide |
+
+## 🏗️ Project Structure
+
+```
+xats-org/core/
+├── schemas/           # JSON Schema definitions
+│   ├── v0.1.0/       # Stable release
+│   └── v0.2.0/       # Development version
+├── src/              # TypeScript source code
+│   ├── validator/    # Validation logic
+│   └── types/        # TypeScript definitions
+├── test/             # Comprehensive test suite
+├── examples/         # Example documents
+├── docs/             # Documentation
+└── bin/              # CLI tools
+```
+
+## 🔄 Version Management
+
+| Branch | Version | Status | Description |
+|--------|---------|--------|-------------|
+| `main` | v0.1.0 | Stable | Latest stable release |
+| `v0.2.0` | v0.2.0 | RC | Release candidate with full WCAG & LTI support |
+| `v0.3.0` | v0.3.0 | Planning | Future features (indexing, case studies) |
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/xats-org/core.git
+cd core
+
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Validate examples
+npm run validate examples/
+```
+
+### Key Contributors
+
+- **Project Steward**: Coordinating development and community
+- **Schema Engineers**: Designing and implementing the schema
+- **Accessibility Champions**: Ensuring WCAG compliance
+- **Documentation Team**: Creating comprehensive guides
+
+## 📈 Roadmap
+
+### v0.2.0 (Current Development)
+- ✅ 100% WCAG 2.1 AA compliance
+- ✅ LTI 1.3 integration
+- ✅ Rights management extension
+- ✅ Core assessment framework
+- 🔄 Documentation updates
+
+### v0.3.0 (Planned)
+- 📑 Formal indexing support
+- 📚 Case study block types
+- 🧠 Metacognitive prompts
+- 🔍 Enhanced search capabilities
+
+### Future Vision
+- 🌍 Internationalization (i18n)
+- 📊 Advanced analytics
+- 🤖 AI authoring tools
+- 📱 Mobile-first rendering
+- 🎮 Gamification elements
+
+See our [full roadmap](./docs/ROADMAP.md) for detailed plans.
+
+## 📄 License
+
+This project is licensed under the [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
+
+## 🌟 Community
+
+- **GitHub**: [github.com/xats-org/core](https://github.com/xats-org/core)
+- **Website**: [xats.org](https://xats.org)
+- **Issues**: [Report bugs or request features](https://github.com/xats-org/core/issues)
+- **Discussions**: [Join the conversation](https://github.com/xats-org/core/discussions)
+
+## 🙏 Acknowledgments
+
+xats is a community-driven project building on decades of work in educational technology and academic publishing. We acknowledge the contributions of:
+
+- The JATS/BITS community for pioneering academic markup
+- The W3C for web standards and accessibility guidelines
+- IMS Global for LTI and educational interoperability standards
+- All our contributors and early adopters
+
 ---
 
-## 4. Contributing
+<div align="center">
 
-This is an open project, and we welcome contributions of all kinds. Please see our **[Contributing Guide](./CONTRIBUTING.md)** to learn how to participate.
+**Building the future of educational content, one schema at a time.**
 
-All contributors are expected to uphold our **[Code of Conduct](./CODE_OF_CONDUCT.md)**.
+Made with ❤️ by the xats community
 
----
-
-## 5. Version Management
-
-The xats project uses a structured branching model:
-- **`main` branch:** Contains the latest stable release (currently v0.1.0)
-- **Version branches:** Active development (e.g., `v0.2.0` for current development)
-- **Permanent history:** All version branches are preserved for reference
-
-For contributing, please see our **[Contributing Guide](./CONTRIBUTING.md)** for detailed branching and PR guidelines.
-
-## 6. Project Vision
-
-To see the future direction of the standard, including planned features and long-term goals for the ecosystem, please read our **[Project Roadmap](./docs/ROADMAP.md)**.
+</div>
