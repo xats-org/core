@@ -8,10 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Initial development of core xats schema validation
-- Comprehensive test suite
-- CLI tooling for validation
-- GitHub Actions CI/CD pipeline
 
 ### Changed
 
@@ -22,6 +18,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Security
+
+## [0.2.0] - 2025-08-19
+
+### Added
+- **Assessment Framework**: Comprehensive assessment support with multiple question types
+  - Multiple choice questions (single and multiple response)
+  - Short answer questions with validation patterns
+  - Essay prompts with rubric support
+- **Accessibility Features**: WCAG 2.1 Level AA compliance
+  - `AccessibilityMetadata` for comprehensive accessibility information
+  - `AssessmentAccessibilitySettings` for assessment-specific accommodations
+  - Support for alternative formats, cognitive supports, and time extensions
+  - Screen reader optimization and keyboard navigation
+- **Pedagogical Metadata**: Cognitive and learning classification
+  - Bloom's Taxonomy level tagging
+  - Difficulty ratings (1-5 scale)
+  - Estimated completion times
+  - Prerequisite tracking
+  - Learning objective alignment
+- **LTI 1.3 Integration**: Learning Tools Interoperability support
+  - Platform registration and tool configuration
+  - Grade passback for assessments
+  - Deep linking capabilities
+- **Rights Management**: Content licensing and copyright tracking
+  - Document-level and element-level rights metadata
+  - Support for Creative Commons and custom licenses
+
+### Documentation
+- Reference documentation for new v0.2.0 objects:
+  - `AccessibilityMetadata` - Comprehensive accessibility information
+  - `AssessmentAccessibilitySettings` - Assessment-specific accommodations
+  - `MultipleChoiceContent` - Multiple choice question structure
+  - `PedagogicalMetadata` - Cognitive and pedagogical classification
+  - `AnswerOption` - Individual answer option structure
+- LTI 1.3 integration guide
+- Rights management examples
+- Comprehensive v0.2.0 example documents
+
+### Changed
+- Schema version now accepts both "0.1.0" and "0.2.0"
+- Enhanced `XatsObject` with accessibility and rights metadata
+- Improved extension system with LTI configuration support
+
+### Technical Improvements
+- Full backward compatibility with v0.1.0 documents
+- Enhanced validation for assessment content
+- Performance optimizations for large documents
+- Comprehensive test coverage for all new features
 
 ## [0.1.0] - 2025-01-17
 
