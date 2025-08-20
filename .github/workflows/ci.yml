@@ -251,8 +251,6 @@ jobs:
       
     - name: Check package sizes
       run: |
-        # Install size-limit if needed
-        pnpm add -D @size-limit/preset-small-lib @size-limit/file
         # Size checking will be implemented in a future iteration
         echo "Size checking temporarily disabled - will be implemented in future version"
       
