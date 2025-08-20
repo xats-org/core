@@ -167,7 +167,7 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(1000); // Should complete in less than 1 second
     });
 
-    it('should handle high-volume validation load', () => {
+    it('should handle high-volume validation load', async () => {
       const testDoc = createMediumDocument();
 
       const startTime = performance.now();
@@ -364,7 +364,7 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(10000); // Should complete in less than 10 seconds
     });
 
-    it('should handle validation burst load', () => {
+    it('should handle validation burst load', async () => {
       const burstSize = 100;
       const docs = Array(burstSize)
         .fill(null)

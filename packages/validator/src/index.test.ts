@@ -24,14 +24,15 @@ describe('XatsValidator', () => {
             {
               id: 'chapter-1',
               title: 'Chapter 1',
-              sections: []
-            }
+              sections: [],
+            },
           ],
         },
       };
 
       const result = validator.validateSync(doc);
       if (!result.isValid) {
+        // eslint-disable-next-line no-console
         console.log('Validation errors:', JSON.stringify(result.errors, null, 2));
       }
       expect(result.isValid).toBe(true);

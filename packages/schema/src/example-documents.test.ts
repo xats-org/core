@@ -185,7 +185,7 @@ describe('Example Document Validation', () => {
       let foundInvalidExamples = 0;
 
       for (const example of invalidExamples) {
-        const examplePath = resolve(process.cwd(), `examples/invalid/${example}`);
+        const examplePath = resolve(__dirname, `../../examples/examples/invalid/${example}`);
 
         let exampleDoc: any;
         try {
