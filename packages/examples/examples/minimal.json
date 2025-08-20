@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "0.1.0",
+  "bibliographicEntry": {
+    "id": "minimal-example",
+    "type": "book",
+    "title": "Minimal Example"
+  },
+  "subject": "Test Subject",
+  "bodyMatter": {
+    "contents": []
+  }
+}
