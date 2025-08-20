@@ -1,16 +1,18 @@
-export interface XatsDocument {
-  schemaVersion: string;
-  bibliographicEntry: Record<string, unknown>;
-  subject: string;
-  frontMatter?: Record<string, unknown>;
-  bodyMatter: Record<string, unknown>;
-  backMatter?: Record<string, unknown>;
-}
+/**
+ * @xats/types - Shared TypeScript Types for xats
+ * 
+ * This package contains all shared type definitions used across the xats monorepo.
+ * Types are organized by domain to make them easy to discover and use.
+ */
 
-export interface XatsMetadata {
-  id?: string;
-  tags?: string[];
-  extensions?: Record<string, unknown>;
-}
+// Re-export all type modules
+export * from './document.js';
+export * from './validation.js';
+export * from './rendering.js';
+export * from './file-modularity.js';
+export * from './schema.js';
+export * from './common.js';
 
-export type XatsVersion = '0.1.0' | '0.2.0' | '0.3.0' | '0.4.0';
+// Version information
+export const XATS_VERSION = '0.4.0';
+export const SCHEMA_VERSION = '0.3.0';
