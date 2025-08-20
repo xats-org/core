@@ -111,7 +111,7 @@ jobs:
       run: pnpm run build
       
     - name: Run tests
-      run: pnpm run test:run
+      run: pnpm run test
       
     - name: Run tests with coverage
       run: pnpm run test:coverage
