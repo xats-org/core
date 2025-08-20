@@ -6,6 +6,38 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The **Extensible Academic Textbook Schema (xats)** is a JSON-based standard for defining educational materials. It creates a deeply semantic, machine-readable format for AI-driven educational tools to generate, deconstruct, and repurpose educational content.
 
+### Monorepo Structure (v0.4.0+)
+
+Starting with v0.4.0, xats is organized as a TypeScript monorepo using Turborepo and pnpm workspaces:
+
+```
+xats/
+├── packages/
+│   ├── @xats/schema/         # Core JSON Schema definitions
+│   ├── @xats/validator/      # Validation logic and error reporting
+│   ├── @xats/types/          # Shared TypeScript types
+│   ├── @xats/cli/            # Command-line interface
+│   ├── @xats/renderer/       # Rendering framework
+│   ├── @xats/mcp-server/     # Model Context Protocol server
+│   ├── @xats/utils/          # Shared utilities
+│   └── @xats/examples/       # Example documents
+├── apps/
+│   ├── docs/                 # Documentation site
+│   └── website/              # xats.org website
+├── turbo.json                # Turborepo configuration
+├── pnpm-workspace.yaml       # pnpm workspace configuration
+└── package.json              # Root package.json
+```
+
+### Development Workflow
+
+When working with the monorepo:
+- Use `pnpm install` to install dependencies
+- Use `pnpm run build` to build all packages
+- Use `pnpm run test` to run all tests
+- Use `pnpm run dev` to start development mode
+- Individual packages can be run with `pnpm --filter @xats/[package] [command]`
+
 ## Memory Management
 
 ### Directory Structure
@@ -209,8 +241,9 @@ git tag v0.2.0-rc1  # Release candidates
 ### Current Active Branches
 
 - **main** - v0.1.0 (stable)
-- **v0.2.0** - Active development (assessment framework)
-- **v0.3.0** - Future development (extended features)
+- **v0.2.0** - Assessment framework (feature complete)
+- **v0.3.0** - Extended features (current development)
+- **v0.4.0** - Monorepo infrastructure (planned)
 
 ## Key Architecture Principles
 
@@ -436,9 +469,13 @@ gh issue create \
 - Add relationships in issue body: `Depends on #X`, `Blocks #Y`, `Related to #Z`
 
 ##### Available Milestones
-- `v0.1.0` - Core functionality and infrastructure (Due: 2025-09-30)
+- `v0.1.0` - Core functionality and infrastructure (Completed)
 - `v0.2.0` - Assessment framework and pedagogy (Due: 2025-11-30)
 - `v0.3.0` - Extended features and ecosystem (Due: 2026-01-31)
+- `v0.4.0` - Monorepo infrastructure and modern tooling (Due: 2026-03-31)
+- `v0.5.0` - Rendering, AI integration & extended features (Due: 2026-05-31)
+- `v0.6.0` - Analytics and advanced internationalization (Due: 2026-09-30)
+- `v0.7.0` - Extended ecosystem and blockchain (Due: 2027-01-31)
 
 ##### GitHub Issue Management Commands
 
