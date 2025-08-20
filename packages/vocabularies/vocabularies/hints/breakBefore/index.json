@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/hints/breakBefore",
+  "title": "Break Before Hint",
+  "description": "Rendering hint to suggest page/section breaks before content",
+  "type": "string",
+  "enum": [
+    "auto",
+    "avoid",
+    "always",
+    "page",
+    "column",
+    "region"
+  ],
+  "default": "auto",
+  "examples": [
+    "page",
+    "column",
+    "always"
+  ]
+}

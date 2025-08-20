@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/pathways/prerequisite",
+  "title": "Prerequisite Learning Pathway",
+  "description": "Pathway to review essential prerequisite knowledge",
+  "type": "object",
+  "properties": {
+    "pathwayType": {
+      "const": "https://xats.org/vocabularies/pathways/prerequisite",
+      "description": "URI identifier for prerequisite pathway type"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of this pathway",
+      "default": "Review essential prerequisite knowledge before proceeding"
+    },
+    "requiredTopics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Topics that must be mastered first",
+      "minItems": 1
+    },
+    "masteryThreshold": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Minimum score required to proceed (0.0-1.0)",
+      "default": 0.8
+    },
+    "estimatedDuration": {
+      "type": "integer",
+      "description": "Estimated time in minutes",
+      "minimum": 1
+    }
+  },
+  "required": ["pathwayType", "requiredTopics"],
+  "examples": [
+    {
+      "pathwayType": "https://xats.org/vocabularies/pathways/prerequisite", 
+      "description": "Master foundational algebra before calculus",
+      "requiredTopics": ["linear equations", "quadratic functions", "exponential functions"],
+      "masteryThreshold": 0.85,
+      "estimatedDuration": 120
+    }
+  ]
+}

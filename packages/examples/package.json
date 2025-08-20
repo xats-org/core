@@ -66,8 +66,7 @@
     "@xats/cli": "workspace:*",
     "@xats/validator": "workspace:*",
     "eslint": "^8.56.0",
-    "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*",
+    "@xats/eslint-config": "workspace:*",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },

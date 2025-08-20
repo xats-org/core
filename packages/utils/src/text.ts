@@ -58,16 +58,26 @@ export function isEmptySemanticText(semanticText: SemanticText): boolean {
   return (
     semanticText.runs.length === 0 ||
     semanticText.runs.every(run => {
-      if ('text' in run) {
-        return run.text.trim() === '';
+      switch (run.type) {
+        case 'text':
+        case 'emphasis':
+        case 'strong':
+        case 'code':
+        case 'subscript':
+        case 'superscript':
+        case 'strikethrough':
+        case 'underline':
+        case 'index':
+          return 'text' in run ? run.text.trim() === '' : true;
+        case 'reference':
+          return 'label' in run && run.label ? run.label.trim() === '' : true;
+        case 'mathInline':
+          return 'math' in run ? run.math.trim() === '' : true;
+        case 'citation':
+          return true;
+        default:
+          return true;
       }
-      if (run.type === 'reference' && run.label) {
-        return run.label.trim() === '';
-      }
-      if (run.type === 'mathInline') {
-        return run.math.trim() === '';
-      }
-      return run.type === 'citation';
     })
   );
 }
@@ -86,12 +96,12 @@ export function mergeConsecutiveRuns(semanticText: SemanticText): SemanticText {
       lastRun.type === run.type &&
       'text' in lastRun &&
       'text' in run &&
-      lastRun.type !== 'reference' &&
-      lastRun.type !== 'citation' &&
-      lastRun.type !== 'mathInline'
+      (run.type === 'text' || run.type === 'emphasis' || run.type === 'strong' || 
+       run.type === 'code' || run.type === 'subscript' || run.type === 'superscript' ||
+       run.type === 'strikethrough' || run.type === 'underline' || run.type === 'index')
     ) {
       // Merge consecutive text runs of the same type
-      lastRun.text += run.text;
+      (lastRun as any).text += (run as any).text;
     } else {
       mergedRuns.push({ ...run });
     }
@@ -152,9 +162,31 @@ export function truncateSemanticText(
   const truncatedRuns: SemanticTextRun[] = [];
   
   for (const run of semanticText.runs) {
-    const runText = 'text' in run ? run.text : 
-                    run.type === 'reference' ? (run.label || '') :
-                    run.type === 'mathInline' ? run.math : '';
+    let runText = '';
+    switch (run.type) {
+      case 'text':
+      case 'emphasis':
+      case 'strong':
+      case 'code':
+      case 'subscript':
+      case 'superscript':
+      case 'strikethrough':
+      case 'underline':
+      case 'index':
+        runText = 'text' in run ? run.text : '';
+        break;
+      case 'reference':
+        runText = 'label' in run && run.label ? run.label : '';
+        break;
+      case 'mathInline':
+        runText = 'math' in run ? run.math : '';
+        break;
+      case 'citation':
+        runText = '';
+        break;
+      default:
+        runText = '';
+    }
     
     if (currentLength + runText.length <= maxLength) {
       truncatedRuns.push(run);

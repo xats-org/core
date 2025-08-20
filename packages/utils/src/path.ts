@@ -5,8 +5,19 @@ import type {
   ContentBlock,
   StructuralContainer,
   Pathway,
-  PathwayCondition,
 } from '@xats/types';
+
+/**
+ * Pathway condition interface for evaluation
+ */
+export interface PathwayCondition {
+  type: 'assessment' | 'completion' | 'composite';
+  operator?: 'and' | 'or' | 'greater_than' | 'less_than' | 'equal_to' | 'greater_than_or_equal' | 'less_than_or_equal';
+  assessmentId?: string;
+  contentId?: string;
+  value?: number;
+  conditions?: PathwayCondition[];
+}
 
 /**
  * Generate a path string for a structural element
@@ -87,6 +98,7 @@ export function evaluateCondition(
 ): boolean {
   switch (condition.type) {
     case 'assessment':
+      if (!condition.assessmentId || condition.value === undefined) return false;
       const score = context[condition.assessmentId];
       if (typeof score !== 'number') return false;
       
@@ -106,9 +118,11 @@ export function evaluateCondition(
       }
     
     case 'completion':
+      if (!condition.contentId) return false;
       return Boolean(context[condition.contentId]);
     
     case 'composite':
+      if (!condition.conditions) return false;
       if (condition.operator === 'and') {
         return condition.conditions.every(c => evaluateCondition(c, context));
       } else {
@@ -128,8 +142,9 @@ export function getNextContent(
   context: Record<string, any>
 ): string | null {
   for (const pathway of pathways) {
-    if (!pathway.condition || evaluateCondition(pathway.condition, context)) {
-      return pathway.targetId;
+    if (!pathway.condition || (typeof pathway.condition === 'string' ? false : evaluateCondition(pathway.condition as PathwayCondition, context))) {
+      // Pathways don't have targetId in the current schema, use id instead
+      return pathway.id;
     }
   }
   
@@ -142,7 +157,7 @@ export function getNextContent(
 export interface Breadcrumb {
   id: string;
   title?: string;
-  label?: string;
+  label?: string | undefined;
   path: string;
 }
 
@@ -160,9 +175,9 @@ export function buildBreadcrumbs(
     
     if (element && 'title' in element) {
       breadcrumbs.push({
-        id: element.id,
-        title: element.title,
-        label: 'label' in element ? element.label : undefined,
+        id: element.id || '',
+        title: typeof element.title === 'string' ? element.title : JSON.stringify(element.title),
+        label: ('label' in element && element.label) ? element.label : undefined,
         path: currentPath,
       });
     }

@@ -62,8 +62,7 @@
     "@types/node": "^20.11.0",
     "@vitest/coverage-v8": "^1.2.0",
     "eslint": "^8.56.0",
-    "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*",
+    "@xats/eslint-config": "workspace:*",
     "typescript": "^5.3.3",
     "vitest": "^1.2.0"
   },

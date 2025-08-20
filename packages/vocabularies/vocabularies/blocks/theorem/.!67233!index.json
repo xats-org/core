@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/blocks/theorem",
+  "title": "Theorem Block",
+  "description": "A semantic callout block for theorems, laws, or principles",
+  "type": "object",
+  "properties": {
+    "blockType": {
+      "const": "https://xats.org/vocabularies/blocks/theorem",
+      "description": "The URI identifier for this block type"
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "The label for the theorem (e.g., 'Theorem 4.1', 'Newton's First Law')"
+        },
+        "statement": {
+          "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
+          "description": "The statement of the theorem, law, or principle"
+        }
+      },
+      "required": ["label", "statement"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["blockType", "content"],
+  "examples": [
+    {
+      "blockType": "https://xats.org/vocabularies/blocks/theorem",
+      "content": {
+        "label": "Theorem 3.2",
+        "statement": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "For any right triangle, the square of the hypotenuse is equal to the sum of the squares of the other two sides: "
+            },
+            {
+              "type": "emphasis",

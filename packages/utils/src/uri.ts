@@ -57,7 +57,7 @@ export function extractVocabularyType(uri: string): string | null {
   if (!uri.startsWith(XATS_BASE_URI)) return null;
   
   const match = uri.match(/^https:\/\/xats\.org\/(\w+)\//);
-  return match ? match[1] : null;
+  return match ? (match[1] ?? null) : null;
 }
 
 /**
@@ -116,8 +116,8 @@ export function parseXatsUri(uri: string): ParsedUri | null {
       return {
         namespace: XATS_BASE_URI,
         vocabulary: 'core',
-        category: pathParts[1],
-        name: pathParts[2],
+        category: pathParts[1] ?? null,
+        name: pathParts[2] ?? null,
         isCore: true,
         isExtension: false,
       };
@@ -127,8 +127,8 @@ export function parseXatsUri(uri: string): ParsedUri | null {
       return {
         namespace: XATS_BASE_URI,
         vocabulary: `${pathParts[1]}/${pathParts[2]}`,
-        category: pathParts[3],
-        name: pathParts[4],
+        category: pathParts[3] ?? null,
+        name: pathParts[4] ?? null,
         isCore: false,
         isExtension: true,
       };
