@@ -37,13 +37,13 @@
     "src"
   ],
   "scripts": {
-    "build": "tsc && chmod +x dist/cli.js",
+    "build": "tsc --build tsconfig.build.json && chmod +x dist/cli.js",
     "clean": "rm -rf dist .tsbuildinfo",
-    "dev": "tsc --watch",
+    "dev": "tsc --build tsconfig.build.json --watch",
     "lint": "eslint .",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit -p tsconfig.build.json"
   },
   "dependencies": {
     "@xats/schema": "workspace:*",
