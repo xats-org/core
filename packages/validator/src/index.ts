@@ -52,7 +52,7 @@ export class XatsValidator {
       type: 'object',
       additionalProperties: true,
     });
-    
+
     // Also add the resource.citationstyles.org version
     this.ajv.addSchema({
       $id: 'https://resource.citationstyles.org/schema/latest/input/json/csl-data.json',
@@ -95,7 +95,7 @@ export class XatsValidator {
   /**
    * Determine schema version from document or options
    */
-  private determineSchemaVersion(document: unknown, explicitVersion?: string): XatsVersion | string {
+  private determineSchemaVersion(document: unknown, explicitVersion?: string): string {
     if (explicitVersion) {
       return explicitVersion;
     }
@@ -111,11 +111,11 @@ export class XatsValidator {
   /**
    * Get or compile validator for a schema version
    */
-  private getValidator(version: XatsVersion | string): Promise<ValidateFunction | null> {
+  private getValidator(version: string): Promise<ValidateFunction | null> {
     return Promise.resolve(this.getValidatorSync(version));
   }
 
-  private getValidatorSync(version: XatsVersion | string): ValidateFunction | null {
+  private getValidatorSync(version: string): ValidateFunction | null {
     // Check if it's a valid version
     if (!isVersionAvailable(version)) {
       return null;
@@ -242,7 +242,7 @@ export class XatsValidator {
    */
   validateSync(document: unknown, options: ValidatorOptions = {}): ValidationResult {
     const schemaVersion = this.determineSchemaVersion(document, options.schemaVersion);
-    
+
     // Check if it's a valid version
     if (!isVersionAvailable(schemaVersion)) {
       return {
@@ -255,7 +255,7 @@ export class XatsValidator {
         ],
       };
     }
-    
+
     const schemaId = getSchemaId(schemaVersion as XatsVersion);
 
     // Try to get cached validator
