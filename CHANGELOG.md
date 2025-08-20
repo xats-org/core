@@ -19,29 +19,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## [0.3.0] - Unreleased
+## [0.3.0] - 2025-08-19
 
 ### Added
-- **Formal Indexing Support**: Complete implementation of IndexRun for professional publishing
+- **File Modularity System**: Enterprise-scale document organization
+  - `FileReference` support for splitting large textbooks across multiple JSON files
+  - `$ref` JSON Pointer syntax for external file references
+  - `xats:refMetadata` for tracking external content versions and integrity
+  - Validation tools for modular document integrity checking
+  - Team collaboration support with independent file editing
+- **Enhanced Internationalization (i18n)**: Global content support
+  - ISO 639-1 language identification for all content elements (`language` property)
+  - Text direction support (`textDirection`) for RTL languages (Arabic, Hebrew, etc.)
+  - WCAG 3.1.1 and 3.1.2 compliance for language identification
+  - Multi-language content support within single documents
+- **Advanced Indexing System**: Professional publishing-grade indexing
   - New `IndexRun` type in SemanticText for marking indexable terms
-  - Support for hierarchical indexing with sub-terms
+  - Hierarchical indexing with main terms and sub-terms
   - Cross-references and "See also" functionality
-  - Redirect support for index aliases
-- **Case Study Blocks**: New structured content type for case-based learning
-  - Comprehensive scenario and background support
-  - Stakeholder perspectives and timelines
-  - Analysis questions and discussion prompts
-  - Learning objectives integration
-- **Metacognitive Prompt Blocks**: Self-reflection and metacognitive support
-  - 8 distinct prompt types for different cognitive activities
-  - Scaffolding with example responses
-  - Self-assessment integration
-  - Progress tracking support
+  - Redirect support for index aliases ("See" references)
+  - Machine-readable index entries for automated index generation
+- **New Pedagogical Content Types**: Enhanced learning experiences
+  - **Case Study Blocks** (`https://xats.org/core/blocks/caseStudy`):
+    - Comprehensive scenario and background support
+    - Stakeholder perspectives and timeline tracking
+    - Analysis questions with cognitive level specification
+    - Resource attachments and exhibits
+    - Learning objectives integration
+  - **Metacognitive Prompt Blocks** (`https://xats.org/core/blocks/metacognitivePrompt`):
+    - 8 distinct prompt types for different cognitive activities
+    - Scaffolding with sentence starters and examples
+    - Self-assessment and reflection integration
+    - Timing guidance for learning process integration
+- **Enhanced Rights Management**: Publisher-ready licensing
+  - Granular permission model (redistribute, modify, commercial use, derivatives)
+  - Multi-stakeholder copyright support for complex authorship
+  - Attribution requirements and format specification
+  - Geographic and usage restrictions
+  - Expiration date support for time-limited licenses
+- **Expanded Accessibility Framework**: Comprehensive WCAG support
+  - Enhanced `AccessibilityMetadata` with cognitive support features
+  - Assessment accessibility settings for diverse learning needs
+  - Alternative input method support (voice, switch, eye-tracking)
+  - Cognitive accessibility features (reading level, complexity indicators)
+  - Extended time and accommodation support for assessments
 
 ### Changed
-- Updated schema to version 0.3.0 with backward compatibility
-- Enhanced SemanticText to support nested IndexRun elements
-- Expanded block types with case study and metacognitive prompt support
+- **Schema version updated to "0.3.0"** with full backward compatibility for 0.1.0 and 0.2.0 documents
+- **Enhanced SemanticText** to support IndexRun elements alongside existing run types
+- **Expanded block types** with case study and metacognitive prompt support
+- **Improved assessment accessibility** with comprehensive accommodation settings
+- **Enhanced mathematical content** with cognitive accessibility features
+- **Updated table support** with improved accessibility attributes
+- **Refined rights metadata** with granular permission controls
+
+### Fixed
+- **File modularity validation** for complex reference hierarchies
+- **Language tag validation** using proper ISO 639-1 format with region support
+- **Text direction handling** for mixed LTR/RTL content
+- **Index cross-reference validation** for circular dependencies
+- **Assessment accessibility compliance** with WCAG guidelines
+- **Rights inheritance** from document to content element level
 
 ## [0.2.0] - 2025-01-20
 

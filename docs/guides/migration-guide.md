@@ -715,6 +715,228 @@ Integrate reflection opportunities throughout your content:
 }
 ```
 
+#### 4. File Modularity System
+
+**NEW FEATURE**: Split large textbooks across multiple JSON files for better organization and team collaboration.
+
+**FileReference Support:**
+
+```json
+{
+  "bodyMatter": {
+    "contents": [
+      {"$ref": "./chapters/introduction.json"},
+      {"$ref": "./chapters/chapter-01.json"},
+      {"$ref": "./chapters/chapter-02.json"},
+      {"$ref": "./appendices/glossary.json"}
+    ]
+  }
+}
+```
+
+**With Reference Metadata:**
+
+```json
+{
+  "$ref": "./chapters/chapter-01.json",
+  "xats:refMetadata": {
+    "title": "Introduction to Biology",
+    "authors": ["Dr. Jane Smith"],
+    "lastModified": "2025-08-15T10:30:00Z",
+    "checksum": "sha256:abc123...",
+    "version": "1.2.0"
+  }
+}
+```
+
+**Migration Strategy:**
+- **Monolithic Documents**: Continue to work as-is, no changes needed
+- **Large Documents**: Consider splitting by chapter or logical sections
+- **Team Projects**: Use file modularity for concurrent editing
+
+#### 5. Enhanced Internationalization
+
+**ENHANCED**: Comprehensive language and text direction support.
+
+**Language Identification (Enhanced):**
+
+```json
+{
+  "schemaVersion": "0.3.0",
+  "language": "en-US",  // ISO 639-1 with region
+  "textDirection": "ltr",
+  "content": {
+    "runs": [
+      {"type": "text", "text": "The English term ", "language": "en"},
+      {"type": "emphasis", "text": "bonjour", "language": "fr"},
+      {"type": "text", "text": " means hello.", "language": "en"}
+    ]
+  }
+}
+```
+
+**Right-to-Left Language Support:**
+
+```json
+{
+  "language": "ar-SA",
+  "textDirection": "rtl",
+  "content": {
+    "runs": [
+      {"type": "text", "text": "مرحبا بكم في كتابنا المدرسي"}
+    ]
+  }
+}
+```
+
+**Migration Benefits:**
+- **WCAG 3.1.1 Compliance**: Automatic language identification for screen readers
+- **WCAG 3.1.2 Compliance**: Proper text direction rendering
+- **Global Content**: Better support for international textbooks
+
+#### 6. Enhanced Rights Management
+
+**ENHANCED**: Publisher-ready licensing and attribution framework.
+
+**Granular Rights Control:**
+
+```json
+{
+  "rights": {
+    "license": "https://xats.org/licenses/cc-by-sa-4.0",
+    "copyrightHolder": "Advanced Biology Textbooks Inc.",
+    "copyrightYear": "2025",
+    "permissions": {
+      "redistribute": true,
+      "modify": true,
+      "commercialUse": false,
+      "createDerivatives": true,
+      "shareAlike": true
+    },
+    "restrictions": {
+      "noCommercialUse": true,
+      "educationalUseOnly": true,
+      "geographicRestrictions": ["US", "CA"]
+    },
+    "attribution": {
+      "required": true,
+      "format": "Advanced Biology by Dr. Smith, licensed under CC BY-SA 4.0",
+      "includeUrl": true,
+      "includeLicense": true
+    }
+  }
+}
+```
+
+**Multi-Stakeholder Copyright:**
+
+```json
+{
+  "rights": {
+    "copyrightHolder": "Primary Publisher Inc.",
+    "additionalCopyrightHolders": [
+      {
+        "name": "Dr. Jane Smith",
+        "year": "2025",
+        "contribution": "Chapters 1-5"
+      },
+      {
+        "name": "Research Institute",
+        "year": "2024-2025",
+        "contribution": "Data visualizations"
+      }
+    ]
+  }
+}
+```
+
+#### 7. Enhanced Accessibility Features
+
+**ENHANCED**: Comprehensive accessibility support for diverse learning needs.
+
+**Enhanced Accessibility Metadata:**
+
+```json
+{
+  "accessibilityMetadata": {
+    "role": "main",
+    "ariaLabel": "Chapter 3: Cellular Biology",
+    "landmarkType": "main",
+    "headingLevel": 1,
+    "cognitiveSupport": {
+      "complexityLevel": "moderate",
+      "readingLevel": 12.5,
+      "simplifiedVersionAvailable": true,
+      "summaryAvailable": true
+    }
+  }
+}
+```
+
+**Assessment Accessibility Settings:**
+
+```json
+{
+  "accessibilitySettings": {
+    "extendedTime": 1.5,
+    "allowScreenReader": true,
+    "allowKeyboardOnly": true,
+    "textToSpeech": true,
+    "alternativeInputMethods": ["voice", "switch"],
+    "cognitiveSupports": {
+      "allowCalculator": true,
+      "simplifiedInstructions": true,
+      "readAloud": true
+    }
+  }
+}
+```
+
+### Migration Tools for v0.3.0
+
+#### Command Line Tools
+
+```bash
+# Validate v0.3.0 documents with all features
+xats-validate --version 0.3.0 document.json
+
+# Check modular document integrity
+xats-validate --modular --verify-refs document.json
+
+# Validate accessibility compliance
+xats-validate --accessibility --wcag-level AA document.json
+
+# Check internationalization support
+xats-validate --i18n --check-language-tags document.json
+```
+
+#### Modularization Helper
+
+```bash
+# Split large document by chapters
+xats-modularize textbook.json --strategy=by-chapter --output-dir=./chapters
+
+# Generate index from IndexRun markers
+xats-generate-index textbook.json --output=generated-index.json
+
+# Extract translatable content
+xats-extract-i18n textbook.json --target-language=es --output=translation-strings.json
+```
+
+### Recommended Migration Steps
+
+1. **Update Schema Version**: Change `"schemaVersion"` from `"0.2.0"` to `"0.3.0"`
+
+2. **Enhance Language Support**: Add language and text direction properties
+
+3. **Consider File Modularity**: For large documents, evaluate splitting into multiple files
+
+4. **Add IndexRun Markers**: Mark important terms for automatic index generation
+
+5. **Enhance Rights Metadata**: Add granular licensing information if needed
+
+6. **Validate Thoroughly**: Use comprehensive validation tools to ensure compliance
+
 ## General Migration Patterns
 
 ### Incremental Enhancement Strategy

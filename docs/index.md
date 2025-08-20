@@ -12,10 +12,11 @@ Welcome to the comprehensive documentation for the **Extensible Academic Textboo
 ## Current Version: v0.3.0
 
 **Latest Features:**
-- Formal indexing support with IndexRun
-- Case study blocks for applied learning
-- Metacognitive prompt blocks for reflection
-- Enhanced pedagogical metadata
+- File modularity for large textbook organization
+- Enhanced internationalization with language and RTL support
+- Advanced indexing with IndexRun type
+- New pedagogical content types (case studies, metacognitive prompts)
+- Enhanced rights management and accessibility features
 
 ## Documentation Categories
 
@@ -68,22 +69,24 @@ For contributors and tool developers:
 ## Version Information
 
 | Version | Status | Features | Migration |
-|---------|--------|----------|-----------|
-| **v0.3.0** | 🚧 Development | IndexRun, Case Studies, Metacognitive Prompts | [v0.2.0→v0.3.0](guides/migration-guide.md#v020--v030-migration) |
-| **v0.2.0** | ✅ Stable | WCAG AA, LTI 1.3, Assessments, Rights Management | [v0.1.0→v0.2.0](guides/migration-guide.md#v010--v020-migration) |
+|---------|--------|----------|----------|
+| **v0.4.0** | 🚧 Development | AI Integration, Advanced Analytics | [Migration Guide](guides/migration-guide.md) |
+| **v0.3.0** | ✅ Stable | File Modularity, i18n, IndexRun, Case Studies, Metacognitive Prompts | [v0.2.0→v0.3.0](guides/migration-guide.md#v020--v030-migration) |
+| **v0.2.0** | 🔒 Security Only | WCAG AA, LTI 1.3, Assessments, Rights Management | [v0.1.0→v0.2.0](guides/migration-guide.md#v010--v020-migration) |
 | **v0.1.0** | 🔒 Security Only | Core schema, Basic content types | Initial release |
 
 **Version Support:**
-- ✅ **Full Support**: v0.3.0 (development), v0.2.0 (stable)
-- 🔒 **Security Only**: v0.1.0 (until 2026-01-01)
+- ✅ **Full Support**: v0.3.0 (stable), v0.4.0 (development)
+- 🔒 **Security Only**: v0.2.0, v0.1.0 (until 2026-01-01)
 
 ## Key Features by Version
 
 ### v0.3.0 Features
-- **Formal Indexing**: Professional publishing with IndexRun elements
-- **Case Studies**: Structured case-based learning content
-- **Metacognitive Prompts**: Self-reflection and learning strategies
-- **Enhanced Pedagogy**: Expanded pedagogical metadata
+- **File Modularity**: Split large textbooks across multiple files
+- **Enhanced Internationalization**: Language identification and RTL support
+- **Advanced Indexing**: Professional publishing with IndexRun elements
+- **New Pedagogical Content**: Case studies and metacognitive prompts
+- **Enhanced Rights Management**: Granular licensing and attribution control
 
 ### v0.2.0 Features
 - **WCAG 2.1 AA Compliance**: Full accessibility support
@@ -138,7 +141,7 @@ For contributors and tool developers:
 
 **Most Popular:**
 1. [Getting Started Tutorial](QUICKSTART_TUTORIAL.md)
-2. [Migration Guide v0.1.0→v0.2.0](guides/migration-guide.md#v010--v020-migration)
+2. [Migration Guide v0.2.0→v0.3.0](guides/migration-guide.md#v020--v030-migration)
 3. [Accessibility Implementation](guides/accessibility-guide.md)
 4. [LTI Integration Setup](integration/lti-1.3-integration-guide.md)
 5. [Complete Schema Reference](reference/index.md)
@@ -148,7 +151,7 @@ For contributors and tool developers:
 2. [Version Compatibility Matrix](specs/version-compatibility-matrix.md) *(New)*
 3. [Migration Tools Reference](specs/migration-tools.md) *(New)*
 4. [v0.2.0→v0.3.0 Migration](guides/migration-guide.md#v020--v030-migration) *(New)*
-5. [v0.3.0 Release Notes](../CHANGELOG.md#030) *(Updated)*
+5. [v0.3.0 Release Notes](releases/v0.3.0.md) *(New)*
 
 ---
 

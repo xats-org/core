@@ -1,6 +1,6 @@
 # xats Project Roadmap
 
-**Version:** 2.0 (for xats schema v0.2.0)
+**Version:** 3.0 (for xats schema v0.3.0)
 **Status:** Living Document
 
 ---
@@ -11,9 +11,9 @@ This document outlines the future direction for the **Extensible Academic Textbo
 
 ---
 
-## 2. Near-Term Roadmap (v0.2.0 - v0.3.0)
+## 2. Recent Completions (v0.2.0 - v0.3.0)
 
-This phase focuses on implementing the most critical missing features to make **xats** a viable platform for creating and distributing high-quality, pedagogically sound educational content.
+This phase completed the most critical missing features to make **xats** a viable platform for creating and distributing high-quality, pedagogically sound educational content.
 
 ### a. ✅ Formal Assessment Vocabulary & Pedagogical Metadata (v0.2.0 - COMPLETED)
 
@@ -32,12 +32,19 @@ This phase focuses on implementing the most critical missing features to make **
 - ✅ **Assessment Analytics:** Built-in support for learning analytics through detailed metadata
 - ✅ **Accessibility Compliance:** Comprehensive WCAG 2.1 AA compliance for all assessment types with `AssessmentAccessibilitySettings`
 
-### b. Support for Authentic & Formative Assessment (v0.3.0 - IN PROGRESS)
+### b. ✅ Support for Authentic & Formative Assessment (v0.3.0 - COMPLETED)
 
-To support modern pedagogy, we are expanding beyond traditional testing formats.
-- **New `blockType` for Case Studies:** A core `blockType` (`.../blocks/caseStudy`) will be introduced to structure case-based problems, a cornerstone of higher education in fields like business, law, and medicine.
-- **Metacognitive Prompts:** A new `blockType` (`.../blocks/metacognitivePrompt`) will be defined for prompts that encourage student self-reflection (e.g., "What was the most challenging concept in this section and why?").
-- **Performance Tasks:** Extended assessment activities that require multiple steps and real-world application.
+**COMPLETED:** Expanded beyond traditional testing formats to support modern pedagogy.
+
+**Implemented `blockType` URIs:**
+- ✅ `https://xats.org/core/blocks/caseStudy`
+- ✅ `https://xats.org/core/blocks/metacognitivePrompt`
+
+**Completed Features:**
+- ✅ **Case Study Blocks:** Complete support for case-based learning with scenarios, stakeholders, timelines, and analysis questions
+- ✅ **Metacognitive Prompts:** 8 distinct prompt types for self-reflection and learning strategies
+- ✅ **Scaffolding Support:** Sentence starters, examples, and rubrics for student guidance
+- ✅ **Pedagogical Integration:** Learning objectives linking and cognitive level specification
 
 ### c. ✅ Enhanced Accessibility & Navigation (v0.2.0 - COMPLETED)
 
@@ -73,16 +80,50 @@ To support modern pedagogy, we are expanding beyond traditional testing formats.
 - ✅ **Platform Registration:** `ltiConfiguration` for tool setup and registration
 - ✅ **Pathway Integration:** `ltiPathwayIntegration` for adaptive learning with grade data
 
-### f. Formal Indexing Support (v0.3.0)
+### f. ✅ Formal Indexing Support (v0.3.0 - COMPLETED)
 
-The current `index` placeholder is a simple marker. A more advanced system is needed for professional publishing.
-- **New `IndexRun`:** A new run type will be added to `SemanticText` to allow authors to tag a specific word or phrase as indexable.
-- **Hierarchical Indexing:** The `IndexRun` will support nested terms and cross-references ("See also:").
-- Consider that IndexRuns may be nested within other runs (since it will be targeting a phrase that may be a portion of other runs)
+**COMPLETED:** Advanced indexing system for professional publishing.
+
+**Implemented Features:**
+- ✅ **IndexRun Type:** New run type in `SemanticText` for marking indexable terms
+- ✅ **Hierarchical Indexing:** Support for main terms and sub-terms
+- ✅ **Cross-References:** "See also" functionality and redirect support
+- ✅ **Machine-Readable:** Structured index entries for automated index generation
+- ✅ **Nested Support:** IndexRuns can be embedded within other semantic runs
+
+### g. ✅ File Modularity System (v0.3.0 - COMPLETED)
+
+**NEW FEATURE:** Enterprise-scale document organization capabilities.
+
+**Implemented Features:**
+- ✅ **FileReference Support:** `$ref` JSON Pointer syntax for external file references
+- ✅ **Metadata Tracking:** `xats:refMetadata` for version and integrity validation
+- ✅ **Team Collaboration:** Independent file editing for large textbook projects
+- ✅ **Validation Tools:** Comprehensive modular document integrity checking
+
+### h. ✅ Enhanced Internationalization (v0.3.0 - COMPLETED)
+
+**ENHANCED:** Global content support with comprehensive i18n features.
+
+**Implemented Features:**
+- ✅ **Language Identification:** ISO 639-1 codes for all content elements
+- ✅ **Text Direction Support:** RTL language support for Arabic, Hebrew, etc.
+- ✅ **WCAG Compliance:** Full 3.1.1 and 3.1.2 compliance for accessibility
+- ✅ **Multi-Language Content:** Mixed language support within documents
+
+### i. ✅ Enhanced Rights Management (v0.3.0 - COMPLETED)
+
+**ENHANCED:** Publisher-ready licensing and attribution framework.
+
+**Implemented Features:**
+- ✅ **Granular Permissions:** Fine-grained control over usage rights
+- ✅ **Multi-Stakeholder Copyright:** Complex authorship and collaboration support
+- ✅ **Attribution Framework:** Required attribution formats and specifications
+- ✅ **Commercial Licensing:** Publisher-ready licensing and restriction controls
 
 ---
 
-## 3. Mid-Term Roadmap (v0.4.0 - v0.9.0)
+## 3. Near-Term Roadmap (v0.4.0 - v0.6.0)
 
 This phase focuses on expanding the ecosystem, improving the scholarly and production lifecycle, and handling more complex use cases.
 
@@ -101,15 +142,52 @@ Content provenance and rights management are critical for academic integrity and
 - **Content Block History:** We will investigate a standard pattern for tracking the version history of a specific `ContentBlock`, including author, date, and a summary of the change.
 - **AI Generation Metadata:** A standard extension will be defined to allow AI-generated content to be explicitly marked as such, including the model used and the prompt.
 
-### c. Internationalization (i18n) and Localization (l10n)
+### c. Advanced Internationalization (v0.4.0)
 
-A truly universal standard must support multiple languages.
-- **Content Translation:** We will define a standard pattern to allow objects to hold multiple language versions of their content.
-- **Locale-Specific Rendering:** We will research a mechanism for providing locale-specific `renderingHints`.
+Building on v0.3.0's i18n foundation for advanced multi-language support.
+- **Content Translation:** Standard patterns for multiple language versions within single objects
+- **Locale-Specific Rendering:** Locale-aware `renderingHints` and cultural adaptations
+- **Translation Workflow:** Integration with professional translation management systems
+
+### d. AI Integration Framework (v0.4.0)
+
+Native support for AI-powered content generation and enhancement.
+- **AI Generation Metadata:** Standard marking for AI-generated content with model attribution
+- **Content Generation APIs:** Structured interfaces for AI content creation
+- **Quality Assurance:** AI-powered validation and content quality assessment
+- **Adaptive Content:** AI-driven content personalization based on learner analytics
+
+### e. Advanced Analytics Platform (v0.5.0)
+
+Comprehensive learning analytics and content performance measurement.
+- **Learning Analytics Framework:** Detailed student interaction and performance tracking
+- **Content Performance Metrics:** Usage patterns, engagement rates, and learning outcome correlations
+- **Publisher Analytics:** Commercial metrics for content effectiveness and market performance
+- **Privacy-First Design:** GDPR/CCPA compliant analytics with learner consent management
 
 ---
 
-## 4. Long-Term Vision & Research (v1.0.0 and Beyond)
+## 4. Mid-Term Vision (v0.7.0 - v0.9.0)
+
+Advanced ecosystem integration and specialized domain support.
+
+### a. Specialized Domain Extensions
+
+Discipline-specific extensions for complex academic fields.
+- **STEM Extensions:** Advanced mathematical notation, chemical formulas, and scientific diagrams
+- **Medical Education:** Clinical case studies, patient simulations, and medical imaging integration
+- **Legal Education:** Case law integration, legal citation standards, and mock trial scenarios
+- **Business Education:** Financial modeling, market simulations, and corporate case studies
+
+### b. Immersive Content Support
+
+Next-generation educational content delivery.
+- **VR/AR Integration:** Virtual and augmented reality content embedding
+- **Interactive Simulations:** Complex educational simulations and virtual laboratories
+- **3D Content:** Three-dimensional models and interactive visualizations
+- **Gamification Elements:** Achievement systems, progress tracking, and educational games
+
+## 5. Long-Term Vision & Research (v1.0.0 and Beyond)
 
 This phase focuses on the long-term health, governance, and deep integration of the **xats** standard into the academic and publishing landscape.
 
@@ -134,3 +212,6 @@ To achieve widespread adoption, **xats** must integrate seamlessly with the tool
 - **Governance and Community Stewardship:** A formal governance model will be established, with working groups for specialized disciplines and for publishers to ensure the standard meets the unique needs of different fields and the realities of the market.
 - **Official Tooling:** The project will sponsor key open-source tools, including a `xats-validator`, a baseline `xats-renderer-js`, and a `xats-a11y-checker`.
 - **AI Agent Collaboration Protocol:** We will propose a simple standard for how different AI agents can hand off `xats` documents to each other in a collaborative pipeline.
+- **Decentralized Content Networks:** Blockchain-based content distribution and rights management
+- **Quantum-Ready Security:** Post-quantum cryptographic standards for long-term content protection
+- **Neural Content Interfaces:** Direct brain-computer interfaces for enhanced learning experiences
