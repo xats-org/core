@@ -160,6 +160,78 @@ See the [v0.3.0 Release Notes](./docs/releases/v0.3.0.md) for complete details.
 
 ---
 
+## Monorepo Development (v0.4.0+)
+
+Starting with v0.4.0, xats is organized as a TypeScript monorepo using Turborepo and pnpm workspaces. This enables better code organization, shared dependencies, and parallel builds.
+
+### Prerequisites
+- Node.js >= 18.0.0
+- pnpm >= 8.0.0 (Install with `npm install -g pnpm`)
+
+### Getting Started
+```bash
+# Clone the repository
+git clone https://github.com/xats-org/core.git
+cd core
+
+# Install pnpm if not already installed
+npm install -g pnpm
+
+# Install dependencies for all packages
+pnpm install
+
+# Build all packages
+pnpm run build
+
+# Run tests across all packages
+pnpm run test
+
+# Start development mode
+pnpm run dev
+```
+
+### Monorepo Structure
+```
+xats/
+├── packages/           # Core packages
+│   ├── @xats/schema/   # JSON Schema definitions
+│   ├── @xats/validator/# Validation logic
+│   ├── @xats/types/    # Shared TypeScript types
+│   ├── @xats/cli/      # Command-line interface
+│   └── ...
+├── apps/              # Applications
+│   ├── docs/          # Documentation site
+│   └── website/       # xats.org website
+└── turbo.json         # Turborepo configuration
+```
+
+### Working with Packages
+```bash
+# Run commands for specific packages
+pnpm --filter @xats/schema build
+pnpm --filter @xats/validator test
+
+# Add dependencies to a specific package
+pnpm --filter @xats/schema add ajv
+
+# Add dev dependencies to root
+pnpm add -D -w eslint
+```
+
+### Turborepo Features
+- **Parallel Builds**: Packages build in parallel based on dependency graph
+- **Caching**: Build outputs are cached for faster subsequent builds
+- **Watch Mode**: `pnpm run dev` watches all packages for changes
+- **Pipeline Optimization**: Tasks run in optimal order based on dependencies
+
+### Creating New Packages
+1. Create a new directory under `packages/` or `apps/`
+2. Add a `package.json` with appropriate name and scripts
+3. Add TypeScript configuration extending root config
+4. Update dependencies in other packages as needed
+
+---
+
 ## Development Guidelines
 
 ### Schema Validation
