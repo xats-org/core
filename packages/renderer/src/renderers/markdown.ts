@@ -8,6 +8,9 @@ import type {
   SemanticText,
   SemanticTextRun,
   StructuralContainer,
+  FrontMatter,
+  BodyMatter,
+  BackMatter,
 } from '@xats/types';
 
 export interface MarkdownRendererOptions extends RendererOptions {
@@ -39,15 +42,15 @@ export class MarkdownRenderer extends BaseRenderer {
     parts.push(this.renderMetadata(document));
     
     if (document.frontMatter) {
-      parts.push(this.renderStructuralContainer(document.frontMatter));
+      parts.push(this.renderDocumentSection('frontmatter', document.frontMatter));
     }
     
     if (document.bodyMatter) {
-      parts.push(this.renderStructuralContainer(document.bodyMatter));
+      parts.push(this.renderDocumentSection('bodymatter', document.bodyMatter));
     }
     
     if (document.backMatter) {
-      parts.push(this.renderStructuralContainer(document.backMatter));
+      parts.push(this.renderDocumentSection('backmatter', document.backMatter));
     }
     
     return parts.filter(Boolean).join('\n\n');
@@ -64,9 +67,12 @@ export class MarkdownRenderer extends BaseRenderer {
       }
       
       if (bib.author && bib.author.length > 0) {
-        const authors = bib.author.map(a => 
-          a.literal || `${a.given || ''} ${a.family || ''}`.trim()
-        ).join(', ');
+        const authors = bib.author.map(a => {
+          if ('literal' in a && a.literal) {
+            return a.literal;
+          }
+          return `${a.given || ''} ${a.family || ''}`.trim();
+        }).join(', ');
         parts.push(`**Authors:** ${authors}`);
       }
       
@@ -92,16 +98,18 @@ export class MarkdownRenderer extends BaseRenderer {
     
     if (container.label || container.title) {
       const level = this.getHeadingLevel(container);
-      const heading = container.label && container.title 
-        ? `${container.label}: ${container.title}`
-        : container.label || container.title || '';
+      const labelText = container.label || '';
+      const titleText = container.title ? this.renderSemanticText(container.title) : '';
+      const heading = labelText && titleText 
+        ? `${labelText}: ${titleText}`
+        : labelText || titleText || '';
       
       if (heading) {
         parts.push(this.renderHeading(level, heading));
       }
     }
     
-    if (container.contents) {
+    if ('contents' in container && container.contents && Array.isArray(container.contents)) {
       this.currentDepth++;
       parts.push(this.renderContents(container.contents));
       this.currentDepth--;
@@ -131,27 +139,42 @@ export class MarkdownRenderer extends BaseRenderer {
     
     switch (typeName) {
       case 'paragraph':
-        return this.renderSemanticText(block.content);
+        if (this.isSemanticText(block.content)) {
+          return this.renderSemanticText(block.content);
+        }
+        return this.escapeText(String(block.content));
       
       case 'heading':
-        const level = block.content.level || 1;
-        const text = this.renderSemanticText(block.content.text);
-        return this.renderHeading(level + this.currentDepth, text);
+        if (this.isHeadingContent(block.content)) {
+          const level = block.content.level || 1;
+          const text = this.renderSemanticText(block.content.text);
+          return this.renderHeading(level + this.currentDepth, text);
+        }
+        return this.renderHeading(2, this.escapeText(String(block.content)));
       
       case 'list':
         return this.renderList(block.content);
       
       case 'blockquote':
-        const quoted = this.renderSemanticText(block.content.text);
-        return quoted.split('\n').map(line => `> ${line}`).join('\n');
+        if (this.isBlockquoteContent(block.content)) {
+          const quoted = this.renderSemanticText(block.content.text);
+          return quoted.split('\n').map(line => `> ${line}`).join('\n');
+        }
+        return `> ${this.escapeText(String(block.content))}`;
       
       case 'codeBlock':
-        const lang = block.content.language || '';
-        const code = block.content.code;
-        return '```' + lang + '\n' + code + '\n```';
+        if (this.isCodeBlockContent(block.content)) {
+          const lang = block.content.language || '';
+          const code = block.content.code;
+          return '```' + lang + '\n' + code + '\n```';
+        }
+        return '```\n' + String(block.content) + '\n```';
       
       case 'mathBlock':
-        return '$$\n' + block.content.math + '\n$$';
+        if (this.isMathBlockContent(block.content)) {
+          return '$$\n' + block.content.math + '\n$$';
+        }
+        return '$$\n' + String(block.content) + '\n$$';
       
       case 'table':
         return this.renderTable(block.content);
@@ -200,12 +223,12 @@ export class MarkdownRenderer extends BaseRenderer {
         return `<u>${this.escapeText(run.text)}</u>`;
       
       case 'reference':
-        const label = run.label || 'Reference';
-        const target = run.targetId ? `#${run.targetId}` : '';
+        const label = run.label || run.text || 'Reference';
+        const target = run.ref ? `#${run.ref}` : '';
         return `[${label}](${target})`;
       
       case 'citation':
-        return `[^${run.citationId}]`;
+        return `[^${run.citeKey}]`;
       
       case 'mathInline':
         return `$${run.math}$`;
@@ -233,7 +256,7 @@ export class MarkdownRenderer extends BaseRenderer {
   }
   
   private renderHeading(level: number, text: string): string {
-    const adjustedLevel = Math.min(6, Math.max(1, level + this.mdOptions.headingOffset));
+    const adjustedLevel = Math.min(6, Math.max(1, level + (this.mdOptions.headingOffset ?? 0)));
     
     if (this.mdOptions.useSetext && adjustedLevel <= 2) {
       return adjustedLevel === 1 
@@ -245,24 +268,32 @@ export class MarkdownRenderer extends BaseRenderer {
   }
   
   private getHeadingLevel(container: StructuralContainer): number {
-    switch (container.type) {
-      case 'unit':
-        return 2;
-      case 'chapter':
-        return 3;
-      case 'section':
-        return 4;
-      default:
-        return 5;
+    // Determine heading level based on container type
+    if ('contents' in container) {
+      const firstContent = Array.isArray(container.contents) ? container.contents[0] : null;
+      if (firstContent && 'blockType' in firstContent) {
+        return 4; // Sections
+      } else if (firstContent && 'contents' in firstContent) {
+        const nestedContent = Array.isArray(firstContent.contents) ? firstContent.contents[0] : null;
+        if (nestedContent && 'blockType' in nestedContent) {
+          return 3; // Chapters
+        }
+        return 2; // Units
+      }
     }
+    return 5; // Default for unknown types
   }
   
   private renderList(content: any): string {
-    const bullet = this.mdOptions.bulletChar;
+    if (!content || !content.items || !Array.isArray(content.items)) {
+      return String(content);
+    }
+    
+    const bullet = this.mdOptions.bulletChar ?? '-';
     const items: string[] = [];
     
     content.items.forEach((item: any, index: number) => {
-      const text = this.renderSemanticText(item);
+      const text = this.isSemanticText(item) ? this.renderSemanticText(item) : String(item);
       const prefix = content.ordered ? `${index + 1}.` : bullet;
       
       // Handle multi-line items
@@ -319,5 +350,76 @@ export class MarkdownRenderer extends BaseRenderer {
     }
     
     return parts.join('\n\n');
+  }
+
+  private renderDocumentSection(
+    sectionType: 'frontmatter' | 'bodymatter' | 'backmatter',
+    section: FrontMatter | BodyMatter | BackMatter
+  ): string {
+    const parts: string[] = [];
+    
+    if (sectionType === 'bodymatter' && 'contents' in section && Array.isArray(section.contents)) {
+      return this.renderContents(section.contents);
+    } else {
+      // Handle FrontMatter and BackMatter properties
+      Object.entries(section).forEach(([key, value]) => {
+        if (key !== 'contents' && Array.isArray(value)) {
+          parts.push(this.renderHeading(2, this.formatSectionTitle(key)));
+          parts.push(value.map(block => this.renderContentBlock(block)).join('\n\n'));
+        }
+      });
+    }
+    
+    return parts.filter(Boolean).join('\n\n');
+  }
+
+  private formatSectionTitle(key: string): string {
+    return key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+  }
+
+  // Type guard methods
+  private isSemanticText(content: unknown): content is SemanticText {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'runs' in content &&
+      Array.isArray((content as any).runs)
+    );
+  }
+
+  private isHeadingContent(content: unknown): content is { level?: number; text: SemanticText } {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'text' in content &&
+      this.isSemanticText((content as any).text)
+    );
+  }
+
+  private isBlockquoteContent(content: unknown): content is { text: SemanticText } {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'text' in content &&
+      this.isSemanticText((content as any).text)
+    );
+  }
+
+  private isCodeBlockContent(content: unknown): content is { code: string; language?: string } {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'code' in content &&
+      typeof (content as any).code === 'string'
+    );
+  }
+
+  private isMathBlockContent(content: unknown): content is { math: string } {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'math' in content &&
+      typeof (content as any).math === 'string'
+    );
   }
 }

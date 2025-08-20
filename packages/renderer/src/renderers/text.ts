@@ -9,6 +9,9 @@ import type {
   SemanticText,
   SemanticTextRun,
   StructuralContainer,
+  FrontMatter,
+  BodyMatter,
+  BackMatter,
 } from '@xats/types';
 
 export interface TextRendererOptions extends RendererOptions {
@@ -40,18 +43,18 @@ export class TextRenderer extends BaseRenderer {
     parts.push(this.renderMetadata(document));
     
     if (document.frontMatter) {
-      parts.push(this.textOptions.sectionSeparator);
-      parts.push(this.renderStructuralContainer(document.frontMatter));
+      parts.push(this.textOptions.sectionSeparator || '');
+      parts.push(this.renderDocumentSection('frontmatter', document.frontMatter));
     }
     
     if (document.bodyMatter) {
-      parts.push(this.textOptions.sectionSeparator);
-      parts.push(this.renderStructuralContainer(document.bodyMatter));
+      parts.push(this.textOptions.sectionSeparator || '');
+      parts.push(this.renderDocumentSection('bodymatter', document.bodyMatter));
     }
     
     if (document.backMatter) {
-      parts.push(this.textOptions.sectionSeparator);
-      parts.push(this.renderStructuralContainer(document.backMatter));
+      parts.push(this.textOptions.sectionSeparator || '');
+      parts.push(this.renderDocumentSection('backmatter', document.backMatter));
     }
     
     return parts.filter(Boolean).join('\n');
@@ -69,9 +72,12 @@ export class TextRenderer extends BaseRenderer {
       }
       
       if (bib.author && bib.author.length > 0) {
-        const authors = bib.author.map(a => 
-          a.literal || `${a.given || ''} ${a.family || ''}`.trim()
-        ).join(', ');
+        const authors = bib.author.map(a => {
+          if ('literal' in a && a.literal) {
+            return a.literal;
+          }
+          return `${a.given || ''} ${a.family || ''}`.trim();
+        }).join(', ');
         parts.push(this.center(authors));
         parts.push('');
       }
@@ -100,7 +106,7 @@ export class TextRenderer extends BaseRenderer {
       }
     }
     
-    if (container.contents) {
+    if ('contents' in container && container.contents && Array.isArray(container.contents)) {
       this.currentIndent++;
       const content = this.renderContents(container.contents);
       this.currentIndent--;
@@ -134,18 +140,27 @@ export class TextRenderer extends BaseRenderer {
     
     switch (typeName) {
       case 'paragraph':
-        return this.wrapText(this.renderSemanticText(block.content));
+        if (this.isSemanticText(block.content)) {
+          return this.wrapText(this.renderSemanticText(block.content));
+        }
+        return this.wrapText(String(block.content));
       
       case 'heading':
-        const text = this.renderSemanticText(block.content.text);
-        return this.formatBlockHeading(text, block.content.level || 1);
+        if (this.isHeadingContent(block.content)) {
+          const text = this.renderSemanticText(block.content.text);
+          return this.formatBlockHeading(text, block.content.level || 1);
+        }
+        return this.formatBlockHeading(String(block.content), 1);
       
       case 'list':
         return this.renderList(block.content);
       
       case 'blockquote':
-        const quoted = this.renderSemanticText(block.content.text);
-        return this.indentBlock(quoted, '  | ');
+        if (this.isBlockquoteContent(block.content)) {
+          const quoted = this.renderSemanticText(block.content.text);
+          return this.indentBlock(quoted, '  | ');
+        }
+        return this.indentBlock(String(block.content), '  | ');
       
       case 'codeBlock':
         return this.renderCodeBlock(block.content);
@@ -160,7 +175,7 @@ export class TextRenderer extends BaseRenderer {
         return this.renderFigure(block.content);
       
       case 'horizontalRule':
-        return '-'.repeat(this.textOptions.lineWidth);
+        return '-'.repeat(this.textOptions.lineWidth || 80);
       
       default:
         return `[${typeName}]`;
@@ -187,7 +202,7 @@ export class TextRenderer extends BaseRenderer {
         return run.label || '[ref]';
       
       case 'citation':
-        return `[${run.citationId}]`;
+        return `[${run.citeKey}]`;
       
       case 'mathInline':
         return run.math;
@@ -203,13 +218,13 @@ export class TextRenderer extends BaseRenderer {
   }
   
   private center(text: string): string {
-    const width = this.textOptions.lineWidth;
+    const width = this.textOptions.lineWidth || 80;
     const padding = Math.max(0, Math.floor((width - text.length) / 2));
     return ' '.repeat(padding) + text;
   }
   
   private indent(text: string, prefix?: string): string {
-    const indentStr = prefix || ' '.repeat(this.currentIndent * this.textOptions.indentSize);
+    const indentStr = prefix || ' '.repeat(this.currentIndent * (this.textOptions.indentSize || 2));
     return text.split('\n').map(line => indentStr + line).join('\n');
   }
   
@@ -218,7 +233,7 @@ export class TextRenderer extends BaseRenderer {
   }
   
   private wrapText(text: string): string {
-    const width = this.textOptions.lineWidth - (this.currentIndent * this.textOptions.indentSize);
+    const width = (this.textOptions.lineWidth || 80) - (this.currentIndent * (this.textOptions.indentSize || 2));
     const words = text.split(/\s+/);
     const lines: string[] = [];
     let currentLine = '';
@@ -239,13 +254,18 @@ export class TextRenderer extends BaseRenderer {
   
   private formatHeading(container: StructuralContainer): string {
     const label = container.label;
-    const title = container.title;
+    const titleObj = container.title;
     
-    if (!label && !title) return '';
+    if (!label && !titleObj) return '';
     
-    const text = label && title ? `${label}: ${title}` : label || title || '';
+    const labelText = label || '';
+    const titleText = titleObj ? (typeof titleObj === 'string' ? titleObj : this.renderSemanticText(titleObj)) : '';
+    const text = labelText && titleText ? `${labelText}: ${titleText}` : labelText || titleText || '';
     
-    switch (container.type) {
+    // Determine container type from contents structure
+    const containerType = this.getContainerType(container);
+    
+    switch (containerType) {
       case 'unit':
         return `\n${text.toUpperCase()}\n${'='.repeat(text.length)}`;
       case 'chapter':
@@ -268,10 +288,14 @@ export class TextRenderer extends BaseRenderer {
   }
   
   private renderList(content: any): string {
+    if (!content || !content.items || !Array.isArray(content.items)) {
+      return String(content);
+    }
+    
     const items: string[] = [];
     
     content.items.forEach((item: any, index: number) => {
-      const text = this.renderSemanticText(item);
+      const text = this.isSemanticText(item) ? this.renderSemanticText(item) : String(item);
       const prefix = content.ordered ? `${index + 1}.` : '•';
       const firstLinePrefix = `${prefix} `;
       const continuationPrefix = ' '.repeat(firstLinePrefix.length);
@@ -293,17 +317,19 @@ export class TextRenderer extends BaseRenderer {
   }
   
   private renderTable(content: any): string {
+    if (!content) return '';
+    
     const parts: string[] = [];
     const rows: string[][] = [];
     
     // Collect all rows
     if (content.headers) {
-      rows.push(content.headers.map((h: any) => this.renderSemanticText(h)));
+      rows.push(content.headers.map((h: any) => this.isSemanticText(h) ? this.renderSemanticText(h) : String(h)));
     }
     
     if (content.rows) {
       for (const row of content.rows) {
-        rows.push(row.map((c: any) => this.renderSemanticText(c)));
+        rows.push(row.map((c: any) => this.isSemanticText(c) ? this.renderSemanticText(c) : String(c)));
       }
     }
     
@@ -323,17 +349,19 @@ export class TextRenderer extends BaseRenderer {
     parts.push(separator);
     
     // Headers
-    if (content.headers) {
+    if (content.headers && rows.length > 0) {
       const headerRow = rows[0];
-      const cells = headerRow.map((cell, i) => ` ${cell.padEnd(colWidths[i])} `);
-      parts.push('|' + cells.join('|') + '|');
-      parts.push(separator);
+      if (headerRow) {
+        const cells = headerRow.map((cell, i) => ` ${cell.padEnd(colWidths[i] || 0)} `);
+        parts.push('|' + cells.join('|') + '|');
+        parts.push(separator);
+      }
     }
     
     // Data rows
     const dataRows = content.headers ? rows.slice(1) : rows;
     for (const row of dataRows) {
-      const cells = row.map((cell, i) => ` ${cell.padEnd(colWidths[i])} `);
+      const cells = row.map((cell, i) => ` ${cell.padEnd(colWidths[i] || 0)} `);
       parts.push('|' + cells.join('|') + '|');
     }
     
@@ -341,7 +369,7 @@ export class TextRenderer extends BaseRenderer {
     
     if (content.caption) {
       parts.push('');
-      parts.push(`Caption: ${this.renderSemanticText(content.caption)}`);
+      parts.push(`Caption: ${this.isSemanticText(content.caption) ? this.renderSemanticText(content.caption) : String(content.caption)}`);
     }
     
     return parts.join('\n');
@@ -357,7 +385,7 @@ export class TextRenderer extends BaseRenderer {
     }
     
     if (content.caption) {
-      parts.push(`Caption: ${this.renderSemanticText(content.caption)}`);
+      parts.push(`Caption: ${this.isSemanticText(content.caption) ? this.renderSemanticText(content.caption) : String(content.caption)}`);
     }
     
     return parts.join('\n');
@@ -382,5 +410,76 @@ export class TextRenderer extends BaseRenderer {
     parts.push('--- end ---');
     
     return parts.join('\n');
+  }
+
+  private renderDocumentSection(
+    sectionType: 'frontmatter' | 'bodymatter' | 'backmatter',
+    section: FrontMatter | BodyMatter | BackMatter
+  ): string {
+    const parts: string[] = [];
+    
+    if (sectionType === 'bodymatter' && 'contents' in section && Array.isArray(section.contents)) {
+      return this.renderContents(section.contents);
+    } else {
+      // Handle FrontMatter and BackMatter properties
+      Object.entries(section).forEach(([key, value]) => {
+        if (key !== 'contents' && Array.isArray(value)) {
+          parts.push(this.formatSectionTitle(key));
+          parts.push('-'.repeat(this.formatSectionTitle(key).length));
+          parts.push(value.map(block => this.renderContentBlock(block)).join('\n\n'));
+        }
+      });
+    }
+    
+    return parts.filter(Boolean).join('\n\n');
+  }
+
+  private formatSectionTitle(key: string): string {
+    return key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+  }
+
+  private getContainerType(container: StructuralContainer): 'unit' | 'chapter' | 'section' | 'unknown' {
+    // Determine container type from contents structure
+    if ('contents' in container) {
+      const firstContent = Array.isArray(container.contents) ? container.contents[0] : null;
+      if (firstContent && 'blockType' in firstContent) {
+        return 'section'; // Contains content blocks directly
+      } else if (firstContent && 'contents' in firstContent) {
+        const nestedContent = Array.isArray(firstContent.contents) ? firstContent.contents[0] : null;
+        if (nestedContent && 'blockType' in nestedContent) {
+          return 'chapter'; // Contains sections
+        }
+        return 'unit'; // Contains chapters
+      }
+    }
+    return 'unknown';
+  }
+
+  // Type guard methods
+  private isSemanticText(content: unknown): content is SemanticText {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'runs' in content &&
+      Array.isArray((content as any).runs)
+    );
+  }
+
+  private isHeadingContent(content: unknown): content is { level?: number; text: SemanticText } {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'text' in content &&
+      this.isSemanticText((content as any).text)
+    );
+  }
+
+  private isBlockquoteContent(content: unknown): content is { text: SemanticText } {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'text' in content &&
+      this.isSemanticText((content as any).text)
+    );
   }
 }

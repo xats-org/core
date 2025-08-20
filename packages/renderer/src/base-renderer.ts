@@ -119,16 +119,20 @@ export abstract class BaseRenderer {
       .map(item => {
         if ('blockType' in item) {
           return this.renderContentBlock(item);
-        } else if ('type' in item) {
-          switch (item.type) {
-            case 'unit':
-              return this.renderUnit(item as Unit);
-            case 'chapter':
-              return this.renderChapter(item as Chapter);
-            case 'section':
+        } else {
+          // Determine type by examining the structure
+          if ('contents' in item) {
+            const firstContent = Array.isArray(item.contents) ? item.contents[0] : null;
+            if (firstContent && 'blockType' in firstContent) {
               return this.renderSection(item as Section);
-            default:
-              return '';
+            } else if (firstContent && 'contents' in firstContent) {
+              const nestedContent = Array.isArray(firstContent.contents) ? firstContent.contents[0] : null;
+              if (nestedContent && 'blockType' in nestedContent) {
+                return this.renderChapter(item as Chapter);
+              }
+              return this.renderUnit(item as Unit);
+            }
+            return this.renderSection(item as Section);
           }
         }
         return '';
