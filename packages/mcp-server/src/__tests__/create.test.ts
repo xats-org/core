@@ -182,7 +182,9 @@ describe('createTool', () => {
 
       expect(result.success).toBe(true);
       expect(result.metadata?.timestamp).toBeDefined();
-      expect(new Date(result.metadata!.timestamp).getTime()).toBeLessThanOrEqual(Date.now());
+      if (result.metadata?.timestamp) {
+        expect(new Date(result.metadata.timestamp).getTime()).toBeLessThanOrEqual(Date.now());
+      }
     });
 
     it('should set bibliographic metadata', async () => {

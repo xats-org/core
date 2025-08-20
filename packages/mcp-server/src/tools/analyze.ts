@@ -182,6 +182,7 @@ function calculateDocumentStatistics(document: XatsDocument): DocumentStatistics
   function extractTextFromContainer(container: any): void {
     if (container.title) {
       totalText += ` ${extractTextFromSemanticText(container.title)}`;
+      countReferences(container.title);
     }
 
     if (container.learningOutcomes) {
@@ -189,6 +190,7 @@ function calculateDocumentStatistics(document: XatsDocument): DocumentStatistics
       for (const outcome of container.learningOutcomes) {
         if (outcome.statement) {
           totalText += ` ${extractTextFromSemanticText(outcome.statement)}`;
+          countReferences(outcome.statement);
         }
       }
     }
@@ -199,6 +201,7 @@ function calculateDocumentStatistics(document: XatsDocument): DocumentStatistics
           // Extract text from content blocks
           if (item.content.text) {
             totalText += ` ${extractTextFromSemanticText(item.content.text)}`;
+            countReferences(item.content.text);
           }
 
           // Count resources

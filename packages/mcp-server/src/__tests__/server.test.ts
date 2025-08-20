@@ -2,7 +2,7 @@
  * @xats/mcp-server - Server Tests
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 import { XatsMcpServer, createServer } from '../server.js';
 

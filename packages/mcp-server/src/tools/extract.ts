@@ -240,7 +240,7 @@ function extractContent(document: XatsDocument, filter?: ExtractInput['filter'])
 /**
  * Extract assessment-related content
  */
-function extractAssessments(document: XatsDocument, filter?: ExtractInput['filter']): any {
+function extractAssessments(document: XatsDocument, _filter?: ExtractInput['filter']): any {
   const assessments: any[] = [];
 
   function findAssessments(container: any, path: string): void {
@@ -364,8 +364,8 @@ export async function extractTool(
       // Filter by pathways if specified
       if (input.filter.pathways && input.filter.pathways.length > 0) {
         extractedData = extractedData.filter((item) => {
-          if (item.pathwayType) {
-            return input.filter!.pathways!.includes(item.pathwayType);
+          if (item.pathwayType && input.filter?.pathways) {
+            return input.filter.pathways.includes(item.pathwayType);
           }
           return true; // Include non-pathway items
         });

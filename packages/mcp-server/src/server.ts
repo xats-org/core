@@ -5,7 +5,6 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
-import { z } from 'zod';
 
 import { analyzeTool } from './tools/analyze.js';
 import { createTool } from './tools/create.js';
@@ -432,13 +431,15 @@ export async function startServer(config?: Partial<McpServerConfig>): Promise<vo
   await server.run();
 
   // Handle graceful shutdown
-  process.on('SIGINT', async () => {
-    await server.close();
-    process.exit(0);
+  process.on('SIGINT', () => {
+    void server.close().finally(() => {
+      process.exit(0);
+    });
   });
 
-  process.on('SIGTERM', async () => {
-    await server.close();
-    process.exit(0);
+  process.on('SIGTERM', () => {
+    void server.close().finally(() => {
+      process.exit(0);
+    });
   });
 }

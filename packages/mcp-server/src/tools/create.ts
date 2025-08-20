@@ -5,20 +5,13 @@
 import { McpError } from '../types.js';
 
 import type { CreateInput, CreateResult, McpServerConfig } from '../types.js';
-import type { XatsDocument, XatsVersion } from '@xats/types';
+import type { XatsDocument } from '@xats/types';
 
 /**
  * Generate a unique ID for xats objects
  */
 function generateId(): string {
   return `xats-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-}
-
-/**
- * Generate current timestamp in ISO format
- */
-function getCurrentTimestamp(): string {
-  return new Date().toISOString();
 }
 
 /**
@@ -249,8 +242,6 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
  * Create a course template with pathways
  */
 function createCourseTemplate(input: CreateInput): XatsDocument {
-  const schemaVersion = input.schemaVersion || '0.3.0';
-
   const document = createTextbookTemplate(input);
 
   // Add pathway content if requested

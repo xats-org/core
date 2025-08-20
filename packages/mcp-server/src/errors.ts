@@ -253,7 +253,7 @@ export function createErrorResponse(error: Error, toolName?: string): any {
 /**
  * Validate and normalize input for tools
  */
-export function validateToolInput(input: any, requiredFields: string[], toolName: string): void {
+export function validateToolInput(input: any, requiredFields: string[], _toolName: string): void {
   if (!input || typeof input !== 'object') {
     throw new InputValidationError('input', 'object', typeof input);
   }
