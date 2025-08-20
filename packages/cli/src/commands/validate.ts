@@ -1,9 +1,12 @@
-import { Command } from 'commander';
 import { readFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
+
 import chalk from 'chalk';
+import { Command } from 'commander';
 import ora from 'ora';
+
 import { XatsValidator } from '@xats/validator';
+
 import type { XatsVersion } from '@xats/types';
 
 export const validateCommand = new Command('validate')
@@ -15,7 +18,7 @@ export const validateCommand = new Command('validate')
   .option('--format <format>', 'output format (text, json)', 'text')
   .action(async (file: string, options: any) => {
     const spinner = ora('Loading document...').start();
-    
+
     try {
       // Check if file exists
       const filePath = resolve(file);
@@ -23,12 +26,12 @@ export const validateCommand = new Command('validate')
         spinner.fail(chalk.red(`File not found: ${file}`));
         process.exit(1);
       }
-      
+
       // Read and parse document
       spinner.text = 'Parsing document...';
       const content = readFileSync(filePath, 'utf-8');
       let document: any;
-      
+
       try {
         document = JSON.parse(content);
       } catch (error) {
@@ -38,20 +41,20 @@ export const validateCommand = new Command('validate')
         }
         process.exit(1);
       }
-      
+
       // Validate document
       spinner.text = 'Validating document...';
       const validator = new XatsValidator({
         strictMode: options.strict,
         allowExtensions: options.extensions !== false,
       });
-      
-      const version = options.schema === 'latest' ? undefined : options.schema as XatsVersion;
+
+      const version = options.schema === 'latest' ? undefined : (options.schema as XatsVersion);
       const result = await validator.validate(document, { version });
-      
+
       if (result.valid) {
         spinner.succeed(chalk.green('Document is valid!'));
-        
+
         if (options.verbose && result.warnings && result.warnings.length > 0) {
           console.log(chalk.yellow('\nWarnings:'));
           result.warnings.forEach((warning, index) => {
@@ -61,13 +64,13 @@ export const validateCommand = new Command('validate')
             }
           });
         }
-        
+
         if (options.format === 'json') {
           console.log(JSON.stringify(result, null, 2));
         }
       } else {
         spinner.fail(chalk.red('Document is invalid'));
-        
+
         if (result.errors && result.errors.length > 0) {
           console.log(chalk.red('\nErrors:'));
           result.errors.forEach((error, index) => {
@@ -80,11 +83,11 @@ export const validateCommand = new Command('validate')
             }
           });
         }
-        
+
         if (options.format === 'json') {
           console.log(JSON.stringify(result, null, 2));
         }
-        
+
         process.exit(1);
       }
     } catch (error) {
