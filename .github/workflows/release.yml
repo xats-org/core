@@ -3,364 +3,64 @@ name: Release
 on:
   push:
     branches:
-      - main  # Trigger release when merging to main
-    tags:
-      - 'v*'  # Also trigger on manual tag creation
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to release (e.g., v0.1.0)'
-        required: true
-        type: string
+      - main
+      - v0.4.0
+      - v0.5.0
+      - v0.6.0
+      - v0.7.0
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  # Pre-release validation - reuse CI jobs for consistency
-  validate:
-    name: Pre-release Validation
+  release:
+    name: Release
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        node-version: [18, 20, 22]
-        
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0 # Needed for changelog generation
-      
-    - name: Setup Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Build project
-      run: npm run build
-      
-    - name: Type check
-      run: npm run typecheck
-      
-    - name: Run linter
-      run: npm run lint
-      
-    - name: Run full test suite
-      run: npm run test:run
-      
-    - name: Run tests with coverage
-      run: npm run test:coverage
-      if: matrix.node-version == 20
-      
-    - name: Validate example documents
-      run: |
-        npm run validate test/fixtures/valid-minimal.json
-        npm run validate examples/adaptive-pathway-example.json
-      
-    - name: Test CLI functionality
-      run: |
-        npm run validate -- --help
-        npm run validate -- --version
-        npm run validate -- versions
-        npm run validate -- schema
-
-  # Security audit for releases
-  security-audit:
-    name: Security Audit
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Run security audit
-      run: npm audit --audit-level=moderate
-      
-    - name: Check for production vulnerabilities
-      run: npm audit --audit-level=high --production
-
-  # Build and package the release
-  build:
-    name: Build Release Package
-    runs-on: ubuntu-latest
-    needs: [validate, security-audit]
-    outputs:
-      version: ${{ steps.version.outputs.version }}
-      tag: ${{ steps.version.outputs.tag }}
-      
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: 'npm'
-        registry-url: 'https://registry.npmjs.org'
-        
-    - name: Extract or determine version
-      id: version
-      run: |
-        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-          # Manual dispatch with version input
-          TAG="${{ github.event.inputs.version }}"
-          VERSION=${TAG#v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-          echo "Manual release version: $VERSION (tag: $TAG)"
-        elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
-          # Tag-based release
-          TAG=${GITHUB_REF#refs/tags/}
-          VERSION=${TAG#v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-          echo "Tag-based release version: $VERSION (tag: $TAG)"
-        elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-          # Main branch push - get version from package.json and create tag
-          VERSION=$(node -p "require('./package.json').version")
-          TAG="v$VERSION"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-          echo "Main branch release version: $VERSION (tag: $TAG)"
-          
-          # Create and push the tag
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "$TAG" || echo "Tag $TAG already exists"
-          git push origin "$TAG" || echo "Failed to push tag (may already exist)"
-        else
-          echo "❌ Unsupported release trigger"
-          exit 1
-        fi
-        
-    - name: Verify package.json version matches tag
-      run: |
-        PACKAGE_VERSION=$(node -p "require('./package.json').version")
-        TAG_VERSION="${{ steps.version.outputs.version }}"
-        echo "Package version: $PACKAGE_VERSION"
-        echo "Tag version: $TAG_VERSION"
-        if [ "$PACKAGE_VERSION" != "$TAG_VERSION" ]; then
-          echo "❌ Version mismatch: package.json ($PACKAGE_VERSION) does not match tag ($TAG_VERSION)"
-          exit 1
-        fi
-        echo "✅ Version verification passed"
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Build project
-      run: npm run build
-      
-    - name: Create npm package
-      run: npm pack
-      
-    - name: Upload package artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: npm-package-${{ steps.version.outputs.version }}
-        path: '*.tgz'
-        retention-days: 30
-
-  # Generate release notes from commits
-  generate-release-notes:
-    name: Generate Release Notes
-    runs-on: ubuntu-latest
-    needs: [build]
-    outputs:
-      release-notes: ${{ steps.notes.outputs.notes }}
-      
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        
-    - name: Generate release notes
-      id: notes
-      run: |
-        # Get the previous tag
-        CURRENT_TAG="${{ needs.build.outputs.tag }}"
-        PREV_TAG=$(git describe --tags --abbrev=0 "$CURRENT_TAG^" 2>/dev/null || echo "")
-        
-        echo "Current tag: $CURRENT_TAG"
-        echo "Previous tag: $PREV_TAG"
-        
-        # Generate release notes
-        cat > release_notes.md << 'EOF'
-        # Release ${{ needs.build.outputs.tag }}
-        
-        **Release Date**: $(date -u +"%Y-%m-%d")
-        
-        ## 🚀 Changes in this release
-        
-        EOF
-        
-        # Get commits since last tag
-        if [ -n "$PREV_TAG" ]; then
-          echo "### 📝 Commit History" >> release_notes.md
-          echo "" >> release_notes.md
-          git log --pretty=format:"- %s (%h)" "$PREV_TAG..$CURRENT_TAG" >> release_notes.md
-        else
-          echo "### 📝 Initial Release" >> release_notes.md
-          echo "" >> release_notes.md
-          echo "This is the initial release of the xats core package." >> release_notes.md
-        fi
-        
-        echo "" >> release_notes.md
-        echo "## 📦 Installation" >> release_notes.md
-        echo "" >> release_notes.md
-        echo '```bash' >> release_notes.md
-        echo "npm install @xats-org/core@${{ needs.build.outputs.version }}" >> release_notes.md
-        echo '```' >> release_notes.md
-        echo "" >> release_notes.md
-        echo "## 🔗 Links" >> release_notes.md
-        echo "" >> release_notes.md
-        echo "- [Documentation](https://xats.org)" >> release_notes.md
-        echo "- [Schema Reference](https://github.com/xats-org/core/tree/main/docs/reference)" >> release_notes.md
-        echo "- [Examples](https://github.com/xats-org/core/tree/main/examples)" >> release_notes.md
-        
-        # Save release notes for GitHub release
-        {
-          echo 'notes<<EOF'
-          cat release_notes.md
-          echo EOF
-        } >> $GITHUB_OUTPUT
-
-  # Create GitHub Release
-  github-release:
-    name: Create GitHub Release
-    runs-on: ubuntu-latest
-    needs: [build, generate-release-notes]
     permissions:
       contents: write
-      
+      issues: write
+      pull-requests: write
+      id-token: write
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Download package artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: npm-package-${{ needs.build.outputs.version }}
-        
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: ${{ needs.build.outputs.tag }}
-        name: Release ${{ needs.build.outputs.tag }}
-        body: ${{ needs.generate-release-notes.outputs.release-notes }}
-        files: |
-          *.tgz
-          schemas/0.1.0/xats.json
-        draft: false
-        prerelease: ${{ contains(needs.build.outputs.tag, '-') }}
-        generate_release_notes: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  # Update latest tag for stable releases
-  update-latest-tag:
-    name: Update Latest Tag
-    runs-on: ubuntu-latest
-    needs: [build, github-release]
-    if: ${{ !contains(needs.build.outputs.tag, '-') }} # Only for stable releases (no pre-release suffixes)
-    permissions:
-      contents: write
-      
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        
-    - name: Update latest tag
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        
-        # Force update the latest tag to point to this release
-        git tag -f latest ${{ needs.build.outputs.tag }}
-        git push -f origin latest
-        
-        echo "✅ Updated 'latest' tag to point to ${{ needs.build.outputs.tag }}"
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
 
-  # Publish to npm (requires NPM_TOKEN secret)
-  npm-publish:
-    name: Publish to npm
-    runs-on: ubuntu-latest
-    needs: [build, github-release]
-    if: ${{ !contains(needs.build.outputs.tag, '-') }} # Only publish stable releases
-    environment: npm-production
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: 'npm'
-        registry-url: 'https://registry.npmjs.org'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Build project
-      run: npm run build
-      
-    - name: Verify package contents
-      run: |
-        echo "📦 Package contents:"
-        npm pack --dry-run
-        
-    - name: Publish to npm
-      run: npm publish --access public
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        
-    - name: Verify publication
-      run: |
-        # Wait a moment for npm to propagate
-        sleep 30
-        # Verify the package was published
-        npm view @xats-org/core@${{ needs.build.outputs.version }} version
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
 
-  # Post-release notifications and cleanup
-  post-release:
-    name: Post-release Tasks
-    runs-on: ubuntu-latest
-    needs: [build, github-release, npm-publish]
-    if: always() && needs.github-release.result == 'success'
-    
-    steps:
-    - name: Release Summary
-      run: |
-        echo "🎉 Release ${{ needs.build.outputs.tag }} completed successfully!"
-        echo ""
-        echo "📦 Package: @xats-org/core@${{ needs.build.outputs.version }}"
-        echo "🔗 GitHub Release: https://github.com/xats-org/core/releases/tag/${{ needs.build.outputs.tag }}"
-        if [ "${{ needs.npm-publish.result }}" == "success" ]; then
-          echo "📱 npm Package: https://www.npmjs.com/package/@xats-org/core/v/${{ needs.build.outputs.version }}"
-        else
-          echo "⚠️  npm publication was skipped or failed"
-        fi
-        
-    - name: Update issue status
-      run: |
-        echo "This workflow addresses Issue #16 - Setup CI/CD Pipeline with GitHub Actions"
-        echo "Release automation is now fully configured and operational."
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Packages
+        run: pnpm build
+
+      - name: Run Tests
+        run: pnpm test
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset:publish
+          version: pnpm changeset:version
+          title: "chore: version packages"
+          commit: "chore: version packages"
+          createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Post Release Steps
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          echo "Packages were published successfully!"
+          echo "Published packages: ${{ steps.changesets.outputs.publishedPackages }}"

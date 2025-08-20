@@ -223,6 +223,44 @@ pnpm add -D -w eslint
 - **Caching**: Build outputs are cached for faster subsequent builds
 - **Watch Mode**: `pnpm run dev` watches all packages for changes
 - **Pipeline Optimization**: Tasks run in optimal order based on dependencies
+- **Remote Caching**: (Optional) Share build caches across team members
+
+#### Available Scripts
+```bash
+# Core development commands
+pnpm build         # Build all packages
+pnpm build:watch   # Build with file watching
+pnpm dev          # Start development mode
+pnpm test         # Run all tests
+pnpm test:watch   # Run tests in watch mode
+pnpm test:coverage # Generate coverage reports
+pnpm lint         # Lint all packages
+pnpm lint:fix     # Auto-fix linting issues
+pnpm format       # Format code with Prettier
+pnpm typecheck    # Type-check all packages
+pnpm clean        # Clean build artifacts
+pnpm validate     # Run full validation (build, lint, test)
+```
+
+#### Turborepo Cache
+Turborepo caches task outputs to speed up builds:
+- Cache is stored in `.turbo/` directory
+- Automatically invalidated when inputs change
+- Can be cleared with `pnpm clean`
+
+#### Remote Caching Setup (Optional)
+For teams, enable remote caching to share build artifacts:
+```bash
+# Set up Vercel Remote Cache (requires Vercel account)
+npx turbo login
+npx turbo link
+
+# Or use custom remote cache
+# Add to .env.local:
+TURBO_API=https://your-cache-server.com
+TURBO_TOKEN=your-token
+TURBO_TEAM=your-team
+```
 
 ### Creating New Packages
 1. Create a new directory under `packages/` or `apps/`
@@ -233,6 +271,41 @@ pnpm add -D -w eslint
 ---
 
 ## Development Guidelines
+
+### Creating Changesets
+
+**All changes to packages require a changeset.** Changesets help us track changes, generate changelogs, and manage releases.
+
+#### When to Create a Changeset
+Create a changeset when you:
+- Add new features
+- Fix bugs
+- Update dependencies
+- Make breaking changes
+- Improve documentation (in packages)
+
+#### How to Create a Changeset
+```bash
+# Create a new changeset
+pnpm changeset:add
+
+# Follow the prompts to:
+# 1. Select affected packages
+# 2. Choose version bump type (patch/minor/major)
+# 3. Write a description
+```
+
+#### Changeset Guidelines
+- **Patch**: Bug fixes, documentation, internal changes
+- **Minor**: New features, deprecations (backward compatible)
+- **Major**: Breaking changes, removed features
+
+#### Example Changeset Messages
+```
+- Fix: Resolve validation error for nested content blocks (#123)
+- Feat: Add support for mathematical expressions in renderer
+- Breaking: Remove deprecated legacyMode option
+```
 
 ### Schema Validation
 Always validate your changes against the schema:
