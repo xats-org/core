@@ -1,0 +1,174 @@
+{
+  "schemaVersion": "0.2.0",
+  "bibliographicEntry": {
+    "id": "accessible-sample-2025",
+    "type": "book",
+    "title": "Accessible Mathematics Primer",
+    "author": [{"family": "Smith", "given": "Jane"}],
+    "issued": {"date-parts": [[2025]]}
+  },
+  "subject": "Mathematics",
+  "targetAudience": "High School",
+  "resources": [
+    {
+      "id": "graph-1",
+      "language": "en",
+      "type": "https://xats.org/core/resources/image",
+      "url": "https://example.com/quadratic-graph.svg",
+      "altText": "Graph showing a parabola opening upward with vertex at origin, representing y = x²",
+      "longDescription": "A coordinate plane displaying a quadratic function y = x² as a U-shaped curve. The vertex is located at the origin (0,0), and the parabola extends symmetrically in both directions with points marked at (-2,4), (-1,1), (0,0), (1,1), and (2,4)."
+    }
+  ],
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "chapter-1",
+        "language": "en",
+        "title": "Introduction to Quadratic Functions",
+        "sections": [
+          {
+            "id": "skip-nav-section",
+            "language": "en", 
+            "title": "Navigation",
+            "content": [
+              {
+                "id": "skip-nav-1",
+                "language": "en",
+                "blockType": "https://xats.org/core/blocks/skipNavigation",
+                "content": {
+                  "skipLinks": [
+                    {
+                      "id": "skip-to-main",
+                      "label": "Skip to main content",
+                      "destinationId": "main-content-section"
+                    },
+                    {
+                      "id": "skip-to-assessment",
+                      "label": "Skip to practice problems",
+                      "destinationId": "assessment-section"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "main-content-section",
+            "language": "en",
+            "title": "Understanding Quadratic Functions", 
+            "accessibilityMetadata": {
+              "landmarkType": "main",
+              "skipTarget": true
+            },
+            "content": [
+              {
+                "id": "intro-paragraph",
+                "language": "en",
+                "blockType": "https://xats.org/core/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "A quadratic function is a polynomial function of degree 2, typically written in the form "},
+                      {"type": "strong", "text": "f(x) = ax² + bx + c"},
+                      {"type": "text", "text": " where a ≠ 0."}
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "quadratic-equation",
+                "language": "en",
+                "blockType": "https://xats.org/core/blocks/mathBlock",
+                "content": {
+                  "notation": "latex",
+                  "expression": "f(x) = ax^2 + bx + c",
+                  "altText": "f of x equals a x squared plus b x plus c",
+                  "speechText": "Function f of x equals a times x squared plus b times x plus c"
+                }
+              },
+              {
+                "id": "graph-figure",
+                "language": "en",
+                "blockType": "https://xats.org/core/blocks/figure",
+                "content": {
+                  "resourceId": "graph-1",
+                  "altText": "Example quadratic function graph showing characteristic parabola shape",
+                  "caption": {
+                    "runs": [
+                      {"type": "text", "text": "Figure 1: Graph of "},
+                      {"type": "emphasis", "text": "y = x²"},
+                      {"type": "text", "text": " showing the characteristic parabola shape"}
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "assessment-section",
+            "language": "en",
+            "title": "Practice Problems",
+            "accessibilityMetadata": {
+              "skipTarget": true,
+              "headingLevel": 2
+            },
+            "content": [
+              {
+                "id": "mc-question-1",
+                "language": "en",
+                "blockType": "https://xats.org/core/blocks/multipleChoice",
+                "content": {
+                  "question": {
+                    "runs": [
+                      {"type": "text", "text": "What is the vertex of the quadratic function "},
+                      {"type": "emphasis", "text": "f(x) = x² - 4x + 3"},
+                      {"type": "text", "text": "?"}
+                    ]
+                  },
+                  "options": [
+                    {
+                      "id": "option-a",
+                      "text": {"runs": [{"type": "text", "text": "(2, -1)"}]},
+                      "correct": true
+                    },
+                    {
+                      "id": "option-b", 
+                      "text": {"runs": [{"type": "text", "text": "(-2, 1)"}]},
+                      "correct": false
+                    },
+                    {
+                      "id": "option-c",
+                      "text": {"runs": [{"type": "text", "text": "(4, 3)"}]},
+                      "correct": false
+                    }
+                  ],
+                  "cognitiveMetadata": {
+                    "bloomsLevel": "apply",
+                    "difficulty": 3,
+                    "estimatedTimeMinutes": 3
+                  },
+                  "scoring": {
+                    "points": 10,
+                    "scoringMethod": "automatic"
+                  },
+                  "accessibilitySettings": {
+                    "extendedTime": 1.5,
+                    "allowScreenReader": true,
+                    "allowKeyboardOnly": true,
+                    "highContrast": true,
+                    "textToSpeech": true,
+                    "cognitiveSupports": {
+                      "allowCalculator": true,
+                      "simplifiedInstructions": true,
+                      "readAloud": true
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

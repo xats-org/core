@@ -1,0 +1,76 @@
+{
+  "name": "@xats/renderer",
+  "version": "0.4.0",
+  "description": "Rendering engine for xats documents to various output formats",
+  "keywords": [
+    "xats",
+    "renderer",
+    "html",
+    "markdown",
+    "educational"
+  ],
+  "homepage": "https://xats.org",
+  "bugs": {
+    "url": "https://github.com/xats-org/core/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xats-org/core.git",
+    "directory": "packages/renderer"
+  },
+  "license": "MIT",
+  "author": "xats Contributors",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./html": {
+      "types": "./dist/renderers/html.d.ts",
+      "import": "./dist/renderers/html.js"
+    },
+    "./markdown": {
+      "types": "./dist/renderers/markdown.d.ts",
+      "import": "./dist/renderers/markdown.js"
+    },
+    "./text": {
+      "types": "./dist/renderers/text.d.ts",
+      "import": "./dist/renderers/text.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist .tsbuildinfo",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@xats/types": "workspace:*",
+    "@xats/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@vitest/coverage-v8": "^1.2.0",
+    "eslint": "^8.56.0",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
