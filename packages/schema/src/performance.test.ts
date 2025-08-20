@@ -19,7 +19,7 @@ describe('Performance Validation', () => {
   });
 
   describe('Validation Speed Tests', () => {
-    it('should validate small documents quickly', async () => {
+    it('should validate small documents quickly', () => {
       const smallDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -56,7 +56,7 @@ describe('Performance Validation', () => {
       };
 
       const startTime = performance.now();
-      const result = await validator.validate(smallDoc);
+      const result = validator.validate(smallDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -64,11 +64,11 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(500); // Should complete in less than 500ms (allowing for CI/system variability)
     });
 
-    it('should validate medium documents efficiently', async () => {
+    it('should validate medium documents efficiently', () => {
       const mediumDoc = createMediumDocument();
 
       const startTime = performance.now();
-      const result = await validator.validate(mediumDoc);
+      const result = validator.validate(mediumDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -76,11 +76,11 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(500); // Should complete in less than 500ms
     });
 
-    it('should validate large documents within reasonable time', async () => {
+    it('should validate large documents within reasonable time', () => {
       const largeDoc = createLargeDocument();
 
       const startTime = performance.now();
-      const result = await validator.validate(largeDoc);
+      const result = validator.validate(largeDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -88,11 +88,11 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(2000); // Should complete in less than 2 seconds
     });
 
-    it('should validate very large documents within acceptable time', async () => {
+    it('should validate very large documents within acceptable time', () => {
       const veryLargeDoc = createVeryLargeDocument();
 
       const startTime = performance.now();
-      const result = await validator.validate(veryLargeDoc);
+      const result = validator.validate(veryLargeDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -102,7 +102,7 @@ describe('Performance Validation', () => {
   });
 
   describe('Concurrent Validation Tests', () => {
-    it('should handle multiple simultaneous validations', async () => {
+    it('should handle multiple simultaneous validations', () => {
       const testDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -167,7 +167,7 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(1000); // Should complete in less than 1 second
     });
 
-    it('should handle high-volume validation load', async () => {
+    it('should handle high-volume validation load', () => {
       const testDoc = createMediumDocument();
 
       const startTime = performance.now();
@@ -205,7 +205,7 @@ describe('Performance Validation', () => {
   });
 
   describe('Memory Usage Tests', () => {
-    it('should not consume excessive memory for large documents', async () => {
+    it('should not consume excessive memory for large documents', () => {
       const initialMemory = process.memoryUsage();
 
       // Validate multiple large documents
@@ -213,7 +213,7 @@ describe('Performance Validation', () => {
         const largeDoc = createLargeDocument();
         largeDoc.bibliographicEntry.id = `memory-test-${i}`;
 
-        const result = await validator.validate(largeDoc);
+        const result = validator.validate(largeDoc);
         expect(result.isValid).toBe(true);
       }
 
@@ -229,14 +229,14 @@ describe('Performance Validation', () => {
       expect(memoryIncrease).toBeLessThan(100 * 1024 * 1024);
     });
 
-    it('should clean up memory between validations', async () => {
+    it('should clean up memory between validations', () => {
       const memoryReadings: number[] = [];
 
       for (let i = 0; i < 5; i++) {
         const doc = createMediumDocument();
         doc.bibliographicEntry.id = `cleanup-test-${i}`;
 
-        await validator.validate(doc);
+        validator.validate(doc);
 
         // Force garbage collection if possible
         if (global.gc) {
@@ -257,7 +257,7 @@ describe('Performance Validation', () => {
   });
 
   describe('Scalability Tests', () => {
-    it('should scale linearly with document size', async () => {
+    it('should scale linearly with document size', () => {
       const sizes = [100, 500, 1000, 2000];
       const times: number[] = [];
 
@@ -265,7 +265,7 @@ describe('Performance Validation', () => {
         const doc = createScalableDocument(size);
 
         const startTime = performance.now();
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         const endTime = performance.now();
 
         expect(result.isValid).toBe(true);
@@ -298,7 +298,7 @@ describe('Performance Validation', () => {
       }
     });
 
-    it('should handle deeply nested structures efficiently', async () => {
+    it('should handle deeply nested structures efficiently', () => {
       const depths = [5, 10, 15, 20];
       const times: number[] = [];
 
@@ -306,7 +306,7 @@ describe('Performance Validation', () => {
         const doc = createDeeplyNestedDocument(depth);
 
         const startTime = performance.now();
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         const endTime = performance.now();
 
         expect(result.isValid).toBe(true);
@@ -320,7 +320,7 @@ describe('Performance Validation', () => {
   });
 
   describe('Error Handling Performance', () => {
-    it('should report validation errors quickly', async () => {
+    it('should report validation errors quickly', () => {
       const invalidDoc = {
         schemaVersion: '0.1.0',
         // Missing required fields to trigger errors
@@ -328,7 +328,7 @@ describe('Performance Validation', () => {
       };
 
       const startTime = performance.now();
-      const result = await validator.validate(invalidDoc);
+      const result = validator.validate(invalidDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -337,11 +337,11 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(100); // Should fail fast
     });
 
-    it('should handle complex validation errors efficiently', async () => {
+    it('should handle complex validation errors efficiently', () => {
       const complexInvalidDoc = createComplexInvalidDocument();
 
       const startTime = performance.now();
-      const result = await validator.validate(complexInvalidDoc);
+      const result = validator.validate(complexInvalidDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -352,11 +352,11 @@ describe('Performance Validation', () => {
   });
 
   describe('Stress Tests', () => {
-    it('should handle extreme document size', async () => {
+    it('should handle extreme document size', () => {
       const extremeDoc = createExtremeDocument();
 
       const startTime = performance.now();
-      const result = await validator.validate(extremeDoc);
+      const result = validator.validate(extremeDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -364,7 +364,7 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(10000); // Should complete in less than 10 seconds
     });
 
-    it('should handle validation burst load', async () => {
+    it('should handle validation burst load', () => {
       const burstSize = 100;
       const docs = Array(burstSize)
         .fill(null)

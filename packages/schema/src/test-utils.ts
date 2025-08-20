@@ -61,8 +61,14 @@ export function createValidator(): ValidatorInstance {
     additionalProperties: true,
   };
 
-  ajv.addSchema(cslSchema, 'https://resource.citationstyles.org/schema/latest/input/json/csl-data.json');
-  ajv.addSchema(cslSchema, 'https://raw.githubusercontent.com/citation-style-language/schema/master/csl-data.json');
+  ajv.addSchema(
+    cslSchema,
+    'https://resource.citationstyles.org/schema/latest/input/json/csl-data.json'
+  );
+  ajv.addSchema(
+    cslSchema,
+    'https://raw.githubusercontent.com/citation-style-language/schema/master/csl-data.json'
+  );
 
   // Add LTI extension schema stub to prevent MissingRefError
   const ltiSchema = {
@@ -121,7 +127,7 @@ export function createValidator(): ValidatorInstance {
       const isValid = validate(doc);
       return {
         isValid,
-        errors: (validate.errors || []) as any,
+        errors: (validate.errors || []) as ValidationError[],
       };
     },
   };

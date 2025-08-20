@@ -18,9 +18,7 @@ describe('XatsValidator', () => {
           title: 'Test Document',
           type: 'book',
         },
-        subject: {
-          uri: 'https://xats.org/subjects/test',
-        },
+        subject: 'Test Subject',
         bodyMatter: {
           contents: [],
         },
@@ -50,9 +48,7 @@ describe('XatsValidator', () => {
           title: 'Test Document',
           type: 'book',
         },
-        subject: {
-          uri: 'https://xats.org/subjects/test',
-        },
+        subject: 'Test Subject',
         bodyMatter: {
           contents: [],
         },

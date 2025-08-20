@@ -19,7 +19,7 @@ describe('Edge Case Validation', () => {
   });
 
   describe('Empty and Minimal Cases', () => {
-    it('should handle empty arrays correctly', async () => {
+    it('should handle empty arrays correctly', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -40,12 +40,12 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       // Empty contents array may not be valid - test validates the behavior
       expect(typeof result.isValid).toBe('boolean');
     });
 
-    it('should handle empty semantic text runs', async () => {
+    it('should handle empty semantic text runs', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -81,11 +81,11 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle empty list items', async () => {
+    it('should handle empty list items', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -120,11 +120,11 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle empty table rows', async () => {
+    it('should handle empty table rows', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -158,13 +158,13 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Extreme Length Cases', () => {
-    it('should handle very long strings', async () => {
+    it('should handle very long strings', () => {
       const veryLongString = 'a'.repeat(10000);
 
       const doc = {
@@ -202,11 +202,11 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle many nested elements', async () => {
+    it('should handle many nested elements', () => {
       // Create deeply nested units (up to reasonable limit)
       let nestedUnit: any = {
         id: 'unit-base',
@@ -256,11 +256,11 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle many parallel elements', async () => {
+    it('should handle many parallel elements', () => {
       const manyChapters = [];
       for (let i = 1; i <= 1000; i++) {
         manyChapters.push({
@@ -297,13 +297,13 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Special Characters and Encoding', () => {
-    it('should handle Unicode characters correctly', async () => {
+    it('should handle Unicode characters correctly', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -345,11 +345,11 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle special HTML entities', async () => {
+    it('should handle special HTML entities', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -390,11 +390,11 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle mathematical symbols and LaTeX', async () => {
+    it('should handle mathematical symbols and LaTeX', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -430,13 +430,13 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Boundary Values', () => {
-    it('should handle minimum required fields only', async () => {
+    it('should handle minimum required fields only', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -449,12 +449,12 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       // May be valid or invalid depending on CSL requirements
       expect(typeof result.isValid).toBe('boolean');
     });
 
-    it('should handle single character values', async () => {
+    it('should handle single character values', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -490,11 +490,11 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle whitespace-only strings', async () => {
+    it('should handle whitespace-only strings', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -530,13 +530,13 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Unusual Data Structures', () => {
-    it('should handle extensions with complex nested data', async () => {
+    it('should handle extensions with complex nested data', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -584,11 +584,11 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle circular references in extensions', async () => {
+    it('should handle circular references in extensions', () => {
       // Note: JSON doesn't support circular references, but we can test
       // what happens with repeated references
       const sharedObject = {
@@ -628,11 +628,11 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle mixed content types in arrays', async () => {
+    it('should handle mixed content types in arrays', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -678,13 +678,13 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Invalid JSON Structures', () => {
-    it('should handle malformed semantic text gracefully', async () => {
+    it('should handle malformed semantic text gracefully', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -724,12 +724,12 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('should handle additional properties correctly', async () => {
+    it('should handle additional properties correctly', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -769,14 +769,14 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       // Schema may or may not allow additional properties
       expect(typeof result.isValid).toBe('boolean');
     });
   });
 
   describe('Performance Edge Cases', () => {
-    it('should handle very large arrays efficiently', async () => {
+    it('should handle very large arrays efficiently', () => {
       const startTime = Date.now();
 
       const largeTagArray = Array(10000)
@@ -809,14 +809,14 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       const endTime = Date.now();
 
       expect(result.isValid).toBe(true);
       expect(endTime - startTime).toBeLessThan(5000); // Should complete within 5 seconds
     });
 
-    it('should handle very deep nesting levels', async () => {
+    it('should handle very deep nesting levels', () => {
       const startTime = Date.now();
 
       // Create deeply nested list structure
@@ -875,7 +875,7 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       const endTime = Date.now();
 
       expect(typeof result.isValid).toBe('boolean');
@@ -884,7 +884,7 @@ describe('Edge Case Validation', () => {
   });
 
   describe('Schema Version Edge Cases', () => {
-    it('should handle exact schema version match', async () => {
+    it('should handle exact schema version match', () => {
       const doc = {
         schemaVersion: '0.1.0', // Exact match
         bibliographicEntry: {
@@ -910,11 +910,11 @@ describe('Edge Case Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should reject slightly different schema versions', async () => {
+    it('should reject slightly different schema versions', () => {
       const invalidVersions = ['0.1.1', '0.1', '0.1.0-beta', '0.1.0 ', ' 0.1.0', '0.1.0.0'];
 
       for (const version of invalidVersions) {
@@ -929,14 +929,14 @@ describe('Edge Case Validation', () => {
           bodyMatter: { contents: [] },
         };
 
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         expect(result.isValid).toBe(false);
       }
     });
   });
 
   describe('Resource and URL Edge Cases', () => {
-    it('should handle various URI schemes in resources', async () => {
+    it('should handle various URI schemes in resources', () => {
       const uriSchemes = [
         'https://example.com/image.png',
         'http://example.com/image.png',
@@ -965,12 +965,12 @@ describe('Edge Case Validation', () => {
           bodyMatter: { contents: [] },
         };
 
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         expect(typeof result.isValid).toBe('boolean');
       }
     });
 
-    it('should handle internationalized domain names', async () => {
+    it('should handle internationalized domain names', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -989,7 +989,7 @@ describe('Edge Case Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(typeof result.isValid).toBe('boolean');
     });
   });

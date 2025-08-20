@@ -19,7 +19,7 @@ describe('Required Field Validation', () => {
   });
 
   describe('Root Document Required Fields', () => {
-    it('should require schemaVersion', async () => {
+    it('should require schemaVersion', () => {
       const doc = {
         bibliographicEntry: {
           id: 'test-001',
@@ -32,7 +32,7 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some(
@@ -41,7 +41,7 @@ describe('Required Field Validation', () => {
       ).toBe(true);
     });
 
-    it('should require bibliographicEntry', async () => {
+    it('should require bibliographicEntry', () => {
       const doc = {
         schemaVersion: '0.1.0',
         subject: 'Test Subject',
@@ -50,7 +50,7 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some(
@@ -60,7 +60,7 @@ describe('Required Field Validation', () => {
       ).toBe(true);
     });
 
-    it('should require subject', async () => {
+    it('should require subject', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -73,14 +73,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('subject') || e.path.includes('subject'))
       ).toBe(true);
     });
 
-    it('should require bodyMatter', async () => {
+    it('should require bodyMatter', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -91,7 +91,7 @@ describe('Required Field Validation', () => {
         subject: 'Test Subject',
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some(
@@ -100,7 +100,7 @@ describe('Required Field Validation', () => {
       ).toBe(true);
     });
 
-    it('should accept document with all required fields', async () => {
+    it('should accept document with all required fields', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -138,13 +138,13 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('XatsObject Required Fields', () => {
-    it('should require id field in all XatsObject descendants', async () => {
+    it('should require id field in all XatsObject descendants', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -164,14 +164,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('id') || e.path.includes('id'))
       ).toBe(true);
     });
 
-    it('should require id in content blocks', async () => {
+    it('should require id in content blocks', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -207,12 +207,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('id'))).toBe(true);
     });
 
-    it('should require id in learning objectives', async () => {
+    it('should require id in learning objectives', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -244,14 +244,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('id'))).toBe(true);
     });
   });
 
   describe('StructuralContainer Required Fields', () => {
-    it('should require title in units', async () => {
+    it('should require title in units', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -271,12 +271,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('title'))).toBe(true);
     });
 
-    it('should require title in chapters', async () => {
+    it('should require title in chapters', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -296,12 +296,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('title'))).toBe(true);
     });
 
-    it('should require title in sections', async () => {
+    it('should require title in sections', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -327,14 +327,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('title'))).toBe(true);
     });
   });
 
   describe('ContentBlock Required Fields', () => {
-    it('should require blockType in content blocks', async () => {
+    it('should require blockType in content blocks', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -370,12 +370,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('blockType'))).toBe(true);
     });
 
-    it('should require content in content blocks', async () => {
+    it('should require content in content blocks', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -407,14 +407,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('content'))).toBe(true);
     });
   });
 
   describe('SemanticText Required Fields', () => {
-    it('should require runs in SemanticText', async () => {
+    it('should require runs in SemanticText', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -450,14 +450,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('runs'))).toBe(true);
     });
   });
 
   describe('Text Run Required Fields', () => {
-    it('should require type and text in TextRun', async () => {
+    it('should require type and text in TextRun', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -497,14 +497,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('type') || e.message.includes('text'))
       ).toBe(true);
     });
 
-    it('should require type, text, and refId in ReferenceRun', async () => {
+    it('should require type, text, and refId in ReferenceRun', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -546,12 +546,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('refId'))).toBe(true);
     });
 
-    it('should require type and refId in CitationRun', async () => {
+    it('should require type and refId in CitationRun', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -592,14 +592,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('refId'))).toBe(true);
     });
   });
 
   describe('Specific Content Block Required Fields', () => {
-    it('should require text in paragraph blocks', async () => {
+    it('should require text in paragraph blocks', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -633,12 +633,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('text'))).toBe(true);
     });
 
-    it('should require listType and items in list blocks', async () => {
+    it('should require listType and items in list blocks', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -672,7 +672,7 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some(
@@ -681,7 +681,7 @@ describe('Required Field Validation', () => {
       ).toBe(true);
     });
 
-    it('should require code in code blocks', async () => {
+    it('should require code in code blocks', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -716,12 +716,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('code'))).toBe(true);
     });
 
-    it('should require notation and expression in math blocks', async () => {
+    it('should require notation and expression in math blocks', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -755,7 +755,7 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some(
@@ -764,7 +764,7 @@ describe('Required Field Validation', () => {
       ).toBe(true);
     });
 
-    it('should require resourceId in figure blocks', async () => {
+    it('should require resourceId in figure blocks', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -801,12 +801,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('resourceId'))).toBe(true);
     });
 
-    it('should require rows in table blocks', async () => {
+    it('should require rows in table blocks', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -843,14 +843,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('rows'))).toBe(true);
     });
   });
 
   describe('Matter Structure Required Fields', () => {
-    it('should require contents in BodyMatter', async () => {
+    it('should require contents in BodyMatter', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -864,12 +864,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('contents'))).toBe(true);
     });
 
-    it('should require contents in Unit', async () => {
+    it('should require contents in Unit', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -889,12 +889,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('contents'))).toBe(true);
     });
 
-    it('should require sections in Chapter', async () => {
+    it('should require sections in Chapter', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -914,12 +914,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('sections'))).toBe(true);
     });
 
-    it('should require content in Section', async () => {
+    it('should require content in Section', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -945,14 +945,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('content'))).toBe(true);
     });
   });
 
   describe('Pathway Required Fields', () => {
-    it('should require trigger and rules in Pathway', async () => {
+    it('should require trigger and rules in Pathway', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -983,14 +983,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('trigger') || e.message.includes('rules'))
       ).toBe(true);
     });
 
-    it('should require triggerType in pathway trigger', async () => {
+    it('should require triggerType in pathway trigger', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -1030,12 +1030,12 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('triggerType'))).toBe(true);
     });
 
-    it('should require condition and destinationId in pathway rules', async () => {
+    it('should require condition and destinationId in pathway rules', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -1075,7 +1075,7 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some(
@@ -1086,7 +1086,7 @@ describe('Required Field Validation', () => {
   });
 
   describe('CSL Data Item Required Fields', () => {
-    it('should require id in bibliographic entry', async () => {
+    it('should require id in bibliographic entry', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -1100,14 +1100,14 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.some((e: any) => e.message.includes('id'))).toBe(true);
     });
   });
 
   describe('Resource Required Fields', () => {
-    it('should require type and url in resources', async () => {
+    it('should require type and url in resources', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -1127,7 +1127,7 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('type') || e.message.includes('url'))
@@ -1136,7 +1136,7 @@ describe('Required Field Validation', () => {
   });
 
   describe('Key Term Required Fields', () => {
-    it('should require term and definition in KeyTerm', async () => {
+    it('should require term and definition in KeyTerm', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -1168,7 +1168,7 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some(
@@ -1179,7 +1179,7 @@ describe('Required Field Validation', () => {
   });
 
   describe('Rendering Hint Required Fields', () => {
-    it('should require hintType and value in RenderingHint', async () => {
+    it('should require hintType and value in RenderingHint', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -1210,7 +1210,7 @@ describe('Required Field Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some(

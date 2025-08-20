@@ -22,7 +22,7 @@ describe('Example Document Validation', () => {
   });
 
   describe('Valid Example Documents', () => {
-    it('should validate adaptive pathway example', async () => {
+    it('should validate adaptive pathway example', () => {
       const examplePath = resolve(process.cwd(), 'examples/adaptive-pathway-example.json');
 
       let exampleDoc: any;
@@ -34,7 +34,7 @@ describe('Example Document Validation', () => {
         exampleDoc = createAdaptivePathwayExample();
       }
 
-      const result = await validator.validate(exampleDoc);
+      const result = validator.validate(exampleDoc);
 
       if (!result.isValid) {
         console.error('Validation errors:', result.errors);
@@ -44,10 +44,10 @@ describe('Example Document Validation', () => {
       expect(result.errors).toHaveLength(0);
     });
 
-    it('should validate comprehensive textbook example', async () => {
+    it('should validate comprehensive textbook example', () => {
       const comprehensiveDoc = createComprehensiveTextbookExample();
 
-      const result = await validator.validate(comprehensiveDoc);
+      const result = validator.validate(comprehensiveDoc);
 
       if (!result.isValid) {
         console.error('Comprehensive doc validation errors:', result.errors);
@@ -57,7 +57,7 @@ describe('Example Document Validation', () => {
       expect(result.errors).toHaveLength(0);
     });
 
-    it('should validate minimal valid document', async () => {
+    it('should validate minimal valid document', () => {
       const minimalDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -95,14 +95,14 @@ describe('Example Document Validation', () => {
         },
       };
 
-      const result = await validator.validate(minimalDoc);
+      const result = validator.validate(minimalDoc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with all block types', async () => {
+    it('should validate document with all block types', () => {
       const allBlockTypesDoc = createAllBlockTypesExample();
 
-      const result = await validator.validate(allBlockTypesDoc);
+      const result = validator.validate(allBlockTypesDoc);
 
       if (!result.isValid) {
         console.error('All block types validation errors:', result.errors);
@@ -111,10 +111,10 @@ describe('Example Document Validation', () => {
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with rich semantic text', async () => {
+    it('should validate document with rich semantic text', () => {
       const richTextDoc = createRichSemanticTextExample();
 
-      const result = await validator.validate(richTextDoc);
+      const result = validator.validate(richTextDoc);
 
       if (!result.isValid) {
         console.error('Rich text validation errors:', result.errors);
@@ -123,10 +123,10 @@ describe('Example Document Validation', () => {
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with nested units and chapters', async () => {
+    it('should validate document with nested units and chapters', () => {
       const nestedDoc = createNestedStructureExample();
 
-      const result = await validator.validate(nestedDoc);
+      const result = validator.validate(nestedDoc);
 
       if (!result.isValid) {
         console.error('Nested structure validation errors:', result.errors);
@@ -135,10 +135,10 @@ describe('Example Document Validation', () => {
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with learning objectives and outcomes', async () => {
+    it('should validate document with learning objectives and outcomes', () => {
       const learningDoc = createLearningObjectivesExample();
 
-      const result = await validator.validate(learningDoc);
+      const result = validator.validate(learningDoc);
 
       if (!result.isValid) {
         console.error('Learning objectives validation errors:', result.errors);
@@ -147,10 +147,10 @@ describe('Example Document Validation', () => {
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with resources and figures', async () => {
+    it('should validate document with resources and figures', () => {
       const resourceDoc = createResourcesExample();
 
-      const result = await validator.validate(resourceDoc);
+      const result = validator.validate(resourceDoc);
 
       if (!result.isValid) {
         console.error('Resources validation errors:', result.errors);
@@ -159,10 +159,10 @@ describe('Example Document Validation', () => {
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with front and back matter', async () => {
+    it('should validate document with front and back matter', () => {
       const fullDoc = createFullDocumentExample();
 
-      const result = await validator.validate(fullDoc);
+      const result = validator.validate(fullDoc);
 
       if (!result.isValid) {
         console.error('Full document validation errors:', result.errors);
@@ -173,7 +173,7 @@ describe('Example Document Validation', () => {
   });
 
   describe('Invalid Example Documents', () => {
-    it('should validate against existing invalid examples', async () => {
+    it('should validate against existing invalid examples', () => {
       const invalidExamples = [
         'missing-required.json',
         'bad-semantictext.json',
@@ -197,7 +197,7 @@ describe('Example Document Validation', () => {
           continue;
         }
 
-        const result = await validator.validate(exampleDoc);
+        const result = validator.validate(exampleDoc);
 
         // Some examples may be valid according to the current schema
         // This documents the validator behavior for each example
@@ -214,7 +214,7 @@ describe('Example Document Validation', () => {
       expect(foundInvalidExamples).toBeGreaterThan(0);
     });
 
-    it('should reject document with missing schema version', async () => {
+    it('should reject document with missing schema version', () => {
       const invalidDoc = {
         // Missing schemaVersion
         bibliographicEntry: {
@@ -226,11 +226,11 @@ describe('Example Document Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      const result = await validator.validate(invalidDoc);
+      const result = validator.validate(invalidDoc);
       expect(result.isValid).toBe(false);
     });
 
-    it('should reject document with invalid semantic text structure', async () => {
+    it('should reject document with invalid semantic text structure', () => {
       const invalidDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -264,11 +264,11 @@ describe('Example Document Validation', () => {
         },
       };
 
-      const result = await validator.validate(invalidDoc);
+      const result = validator.validate(invalidDoc);
       expect(result.isValid).toBe(false);
     });
 
-    it('should reject document with invalid block type URI', async () => {
+    it('should reject document with invalid block type URI', () => {
       const invalidDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -304,11 +304,11 @@ describe('Example Document Validation', () => {
         },
       };
 
-      const result = await validator.validate(invalidDoc);
+      const result = validator.validate(invalidDoc);
       expect(result.isValid).toBe(false);
     });
 
-    it('should reject document with mixed content types in BodyMatter', async () => {
+    it('should reject document with mixed content types in BodyMatter', () => {
       const invalidDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -333,31 +333,31 @@ describe('Example Document Validation', () => {
         },
       };
 
-      await validator.validate(invalidDoc);
+      validator.validate(invalidDoc);
       // Note: The schema may allow this depending on oneOf implementation
       // This test documents the expected behavior
     });
   });
 
   describe('Stress Test Documents', () => {
-    it('should validate document with deeply nested structures', async () => {
+    it('should validate document with deeply nested structures', () => {
       const deepDoc = createDeeplyNestedExample();
 
-      const result = await validator.validate(deepDoc);
+      const result = validator.validate(deepDoc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with many content blocks', async () => {
+    it('should validate document with many content blocks', () => {
       const manyBlocksDoc = createManyBlocksExample();
 
-      const result = await validator.validate(manyBlocksDoc);
+      const result = validator.validate(manyBlocksDoc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with complex pathways', async () => {
+    it('should validate document with complex pathways', () => {
       const complexPathwaysDoc = createComplexPathwaysExample();
 
-      const result = await validator.validate(complexPathwaysDoc);
+      const result = validator.validate(complexPathwaysDoc);
       expect(result.isValid).toBe(true);
     });
   });

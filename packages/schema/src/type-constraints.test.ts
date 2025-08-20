@@ -19,7 +19,7 @@ describe('Type Constraint Validation', () => {
   });
 
   describe('Primitive Type Constraints', () => {
-    it('should enforce string type for schemaVersion', async () => {
+    it('should enforce string type for schemaVersion', () => {
       const doc = {
         schemaVersion: 123, // Should be string
         bibliographicEntry: {
@@ -31,14 +31,14 @@ describe('Type Constraint Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should enforce string type for subject', async () => {
+    it('should enforce string type for subject', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -50,14 +50,14 @@ describe('Type Constraint Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should enforce string type for title in structural containers', async () => {
+    it('should enforce string type for title in structural containers', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -77,14 +77,14 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should enforce string type for id fields', async () => {
+    it('should enforce string type for id fields', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -104,7 +104,7 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
@@ -113,7 +113,7 @@ describe('Type Constraint Validation', () => {
   });
 
   describe('Array Type Constraints', () => {
-    it('should enforce array type for tags', async () => {
+    it('should enforce array type for tags', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -134,14 +134,14 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('array') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should enforce array type for contents in BodyMatter', async () => {
+    it('should enforce array type for contents in BodyMatter', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -155,14 +155,14 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('array') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should enforce array type for sections in Chapter', async () => {
+    it('should enforce array type for sections in Chapter', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -182,14 +182,14 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('array') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should enforce array type for content in Section', async () => {
+    it('should enforce array type for content in Section', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -215,14 +215,14 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('array') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should enforce array type for runs in SemanticText', async () => {
+    it('should enforce array type for runs in SemanticText', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -258,7 +258,7 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('array') || e.message.includes('type'))
@@ -267,7 +267,7 @@ describe('Type Constraint Validation', () => {
   });
 
   describe('Object Type Constraints', () => {
-    it('should enforce object type for bibliographicEntry', async () => {
+    it('should enforce object type for bibliographicEntry', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: 'not-an-object', // Should be object
@@ -275,14 +275,14 @@ describe('Type Constraint Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('object') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should enforce object type for bodyMatter', async () => {
+    it('should enforce object type for bodyMatter', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -294,14 +294,14 @@ describe('Type Constraint Validation', () => {
         bodyMatter: 'not-an-object', // Should be object
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('object') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should enforce object type for content in ContentBlock', async () => {
+    it('should enforce object type for content in ContentBlock', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -333,14 +333,14 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('object') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should enforce object type for extensions', async () => {
+    it('should enforce object type for extensions', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -361,7 +361,7 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('object') || e.message.includes('type'))
@@ -370,7 +370,7 @@ describe('Type Constraint Validation', () => {
   });
 
   describe('Const Value Constraints', () => {
-    it('should enforce const value for schemaVersion', async () => {
+    it('should enforce const value for schemaVersion', () => {
       const doc = {
         schemaVersion: '1.0.0', // Should be '0.1.0'
         bibliographicEntry: {
@@ -382,13 +382,13 @@ describe('Type Constraint Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       // The error message may vary depending on validator implementation
       expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('should enforce const value for text run type', async () => {
+    it('should enforce const value for text run type', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -429,12 +429,12 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('should enforce const value for reference run type', async () => {
+    it('should enforce const value for reference run type', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -476,13 +476,13 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
     });
   });
 
   describe('Enum Constraints', () => {
-    it('should enforce enum values for list type', async () => {
+    it('should enforce enum values for list type', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -517,12 +517,12 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('should accept valid enum values for list type', async () => {
+    it('should accept valid enum values for list type', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -563,11 +563,11 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should enforce enum values for math notation', async () => {
+    it('should enforce enum values for math notation', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -602,12 +602,12 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('should accept valid enum values for math notation', async () => {
+    it('should accept valid enum values for math notation', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -642,13 +642,13 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Complex Type Combinations', () => {
-    it('should validate oneOf constraints for BodyMatter contents', async () => {
+    it('should validate oneOf constraints for BodyMatter contents', () => {
       // Test with mixed Unit and Chapter - should fail
       const doc = {
         schemaVersion: '0.1.0',
@@ -674,12 +674,12 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      await validator.validate(doc);
+      validator.validate(doc);
       // Note: This might pass if the schema allows mixed content.
       // The test validates the structure is checked.
     });
 
-    it('should validate oneOf constraints for SemanticText runs', async () => {
+    it('should validate oneOf constraints for SemanticText runs', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -725,13 +725,13 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
     });
   });
 
   describe('Boolean Type Constraints', () => {
-    it('should enforce boolean type for placeholder field', async () => {
+    it('should enforce boolean type for placeholder field', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -765,14 +765,14 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('boolean') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should accept boolean values for placeholder field', async () => {
+    it('should accept boolean values for placeholder field', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -806,13 +806,13 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Number Type Constraints', () => {
-    it('should reject non-number values for numeric fields', async () => {
+    it('should reject non-number values for numeric fields', () => {
       // Note: The current schema doesn't have explicit number fields,
       // but we can test with custom extensions that might include numbers
       const doc = {
@@ -838,13 +838,13 @@ describe('Type Constraint Validation', () => {
       };
 
       // This test validates that extensions can contain any type
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true); // Extensions are open-ended
     });
   });
 
   describe('Mixed Type Arrays', () => {
-    it('should enforce string array type for tags', async () => {
+    it('should enforce string array type for tags', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -869,14 +869,14 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
       ).toBe(true);
     });
 
-    it('should enforce string array type for citationIds', async () => {
+    it('should enforce string array type for citationIds', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -901,7 +901,7 @@ describe('Type Constraint Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
@@ -910,7 +910,7 @@ describe('Type Constraint Validation', () => {
   });
 
   describe('Null and Undefined Handling', () => {
-    it('should reject null values for required fields', async () => {
+    it('should reject null values for required fields', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -922,12 +922,12 @@ describe('Type Constraint Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('should accept null values for optional fields', async () => {
+    it('should accept null values for optional fields', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -940,7 +940,7 @@ describe('Type Constraint Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      await validator.validate(doc);
+      validator.validate(doc);
       // Note: Schema may or may not allow null for optional fields
       // This test validates the behavior is consistent
     });

@@ -19,7 +19,7 @@ describe('Pattern and Format Validation', () => {
   });
 
   describe('URI Format Validation', () => {
-    it('should enforce URI format for blockType', async () => {
+    it('should enforce URI format for blockType', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -55,14 +55,14 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('uri') || e.message.includes('format'))
       ).toBe(true);
     });
 
-    it('should accept valid URI for blockType', async () => {
+    it('should accept valid URI for blockType', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -98,11 +98,11 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should enforce URI format for rendering hint type', async () => {
+    it('should enforce URI format for rendering hint type', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -134,14 +134,14 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('uri') || e.message.includes('format'))
       ).toBe(true);
     });
 
-    it('should accept valid URI for rendering hint type', async () => {
+    it('should accept valid URI for rendering hint type', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -173,11 +173,11 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should enforce URI format for resource type', async () => {
+    it('should enforce URI format for resource type', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -196,14 +196,14 @@ describe('Pattern and Format Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('uri') || e.message.includes('format'))
       ).toBe(true);
     });
 
-    it('should enforce URI format for resource URL', async () => {
+    it('should enforce URI format for resource URL', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -222,14 +222,14 @@ describe('Pattern and Format Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('uri') || e.message.includes('format'))
       ).toBe(true);
     });
 
-    it('should accept valid URIs for resource fields', async () => {
+    it('should accept valid URIs for resource fields', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -262,11 +262,11 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should enforce URI format for pathway trigger type', async () => {
+    it('should enforce URI format for pathway trigger type', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -306,14 +306,14 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('uri') || e.message.includes('format'))
       ).toBe(true);
     });
 
-    it('should enforce URI format for pathway type', async () => {
+    it('should enforce URI format for pathway type', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -354,14 +354,14 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some((e: any) => e.message.includes('uri') || e.message.includes('format'))
       ).toBe(true);
     });
 
-    it('should accept valid URIs for pathway fields', async () => {
+    it('should accept valid URIs for pathway fields', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -402,13 +402,13 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Pattern Validation', () => {
-    it('should enforce pattern for pathway conditions', async () => {
+    it('should enforce pattern for pathway conditions', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -448,7 +448,7 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(
         result.errors.some(
@@ -457,7 +457,7 @@ describe('Pattern and Format Validation', () => {
       ).toBe(true);
     });
 
-    it('should accept valid pathway condition patterns', async () => {
+    it('should accept valid pathway condition patterns', () => {
       const validConditions = [
         'score >= 70',
         'score < 70 AND attempts >= 3',
@@ -508,12 +508,12 @@ describe('Pattern and Format Validation', () => {
           },
         };
 
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         expect(result.isValid).toBe(true);
       }
     });
 
-    it('should enforce pattern for placeholder block types', async () => {
+    it('should enforce pattern for placeholder block types', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -548,12 +548,12 @@ describe('Pattern and Format Validation', () => {
       };
 
       // This tests the pattern validation for placeholder blockTypes
-      await validator.validate(doc);
+      validator.validate(doc);
       // The schema allows additional properties in placeholder content,
       // so this should be valid if the pattern matches
     });
 
-    it('should accept valid placeholder block type patterns', async () => {
+    it('should accept valid placeholder block type patterns', () => {
       const validPlaceholders = [
         'https://xats.org/core/placeholders/tableOfContents',
         'https://xats.org/core/placeholders/bibliography',
@@ -594,14 +594,14 @@ describe('Pattern and Format Validation', () => {
           },
         };
 
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         expect(result.isValid).toBe(true);
       }
     });
   });
 
   describe('Edge Cases in Format Validation', () => {
-    it('should handle relative URIs correctly', async () => {
+    it('should handle relative URIs correctly', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -620,12 +620,12 @@ describe('Pattern and Format Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      await validator.validate(doc);
+      validator.validate(doc);
       // This tests how the validator handles relative URIs
       // The result depends on the URI validation implementation
     });
 
-    it('should handle scheme-less URIs', async () => {
+    it('should handle scheme-less URIs', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -644,11 +644,11 @@ describe('Pattern and Format Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      await validator.validate(doc);
+      validator.validate(doc);
       // This tests how the validator handles scheme-less URIs
     });
 
-    it('should handle URIs with special characters', async () => {
+    it('should handle URIs with special characters', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -682,11 +682,11 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      await validator.validate(doc);
+      validator.validate(doc);
       // This tests how the validator handles URIs with query parameters
     });
 
-    it('should handle internationalized URIs', async () => {
+    it('should handle internationalized URIs', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -705,11 +705,11 @@ describe('Pattern and Format Validation', () => {
         bodyMatter: { contents: [] },
       };
 
-      await validator.validate(doc);
+      validator.validate(doc);
       // This tests how the validator handles internationalized domain names
     });
 
-    it('should reject obviously invalid URIs', async () => {
+    it('should reject obviously invalid URIs', () => {
       const invalidUris = [
         'ht tp://example.com', // Space in scheme
         'https:///example.com', // Triple slash
@@ -737,14 +737,14 @@ describe('Pattern and Format Validation', () => {
           bodyMatter: { contents: [] },
         };
 
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         expect(result.isValid).toBe(false);
       }
     });
   });
 
   describe('Custom Block Type Validation', () => {
-    it('should accept custom block type URIs', async () => {
+    it('should accept custom block type URIs', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -782,11 +782,11 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should accept extension block types with proper URI format', async () => {
+    it('should accept extension block types with proper URI format', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -827,13 +827,13 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Format Validation Edge Cases', () => {
-    it('should handle very long URIs', async () => {
+    it('should handle very long URIs', () => {
       const longUri = `https://example.com/${'a'.repeat(2000)}/block`;
 
       const doc = {
@@ -869,12 +869,12 @@ describe('Pattern and Format Validation', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       // Test that extremely long URIs are handled appropriately
       expect(typeof result.isValid).toBe('boolean');
     });
 
-    it('should handle URIs with various protocols', async () => {
+    it('should handle URIs with various protocols', () => {
       const protocols = [
         'https://example.com/block',
         'http://example.com/block',
@@ -902,7 +902,7 @@ describe('Pattern and Format Validation', () => {
           bodyMatter: { contents: [] },
         };
 
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         // All should be valid URIs regardless of protocol
         expect(typeof result.isValid).toBe('boolean');
       }
