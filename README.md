@@ -308,18 +308,22 @@ npm run validate examples/
 - ✅ Enhanced rights management and accessibility features
 - ✅ Comprehensive v0.3.0 documentation
 
-### v0.4.0 (Planned)
-- 🤖 AI integration and content generation support
-- 📊 Advanced learning analytics framework
-- 🔍 Enhanced search and discovery capabilities
-- 🎯 Adaptive content delivery system
+### v0.4.0 (In Development - Target: 2026-05-31)
+- 🎨 **Enhanced Rendering Hints**: Comprehensive author intent preservation system
+- 🤖 **AI Integration Framework**: MCP server and multi-agent orchestration for textbook creation
+- 📊 **R-markdown Renderer**: Academic workflow integration with scientific computing
+- 🔄 **Production Workflow Tools**: Round-trip conversion and ancillary generation
+
+### v0.5.0 (Planned - Target: 2026-09-30)
+- 📊 **Advanced Analytics Platform**: Learning analytics and content performance metrics
+- 🌍 **Advanced Internationalization**: Multi-language content and translation workflows
+- 🔒 **Privacy-First Analytics**: GDPR/CCPA compliant analytics framework
 
 ### Future Vision
-- 🌍 Internationalization (i18n)
-- 📊 Advanced analytics
-- 🤖 AI authoring tools
-- 📱 Mobile-first rendering
-- 🎮 Gamification elements
+- 🎮 **Immersive Content**: VR/AR integration and gamification
+- 🏥 **Domain Extensions**: Specialized support for STEM, medical, legal education
+- 🔐 **Blockchain Integration**: Immutable content provenance tracking
+- 📱 **Mobile-First Rendering**: Optimized mobile learning experiences
 
 See our [full roadmap](./docs/ROADMAP.md) for detailed plans.
 
