@@ -1,0 +1,277 @@
+{
+  "meeting": {
+    "date": "2025-08-19",
+    "time": "21:55",
+    "title": "Project Structure for Tooling Phase",
+    "decision": "Enhanced Monorepo with Workspaces"
+  },
+  "immediate_actions": [
+    {
+      "id": "IM-001",
+      "title": "Research and select monorepo tooling stack",
+      "description": "Evaluate Turborepo vs. Nx, select primary build orchestration tool",
+      "assignee": "xats-dev-lead",
+      "due_date": "2025-08-26",
+      "priority": "high",
+      "status": "pending",
+      "deliverables": [
+        "Tooling comparison document",
+        "Selected tooling with rationale",
+        "Initial configuration files"
+      ]
+    },
+    {
+      "id": "IM-002", 
+      "title": "Design new CI/CD pipeline for workspaces",
+      "description": "Create GitHub Actions workflow optimized for monorepo with caching",
+      "assignee": "deployment-engineer",
+      "due_date": "2025-08-26",
+      "priority": "high", 
+      "status": "pending",
+      "deliverables": [
+        "Updated .github/workflows/ci.yml",
+        "Caching strategy documentation",
+        "Performance benchmarks"
+      ]
+    },
+    {
+      "id": "IM-003",
+      "title": "Plan documentation reorganization for packages",
+      "description": "Design documentation architecture for multi-package structure",
+      "assignee": "xats-doc-writer",
+      "due_date": "2025-08-26",
+      "priority": "medium",
+      "status": "pending",
+      "deliverables": [
+        "Documentation architecture plan",
+        "Package-specific doc templates",
+        "Migration strategy for existing docs"
+      ]
+    }
+  ],
+  "short_term_actions": [
+    {
+      "id": "ST-001",
+      "title": "Create migration plan for existing codebase", 
+      "description": "Detailed plan for moving current code into package structure",
+      "assignee": "xats-schema-engineer",
+      "due_date": "2025-09-02",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": ["IM-001", "IM-002"],
+      "deliverables": [
+        "Step-by-step migration plan",
+        "Automated migration scripts",
+        "Testing strategy for migration"
+      ]
+    },
+    {
+      "id": "ST-002",
+      "title": "Set up development tooling and shared configurations",
+      "description": "Configure ESLint, TypeScript, Prettier for shared use across packages",
+      "assignee": "dx-optimizer", 
+      "due_date": "2025-09-02",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": ["IM-001"],
+      "deliverables": [
+        "Shared configuration packages",
+        "Developer setup documentation",
+        "VS Code workspace configuration"
+      ]
+    },
+    {
+      "id": "ST-003",
+      "title": "Define package boundaries and naming conventions",
+      "description": "Establish clear rules for package organization and naming",
+      "assignee": "project-architect",
+      "due_date": "2025-09-02", 
+      "priority": "medium",
+      "status": "pending",
+      "deliverables": [
+        "Package boundary guidelines",
+        "Naming convention documentation",
+        "Dependency management rules"
+      ]
+    }
+  ],
+  "medium_term_actions": [
+    {
+      "id": "MT-001",
+      "title": "Create package-specific documentation templates",
+      "description": "Standard templates for README, API docs, and examples per package",
+      "assignee": "xats-implementation-guide",
+      "due_date": "2025-09-16",
+      "priority": "medium", 
+      "status": "pending",
+      "dependencies": ["ST-001", "ST-003"],
+      "deliverables": [
+        "Package README template",
+        "API documentation template", 
+        "Example structure template"
+      ]
+    },
+    {
+      "id": "MT-002",
+      "title": "Test new structure with sample use cases",
+      "description": "Validate user experience with new package structure",
+      "assignee": "xats-consumer-advocate",
+      "due_date": "2025-09-16",
+      "priority": "high",
+      "status": "pending", 
+      "dependencies": ["ST-001"],
+      "deliverables": [
+        "User experience test results",
+        "Installation and usage guides",
+        "Feedback collection and analysis"
+      ]
+    },
+    {
+      "id": "MT-003",
+      "title": "Validate enterprise packaging requirements",
+      "description": "Ensure new structure meets enterprise adoption needs",
+      "assignee": "xats-publishing-expert",
+      "due_date": "2025-09-16",
+      "priority": "medium",
+      "status": "pending",
+      "deliverables": [
+        "Enterprise requirements validation",
+        "Packaging strategy documentation",
+        "Support and licensing recommendations"
+      ]
+    }
+  ],
+  "review_milestones": [
+    {
+      "id": "RM-001",
+      "title": "Infrastructure setup complete",
+      "date": "2025-09-02",
+      "description": "All tooling configured, existing code migrated to new structure",
+      "success_criteria": [
+        "All packages build successfully",
+        "CI/CD pipeline functional",
+        "Documentation updated"
+      ],
+      "review_participants": ["xats-dev-lead", "deployment-engineer", "dx-optimizer"]
+    },
+    {
+      "id": "RM-002", 
+      "title": "First new package released",
+      "date": "2025-09-16",
+      "description": "MCP server package developed and released using new structure",
+      "success_criteria": [
+        "Package published to npm",
+        "Documentation complete",
+        "User adoption measured"
+      ],
+      "review_participants": ["project-architect", "xats-implementation-guide"]
+    },
+    {
+      "id": "RM-003",
+      "title": "Developer experience evaluation", 
+      "date": "2025-09-30",
+      "description": "Comprehensive review of developer experience and build performance",
+      "success_criteria": [
+        "Build times under target",
+        "Positive developer feedback",
+        "Contribution velocity maintained"
+      ],
+      "review_participants": ["All board members"]
+    },
+    {
+      "id": "RM-004",
+      "title": "Full structure assessment",
+      "date": "2026-02-19",
+      "description": "6-month comprehensive review with option to adjust approach",
+      "success_criteria": [
+        "All success metrics met",
+        "Community adoption positive", 
+        "Technical debt manageable"
+      ],
+      "review_participants": ["All board members", "Community representatives"]
+    }
+  ],
+  "contingency_plans": [
+    {
+      "scenario": "Migration takes longer than expected",
+      "trigger": "Migration not complete by September 9",
+      "response": [
+        "Reassess scope and prioritize core packages",
+        "Consider phased migration approach",
+        "Extend timeline by 2 weeks maximum"
+      ],
+      "responsible": "xats-project-steward"
+    },
+    {
+      "scenario": "Build performance worse than current",
+      "trigger": "Build times >2x current performance",
+      "response": [
+        "Immediate investigation by deployment-engineer",
+        "Consider alternative caching strategies",
+        "Evaluate tooling alternatives"
+      ],
+      "responsible": "deployment-engineer"
+    },
+    {
+      "scenario": "Developer experience significantly degraded",
+      "trigger": "Multiple contributors report setup issues",
+      "response": [
+        "Immediate developer experience audit",
+        "Simplify setup process",
+        "Consider rollback if issues persist"
+      ],
+      "responsible": "dx-optimizer"
+    },
+    {
+      "scenario": "Community adoption lower than expected",
+      "trigger": "Package download rates <50% of current",
+      "response": [
+        "User experience research",
+        "Documentation improvements",
+        "Community feedback collection"
+      ],
+      "responsible": "xats-consumer-advocate"
+    }
+  ],
+  "success_metrics": {
+    "technical": {
+      "build_performance": {
+        "target": "Build times under 2 minutes for full monorepo",
+        "measurement": "CI pipeline duration, local build times",
+        "baseline": "Current build time ~45 seconds"
+      },
+      "developer_productivity": {
+        "target": "New contributor productive within 30 minutes", 
+        "measurement": "Time from clone to first successful contribution",
+        "baseline": "Current ~15 minutes"
+      },
+      "package_quality": {
+        "target": "All packages have >90% test coverage",
+        "measurement": "Combined coverage reports",
+        "baseline": "Current ~85% coverage"
+      }
+    },
+    "user_experience": {
+      "package_discovery": {
+        "target": "Users find relevant packages within 2 clicks",
+        "measurement": "Documentation analytics, user feedback"
+      },
+      "integration_success": {
+        "target": ">95% successful installations of package combinations",
+        "measurement": "npm telemetry, issue reports"
+      }
+    },
+    "community": {
+      "contribution_rate": {
+        "target": "Maintain or increase contribution velocity",
+        "measurement": "PR rate, issue resolution time", 
+        "baseline": "Current ~15 PRs/month"
+      },
+      "package_adoption": {
+        "target": "Each package gains independent usage",
+        "measurement": "npm download statistics",
+        "baseline": "Current validator downloads ~100/week"
+      }
+    }
+  }
+}
