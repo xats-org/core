@@ -24,9 +24,10 @@ export class XatsValidator {
   constructor(options: ValidatorOptions = {}) {
     this.ajv = new Ajv({
       allErrors: options.allErrors ?? true,
-      strict: options.strict ?? true,
+      strict: options.strict ?? false, // Set to false to allow external refs
       loadSchema: this.loadRemoteSchema.bind(this),
       validateFormats: true,
+      validateSchema: false, // Don't validate the schema itself
     });
 
     // Add standard formats (email, uri, etc.)
@@ -45,7 +46,14 @@ export class XatsValidator {
    * Pre-load common schemas for offline validation
    */
   private preloadSchemas(): void {
-    // Load CSL schema stub
+    // Load CSL schema stub - matches the URL referenced in xats schemas
+    this.ajv.addSchema({
+      $id: 'https://raw.githubusercontent.com/citation-style-language/schema/master/csl-data.json',
+      type: 'object',
+      additionalProperties: true,
+    });
+    
+    // Also add the resource.citationstyles.org version
     this.ajv.addSchema({
       $id: 'https://resource.citationstyles.org/schema/latest/input/json/csl-data.json',
       type: 'object',
