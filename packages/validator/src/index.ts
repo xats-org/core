@@ -242,14 +242,28 @@ export class XatsValidator {
    */
   validateSync(document: unknown, options: ValidatorOptions = {}): ValidationResult {
     const schemaVersion = this.determineSchemaVersion(document, options.schemaVersion);
-    const schemaId = getSchemaId(schemaVersion);
+    
+    // Check if it's a valid version
+    if (!isVersionAvailable(schemaVersion)) {
+      return {
+        isValid: false,
+        errors: [
+          {
+            path: 'root',
+            message: `Invalid schema version: ${schemaVersion}`,
+          },
+        ],
+      };
+    }
+    
+    const schemaId = getSchemaId(schemaVersion as XatsVersion);
 
     // Try to get cached validator
     const validate = this.validatorCache.get(schemaId) || this.ajv.getSchema(schemaId);
 
     if (!validate) {
       // Try to compile on the fly
-      const schema = loadSchema(schemaVersion);
+      const schema = loadSchema(schemaVersion as XatsVersion);
       if (!schema) {
         return {
           isValid: false,
