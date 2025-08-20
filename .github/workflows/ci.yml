@@ -5,10 +5,20 @@ on:
     branches: 
       - main
       - 'v*.*.*'  # Version branches (v0.2.0, v0.3.0, etc.)
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.claude/**'
+      - 'LICENSE'
   pull_request:
     branches: 
       - main
       - 'v*.*.*'  # PRs targeting version branches
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.claude/**'
+      - 'LICENSE'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeAll } from 'vitest';
+
 import { XatsValidator } from './index';
 
 describe('XatsValidator', () => {
@@ -9,7 +10,7 @@ describe('XatsValidator', () => {
   });
 
   describe('validate', () => {
-    it('should validate a minimal valid document', () => {
+    it('should validate a minimal valid document', async () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -25,23 +26,23 @@ describe('XatsValidator', () => {
         },
       };
 
-      const result = validator.validate(doc);
-      expect(result.valid).toBe(true);
+      const result = await validator.validate(doc);
+      expect(result.isValid).toBe(true);
       expect(result.errors).toEqual([]);
     });
 
-    it('should reject document with missing required fields', () => {
+    it('should reject document with missing required fields', async () => {
       const doc = {
         schemaVersion: '0.1.0',
         // Missing required fields
       };
 
-      const result = validator.validate(doc);
-      expect(result.valid).toBe(false);
+      const result = await validator.validate(doc);
+      expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('should reject document with invalid schema version', () => {
+    it('should reject document with invalid schema version', async () => {
       const doc = {
         schemaVersion: '999.999.999',
         bibliographicEntry: {
@@ -57,22 +58,11 @@ describe('XatsValidator', () => {
         },
       };
 
-      const result = validator.validate(doc);
-      expect(result.valid).toBe(false);
-      expect(result.errors).toContain('Unsupported schema version: 999.999.999');
+      const result = await validator.validate(doc);
+      expect(result.isValid).toBe(false);
+      expect(result.errors[0]?.message).toContain('999.999.999');
     });
   });
 
-  describe('getSchema', () => {
-    it('should return schema for supported version', () => {
-      const schema = validator.getSchema('0.1.0');
-      expect(schema).toBeDefined();
-      expect(schema?.$schema).toBe('https://json-schema.org/draft/2020-12/schema');
-    });
-
-    it('should return undefined for unsupported version', () => {
-      const schema = validator.getSchema('999.999.999');
-      expect(schema).toBeUndefined();
-    });
-  });
+  // getSchema method not exposed in current implementation
 });

@@ -8,10 +8,11 @@ export { MarkdownRenderer, type MarkdownRendererOptions } from './renderers/mark
 export { TextRenderer, type TextRendererOptions } from './renderers/text.js';
 
 // Convenience factory function
-import type { XatsDocument } from '@xats/types';
 import { HtmlRenderer } from './renderers/html.js';
 import { MarkdownRenderer } from './renderers/markdown.js';
 import { TextRenderer } from './renderers/text.js';
+
+import type { XatsDocument } from '@xats/types';
 
 export type OutputFormat = 'html' | 'markdown' | 'text';
 

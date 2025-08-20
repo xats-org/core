@@ -6,7 +6,13 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { readdirSync, readFileSync, existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { validateXatsFile } from '../dist/validator.js';
+import { validateXatsSync } from '@xats/validator';
+
+// Alias for backwards compatibility with test code
+const validateXatsFile = (content: any) => {
+  const parsed = typeof content === 'string' ? JSON.parse(content) : content;
+  return validateXatsSync(parsed);
+};
 
 const EXAMPLES_DIR = join(process.cwd(), 'examples');
 const INVALID_EXAMPLES_DIR = join(EXAMPLES_DIR, 'invalid');

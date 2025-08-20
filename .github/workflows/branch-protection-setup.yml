@@ -61,10 +61,11 @@ jobs:
         BRANCH="${{ steps.branch.outputs.name }}"
         
         # Define required status checks based on branch type
-        # These job names match the modern ci.yml workflow (not ci-consistent.yml)
+        # These job names match the ci.yml workflow jobs
         if [ "$BRANCH" == "main" ]; then
           CHECKS='[
             "lint",
+            "typecheck",
             "test (18)",
             "test (20)",
             "test (22)",
@@ -78,7 +79,9 @@ jobs:
         else
           CHECKS='[
             "lint",
-            "test (20)"
+            "typecheck",
+            "test (20)",
+            "build"
           ]'
           echo "Setting up standard protection for version branch"
         fi

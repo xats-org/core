@@ -24,13 +24,17 @@ export const accessibilityExample: XatsDocument = {
   },
   subject: 'Accessibility',
   bodyMatter: {
-    id: 'body',
-    type: 'bodyMatter',
     contents: [
       {
         id: 'chapter-1',
-        type: 'chapter',
-        title: 'Visual Content with Descriptions',
+        title: {
+          runs: [
+            {
+              type: 'text',
+              text: 'Visual Content with Descriptions',
+            },
+          ],
+        },
         contents: [
           {
             id: 'figure-1',
@@ -90,35 +94,43 @@ export const adaptivePathwayExample: XatsDocument = {
   },
   subject: 'Mathematics',
   bodyMatter: {
-    id: 'body',
-    type: 'bodyMatter',
     contents: [
       {
         id: 'chapter-1',
-        type: 'chapter',
-        title: 'Algebra Fundamentals',
+        title: {
+          runs: [
+            {
+              type: 'text',
+              text: 'Algebra Fundamentals',
+            },
+          ],
+        },
         pathways: [
           {
             id: 'pathway-1',
-            condition: {
-              type: 'assessment',
-              assessmentId: 'pretest-1',
-              operator: 'greater_than',
-              value: 80,
+            pathwayType: 'https://xats.org/core/pathways/conditional',
+            condition: 'assessment:pretest-1:greater_than:80',
+            description: {
+              runs: [
+                {
+                  type: 'text',
+                  text: 'Skip to advanced topics for high scorers',
+                },
+              ],
             },
-            targetId: 'advanced-section',
-            description: 'Skip to advanced topics for high scorers',
           },
           {
             id: 'pathway-2',
-            condition: {
-              type: 'assessment',
-              assessmentId: 'pretest-1',
-              operator: 'less_than',
-              value: 60,
+            pathwayType: 'https://xats.org/core/pathways/conditional',
+            condition: 'assessment:pretest-1:less_than:60',
+            description: {
+              runs: [
+                {
+                  type: 'text',
+                  text: 'Additional support for struggling students',
+                },
+              ],
             },
-            targetId: 'remedial-section',
-            description: 'Additional support for struggling students',
           },
         ],
         contents: [
@@ -127,7 +139,14 @@ export const adaptivePathwayExample: XatsDocument = {
             blockType: 'https://xats.org/core/blocks/assessment',
             content: {
               assessmentType: 'formative',
-              title: 'Pre-test: Algebra Basics',
+              title: {
+          runs: [
+            {
+              type: 'text',
+              text: 'Pre-test: Algebra Basics',
+            },
+          ],
+        },
               questions: [
                 {
                   id: 'q1',
@@ -154,8 +173,14 @@ export const adaptivePathwayExample: XatsDocument = {
           },
           {
             id: 'standard-section',
-            type: 'section',
-            title: 'Standard Content',
+            title: {
+          runs: [
+            {
+              type: 'text',
+              text: 'Standard Content',
+            },
+          ],
+        },
             contents: [
               {
                 id: 'para-standard',
@@ -173,8 +198,14 @@ export const adaptivePathwayExample: XatsDocument = {
           },
           {
             id: 'remedial-section',
-            type: 'section',
-            title: 'Additional Support',
+            title: {
+          runs: [
+            {
+              type: 'text',
+              text: 'Additional Support',
+            },
+          ],
+        },
             contents: [
               {
                 id: 'para-remedial',
@@ -192,8 +223,14 @@ export const adaptivePathwayExample: XatsDocument = {
           },
           {
             id: 'advanced-section',
-            type: 'section',
-            title: 'Advanced Topics',
+            title: {
+          runs: [
+            {
+              type: 'text',
+              text: 'Advanced Topics',
+            },
+          ],
+        },
             contents: [
               {
                 id: 'para-advanced',

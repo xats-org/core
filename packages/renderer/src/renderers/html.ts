@@ -1,4 +1,5 @@
 import { BaseRenderer, type RendererOptions } from '../base-renderer.js';
+
 import type {
   XatsDocument,
   Unit,
@@ -25,7 +26,7 @@ export interface HtmlRendererOptions extends RendererOptions {
  */
 export class HtmlRenderer extends BaseRenderer {
   protected htmlOptions: HtmlRendererOptions;
-  
+
   constructor(options: HtmlRendererOptions = {}) {
     super(options);
     this.htmlOptions = {
@@ -34,199 +35,206 @@ export class HtmlRenderer extends BaseRenderer {
       ...options,
     };
   }
-  
+
   render(document: XatsDocument): string {
     const content = [
       this.renderMetadata(document),
       document.frontMatter ? this.renderDocumentSection('frontmatter', document.frontMatter) : '',
       document.bodyMatter ? this.renderDocumentSection('bodymatter', document.bodyMatter) : '',
       document.backMatter ? this.renderDocumentSection('backmatter', document.backMatter) : '',
-    ].filter(Boolean).join('\n');
-    
+    ]
+      .filter(Boolean)
+      .join('\n');
+
     if (this.htmlOptions.wrapInDocument) {
       return this.wrapInHtmlDocument(content, document);
     }
-    
+
     return content;
   }
-  
+
   renderMetadata(document: XatsDocument): string {
     const parts: string[] = [];
-    
+
     if (document.bibliographicEntry) {
       const bib = document.bibliographicEntry;
       parts.push('<header class="xats-metadata">');
-      
+
       if (bib.title) {
         parts.push(`<h1 class="xats-title">${this.escapeText(bib.title)}</h1>`);
       }
-      
+
       if (bib.author && bib.author.length > 0) {
-        const authors = bib.author.map(a => {
-          if ('literal' in a && a.literal) {
-            return a.literal;
-          }
-          return `${a.given || ''} ${a.family || ''}`.trim();
-        }).join(', ');
+        const authors = bib.author
+          .map((a) => {
+            if ('literal' in a && a.literal) {
+              return a.literal;
+            }
+            return `${a.given || ''} ${a.family || ''}`.trim();
+          })
+          .join(', ');
         parts.push(`<div class="xats-authors">${this.escapeText(authors)}</div>`);
       }
-      
+
       if (bib.publisher) {
         parts.push(`<div class="xats-publisher">${this.escapeText(bib.publisher)}</div>`);
       }
-      
+
       parts.push('</header>');
     }
-    
+
     return parts.join('\n');
   }
-  
+
   renderStructuralContainer(container: StructuralContainer): string {
     const attrs = this.getAttributes(container);
     const className = this.getContainerClassName(container);
-    
+
     const parts: string[] = [];
     parts.push(`<div class="${className}"${attrs}>`);
-    
+
     if (container.label) {
       parts.push(`<div class="xats-label">${this.escapeText(container.label)}</div>`);
     }
-    
+
     if (container.title) {
       const level = this.getHeadingLevel(container);
       const titleText = this.renderSemanticText(container.title);
       parts.push(`<h${level} class="xats-heading">${titleText}</h${level}>`);
     }
-    
+
     if ('contents' in container && container.contents && Array.isArray(container.contents)) {
       parts.push(this.renderContents(container.contents));
     }
-    
+
     parts.push('</div>');
-    
+
     return parts.join('\n');
   }
-  
+
   renderUnit(unit: Unit): string {
     return this.renderStructuralContainer(unit);
   }
-  
+
   renderChapter(chapter: Chapter): string {
     return this.renderStructuralContainer(chapter);
   }
-  
+
   renderSection(section: Section): string {
     return this.renderStructuralContainer(section);
   }
-  
+
   renderContentBlock(block: ContentBlock): string {
     // Check for custom renderer
     const custom = this.applyCustomRenderer(block);
     if (custom) return custom;
-    
+
     const typeName = this.getBlockTypeName(block.blockType);
     const attrs = this.getAttributes(block);
-    
+
     switch (typeName) {
       case 'paragraph':
         if (this.isSemanticText(block.content)) {
           return `<p class="xats-paragraph"${attrs}>${this.renderSemanticText(block.content)}</p>`;
         }
         return `<p class="xats-paragraph"${attrs}>${this.escapeText(String(block.content))}</p>`;
-      
+
       case 'heading':
         if (this.isHeadingContent(block.content)) {
           const level = block.content.level || 1;
           return `<h${level} class="xats-heading"${attrs}>${this.renderSemanticText(block.content.text)}</h${level}>`;
         }
         return `<h2 class="xats-heading"${attrs}>${this.escapeText(String(block.content))}</h2>`;
-      
+
       case 'list':
         if (this.isListContent(block.content)) {
           const tag = block.content.ordered ? 'ol' : 'ul';
           const items = block.content.items
-            .map((item: any) => `<li>${this.isSemanticText(item) ? this.renderSemanticText(item) : this.escapeText(String(item))}</li>`)
+            .map(
+              (item: any) =>
+                `<li>${this.isSemanticText(item) ? this.renderSemanticText(item) : this.escapeText(String(item))}</li>`
+            )
             .join('\n');
           return `<${tag} class="xats-list"${attrs}>${items}</${tag}>`;
         }
         return `<ul class="xats-list"${attrs}><li>${this.escapeText(String(block.content))}</li></ul>`;
-      
+
       case 'blockquote':
         if (this.isBlockquoteContent(block.content)) {
           return `<blockquote class="xats-blockquote"${attrs}>${this.renderSemanticText(block.content.text)}</blockquote>`;
         }
         return `<blockquote class="xats-blockquote"${attrs}>${this.escapeText(String(block.content))}</blockquote>`;
-      
+
       case 'codeBlock':
         if (this.isCodeBlockContent(block.content)) {
           const lang = block.content.language || '';
           return `<pre class="xats-code"${attrs}><code class="language-${lang}">${this.escapeText(block.content.code)}</code></pre>`;
         }
         return `<pre class="xats-code"${attrs}><code>${this.escapeText(String(block.content))}</code></pre>`;
-      
+
       case 'mathBlock':
         if (this.isMathBlockContent(block.content)) {
           return `<div class="xats-math"${attrs}>${this.escapeText(block.content.math)}</div>`;
         }
         return `<div class="xats-math"${attrs}>${this.escapeText(String(block.content))}</div>`;
-      
+
       case 'table':
         return this.renderTable(block.content, attrs);
-      
+
       case 'figure':
         return this.renderFigure(block.content, attrs);
-      
+
       default:
         return `<div class="xats-block xats-${typeName}"${attrs}>${JSON.stringify(block.content)}</div>`;
     }
   }
-  
+
   renderSemanticText(text: SemanticText): string {
-    return text.runs.map(run => this.renderSemanticTextRun(run)).join('');
+    return text.runs.map((run) => this.renderSemanticTextRun(run)).join('');
   }
-  
+
   renderSemanticTextRun(run: SemanticTextRun): string {
     switch (run.type) {
       case 'text':
         return this.escapeText(run.text);
-      
+
       case 'emphasis':
         return `<em>${this.escapeText(run.text)}</em>`;
-      
+
       case 'strong':
         return `<strong>${this.escapeText(run.text)}</strong>`;
-      
+
       case 'code':
         return `<code>${this.escapeText(run.text)}</code>`;
-      
+
       case 'subscript':
         return `<sub>${this.escapeText(run.text)}</sub>`;
-      
+
       case 'superscript':
         return `<sup>${this.escapeText(run.text)}</sup>`;
-      
+
       case 'strikethrough':
         return `<del>${this.escapeText(run.text)}</del>`;
-      
+
       case 'underline':
         return `<u>${this.escapeText(run.text)}</u>`;
-      
+
       case 'reference':
         const href = run.ref ? `#${run.ref}` : '#';
         const label = run.label || run.text || 'Reference';
         return `<a href="${href}" class="xats-reference">${this.escapeText(label)}</a>`;
-      
+
       case 'citation':
         return `<cite class="xats-citation" data-cite="${run.citeKey}">[${run.citeKey}]</cite>`;
-      
+
       case 'mathInline':
         return `<span class="xats-math-inline">${this.escapeText(run.math)}</span>`;
-      
+
       default:
         return '';
     }
   }
-  
+
   protected escapeText(text: string): string {
     return text
       .replace(/&/g, '&amp;')
@@ -235,21 +243,21 @@ export class HtmlRenderer extends BaseRenderer {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
   }
-  
+
   private getAttributes(obj: any): string {
     const attrs: string[] = [];
-    
+
     if (this.options.includeIds && obj.id) {
       attrs.push(`id="${obj.id}"`);
     }
-    
+
     if (this.options.includeTags && obj.tags && obj.tags.length > 0) {
       attrs.push(`data-tags="${obj.tags.join(' ')}"`);
     }
-    
-    return attrs.length > 0 ? ' ' + attrs.join(' ') : '';
+
+    return attrs.length > 0 ? ` ${attrs.join(' ')}` : '';
   }
-  
+
   private getHeadingLevel(container: StructuralContainer): number {
     // Determine heading level based on container type
     if ('contents' in container) {
@@ -257,7 +265,9 @@ export class HtmlRenderer extends BaseRenderer {
       if (firstContent && 'blockType' in firstContent) {
         return 2; // Chapters
       } else if (firstContent && 'contents' in firstContent) {
-        const nestedContent = Array.isArray(firstContent.contents) ? firstContent.contents[0] : null;
+        const nestedContent = Array.isArray(firstContent.contents)
+          ? firstContent.contents[0]
+          : null;
         if (nestedContent && 'blockType' in nestedContent) {
           return 3; // Sections
         }
@@ -266,15 +276,15 @@ export class HtmlRenderer extends BaseRenderer {
     }
     return 4; // Default for unknown types
   }
-  
+
   private renderTable(content: any, attrs: string): string {
     const parts: string[] = [];
     parts.push(`<table class="xats-table"${attrs}>`);
-    
+
     if (content.caption) {
       parts.push(`<caption>${this.renderSemanticText(content.caption)}</caption>`);
     }
-    
+
     if (content.headers && content.headers.length > 0) {
       parts.push('<thead><tr>');
       for (const header of content.headers) {
@@ -282,7 +292,7 @@ export class HtmlRenderer extends BaseRenderer {
       }
       parts.push('</tr></thead>');
     }
-    
+
     if (content.rows && content.rows.length > 0) {
       parts.push('<tbody>');
       for (const row of content.rows) {
@@ -294,32 +304,32 @@ export class HtmlRenderer extends BaseRenderer {
       }
       parts.push('</tbody>');
     }
-    
+
     parts.push('</table>');
     return parts.join('\n');
   }
-  
+
   private renderFigure(content: any, attrs: string): string {
     const parts: string[] = [];
     parts.push(`<figure class="xats-figure"${attrs}>`);
-    
+
     if (content.src) {
       const alt = content.alt ? this.escapeText(content.alt) : '';
       parts.push(`<img src="${content.src}" alt="${alt}" />`);
     }
-    
+
     if (content.caption) {
       parts.push(`<figcaption>${this.renderSemanticText(content.caption)}</figcaption>`);
     }
-    
+
     parts.push('</figure>');
     return parts.join('\n');
   }
-  
+
   private wrapInHtmlDocument(content: string, document: XatsDocument): string {
     const title = document.bibliographicEntry?.title || 'xats Document';
     const lang = document.bibliographicEntry?.language || 'en';
-    
+
     const parts: string[] = [];
     parts.push('<!DOCTYPE html>');
     parts.push(`<html lang="${lang}">`);
@@ -327,7 +337,7 @@ export class HtmlRenderer extends BaseRenderer {
     parts.push('<meta charset="UTF-8">');
     parts.push('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
     parts.push(`<title>${this.escapeText(title)}</title>`);
-    
+
     if (this.htmlOptions.includeStyles) {
       parts.push('<style>');
       parts.push(this.getDefaultStyles());
@@ -336,7 +346,7 @@ export class HtmlRenderer extends BaseRenderer {
       }
       parts.push('</style>');
     }
-    
+
     parts.push('</head>');
     parts.push('<body>');
     parts.push('<main class="xats-document">');
@@ -344,10 +354,10 @@ export class HtmlRenderer extends BaseRenderer {
     parts.push('</main>');
     parts.push('</body>');
     parts.push('</html>');
-    
+
     return parts.join('\n');
   }
-  
+
   private getDefaultStyles(): string {
     return `
       body {
@@ -448,9 +458,9 @@ export class HtmlRenderer extends BaseRenderer {
   ): string {
     const parts: string[] = [];
     const className = `xats-${sectionType}`;
-    
+
     parts.push(`<section class="${className}">`);
-    
+
     if (sectionType === 'bodymatter' && 'contents' in section && Array.isArray(section.contents)) {
       parts.push(this.renderContents(section.contents));
     } else {
@@ -459,14 +469,14 @@ export class HtmlRenderer extends BaseRenderer {
         if (key !== 'contents' && Array.isArray(value)) {
           parts.push(`<div class="xats-${key}">`);
           parts.push(`<h2 class="xats-section-title">${this.formatSectionTitle(key)}</h2>`);
-          parts.push(value.map(block => this.renderContentBlock(block)).join('\\n'));
+          parts.push(value.map((block) => this.renderContentBlock(block)).join('\\n'));
           parts.push('</div>');
         }
       });
     }
-    
+
     parts.push('</section>');
-    
+
     return parts.join('\\n');
   }
 
@@ -481,7 +491,9 @@ export class HtmlRenderer extends BaseRenderer {
       if (firstContent && 'blockType' in firstContent) {
         return 'xats-section'; // Contains content blocks directly
       } else if (firstContent && 'contents' in firstContent) {
-        const nestedContent = Array.isArray(firstContent.contents) ? firstContent.contents[0] : null;
+        const nestedContent = Array.isArray(firstContent.contents)
+          ? firstContent.contents[0]
+          : null;
         if (nestedContent && 'blockType' in nestedContent) {
           return 'xats-chapter'; // Contains sections
         }
