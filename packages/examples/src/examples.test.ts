@@ -16,7 +16,10 @@ const validateXatsFile = (content: unknown) => {
   return validateXatsSync(parsed);
 };
 
-const EXAMPLES_DIR = join(process.cwd(), 'examples');
+// When running from monorepo root, need to find the examples package directory
+const EXAMPLES_DIR = existsSync(join(process.cwd(), 'packages', 'examples', 'examples'))
+  ? join(process.cwd(), 'packages', 'examples', 'examples')
+  : join(process.cwd(), 'examples'); // Fallback for running from package directory
 const INVALID_EXAMPLES_DIR = join(EXAMPLES_DIR, 'invalid');
 
 // Ensure invalid examples directory exists

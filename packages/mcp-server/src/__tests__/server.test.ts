@@ -3,7 +3,9 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+
 import { XatsMcpServer, createServer } from '../server.js';
+
 import type { McpServerConfig } from '../types.js';
 
 describe('XatsMcpServer', () => {
@@ -38,7 +40,7 @@ describe('XatsMcpServer', () => {
     it('should create server with default config', () => {
       server = new XatsMcpServer();
       const config = server.getConfig();
-      
+
       expect(config.name).toBe('xats-mcp-server');
       expect(config.version).toBe('0.4.0');
       expect(config.capabilities?.tools).toBe(true);
@@ -47,7 +49,7 @@ describe('XatsMcpServer', () => {
     it('should create server with custom config', () => {
       server = new XatsMcpServer(mockConfig);
       const config = server.getConfig();
-      
+
       expect(config.name).toBe('test-mcp-server');
       expect(config.defaultSchemaVersion).toBe('0.3.0');
       expect(config.validation?.strict).toBe(true);
@@ -60,10 +62,10 @@ describe('XatsMcpServer', () => {
           strict: false,
         },
       };
-      
+
       server = new XatsMcpServer(partialConfig);
       const config = server.getConfig();
-      
+
       expect(config.name).toBe('custom-server');
       expect(config.version).toBe('0.4.0'); // default
       expect(config.validation?.strict).toBe(false); // custom
@@ -87,7 +89,7 @@ describe('XatsMcpServer', () => {
     it('should return server configuration', () => {
       server = new XatsMcpServer(mockConfig);
       const config = server.getConfig();
-      
+
       expect(config).toEqual(mockConfig);
       expect(config).not.toBe(mockConfig); // should be a copy
     });
@@ -100,10 +102,10 @@ describe('XatsMcpServer', () => {
 
     it('should validate input objects', () => {
       const validateInput = (server as any).validateInput.bind(server);
-      
+
       // Valid input
       expect(() => validateInput({ document: {} }, 'validate')).not.toThrow();
-      
+
       // Invalid input
       expect(() => validateInput(null, 'validate')).toThrow('Invalid input');
       expect(() => validateInput('string', 'validate')).toThrow('Invalid input');

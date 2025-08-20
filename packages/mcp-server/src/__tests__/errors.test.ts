@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
+
 import {
   McpError,
   ValidationError,
@@ -87,7 +88,7 @@ describe('Error Classes', () => {
       const error = new InputValidationError('email', 'string', 123);
 
       expect(error.name).toBe('InputValidationError');
-      expect(error.message).toContain('Invalid input for field \'email\'');
+      expect(error.message).toContain("Invalid input for field 'email'");
       expect(error.details.field).toBe('email');
       expect(error.details.expected).toBe('string');
       expect(error.details.received).toBe(123);
@@ -230,21 +231,29 @@ describe('Utility Functions', () => {
     });
 
     it('should reject null input', () => {
-      expect(() => validateToolInput(null, ['document'], 'test_tool')).toThrow(InputValidationError);
+      expect(() => validateToolInput(null, ['document'], 'test_tool')).toThrow(
+        InputValidationError
+      );
     });
 
     it('should reject non-object input', () => {
-      expect(() => validateToolInput('string', ['document'], 'test_tool')).toThrow(InputValidationError);
+      expect(() => validateToolInput('string', ['document'], 'test_tool')).toThrow(
+        InputValidationError
+      );
     });
 
     it('should reject missing required fields', () => {
       const input = { schemaVersion: '0.3.0' };
-      expect(() => validateToolInput(input, ['document'], 'test_tool')).toThrow(InputValidationError);
+      expect(() => validateToolInput(input, ['document'], 'test_tool')).toThrow(
+        InputValidationError
+      );
     });
 
     it('should reject null required fields', () => {
       const input = { document: null };
-      expect(() => validateToolInput(input, ['document'], 'test_tool')).toThrow(InputValidationError);
+      expect(() => validateToolInput(input, ['document'], 'test_tool')).toThrow(
+        InputValidationError
+      );
     });
   });
 
@@ -265,17 +274,15 @@ describe('Utility Functions', () => {
     it('should re-throw McpError', async () => {
       const error = new McpError('Test error', 'TEST_CODE');
       const operation = vi.fn().mockRejectedValue(error);
-      
-      await expect(safeExecuteTool('test_tool', operation, mockConfig))
-        .rejects.toThrow(McpError);
+
+      await expect(safeExecuteTool('test_tool', operation, mockConfig)).rejects.toThrow(McpError);
     });
 
     it('should wrap regular errors in ToolError', async () => {
       const error = new Error('Regular error');
       const operation = vi.fn().mockRejectedValue(error);
-      
-      await expect(safeExecuteTool('test_tool', operation, mockConfig))
-        .rejects.toThrow(ToolError);
+
+      await expect(safeExecuteTool('test_tool', operation, mockConfig)).rejects.toThrow(ToolError);
     });
   });
 
@@ -345,7 +352,7 @@ describe('Constants', () => {
       expect(COMMON_ERRORS.PARSING_FAILED).toBeDefined();
 
       // Should be strings
-      Object.values(COMMON_ERRORS).forEach(message => {
+      Object.values(COMMON_ERRORS).forEach((message) => {
         expect(typeof message).toBe('string');
         expect(message.length).toBeGreaterThan(0);
       });

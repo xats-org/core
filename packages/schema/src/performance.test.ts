@@ -102,7 +102,7 @@ describe('Performance Validation', () => {
   });
 
   describe('Concurrent Validation Tests', () => {
-    it('should handle multiple simultaneous validations', () => {
+    it('should handle multiple simultaneous validations', async () => {
       const testDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {

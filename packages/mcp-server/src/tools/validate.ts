@@ -3,12 +3,10 @@
  */
 
 import { createValidator } from '@xats/validator';
-import type { 
-  ValidateInput, 
-  ValidateResult, 
-  McpServerConfig 
-} from '../types.js';
+
 import { ValidationError } from '../types.js';
+
+import type { ValidateInput, ValidateResult, McpServerConfig } from '../types.js';
 
 /**
  * Validate a xats document against the JSON Schema
@@ -33,13 +31,13 @@ export async function validateTool(
     const validationOptions: any = {
       strict: input.strict ?? config.validation?.strict ?? true,
     };
-    
+
     if (input.schemaVersion) {
       validationOptions.schemaVersion = input.schemaVersion;
     } else if (config.defaultSchemaVersion) {
       validationOptions.schemaVersion = config.defaultSchemaVersion;
     }
-    
+
     const validationResult = await validator.validate(input.document, validationOptions);
 
     return {
@@ -68,10 +66,7 @@ export async function validateTool(
 /**
  * Validate a xats document synchronously (for pre-loaded schemas)
  */
-export function validateToolSync(
-  input: ValidateInput,
-  config: McpServerConfig
-): ValidateResult {
+export function validateToolSync(input: ValidateInput, config: McpServerConfig): ValidateResult {
   try {
     // Validate input parameters
     if (!input.document) {
@@ -88,13 +83,13 @@ export function validateToolSync(
     const validationOptions: any = {
       strict: input.strict ?? config.validation?.strict ?? true,
     };
-    
+
     if (input.schemaVersion) {
       validationOptions.schemaVersion = input.schemaVersion;
     } else if (config.defaultSchemaVersion) {
       validationOptions.schemaVersion = config.defaultSchemaVersion;
     }
-    
+
     const validationResult = validator.validateSync(input.document, validationOptions);
 
     return {
@@ -128,12 +123,12 @@ export async function validateBatchTool(
   config: McpServerConfig
 ): Promise<ValidateResult[]> {
   const results: ValidateResult[] = [];
-  
+
   for (const input of documents) {
     const result = await validateTool(input, config);
     results.push(result);
   }
-  
+
   return results;
 }
 
@@ -158,7 +153,7 @@ export function getValidationSummary(results: ValidateResult[]): {
       summary.valid++;
     } else {
       summary.invalid++;
-      
+
       // Count error types
       if (result.data?.errors) {
         for (const error of result.data.errors) {

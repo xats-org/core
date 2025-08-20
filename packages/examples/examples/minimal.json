@@ -7,6 +7,12 @@
   },
   "subject": "Test Subject",
   "bodyMatter": {
-    "contents": []
+    "contents": [
+      {
+        "id": "chapter-1",
+        "title": "Chapter 1",
+        "sections": []
+      }
+    ]
   }
 }

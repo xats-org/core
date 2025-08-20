@@ -4,18 +4,16 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
 
-import type { McpServerConfig } from './types.js';
-import { validateTool } from './tools/validate.js';
-import { createTool } from './tools/create.js';
 import { analyzeTool } from './tools/analyze.js';
+import { createTool } from './tools/create.js';
 import { extractTool } from './tools/extract.js';
 import { transformTool } from './tools/transform.js';
+import { validateTool } from './tools/validate.js';
+
+import type { McpServerConfig } from './types.js';
 
 export class XatsMcpServer {
   private server: Server;
@@ -360,10 +358,14 @@ export class XatsMcpServer {
               content: [
                 {
                   type: 'text',
-                  text: JSON.stringify({
-                    success: false,
-                    error: `Unknown tool: ${name}`,
-                  }, null, 2),
+                  text: JSON.stringify(
+                    {
+                      success: false,
+                      error: `Unknown tool: ${name}`,
+                    },
+                    null,
+                    2
+                  ),
                 },
               ],
               isError: true,
@@ -374,11 +376,15 @@ export class XatsMcpServer {
           content: [
             {
               type: 'text',
-              text: JSON.stringify({
-                success: false,
-                error: error instanceof Error ? error.message : 'Unknown error',
-                details: error instanceof Error ? error.stack : undefined,
-              }, null, 2),
+              text: JSON.stringify(
+                {
+                  success: false,
+                  error: error instanceof Error ? error.message : 'Unknown error',
+                  details: error instanceof Error ? error.stack : undefined,
+                },
+                null,
+                2
+              ),
             },
           ],
           isError: true,
@@ -424,13 +430,13 @@ export async function createServer(config?: Partial<McpServerConfig>): Promise<X
 export async function startServer(config?: Partial<McpServerConfig>): Promise<void> {
   const server = await createServer(config);
   await server.run();
-  
+
   // Handle graceful shutdown
   process.on('SIGINT', async () => {
     await server.close();
     process.exit(0);
   });
-  
+
   process.on('SIGTERM', async () => {
     await server.close();
     process.exit(0);

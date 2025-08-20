@@ -2,26 +2,27 @@
  * @xats/mcp-server - Analyze Tool Implementation
  */
 
-import type { XatsDocument, SemanticText } from '@xats/types';
-import type { 
-  AnalyzeInput, 
-  AnalyzeResult, 
+import { AnalysisError } from '../types.js';
+
+import type {
+  AnalyzeInput,
+  AnalyzeResult,
   McpServerConfig,
   DocumentStructure,
   DocumentStatistics,
-  DocumentIssue
+  DocumentIssue,
 } from '../types.js';
-import { AnalysisError } from '../types.js';
+import type { XatsDocument, SemanticText } from '@xats/types';
 
 /**
  * Extract text content from SemanticText objects
  */
 function extractTextFromSemanticText(semanticText: SemanticText | undefined): string {
   if (!semanticText?.runs) return '';
-  
+
   return semanticText.runs
-    .filter(run => run.type === 'text')
-    .map(run => run.text || '')
+    .filter((run) => run.type === 'text')
+    .map((run) => run.text || '')
     .join(' ');
 }
 
@@ -29,7 +30,10 @@ function extractTextFromSemanticText(semanticText: SemanticText | undefined): st
  * Count words in text content
  */
 function countWords(text: string): number {
-  return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+  return text
+    .trim()
+    .split(/\s+/)
+    .filter((word) => word.length > 0).length;
 }
 
 /**
@@ -43,24 +47,30 @@ function calculateReadingTime(wordCount: number): number {
  * Calculate text complexity score based on various factors
  */
 function calculateComplexityScore(text: string): number {
-  const words = text.split(/\s+/).filter(word => word.length > 0);
-  const sentences = text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
-  
+  const words = text.split(/\s+/).filter((word) => word.length > 0);
+  const sentences = text.split(/[.!?]+/).filter((sentence) => sentence.trim().length > 0);
+
   if (words.length === 0 || sentences.length === 0) return 0;
-  
+
   // Average words per sentence
   const avgWordsPerSentence = words.length / sentences.length;
-  
+
   // Average syllables per word (rough estimate)
-  const avgSyllablesPerWord = words.reduce((sum, word) => {
-    // Simple syllable counting heuristic
-    const syllables = word.toLowerCase().replace(/[^a-z]/g, '').replace(/e$/, '').match(/[aeiouy]+/g)?.length || 1;
-    return sum + syllables;
-  }, 0) / words.length;
-  
+  const avgSyllablesPerWord =
+    words.reduce((sum, word) => {
+      // Simple syllable counting heuristic
+      const syllables =
+        word
+          .toLowerCase()
+          .replace(/[^a-z]/g, '')
+          .replace(/e$/, '')
+          .match(/[aeiouy]+/g)?.length || 1;
+      return sum + syllables;
+    }, 0) / words.length;
+
   // Flesch-Kincaid grade level (simplified)
   const complexityScore = 0.39 * avgWordsPerSentence + 11.8 * avgSyllablesPerWord - 15.59;
-  
+
   return Math.max(0, Math.min(20, complexityScore)); // Cap between 0-20
 }
 
@@ -99,34 +109,41 @@ function analyzeDocumentStructure(document: XatsDocument): DocumentStructure {
         } else {
           structure.containers.units++;
         }
-        
+
         // Count pathways
         if (container.pathways) {
           for (const pathway of container.pathways) {
             structure.pathways.total++;
             const pathwayType = pathway.pathwayType || 'unknown';
-            structure.pathways.byType[pathwayType] = (structure.pathways.byType[pathwayType] || 0) + 1;
+            structure.pathways.byType[pathwayType] =
+              (structure.pathways.byType[pathwayType] || 0) + 1;
           }
         }
-        
+
         // Analyze sections and content blocks
         if (container.contents) {
           for (const section of container.contents) {
             if ('contents' in section) {
               structure.containers.sections++;
-              
+
               // Analyze content blocks in section
               if (section.contents) {
                 for (const block of section.contents) {
                   if ('blockType' in block) {
                     structure.contentBlocks.total++;
                     const blockType = block.blockType || 'unknown';
-                    structure.contentBlocks.byType[blockType] = (structure.contentBlocks.byType[blockType] || 0) + 1;
-                    
+                    structure.contentBlocks.byType[blockType] =
+                      (structure.contentBlocks.byType[blockType] || 0) + 1;
+
                     // Check if it's an assessment block
-                    if (blockType.includes('assessment') || blockType.includes('quiz') || blockType.includes('test')) {
+                    if (
+                      blockType.includes('assessment') ||
+                      blockType.includes('quiz') ||
+                      blockType.includes('test')
+                    ) {
                       structure.assessments.total++;
-                      structure.assessments.byType[blockType] = (structure.assessments.byType[blockType] || 0) + 1;
+                      structure.assessments.byType[blockType] =
+                        (structure.assessments.byType[blockType] || 0) + 1;
                     }
                   }
                 }
@@ -164,28 +181,32 @@ function calculateDocumentStatistics(document: XatsDocument): DocumentStatistics
   // Extract text from all content blocks
   function extractTextFromContainer(container: any): void {
     if (container.title) {
-      totalText += ' ' + extractTextFromSemanticText(container.title);
+      totalText += ` ${extractTextFromSemanticText(container.title)}`;
     }
-    
+
     if (container.learningOutcomes) {
       learningObjectives += container.learningOutcomes.length;
       for (const outcome of container.learningOutcomes) {
         if (outcome.statement) {
-          totalText += ' ' + extractTextFromSemanticText(outcome.statement);
+          totalText += ` ${extractTextFromSemanticText(outcome.statement)}`;
         }
       }
     }
-    
+
     if (container.contents) {
       for (const item of container.contents) {
         if ('blockType' in item && item.content) {
           // Extract text from content blocks
           if (item.content.text) {
-            totalText += ' ' + extractTextFromSemanticText(item.content.text);
+            totalText += ` ${extractTextFromSemanticText(item.content.text)}`;
           }
-          
+
           // Count resources
-          if (item.blockType?.includes('figure') || item.blockType?.includes('image') || item.blockType?.includes('video')) {
+          if (
+            item.blockType?.includes('figure') ||
+            item.blockType?.includes('image') ||
+            item.blockType?.includes('video')
+          ) {
             resources++;
           }
         } else if ('contents' in item) {
@@ -220,7 +241,7 @@ function calculateDocumentStatistics(document: XatsDocument): DocumentStatistics
   }
 
   const wordCount = countWords(totalText);
-  
+
   return {
     wordCount,
     characterCount: totalText.length,
@@ -236,8 +257,8 @@ function calculateDocumentStatistics(document: XatsDocument): DocumentStatistics
  * Find potential issues in the document
  */
 function findDocumentIssues(
-  document: XatsDocument, 
-  structure: DocumentStructure, 
+  document: XatsDocument,
+  structure: DocumentStructure,
   statistics: DocumentStatistics
 ): DocumentIssue[] {
   const issues: DocumentIssue[] = [];
@@ -358,7 +379,7 @@ export async function analyzeTool(
 
     // Perform basic structure analysis
     const structure = analyzeDocumentStructure(input.document);
-    
+
     let statistics: DocumentStatistics | undefined;
     let issues: DocumentIssue[] = [];
 
@@ -370,8 +391,8 @@ export async function analyzeTool(
 
       if (includeIssues && depth === 'comprehensive') {
         issues = findDocumentIssues(
-          input.document, 
-          structure, 
+          input.document,
+          structure,
           statistics || {
             wordCount: 0,
             characterCount: 0,

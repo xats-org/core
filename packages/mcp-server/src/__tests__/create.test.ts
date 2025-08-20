@@ -3,7 +3,9 @@
  */
 
 import { describe, it, expect } from 'vitest';
+
 import { createTool, getAvailableTemplates } from '../tools/create.js';
+
 import type { CreateInput, McpServerConfig } from '../types.js';
 
 describe('createTool', () => {
@@ -53,7 +55,7 @@ describe('createTool', () => {
       expect(result.data?.document.frontMatter).toBeDefined();
       expect(result.data?.document.backMatter).toBeDefined();
       expect(result.data?.document.bodyMatter?.contents).toHaveLength(2); // Two chapters
-      
+
       // Check first chapter has learning objectives
       const firstChapter = result.data?.document.bodyMatter?.contents[0];
       expect(firstChapter).toBeDefined();
@@ -76,7 +78,7 @@ describe('createTool', () => {
       expect(result.success).toBe(true);
       expect(result.data?.document).toBeDefined();
       expect(result.data?.template).toBe('course');
-      
+
       // Check that document was created successfully
       expect(result.data?.document).toBeDefined();
     });
@@ -94,15 +96,15 @@ describe('createTool', () => {
       expect(result.data?.document).toBeDefined();
       expect(result.data?.document.bibliographicEntry?.type).toBe('article');
       // Check that document was created successfully
-      
+
       // Check for assessment content
       const firstChapter = result.data?.document.bodyMatter?.contents[0];
       expect(firstChapter).toBeDefined();
       if ('contents' in firstChapter && firstChapter.contents) {
         const section = firstChapter.contents[0];
         if ('contents' in section && section.contents) {
-          const hasAssessmentBlock = section.contents.some((block: any) => 
-            'blockType' in block && block.blockType?.includes('multipleChoice')
+          const hasAssessmentBlock = section.contents.some(
+            (block: any) => 'blockType' in block && block.blockType?.includes('multipleChoice')
           );
           expect(hasAssessmentBlock).toBe(true);
         }
@@ -180,7 +182,7 @@ describe('createTool', () => {
 
       expect(result.success).toBe(true);
       expect(result.metadata?.timestamp).toBeDefined();
-      expect(new Date(result.metadata!.timestamp!).getTime()).toBeLessThanOrEqual(Date.now());
+      expect(new Date(result.metadata!.timestamp).getTime()).toBeLessThanOrEqual(Date.now());
     });
 
     it('should set bibliographic metadata', async () => {
@@ -207,15 +209,15 @@ describe('createTool', () => {
       const templates = getAvailableTemplates();
 
       expect(templates).toHaveLength(4);
-      
-      const templateNames = templates.map(t => t.name);
+
+      const templateNames = templates.map((t) => t.name);
       expect(templateNames).toContain('minimal');
       expect(templateNames).toContain('textbook');
       expect(templateNames).toContain('course');
       expect(templateNames).toContain('assessment');
 
       // Check structure
-      templates.forEach(template => {
+      templates.forEach((template) => {
         expect(template).toHaveProperty('name');
         expect(template).toHaveProperty('description');
         expect(template).toHaveProperty('features');

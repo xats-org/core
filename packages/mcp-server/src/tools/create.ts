@@ -2,13 +2,10 @@
  * @xats/mcp-server - Create Tool Implementation
  */
 
-import type { XatsDocument, XatsVersion } from '@xats/types';
-import type { 
-  CreateInput, 
-  CreateResult, 
-  McpServerConfig 
-} from '../types.js';
 import { McpError } from '../types.js';
+
+import type { CreateInput, CreateResult, McpServerConfig } from '../types.js';
+import type { XatsDocument, XatsVersion } from '@xats/types';
 
 /**
  * Generate a unique ID for xats objects
@@ -29,7 +26,7 @@ function getCurrentTimestamp(): string {
  */
 function createMinimalTemplate(input: CreateInput): XatsDocument {
   const schemaVersion = input.schemaVersion || '0.3.0';
-  
+
   return {
     schemaVersion,
     bibliographicEntry: {
@@ -43,7 +40,7 @@ function createMinimalTemplate(input: CreateInput): XatsDocument {
     bodyMatter: {
       contents: [
         {
-                label: 'chapter-1',
+          label: 'chapter-1',
           title: {
             runs: [
               {
@@ -54,7 +51,7 @@ function createMinimalTemplate(input: CreateInput): XatsDocument {
           },
           contents: [
             {
-                        label: 'section-1-1',
+              label: 'section-1-1',
               title: {
                 runs: [
                   {
@@ -65,7 +62,7 @@ function createMinimalTemplate(input: CreateInput): XatsDocument {
               },
               contents: [
                 {
-                                blockType: 'https://xats.org/core/blocks/paragraph',
+                  blockType: 'https://xats.org/core/blocks/paragraph',
                   content: {
                     text: {
                       runs: [
@@ -91,7 +88,7 @@ function createMinimalTemplate(input: CreateInput): XatsDocument {
  */
 function createTextbookTemplate(input: CreateInput): XatsDocument {
   const schemaVersion = input.schemaVersion || '0.3.0';
-  
+
   return {
     schemaVersion,
     bibliographicEntry: {
@@ -103,36 +100,38 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
       'container-title': input.subject,
     },
     subject: input.subject || 'General',
-    ...(input.options?.includeFrontMatter ? {
-      frontMatter: {
-        preface: [
-          {
-            id: generateId(),
-            blockType: 'https://xats.org/core/blocks/heading',
-            content: {
-              level: 1,
-              text: {
-                runs: [
-                  {
-                    type: 'text',
-                    text: 'Table of Contents',
+    ...(input.options?.includeFrontMatter
+      ? {
+          frontMatter: {
+            preface: [
+              {
+                id: generateId(),
+                blockType: 'https://xats.org/core/blocks/heading',
+                content: {
+                  level: 1,
+                  text: {
+                    runs: [
+                      {
+                        type: 'text',
+                        text: 'Table of Contents',
+                      },
+                    ],
                   },
-                ],
+                },
               },
-            },
+              {
+                id: generateId(),
+                blockType: 'https://xats.org/core/placeholders/tableOfContents',
+                content: {},
+              },
+            ],
           },
-          {
-            id: generateId(),
-            blockType: 'https://xats.org/core/placeholders/tableOfContents',
-            content: {},
-          },
-        ],
-      }
-    } : {}),
+        }
+      : {}),
     bodyMatter: {
       contents: [
         {
-                label: 'chapter-1',
+          label: 'chapter-1',
           title: {
             runs: [
               {
@@ -143,7 +142,7 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
           },
           learningOutcomes: [
             {
-                        statement: {
+              statement: {
                 runs: [
                   {
                     type: 'text',
@@ -155,7 +154,7 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
           ],
           contents: [
             {
-                        label: 'section-1-1',
+              label: 'section-1-1',
               title: {
                 runs: [
                   {
@@ -166,7 +165,7 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
               },
               contents: [
                 {
-                                blockType: 'https://xats.org/core/blocks/paragraph',
+                  blockType: 'https://xats.org/core/blocks/paragraph',
                   content: {
                     text: {
                       runs: [
@@ -183,7 +182,7 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
           ],
         },
         {
-                label: 'chapter-2',
+          label: 'chapter-2',
           title: {
             runs: [
               {
@@ -194,7 +193,7 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
           },
           contents: [
             {
-                        label: 'section-2-1',
+              label: 'section-2-1',
               title: {
                 runs: [
                   {
@@ -205,7 +204,7 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
               },
               contents: [
                 {
-                                blockType: 'https://xats.org/core/blocks/paragraph',
+                  blockType: 'https://xats.org/core/blocks/paragraph',
                   content: {
                     text: {
                       runs: [
@@ -223,24 +222,26 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
         },
       ],
     },
-    ...(input.options?.includeBackMatter ? {
-      backMatter: {
-        bibliography: [
-          {
-            id: generateId(),
-            blockType: 'https://xats.org/core/placeholders/bibliography',
-            content: {},
+    ...(input.options?.includeBackMatter
+      ? {
+          backMatter: {
+            bibliography: [
+              {
+                id: generateId(),
+                blockType: 'https://xats.org/core/placeholders/bibliography',
+                content: {},
+              },
+            ],
+            index: [
+              {
+                id: generateId(),
+                blockType: 'https://xats.org/core/placeholders/index',
+                content: {},
+              },
+            ],
           },
-        ],
-        index: [
-          {
-            id: generateId(),
-            blockType: 'https://xats.org/core/placeholders/index',
-            content: {},
-          },
-        ],
-      }
-    } : {}),
+        }
+      : {}),
   };
 }
 
@@ -249,9 +250,9 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
  */
 function createCourseTemplate(input: CreateInput): XatsDocument {
   const schemaVersion = input.schemaVersion || '0.3.0';
-  
+
   const document = createTextbookTemplate(input);
-  
+
   // Add pathway content if requested
   if (input.options?.includePathways && document.bodyMatter.contents[0]) {
     const firstChapter = document.bodyMatter.contents[0];
@@ -270,7 +271,7 @@ function createCourseTemplate(input: CreateInput): XatsDocument {
       ];
     }
   }
-  
+
   return document;
 }
 
@@ -279,7 +280,7 @@ function createCourseTemplate(input: CreateInput): XatsDocument {
  */
 function createAssessmentTemplate(input: CreateInput): XatsDocument {
   const schemaVersion = input.schemaVersion || '0.3.0';
-  
+
   return {
     schemaVersion,
     bibliographicEntry: {
@@ -293,7 +294,7 @@ function createAssessmentTemplate(input: CreateInput): XatsDocument {
     bodyMatter: {
       contents: [
         {
-                label: 'assessment-chapter',
+          label: 'assessment-chapter',
           title: {
             runs: [
               {
@@ -304,7 +305,7 @@ function createAssessmentTemplate(input: CreateInput): XatsDocument {
           },
           contents: [
             {
-                        label: 'quiz-section',
+              label: 'quiz-section',
               title: {
                 runs: [
                   {
@@ -315,7 +316,7 @@ function createAssessmentTemplate(input: CreateInput): XatsDocument {
               },
               contents: [
                 {
-                                blockType: 'https://xats.org/core/blocks/paragraph',
+                  blockType: 'https://xats.org/core/blocks/paragraph',
                   content: {
                     text: {
                       runs: [
@@ -329,7 +330,7 @@ function createAssessmentTemplate(input: CreateInput): XatsDocument {
                 },
                 // Example assessment block (would be more detailed in real implementation)
                 {
-                                blockType: 'https://xats.org/assessment/multipleChoice',
+                  blockType: 'https://xats.org/assessment/multipleChoice',
                   content: {
                     question: {
                       runs: [
@@ -341,7 +342,7 @@ function createAssessmentTemplate(input: CreateInput): XatsDocument {
                     },
                     options: [
                       {
-                                            text: {
+                        text: {
                           runs: [
                             {
                               type: 'text',
@@ -351,7 +352,7 @@ function createAssessmentTemplate(input: CreateInput): XatsDocument {
                         },
                       },
                       {
-                                            text: {
+                        text: {
                           runs: [
                             {
                               type: 'text',
@@ -361,7 +362,7 @@ function createAssessmentTemplate(input: CreateInput): XatsDocument {
                         },
                       },
                       {
-                                            text: {
+                        text: {
                           runs: [
                             {
                               type: 'text',
@@ -397,7 +398,7 @@ export async function createTool(
     }
 
     let document: XatsDocument;
-    let templateType = input.template || 'minimal';
+    const templateType = input.template || 'minimal';
 
     // Create document based on template type
     switch (templateType) {

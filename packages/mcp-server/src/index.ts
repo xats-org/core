@@ -2,9 +2,10 @@
  * @xats/mcp-server - Main Package Entry Point
  */
 
-import type { McpServerConfig } from './types.js';
 import { createServer } from './server.js';
 import { TOOL_REGISTRY, TOOL_CATEGORIES } from './tools/index.js';
+
+import type { McpServerConfig } from './types.js';
 
 // Server exports
 export { XatsMcpServer, createServer, startServer } from './server.js';
@@ -86,7 +87,6 @@ export {
 // Version and metadata
 export const VERSION = '0.4.0';
 export const PACKAGE_NAME = '@xats/mcp-server';
-
 
 /**
  * Default configuration for the MCP server

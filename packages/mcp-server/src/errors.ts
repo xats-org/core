@@ -77,7 +77,11 @@ export class InputValidationError extends ValidationError {
  * Document processing errors
  */
 export class DocumentError extends McpError {
-  constructor(message: string, details?: any, severity: 'low' | 'medium' | 'high' | 'critical' = 'medium') {
+  constructor(
+    message: string,
+    details?: any,
+    severity: 'low' | 'medium' | 'high' | 'critical' = 'medium'
+  ) {
     super(message, 'DOCUMENT_ERROR', details, severity);
     this.name = 'DocumentError';
   }
@@ -225,11 +229,12 @@ export class FileSystemError extends ResourceError {
  * Create a standardized error response
  */
 export function createErrorResponse(error: Error, toolName?: string): any {
-  const mcpError = error instanceof McpError ? error : new McpError(
-    error.message || 'Unknown error',
-    'UNKNOWN_ERROR',
-    { originalError: error.constructor.name }
-  );
+  const mcpError =
+    error instanceof McpError
+      ? error
+      : new McpError(error.message || 'Unknown error', 'UNKNOWN_ERROR', {
+          originalError: error.constructor.name,
+        });
 
   return {
     success: false,
@@ -248,11 +253,7 @@ export function createErrorResponse(error: Error, toolName?: string): any {
 /**
  * Validate and normalize input for tools
  */
-export function validateToolInput(
-  input: any,
-  requiredFields: string[],
-  toolName: string
-): void {
+export function validateToolInput(input: any, requiredFields: string[], toolName: string): void {
   if (!input || typeof input !== 'object') {
     throw new InputValidationError('input', 'object', typeof input);
   }
@@ -303,7 +304,7 @@ export async function safeExecuteTool<T>(
 export const ERROR_SEVERITY = {
   low: {
     level: 0,
-    description: 'Minor issues that don\'t prevent operation',
+    description: "Minor issues that don't prevent operation",
     action: 'Log and continue',
   },
   medium: {
@@ -335,17 +336,24 @@ export function getErrorHandlingStrategy(severity: keyof typeof ERROR_SEVERITY) 
  */
 export function formatErrorForLogging(error: Error, context?: any): string {
   const timestamp = new Date().toISOString();
-  const errorInfo = error instanceof McpError ? error.toJSON() : {
-    name: error.name,
-    message: error.message,
-    stack: error.stack,
-  };
+  const errorInfo =
+    error instanceof McpError
+      ? error.toJSON()
+      : {
+          name: error.name,
+          message: error.message,
+          stack: error.stack,
+        };
 
-  return JSON.stringify({
-    timestamp,
-    context,
-    error: errorInfo,
-  }, null, 2);
+  return JSON.stringify(
+    {
+      timestamp,
+      context,
+      error: errorInfo,
+    },
+    null,
+    2
+  );
 }
 
 /**

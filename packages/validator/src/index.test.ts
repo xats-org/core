@@ -10,7 +10,7 @@ describe('XatsValidator', () => {
   });
 
   describe('validate', () => {
-    it('should validate a minimal valid document', async () => {
+    it('should validate a minimal valid document', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -20,27 +20,36 @@ describe('XatsValidator', () => {
         },
         subject: 'Test Subject',
         bodyMatter: {
-          contents: [],
+          contents: [
+            {
+              id: 'chapter-1',
+              title: 'Chapter 1',
+              sections: []
+            }
+          ],
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validateSync(doc);
+      if (!result.isValid) {
+        console.log('Validation errors:', JSON.stringify(result.errors, null, 2));
+      }
       expect(result.isValid).toBe(true);
       expect(result.errors).toEqual([]);
     });
 
-    it('should reject document with missing required fields', async () => {
+    it('should reject document with missing required fields', () => {
       const doc = {
         schemaVersion: '0.1.0',
         // Missing required fields
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validateSync(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('should reject document with invalid schema version', async () => {
+    it('should reject document with invalid schema version', () => {
       const doc = {
         schemaVersion: '999.999.999',
         bibliographicEntry: {
@@ -54,7 +63,7 @@ describe('XatsValidator', () => {
         },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validateSync(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors[0]?.message).toContain('999.999.999');
     });
