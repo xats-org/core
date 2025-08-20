@@ -127,43 +127,87 @@ This phase completed the most critical missing features to make **xats** a viabl
 
 This phase focuses on expanding the ecosystem, improving the scholarly and production lifecycle, and handling more complex use cases.
 
-### a. Production & Scholarly Workflow Integration
+### v0.4.0 - Rendering & AI Integration (Target: 2026-05-31)
+
+This release prioritizes author intent preservation, AI-powered content generation, and scientific computing integration.
+
+#### a. Enhanced Rendering Hints System (HIGH PRIORITY)
+
+Build out comprehensive rendering hints to help renderers determine and preserve author intent.
+- **Semantic Intent Vocabulary:** URI-based vocabulary for author intent (`emphasis`, `warning`, `highlight`, `aside`, `featured`)
+- **Pedagogical Roles:** Classification system for content roles (`introduction`, `example`, `summary`, `key-concept`)
+- **Prominence Levels:** Granular control over visual emphasis (1-5 scale)
+- **Layout Hints:** Suggestions for layout preservation (`keep-together`, `allow-break`, `force-new-page`)
+- **Cross-Renderer Consistency:** Standard interpretation guidelines for all renderers
+- **Fallback Strategies:** Graceful degradation for unsupported hints
+
+#### b. AI Integration Framework (HIGH PRIORITY - Accelerated from v0.5.0)
+
+Native support for AI-powered content orchestration and generation.
+- **MCP Server for xats:** Model Context Protocol server for AI agents to work with xats files
+  - Read/write/validate xats documents
+  - Schema-aware content manipulation
+  - Multi-agent orchestration support
+  - Content generation templates
+- **AI Generation Metadata Extension:** Comprehensive tracking of AI-generated content
+  - Model attribution and versioning
+  - Prompt preservation and parameters
+  - Confidence scores and validation status
+  - Human review tracking
+- **Agent Orchestration Protocol:** Enable multiple AI agents to collaborate on textbook creation
+  - xats as data interchange format
+  - Sequential and parallel agent workflows
+  - Context preservation between agents
+  - Quality gates and validation points
+- **Memory & Context Management:** Schema serves as persistent memory for AI workflows
+  - Progressive content building
+  - Cross-section context awareness
+  - Dependency tracking
+  - Version control integration
+
+#### c. R-markdown Renderer (MEDIUM PRIORITY)
+
+Academic workflow integration through R-markdown output.
+- **Full xats to R-markdown Conversion:** Complete feature mapping
+- **Scientific Computing Integration:** Seamless R code chunk generation
+- **Statistical Graphics Support:** Automatic figure and table conversion
+- **Bibliography Integration:** CSL-JSON to BibTeX conversion
+- **Reproducible Research:** Maintain computational reproducibility
+- **Academic Publishing Pipeline:** Direct integration with journal submission systems
+
+#### d. Production & Scholarly Workflow Integration
 
 For publishers and academics to adopt **xats**, it must integrate with established workflows.
-- **Round-Trip Conversion Tooling:** We will need a standard for "round-tripping" content between **xats** and existing formats like InDesign (IDML).
-- **Automated Ancillary Generation:** We will define a standard set of `tags` to facilitate the automated generation of ancillary materials (e.g., study guides, slide decks).
-- **Formal Peer Review & Annotation Layer:** We will define a core vocabulary for annotations (`suggestion`, `clarification_request`, `minor_revision_needed`) that can be attached to any `XatsObject`, including a `status` property (`"open"`, `"resolved"`) to support the review workflow.
-- **Collaborative Project Block:** A new `blockType` will be defined to structure group projects, including fields for roles, deliverables, and peer assessment criteria.
+- **Round-Trip Conversion Tooling:** Standard for "round-tripping" content between **xats** and existing formats like InDesign (IDML)
+- **Automated Ancillary Generation:** Standard set of `tags` to facilitate automated generation of ancillary materials (e.g., study guides, slide decks)
+- **Formal Peer Review & Annotation Layer:** Core vocabulary for annotations with workflow status tracking
+- **Collaborative Project Block:** New `blockType` for group projects with roles and peer assessment
 
-### b. Granular Rights Management & Academic Provenance
+### v0.5.0 - Analytics & Advanced Features (Target: 2026-09-30)
 
-Content provenance and rights management are critical for academic integrity and commercial publishing.
-- **Standardized Rights Extension:** We will define a standard `extension` for the `Resource` object to hold structured rights information (e.g., `copyrightHolder`, `licenseType`).
-- **Content Block History:** We will investigate a standard pattern for tracking the version history of a specific `ContentBlock`, including author, date, and a summary of the change.
-- **AI Generation Metadata:** A standard extension will be defined to allow AI-generated content to be explicitly marked as such, including the model used and the prompt.
-
-### c. Advanced Internationalization (v0.4.0)
-
-Building on v0.3.0's i18n foundation for advanced multi-language support.
-- **Content Translation:** Standard patterns for multiple language versions within single objects
-- **Locale-Specific Rendering:** Locale-aware `renderingHints` and cultural adaptations
-- **Translation Workflow:** Integration with professional translation management systems
-
-### d. AI Integration Framework (v0.4.0)
-
-Native support for AI-powered content generation and enhancement.
-- **AI Generation Metadata:** Standard marking for AI-generated content with model attribution
-- **Content Generation APIs:** Structured interfaces for AI content creation
-- **Quality Assurance:** AI-powered validation and content quality assessment
-- **Adaptive Content:** AI-driven content personalization based on learner analytics
-
-### e. Advanced Analytics Platform (v0.5.0)
+#### a. Advanced Analytics Platform
 
 Comprehensive learning analytics and content performance measurement.
 - **Learning Analytics Framework:** Detailed student interaction and performance tracking
 - **Content Performance Metrics:** Usage patterns, engagement rates, and learning outcome correlations
 - **Publisher Analytics:** Commercial metrics for content effectiveness and market performance
 - **Privacy-First Design:** GDPR/CCPA compliant analytics with learner consent management
+
+#### b. Advanced Internationalization
+
+Building on v0.3.0's i18n foundation for advanced multi-language support.
+- **Content Translation:** Standard patterns for multiple language versions within single objects
+- **Locale-Specific Rendering:** Locale-aware `renderingHints` and cultural adaptations
+- **Translation Workflow:** Integration with professional translation management systems
+
+### v0.6.0 - Extended Ecosystem (Target: 2027-01-31)
+
+#### a. Granular Rights Management & Academic Provenance
+
+Content provenance and rights management for academic integrity and commercial publishing.
+- **Standardized Rights Extension:** Standard `extension` for structured rights information
+- **Content Block History:** Version history tracking for specific `ContentBlock` elements
+- **Blockchain Integration:** Immutable provenance tracking for academic content
 
 ---
 
