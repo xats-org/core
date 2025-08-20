@@ -118,7 +118,19 @@ export interface SemanticText {
 /**
  * Union type for all run types
  */
-export type Run = TextRun | ReferenceRun | CitationRun | EmphasisRun | StrongRun | IndexRun | CodeRun | MathInlineRun | SubscriptRun | SuperscriptRun | StrikethroughRun | UnderlineRun;
+export type Run =
+  | TextRun
+  | ReferenceRun
+  | CitationRun
+  | EmphasisRun
+  | StrongRun
+  | IndexRun
+  | CodeRun
+  | MathInlineRun
+  | SubscriptRun
+  | SuperscriptRun
+  | StrikethroughRun
+  | UnderlineRun;
 
 /**
  * Type alias for semantic text runs (for backward compatibility)

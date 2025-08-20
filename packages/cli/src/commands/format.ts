@@ -1,7 +1,8 @@
-import { Command } from 'commander';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
+
 import chalk from 'chalk';
+import { Command } from 'commander';
 import ora from 'ora';
 
 export const formatCommand = new Command('format')
@@ -13,7 +14,7 @@ export const formatCommand = new Command('format')
   .option('--compact', 'use compact formatting (no extra whitespace)')
   .action((file: string, options: any) => {
     const spinner = ora('Loading document...').start();
-    
+
     try {
       // Check if file exists
       const filePath = resolve(file);
@@ -21,12 +22,12 @@ export const formatCommand = new Command('format')
         spinner.fail(chalk.red(`File not found: ${file}`));
         process.exit(1);
       }
-      
+
       // Read and parse document
       spinner.text = 'Parsing document...';
       const content = readFileSync(filePath, 'utf-8');
       let document: any;
-      
+
       try {
         document = JSON.parse(content);
       } catch (error) {
@@ -36,26 +37,26 @@ export const formatCommand = new Command('format')
         }
         process.exit(1);
       }
-      
+
       // Format document
       spinner.text = 'Formatting document...';
-      
+
       let formatted: string;
       const indent = options.compact ? 0 : parseInt(options.indent, 10);
-      
+
       if (options.sortKeys !== false && !options.compact) {
         // Sort keys for consistent formatting
         formatted = JSON.stringify(sortObjectKeys(document), null, indent);
       } else {
         formatted = JSON.stringify(document, null, indent);
       }
-      
+
       // Write output
       const outputPath = options.output ? resolve(options.output) : filePath;
-      writeFileSync(outputPath, formatted + '\n', 'utf-8');
-      
+      writeFileSync(outputPath, `${formatted}\n`, 'utf-8');
+
       spinner.succeed(chalk.green(`Document formatted successfully!`));
-      
+
       if (options.output) {
         console.log(chalk.gray(`Output written to: ${outputPath}`));
       }
@@ -75,7 +76,7 @@ function sortObjectKeys(obj: any): any {
   if (Array.isArray(obj)) {
     return obj.map(sortObjectKeys);
   }
-  
+
   if (obj !== null && typeof obj === 'object') {
     // Define key order priority
     const keyOrder = [
@@ -87,48 +88,46 @@ function sortObjectKeys(obj: any): any {
       'frontMatter',
       'bodyMatter',
       'backMatter',
-      
+
       // Common object keys
       'id',
       'type',
       'label',
       'title',
       'contents',
-      
+
       // Block keys
       'blockType',
       'content',
-      
+
       // SemanticText keys
       'runs',
       'text',
-      
+
       // Extension keys (always last)
       'tags',
       'extensions',
     ];
-    
+
     const sorted: any = {};
     const keys = Object.keys(obj);
-    
+
     // First, add keys in priority order
     for (const key of keyOrder) {
       if (keys.includes(key)) {
         sorted[key] = sortObjectKeys(obj[key]);
       }
     }
-    
+
     // Then add remaining keys alphabetically
-    const remainingKeys = keys
-      .filter(key => !keyOrder.includes(key))
-      .sort();
-    
+    const remainingKeys = keys.filter((key) => !keyOrder.includes(key)).sort();
+
     for (const key of remainingKeys) {
       sorted[key] = sortObjectKeys(obj[key]);
     }
-    
+
     return sorted;
   }
-  
+
   return obj;
 }
