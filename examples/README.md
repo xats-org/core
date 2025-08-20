@@ -1,6 +1,30 @@
 # xats Examples
 
-This directory contains example xats documents demonstrating key features and best practices for v0.2.0 of the schema.
+This directory contains example xats documents demonstrating key features and best practices across all schema versions.
+
+## v0.3.0 Example Documents
+
+### File Modularity Examples
+
+#### `multi-file-textbook/`
+Demonstrates file modularity features including:
+- Large textbook split across multiple JSON files
+- Reference metadata for tracking external content
+- Team collaboration workflow examples
+- Validation strategies for modular documents
+
+#### `v0.3.0-features-example.json`
+Comprehensive example showcasing all v0.3.0 features:
+- File modularity with external references
+- Enhanced internationalization (i18n) with RTL support
+- Advanced indexing with IndexRun markers
+- Case study and metacognitive prompt blocks
+- Enhanced rights management and accessibility
+
+### New Pedagogical Content Types
+
+#### Case Studies and Metacognitive Prompts
+Examples of structured case-based learning and self-reflection content with full pedagogical metadata.
 
 ## v0.2.0 Example Documents
 

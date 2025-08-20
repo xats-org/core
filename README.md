@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/stable-v0.2.0-blue.svg)](https://github.com/xats-org/core/releases)
-[![Development](https://img.shields.io/badge/development-v0.3.0-orange.svg)](https://github.com/xats-org/core/tree/v0.3.0)
+[![Version](https://img.shields.io/badge/stable-v0.3.0-blue.svg)](https://github.com/xats-org/core/releases)
+[![Development](https://img.shields.io/badge/development-v0.4.0-orange.svg)](https://github.com/xats-org/core/tree/main)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![CI Status](https://img.shields.io/github/actions/workflow/status/xats-org/core/ci.yml?branch=v0.2.0&label=CI)](https://github.com/xats-org/core/actions)
 [![npm version](https://img.shields.io/npm/v/@xats-org/core.svg)](https://www.npmjs.com/package/@xats-org/core)
@@ -26,6 +26,9 @@ The **eXtensible Academic Text Standard (xats)** is a modern, JSON-based schema 
 - 🔌 **LMS Integration**: Native LTI 1.3 support for seamless Learning Management System integration
 - 📊 **Assessment Framework**: Comprehensive built-in assessment system with multiple question types
 - 🔐 **Rights Management**: Comprehensive licensing and copyright management for publishers
+- 📂 **File Modularity**: Split large textbooks across multiple files for team collaboration
+- 🌍 **Internationalization**: Full language and text direction support for global content
+- 📖 **Advanced Indexing**: Semantic indexing with cross-references and hierarchical structure
 - 🚀 **Extensible Architecture**: Domain-specific extensions without breaking compatibility
 
 ## 📊 How xats Compares
@@ -39,6 +42,8 @@ The **eXtensible Academic Text Standard (xats)** is a modern, JSON-based schema 
 | **Learning Objectives** | ✅ Native support | ❌ No | ❌ No | ⚠️ Limited | ❌ No |
 | **Assessment Framework** | ✅ Built-in | ❌ No | ❌ No | ⚠️ Basic | ❌ No |
 | **Adaptive Learning Paths** | ✅ Native pathways | ❌ No | ❌ No | ❌ No | ⚠️ Conditional only |
+| **File Modularity** | ✅ Native support | ❌ No | ⚠️ Limited | ❌ No | ✅ Good |
+| **Internationalization** | ✅ Full i18n/RTL | ⚠️ Basic | ⚠️ Basic | ✅ Good | ⚠️ Limited |
 | **WCAG 2.1 AA Compliance** | ✅ 100% compliant | ⚠️ Partial | ⚠️ Partial | ✅ Good | ⚠️ Partial |
 | **LTI 1.3 Integration** | ✅ Native | ❌ No | ❌ No | ❌ No | ❌ No |
 | **AI Processing** | ✅ Optimized | ⚠️ Possible | ⚠️ Possible | ⚠️ Limited | ⚠️ Complex |
@@ -57,6 +62,9 @@ Unlike general-purpose formats, xats is designed specifically for academic and e
 - Adaptive learning pathways
 - Student progress tracking
 - Prerequisite management
+- File modularity for large textbooks
+- Semantic indexing and cross-references
+- Case study and reflection prompts
 
 #### 🤝 **Modern Integration Ready**
 - **LMS Integration**: Native LTI 1.3 support for Canvas, Blackboard, Moodle, etc.
@@ -91,7 +99,7 @@ xats-validate my-textbook.json
 import { validateDocument } from '@xats-org/core';
 
 const document = {
-  schemaVersion: "0.2.0",
+  schemaVersion: "0.3.0",
   bibliographicEntry: {
     id: "calculus-101",
     type: "book",
@@ -110,7 +118,7 @@ const { valid, errors } = await validateDocument(document);
 
 ```json
 {
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "bibliographicEntry": {
     "id": "biology-fundamentals",
     "type": "book",
@@ -124,32 +132,44 @@ const { valid, errors } = await validateDocument(document);
     "contents": [
       {
         "id": "ch-1",
-        "language": "en",
+        "language": "en-US",
+        "textDirection": "ltr",
         "label": "Chapter 1", 
         "title": "Introduction to Cell Biology",
         "learningObjectives": [
           {
             "id": "lo-1-1",
-            "language": "en",
+            "language": "en-US",
             "description": "Understand the basic structure of a cell"
           }
         ],
         "sections": [
           {
             "id": "sec-1-1",
-            "language": "en",
+            "language": "en-US",
             "title": "What is a Cell?",
             "content": [
               {
                 "id": "para-1",
-                "language": "en",
+                "language": "en-US",
                 "blockType": "https://xats.org/core/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
                       {
                         "type": "text",
-                        "text": "A cell is the smallest unit of life."
+                        "text": "A "
+                      },
+                      {
+                        "type": "index",
+                        "text": "cell",
+                        "indexTerm": "Cell",
+                        "subTerm": "Definition",
+                        "indexId": "idx-cell-def"
+                      },
+                      {
+                        "type": "text",
+                        "text": " is the smallest unit of life."
                       }
                     ]
                   }
@@ -157,7 +177,7 @@ const { valid, errors } = await validateDocument(document);
               },
               {
                 "id": "assessment-1",
-                "language": "en",
+                "language": "en-US",
                 "blockType": "https://xats.org/core/blocks/multipleChoice",
                 "content": {
                   "question": {
@@ -215,14 +235,16 @@ const { valid, errors } = await validateDocument(document);
 | **[Extension Guide](./docs/guides/extension-guide.md)** | Creating custom extensions |
 | **[LTI Integration](./docs/guides/lti-integration.md)** | LMS integration guide |
 | **[Accessibility Guide](./docs/guides/accessibility-guide.md)** | WCAG compliance guide |
+| **[Release Notes](./docs/releases/)** | Complete release history and feature announcements |
 
 ## 🏗️ Project Structure
 
 ```
 xats-org/core/
 ├── schemas/           # JSON Schema definitions
-│   ├── v0.1.0/       # Stable release
-│   └── v0.2.0/       # Development version
+│   ├── v0.1.0/       # Legacy release
+│   ├── v0.2.0/       # Previous stable
+│   └── v0.3.0/       # Current stable
 ├── src/              # TypeScript source code
 │   ├── validator/    # Validation logic
 │   └── types/        # TypeScript definitions
@@ -236,8 +258,9 @@ xats-org/core/
 
 | Version | Status | Support Level | Key Features |
 |---------|--------|---------------|--------------|
-| **v0.3.0** | 🚧 Development | Full | IndexRun, Case Studies, Metacognitive Prompts |
-| **v0.2.0** | ✅ Stable | Full | WCAG AA, LTI 1.3, Assessments, Rights Management |
+| **v0.4.0** | 🚧 Development | Full | AI Integration, Advanced Analytics |
+| **v0.3.0** | ✅ Stable | Full | File Modularity, i18n, IndexRun, Case Studies, Metacognitive Prompts |
+| **v0.2.0** | 🔒 Security Only | Security Only | WCAG AA, LTI 1.3, Assessments, Rights Management |
 | **v0.1.0** | 🔒 Security Only | Security Only | Core schema, Basic content types |
 
 **Migration Support:** All versions are forward-compatible. Documents automatically work with newer schema versions.
@@ -277,19 +300,19 @@ npm run validate examples/
 
 ## 📈 Roadmap
 
-### v0.2.0 (Current Stable Release)
-- ✅ 100% WCAG 2.1 AA compliance
-- ✅ LTI 1.3 integration with grade passback
-- ✅ Rights management extension
-- ✅ Core assessment framework with multiple question types
-- ✅ Enhanced validation and TypeScript support
-- ✅ Comprehensive documentation updates
+### v0.3.0 (Current Stable Release)
+- ✅ File modularity for large textbooks
+- ✅ Enhanced internationalization with language and RTL support
+- ✅ Advanced indexing with IndexRun type
+- ✅ New pedagogical content types (case studies, metacognitive prompts)
+- ✅ Enhanced rights management and accessibility features
+- ✅ Comprehensive v0.3.0 documentation
 
-### v0.3.0 (Planned)
-- 📑 Formal indexing support
-- 📚 Case study block types
-- 🧠 Metacognitive prompts
-- 🔍 Enhanced search capabilities
+### v0.4.0 (Planned)
+- 🤖 AI integration and content generation support
+- 📊 Advanced learning analytics framework
+- 🔍 Enhanced search and discovery capabilities
+- 🎯 Adaptive content delivery system
 
 ### Future Vision
 - 🌍 Internationalization (i18n)

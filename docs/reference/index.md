@@ -20,11 +20,13 @@ Use the links below to navigate to the detailed specification for each definitio
 - [CitationRun](./CitationRun.md) - Inline citations to bibliographic entries
 - [EmphasisRun](./EmphasisRun.md) - Text with emphasis formatting (italic)
 - [StrongRun](./StrongRun.md) - Text with strong emphasis formatting (bold)
+- [IndexRun](./IndexRun.md) - Indexable text markers for professional publishing *(v0.3.0)*
 
 ## Structural Components
 - [Unit](./Unit.md) - High-level organizational containers
 - [Chapter](./Chapter.md) - Major content divisions with learning objectives
 - [Section](./Section.md) - Subdivisions within chapters containing content blocks
+- [FileReference](./FileReference.md) - External file references for modular documents *(v0.3.0)*
 
 ## Pedagogical Components
 - [LearningOutcome](./LearningOutcome.md) - Broad capabilities students should possess
@@ -60,8 +62,17 @@ Use the links below to navigate to the detailed specification for each definitio
 - [AccessibilityMetadata](./AccessibilityMetadata.md) - WCAG compliance and assistive technology support
 - [AssessmentAccessibilitySettings](./AssessmentAccessibilitySettings.md) - Assessment-specific accessibility options
 
-## Rights and Licensing (v0.2.0)
-- [RightsMetadata](./RightsMetadata.md) - Comprehensive intellectual property and licensing information
+## Rights and Licensing (v0.2.0/v0.3.0)
+- [RightsMetadata](./RightsMetadata.md) - Comprehensive intellectual property and licensing information *(enhanced in v0.3.0)*
+
+## Pedagogical Content Types (v0.3.0)
+
+### Case-Based Learning
+- [CaseStudyContent](./CaseStudyContent.md) - Structured case study scenarios with stakeholders and analysis questions
+
+### Reflective Learning 
+- [MetacognitivePromptContent](./MetacognitivePromptContent.md) - Self-reflection prompts with scaffolding and assessment
+- [PedagogicalMetadata](./PedagogicalMetadata.md) - Extended pedagogical classification and instructional methods
 
 ## Bibliographic Components
 - [CslDataItem](./CslDataItem.md) - Citation Style Language bibliographic entries
@@ -75,9 +86,12 @@ Use the links below to navigate to the detailed specification for each definitio
 
 ## What's New in v0.3.0
 
-- **Formal Indexing Support**: New `IndexRun` type in SemanticText for professional publishing
-- **Case Study Blocks**: Structured content type for case-based learning scenarios
-- **Metacognitive Prompt Blocks**: Self-reflection and metacognitive assessment support
+- **File Modularity System**: Split large textbooks across multiple JSON files with `FileReference` support
+- **Enhanced Internationalization**: Language identification and text direction support for global content
+- **Advanced Indexing**: New `IndexRun` type in SemanticText for professional publishing with hierarchical structure
+- **New Pedagogical Content Types**: Case study blocks for applied learning and metacognitive prompt blocks for self-reflection
+- **Enhanced Rights Management**: Granular licensing control with multi-stakeholder copyright support
+- **Expanded Accessibility**: Comprehensive cognitive support and assessment accommodation features
 
 ## What's New in v0.2.0
 
