@@ -1,9 +1,11 @@
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 import chalk from 'chalk';
 import { Command } from 'commander';
 import ora from 'ora';
+
+import type { FormatCommandOptions } from '../types.js';
 
 export const formatCommand = new Command('format')
   .description('Format a xats document with proper indentation')
@@ -12,7 +14,7 @@ export const formatCommand = new Command('format')
   .option('-i, --indent <spaces>', 'number of spaces for indentation', '2')
   .option('--no-sort-keys', 'do not sort object keys')
   .option('--compact', 'use compact formatting (no extra whitespace)')
-  .action((file: string, options: any) => {
+  .action((file: string, options: FormatCommandOptions) => {
     const spinner = ora('Loading document...').start();
 
     try {
@@ -26,7 +28,7 @@ export const formatCommand = new Command('format')
       // Read and parse document
       spinner.text = 'Parsing document...';
       const content = readFileSync(filePath, 'utf-8');
-      let document: any;
+      let document: unknown;
 
       try {
         document = JSON.parse(content);
@@ -42,7 +44,7 @@ export const formatCommand = new Command('format')
       spinner.text = 'Formatting document...';
 
       let formatted: string;
-      const indent = options.compact ? 0 : parseInt(options.indent, 10);
+      const indent = options.compact ? 0 : parseInt(options.indent || '2', 10);
 
       if (options.sortKeys !== false && !options.compact) {
         // Sort keys for consistent formatting
@@ -72,7 +74,7 @@ export const formatCommand = new Command('format')
 /**
  * Recursively sort object keys
  */
-function sortObjectKeys(obj: any): any {
+function sortObjectKeys(obj: unknown): unknown {
   if (Array.isArray(obj)) {
     return obj.map(sortObjectKeys);
   }
@@ -109,13 +111,13 @@ function sortObjectKeys(obj: any): any {
       'extensions',
     ];
 
-    const sorted: any = {};
-    const keys = Object.keys(obj);
+    const sorted: Record<string, unknown> = {};
+    const keys = Object.keys(obj as Record<string, unknown>);
 
     // First, add keys in priority order
     for (const key of keyOrder) {
       if (keys.includes(key)) {
-        sorted[key] = sortObjectKeys(obj[key]);
+        sorted[key] = sortObjectKeys((obj as Record<string, unknown>)[key]);
       }
     }
 
@@ -123,7 +125,7 @@ function sortObjectKeys(obj: any): any {
     const remainingKeys = keys.filter((key) => !keyOrder.includes(key)).sort();
 
     for (const key of remainingKeys) {
-      sorted[key] = sortObjectKeys(obj[key]);
+      sorted[key] = sortObjectKeys((obj as Record<string, unknown>)[key]);
     }
 
     return sorted;

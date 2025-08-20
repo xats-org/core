@@ -10,11 +10,15 @@ import { infoCommand } from './commands/info.js';
 import { statsCommand } from './commands/stats.js';
 import { validateCommand } from './commands/validate.js';
 
+import type { PackageJson } from './types.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Read package.json for version
-const packageJson = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf-8'));
+const packageJson = JSON.parse(
+  readFileSync(join(__dirname, '..', 'package.json'), 'utf-8')
+) as PackageJson;
 
 const program = new Command();
 

@@ -1,16 +1,18 @@
-import { readFileSync, existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 
 import chalk from 'chalk';
 import { Command } from 'commander';
 
-import { extractPlainText } from '@xats/utils';
+import { isStructuralContainer, isXatsDocument } from '../types.js';
+
+import type { CslAuthor, DocumentInfo, InfoCommandOptions } from '../types.js';
 
 export const infoCommand = new Command('info')
   .description('Display information about a xats document')
   .argument('<file>', 'path to the xats document')
   .option('--format <format>', 'output format (text, json)', 'text')
-  .action((file: string, options: any) => {
+  .action((file: string, options: InfoCommandOptions) => {
     try {
       // Check if file exists
       const filePath = resolve(file);
@@ -21,7 +23,7 @@ export const infoCommand = new Command('info')
 
       // Read and parse document
       const content = readFileSync(filePath, 'utf-8');
-      let document: any;
+      let document: unknown;
 
       try {
         document = JSON.parse(content);
@@ -30,44 +32,58 @@ export const infoCommand = new Command('info')
         process.exit(1);
       }
 
+      // Validate that it's a xats document
+      if (!isXatsDocument(document)) {
+        console.error(chalk.red('Document is not a valid xats document structure'));
+        process.exit(1);
+      }
+
       // Extract information
-      const info = {
-        schemaVersion: document.schemaVersion,
+      const info: DocumentInfo = {
+        schemaVersion: document.schemaVersion || 'unknown',
         title: document.bibliographicEntry?.title || 'Untitled',
         authors: document.bibliographicEntry?.author || [],
-        subject: document.subject,
-        publisher: document.bibliographicEntry?.publisher,
-        publishedDate: document.bibliographicEntry?.issued?.['date-parts']?.[0],
-        isbn: document.bibliographicEntry?.ISBN,
-        language: document.bibliographicEntry?.language || 'en',
+        subject: typeof document.subject === 'string' ? document.subject : '',
+        language: (document.bibliographicEntry?.language as string) || 'en',
         hasFrontMatter: Boolean(document.frontMatter),
         hasBackMatter: Boolean(document.backMatter),
         unitCount: 0,
         chapterCount: 0,
         sectionCount: 0,
+        ...(document.bibliographicEntry?.publisher && {
+          publisher: document.bibliographicEntry.publisher,
+        }),
+        ...(document.bibliographicEntry?.issued?.['date-parts']?.[0] && {
+          publishedDate: document.bibliographicEntry.issued['date-parts'][0],
+        }),
+        ...(document.bibliographicEntry?.ISBN && { isbn: document.bibliographicEntry.ISBN }),
       };
 
       // Count structural elements
       if (document.bodyMatter?.contents) {
         for (const item of document.bodyMatter.contents) {
-          if (item.type === 'unit') {
-            info.unitCount++;
-            if (item.contents) {
-              for (const chapter of item.contents) {
-                if (chapter.type === 'chapter') {
-                  info.chapterCount++;
-                  if (chapter.contents) {
-                    info.sectionCount += chapter.contents.filter(
-                      (s: any) => s.type === 'section'
-                    ).length;
+          if (isStructuralContainer(item)) {
+            if (item.type === 'unit') {
+              info.unitCount++;
+              if (item.contents && Array.isArray(item.contents)) {
+                for (const chapter of item.contents) {
+                  if (isStructuralContainer(chapter) && chapter.type === 'chapter') {
+                    info.chapterCount++;
+                    if (chapter.contents && Array.isArray(chapter.contents)) {
+                      info.sectionCount += chapter.contents.filter(
+                        (s) => isStructuralContainer(s) && s.type === 'section'
+                      ).length;
+                    }
                   }
                 }
               }
-            }
-          } else if (item.type === 'chapter') {
-            info.chapterCount++;
-            if (item.contents) {
-              info.sectionCount += item.contents.filter((s: any) => s.type === 'section').length;
+            } else if (item.type === 'chapter') {
+              info.chapterCount++;
+              if (item.contents && Array.isArray(item.contents)) {
+                info.sectionCount += item.contents.filter(
+                  (s) => isStructuralContainer(s) && s.type === 'section'
+                ).length;
+              }
             }
           }
         }
@@ -86,7 +102,7 @@ export const infoCommand = new Command('info')
 
         if (info.authors.length > 0) {
           const authorNames = info.authors
-            .map((a: any) => a.literal || `${a.given} ${a.family}`)
+            .map((a: CslAuthor) => a.literal || `${a.given || ''} ${a.family || ''}`.trim())
             .join(', ');
           console.log(chalk.cyan('Authors:'), authorNames);
         }

@@ -8,6 +8,10 @@ import type {
   SemanticText,
   SemanticTextRun,
   StructuralContainer,
+  FrontMatter,
+  BodyMatter,
+  BackMatter,
+  Run,
 } from '@xats/types';
 
 export interface HtmlRendererOptions extends RendererOptions {
@@ -34,9 +38,9 @@ export class HtmlRenderer extends BaseRenderer {
   render(document: XatsDocument): string {
     const content = [
       this.renderMetadata(document),
-      document.frontMatter ? this.renderStructuralContainer(document.frontMatter) : '',
-      document.bodyMatter ? this.renderStructuralContainer(document.bodyMatter) : '',
-      document.backMatter ? this.renderStructuralContainer(document.backMatter) : '',
+      document.frontMatter ? this.renderDocumentSection('frontmatter', document.frontMatter) : '',
+      document.bodyMatter ? this.renderDocumentSection('bodymatter', document.bodyMatter) : '',
+      document.backMatter ? this.renderDocumentSection('backmatter', document.backMatter) : '',
     ].filter(Boolean).join('\n');
     
     if (this.htmlOptions.wrapInDocument) {
@@ -58,9 +62,12 @@ export class HtmlRenderer extends BaseRenderer {
       }
       
       if (bib.author && bib.author.length > 0) {
-        const authors = bib.author.map(a => 
-          a.literal || `${a.given || ''} ${a.family || ''}`.trim()
-        ).join(', ');
+        const authors = bib.author.map(a => {
+          if ('literal' in a && a.literal) {
+            return a.literal;
+          }
+          return `${a.given || ''} ${a.family || ''}`.trim();
+        }).join(', ');
         parts.push(`<div class="xats-authors">${this.escapeText(authors)}</div>`);
       }
       
@@ -76,7 +83,7 @@ export class HtmlRenderer extends BaseRenderer {
   
   renderStructuralContainer(container: StructuralContainer): string {
     const attrs = this.getAttributes(container);
-    const className = container.type ? `xats-${container.type}` : 'xats-container';
+    const className = this.getContainerClassName(container);
     
     const parts: string[] = [];
     parts.push(`<div class="${className}"${attrs}>`);
@@ -87,10 +94,11 @@ export class HtmlRenderer extends BaseRenderer {
     
     if (container.title) {
       const level = this.getHeadingLevel(container);
-      parts.push(`<h${level} class="xats-heading">${this.escapeText(container.title)}</h${level}>`);
+      const titleText = this.renderSemanticText(container.title);
+      parts.push(`<h${level} class="xats-heading">${titleText}</h${level}>`);
     }
     
-    if (container.contents) {
+    if ('contents' in container && container.contents && Array.isArray(container.contents)) {
       parts.push(this.renderContents(container.contents));
     }
     
@@ -121,28 +129,46 @@ export class HtmlRenderer extends BaseRenderer {
     
     switch (typeName) {
       case 'paragraph':
-        return `<p class="xats-paragraph"${attrs}>${this.renderSemanticText(block.content)}</p>`;
+        if (this.isSemanticText(block.content)) {
+          return `<p class="xats-paragraph"${attrs}>${this.renderSemanticText(block.content)}</p>`;
+        }
+        return `<p class="xats-paragraph"${attrs}>${this.escapeText(String(block.content))}</p>`;
       
       case 'heading':
-        const level = block.content.level || 1;
-        return `<h${level} class="xats-heading"${attrs}>${this.renderSemanticText(block.content.text)}</h${level}>`;
+        if (this.isHeadingContent(block.content)) {
+          const level = block.content.level || 1;
+          return `<h${level} class="xats-heading"${attrs}>${this.renderSemanticText(block.content.text)}</h${level}>`;
+        }
+        return `<h2 class="xats-heading"${attrs}>${this.escapeText(String(block.content))}</h2>`;
       
       case 'list':
-        const tag = block.content.ordered ? 'ol' : 'ul';
-        const items = block.content.items
-          .map((item: any) => `<li>${this.renderSemanticText(item)}</li>`)
-          .join('\n');
-        return `<${tag} class="xats-list"${attrs}>${items}</${tag}>`;
+        if (this.isListContent(block.content)) {
+          const tag = block.content.ordered ? 'ol' : 'ul';
+          const items = block.content.items
+            .map((item: any) => `<li>${this.isSemanticText(item) ? this.renderSemanticText(item) : this.escapeText(String(item))}</li>`)
+            .join('\n');
+          return `<${tag} class="xats-list"${attrs}>${items}</${tag}>`;
+        }
+        return `<ul class="xats-list"${attrs}><li>${this.escapeText(String(block.content))}</li></ul>`;
       
       case 'blockquote':
-        return `<blockquote class="xats-blockquote"${attrs}>${this.renderSemanticText(block.content.text)}</blockquote>`;
+        if (this.isBlockquoteContent(block.content)) {
+          return `<blockquote class="xats-blockquote"${attrs}>${this.renderSemanticText(block.content.text)}</blockquote>`;
+        }
+        return `<blockquote class="xats-blockquote"${attrs}>${this.escapeText(String(block.content))}</blockquote>`;
       
       case 'codeBlock':
-        const lang = block.content.language || '';
-        return `<pre class="xats-code"${attrs}><code class="language-${lang}">${this.escapeText(block.content.code)}</code></pre>`;
+        if (this.isCodeBlockContent(block.content)) {
+          const lang = block.content.language || '';
+          return `<pre class="xats-code"${attrs}><code class="language-${lang}">${this.escapeText(block.content.code)}</code></pre>`;
+        }
+        return `<pre class="xats-code"${attrs}><code>${this.escapeText(String(block.content))}</code></pre>`;
       
       case 'mathBlock':
-        return `<div class="xats-math"${attrs}>${this.escapeText(block.content.math)}</div>`;
+        if (this.isMathBlockContent(block.content)) {
+          return `<div class="xats-math"${attrs}>${this.escapeText(block.content.math)}</div>`;
+        }
+        return `<div class="xats-math"${attrs}>${this.escapeText(String(block.content))}</div>`;
       
       case 'table':
         return this.renderTable(block.content, attrs);
@@ -186,12 +212,12 @@ export class HtmlRenderer extends BaseRenderer {
         return `<u>${this.escapeText(run.text)}</u>`;
       
       case 'reference':
-        const href = run.targetId ? `#${run.targetId}` : '#';
-        const label = run.label || 'Reference';
+        const href = run.ref ? `#${run.ref}` : '#';
+        const label = run.label || run.text || 'Reference';
         return `<a href="${href}" class="xats-reference">${this.escapeText(label)}</a>`;
       
       case 'citation':
-        return `<cite class="xats-citation" data-cite="${run.citationId}">[${run.citationId}]</cite>`;
+        return `<cite class="xats-citation" data-cite="${run.citeKey}">[${run.citeKey}]</cite>`;
       
       case 'mathInline':
         return `<span class="xats-math-inline">${this.escapeText(run.math)}</span>`;
@@ -225,16 +251,20 @@ export class HtmlRenderer extends BaseRenderer {
   }
   
   private getHeadingLevel(container: StructuralContainer): number {
-    switch (container.type) {
-      case 'unit':
-        return 2;
-      case 'chapter':
-        return 3;
-      case 'section':
-        return 4;
-      default:
-        return 5;
+    // Determine heading level based on container type
+    if ('contents' in container) {
+      const firstContent = Array.isArray(container.contents) ? container.contents[0] : null;
+      if (firstContent && 'blockType' in firstContent) {
+        return 2; // Chapters
+      } else if (firstContent && 'contents' in firstContent) {
+        const nestedContent = Array.isArray(firstContent.contents) ? firstContent.contents[0] : null;
+        if (nestedContent && 'blockType' in nestedContent) {
+          return 3; // Sections
+        }
+        return 1; // Units
+      }
     }
+    return 4; // Default for unknown types
   }
   
   private renderTable(content: any, attrs: string): string {
@@ -410,5 +440,109 @@ export class HtmlRenderer extends BaseRenderer {
         color: #666;
       }
     `;
+  }
+
+  private renderDocumentSection(
+    sectionType: 'frontmatter' | 'bodymatter' | 'backmatter',
+    section: FrontMatter | BodyMatter | BackMatter
+  ): string {
+    const parts: string[] = [];
+    const className = `xats-${sectionType}`;
+    
+    parts.push(`<section class="${className}">`);
+    
+    if (sectionType === 'bodymatter' && 'contents' in section && Array.isArray(section.contents)) {
+      parts.push(this.renderContents(section.contents));
+    } else {
+      // Handle FrontMatter and BackMatter properties
+      Object.entries(section).forEach(([key, value]) => {
+        if (key !== 'contents' && Array.isArray(value)) {
+          parts.push(`<div class="xats-${key}">`);
+          parts.push(`<h2 class="xats-section-title">${this.formatSectionTitle(key)}</h2>`);
+          parts.push(value.map(block => this.renderContentBlock(block)).join('\\n'));
+          parts.push('</div>');
+        }
+      });
+    }
+    
+    parts.push('</section>');
+    
+    return parts.join('\\n');
+  }
+
+  private formatSectionTitle(key: string): string {
+    return key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+  }
+
+  private getContainerClassName(container: StructuralContainer): string {
+    // Try to determine container type from its contents
+    if ('contents' in container) {
+      const firstContent = Array.isArray(container.contents) ? container.contents[0] : null;
+      if (firstContent && 'blockType' in firstContent) {
+        return 'xats-section'; // Contains content blocks directly
+      } else if (firstContent && 'contents' in firstContent) {
+        const nestedContent = Array.isArray(firstContent.contents) ? firstContent.contents[0] : null;
+        if (nestedContent && 'blockType' in nestedContent) {
+          return 'xats-chapter'; // Contains sections
+        }
+        return 'xats-unit'; // Contains chapters
+      }
+    }
+    return 'xats-container';
+  }
+
+  // Type guard methods
+  private isSemanticText(content: unknown): content is SemanticText {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'runs' in content &&
+      Array.isArray((content as any).runs)
+    );
+  }
+
+  private isHeadingContent(content: unknown): content is { level?: number; text: SemanticText } {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'text' in content &&
+      this.isSemanticText((content as any).text)
+    );
+  }
+
+  private isListContent(content: unknown): content is { ordered?: boolean; items: SemanticText[] } {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'items' in content &&
+      Array.isArray((content as any).items)
+    );
+  }
+
+  private isBlockquoteContent(content: unknown): content is { text: SemanticText } {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'text' in content &&
+      this.isSemanticText((content as any).text)
+    );
+  }
+
+  private isCodeBlockContent(content: unknown): content is { code: string; language?: string } {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'code' in content &&
+      typeof (content as any).code === 'string'
+    );
+  }
+
+  private isMathBlockContent(content: unknown): content is { math: string } {
+    return (
+      typeof content === 'object' &&
+      content !== null &&
+      'math' in content &&
+      typeof (content as any).math === 'string'
+    );
   }
 }

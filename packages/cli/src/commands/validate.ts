@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 
 import chalk from 'chalk';
@@ -7,6 +7,9 @@ import ora from 'ora';
 
 import { XatsValidator } from '@xats/validator';
 
+import { isXatsDocument } from '../types.js';
+
+import type { ValidateCommandOptions } from '../types.js';
 import type { XatsVersion } from '@xats/types';
 
 export const validateCommand = new Command('validate')
@@ -16,7 +19,7 @@ export const validateCommand = new Command('validate')
   .option('--strict', 'enable strict validation mode')
   .option('--no-extensions', 'disallow extensions')
   .option('--format <format>', 'output format (text, json)', 'text')
-  .action(async (file: string, options: any) => {
+  .action(async (file: string, options: ValidateCommandOptions) => {
     const spinner = ora('Loading document...').start();
 
     try {
@@ -30,7 +33,7 @@ export const validateCommand = new Command('validate')
       // Read and parse document
       spinner.text = 'Parsing document...';
       const content = readFileSync(filePath, 'utf-8');
-      let document: any;
+      let document: unknown;
 
       try {
         document = JSON.parse(content);
@@ -42,17 +45,24 @@ export const validateCommand = new Command('validate')
         process.exit(1);
       }
 
+      // Validate that it's a xats document
+      if (!isXatsDocument(document)) {
+        spinner.fail(chalk.red('Document is not a valid xats document structure'));
+        process.exit(1);
+      }
+
       // Validate document
       spinner.text = 'Validating document...';
       const validator = new XatsValidator({
-        strictMode: options.strict,
-        allowExtensions: options.extensions !== false,
+        strict: Boolean(options.strict),
+        allErrors: true,
+        verbose: Boolean(options.verbose),
       });
 
-      const version = options.schema === 'latest' ? undefined : (options.schema as XatsVersion);
-      const result = await validator.validate(document, { version });
+      const _version = options.schema === 'latest' ? undefined : (options.schema as XatsVersion);
+      const result = await validator.validate(document);
 
-      if (result.valid) {
+      if (result.isValid) {
         spinner.succeed(chalk.green('Document is valid!'));
 
         if (options.verbose && result.warnings && result.warnings.length > 0) {
@@ -78,8 +88,8 @@ export const validateCommand = new Command('validate')
             if (error.path) {
               console.log(chalk.gray(`     at: ${error.path}`));
             }
-            if (options.verbose && error.schemaPath) {
-              console.log(chalk.gray(`     schema: ${error.schemaPath}`));
+            if (options.verbose && error.keyword) {
+              console.log(chalk.gray(`     keyword: ${error.keyword}`));
             }
           });
         }
