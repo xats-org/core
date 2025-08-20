@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */
 /**
  * Type Constraint Validation Tests
- * 
+ *
  * Tests that all type constraints in the schema are properly enforced,
- * including primitive types, array types, object types, enums, 
+ * including primitive types, array types, object types, enums,
  * const values, and complex type combinations.
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
-import { createValidator } from '@xats/validator';
 
 describe('Type Constraint Validation', () => {
   let validator: any;
@@ -23,17 +23,17 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-001',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
-        bodyMatter: { contents: [] }
+        bodyMatter: { contents: [] },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('string') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should enforce string type for subject', async () => {
@@ -42,17 +42,17 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-002',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 123, // Should be string
-        bodyMatter: { contents: [] }
+        bodyMatter: { contents: [] },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('string') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should enforce string type for title in structural containers', async () => {
@@ -61,7 +61,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-003',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -69,17 +69,17 @@ describe('Type Constraint Validation', () => {
             {
               id: 'chapter-1',
               title: 123, // Should be string
-              sections: []
-            }
-          ]
-        }
+              sections: [],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('string') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should enforce string type for id fields', async () => {
@@ -88,7 +88,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-004',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -96,17 +96,17 @@ describe('Type Constraint Validation', () => {
             {
               id: 123, // Should be string
               title: 'Chapter 1',
-              sections: []
-            }
-          ]
-        }
+              sections: [],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('string') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
+      ).toBe(true);
     });
   });
 
@@ -117,7 +117,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-005',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -126,17 +126,17 @@ describe('Type Constraint Validation', () => {
               id: 'chapter-1',
               title: 'Chapter 1',
               tags: 'not-an-array', // Should be array
-              sections: []
-            }
-          ]
-        }
+              sections: [],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('array') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('array') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should enforce array type for contents in BodyMatter', async () => {
@@ -145,19 +145,19 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-006',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
-          contents: 'not-an-array' // Should be array
-        }
+          contents: 'not-an-array', // Should be array
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('array') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('array') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should enforce array type for sections in Chapter', async () => {
@@ -166,7 +166,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-007',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -174,17 +174,17 @@ describe('Type Constraint Validation', () => {
             {
               id: 'chapter-1',
               title: 'Chapter 1',
-              sections: 'not-an-array' // Should be array
-            }
-          ]
-        }
+              sections: 'not-an-array', // Should be array
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('array') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('array') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should enforce array type for content in Section', async () => {
@@ -193,7 +193,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-008',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -205,19 +205,19 @@ describe('Type Constraint Validation', () => {
                 {
                   id: 'section-1',
                   title: 'Section 1',
-                  content: 'not-an-array' // Should be array
-                }
-              ]
-            }
-          ]
-        }
+                  content: 'not-an-array', // Should be array
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('array') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('array') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should enforce array type for runs in SemanticText', async () => {
@@ -226,7 +226,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-009',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -244,23 +244,23 @@ describe('Type Constraint Validation', () => {
                       blockType: 'https://xats.org/core/blocks/paragraph',
                       content: {
                         text: {
-                          runs: 'not-an-array' // Should be array
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                          runs: 'not-an-array', // Should be array
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('array') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('array') || e.message.includes('type'))
+      ).toBe(true);
     });
   });
 
@@ -270,14 +270,14 @@ describe('Type Constraint Validation', () => {
         schemaVersion: '0.1.0',
         bibliographicEntry: 'not-an-object', // Should be object
         subject: 'Test Subject',
-        bodyMatter: { contents: [] }
+        bodyMatter: { contents: [] },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('object') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('object') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should enforce object type for bodyMatter', async () => {
@@ -286,17 +286,17 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-010',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
-        bodyMatter: 'not-an-object' // Should be object
+        bodyMatter: 'not-an-object', // Should be object
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('object') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('object') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should enforce object type for content in ContentBlock', async () => {
@@ -305,7 +305,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-011',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -321,21 +321,21 @@ describe('Type Constraint Validation', () => {
                     {
                       id: 'block-1',
                       blockType: 'https://xats.org/core/blocks/paragraph',
-                      content: 'not-an-object' // Should be object
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                      content: 'not-an-object', // Should be object
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('object') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('object') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should enforce object type for extensions', async () => {
@@ -344,7 +344,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-012',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -353,17 +353,17 @@ describe('Type Constraint Validation', () => {
               id: 'chapter-1',
               title: 'Chapter 1',
               extensions: 'not-an-object', // Should be object
-              sections: []
-            }
-          ]
-        }
+              sections: [],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('object') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('object') || e.message.includes('type'))
+      ).toBe(true);
     });
   });
 
@@ -374,10 +374,10 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-013',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
-        bodyMatter: { contents: [] }
+        bodyMatter: { contents: [] },
       };
 
       const result = await validator.validate(doc);
@@ -392,7 +392,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-014',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -413,18 +413,18 @@ describe('Type Constraint Validation', () => {
                           runs: [
                             {
                               type: 'invalid-type', // Should be 'text'
-                              text: 'Some text'
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                              text: 'Some text',
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
@@ -438,7 +438,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-015',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -460,18 +460,18 @@ describe('Type Constraint Validation', () => {
                             {
                               type: 'invalid-ref', // Should be 'reference'
                               text: 'See chapter 2',
-                              refId: 'chapter-2'
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                              refId: 'chapter-2',
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
@@ -486,7 +486,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-016',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -504,15 +504,15 @@ describe('Type Constraint Validation', () => {
                       blockType: 'https://xats.org/core/blocks/list',
                       content: {
                         listType: 'invalid-type', // Should be 'ordered' or 'unordered'
-                        items: []
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        items: [],
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
@@ -526,7 +526,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-017',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -547,18 +547,18 @@ describe('Type Constraint Validation', () => {
                         items: [
                           {
                             text: {
-                              runs: [{ type: 'text', text: 'Item 1' }]
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                              runs: [{ type: 'text', text: 'Item 1' }],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
@@ -571,7 +571,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-018',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -589,15 +589,15 @@ describe('Type Constraint Validation', () => {
                       blockType: 'https://xats.org/core/blocks/mathBlock',
                       content: {
                         notation: 'invalid-notation', // Should be 'latex', 'mathml', or 'asciimath'
-                        expression: 'x = y + z'
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        expression: 'x = y + z',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
@@ -611,7 +611,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-019',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -629,15 +629,15 @@ describe('Type Constraint Validation', () => {
                       blockType: 'https://xats.org/core/blocks/mathBlock',
                       content: {
                         notation: 'latex', // Valid enum value
-                        expression: '\\int_a^b f(x) dx'
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        expression: '\\int_a^b f(x) dx',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
@@ -653,7 +653,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-020',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -661,15 +661,15 @@ describe('Type Constraint Validation', () => {
             {
               id: 'unit-1',
               title: 'Unit 1',
-              contents: [] // This makes it a Unit
+              contents: [], // This makes it a Unit
             },
             {
               id: 'chapter-1',
               title: 'Chapter 1',
-              sections: [] // This makes it a Chapter
-            }
-          ]
-        }
+              sections: [], // This makes it a Chapter
+            },
+          ],
+        },
       };
 
       await validator.validate(doc);
@@ -683,7 +683,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-021',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -704,23 +704,23 @@ describe('Type Constraint Validation', () => {
                           runs: [
                             {
                               type: 'text',
-                              text: 'Valid text'
+                              text: 'Valid text',
                             },
                             {
                               type: 'invalid-run-type', // Invalid run type
                               text: 'Invalid run',
-                              extraField: 'not allowed'
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                              extraField: 'not allowed',
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
@@ -735,7 +735,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-022',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -752,22 +752,22 @@ describe('Type Constraint Validation', () => {
                       id: 'block-1',
                       blockType: 'https://xats.org/core/placeholders/tableOfContents',
                       content: {
-                        placeholder: 'not-a-boolean' // Should be boolean
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        placeholder: 'not-a-boolean', // Should be boolean
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('boolean') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('boolean') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should accept boolean values for placeholder field', async () => {
@@ -776,7 +776,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-023',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -793,15 +793,15 @@ describe('Type Constraint Validation', () => {
                       id: 'block-1',
                       blockType: 'https://xats.org/core/placeholders/tableOfContents',
                       content: {
-                        placeholder: true // Valid boolean
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        placeholder: true, // Valid boolean
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
@@ -818,7 +818,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-024',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -827,12 +827,12 @@ describe('Type Constraint Validation', () => {
               id: 'chapter-1',
               title: 'Chapter 1',
               extensions: {
-                customNumericField: 'not-a-number' // If extension expects number
+                customNumericField: 'not-a-number', // If extension expects number
               },
-              sections: []
-            }
-          ]
-        }
+              sections: [],
+            },
+          ],
+        },
       };
 
       // This test validates that extensions can contain any type
@@ -848,7 +848,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-025',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -859,19 +859,19 @@ describe('Type Constraint Validation', () => {
               tags: [
                 'valid-tag',
                 123, // Should be string
-                'another-valid-tag'
+                'another-valid-tag',
               ],
-              sections: []
-            }
-          ]
-        }
+              sections: [],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('string') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
+      ).toBe(true);
     });
 
     it('should enforce string array type for citationIds', async () => {
@@ -880,7 +880,7 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-026',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -891,19 +891,19 @@ describe('Type Constraint Validation', () => {
               citationIds: [
                 'citation-1',
                 42, // Should be string
-                'citation-2'
+                'citation-2',
               ],
-              sections: []
-            }
-          ]
-        }
+              sections: [],
+            },
+          ],
+        },
       };
 
       const result = await validator.validate(doc);
       expect(result.isValid).toBe(false);
-      expect(result.errors.some((e: any) => 
-        e.message.includes('string') || e.message.includes('type')
-      )).toBe(true);
+      expect(
+        result.errors.some((e: any) => e.message.includes('string') || e.message.includes('type'))
+      ).toBe(true);
     });
   });
 
@@ -914,10 +914,10 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-027',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: null, // Should not be null
-        bodyMatter: { contents: [] }
+        bodyMatter: { contents: [] },
       };
 
       const result = await validator.validate(doc);
@@ -931,11 +931,11 @@ describe('Type Constraint Validation', () => {
         bibliographicEntry: {
           id: 'test-028',
           type: 'book',
-          title: 'Test Book'
+          title: 'Test Book',
         },
         subject: 'Test Subject',
-        citationStyle: null, // Optional field can be null  
-        bodyMatter: { contents: [] }
+        citationStyle: null, // Optional field can be null
+        bodyMatter: { contents: [] },
       };
 
       await validator.validate(doc);

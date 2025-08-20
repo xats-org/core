@@ -1,6 +1,6 @@
 /**
  * @xats/schema - JSON Schema definitions for xats
- * 
+ *
  * This package provides access to all xats schema versions and utilities
  * for working with schemas.
  */
@@ -8,6 +8,7 @@
 import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+
 import type { SchemaDefinition, XatsVersion } from '@xats/types';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,10 +30,11 @@ const schemaCache = new Map<string, SchemaDefinition>();
  */
 export function loadSchema(version: XatsVersion | 'latest'): SchemaDefinition | null {
   const targetVersion = version === 'latest' ? LATEST_VERSION : version;
-  
+
   // Check cache first
-  if (schemaCache.has(targetVersion)) {
-    return schemaCache.get(targetVersion)!;
+  const cachedSchema = schemaCache.get(targetVersion);
+  if (cachedSchema) {
+    return cachedSchema;
   }
 
   try {
@@ -40,7 +42,7 @@ export function loadSchema(version: XatsVersion | 'latest'): SchemaDefinition | 
     const schemaPath = resolve(__dirname, '..', 'schemas', targetVersion, 'xats.json');
     const schemaContent = readFileSync(schemaPath, 'utf-8');
     const schema = JSON.parse(schemaContent) as SchemaDefinition;
-    
+
     // Cache the loaded schema
     schemaCache.set(targetVersion, schema);
     return schema;
@@ -52,7 +54,7 @@ export function loadSchema(version: XatsVersion | 'latest'): SchemaDefinition | 
         const defaultPath = resolve(__dirname, '..', 'schemas', LATEST_VERSION, 'xats.json');
         const schemaContent = readFileSync(defaultPath, 'utf-8');
         const schema = JSON.parse(schemaContent) as SchemaDefinition;
-        
+
         // Cache it under the requested version for consistency
         schemaCache.set(targetVersion, schema);
         return schema;
@@ -115,11 +117,11 @@ export function getSchemaMetadata(version: XatsVersion): {
 } | null {
   const schema = loadSchema(version);
   if (!schema) return null;
-  
+
   return {
     version: schema.version || version,
     title: schema.title || 'Extensible Academic Textbook Schema',
-    description: schema.description || 'JSON Schema for academic textbook content'
+    description: schema.description || 'JSON Schema for academic textbook content',
   };
 }
 
@@ -128,11 +130,11 @@ export function getSchemaMetadata(version: XatsVersion): {
  */
 export function getAllSchemas(): Record<XatsVersion, SchemaDefinition | null> {
   const schemas: Partial<Record<XatsVersion, SchemaDefinition | null>> = {};
-  
+
   for (const version of SCHEMA_VERSIONS) {
     schemas[version] = loadSchema(version);
   }
-  
+
   return schemas as Record<XatsVersion, SchemaDefinition | null>;
 }
 

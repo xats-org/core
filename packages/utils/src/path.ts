@@ -55,7 +55,7 @@ export function findByPath(
     if (Array.isArray(current)) {
       current = current.find((item) => item.id === part);
     } else if (current && 'contents' in current && current.contents) {
-      current = (current.contents as Array<{ id: string }>).find((item) => item.id === part);
+      current = (current.contents as Array<{ id: string }>).find((item) => item.id === part) as StructuralContainer | ContentBlock | undefined;
     } else {
       return undefined;
     }
