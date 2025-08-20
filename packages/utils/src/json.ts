@@ -48,7 +48,10 @@ export function deepMerge<T extends Record<string, unknown>>(target: T, source: 
         typeof targetValue === 'object' &&
         !Array.isArray(targetValue)
       ) {
-        result[key] = deepMerge(targetValue as Record<string, unknown>, sourceValue as Record<string, unknown>) as T[Extract<keyof T, string>];
+        result[key] = deepMerge(
+          targetValue as Record<string, unknown>,
+          sourceValue as Record<string, unknown>
+        ) as T[Extract<keyof T, string>];
       } else {
         result[key] = sourceValue as T[Extract<keyof T, string>];
       }
@@ -128,7 +131,10 @@ export function removeUndefined<T extends Record<string, unknown>>(obj: T): T {
   for (const key in obj) {
     if (obj[key] !== undefined) {
       if (typeof obj[key] === 'object' && !Array.isArray(obj[key]) && obj[key] !== null) {
-        result[key] = removeUndefined(obj[key] as Record<string, unknown>) as T[Extract<keyof T, string>];
+        result[key] = removeUndefined(obj[key] as Record<string, unknown>) as T[Extract<
+          keyof T,
+          string
+        >];
       } else {
         result[key] = obj[key];
       }

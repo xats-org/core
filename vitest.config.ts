@@ -1,11 +1,10 @@
-import { defineWorkspace } from 'vitest/config';
+import { defineConfig } from 'vitest/config';
 
-export default defineWorkspace([
-  'packages/schema',
-  'packages/types',
-  'packages/validator', 
-  'packages/utils',
-  'packages/examples',
-  'packages/mcp-server',
-  'packages/vocabularies',
-]);
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    include: ['packages/*/src/**/*.test.ts', 'packages/*/src/**/*.spec.ts'],
+    exclude: ['node_modules', 'dist', '**/dist/**'],
+  },
+});
