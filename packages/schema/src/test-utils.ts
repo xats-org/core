@@ -121,7 +121,7 @@ export function createValidator(): ValidatorInstance {
       const isValid = validate(doc);
       return {
         isValid,
-        errors: validate.errors || [],
+        errors: (validate.errors || []) as any,
       };
     },
   };
