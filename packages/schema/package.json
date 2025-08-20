@@ -6,12 +6,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "dev": "tsc --watch",
+    "build": "tsc --build",
+    "dev": "tsc --build --watch",
     "test": "vitest",
     "lint": "eslint src --ext .ts,.js",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist .tsbuildinfo"
   },
   "keywords": [
     "xats",

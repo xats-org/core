@@ -3,7 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "build/**"],
+      "outputs": ["dist/**", ".tsbuildinfo", ".next/**", "build/**"],
       "env": ["NODE_ENV"]
     },
     "dev": {
@@ -28,6 +28,6 @@
       "cache": false
     }
   },
-  "globalDependencies": ["**/.env", "tsconfig.json"],
+  "globalDependencies": ["**/.env", "tsconfig.json", "tsconfig.base.json"],
   "globalEnv": ["NODE_ENV", "CI"]
 }

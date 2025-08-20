@@ -5,6 +5,7 @@
   "description": "Extensible Academic Textbook Schema (xats) - Monorepo",
   "scripts": {
     "build": "turbo run build",
+    "build:watch": "turbo run build -- --watch",
     "dev": "turbo run dev",
     "test": "turbo run test",
     "test:run": "turbo run test",
