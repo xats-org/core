@@ -50,7 +50,8 @@ export const accessibilityExample: XatsDocument = {
                   },
                 ],
               },
-              longDescription: 'The flowchart begins with Requirements Analysis, flowing to Design, then Implementation, Testing, Deployment, and Maintenance, with feedback loops from each stage back to earlier stages.',
+              longDescription:
+                'The flowchart begins with Requirements Analysis, flowing to Design, then Implementation, Testing, Deployment, and Maintenance, with feedback loops from each stage back to earlier stages.',
             },
             extensions: {
               accessibility: {
@@ -64,7 +65,8 @@ export const accessibilityExample: XatsDocument = {
             blockType: 'https://xats.org/core/blocks/mathBlock',
             content: {
               math: 'E = mc^2',
-              mathML: '<math><mi>E</mi><mo>=</mo><mi>m</mi><msup><mi>c</mi><mn>2</mn></msup></math>',
+              mathML:
+                '<math><mi>E</mi><mo>=</mo><mi>m</mi><msup><mi>c</mi><mn>2</mn></msup></math>',
               spokenText: 'E equals m c squared',
             },
           },
@@ -140,13 +142,13 @@ export const adaptivePathwayExample: XatsDocument = {
             content: {
               assessmentType: 'formative',
               title: {
-          runs: [
-            {
-              type: 'text',
-              text: 'Pre-test: Algebra Basics',
-            },
-          ],
-        },
+                runs: [
+                  {
+                    type: 'text',
+                    text: 'Pre-test: Algebra Basics',
+                  },
+                ],
+              },
               questions: [
                 {
                   id: 'q1',
@@ -174,13 +176,13 @@ export const adaptivePathwayExample: XatsDocument = {
           {
             id: 'standard-section',
             title: {
-          runs: [
-            {
-              type: 'text',
-              text: 'Standard Content',
+              runs: [
+                {
+                  type: 'text',
+                  text: 'Standard Content',
+                },
+              ],
             },
-          ],
-        },
             contents: [
               {
                 id: 'para-standard',
@@ -199,13 +201,13 @@ export const adaptivePathwayExample: XatsDocument = {
           {
             id: 'remedial-section',
             title: {
-          runs: [
-            {
-              type: 'text',
-              text: 'Additional Support',
+              runs: [
+                {
+                  type: 'text',
+                  text: 'Additional Support',
+                },
+              ],
             },
-          ],
-        },
             contents: [
               {
                 id: 'para-remedial',
@@ -224,13 +226,13 @@ export const adaptivePathwayExample: XatsDocument = {
           {
             id: 'advanced-section',
             title: {
-          runs: [
-            {
-              type: 'text',
-              text: 'Advanced Topics',
+              runs: [
+                {
+                  type: 'text',
+                  text: 'Advanced Topics',
+                },
+              ],
             },
-          ],
-        },
             contents: [
               {
                 id: 'para-advanced',

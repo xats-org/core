@@ -2,7 +2,8 @@
  * @xats/examples - Example xats documents
  */
 
-import type { XatsDocument } from '@xats/types';
+// @xats/types import removed - not currently used
+// import type { XatsDocument } from '@xats/types';
 
 // Export all version examples
 export * as v010 from './v0.1.0/index.js';
@@ -25,11 +26,7 @@ export interface ExampleMetadata {
  * Get all available examples
  */
 export function getAllExamples(): ExampleMetadata[] {
-  return [
-    ...getV010Examples(),
-    ...getV020Examples(),
-    ...getV030Examples(),
-  ];
+  return [...getV010Examples(), ...getV020Examples(), ...getV030Examples()];
 }
 
 /**

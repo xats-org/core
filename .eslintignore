@@ -24,6 +24,9 @@ pnpm-lock.yaml
 package-lock.json
 yarn.lock
 
+# Example JS files (not TypeScript)
+packages/examples/examples/*.js
+
 # Test snapshots
 **/__snapshots__/
 

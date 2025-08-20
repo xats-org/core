@@ -3,10 +3,10 @@
  * Ensures all example documents remain valid as the schema evolves
  */
 
-import { readdirSync, readFileSync, existsSync, mkdirSync, writeFileSync } from 'fs';
+import { readdirSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 import { validateXatsSync } from '@xats/validator';
 
@@ -51,7 +51,7 @@ describe('Example Document Validation', () => {
           });
 
           it('should have all required fields', () => {
-            const content = JSON.parse(readFileSync(filePath, 'utf8')) as any;
+            const content = JSON.parse(readFileSync(filePath, 'utf8')) as Record<string, unknown>;
 
             // Check required top-level fields
             expect(content).toHaveProperty('schemaVersion');
@@ -61,7 +61,7 @@ describe('Example Document Validation', () => {
           });
 
           it('should have correct field types', () => {
-            const content = JSON.parse(readFileSync(filePath, 'utf8')) as any;
+            const content = JSON.parse(readFileSync(filePath, 'utf8')) as Record<string, unknown>;
 
             // Check field types
             expect(typeof content.schemaVersion).toBe('string');
@@ -70,9 +70,9 @@ describe('Example Document Validation', () => {
             expect(typeof content.bodyMatter).toBe('object');
 
             // Check bibliographic entry has required fields
-            expect(content.bibliographicEntry).toHaveProperty('id');
-            expect(content.bibliographicEntry).toHaveProperty('type');
-            expect(content.bibliographicEntry).toHaveProperty('title');
+            expect(content.bibliographicEntry as Record<string, unknown>).toHaveProperty('id');
+            expect(content.bibliographicEntry as Record<string, unknown>).toHaveProperty('type');
+            expect(content.bibliographicEntry as Record<string, unknown>).toHaveProperty('title');
           });
         });
       });
@@ -118,18 +118,11 @@ describe('Example Document Validation', () => {
       // Log which examples are missing (for information only)
       const missingExamples = expectedExamples.filter((ex) => !actualFiles.includes(ex));
       if (missingExamples.length > 0) {
-        console.log('Missing example files:', missingExamples);
+        // Silently skip - missing examples are expected during development
       }
     });
 
     it('should have invalid examples for common mistakes', () => {
-      const expectedInvalidExamples = [
-        'missing-required.json',
-        'wrong-types.json',
-        'bad-references.json',
-        'malformed-semantictext.json',
-      ];
-
       const actualInvalidFiles = existsSync(INVALID_EXAMPLES_DIR)
         ? readdirSync(INVALID_EXAMPLES_DIR).filter((f) => f.endsWith('.json'))
         : [];
@@ -144,9 +137,7 @@ describe('Example Document Validation', () => {
       const startTime = Date.now();
 
       const allFiles = [
-        ...readdirSync(EXAMPLES_DIR).filter(
-          (f) => f.endsWith('.json') && !f.includes('invalid')
-        ),
+        ...readdirSync(EXAMPLES_DIR).filter((f) => f.endsWith('.json') && !f.includes('invalid')),
       ];
 
       allFiles.forEach((file) => {
