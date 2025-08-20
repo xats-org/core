@@ -11,10 +11,11 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 import { describe, it, expect, beforeAll } from 'vitest';
-import { createValidator } from './test-utils.js';
+
+import { createValidator, type ValidatorInstance } from './test-utils.js';
 
 describe('Example Document Validation', () => {
-  let validator: any;
+  let validator: ValidatorInstance;
 
   beforeAll(() => {
     validator = createValidator();

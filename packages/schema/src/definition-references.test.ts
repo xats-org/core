@@ -8,15 +8,19 @@
  */
 
 import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 import { describe, it, expect, beforeAll } from 'vitest';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 describe('Definition Reference Validation', () => {
   let schemaContent: any;
 
   beforeAll(() => {
-    const schemaPath = resolve(process.cwd(), 'schemas/0.1.0/xats.json');
+    const schemaPath = resolve(__dirname, '..', 'schemas', '0.1.0', 'xats.json');
     const schemaText = readFileSync(schemaPath, 'utf-8');
     schemaContent = JSON.parse(schemaText);
   });

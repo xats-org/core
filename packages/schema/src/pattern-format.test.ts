@@ -8,10 +8,11 @@
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
-import { createValidator } from './test-utils.js';
+
+import { createValidator, type ValidatorInstance } from './test-utils.js';
 
 describe('Pattern and Format Validation', () => {
-  let validator: any;
+  let validator: ValidatorInstance;
 
   beforeAll(() => {
     validator = createValidator();
