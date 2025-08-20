@@ -108,6 +108,10 @@ test/**/*.js.map
 test/**/*.d.ts
 test/**/*.d.ts.map
 
+# TypeScript
+*.tsbuildinfo
+.tsbuildinfo
+
 # Claude-specific (keeping secrets private)
 .claude/.mcp.json*
 .claude/settings.local.json*
