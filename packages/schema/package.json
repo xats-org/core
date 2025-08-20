@@ -1,0 +1,48 @@
+{
+  "name": "@xats/schema",
+  "version": "0.4.0",
+  "description": "JSON Schema definitions for the Extensible Academic Textbook Schema",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts,.js",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "xats",
+    "schema",
+    "json-schema",
+    "education",
+    "textbook"
+  ],
+  "author": "xats.org",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xats-org/core.git",
+    "directory": "packages/schema"
+  },
+  "bugs": {
+    "url": "https://github.com/xats-org/core/issues"
+  },
+  "homepage": "https://xats.org",
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0",
+    "vitest": "^3.2.4"
+  },
+  "files": [
+    "dist/",
+    "schemas/",
+    "README.md"
+  ]
+}
