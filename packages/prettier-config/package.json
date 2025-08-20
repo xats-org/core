@@ -1,0 +1,28 @@
+{
+  "name": "@xats/prettier-config",
+  "version": "0.4.0",
+  "description": "Shared Prettier configuration for xats monorepo",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf node_modules"
+  },
+  "keywords": [
+    "prettier",
+    "config",
+    "xats"
+  ],
+  "author": "xats.org",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xats-org/core.git",
+    "directory": "packages/prettier-config"
+  },
+  "peerDependencies": {
+    "prettier": "^3.0.0"
+  },
+  "files": [
+    "index.js",
+    "README.md"
+  ]
+}

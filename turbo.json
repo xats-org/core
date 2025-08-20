@@ -17,6 +17,20 @@
     },
     "lint": {
       "outputs": [],
+      "cache": true,
+      "dependsOn": ["^lint"]
+    },
+    "lint:fix": {
+      "outputs": [],
+      "cache": false,
+      "dependsOn": ["^lint:fix"]
+    },
+    "format": {
+      "outputs": [],
+      "cache": false
+    },
+    "format:check": {
+      "outputs": [],
       "cache": true
     },
     "typecheck": {
