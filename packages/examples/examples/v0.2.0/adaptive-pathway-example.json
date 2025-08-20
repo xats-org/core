@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "0.1.0",
+  "bibliographicEntry": {
+    "id": "example-001",
+    "type": "book",
+    "title": "Example Textbook",
+    "author": [
+      {
+        "family": "Smith",
+        "given": "John"
+      }
+    ],
+    "issued": {
+      "date-parts": [[2024]]
+    }
+  },
+  "subject": "Computer Science",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "chapter-1",
+        "label": "1",
+        "title": "Introduction",
+        "sections": [
+          {
+            "id": "section-1-1",
+            "label": "1.1",
+            "title": "Getting Started",
+            "content": [
+              {
+                "id": "block-1",
+                "blockType": "https://xats.org/core/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "This is an example document demonstrating adaptive pathways."
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

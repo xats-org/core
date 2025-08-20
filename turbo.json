@@ -1,0 +1,93 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".tsbuildinfo", ".next/**", "build/**", "lib/**"],
+      "env": ["NODE_ENV"],
+      "inputs": ["src/**", "!src/**/*.test.ts", "!src/**/*.test.tsx"]
+    },
+    "build:watch": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".tsbuildinfo"],
+      "cache": false,
+      "persistent": true
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "env": ["NODE_ENV", "CI"],
+      "inputs": ["src/**", "test/**", "tests/**", "vitest.config.ts", "vitest.config.js"]
+    },
+    "test:watch": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "env": ["NODE_ENV", "CI"]
+    },
+    "test:ui": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
+    "lint": {
+      "outputs": [],
+      "cache": true,
+      "dependsOn": [],
+      "inputs": ["src/**", "test/**", "tests/**", ".eslintrc*", "eslint.config.*"]
+    },
+    "lint:fix": {
+      "outputs": [],
+      "cache": false,
+      "dependsOn": []
+    },
+    "format": {
+      "outputs": [],
+      "cache": false
+    },
+    "format:check": {
+      "outputs": [],
+      "cache": true,
+      "inputs": ["src/**", "test/**", "tests/**", ".prettierrc*", "prettier.config.*"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": [".tsbuildinfo"],
+      "cache": true,
+      "inputs": ["src/**", "tsconfig.json", "tsconfig.*.json"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "validate": {
+      "dependsOn": ["build", "lint", "typecheck", "test"],
+      "cache": false
+    },
+    "docs": {
+      "outputs": ["docs/**"],
+      "cache": true,
+      "inputs": ["src/**", "README.md"]
+    },
+    "changeset": {
+      "cache": false
+    },
+    "version": {
+      "cache": false
+    },
+    "publish": {
+      "cache": false,
+      "dependsOn": ["build", "test"]
+    }
+  },
+  "globalDependencies": ["**/.env", "**/.env.*", "tsconfig.json", "tsconfig.base.json"],
+  "globalEnv": ["NODE_ENV", "CI", "TURBO_TELEMETRY_DISABLED"]
+}

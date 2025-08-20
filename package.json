@@ -1,32 +1,40 @@
 {
-  "name": "@xats-org/core",
-  "version": "0.3.0",
-  "description": "Extensible Academic Textbook Schema (xats) - Core validation and tooling",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "bin": {
-    "xats-validate": "./bin/validate.js",
-    "xats-render": "./bin/render.js"
-  },
+  "name": "@xats-org/monorepo",
+  "version": "0.4.0",
+  "private": true,
+  "description": "Extensible Academic Textbook Schema (xats) - Monorepo",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "dev": "tsc --watch",
-    "test": "vitest",
-    "test:run": "vitest run",
+    "build": "turbo run build",
+    "build:watch": "turbo run build:watch",
+    "dev": "turbo run dev",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:accessibility": "vitest run test/accessibility/wcag-compliance.test.ts",
-    "test:accessibility:full": "vitest run test/accessibility/",
-    "test:accessibility:integration": "vitest run test/accessibility/ --reporter=verbose",
-    "validate": "node bin/validate.js",
-    "validate:wcag": "npx ts-node test/accessibility/wcag-validation-rules.ts",
-    "lint": "eslint src test --ext .ts,.js",
-    "lint:fix": "eslint src test --ext .ts,.js --fix",
-    "typecheck": "tsc --noEmit",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "vitest run tests/e2e",
+    "test:all": "pnpm test && pnpm test:integration && pnpm test:e2e",
+    "test:turbo": "turbo run test",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "format": "turbo run format",
+    "format:check": "turbo run format:check",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
+    "clean:all": "pnpm clean && pnpm -r exec rm -rf node_modules dist .turbo",
+    "validate": "turbo run validate",
+    "docs": "turbo run docs",
+    "changeset": "changeset",
+    "changeset:add": "changeset add",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "changeset:status": "changeset status --verbose",
     "release": "./scripts/release.sh",
     "release:patch": "./scripts/release.sh patch",
     "release:minor": "./scripts/release.sh minor",
-    "release:major": "./scripts/release.sh major"
+    "release:major": "./scripts/release.sh major",
+    "bench": "vitest bench",
+    "size": "turbo run size"
   },
   "keywords": [
     "xats",
@@ -46,30 +54,29 @@
     "url": "https://github.com/xats-org/core/issues"
   },
   "homepage": "https://xats.org",
-  "dependencies": {
-    "ajv": "^8.12.0",
-    "ajv-formats": "^2.1.1",
-    "chalk": "^5.3.0",
-    "commander": "^11.1.0"
-  },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.6",
     "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
     "@typescript-eslint/parser": "^6.13.0",
     "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "@xats/eslint-config": "workspace:*",
+    "@xats/prettier-config": "workspace:*",
     "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "prettier": "^3.1.0",
+    "turbo": "^2.5.6",
     "typescript": "^5.3.0",
     "vitest": "^3.2.4"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   },
-  "files": [
-    "dist/",
-    "bin/",
-    "schemas/",
-    "README.md",
-    "LICENSE.md",
-    "CHANGELOG.md"
-  ]
+  "packageManager": "pnpm@10.15.0"
 }

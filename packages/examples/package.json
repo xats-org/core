@@ -1,0 +1,80 @@
+{
+  "name": "@xats/examples",
+  "version": "0.4.0",
+  "description": "Example xats documents demonstrating schema features",
+  "keywords": [
+    "xats",
+    "examples",
+    "educational",
+    "textbook",
+    "samples"
+  ],
+  "homepage": "https://xats.org",
+  "bugs": {
+    "url": "https://github.com/xats-org/core/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xats-org/core.git",
+    "directory": "packages/examples"
+  },
+  "license": "MIT",
+  "author": "xats Contributors",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./v0.1.0": {
+      "types": "./dist/v0.1.0/index.d.ts",
+      "import": "./dist/v0.1.0/index.js"
+    },
+    "./v0.2.0": {
+      "types": "./dist/v0.2.0/index.d.ts",
+      "import": "./dist/v0.2.0/index.js"
+    },
+    "./v0.3.0": {
+      "types": "./dist/v0.3.0/index.d.ts",
+      "import": "./dist/v0.3.0/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "examples"
+  ],
+  "scripts": {
+    "build": "tsc && npm run copy-examples",
+    "copy-examples": "mkdir -p dist && cp -r examples dist/",
+    "clean": "rm -rf dist .tsbuildinfo",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "validate": "npm run validate:v0.1.0 && npm run validate:v0.2.0 && npm run validate:v0.3.0",
+    "validate:v0.1.0": "node --loader tsx ../cli/dist/cli.js validate examples/v0.1.0/*.json --schema 0.1.0",
+    "validate:v0.2.0": "node --loader tsx ../cli/dist/cli.js validate examples/v0.2.0/*.json --schema 0.2.0",
+    "validate:v0.3.0": "node --loader tsx ../cli/dist/cli.js validate examples/v0.3.0/*.json --schema 0.3.0",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@xats/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@xats/cli": "workspace:*",
+    "@xats/validator": "workspace:*",
+    "eslint": "^8.56.0",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
