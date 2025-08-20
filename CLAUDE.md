@@ -152,9 +152,12 @@ The xats project follows a structured versioning and branching strategy to maint
 
 ### Workflow Process
 
+**⚠️ CRITICAL: NEVER commit directly to main or version branches (v0.2.0, v0.3.0, v0.4.0, etc.)**
+**ALWAYS create feature branches and use pull requests for ALL changes.**
+
 #### 1. Starting New Development
 ```bash
-# Create new version branch from main
+# Create new version branch from main (only for new versions)
 git checkout main
 git pull origin main
 git checkout -b v0.2.0
@@ -163,15 +166,21 @@ git push -u origin v0.2.0
 
 #### 2. Feature Development
 ```bash
-# Create feature branch from version branch
+# ALWAYS create feature branch from version branch
 git checkout v0.2.0
 git pull origin v0.2.0
 git checkout -b feature/issue-42-new-feature
+
+# Make your changes
+# Commit your changes
+# Push feature branch
+git push -u origin feature/issue-42-new-feature
 ```
 
 #### 3. Pull Request Creation
 ```bash
-# Target the version branch, not main
+# ALWAYS target the version branch, NOT main
+# Feature branches → Version branches (during development)
 gh pr create \
   --base "v0.2.0" \
   --title "feat: implement new feature" \
@@ -179,14 +188,29 @@ gh pr create \
   --body "Closes #42"
 ```
 
-#### 4. Version Release
+#### 4. Version Release (ONLY when version is complete)
 ```bash
-# When version is stable, merge to main
+# Version branches → main (ONLY for releases)
+# This PR is created ONLY when the version is ready for production
+gh pr create \
+  --base "main" \
+  --head "v0.2.0" \
+  --title "Release: v0.2.0" \
+  --body "Release notes..."
+
+# After PR is approved and merged
 git checkout main
-git merge v0.2.0
+git pull origin main
 git tag v0.2.0
-git push origin main --tags
+git push origin v0.2.0
 ```
+
+#### Important Rules:
+1. **NEVER commit directly to main** - All changes must go through PR review
+2. **NEVER commit directly to version branches** - Use feature branches
+3. **Feature branches target version branches** - Not main
+4. **Version branches target main ONLY for releases** - When fully ready for production
+5. **Always create PRs** - Even for small changes
 
 #### 5. Hotfix Process
 ```bash
