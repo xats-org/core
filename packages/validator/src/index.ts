@@ -95,14 +95,14 @@ export class XatsValidator {
   /**
    * Determine schema version from document or options
    */
-  private determineSchemaVersion(document: unknown, explicitVersion?: string): XatsVersion {
-    if (explicitVersion && isVersionAvailable(explicitVersion)) {
-      return explicitVersion as XatsVersion;
+  private determineSchemaVersion(document: unknown, explicitVersion?: string): XatsVersion | string {
+    if (explicitVersion) {
+      return explicitVersion;
     }
 
     const doc = document as Partial<XatsDocument>;
-    if (doc.schemaVersion && isVersionAvailable(doc.schemaVersion)) {
-      return doc.schemaVersion as XatsVersion;
+    if (doc.schemaVersion) {
+      return doc.schemaVersion;
     }
 
     return LATEST_VERSION;
@@ -111,12 +111,16 @@ export class XatsValidator {
   /**
    * Get or compile validator for a schema version
    */
-  private getValidator(version: XatsVersion): Promise<ValidateFunction | null> {
+  private getValidator(version: XatsVersion | string): Promise<ValidateFunction | null> {
     return Promise.resolve(this.getValidatorSync(version));
   }
 
-  private getValidatorSync(version: XatsVersion): ValidateFunction | null {
-    const schemaId = getSchemaId(version);
+  private getValidatorSync(version: XatsVersion | string): ValidateFunction | null {
+    // Check if it's a valid version
+    if (!isVersionAvailable(version)) {
+      return null;
+    }
+    const schemaId = getSchemaId(version as XatsVersion);
 
     // Check cache
     const cachedValidator = this.validatorCache.get(schemaId);
@@ -125,7 +129,7 @@ export class XatsValidator {
     }
 
     // Load schema
-    const schema = loadSchema(version);
+    const schema = loadSchema(version as XatsVersion);
     if (!schema) {
       return null;
     }

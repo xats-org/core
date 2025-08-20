@@ -484,32 +484,4 @@ export class TextRenderer extends BaseRenderer {
     }
     return 'unknown';
   }
-
-  // Type guard methods
-  private isSemanticText(content: unknown): content is SemanticText {
-    return (
-      typeof content === 'object' &&
-      content !== null &&
-      'runs' in content &&
-      Array.isArray((content as any).runs)
-    );
-  }
-
-  private isHeadingContent(content: unknown): content is { level?: number; text: SemanticText } {
-    return (
-      typeof content === 'object' &&
-      content !== null &&
-      'text' in content &&
-      this.isSemanticText((content as any).text)
-    );
-  }
-
-  private isBlockquoteContent(content: unknown): content is { text: SemanticText } {
-    return (
-      typeof content === 'object' &&
-      content !== null &&
-      'text' in content &&
-      this.isSemanticText((content as any).text)
-    );
-  }
 }
