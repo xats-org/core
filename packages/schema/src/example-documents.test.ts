@@ -9,7 +9,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { createValidator } from '../../dist/validator.js';
+import { createValidator } from '@xats/validator';
 
 describe('Example Document Validation', () => {
   let validator: any;

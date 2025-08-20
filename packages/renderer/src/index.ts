@@ -8,13 +8,15 @@ export { MarkdownRenderer, type MarkdownRendererOptions } from './renderers/mark
 export { TextRenderer, type TextRendererOptions } from './renderers/text.js';
 
 // Convenience factory function
-import { HtmlRenderer } from './renderers/html.js';
-import { MarkdownRenderer } from './renderers/markdown.js';
-import { TextRenderer } from './renderers/text.js';
+import { HtmlRenderer, type HtmlRendererOptions } from './renderers/html.js';
+import { MarkdownRenderer, type MarkdownRendererOptions } from './renderers/markdown.js';
+import { TextRenderer, type TextRendererOptions } from './renderers/text.js';
 
 import type { XatsDocument } from '@xats/types';
 
 export type OutputFormat = 'html' | 'markdown' | 'text';
+
+export type RenderOptions = HtmlRendererOptions | MarkdownRendererOptions | TextRendererOptions;
 
 /**
  * Render a xats document to a specific format
@@ -22,16 +24,16 @@ export type OutputFormat = 'html' | 'markdown' | 'text';
 export function render(
   document: XatsDocument,
   format: OutputFormat = 'html',
-  options: any = {}
+  options: RenderOptions = {}
 ): string {
   switch (format) {
     case 'html':
-      return new HtmlRenderer(options).render(document);
+      return new HtmlRenderer(options as HtmlRendererOptions).render(document);
     case 'markdown':
-      return new MarkdownRenderer(options).render(document);
+      return new MarkdownRenderer(options as MarkdownRendererOptions).render(document);
     case 'text':
-      return new TextRenderer(options).render(document);
+      return new TextRenderer(options as TextRendererOptions).render(document);
     default:
-      throw new Error(`Unsupported output format: ${format}`);
+      throw new Error(`Unsupported output format: ${format as string}`);
   }
 }

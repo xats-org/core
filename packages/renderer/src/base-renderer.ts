@@ -23,6 +23,86 @@ export interface RendererOptions {
  * Base class for all renderers
  */
 export abstract class BaseRenderer {
+  // Type guards for content block content types
+  protected isSemanticText(value: unknown): value is SemanticText {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'runs' in value &&
+      Array.isArray((value as SemanticText).runs)
+    );
+  }
+
+  protected isHeadingContent(value: unknown): value is { level?: number; text: SemanticText } {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'text' in value &&
+      this.isSemanticText((value as { text: unknown }).text)
+    );
+  }
+
+  protected isListContent(
+    value: unknown
+  ): value is { ordered?: boolean; items: (SemanticText | string)[] } {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'items' in value &&
+      Array.isArray((value as { items: unknown }).items)
+    );
+  }
+
+  protected isBlockquoteContent(
+    value: unknown
+  ): value is { text: SemanticText; citation?: SemanticText } {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'text' in value &&
+      this.isSemanticText((value as { text: unknown }).text)
+    );
+  }
+
+  protected isCodeBlockContent(value: unknown): value is { language?: string; code: string } {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'code' in value &&
+      typeof (value as { code: unknown }).code === 'string'
+    );
+  }
+
+  protected isMathBlockContent(value: unknown): value is { math: string; format?: string } {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'math' in value &&
+      typeof (value as { math: unknown }).math === 'string'
+    );
+  }
+
+  protected isTableContent(
+    value: unknown
+  ): value is { caption?: SemanticText; headers?: SemanticText[]; rows: SemanticText[][] } {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'rows' in value &&
+      Array.isArray((value as { rows: unknown }).rows)
+    );
+  }
+
+  protected isFigureContent(
+    value: unknown
+  ): value is { src: string; alt?: string; caption?: SemanticText } {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'src' in value &&
+      typeof (value as { src: unknown }).src === 'string'
+    );
+  }
   protected options: RendererOptions;
 
   constructor(options: RendererOptions = {}) {

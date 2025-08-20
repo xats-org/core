@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
-import { createValidator } from '../../dist/validator.js';
+import { createValidator } from '@xats/validator';
 
 describe('Required Field Validation', () => {
   let validator: any;

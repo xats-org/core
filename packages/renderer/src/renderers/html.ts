@@ -12,7 +12,6 @@ import type {
   FrontMatter,
   BodyMatter,
   BackMatter,
-  Run,
 } from '@xats/types';
 
 export interface HtmlRendererOptions extends RendererOptions {
@@ -151,7 +150,7 @@ export class HtmlRenderer extends BaseRenderer {
           const tag = block.content.ordered ? 'ol' : 'ul';
           const items = block.content.items
             .map(
-              (item: any) =>
+              (item) =>
                 `<li>${this.isSemanticText(item) ? this.renderSemanticText(item) : this.escapeText(String(item))}</li>`
             )
             .join('\n');
@@ -179,10 +178,16 @@ export class HtmlRenderer extends BaseRenderer {
         return `<div class="xats-math"${attrs}>${this.escapeText(String(block.content))}</div>`;
 
       case 'table':
-        return this.renderTable(block.content, attrs);
+        if (this.isTableContent(block.content)) {
+          return this.renderTable(block.content, attrs);
+        }
+        return `<div class="xats-table"${attrs}>Invalid table content</div>`;
 
       case 'figure':
-        return this.renderFigure(block.content, attrs);
+        if (this.isFigureContent(block.content)) {
+          return this.renderFigure(block.content, attrs);
+        }
+        return `<div class="xats-figure"${attrs}>Invalid figure content</div>`;
 
       default:
         return `<div class="xats-block xats-${typeName}"${attrs}>${JSON.stringify(block.content)}</div>`;
@@ -219,10 +224,11 @@ export class HtmlRenderer extends BaseRenderer {
       case 'underline':
         return `<u>${this.escapeText(run.text)}</u>`;
 
-      case 'reference':
+      case 'reference': {
         const href = run.ref ? `#${run.ref}` : '#';
         const label = run.label || run.text || 'Reference';
         return `<a href="${href}" class="xats-reference">${this.escapeText(label)}</a>`;
+      }
 
       case 'citation':
         return `<cite class="xats-citation" data-cite="${run.citeKey}">[${run.citeKey}]</cite>`;
@@ -244,7 +250,7 @@ export class HtmlRenderer extends BaseRenderer {
       .replace(/'/g, '&#39;');
   }
 
-  private getAttributes(obj: any): string {
+  private getAttributes(obj: { id?: string; tags?: string[] }): string {
     const attrs: string[] = [];
 
     if (this.options.includeIds && obj.id) {
@@ -277,7 +283,10 @@ export class HtmlRenderer extends BaseRenderer {
     return 4; // Default for unknown types
   }
 
-  private renderTable(content: any, attrs: string): string {
+  private renderTable(
+    content: { caption?: SemanticText; headers?: SemanticText[]; rows: SemanticText[][] },
+    attrs: string
+  ): string {
     const parts: string[] = [];
     parts.push(`<table class="xats-table"${attrs}>`);
 
@@ -309,7 +318,10 @@ export class HtmlRenderer extends BaseRenderer {
     return parts.join('\n');
   }
 
-  private renderFigure(content: any, attrs: string): string {
+  private renderFigure(
+    content: { src: string; alt?: string; caption?: SemanticText },
+    attrs: string
+  ): string {
     const parts: string[] = [];
     parts.push(`<figure class="xats-figure"${attrs}>`);
 

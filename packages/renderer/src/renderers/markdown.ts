@@ -155,7 +155,10 @@ export class MarkdownRenderer extends BaseRenderer {
         return this.renderHeading(2, this.escapeText(String(block.content)));
 
       case 'list':
-        return this.renderList(block.content);
+        if (this.isListContent(block.content)) {
+          return this.renderList(block.content);
+        }
+        return this.escapeText(String(block.content));
 
       case 'blockquote':
         if (this.isBlockquoteContent(block.content)) {
@@ -182,10 +185,16 @@ export class MarkdownRenderer extends BaseRenderer {
         return `$$\n${String(block.content)}\n$$`;
 
       case 'table':
-        return this.renderTable(block.content);
+        if (this.isTableContent(block.content)) {
+          return this.renderTable(block.content);
+        }
+        return `Table: ${String(block.content)}`;
 
       case 'figure':
-        return this.renderFigure(block.content);
+        if (this.isFigureContent(block.content)) {
+          return this.renderFigure(block.content);
+        }
+        return `Figure: ${String(block.content)}`;
 
       case 'horizontalRule':
         return '---';
@@ -291,15 +300,11 @@ export class MarkdownRenderer extends BaseRenderer {
     return 5; // Default for unknown types
   }
 
-  private renderList(content: any): string {
-    if (!content || !content.items || !Array.isArray(content.items)) {
-      return String(content);
-    }
-
+  private renderList(content: { ordered?: boolean; items: (SemanticText | string)[] }): string {
     const bullet = this.mdOptions.bulletChar ?? '-';
     const items: string[] = [];
 
-    content.items.forEach((item: any, index: number) => {
+    content.items.forEach((item, index: number) => {
       const text = this.isSemanticText(item) ? this.renderSemanticText(item) : String(item);
       const prefix = content.ordered ? `${index + 1}.` : bullet;
 
@@ -318,7 +323,11 @@ export class MarkdownRenderer extends BaseRenderer {
     return items.join('\n');
   }
 
-  private renderTable(content: any): string {
+  private renderTable(content: {
+    caption?: SemanticText;
+    headers?: SemanticText[];
+    rows: SemanticText[][];
+  }): string {
     const parts: string[] = [];
 
     if (content.caption) {
@@ -328,7 +337,7 @@ export class MarkdownRenderer extends BaseRenderer {
 
     // Headers
     if (content.headers && content.headers.length > 0) {
-      const headers = content.headers.map((h: any) => this.renderSemanticText(h));
+      const headers = content.headers.map((h) => this.renderSemanticText(h));
       parts.push(`| ${headers.join(' | ')} |`);
       parts.push(`|${headers.map(() => ' --- ').join('|')}|`);
     }
@@ -336,7 +345,7 @@ export class MarkdownRenderer extends BaseRenderer {
     // Rows
     if (content.rows && content.rows.length > 0) {
       for (const row of content.rows) {
-        const cells = row.map((c: any) => this.renderSemanticText(c));
+        const cells = row.map((c) => this.renderSemanticText(c));
         parts.push(`| ${cells.join(' | ')} |`);
       }
     }
@@ -344,7 +353,7 @@ export class MarkdownRenderer extends BaseRenderer {
     return parts.join('\n');
   }
 
-  private renderFigure(content: any): string {
+  private renderFigure(content: { src: string; alt?: string; caption?: SemanticText }): string {
     const parts: string[] = [];
 
     if (content.src) {
@@ -384,49 +393,5 @@ export class MarkdownRenderer extends BaseRenderer {
     return key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
   }
 
-  // Type guard methods
-  private isSemanticText(content: unknown): content is SemanticText {
-    return (
-      typeof content === 'object' &&
-      content !== null &&
-      'runs' in content &&
-      Array.isArray((content as any).runs)
-    );
-  }
-
-  private isHeadingContent(content: unknown): content is { level?: number; text: SemanticText } {
-    return (
-      typeof content === 'object' &&
-      content !== null &&
-      'text' in content &&
-      this.isSemanticText((content as any).text)
-    );
-  }
-
-  private isBlockquoteContent(content: unknown): content is { text: SemanticText } {
-    return (
-      typeof content === 'object' &&
-      content !== null &&
-      'text' in content &&
-      this.isSemanticText((content as any).text)
-    );
-  }
-
-  private isCodeBlockContent(content: unknown): content is { code: string; language?: string } {
-    return (
-      typeof content === 'object' &&
-      content !== null &&
-      'code' in content &&
-      typeof (content as any).code === 'string'
-    );
-  }
-
-  private isMathBlockContent(content: unknown): content is { math: string } {
-    return (
-      typeof content === 'object' &&
-      content !== null &&
-      'math' in content &&
-      typeof (content as any).math === 'string'
-    );
-  }
+  // Type guards are now inherited from BaseRenderer
 }
