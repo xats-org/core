@@ -8,6 +8,7 @@
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
+import { createValidator } from './test-utils.js';
 
 describe('Pattern and Format Validation', () => {
   let validator: any;

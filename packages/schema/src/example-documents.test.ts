@@ -11,6 +11,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 import { describe, it, expect, beforeAll } from 'vitest';
+import { createValidator } from './test-utils.js';
 
 describe('Example Document Validation', () => {
   let validator: any;

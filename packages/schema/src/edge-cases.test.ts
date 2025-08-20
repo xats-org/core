@@ -8,6 +8,7 @@
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
+import { createValidator } from './test-utils.js';
 
 describe('Edge Case Validation', () => {
   let validator: any;

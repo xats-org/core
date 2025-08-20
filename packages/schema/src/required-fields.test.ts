@@ -8,6 +8,7 @@
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
+import { createValidator } from './test-utils.js';
 
 describe('Required Field Validation', () => {
   let validator: any;
