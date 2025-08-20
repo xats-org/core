@@ -1,7 +1,8 @@
 # xats Project Roadmap
 
-**Version:** 3.0 (for xats schema v0.3.0)
-**Status:** Living Document
+**Version:** 4.0 (for xats schema v0.4.0)
+**Status:** Living Document  
+**Last Updated:** 2025-08-20
 
 ---
  
@@ -123,13 +124,78 @@ This phase completed the most critical missing features to make **xats** a viabl
 
 ---
 
-## 3. Near-Term Roadmap (v0.4.0 - v0.6.0)
+## 3. Near-Term Roadmap (v0.4.0 - v0.7.0)
 
-This phase focuses on expanding the ecosystem, improving the scholarly and production lifecycle, and handling more complex use cases.
+This phase focuses on modernizing the project infrastructure, expanding the ecosystem, improving the scholarly and production lifecycle, and handling more complex use cases.
 
-### v0.4.0 - Rendering & AI Integration (Target: 2026-05-31)
+### v0.4.0 - Monorepo Infrastructure & Modern Tooling (Target: 2026-03-31)
 
-This release prioritizes author intent preservation, AI-powered content generation, and scientific computing integration.
+This release establishes a modern, scalable monorepo architecture using industry best practices and TypeScript throughout, enabling rapid development and ecosystem expansion.
+
+#### a. Monorepo Architecture Migration (CRITICAL PRIORITY)
+
+Complete restructuring of the xats project as a modern TypeScript monorepo with Turborepo.
+
+**Phase 1: Infrastructure Setup (Weeks 1-2)**
+- **Turborepo Configuration:** High-performance build system with intelligent caching and parallel execution
+- **TypeScript Project References:** Proper type sharing across packages with build-time validation
+- **Shared Configurations:** Centralized ESLint, Prettier, and tsconfig for consistency
+- **Vitest Testing Framework:** Modern, fast testing with watch mode and coverage reporting
+- **Changesets Integration:** Automated versioning and changelog generation for all packages
+
+**Phase 2: Core Package Migration (Weeks 3-4)**
+- **@xats/schema:** Core JSON Schema definitions with TypeScript type generation
+- **@xats/validator:** High-performance validation with detailed error reporting
+- **@xats/types:** Shared TypeScript definitions and interfaces
+- **Build Pipelines:** Optimized build processes with Turborepo caching
+
+**Phase 3: Tool Development (Weeks 5-6)**
+- **@xats/cli:** Command-line interface for validation, conversion, and generation
+- **@xats/renderer:** Pluggable rendering framework for multiple output formats
+- **@xats/mcp-server:** Model Context Protocol server for AI integration
+- **@xats/utils:** Shared utilities and helper functions
+
+**Phase 4: Documentation & Testing (Week 7)**
+- **Documentation Migration:** Updated docs reflecting monorepo structure
+- **Storybook Integration:** Component documentation and visual testing
+- **Integration Tests:** Comprehensive cross-package testing
+- **CI/CD Pipelines:** GitHub Actions with matrix testing and automated releases
+
+**Phase 5: Polish & Release (Week 8)**
+- **Performance Optimization:** Bundle size analysis and tree-shaking
+- **Security Audit:** Dependency scanning and vulnerability assessment
+- **Migration Guide:** Comprehensive guide for transitioning from v0.3.0
+- **Release Preparation:** Coordinated package releases with Changesets
+
+#### b. Developer Experience Enhancements
+
+Modern tooling and workflows for optimal developer productivity.
+- **TypeScript Everywhere:** Full TypeScript coverage with strict mode
+- **Automated Type Generation:** JSON Schema to TypeScript type generation
+- **Hot Module Replacement:** Fast development iteration with HMR
+- **Intelligent IDE Support:** Enhanced autocomplete and inline documentation
+- **Monorepo Task Orchestration:** Turborepo for efficient task running
+- **Dependency Management:** pnpm workspaces for efficient package management
+
+#### c. Package Architecture
+
+Modular, composable packages for flexible ecosystem growth.
+- **Core Packages:**
+  - `@xats/schema`: JSON Schema definitions
+  - `@xats/validator`: Validation logic
+  - `@xats/types`: TypeScript types
+- **Tool Packages:**
+  - `@xats/cli`: Command-line tools
+  - `@xats/renderer`: Rendering framework
+  - `@xats/mcp-server`: AI integration
+- **Utility Packages:**
+  - `@xats/utils`: Common utilities
+  - `@xats/examples`: Example documents
+- **Future Packages:** Foundation for ecosystem expansion
+
+### v0.5.0 - Rendering, AI Integration & Extended Features (Target: 2026-09-30)
+
+Building on the monorepo foundation, this release focuses on content rendering, AI integration, and production workflows.
 
 #### a. Enhanced Rendering Hints System (HIGH PRIORITY)
 
@@ -141,7 +207,7 @@ Build out comprehensive rendering hints to help renderers determine and preserve
 - **Cross-Renderer Consistency:** Standard interpretation guidelines for all renderers
 - **Fallback Strategies:** Graceful degradation for unsupported hints
 
-#### b. AI Integration Framework (HIGH PRIORITY - Accelerated from v0.5.0)
+#### b. AI Integration Framework (HIGH PRIORITY)
 
 Native support for AI-powered content orchestration and generation.
 - **MCP Server for xats:** Model Context Protocol server for AI agents to work with xats files
@@ -183,7 +249,15 @@ For publishers and academics to adopt **xats**, it must integrate with establish
 - **Formal Peer Review & Annotation Layer:** Core vocabulary for annotations with workflow status tracking
 - **Collaborative Project Block:** New `blockType` for group projects with roles and peer assessment
 
-### v0.5.0 - Analytics & Advanced Features (Target: 2026-09-30)
+#### e. Learning Analytics & Progress Tracking
+
+Advanced analytics for learning outcomes and content effectiveness.
+- **Learning Analytics Framework:** Detailed student interaction and performance tracking
+- **Content Performance Metrics:** Usage patterns, engagement rates, and learning outcome correlations
+- **Problem-Based Learning Blocks:** Interactive problem-solving and active learning components
+- **Privacy-First Design:** GDPR/CCPA compliant analytics with learner consent management
+
+### v0.6.0 - Analytics & Advanced Internationalization (Target: 2026-09-30)
 
 #### a. Advanced Analytics Platform
 
@@ -200,7 +274,7 @@ Building on v0.3.0's i18n foundation for advanced multi-language support.
 - **Locale-Specific Rendering:** Locale-aware `renderingHints` and cultural adaptations
 - **Translation Workflow:** Integration with professional translation management systems
 
-### v0.6.0 - Extended Ecosystem (Target: 2027-01-31)
+### v0.7.0 - Extended Ecosystem (Target: 2027-01-31)
 
 #### a. Granular Rights Management & Academic Provenance
 
@@ -211,7 +285,7 @@ Content provenance and rights management for academic integrity and commercial p
 
 ---
 
-## 4. Mid-Term Vision (v0.7.0 - v0.9.0)
+## 4. Mid-Term Vision (v0.8.0 - v0.9.0)
 
 Advanced ecosystem integration and specialized domain support.
 
