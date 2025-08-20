@@ -10,7 +10,10 @@
     "dev": "tsc --build --watch",
     "clean": "rm -rf dist .tsbuildinfo",
     "test": "vitest",
-    "lint": "eslint src --ext .ts",
+    "lint": "eslint src --ext .ts,.js",
+    "lint:fix": "eslint src --ext .ts,.js --fix",
+    "format": "prettier --write \"src/**/*.{ts,js,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,js,json}\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

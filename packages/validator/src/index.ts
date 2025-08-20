@@ -1,14 +1,18 @@
-import { XatsSchema } from '@xats/schema';
-import type { XatsDocument } from '@xats/types';
-import Ajv from 'ajv';
+import AjvDefault from 'ajv';
 import addFormats from 'ajv-formats';
 
-const ajv = new Ajv({ allErrors: true });
+import { XatsSchema } from '@xats/schema';
+
+import type { XatsDocument } from '@xats/types';
+
+const ajv = new AjvDefault({ allErrors: true });
 addFormats(ajv);
 
-export function validateXatsDocument(document: XatsDocument): boolean {
-  console.log(`Validating document with schema version: ${XatsSchema.version}`);
-  return true;
+export function validateXatsDocument(_document: XatsDocument): boolean {
+  // TODO: Implement actual validation logic
+  // For now, just return true and reference the schema version
+  const schemaVersion = XatsSchema.version;
+  return Boolean(schemaVersion);
 }
 
 export type { XatsDocument } from '@xats/types';

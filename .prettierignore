@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+coverage/
+
+# Cache
+.turbo/
+.cache/
+*.tsbuildinfo
+
+# Lock files
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Generated files
+**/__snapshots__/
+*.min.js
+*.min.css
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Changelog
+CHANGELOG.md
