@@ -3,8 +3,24 @@ name: Security
 on:
   push:
     branches: [main, 'v*.*.*']
+    paths:
+      - '**.js'
+      - '**.ts'
+      - '**.jsx'
+      - '**.tsx'
+      - '**/package.json'
+      - '**/pnpm-lock.yaml'
+      - '.github/workflows/security.yml'
   pull_request:
     branches: [main, 'v*.*.*']
+    paths:
+      - '**.js'
+      - '**.ts'
+      - '**.jsx'
+      - '**.tsx'
+      - '**/package.json'
+      - '**/pnpm-lock.yaml'
+      - '.github/workflows/security.yml'
   schedule:
     # Run security scans weekly on Monday at 2 AM UTC (reduced from daily)
     - cron: '0 2 * * 1'
@@ -153,7 +169,9 @@ jobs:
   sbom:
     name: Generate Software Bill of Materials
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: |
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[release]'))
     
     steps:
     - name: Checkout code
@@ -189,8 +207,11 @@ jobs:
   container-scan:
     name: Container Security Scan
     runs-on: ubuntu-latest
-    # Only run if Dockerfile exists and on PRs
-    if: github.event_name == 'pull_request' && hashFiles('Dockerfile') != ''
+    # Only run if Dockerfile exists and changes were made to it
+    if: |
+      github.event_name == 'pull_request' && 
+      hashFiles('Dockerfile') != '' &&
+      contains(github.event.pull_request.changed_files, 'Dockerfile')
     
     steps:
     - name: Checkout code
