@@ -405,6 +405,7 @@ Commands are organized into categories based on their purpose:
 - **xats-dev:schema-implement** - Implements new features with full workflow
 - **xats-dev:test-suite** - Creates comprehensive test suites
 - **xats-dev:code-review** - Performs thorough code reviews
+- **xats-dev:ci-auto-fix** - Automatically fixes CI failures for a PR (uses Opus model)
 
 #### User Commands (`xats-user:`)
 - **xats-user:create-textbook** - Helps create xats-compliant textbooks

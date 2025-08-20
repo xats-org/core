@@ -28,8 +28,8 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc --build",
-    "dev": "tsc --build --watch",
+    "build": "tsc --build tsconfig.build.json",
+    "dev": "tsc --build tsconfig.build.json --watch",
     "start": "node dist/cli.js",
     "clean": "rm -rf dist .tsbuildinfo",
     "test": "vitest run",
@@ -39,7 +39,7 @@
     "lint:fix": "eslint src --ext .ts,.js --fix",
     "format": "prettier --write \"src/**/*.{ts,js,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,js,json}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit -p tsconfig.build.json"
   },
   "dependencies": {
     "@xats/schema": "workspace:*",

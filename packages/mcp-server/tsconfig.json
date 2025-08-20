@@ -11,9 +11,7 @@
   ],
   "exclude": [
     "dist",
-    "node_modules",
-    "**/*.test.ts",
-    "**/*.spec.ts"
+    "node_modules"
   ],
   "references": [
     {

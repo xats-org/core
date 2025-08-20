@@ -1,29 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */
 /**
  * Performance Validation Tests
- * 
+ *
  * Tests the performance characteristics of schema validation,
  * including speed, memory usage, and scalability with large
  * documents and high validation volume.
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
-import { createValidator } from '../../dist/validator.js';
+
+import { createValidator, type ValidatorInstance } from './test-utils.js';
 
 describe('Performance Validation', () => {
-  let validator: any;
+  let validator: ValidatorInstance;
 
   beforeAll(() => {
     validator = createValidator();
   });
 
   describe('Validation Speed Tests', () => {
-    it('should validate small documents quickly', async () => {
+    it('should validate small documents quickly', () => {
       const smallDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'perf-001',
           type: 'book',
-          title: 'Small Document'
+          title: 'Small Document',
         },
         subject: 'Test',
         bodyMatter: {
@@ -41,20 +43,20 @@ describe('Performance Validation', () => {
                       blockType: 'https://xats.org/core/blocks/paragraph',
                       content: {
                         text: {
-                          runs: [{ type: 'text', text: 'Small content' }]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                          runs: [{ type: 'text', text: 'Small content' }],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const startTime = performance.now();
-      const result = await validator.validate(smallDoc);
+      const result = validator.validate(smallDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -62,11 +64,11 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(500); // Should complete in less than 500ms (allowing for CI/system variability)
     });
 
-    it('should validate medium documents efficiently', async () => {
+    it('should validate medium documents efficiently', () => {
       const mediumDoc = createMediumDocument();
 
       const startTime = performance.now();
-      const result = await validator.validate(mediumDoc);
+      const result = validator.validate(mediumDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -74,11 +76,11 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(500); // Should complete in less than 500ms
     });
 
-    it('should validate large documents within reasonable time', async () => {
+    it('should validate large documents within reasonable time', () => {
       const largeDoc = createLargeDocument();
 
       const startTime = performance.now();
-      const result = await validator.validate(largeDoc);
+      const result = validator.validate(largeDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -86,11 +88,11 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(2000); // Should complete in less than 2 seconds
     });
 
-    it('should validate very large documents within acceptable time', async () => {
+    it('should validate very large documents within acceptable time', () => {
       const veryLargeDoc = createVeryLargeDocument();
 
       const startTime = performance.now();
-      const result = await validator.validate(veryLargeDoc);
+      const result = validator.validate(veryLargeDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -106,7 +108,7 @@ describe('Performance Validation', () => {
         bibliographicEntry: {
           id: 'concurrent-001',
           type: 'book',
-          title: 'Concurrent Test'
+          title: 'Concurrent Test',
         },
         subject: 'Test',
         bodyMatter: {
@@ -124,38 +126,40 @@ describe('Performance Validation', () => {
                       blockType: 'https://xats.org/core/blocks/paragraph',
                       content: {
                         text: {
-                          runs: [{ type: 'text', text: 'Concurrent validation test' }]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                          runs: [{ type: 'text', text: 'Concurrent validation test' }],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const startTime = performance.now();
-      
+
       // Run 10 validations concurrently
-      const promises = Array(10).fill(null).map((_, i) => {
-        const doc = {
-          ...testDoc,
-          bibliographicEntry: {
-            ...testDoc.bibliographicEntry,
-            id: `concurrent-${i}`
-          }
-        };
-        return validator.validate(doc);
-      });
+      const promises = Array(10)
+        .fill(null)
+        .map((_, i) => {
+          const doc = {
+            ...testDoc,
+            bibliographicEntry: {
+              ...testDoc.bibliographicEntry,
+              id: `concurrent-${i}`,
+            },
+          };
+          return validator.validate(doc);
+        });
 
       const results = await Promise.all(promises);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
       // All validations should succeed
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.isValid).toBe(true);
       });
 
@@ -167,31 +171,33 @@ describe('Performance Validation', () => {
       const testDoc = createMediumDocument();
 
       const startTime = performance.now();
-      
+
       // Run 50 validations concurrently
-      const promises = Array(50).fill(null).map((_, i) => {
-        const doc = {
-          ...testDoc,
-          bibliographicEntry: {
-            ...testDoc.bibliographicEntry,
-            id: `load-test-${i}`
-          }
-        };
-        return validator.validate(doc);
-      });
+      const promises = Array(50)
+        .fill(null)
+        .map((_, i) => {
+          const doc = {
+            ...testDoc,
+            bibliographicEntry: {
+              ...testDoc.bibliographicEntry,
+              id: `load-test-${i}`,
+            },
+          };
+          return validator.validate(doc);
+        });
 
       const results = await Promise.all(promises);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
       // All validations should succeed
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.isValid).toBe(true);
       });
 
       // Should handle high volume efficiently
       expect(duration).toBeLessThan(5000); // Should complete in less than 5 seconds
-      
+
       // Calculate average time per validation
       const avgTimePerValidation = duration / 50;
       expect(avgTimePerValidation).toBeLessThan(100); // Average less than 100ms per validation
@@ -199,15 +205,15 @@ describe('Performance Validation', () => {
   });
 
   describe('Memory Usage Tests', () => {
-    it('should not consume excessive memory for large documents', async () => {
+    it('should not consume excessive memory for large documents', () => {
       const initialMemory = process.memoryUsage();
-      
+
       // Validate multiple large documents
       for (let i = 0; i < 10; i++) {
         const largeDoc = createLargeDocument();
         largeDoc.bibliographicEntry.id = `memory-test-${i}`;
-        
-        const result = await validator.validate(largeDoc);
+
+        const result = validator.validate(largeDoc);
         expect(result.isValid).toBe(true);
       }
 
@@ -218,25 +224,25 @@ describe('Performance Validation', () => {
 
       const finalMemory = process.memoryUsage();
       const memoryIncrease = finalMemory.heapUsed - initialMemory.heapUsed;
-      
+
       // Memory increase should be reasonable (less than 100MB)
       expect(memoryIncrease).toBeLessThan(100 * 1024 * 1024);
     });
 
-    it('should clean up memory between validations', async () => {
+    it('should clean up memory between validations', () => {
       const memoryReadings: number[] = [];
-      
+
       for (let i = 0; i < 5; i++) {
         const doc = createMediumDocument();
         doc.bibliographicEntry.id = `cleanup-test-${i}`;
-        
-        await validator.validate(doc);
-        
+
+        validator.validate(doc);
+
         // Force garbage collection if possible
         if (global.gc) {
           global.gc();
         }
-        
+
         memoryReadings.push(process.memoryUsage().heapUsed);
       }
 
@@ -244,24 +250,24 @@ describe('Performance Validation', () => {
       const firstReading = memoryReadings[0];
       const lastReading = memoryReadings[memoryReadings.length - 1];
       const memoryIncrease = (lastReading ?? 0) - (firstReading ?? 0);
-      
+
       // Should not increase by more than 50MB over 5 validations
       expect(memoryIncrease).toBeLessThan(50 * 1024 * 1024);
     });
   });
 
   describe('Scalability Tests', () => {
-    it('should scale linearly with document size', async () => {
+    it('should scale linearly with document size', () => {
       const sizes = [100, 500, 1000, 2000];
       const times: number[] = [];
 
       for (const size of sizes) {
         const doc = createScalableDocument(size);
-        
+
         const startTime = performance.now();
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         const endTime = performance.now();
-        
+
         expect(result.isValid).toBe(true);
         times.push(endTime - startTime);
       }
@@ -273,32 +279,36 @@ describe('Performance Validation', () => {
         const currTime = times[i];
         const prevSize = sizes[i - 1];
         const currSize = sizes[i];
-        
-        if (prevTime === undefined || currTime === undefined || 
-            prevSize === undefined || currSize === undefined) {
+
+        if (
+          prevTime === undefined ||
+          currTime === undefined ||
+          prevSize === undefined ||
+          currSize === undefined
+        ) {
           continue;
         }
-        
+
         const ratio = currTime / prevTime;
         const sizeRatio = currSize / prevSize;
-        
+
         // Time ratio should scale reasonably with size ratio
         // Allow for variance in performance measurements on different systems
         expect(ratio).toBeLessThan(sizeRatio * 100); // Allow for performance variance on different systems
       }
     });
 
-    it('should handle deeply nested structures efficiently', async () => {
+    it('should handle deeply nested structures efficiently', () => {
       const depths = [5, 10, 15, 20];
       const times: number[] = [];
 
       for (const depth of depths) {
         const doc = createDeeplyNestedDocument(depth);
-        
+
         const startTime = performance.now();
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         const endTime = performance.now();
-        
+
         expect(result.isValid).toBe(true);
         times.push(endTime - startTime);
       }
@@ -310,15 +320,15 @@ describe('Performance Validation', () => {
   });
 
   describe('Error Handling Performance', () => {
-    it('should report validation errors quickly', async () => {
+    it('should report validation errors quickly', () => {
       const invalidDoc = {
         schemaVersion: '0.1.0',
         // Missing required fields to trigger errors
-        subject: 'Test'
+        subject: 'Test',
       };
 
       const startTime = performance.now();
-      const result = await validator.validate(invalidDoc);
+      const result = validator.validate(invalidDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -327,11 +337,11 @@ describe('Performance Validation', () => {
       expect(duration).toBeLessThan(100); // Should fail fast
     });
 
-    it('should handle complex validation errors efficiently', async () => {
+    it('should handle complex validation errors efficiently', () => {
       const complexInvalidDoc = createComplexInvalidDocument();
 
       const startTime = performance.now();
-      const result = await validator.validate(complexInvalidDoc);
+      const result = validator.validate(complexInvalidDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -342,11 +352,11 @@ describe('Performance Validation', () => {
   });
 
   describe('Stress Tests', () => {
-    it('should handle extreme document size', async () => {
+    it('should handle extreme document size', () => {
       const extremeDoc = createExtremeDocument();
 
       const startTime = performance.now();
-      const result = await validator.validate(extremeDoc);
+      const result = validator.validate(extremeDoc);
       const endTime = performance.now();
       const duration = endTime - startTime;
 
@@ -356,29 +366,31 @@ describe('Performance Validation', () => {
 
     it('should handle validation burst load', async () => {
       const burstSize = 100;
-      const docs = Array(burstSize).fill(null).map((_, i) => {
-        const doc = createMediumDocument();
-        doc.bibliographicEntry.id = `burst-test-${i}`;
-        return doc;
-      });
+      const docs = Array(burstSize)
+        .fill(null)
+        .map((_, i) => {
+          const doc = createMediumDocument();
+          doc.bibliographicEntry.id = `burst-test-${i}`;
+          return doc;
+        });
 
       const startTime = performance.now();
-      
+
       // Validate all documents as quickly as possible
-      const promises = docs.map(doc => validator.validate(doc));
+      const promises = docs.map((doc) => validator.validate(doc));
       const results = await Promise.all(promises);
-      
+
       const endTime = performance.now();
       const duration = endTime - startTime;
 
       // All should succeed
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result.isValid).toBe(true);
       });
 
       // Should handle burst load efficiently
       expect(duration).toBeLessThan(10000); // Should complete in less than 10 seconds
-      
+
       const avgTimePerValidation = duration / burstSize;
       expect(avgTimePerValidation).toBeLessThan(100); // Average less than 100ms per validation
     });
@@ -392,19 +404,25 @@ describe('Performance Validation', () => {
       chapters.push({
         id: `chapter-${i}`,
         title: `Chapter ${i}`,
-        sections: Array(5).fill(null).map((_, j) => ({
-          id: `section-${i}-${j}`,
-          title: `Section ${i}.${j}`,
-          content: Array(10).fill(null).map((_, k) => ({
-            id: `block-${i}-${j}-${k}`,
-            blockType: 'https://xats.org/core/blocks/paragraph',
-            content: {
-              text: {
-                runs: [{ type: 'text', text: `Content for chapter ${i}, section ${j}, block ${k}` }]
-              }
-            }
-          }))
-        }))
+        sections: Array(5)
+          .fill(null)
+          .map((_, j) => ({
+            id: `section-${i}-${j}`,
+            title: `Section ${i}.${j}`,
+            content: Array(10)
+              .fill(null)
+              .map((_, k) => ({
+                id: `block-${i}-${j}-${k}`,
+                blockType: 'https://xats.org/core/blocks/paragraph',
+                content: {
+                  text: {
+                    runs: [
+                      { type: 'text', text: `Content for chapter ${i}, section ${j}, block ${k}` },
+                    ],
+                  },
+                },
+              })),
+          })),
       });
     }
 
@@ -413,12 +431,12 @@ describe('Performance Validation', () => {
       bibliographicEntry: {
         id: 'medium-doc-001',
         type: 'book',
-        title: 'Medium Size Document'
+        title: 'Medium Size Document',
       },
       subject: 'Performance Testing',
       bodyMatter: {
-        contents: chapters
-      }
+        contents: chapters,
+      },
     };
   }
 
@@ -428,19 +446,30 @@ describe('Performance Validation', () => {
       chapters.push({
         id: `chapter-${i}`,
         title: `Chapter ${i}`,
-        sections: Array(10).fill(null).map((_, j) => ({
-          id: `section-${i}-${j}`,
-          title: `Section ${i}.${j}`,
-          content: Array(20).fill(null).map((_, k) => ({
-            id: `block-${i}-${j}-${k}`,
-            blockType: 'https://xats.org/core/blocks/paragraph',
-            content: {
-              text: {
-                runs: [{ type: 'text', text: `Large document content for chapter ${i}, section ${j}, block ${k}. `.repeat(10) }]
-              }
-            }
-          }))
-        }))
+        sections: Array(10)
+          .fill(null)
+          .map((_, j) => ({
+            id: `section-${i}-${j}`,
+            title: `Section ${i}.${j}`,
+            content: Array(20)
+              .fill(null)
+              .map((_, k) => ({
+                id: `block-${i}-${j}-${k}`,
+                blockType: 'https://xats.org/core/blocks/paragraph',
+                content: {
+                  text: {
+                    runs: [
+                      {
+                        type: 'text',
+                        text: `Large document content for chapter ${i}, section ${j}, block ${k}. `.repeat(
+                          10
+                        ),
+                      },
+                    ],
+                  },
+                },
+              })),
+          })),
       });
     }
 
@@ -449,17 +478,19 @@ describe('Performance Validation', () => {
       bibliographicEntry: {
         id: 'large-doc-001',
         type: 'book',
-        title: 'Large Size Document'
+        title: 'Large Size Document',
       },
       subject: 'Performance Testing',
-      resources: Array(100).fill(null).map((_, i) => ({
-        id: `resource-${i}`,
-        type: 'https://xats.org/core/resources/image',
-        url: `https://example.com/image-${i}.png`
-      })),
+      resources: Array(100)
+        .fill(null)
+        .map((_, i) => ({
+          id: `resource-${i}`,
+          type: 'https://xats.org/core/resources/image',
+          url: `https://example.com/image-${i}.png`,
+        })),
       bodyMatter: {
-        contents: chapters
-      }
+        contents: chapters,
+      },
     };
   }
 
@@ -471,29 +502,35 @@ describe('Performance Validation', () => {
         chapters.push({
           id: `unit-${u}-chapter-${i}`,
           title: `Unit ${u} Chapter ${i}`,
-          sections: Array(15).fill(null).map((_, j) => ({
-            id: `unit-${u}-section-${i}-${j}`,
-            title: `Unit ${u} Section ${i}.${j}`,
-            content: Array(30).fill(null).map((_, k) => ({
-              id: `unit-${u}-block-${i}-${j}-${k}`,
-              blockType: 'https://xats.org/core/blocks/paragraph',
-              content: {
-                text: {
-                  runs: [{ 
-                    type: 'text', 
-                    text: `Very large document content for unit ${u}, chapter ${i}, section ${j}, block ${k}. ${'This is additional content to make the document larger. '.repeat(20)}` 
-                  }]
-                }
-              }
-            }))
-          }))
+          sections: Array(15)
+            .fill(null)
+            .map((_, j) => ({
+              id: `unit-${u}-section-${i}-${j}`,
+              title: `Unit ${u} Section ${i}.${j}`,
+              content: Array(30)
+                .fill(null)
+                .map((_, k) => ({
+                  id: `unit-${u}-block-${i}-${j}-${k}`,
+                  blockType: 'https://xats.org/core/blocks/paragraph',
+                  content: {
+                    text: {
+                      runs: [
+                        {
+                          type: 'text',
+                          text: `Very large document content for unit ${u}, chapter ${i}, section ${j}, block ${k}. ${'This is additional content to make the document larger. '.repeat(20)}`,
+                        },
+                      ],
+                    },
+                  },
+                })),
+            })),
         });
       }
-      
+
       units.push({
         id: `unit-${u}`,
         title: `Unit ${u}`,
-        contents: chapters
+        contents: chapters,
       });
     }
 
@@ -502,37 +539,41 @@ describe('Performance Validation', () => {
       bibliographicEntry: {
         id: 'very-large-doc-001',
         type: 'book',
-        title: 'Very Large Size Document'
+        title: 'Very Large Size Document',
       },
       subject: 'Performance Testing',
-      resources: Array(500).fill(null).map((_, i) => ({
-        id: `resource-${i}`,
-        type: 'https://xats.org/core/resources/image',
-        url: `https://example.com/image-${i}.png`
-      })),
+      resources: Array(500)
+        .fill(null)
+        .map((_, i) => ({
+          id: `resource-${i}`,
+          type: 'https://xats.org/core/resources/image',
+          url: `https://example.com/image-${i}.png`,
+        })),
       bodyMatter: {
-        contents: units
-      }
+        contents: units,
+      },
     };
   }
 
   function createScalableDocument(blockCount: number) {
-    const blocks = Array(blockCount).fill(null).map((_, i) => ({
-      id: `block-${i}`,
-      blockType: 'https://xats.org/core/blocks/paragraph',
-      content: {
-        text: {
-          runs: [{ type: 'text', text: `Scalable content block ${i}` }]
-        }
-      }
-    }));
+    const blocks = Array(blockCount)
+      .fill(null)
+      .map((_, i) => ({
+        id: `block-${i}`,
+        blockType: 'https://xats.org/core/blocks/paragraph',
+        content: {
+          text: {
+            runs: [{ type: 'text', text: `Scalable content block ${i}` }],
+          },
+        },
+      }));
 
     return {
       schemaVersion: '0.1.0',
       bibliographicEntry: {
         id: `scalable-doc-${blockCount}`,
         type: 'book',
-        title: `Scalable Document (${blockCount} blocks)`
+        title: `Scalable Document (${blockCount} blocks)`,
       },
       subject: 'Scalability Testing',
       bodyMatter: {
@@ -544,12 +585,12 @@ describe('Performance Validation', () => {
               {
                 id: 'section-1',
                 title: 'Scalable Section',
-                content: blocks
-              }
-            ]
-          }
-        ]
-      }
+                content: blocks,
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -567,13 +608,13 @@ describe('Performance Validation', () => {
               blockType: 'https://xats.org/core/blocks/paragraph',
               content: {
                 text: {
-                  runs: [{ type: 'text', text: `Deep nested content at depth ${depth}` }]
-                }
-              }
-            }
-          ]
-        }
-      ]
+                  runs: [{ type: 'text', text: `Deep nested content at depth ${depth}` }],
+                },
+              },
+            },
+          ],
+        },
+      ],
     };
 
     // Create nested units
@@ -581,7 +622,7 @@ describe('Performance Validation', () => {
       nestedContent = {
         id: `unit-depth-${i}`,
         title: `Unit at Depth ${i}`,
-        contents: [nestedContent]
+        contents: [nestedContent],
       };
     }
 
@@ -590,12 +631,12 @@ describe('Performance Validation', () => {
       bibliographicEntry: {
         id: `nested-doc-depth-${depth}`,
         type: 'book',
-        title: `Deeply Nested Document (depth ${depth})`
+        title: `Deeply Nested Document (depth ${depth})`,
       },
       subject: 'Nesting Testing',
       bodyMatter: {
-        contents: [nestedContent]
-      }
+        contents: [nestedContent],
+      },
     };
   }
 
@@ -622,18 +663,18 @@ describe('Performance Validation', () => {
                         runs: [
                           {
                             type: 'invalid-type', // Invalid run type (error 6)
-                            text: 'Invalid content'
-                          }
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                            text: 'Invalid content',
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -646,29 +687,35 @@ describe('Performance Validation', () => {
         chapters.push({
           id: `extreme-unit-${u}-chapter-${i}`,
           title: `Extreme Unit ${u} Chapter ${i}`,
-          sections: Array(5).fill(null).map((_, j) => ({
-            id: `extreme-unit-${u}-section-${i}-${j}`,
-            title: `Extreme Unit ${u} Section ${i}.${j}`,
-            content: Array(50).fill(null).map((_, k) => ({
-              id: `extreme-unit-${u}-block-${i}-${j}-${k}`,
-              blockType: 'https://xats.org/core/blocks/paragraph',
-              content: {
-                text: {
-                  runs: [{ 
-                    type: 'text', 
-                    text: `Extreme document content. ${'X'.repeat(1000)}` 
-                  }]
-                }
-              }
-            }))
-          }))
+          sections: Array(5)
+            .fill(null)
+            .map((_, j) => ({
+              id: `extreme-unit-${u}-section-${i}-${j}`,
+              title: `Extreme Unit ${u} Section ${i}.${j}`,
+              content: Array(50)
+                .fill(null)
+                .map((_, k) => ({
+                  id: `extreme-unit-${u}-block-${i}-${j}-${k}`,
+                  blockType: 'https://xats.org/core/blocks/paragraph',
+                  content: {
+                    text: {
+                      runs: [
+                        {
+                          type: 'text',
+                          text: `Extreme document content. ${'X'.repeat(1000)}`,
+                        },
+                      ],
+                    },
+                  },
+                })),
+            })),
         });
       }
-      
+
       units.push({
         id: `extreme-unit-${u}`,
         title: `Extreme Unit ${u}`,
-        contents: chapters
+        contents: chapters,
       });
     }
 
@@ -677,17 +724,19 @@ describe('Performance Validation', () => {
       bibliographicEntry: {
         id: 'extreme-doc-001',
         type: 'book',
-        title: 'Extreme Size Document'
+        title: 'Extreme Size Document',
       },
       subject: 'Extreme Performance Testing',
-      resources: Array(1000).fill(null).map((_, i) => ({
-        id: `extreme-resource-${i}`,
-        type: 'https://xats.org/core/resources/image',
-        url: `https://example.com/extreme-image-${i}.png`
-      })),
+      resources: Array(1000)
+        .fill(null)
+        .map((_, i) => ({
+          id: `extreme-resource-${i}`,
+          type: 'https://xats.org/core/resources/image',
+          url: `https://example.com/extreme-image-${i}.png`,
+        })),
       bodyMatter: {
-        contents: units
-      }
+        contents: units,
+      },
     };
   }
 });

@@ -1,29 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */
 /**
  * Edge Case Validation Tests
- * 
+ *
  * Tests edge cases, boundary conditions, unusual data structures,
  * and potential schema vulnerabilities that could cause validation
  * failures or unexpected behavior.
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
-import { createValidator } from '../../dist/validator.js';
+
+import { createValidator, type ValidatorInstance } from './test-utils.js';
 
 describe('Edge Case Validation', () => {
-  let validator: any;
+  let validator: ValidatorInstance;
 
   beforeAll(() => {
     validator = createValidator();
   });
 
   describe('Empty and Minimal Cases', () => {
-    it('should handle empty arrays correctly', async () => {
+    it('should handle empty arrays correctly', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-001',
           type: 'book',
-          title: 'Edge Case Book'
+          title: 'Edge Case Book',
         },
         subject: 'Test',
         resources: [], // Empty resources array
@@ -32,24 +34,24 @@ describe('Edge Case Validation', () => {
             {
               id: 'chapter-1',
               title: 'Empty Chapter',
-              sections: [] // Empty sections array (may not be valid)
-            }
-          ]
-        }
+              sections: [], // Empty sections array (may not be valid)
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       // Empty contents array may not be valid - test validates the behavior
       expect(typeof result.isValid).toBe('boolean');
     });
 
-    it('should handle empty semantic text runs', async () => {
+    it('should handle empty semantic text runs', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-002',
           type: 'book',
-          title: 'Edge Case Book'
+          title: 'Edge Case Book',
         },
         subject: 'Test',
         bodyMatter: {
@@ -67,29 +69,29 @@ describe('Edge Case Validation', () => {
                       blockType: 'https://xats.org/core/blocks/paragraph',
                       content: {
                         text: {
-                          runs: [] // Empty runs array
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                          runs: [], // Empty runs array
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle empty list items', async () => {
+    it('should handle empty list items', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-003',
           type: 'book',
-          title: 'Edge Case Book'
+          title: 'Edge Case Book',
         },
         subject: 'Test',
         bodyMatter: {
@@ -107,28 +109,28 @@ describe('Edge Case Validation', () => {
                       blockType: 'https://xats.org/core/blocks/list',
                       content: {
                         listType: 'unordered',
-                        items: [] // Empty items array
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        items: [], // Empty items array
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle empty table rows', async () => {
+    it('should handle empty table rows', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-004',
           type: 'book',
-          title: 'Edge Case Book'
+          title: 'Edge Case Book',
         },
         subject: 'Test',
         bodyMatter: {
@@ -145,32 +147,32 @@ describe('Edge Case Validation', () => {
                       id: 'block-1',
                       blockType: 'https://xats.org/core/blocks/table',
                       content: {
-                        rows: [] // Empty rows array
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        rows: [], // Empty rows array
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Extreme Length Cases', () => {
-    it('should handle very long strings', async () => {
+    it('should handle very long strings', () => {
       const veryLongString = 'a'.repeat(10000);
-      
+
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-005',
           type: 'book',
-          title: veryLongString // Very long title
+          title: veryLongString, // Very long title
         },
         subject: 'Test',
         bodyMatter: {
@@ -188,23 +190,23 @@ describe('Edge Case Validation', () => {
                       blockType: 'https://xats.org/core/blocks/paragraph',
                       content: {
                         text: {
-                          runs: [{ type: 'text', text: veryLongString }]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                          runs: [{ type: 'text', text: veryLongString }],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle many nested elements', async () => {
+    it('should handle many nested elements', () => {
       // Create deeply nested units (up to reasonable limit)
       let nestedUnit: any = {
         id: 'unit-base',
@@ -222,14 +224,14 @@ describe('Edge Case Validation', () => {
                     id: 'block-base',
                     blockType: 'https://xats.org/core/blocks/paragraph',
                     content: {
-                      text: { runs: [{ type: 'text', text: 'Deep content' }] }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+                      text: { runs: [{ type: 'text', text: 'Deep content' }] },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       };
 
       // Nest units within units
@@ -237,7 +239,7 @@ describe('Edge Case Validation', () => {
         nestedUnit = {
           id: `unit-${i}`,
           title: `Unit Level ${i}`,
-          contents: [nestedUnit]
+          contents: [nestedUnit],
         };
       }
 
@@ -246,19 +248,19 @@ describe('Edge Case Validation', () => {
         bibliographicEntry: {
           id: 'edge-006',
           type: 'book',
-          title: 'Deeply Nested Book'
+          title: 'Deeply Nested Book',
         },
         subject: 'Test',
         bodyMatter: {
-          contents: [nestedUnit]
-        }
+          contents: [nestedUnit],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle many parallel elements', async () => {
+    it('should handle many parallel elements', () => {
       const manyChapters = [];
       for (let i = 1; i <= 1000; i++) {
         manyChapters.push({
@@ -273,12 +275,12 @@ describe('Edge Case Validation', () => {
                   id: `block-${i}`,
                   blockType: 'https://xats.org/core/blocks/paragraph',
                   content: {
-                    text: { runs: [{ type: 'text', text: `Content ${i}` }] }
-                  }
-                }
-              ]
-            }
-          ]
+                    text: { runs: [{ type: 'text', text: `Content ${i}` }] },
+                  },
+                },
+              ],
+            },
+          ],
         });
       }
 
@@ -287,27 +289,27 @@ describe('Edge Case Validation', () => {
         bibliographicEntry: {
           id: 'edge-007',
           type: 'book',
-          title: 'Many Chapters Book'
+          title: 'Many Chapters Book',
         },
         subject: 'Test',
         bodyMatter: {
-          contents: manyChapters
-        }
+          contents: manyChapters,
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Special Characters and Encoding', () => {
-    it('should handle Unicode characters correctly', async () => {
+    it('should handle Unicode characters correctly', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-008',
           type: 'book',
-          title: '数学教科書 📚 Mathematics Textbook'
+          title: '数学教科書 📚 Mathematics Textbook',
         },
         subject: '数学と科学 🧮',
         bodyMatter: {
@@ -326,31 +328,34 @@ describe('Edge Case Validation', () => {
                       content: {
                         text: {
                           runs: [
-                            { type: 'text', text: 'Unicode test: αβγδε θεωρία, العربية, 中文, हिन्दी, русский' },
-                            { type: 'text', text: ' Emoji: 🔬⚗️🧪🔍📊📈📉💡' }
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                            {
+                              type: 'text',
+                              text: 'Unicode test: αβγδε θεωρία, العربية, 中文, हिन्दी, русский',
+                            },
+                            { type: 'text', text: ' Emoji: 🔬⚗️🧪🔍📊📈📉💡' },
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle special HTML entities', async () => {
+    it('should handle special HTML entities', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-009',
           type: 'book',
-          title: 'Book with Special Characters'
+          title: 'Book with Special Characters',
         },
         subject: 'Test',
         bodyMatter: {
@@ -369,30 +374,33 @@ describe('Edge Case Validation', () => {
                       content: {
                         text: {
                           runs: [
-                            { type: 'text', text: 'Special chars: &lt; &gt; &amp; &quot; &apos; © ® ™ ° ± × ÷' }
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                            {
+                              type: 'text',
+                              text: 'Special chars: &lt; &gt; &amp; &quot; &apos; © ® ™ ° ± × ÷',
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle mathematical symbols and LaTeX', async () => {
+    it('should handle mathematical symbols and LaTeX', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-010',
           type: 'book',
-          title: 'Mathematical Content'
+          title: 'Mathematical Content',
         },
         subject: 'Mathematics',
         bodyMatter: {
@@ -410,48 +418,49 @@ describe('Edge Case Validation', () => {
                       blockType: 'https://xats.org/core/blocks/mathBlock',
                       content: {
                         notation: 'latex',
-                        expression: '\\sum_{i=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6} \\quad \\forall n \\in \\mathbb{N}'
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        expression:
+                          '\\sum_{i=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6} \\quad \\forall n \\in \\mathbb{N}',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Boundary Values', () => {
-    it('should handle minimum required fields only', async () => {
+    it('should handle minimum required fields only', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
-          id: 'min-001'
+          id: 'min-001',
           // Only minimum CSL fields
         },
         subject: '',
         bodyMatter: {
-          contents: []
-        }
+          contents: [],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       // May be valid or invalid depending on CSL requirements
       expect(typeof result.isValid).toBe('boolean');
     });
 
-    it('should handle single character values', async () => {
+    it('should handle single character values', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'a',
           type: 'book',
-          title: 'A'
+          title: 'A',
         },
         subject: 'X',
         bodyMatter: {
@@ -469,29 +478,29 @@ describe('Edge Case Validation', () => {
                       blockType: 'https://xats.org/core/blocks/paragraph',
                       content: {
                         text: {
-                          runs: [{ type: 'text', text: '.' }]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                          runs: [{ type: 'text', text: '.' }],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle whitespace-only strings', async () => {
+    it('should handle whitespace-only strings', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-011',
           type: 'book',
-          title: '   ' // Whitespace only
+          title: '   ', // Whitespace only
         },
         subject: '\t\n\r  ', // Various whitespace
         bodyMatter: {
@@ -509,31 +518,31 @@ describe('Edge Case Validation', () => {
                       blockType: 'https://xats.org/core/blocks/paragraph',
                       content: {
                         text: {
-                          runs: [{ type: 'text', text: '     ' }]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                          runs: [{ type: 'text', text: '     ' }],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Unusual Data Structures', () => {
-    it('should handle extensions with complex nested data', async () => {
+    it('should handle extensions with complex nested data', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-012',
           type: 'book',
-          title: 'Extensions Test'
+          title: 'Extensions Test',
         },
         subject: 'Test',
         bodyMatter: {
@@ -551,47 +560,40 @@ describe('Edge Case Validation', () => {
                           null_value: null,
                           boolean: true,
                           number: 42.5,
-                          string: 'value'
-                        }
-                      }
-                    }
-                  }
+                          string: 'value',
+                        },
+                      },
+                    },
+                  },
                 },
                 arrayOfObjects: [
                   { type: 'type1', data: 'data1' },
-                  { type: 'type2', data: 'data2' }
+                  { type: 'type2', data: 'data2' },
                 ],
-                mixedArray: [
-                  'string',
-                  123,
-                  true,
-                  null,
-                  { object: 'value' },
-                  [1, 2, 3]
-                ]
+                mixedArray: ['string', 123, true, null, { object: 'value' }, [1, 2, 3]],
               },
               sections: [
                 {
                   id: 'section-1',
                   title: 'Section 1',
-                  content: []
-                }
-              ]
-            }
-          ]
-        }
+                  content: [],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle circular references in extensions', async () => {
+    it('should handle circular references in extensions', () => {
       // Note: JSON doesn't support circular references, but we can test
       // what happens with repeated references
       const sharedObject = {
         id: 'shared-123',
-        data: 'shared data'
+        data: 'shared data',
       };
 
       const doc = {
@@ -599,7 +601,7 @@ describe('Edge Case Validation', () => {
         bibliographicEntry: {
           id: 'edge-013',
           type: 'book',
-          title: 'Circular References Test'
+          title: 'Circular References Test',
         },
         subject: 'Test',
         bodyMatter: {
@@ -611,32 +613,32 @@ describe('Edge Case Validation', () => {
                 reference1: sharedObject,
                 reference2: sharedObject,
                 nested: {
-                  reference3: sharedObject
-                }
+                  reference3: sharedObject,
+                },
               },
               sections: [
                 {
                   id: 'section-1',
                   title: 'Section 1',
-                  content: []
-                }
-              ]
-            }
-          ]
-        }
+                  content: [],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should handle mixed content types in arrays', async () => {
+    it('should handle mixed content types in arrays', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-014',
           type: 'book',
-          title: 'Mixed Content Test'
+          title: 'Mixed Content Test',
         },
         subject: 'Test',
         bodyMatter: {
@@ -663,32 +665,32 @@ describe('Edge Case Validation', () => {
                             { type: 'reference', text: 'reference', refId: 'ref-1' },
                             { type: 'text', text: ' with ' },
                             { type: 'citation', refId: 'cite-1' },
-                            { type: 'text', text: ' end.' }
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                            { type: 'text', text: ' end.' },
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Invalid JSON Structures', () => {
-    it('should handle malformed semantic text gracefully', async () => {
+    it('should handle malformed semantic text gracefully', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-015',
           type: 'book',
-          title: 'Malformed Test'
+          title: 'Malformed Test',
         },
         subject: 'Test',
         bodyMatter: {
@@ -709,31 +711,31 @@ describe('Edge Case Validation', () => {
                           runs: [
                             { type: 'text' }, // Missing text field
                             { type: 'emphasis', text: 'valid emphasis' },
-                            { type: 'reference', text: 'ref text' } // Missing refId
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                            { type: 'reference', text: 'ref text' }, // Missing refId
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('should handle additional properties correctly', async () => {
+    it('should handle additional properties correctly', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-016',
           type: 'book',
-          title: 'Additional Properties Test'
+          title: 'Additional Properties Test',
         },
         subject: 'Test',
         unknownRootField: 'This should be ignored or cause validation error',
@@ -754,37 +756,39 @@ describe('Edge Case Validation', () => {
                       unknownBlockField: 'Unknown block field',
                       content: {
                         text: {
-                          runs: [{ type: 'text', text: 'Content' }]
+                          runs: [{ type: 'text', text: 'Content' }],
                         },
-                        unknownContentField: 'Unknown content field'
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        unknownContentField: 'Unknown content field',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       // Schema may or may not allow additional properties
       expect(typeof result.isValid).toBe('boolean');
     });
   });
 
   describe('Performance Edge Cases', () => {
-    it('should handle very large arrays efficiently', async () => {
+    it('should handle very large arrays efficiently', () => {
       const startTime = Date.now();
-      
-      const largeTagArray = Array(10000).fill(null).map((_, i) => `tag-${i}`);
-      
+
+      const largeTagArray = Array(10000)
+        .fill(null)
+        .map((_, i) => `tag-${i}`);
+
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-017',
           type: 'book',
-          title: 'Large Array Test'
+          title: 'Large Array Test',
         },
         subject: 'Test',
         bodyMatter: {
@@ -797,27 +801,27 @@ describe('Edge Case Validation', () => {
                 {
                   id: 'section-1',
                   title: 'Section 1',
-                  content: []
-                }
-              ]
-            }
-          ]
-        }
+                  content: [],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       const endTime = Date.now();
-      
+
       expect(result.isValid).toBe(true);
       expect(endTime - startTime).toBeLessThan(5000); // Should complete within 5 seconds
     });
 
-    it('should handle very deep nesting levels', async () => {
+    it('should handle very deep nesting levels', () => {
       const startTime = Date.now();
-      
+
       // Create deeply nested list structure
       let deepContent: any = {
-        text: { runs: [{ type: 'text', text: 'Deep content' }] }
+        text: { runs: [{ type: 'text', text: 'Deep content' }] },
       };
 
       // Nest lists within lists up to a reasonable depth
@@ -830,10 +834,10 @@ describe('Edge Case Validation', () => {
               blockType: 'https://xats.org/core/blocks/list',
               content: {
                 listType: 'unordered',
-                items: [deepContent]
-              }
-            }
-          ]
+                items: [deepContent],
+              },
+            },
+          ],
         };
       }
 
@@ -842,7 +846,7 @@ describe('Edge Case Validation', () => {
         bibliographicEntry: {
           id: 'edge-018',
           type: 'book',
-          title: 'Deep Nesting Test'
+          title: 'Deep Nesting Test',
         },
         subject: 'Test',
         bodyMatter: {
@@ -860,65 +864,58 @@ describe('Edge Case Validation', () => {
                       blockType: 'https://xats.org/core/blocks/list',
                       content: {
                         listType: 'ordered',
-                        items: [deepContent]
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        items: [deepContent],
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       const endTime = Date.now();
-      
+
       expect(typeof result.isValid).toBe('boolean');
       expect(endTime - startTime).toBeLessThan(10000); // Should complete within 10 seconds
     });
   });
 
   describe('Schema Version Edge Cases', () => {
-    it('should handle exact schema version match', async () => {
+    it('should handle exact schema version match', () => {
       const doc = {
         schemaVersion: '0.1.0', // Exact match
         bibliographicEntry: {
           id: 'edge-019',
           type: 'book',
-          title: 'Version Test'
+          title: 'Version Test',
         },
         subject: 'Test',
-        bodyMatter: { 
+        bodyMatter: {
           contents: [
             {
               id: 'chapter-1',
               title: 'Test Chapter',
               sections: [
                 {
-                  id: 'section-1', 
+                  id: 'section-1',
                   title: 'Test Section',
-                  content: []
-                }
-              ]
-            }
-          ] 
-        }
+                  content: [],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should reject slightly different schema versions', async () => {
-      const invalidVersions = [
-        '0.1.1',
-        '0.1',
-        '0.1.0-beta',
-        '0.1.0 ',
-        ' 0.1.0',
-        '0.1.0.0'
-      ];
+    it('should reject slightly different schema versions', () => {
+      const invalidVersions = ['0.1.1', '0.1', '0.1.0-beta', '0.1.0 ', ' 0.1.0', '0.1.0.0'];
 
       for (const version of invalidVersions) {
         const doc = {
@@ -926,27 +923,27 @@ describe('Edge Case Validation', () => {
           bibliographicEntry: {
             id: `edge-version-${invalidVersions.indexOf(version)}`,
             type: 'book',
-            title: 'Version Test'
+            title: 'Version Test',
           },
           subject: 'Test',
-          bodyMatter: { contents: [] }
+          bodyMatter: { contents: [] },
         };
 
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         expect(result.isValid).toBe(false);
       }
     });
   });
 
   describe('Resource and URL Edge Cases', () => {
-    it('should handle various URI schemes in resources', async () => {
+    it('should handle various URI schemes in resources', () => {
       const uriSchemes = [
         'https://example.com/image.png',
         'http://example.com/image.png',
         'ftp://example.com/image.png',
         'file:///local/path/image.png',
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==',
-        'urn:isbn:123456789'
+        'urn:isbn:123456789',
       ];
 
       for (const uri of uriSchemes) {
@@ -955,44 +952,44 @@ describe('Edge Case Validation', () => {
           bibliographicEntry: {
             id: `edge-uri-${uriSchemes.indexOf(uri)}`,
             type: 'book',
-            title: 'URI Test'
+            title: 'URI Test',
           },
           subject: 'Test',
           resources: [
             {
               id: 'resource-1',
               type: 'https://xats.org/core/resources/image',
-              url: uri
-            }
+              url: uri,
+            },
           ],
-          bodyMatter: { contents: [] }
+          bodyMatter: { contents: [] },
         };
 
-        const result = await validator.validate(doc);
+        const result = validator.validate(doc);
         expect(typeof result.isValid).toBe('boolean');
       }
     });
 
-    it('should handle internationalized domain names', async () => {
+    it('should handle internationalized domain names', () => {
       const doc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'edge-020',
           type: 'book',
-          title: 'IDN Test'
+          title: 'IDN Test',
         },
         subject: 'Test',
         resources: [
           {
             id: 'resource-1',
             type: 'https://xats.org/core/resources/image',
-            url: 'https://例え.テスト/画像.png'
-          }
+            url: 'https://例え.テスト/画像.png',
+          },
         ],
-        bodyMatter: { contents: [] }
+        bodyMatter: { contents: [] },
       };
 
-      const result = await validator.validate(doc);
+      const result = validator.validate(doc);
       expect(typeof result.isValid).toBe('boolean');
     });
   });

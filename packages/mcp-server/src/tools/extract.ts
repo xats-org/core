@@ -2,37 +2,34 @@
  * @xats/mcp-server - Extract Tool Implementation
  */
 
-import type { XatsDocument, SemanticText } from '@xats/types';
-import type { 
-  ExtractInput, 
-  ExtractResult, 
-  McpServerConfig 
-} from '../types.js';
 import { McpError } from '../types.js';
+
+import type { ExtractInput, ExtractResult, McpServerConfig } from '../types.js';
+import type { XatsDocument, SemanticText } from '@xats/types';
 
 /**
  * Extract content from SemanticText
  */
 function extractSemanticTextContent(semanticText: SemanticText | undefined): any {
   if (!semanticText?.runs) return null;
-  
+
   return {
     plainText: semanticText.runs
-      .filter(run => run.type === 'text')
-      .map(run => 'text' in run ? run.text : '')
+      .filter((run) => run.type === 'text')
+      .map((run) => ('text' in run ? run.text : ''))
       .join(' '),
-    runs: semanticText.runs.map(run => ({
+    runs: semanticText.runs.map((run) => ({
       type: run.type,
       text: 'text' in run ? run.text : '',
       ...('ref' in run ? { ref: run.ref } : {}),
       ...('citeKey' in run ? { citeKey: run.citeKey } : {}),
     })),
     references: semanticText.runs
-      .filter(run => run.type === 'reference')
-      .map(run => ({ type: run.type, ref: 'ref' in run ? run.ref : null })),
+      .filter((run) => run.type === 'reference')
+      .map((run) => ({ type: run.type, ref: 'ref' in run ? run.ref : null })),
     citations: semanticText.runs
-      .filter(run => run.type === 'citation')
-      .map(run => ({ type: run.type, citeKey: 'citeKey' in run ? run.citeKey : null })),
+      .filter((run) => run.type === 'citation')
+      .map((run) => ({ type: run.type, citeKey: 'citeKey' in run ? run.citeKey : null })),
   };
 }
 
@@ -42,22 +39,22 @@ function extractSemanticTextContent(semanticText: SemanticText | undefined): any
 function getValueAtPath(obj: any, path: string): any {
   const parts = path.split('.');
   let current = obj;
-  
+
   for (const part of parts) {
     if (current === null || current === undefined) {
       return undefined;
     }
-    
+
     // Handle array indices
     if (part.includes('[') && part.includes(']')) {
       const [key, indexStr] = part.split('[');
       const indexStr2 = indexStr?.replace(']', '');
       const index = indexStr2 ? parseInt(indexStr2, 10) : -1;
-      
+
       if (key) {
         current = current[key];
       }
-      
+
       if (Array.isArray(current) && index >= 0 && index < current.length) {
         current = current[index];
       } else {
@@ -67,7 +64,7 @@ function getValueAtPath(obj: any, path: string): any {
       current = current[part];
     }
   }
-  
+
   return current;
 }
 
@@ -106,7 +103,7 @@ function extractStructure(document: XatsDocument): any {
   if (document.bodyMatter) {
     structure.bodyMatter = {
       containerCount: document.bodyMatter.contents.length,
-      containers: document.bodyMatter.contents.map(container => ({
+      containers: document.bodyMatter.contents.map((container) => ({
         id: container.id,
         label: container.label,
         title: extractSemanticTextContent(container.title)?.plainText,
@@ -145,7 +142,7 @@ function extractContent(document: XatsDocument, filter?: ExtractInput['filter'])
         if ('blockType' in item) {
           // This is a content block
           const blockType = item.blockType;
-          
+
           // Apply block type filter
           if (filter?.blockTypes && !filter.blockTypes.includes(blockType)) {
             continue;
@@ -167,12 +164,12 @@ function extractContent(document: XatsDocument, filter?: ExtractInput['filter'])
           // Extract specific content based on block type
           if (item.content) {
             contentData.content = { ...item.content };
-            
+
             // Process semantic text in content
             if (item.content.text) {
               contentData.textContent = extractSemanticTextContent(item.content.text);
             }
-            
+
             if (item.content.title) {
               contentData.titleContent = extractSemanticTextContent(item.content.title);
             }
@@ -206,7 +203,7 @@ function extractContent(document: XatsDocument, filter?: ExtractInput['filter'])
       const block = blocks[i];
       if ('blockType' in block) {
         const blockType = block.blockType;
-        
+
         if (!filter?.blockTypes || filter.blockTypes.includes(blockType)) {
           if (filter?.includeEmpty || (block.content && Object.keys(block.content).length > 0)) {
             extractedContent.push({
@@ -243,7 +240,7 @@ function extractContent(document: XatsDocument, filter?: ExtractInput['filter'])
 /**
  * Extract assessment-related content
  */
-function extractAssessments(document: XatsDocument, filter?: ExtractInput['filter']): any {
+function extractAssessments(document: XatsDocument, _filter?: ExtractInput['filter']): any {
   const assessments: any[] = [];
 
   function findAssessments(container: any, path: string): void {
@@ -254,15 +251,16 @@ function extractAssessments(document: XatsDocument, filter?: ExtractInput['filte
 
         if ('blockType' in item) {
           const blockType = item.blockType;
-          
+
           // Check if this is an assessment-related block
-          if (blockType.includes('assessment') || 
-              blockType.includes('quiz') || 
-              blockType.includes('test') ||
-              blockType.includes('multipleChoice') ||
-              blockType.includes('shortAnswer') ||
-              blockType.includes('essay')) {
-            
+          if (
+            blockType.includes('assessment') ||
+            blockType.includes('quiz') ||
+            blockType.includes('test') ||
+            blockType.includes('multipleChoice') ||
+            blockType.includes('shortAnswer') ||
+            blockType.includes('essay')
+          ) {
             assessments.push({
               id: item.id,
               blockType,
@@ -320,13 +318,13 @@ export async function extractTool(
     }
 
     let extractedData: any;
-    let extractionType = input.type || 'content';
-    let path = input.path || 'root';
+    const extractionType = input.type || 'content';
+    const path = input.path || 'root';
 
     // Handle specific path extraction first
     if (input.path && input.path !== 'root') {
       extractedData = getValueAtPath(input.document, input.path);
-      
+
       if (extractedData === undefined) {
         return {
           success: false,
@@ -365,9 +363,9 @@ export async function extractTool(
     if (Array.isArray(extractedData) && input.filter) {
       // Filter by pathways if specified
       if (input.filter.pathways && input.filter.pathways.length > 0) {
-        extractedData = extractedData.filter(item => {
-          if (item.pathwayType) {
-            return input.filter!.pathways!.includes(item.pathwayType);
+        extractedData = extractedData.filter((item) => {
+          if (item.pathwayType && input.filter?.pathways) {
+            return input.filter.pathways.includes(item.pathwayType);
           }
           return true; // Include non-pathway items
         });

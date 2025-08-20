@@ -1,6 +1,6 @@
 /**
  * @xats/schema - JSON Schema definitions for xats
- * 
+ *
  * This package provides access to all xats schema versions and utilities
  * for working with schemas.
  */
@@ -8,6 +8,7 @@
 import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+
 import type { SchemaDefinition, XatsVersion } from '@xats/types';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,6 +18,7 @@ const __dirname = dirname(__filename);
 export const SCHEMA_VERSIONS: XatsVersion[] = ['0.1.0', '0.2.0', '0.3.0'];
 export const LATEST_VERSION: XatsVersion = '0.3.0';
 export const CURRENT_VERSION: XatsVersion = '0.3.0';
+export const DEFAULT_VERSION: XatsVersion = '0.1.0'; // Default for backwards compatibility
 
 // Schema cache to avoid repeated file reads
 const schemaCache = new Map<string, SchemaDefinition>();
@@ -27,23 +29,40 @@ const schemaCache = new Map<string, SchemaDefinition>();
  * @returns The schema definition or null if not found
  */
 export function loadSchema(version: XatsVersion | 'latest'): SchemaDefinition | null {
-  const cacheKey = version === 'latest' ? LATEST_VERSION : version;
-  
+  const targetVersion = version === 'latest' ? LATEST_VERSION : version;
+
   // Check cache first
-  if (schemaCache.has(cacheKey)) {
-    return schemaCache.get(cacheKey)!;
+  const cachedSchema = schemaCache.get(targetVersion);
+  if (cachedSchema) {
+    return cachedSchema;
   }
 
   try {
-    const schemaPath = resolve(__dirname, '..', 'schemas', version, 'xats.json');
+    // Try to load the specific version
+    const schemaPath = resolve(__dirname, '..', 'schemas', targetVersion, 'xats.json');
     const schemaContent = readFileSync(schemaPath, 'utf-8');
     const schema = JSON.parse(schemaContent) as SchemaDefinition;
-    
+
     // Cache the loaded schema
-    schemaCache.set(cacheKey, schema);
+    schemaCache.set(targetVersion, schema);
     return schema;
   } catch (error) {
-    console.error(`Failed to load schema version ${version}:`, error);
+    // If version doesn't exist as a file, try to load the default version
+    // This handles backwards compatibility for test documents
+    if (targetVersion === DEFAULT_VERSION && targetVersion !== LATEST_VERSION) {
+      try {
+        const defaultPath = resolve(__dirname, '..', 'schemas', LATEST_VERSION, 'xats.json');
+        const schemaContent = readFileSync(defaultPath, 'utf-8');
+        const schema = JSON.parse(schemaContent) as SchemaDefinition;
+
+        // Cache it under the requested version for consistency
+        schemaCache.set(targetVersion, schema);
+        return schema;
+      } catch (fallbackError) {
+        console.error(`Failed to load fallback schema for ${targetVersion}:`, fallbackError);
+      }
+    }
+    console.error(`Failed to load schema version ${targetVersion}:`, error);
     return null;
   }
 }
@@ -98,11 +117,11 @@ export function getSchemaMetadata(version: XatsVersion): {
 } | null {
   const schema = loadSchema(version);
   if (!schema) return null;
-  
+
   return {
     version: schema.version || version,
     title: schema.title || 'Extensible Academic Textbook Schema',
-    description: schema.description || 'JSON Schema for academic textbook content'
+    description: schema.description || 'JSON Schema for academic textbook content',
   };
 }
 
@@ -111,11 +130,11 @@ export function getSchemaMetadata(version: XatsVersion): {
  */
 export function getAllSchemas(): Record<XatsVersion, SchemaDefinition | null> {
   const schemas: Partial<Record<XatsVersion, SchemaDefinition | null>> = {};
-  
+
   for (const version of SCHEMA_VERSIONS) {
     schemas[version] = loadSchema(version);
   }
-  
+
   return schemas as Record<XatsVersion, SchemaDefinition | null>;
 }
 

@@ -1,27 +1,30 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */
 /**
  * Example Document Validation Tests
- * 
+ *
  * Tests validation against real example documents including
  * valid examples, invalid examples, and comprehensive
  * documents that test multiple schema features together.
  */
 
-import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { createValidator } from '../../dist/validator.js';
+
+import { describe, it, expect, beforeAll } from 'vitest';
+
+import { createValidator, type ValidatorInstance } from './test-utils.js';
 
 describe('Example Document Validation', () => {
-  let validator: any;
+  let validator: ValidatorInstance;
 
   beforeAll(() => {
     validator = createValidator();
   });
 
   describe('Valid Example Documents', () => {
-    it('should validate adaptive pathway example', async () => {
+    it('should validate adaptive pathway example', () => {
       const examplePath = resolve(process.cwd(), 'examples/adaptive-pathway-example.json');
-      
+
       let exampleDoc: any;
       try {
         const exampleText = readFileSync(examplePath, 'utf-8');
@@ -31,30 +34,30 @@ describe('Example Document Validation', () => {
         exampleDoc = createAdaptivePathwayExample();
       }
 
-      const result = await validator.validate(exampleDoc);
-      
+      const result = validator.validate(exampleDoc);
+
       if (!result.isValid) {
         console.error('Validation errors:', result.errors);
       }
-      
+
       expect(result.isValid).toBe(true);
       expect(result.errors).toHaveLength(0);
     });
 
-    it('should validate comprehensive textbook example', async () => {
+    it('should validate comprehensive textbook example', () => {
       const comprehensiveDoc = createComprehensiveTextbookExample();
-      
-      const result = await validator.validate(comprehensiveDoc);
-      
+
+      const result = validator.validate(comprehensiveDoc);
+
       if (!result.isValid) {
         console.error('Comprehensive doc validation errors:', result.errors);
       }
-      
+
       expect(result.isValid).toBe(true);
       expect(result.errors).toHaveLength(0);
     });
 
-    it('should validate minimal valid document', async () => {
+    it('should validate minimal valid document', () => {
       const minimalDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
@@ -62,7 +65,7 @@ describe('Example Document Validation', () => {
           type: 'book',
           title: 'Minimal Test Book',
           author: [{ family: 'Author', given: 'Test' }],
-          issued: { 'date-parts': [[2024]] }
+          issued: { 'date-parts': [[2024]] },
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -80,110 +83,110 @@ describe('Example Document Validation', () => {
                       blockType: 'https://xats.org/core/blocks/paragraph',
                       content: {
                         text: {
-                          runs: [{ type: 'text', text: 'Minimal content' }]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                          runs: [{ type: 'text', text: 'Minimal content' }],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(minimalDoc);
+      const result = validator.validate(minimalDoc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with all block types', async () => {
+    it('should validate document with all block types', () => {
       const allBlockTypesDoc = createAllBlockTypesExample();
-      
-      const result = await validator.validate(allBlockTypesDoc);
-      
+
+      const result = validator.validate(allBlockTypesDoc);
+
       if (!result.isValid) {
         console.error('All block types validation errors:', result.errors);
       }
-      
+
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with rich semantic text', async () => {
+    it('should validate document with rich semantic text', () => {
       const richTextDoc = createRichSemanticTextExample();
-      
-      const result = await validator.validate(richTextDoc);
-      
+
+      const result = validator.validate(richTextDoc);
+
       if (!result.isValid) {
         console.error('Rich text validation errors:', result.errors);
       }
-      
+
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with nested units and chapters', async () => {
+    it('should validate document with nested units and chapters', () => {
       const nestedDoc = createNestedStructureExample();
-      
-      const result = await validator.validate(nestedDoc);
-      
+
+      const result = validator.validate(nestedDoc);
+
       if (!result.isValid) {
         console.error('Nested structure validation errors:', result.errors);
       }
-      
+
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with learning objectives and outcomes', async () => {
+    it('should validate document with learning objectives and outcomes', () => {
       const learningDoc = createLearningObjectivesExample();
-      
-      const result = await validator.validate(learningDoc);
-      
+
+      const result = validator.validate(learningDoc);
+
       if (!result.isValid) {
         console.error('Learning objectives validation errors:', result.errors);
       }
-      
+
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with resources and figures', async () => {
+    it('should validate document with resources and figures', () => {
       const resourceDoc = createResourcesExample();
-      
-      const result = await validator.validate(resourceDoc);
-      
+
+      const result = validator.validate(resourceDoc);
+
       if (!result.isValid) {
         console.error('Resources validation errors:', result.errors);
       }
-      
+
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with front and back matter', async () => {
+    it('should validate document with front and back matter', () => {
       const fullDoc = createFullDocumentExample();
-      
-      const result = await validator.validate(fullDoc);
-      
+
+      const result = validator.validate(fullDoc);
+
       if (!result.isValid) {
         console.error('Full document validation errors:', result.errors);
       }
-      
+
       expect(result.isValid).toBe(true);
     });
   });
 
   describe('Invalid Example Documents', () => {
-    it('should validate against existing invalid examples', async () => {
+    it('should validate against existing invalid examples', () => {
       const invalidExamples = [
         'missing-required.json',
         'bad-semantictext.json',
         'invalid-references.json',
         'unknown-blocktypes.json',
-        'wrong-types.json'
+        'wrong-types.json',
       ];
 
       let foundInvalidExamples = 0;
-      
+
       for (const example of invalidExamples) {
-        const examplePath = resolve(process.cwd(), `examples/invalid/${example}`);
-        
+        const examplePath = resolve(__dirname, `../../examples/examples/invalid/${example}`);
+
         let exampleDoc: any;
         try {
           const exampleText = readFileSync(examplePath, 'utf-8');
@@ -194,46 +197,46 @@ describe('Example Document Validation', () => {
           continue;
         }
 
-        const result = await validator.validate(exampleDoc);
-        
+        const result = validator.validate(exampleDoc);
+
         // Some examples may be valid according to the current schema
         // This documents the validator behavior for each example
         if (example === 'unknown-blocktypes.json' && result.isValid) {
           // Schema may allow unknown block types - this is expected behavior
           continue;
         }
-        
+
         expect(result.isValid).toBe(false);
         expect(result.errors.length).toBeGreaterThan(0);
       }
-      
+
       // Ensure we actually tested some invalid examples
       expect(foundInvalidExamples).toBeGreaterThan(0);
     });
 
-    it('should reject document with missing schema version', async () => {
+    it('should reject document with missing schema version', () => {
       const invalidDoc = {
         // Missing schemaVersion
         bibliographicEntry: {
           id: 'invalid-001',
           type: 'book',
-          title: 'Invalid Book'
+          title: 'Invalid Book',
         },
         subject: 'Test Subject',
-        bodyMatter: { contents: [] }
+        bodyMatter: { contents: [] },
       };
 
-      const result = await validator.validate(invalidDoc);
+      const result = validator.validate(invalidDoc);
       expect(result.isValid).toBe(false);
     });
 
-    it('should reject document with invalid semantic text structure', async () => {
+    it('should reject document with invalid semantic text structure', () => {
       const invalidDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'invalid-002',
           type: 'book',
-          title: 'Invalid Book'
+          title: 'Invalid Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -250,28 +253,28 @@ describe('Example Document Validation', () => {
                       id: 'block-1',
                       blockType: 'https://xats.org/core/blocks/paragraph',
                       content: {
-                        text: 'Invalid - should be SemanticText object' // Should be object with runs
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        text: 'Invalid - should be SemanticText object', // Should be object with runs
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(invalidDoc);
+      const result = validator.validate(invalidDoc);
       expect(result.isValid).toBe(false);
     });
 
-    it('should reject document with invalid block type URI', async () => {
+    it('should reject document with invalid block type URI', () => {
       const invalidDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'invalid-003',
           type: 'book',
-          title: 'Invalid Book'
+          title: 'Invalid Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -289,29 +292,29 @@ describe('Example Document Validation', () => {
                       blockType: 'not-a-valid-uri',
                       content: {
                         text: {
-                          runs: [{ type: 'text', text: 'Content' }]
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                          runs: [{ type: 'text', text: 'Content' }],
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
-      const result = await validator.validate(invalidDoc);
+      const result = validator.validate(invalidDoc);
       expect(result.isValid).toBe(false);
     });
 
-    it('should reject document with mixed content types in BodyMatter', async () => {
+    it('should reject document with mixed content types in BodyMatter', () => {
       const invalidDoc = {
         schemaVersion: '0.1.0',
         bibliographicEntry: {
           id: 'invalid-004',
           type: 'book',
-          title: 'Invalid Book'
+          title: 'Invalid Book',
         },
         subject: 'Test Subject',
         bodyMatter: {
@@ -319,42 +322,42 @@ describe('Example Document Validation', () => {
             {
               id: 'unit-1',
               title: 'Unit 1',
-              contents: [] // This makes it a Unit
+              contents: [], // This makes it a Unit
             },
             {
               id: 'chapter-1',
               title: 'Chapter 1',
-              sections: [] // This makes it a Chapter - mixed with Unit above
-            }
-          ]
-        }
+              sections: [], // This makes it a Chapter - mixed with Unit above
+            },
+          ],
+        },
       };
 
-      await validator.validate(invalidDoc);
+      validator.validate(invalidDoc);
       // Note: The schema may allow this depending on oneOf implementation
       // This test documents the expected behavior
     });
   });
 
   describe('Stress Test Documents', () => {
-    it('should validate document with deeply nested structures', async () => {
+    it('should validate document with deeply nested structures', () => {
       const deepDoc = createDeeplyNestedExample();
-      
-      const result = await validator.validate(deepDoc);
+
+      const result = validator.validate(deepDoc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with many content blocks', async () => {
+    it('should validate document with many content blocks', () => {
       const manyBlocksDoc = createManyBlocksExample();
-      
-      const result = await validator.validate(manyBlocksDoc);
+
+      const result = validator.validate(manyBlocksDoc);
       expect(result.isValid).toBe(true);
     });
 
-    it('should validate document with complex pathways', async () => {
+    it('should validate document with complex pathways', () => {
       const complexPathwaysDoc = createComplexPathwaysExample();
-      
-      const result = await validator.validate(complexPathwaysDoc);
+
+      const result = validator.validate(complexPathwaysDoc);
       expect(result.isValid).toBe(true);
     });
   });
@@ -368,7 +371,7 @@ describe('Example Document Validation', () => {
         type: 'book',
         title: 'Adaptive Learning Mathematics',
         author: [{ family: 'Smith', given: 'Jane' }],
-        issued: { 'date-parts': [[2024]] }
+        issued: { 'date-parts': [[2024]] },
       },
       subject: 'Mathematics',
       bodyMatter: {
@@ -380,26 +383,26 @@ describe('Example Document Validation', () => {
               {
                 trigger: {
                   triggerType: 'https://xats.org/core/triggers/onAssessment',
-                  sourceId: 'quiz-1'
+                  sourceId: 'quiz-1',
                 },
                 rules: [
                   {
                     condition: 'score >= 80',
                     destinationId: 'chapter-2',
-                    pathwayType: 'https://xats.org/core/pathways/standard'
+                    pathwayType: 'https://xats.org/core/pathways/standard',
                   },
                   {
                     condition: 'score < 80 AND score >= 60',
                     destinationId: 'review-section',
-                    pathwayType: 'https://xats.org/core/pathways/remedial'
+                    pathwayType: 'https://xats.org/core/pathways/remedial',
                   },
                   {
                     condition: 'score < 60',
                     destinationId: 'fundamentals-review',
-                    pathwayType: 'https://xats.org/core/pathways/prerequisite'
-                  }
-                ]
-              }
+                    pathwayType: 'https://xats.org/core/pathways/prerequisite',
+                  },
+                ],
+              },
             ],
             sections: [
               {
@@ -414,17 +417,17 @@ describe('Example Document Validation', () => {
                         runs: [
                           { type: 'text', text: 'In this chapter, we will explore ' },
                           { type: 'emphasis', text: 'basic algebraic concepts' },
-                          { type: 'text', text: ' that form the foundation of mathematics.' }
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                          { type: 'text', text: ' that form the foundation of mathematics.' },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -437,11 +440,11 @@ describe('Example Document Validation', () => {
         title: 'Comprehensive Science Textbook',
         author: [
           { family: 'Johnson', given: 'Robert' },
-          { family: 'Williams', given: 'Sarah' }
+          { family: 'Williams', given: 'Sarah' },
         ],
         issued: { 'date-parts': [[2024]] },
         publisher: 'Academic Press',
-        ISBN: '978-0-123456-78-9'
+        ISBN: '978-0-123456-78-9',
       },
       subject: 'Science',
       targetAudience: 'Undergraduate students',
@@ -450,16 +453,16 @@ describe('Example Document Validation', () => {
         {
           id: 'outcome-1',
           description: 'Understand fundamental scientific principles',
-          tags: ['fundamental', 'principles']
-        }
+          tags: ['fundamental', 'principles'],
+        },
       ],
       resources: [
         {
           id: 'resource-1',
           type: 'https://xats.org/core/resources/image',
           url: 'https://example.com/images/cell-diagram.png',
-          altText: 'Diagram of a typical plant cell'
-        }
+          altText: 'Diagram of a typical plant cell',
+        },
       ],
       frontMatter: {
         sections: [
@@ -472,13 +475,18 @@ describe('Example Document Validation', () => {
                 blockType: 'https://xats.org/core/blocks/paragraph',
                 content: {
                   text: {
-                    runs: [{ type: 'text', text: 'This textbook provides a comprehensive introduction to science.' }]
-                  }
-                }
-              }
-            ]
-          }
-        ]
+                    runs: [
+                      {
+                        type: 'text',
+                        text: 'This textbook provides a comprehensive introduction to science.',
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        ],
       },
       bodyMatter: {
         contents: [
@@ -486,7 +494,7 @@ describe('Example Document Validation', () => {
             id: 'unit-1',
             title: 'Biology Fundamentals',
             introduction: {
-              runs: [{ type: 'text', text: 'This unit covers the basics of biology.' }]
+              runs: [{ type: 'text', text: 'This unit covers the basics of biology.' }],
             },
             contents: [
               {
@@ -496,8 +504,8 @@ describe('Example Document Validation', () => {
                   {
                     id: 'obj-1',
                     description: 'Identify parts of a cell',
-                    linkedOutcomeId: 'outcome-1'
-                  }
+                    linkedOutcomeId: 'outcome-1',
+                  },
                 ],
                 sections: [
                   {
@@ -509,9 +517,14 @@ describe('Example Document Validation', () => {
                         blockType: 'https://xats.org/core/blocks/paragraph',
                         content: {
                           text: {
-                            runs: [{ type: 'text', text: 'The cell membrane controls what enters and exits the cell.' }]
-                          }
-                        }
+                            runs: [
+                              {
+                                type: 'text',
+                                text: 'The cell membrane controls what enters and exits the cell.',
+                              },
+                            ],
+                          },
+                        },
                       },
                       {
                         id: 'figure-1',
@@ -519,29 +532,39 @@ describe('Example Document Validation', () => {
                         content: {
                           resourceId: 'resource-1',
                           caption: {
-                            runs: [{ type: 'text', text: 'A detailed view of cell structure' }]
-                          }
-                        }
-                      }
-                    ]
-                  }
+                            runs: [{ type: 'text', text: 'A detailed view of cell structure' }],
+                          },
+                        },
+                      },
+                    ],
+                  },
                 ],
                 summary: {
-                  runs: [{ type: 'text', text: 'In this chapter, we learned about cell structure and function.' }]
+                  runs: [
+                    {
+                      type: 'text',
+                      text: 'In this chapter, we learned about cell structure and function.',
+                    },
+                  ],
                 },
                 keyTerms: [
                   {
                     id: 'term-1',
                     term: 'Cell membrane',
                     definition: {
-                      runs: [{ type: 'text', text: 'The boundary that separates the cell interior from the environment.' }]
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+                      runs: [
+                        {
+                          type: 'text',
+                          text: 'The boundary that separates the cell interior from the environment.',
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
       backMatter: {
         glossary: [
@@ -549,9 +572,9 @@ describe('Example Document Validation', () => {
             id: 'gloss-1',
             term: 'Cell',
             definition: {
-              runs: [{ type: 'text', text: 'The basic unit of life.' }]
-            }
-          }
+              runs: [{ type: 'text', text: 'The basic unit of life.' }],
+            },
+          },
         ],
         bibliography: [
           {
@@ -559,10 +582,10 @@ describe('Example Document Validation', () => {
             type: 'article-journal',
             title: 'Advances in Cell Biology',
             author: [{ family: 'Brown', given: 'Michael' }],
-            issued: { 'date-parts': [[2023]] }
-          }
-        ]
-      }
+            issued: { 'date-parts': [[2023]] },
+          },
+        ],
+      },
     };
   }
 
@@ -572,7 +595,7 @@ describe('Example Document Validation', () => {
       bibliographicEntry: {
         id: 'all-blocks-001',
         type: 'book',
-        title: 'All Block Types Example'
+        title: 'All Block Types Example',
       },
       subject: 'Test',
       bodyMatter: {
@@ -589,22 +612,22 @@ describe('Example Document Validation', () => {
                     id: 'para-1',
                     blockType: 'https://xats.org/core/blocks/paragraph',
                     content: {
-                      text: { runs: [{ type: 'text', text: 'Paragraph content' }] }
-                    }
+                      text: { runs: [{ type: 'text', text: 'Paragraph content' }] },
+                    },
                   },
                   {
                     id: 'heading-1',
                     blockType: 'https://xats.org/core/blocks/heading',
                     content: {
-                      text: { runs: [{ type: 'text', text: 'Heading Content' }] }
-                    }
+                      text: { runs: [{ type: 'text', text: 'Heading Content' }] },
+                    },
                   },
                   {
                     id: 'quote-1',
                     blockType: 'https://xats.org/core/blocks/blockquote',
                     content: {
-                      text: { runs: [{ type: 'text', text: 'Quoted text content' }] }
-                    }
+                      text: { runs: [{ type: 'text', text: 'Quoted text content' }] },
+                    },
                   },
                   {
                     id: 'list-1',
@@ -613,29 +636,29 @@ describe('Example Document Validation', () => {
                       listType: 'unordered',
                       items: [
                         {
-                          text: { runs: [{ type: 'text', text: 'First item' }] }
+                          text: { runs: [{ type: 'text', text: 'First item' }] },
                         },
                         {
-                          text: { runs: [{ type: 'text', text: 'Second item' }] }
-                        }
-                      ]
-                    }
+                          text: { runs: [{ type: 'text', text: 'Second item' }] },
+                        },
+                      ],
+                    },
                   },
                   {
                     id: 'code-1',
                     blockType: 'https://xats.org/core/blocks/codeBlock',
                     content: {
                       language: 'javascript',
-                      code: 'console.log("Hello, world!");'
-                    }
+                      code: 'console.log("Hello, world!");',
+                    },
                   },
                   {
                     id: 'math-1',
                     blockType: 'https://xats.org/core/blocks/mathBlock',
                     content: {
                       notation: 'latex',
-                      expression: '\\int_a^b f(x) dx'
-                    }
+                      expression: '\\int_a^b f(x) dx',
+                    },
                   },
                   {
                     id: 'table-1',
@@ -643,29 +666,29 @@ describe('Example Document Validation', () => {
                     content: {
                       headers: [
                         { runs: [{ type: 'text', text: 'Column 1' }] },
-                        { runs: [{ type: 'text', text: 'Column 2' }] }
+                        { runs: [{ type: 'text', text: 'Column 2' }] },
                       ],
                       rows: [
                         [
                           { runs: [{ type: 'text', text: 'Row 1, Col 1' }] },
-                          { runs: [{ type: 'text', text: 'Row 1, Col 2' }] }
-                        ]
-                      ]
-                    }
+                          { runs: [{ type: 'text', text: 'Row 1, Col 2' }] },
+                        ],
+                      ],
+                    },
                   },
                   {
                     id: 'toc-1',
                     blockType: 'https://xats.org/core/placeholders/tableOfContents',
                     content: {
-                      placeholder: true
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                      placeholder: true,
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -675,7 +698,7 @@ describe('Example Document Validation', () => {
       bibliographicEntry: {
         id: 'rich-text-001',
         type: 'book',
-        title: 'Rich Text Example'
+        title: 'Rich Text Example',
       },
       subject: 'Test',
       bodyMatter: {
@@ -702,17 +725,17 @@ describe('Example Document Validation', () => {
                           { type: 'reference', text: 'reference to chapter 2', refId: 'chapter-2' },
                           { type: 'text', text: ' and a ' },
                           { type: 'citation', refId: 'citation-1' },
-                          { type: 'text', text: '.' }
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                          { type: 'text', text: '.' },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -722,7 +745,7 @@ describe('Example Document Validation', () => {
       bibliographicEntry: {
         id: 'nested-001',
         type: 'book',
-        title: 'Nested Structure Example'
+        title: 'Nested Structure Example',
       },
       subject: 'Test',
       bodyMatter: {
@@ -747,19 +770,19 @@ describe('Example Document Validation', () => {
                             id: 'block-1',
                             blockType: 'https://xats.org/core/blocks/paragraph',
                             content: {
-                              text: { runs: [{ type: 'text', text: 'Nested content' }] }
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                              text: { runs: [{ type: 'text', text: 'Nested content' }] },
+                            },
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -769,7 +792,7 @@ describe('Example Document Validation', () => {
       bibliographicEntry: {
         id: 'learning-001',
         type: 'book',
-        title: 'Learning Objectives Example'
+        title: 'Learning Objectives Example',
       },
       subject: 'Test',
       learningOutcomes: [
@@ -779,10 +802,10 @@ describe('Example Document Validation', () => {
           subItems: [
             {
               id: 'outcome-1-1',
-              description: 'Understand basic concepts'
-            }
-          ]
-        }
+              description: 'Understand basic concepts',
+            },
+          ],
+        },
       ],
       bodyMatter: {
         contents: [
@@ -797,10 +820,10 @@ describe('Example Document Validation', () => {
                 subItems: [
                   {
                     id: 'obj-1-1',
-                    description: 'Understand terminology'
-                  }
-                ]
-              }
+                    description: 'Understand terminology',
+                  },
+                ],
+              },
             ],
             sections: [
               {
@@ -811,15 +834,15 @@ describe('Example Document Validation', () => {
                     id: 'block-1',
                     blockType: 'https://xats.org/core/blocks/paragraph',
                     content: {
-                      text: { runs: [{ type: 'text', text: 'Learning content' }] }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                      text: { runs: [{ type: 'text', text: 'Learning content' }] },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -829,7 +852,7 @@ describe('Example Document Validation', () => {
       bibliographicEntry: {
         id: 'resources-001',
         type: 'book',
-        title: 'Resources Example'
+        title: 'Resources Example',
       },
       subject: 'Test',
       resources: [
@@ -837,14 +860,14 @@ describe('Example Document Validation', () => {
           id: 'image-1',
           type: 'https://xats.org/core/resources/image',
           url: 'https://example.com/image.png',
-          altText: 'Example image'
+          altText: 'Example image',
         },
         {
           id: 'video-1',
           type: 'https://xats.org/core/resources/video',
           url: 'https://example.com/video.mp4',
-          altText: 'Example video'
-        }
+          altText: 'Example video',
+        },
       ],
       bodyMatter: {
         contents: [
@@ -862,17 +885,17 @@ describe('Example Document Validation', () => {
                     content: {
                       resourceId: 'image-1',
                       caption: {
-                        runs: [{ type: 'text', text: 'This is an example figure' }]
+                        runs: [{ type: 'text', text: 'This is an example figure' }],
                       },
-                      altText: 'Alternative text for the figure'
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                      altText: 'Alternative text for the figure',
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -882,7 +905,7 @@ describe('Example Document Validation', () => {
       bibliographicEntry: {
         id: 'full-001',
         type: 'book',
-        title: 'Complete Document Example'
+        title: 'Complete Document Example',
       },
       subject: 'Test',
       frontMatter: {
@@ -894,11 +917,11 @@ describe('Example Document Validation', () => {
               {
                 id: 'toc-placeholder',
                 blockType: 'https://xats.org/core/placeholders/tableOfContents',
-                content: { placeholder: true }
-              }
-            ]
-          }
-        ]
+                content: { placeholder: true },
+              },
+            ],
+          },
+        ],
       },
       bodyMatter: {
         contents: [
@@ -914,14 +937,14 @@ describe('Example Document Validation', () => {
                     id: 'block-1',
                     blockType: 'https://xats.org/core/blocks/paragraph',
                     content: {
-                      text: { runs: [{ type: 'text', text: 'Main content here' }] }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+                      text: { runs: [{ type: 'text', text: 'Main content here' }] },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
       backMatter: {
         sections: [
@@ -932,12 +955,12 @@ describe('Example Document Validation', () => {
               {
                 id: 'bib-placeholder',
                 blockType: 'https://xats.org/core/placeholders/bibliography',
-                content: { placeholder: true }
-              }
-            ]
-          }
-        ]
-      }
+                content: { placeholder: true },
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -947,7 +970,7 @@ describe('Example Document Validation', () => {
       bibliographicEntry: {
         id: 'deep-001',
         type: 'book',
-        title: 'Deeply Nested Example'
+        title: 'Deeply Nested Example',
       },
       subject: 'Test',
       bodyMatter: {
@@ -976,25 +999,25 @@ describe('Example Document Validation', () => {
                                 listType: 'unordered',
                                 items: [
                                   {
-                                    text: { runs: [{ type: 'text', text: 'Nested item 1' }] }
+                                    text: { runs: [{ type: 'text', text: 'Nested item 1' }] },
                                   },
                                   {
-                                    text: { runs: [{ type: 'text', text: 'Nested item 2' }] }
-                                  }
-                                ]
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                                    text: { runs: [{ type: 'text', text: 'Nested item 2' }] },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -1005,8 +1028,8 @@ describe('Example Document Validation', () => {
         id: `block-${i}`,
         blockType: 'https://xats.org/core/blocks/paragraph',
         content: {
-          text: { runs: [{ type: 'text', text: `Content block number ${i}` }] }
-        }
+          text: { runs: [{ type: 'text', text: `Content block number ${i}` }] },
+        },
       });
     }
 
@@ -1015,7 +1038,7 @@ describe('Example Document Validation', () => {
       bibliographicEntry: {
         id: 'many-blocks-001',
         type: 'book',
-        title: 'Many Blocks Example'
+        title: 'Many Blocks Example',
       },
       subject: 'Test',
       bodyMatter: {
@@ -1027,12 +1050,12 @@ describe('Example Document Validation', () => {
               {
                 id: 'section-1',
                 title: 'Content Section',
-                content: blocks
-              }
-            ]
-          }
-        ]
-      }
+                content: blocks,
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -1042,7 +1065,7 @@ describe('Example Document Validation', () => {
       bibliographicEntry: {
         id: 'complex-pathways-001',
         type: 'book',
-        title: 'Complex Pathways Example'
+        title: 'Complex Pathways Example',
       },
       subject: 'Test',
       bodyMatter: {
@@ -1054,43 +1077,43 @@ describe('Example Document Validation', () => {
               {
                 trigger: {
                   triggerType: 'https://xats.org/core/triggers/onAssessment',
-                  sourceId: 'quiz-1'
+                  sourceId: 'quiz-1',
                 },
                 rules: [
                   {
                     condition: 'score >= 90 AND time_spent < 300',
                     destinationId: 'advanced-track',
-                    pathwayType: 'https://xats.org/core/pathways/enrichment'
+                    pathwayType: 'https://xats.org/core/pathways/enrichment',
                   },
                   {
                     condition: 'score >= 70 AND score < 90',
                     destinationId: 'standard-track',
-                    pathwayType: 'https://xats.org/core/pathways/standard'
+                    pathwayType: 'https://xats.org/core/pathways/standard',
                   },
                   {
                     condition: 'score >= 50 AND score < 70 AND attempts <= 2',
                     destinationId: 'review-track',
-                    pathwayType: 'https://xats.org/core/pathways/remedial'
+                    pathwayType: 'https://xats.org/core/pathways/remedial',
                   },
                   {
                     condition: 'score < 50 OR attempts > 2',
                     destinationId: 'foundation-track',
-                    pathwayType: 'https://xats.org/core/pathways/prerequisite'
-                  }
-                ]
+                    pathwayType: 'https://xats.org/core/pathways/prerequisite',
+                  },
+                ],
               },
               {
                 trigger: {
-                  triggerType: 'https://xats.org/core/triggers/onCompletion'
+                  triggerType: 'https://xats.org/core/triggers/onCompletion',
                 },
                 rules: [
                   {
                     condition: 'completed == true',
                     destinationId: 'next-chapter',
-                    pathwayType: 'https://xats.org/core/pathways/standard'
-                  }
-                ]
-              }
+                    pathwayType: 'https://xats.org/core/pathways/standard',
+                  },
+                ],
+              },
             ],
             sections: [
               {
@@ -1101,15 +1124,15 @@ describe('Example Document Validation', () => {
                     id: 'block-1',
                     blockType: 'https://xats.org/core/blocks/paragraph',
                     content: {
-                      text: { runs: [{ type: 'text', text: 'Content with complex pathways' }] }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
+                      text: { runs: [{ type: 'text', text: 'Content with complex pathways' }] },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 });

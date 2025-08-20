@@ -23,40 +23,20 @@ export const featuresExample: XatsDocument = {
     },
   },
   subject: 'Technology',
-  fileModularity: {
-    baseUri: 'https://example.com/textbook/',
-    files: [
-      {
-        id: 'main',
-        path: 'index.json',
-        type: 'primary',
-        description: 'Main document structure',
-      },
-      {
-        id: 'chapter-1-content',
-        path: 'chapters/chapter-1.json',
-        type: 'content',
-        description: 'Chapter 1 content blocks',
-      },
-      {
-        id: 'media',
-        path: 'media/manifest.json',
-        type: 'media',
-        description: 'Media asset manifest',
-      },
-    ],
-  },
   bodyMatter: {
-    id: 'body',
-    type: 'bodyMatter',
     contents: [
       {
         id: 'chapter-1',
-        type: 'chapter',
-        title: 'Interactive Learning',
+        title: {
+          runs: [
+            {
+              type: 'text',
+              text: 'Interactive Learning',
+            },
+          ],
+        },
         fileReference: {
-          fileId: 'chapter-1-content',
-          selector: '#content',
+          $ref: 'chapter-1-content.json',
         },
         contents: [
           {
@@ -105,56 +85,9 @@ export const featuresExample: XatsDocument = {
                 },
               ],
             },
-            annotations: [
-              {
-                id: 'ann-1',
-                type: 'instructor',
-                targetRange: { start: 0, end: 28 },
-                content: {
-                  runs: [
-                    {
-                      type: 'text',
-                      text: 'This is the small angle approximation',
-                    },
-                  ],
-                },
-                visibility: 'instructor-only',
-              },
-              {
-                id: 'ann-2',
-                type: 'student',
-                targetRange: { start: 29, end: 50 },
-                content: {
-                  runs: [
-                    {
-                      type: 'text',
-                      text: 'Remember to check units!',
-                    },
-                  ],
-                },
-                author: 'student-123',
-                timestamp: '2025-01-20T10:30:00Z',
-              },
-            ],
           },
         ],
       },
     ],
-  },
-  analytics: {
-    enabled: true,
-    providers: [
-      {
-        type: 'xapi',
-        endpoint: 'https://lrs.example.com/xapi',
-        version: '1.0.3',
-      },
-    ],
-    dataCollection: {
-      pageViews: true,
-      timeOnPage: true,
-      interactions: true,
-      assessmentScores: true,
-    },
   },
 };

@@ -2,24 +2,25 @@
  * @xats/mcp-server - Transform Tool Implementation
  */
 
-import type { XatsDocument, SemanticText, XatsVersion } from '@xats/types';
-import type { 
-  TransformInput, 
-  TransformResult, 
-  TransformChange,
-  McpServerConfig 
-} from '../types.js';
 import { TransformError } from '../types.js';
+
+import type {
+  TransformInput,
+  TransformResult,
+  TransformChange,
+  McpServerConfig,
+} from '../types.js';
+import type { XatsDocument, SemanticText, XatsVersion } from '@xats/types';
 
 /**
  * Convert SemanticText to plain text
  */
 function semanticTextToPlainText(semanticText: SemanticText | undefined): string {
   if (!semanticText?.runs) return '';
-  
+
   return semanticText.runs
-    .filter(run => run.type === 'text')
-    .map(run => run.text || '')
+    .filter((run) => run.type === 'text')
+    .map((run) => run.text || '')
     .join(' ');
 }
 
@@ -28,9 +29,9 @@ function semanticTextToPlainText(semanticText: SemanticText | undefined): string
  */
 function semanticTextToMarkdown(semanticText: SemanticText | undefined): string {
   if (!semanticText?.runs) return '';
-  
+
   return semanticText.runs
-    .map(run => {
+    .map((run) => {
       switch (run.type) {
         case 'text':
           return 'text' in run ? run.text : '';
@@ -54,9 +55,9 @@ function semanticTextToMarkdown(semanticText: SemanticText | undefined): string 
  */
 function semanticTextToHtml(semanticText: SemanticText | undefined): string {
   if (!semanticText?.runs) return '';
-  
+
   return semanticText.runs
-    .map(run => {
+    .map((run) => {
       switch (run.type) {
         case 'text':
           return escapeHtml('text' in run ? run.text : '');
@@ -91,7 +92,7 @@ function escapeHtml(text: string): string {
  * Transform document to JSON (clean/restructured)
  */
 function transformToJson(
-  document: XatsDocument, 
+  document: XatsDocument,
   options: TransformInput['options']
 ): { document: XatsDocument; changes: TransformChange[] } {
   const changes: TransformChange[] = [];
@@ -116,10 +117,11 @@ function transformToJson(
         container.contents = container.contents.filter((item: any, index: number) => {
           if ('blockType' in item) {
             const blockType = item.blockType;
-            const isAssessment = blockType.includes('assessment') || 
-                               blockType.includes('quiz') || 
-                               blockType.includes('test');
-            
+            const isAssessment =
+              blockType.includes('assessment') ||
+              blockType.includes('quiz') ||
+              blockType.includes('test');
+
             if (isAssessment) {
               changes.push({
                 type: 'removed',
@@ -172,7 +174,7 @@ function transformToJson(
  * Transform document to Markdown
  */
 function transformToMarkdown(
-  document: XatsDocument, 
+  document: XatsDocument,
   options: TransformInput['options']
 ): { content: string; changes: TransformChange[] } {
   const changes: TransformChange[] = [];
@@ -185,8 +187,11 @@ function transformToMarkdown(
 
   // Add author if available
   if (document.bibliographicEntry?.author) {
-    const authors = Array.isArray(document.bibliographicEntry.author) 
-      ? document.bibliographicEntry.author.map(a => a.family || a.given || '').filter(Boolean).join(', ')
+    const authors = Array.isArray(document.bibliographicEntry.author)
+      ? document.bibliographicEntry.author
+          .map((a) => a.family || a.given || '')
+          .filter(Boolean)
+          .join(', ')
       : String(document.bibliographicEntry.author || '');
     markdown += `**Author:** ${authors}\n\n`;
   }
@@ -228,8 +233,10 @@ function transformToMarkdown(
                 const blockType = block.blockType;
 
                 // Skip assessments if requested
-                if (options?.stripAssessments && 
-                    (blockType.includes('assessment') || blockType.includes('quiz'))) {
+                if (
+                  options?.stripAssessments &&
+                  (blockType.includes('assessment') || blockType.includes('quiz'))
+                ) {
                   changes.push({
                     type: 'removed',
                     path: `block.${block.id}`,
@@ -263,7 +270,7 @@ function transformToMarkdown(
                   if (content?.text) {
                     const quotedText = semanticTextToMarkdown(content.text)
                       .split('\n')
-                      .map(line => `> ${line}`)
+                      .map((line) => `> ${line}`)
                       .join('\n');
                     markdown += `${quotedText}\n\n`;
                   }
@@ -298,20 +305,20 @@ function transformToMarkdown(
  * Transform document to HTML
  */
 function transformToHtml(
-  document: XatsDocument, 
+  document: XatsDocument,
   options: TransformInput['options']
 ): { content: string; changes: TransformChange[] } {
   const changes: TransformChange[] = [];
   let html = `<!DOCTYPE html>\n<html lang="${document.lang || 'en'}">\n<head>\n`;
-  
+
   // Add metadata
   if (document.bibliographicEntry?.title) {
     html += `  <title>${escapeHtml(String(document.bibliographicEntry.title))}</title>\n`;
   }
-  
+
   html += `  <meta charset="UTF-8">\n`;
   html += `  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n`;
-  
+
   if (document.subject) {
     html += `  <meta name="subject" content="${escapeHtml(String(document.subject))}">\n`;
   }
@@ -325,8 +332,11 @@ function transformToHtml(
 
   // Add author information
   if (document.bibliographicEntry?.author) {
-    const authors = Array.isArray(document.bibliographicEntry.author) 
-      ? document.bibliographicEntry.author.map(a => a.family || a.given || '').filter(Boolean).join(', ')
+    const authors = Array.isArray(document.bibliographicEntry.author)
+      ? document.bibliographicEntry.author
+          .map((a) => a.family || a.given || '')
+          .filter(Boolean)
+          .join(', ')
       : String(document.bibliographicEntry.author || '');
     html += `  <p class="author"><strong>Author:</strong> ${escapeHtml(authors)}</p>\n`;
   }
@@ -335,7 +345,7 @@ function transformToHtml(
   if (document.bodyMatter?.contents) {
     for (const container of document.bodyMatter.contents) {
       html += `  <section>\n`;
-      
+
       if ('title' in container && container.title) {
         html += `    <h2>${semanticTextToHtml(container.title)}</h2>\n`;
       }
@@ -358,7 +368,7 @@ function transformToHtml(
       if ('contents' in container && container.contents) {
         for (const section of container.contents) {
           html += `    <section>\n`;
-          
+
           if ('title' in section && section.title) {
             html += `      <h3>${semanticTextToHtml(section.title)}</h3>\n`;
           }
@@ -370,8 +380,10 @@ function transformToHtml(
                 const blockType = block.blockType;
 
                 // Skip assessments if requested
-                if (options?.stripAssessments && 
-                    (blockType.includes('assessment') || blockType.includes('quiz'))) {
+                if (
+                  options?.stripAssessments &&
+                  (blockType.includes('assessment') || blockType.includes('quiz'))
+                ) {
                   changes.push({
                     type: 'removed',
                     path: `block.${block.id}`,
@@ -423,11 +435,11 @@ function transformToHtml(
               }
             }
           }
-          
+
           html += `    </section>\n`;
         }
       }
-      
+
       html += `  </section>\n`;
     }
   }
@@ -448,7 +460,7 @@ function transformToHtml(
  * Transform document to plain text
  */
 function transformToText(
-  document: XatsDocument, 
+  document: XatsDocument,
   options: TransformInput['options']
 ): { content: string; changes: TransformChange[] } {
   const changes: TransformChange[] = [];
@@ -457,13 +469,16 @@ function transformToText(
   // Add title
   if (document.bibliographicEntry?.title) {
     text += `${document.bibliographicEntry.title}\n`;
-    text += '='.repeat(document.bibliographicEntry.title.length) + '\n\n';
+    text += `${'='.repeat(document.bibliographicEntry.title.length)}\n\n`;
   }
 
   // Add author
   if (document.bibliographicEntry?.author) {
-    const authors = Array.isArray(document.bibliographicEntry.author) 
-      ? document.bibliographicEntry.author.map(a => a.family || a.given || '').filter(Boolean).join(', ')
+    const authors = Array.isArray(document.bibliographicEntry.author)
+      ? document.bibliographicEntry.author
+          .map((a) => a.family || a.given || '')
+          .filter(Boolean)
+          .join(', ')
       : String(document.bibliographicEntry.author || '');
     text += `Author: ${authors}\n\n`;
   }
@@ -479,7 +494,7 @@ function transformToText(
       if ('title' in container && container.title) {
         const title = semanticTextToPlainText(container.title);
         text += `${title}\n`;
-        text += '-'.repeat(title.length) + '\n\n';
+        text += `${'-'.repeat(title.length)}\n\n`;
       }
 
       // Add learning objectives
@@ -507,8 +522,10 @@ function transformToText(
                 const blockType = block.blockType;
 
                 // Skip assessments if requested
-                if (options?.stripAssessments && 
-                    (blockType.includes('assessment') || blockType.includes('quiz'))) {
+                if (
+                  options?.stripAssessments &&
+                  (blockType.includes('assessment') || blockType.includes('quiz'))
+                ) {
                   changes.push({
                     type: 'removed',
                     path: `block.${block.id}`,
@@ -553,19 +570,19 @@ function transformToText(
  * Migrate document to different schema version
  */
 function migrateVersion(
-  document: XatsDocument, 
+  document: XatsDocument,
   targetVersion: XatsVersion
 ): { document: XatsDocument; changes: TransformChange[] } {
   const changes: TransformChange[] = [];
   const currentVersion = document.schemaVersion;
-  
+
   if (currentVersion === targetVersion) {
     return { document, changes };
   }
 
   // Clone the document
   const migratedDocument: XatsDocument = JSON.parse(JSON.stringify(document));
-  
+
   // Update schema version
   migratedDocument.schemaVersion = targetVersion;
   changes.push({

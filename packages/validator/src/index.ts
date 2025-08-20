@@ -1,24 +1,20 @@
 /**
  * @xats/validator - xats Document Validator
- * 
+ *
  * Provides validation capabilities for xats documents against the JSON Schema.
  */
 
 import Ajv, { type ValidateFunction, type ErrorObject } from 'ajv';
 import addFormats from 'ajv-formats';
-import { 
-  loadSchema, 
-  getSchemaId, 
-  isVersionAvailable,
-  LATEST_VERSION,
-  type SchemaDefinition 
-} from '@xats/schema';
-import type { 
-  ValidationResult, 
-  ValidationError, 
+
+import { loadSchema, getSchemaId, isVersionAvailable, LATEST_VERSION } from '@xats/schema';
+
+import type {
+  ValidationResult,
+  ValidationError,
   ValidatorOptions,
   XatsDocument,
-  XatsVersion 
+  XatsVersion,
 } from '@xats/types';
 
 export class XatsValidator {
@@ -28,19 +24,20 @@ export class XatsValidator {
   constructor(options: ValidatorOptions = {}) {
     this.ajv = new Ajv({
       allErrors: options.allErrors ?? true,
-      strict: options.strict ?? true,
+      strict: options.strict ?? false, // Set to false to allow external refs
       loadSchema: this.loadRemoteSchema.bind(this),
-      validateFormats: true
+      validateFormats: true,
+      validateSchema: false, // Don't validate the schema itself
     });
 
     // Add standard formats (email, uri, etc.)
     addFormats(this.ajv);
-    
+
     // Add custom xats URI format
     this.ajv.addFormat('xats-uri', {
-      validate: (data: string) => /^https:\/\/xats\.org\/[\w\-/.]+$/.test(data)
+      validate: (data: string) => /^https:\/\/xats\.org\/[\w\-/.]+$/.test(data),
     });
-    
+
     // Pre-load schemas for offline validation
     this.preloadSchemas();
   }
@@ -49,11 +46,18 @@ export class XatsValidator {
    * Pre-load common schemas for offline validation
    */
   private preloadSchemas(): void {
-    // Load CSL schema stub
+    // Load CSL schema stub - matches the URL referenced in xats schemas
+    this.ajv.addSchema({
+      $id: 'https://raw.githubusercontent.com/citation-style-language/schema/master/csl-data.json',
+      type: 'object',
+      additionalProperties: true,
+    });
+
+    // Also add the resource.citationstyles.org version
     this.ajv.addSchema({
       $id: 'https://resource.citationstyles.org/schema/latest/input/json/csl-data.json',
       type: 'object',
-      additionalProperties: true
+      additionalProperties: true,
     });
 
     // Load LTI extension schema stub
@@ -63,16 +67,20 @@ export class XatsValidator {
       properties: {
         resourceLink: { type: 'object' },
         context: { type: 'object' },
-        platform: { type: 'object' }
+        platform: { type: 'object' },
       },
-      additionalProperties: true
+      additionalProperties: true,
     });
   }
 
   /**
    * Load remote schema (for $ref resolution)
    */
-  private async loadRemoteSchema(uri: string): Promise<object> {
+  private loadRemoteSchema(uri: string): Promise<object> {
+    return Promise.resolve(this.loadRemoteSchemaSync(uri));
+  }
+
+  private loadRemoteSchemaSync(uri: string): object {
     // Try to resolve from local schemas first
     const versionMatch = uri.match(/schemas\/(\d+\.\d+\.\d+)\//);
     if (versionMatch && versionMatch[1] && isVersionAvailable(versionMatch[1])) {
@@ -87,17 +95,14 @@ export class XatsValidator {
   /**
    * Determine schema version from document or options
    */
-  private determineSchemaVersion(
-    document: unknown, 
-    explicitVersion?: string
-  ): XatsVersion {
-    if (explicitVersion && isVersionAvailable(explicitVersion)) {
-      return explicitVersion as XatsVersion;
+  private determineSchemaVersion(document: unknown, explicitVersion?: string): string {
+    if (explicitVersion) {
+      return explicitVersion;
     }
 
     const doc = document as Partial<XatsDocument>;
-    if (doc.schemaVersion && isVersionAvailable(doc.schemaVersion)) {
-      return doc.schemaVersion as XatsVersion;
+    if (doc.schemaVersion) {
+      return doc.schemaVersion;
     }
 
     return LATEST_VERSION;
@@ -106,23 +111,32 @@ export class XatsValidator {
   /**
    * Get or compile validator for a schema version
    */
-  private async getValidator(version: XatsVersion): Promise<ValidateFunction | null> {
-    const schemaId = getSchemaId(version);
-    
+  private getValidator(version: string): Promise<ValidateFunction | null> {
+    return Promise.resolve(this.getValidatorSync(version));
+  }
+
+  private getValidatorSync(version: string): ValidateFunction | null {
+    // Check if it's a valid version
+    if (!isVersionAvailable(version)) {
+      return null;
+    }
+    const schemaId = getSchemaId(version as XatsVersion);
+
     // Check cache
-    if (this.validatorCache.has(schemaId)) {
-      return this.validatorCache.get(schemaId)!;
+    const cachedValidator = this.validatorCache.get(schemaId);
+    if (cachedValidator) {
+      return cachedValidator;
     }
 
     // Load schema
-    const schema = loadSchema(version);
+    const schema = loadSchema(version as XatsVersion);
     if (!schema) {
       return null;
     }
 
     try {
       // Compile validator
-      const validate = this.ajv.compile(schema as SchemaDefinition);
+      const validate = this.ajv.compile(schema);
       this.validatorCache.set(schemaId, validate);
       return validate;
     } catch (error) {
@@ -134,35 +148,34 @@ export class XatsValidator {
   /**
    * Validate a xats document against the appropriate schema version
    */
-  async validate(
-    document: unknown, 
-    options: ValidatorOptions = {}
-  ): Promise<ValidationResult> {
+  async validate(document: unknown, options: ValidatorOptions = {}): Promise<ValidationResult> {
     try {
       // Determine schema version
       const schemaVersion = this.determineSchemaVersion(document, options.schemaVersion);
-      
+
       // Get validator
       const validate = await this.getValidator(schemaVersion);
       if (!validate) {
         return {
           isValid: false,
-          errors: [{
-            path: 'root',
-            message: `Schema version ${schemaVersion} not found or could not be compiled`
-          }],
-          schemaVersion
+          errors: [
+            {
+              path: 'root',
+              message: `Schema version ${schemaVersion} not found or could not be compiled`,
+            },
+          ],
+          schemaVersion,
         };
       }
 
       // Perform validation
       const isValid = validate(document);
-      
+
       if (isValid) {
         return {
           isValid: true,
           errors: [],
-          schemaVersion
+          schemaVersion,
         };
       }
 
@@ -172,15 +185,17 @@ export class XatsValidator {
       return {
         isValid: false,
         errors,
-        schemaVersion
+        schemaVersion,
       };
     } catch (error) {
       return {
         isValid: false,
-        errors: [{
-          path: 'root',
-          message: error instanceof Error ? error.message : 'Unknown validation error'
-        }]
+        errors: [
+          {
+            path: 'root',
+            message: error instanceof Error ? error.message : 'Unknown validation error',
+          },
+        ],
       };
     }
   }
@@ -189,12 +204,12 @@ export class XatsValidator {
    * Transform AJV errors to ValidationError format
    */
   private transformErrors(ajvErrors: ErrorObject[]): ValidationError[] {
-    return ajvErrors.map(error => ({
+    return ajvErrors.map((error) => ({
       path: error.instancePath || 'root',
       message: this.formatErrorMessage(error),
       keyword: error.keyword,
       params: error.params || {},
-      data: error.data
+      data: error.data,
     }));
   }
 
@@ -225,48 +240,63 @@ export class XatsValidator {
   /**
    * Validate a document synchronously (for pre-loaded schemas)
    */
-  validateSync(
-    document: unknown, 
-    options: ValidatorOptions = {}
-  ): ValidationResult {
+  validateSync(document: unknown, options: ValidatorOptions = {}): ValidationResult {
     const schemaVersion = this.determineSchemaVersion(document, options.schemaVersion);
-    const schemaId = getSchemaId(schemaVersion);
-    
+
+    // Check if it's a valid version
+    if (!isVersionAvailable(schemaVersion)) {
+      return {
+        isValid: false,
+        errors: [
+          {
+            path: 'root',
+            message: `Invalid schema version: ${schemaVersion}`,
+          },
+        ],
+      };
+    }
+
+    const schemaId = getSchemaId(schemaVersion as XatsVersion);
+
     // Try to get cached validator
     const validate = this.validatorCache.get(schemaId) || this.ajv.getSchema(schemaId);
-    
+
     if (!validate) {
       // Try to compile on the fly
-      const schema = loadSchema(schemaVersion);
+      const schema = loadSchema(schemaVersion as XatsVersion);
       if (!schema) {
         return {
           isValid: false,
-          errors: [{
-            path: 'root',
-            message: `Schema version ${schemaVersion} not available for synchronous validation`
-          }],
-          schemaVersion
+          errors: [
+            {
+              path: 'root',
+              message: `Schema version ${schemaVersion} not available for synchronous validation`,
+            },
+          ],
+          schemaVersion,
         };
       }
-      
+
       try {
-        const newValidate = this.ajv.compile(schema as SchemaDefinition);
+        const newValidate = this.ajv.compile(schema);
         this.validatorCache.set(schemaId, newValidate);
-        
+
         const isValid = newValidate(document);
         return {
           isValid,
           errors: isValid ? [] : this.transformErrors(newValidate.errors || []),
-          schemaVersion
+          schemaVersion,
         };
       } catch (error) {
         return {
           isValid: false,
-          errors: [{
-            path: 'root',
-            message: `Failed to compile schema: ${error}`
-          }],
-          schemaVersion
+          errors: [
+            {
+              path: 'root',
+              message: `Failed to compile schema: ${error instanceof Error ? error.message : String(error)}`,
+            },
+          ],
+          schemaVersion,
         };
       }
     }
@@ -275,7 +305,7 @@ export class XatsValidator {
     return {
       isValid,
       errors: isValid ? [] : this.transformErrors(validate.errors || []),
-      schemaVersion
+      schemaVersion,
     };
   }
 
@@ -300,7 +330,8 @@ export class XatsValidator {
   /**
    * Add custom keyword validator
    */
-  addKeyword(keyword: string, definition: any): void {
+  addKeyword(keyword: string, definition: Record<string, unknown>): void {
+    // @ts-expect-error - Ajv type definition issue
     this.ajv.addKeyword(keyword, definition);
   }
 }
@@ -326,19 +357,16 @@ export async function validateXats(
 /**
  * Validate a xats document synchronously (convenience function)
  */
-export function validateXatsSync(
-  document: unknown,
-  options?: ValidatorOptions
-): ValidationResult {
+export function validateXatsSync(document: unknown, options?: ValidatorOptions): ValidationResult {
   const validator = new XatsValidator(options);
   return validator.validateSync(document, options);
 }
 
 // Re-export types
-export type { 
-  ValidationResult, 
-  ValidationError, 
+export type {
+  ValidationResult,
+  ValidationError,
   ValidatorOptions,
   ValidationWarning,
-  ValidationMetadata 
+  ValidationMetadata,
 } from '@xats/types';

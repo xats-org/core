@@ -1,11 +1,16 @@
 /**
  * @xats/mcp-server - Tools Index
- * 
+ *
  * Exports all MCP tools and utilities
  */
 
 // Tool implementations
-export { validateTool, validateToolSync, validateBatchTool, getValidationSummary } from './validate.js';
+export {
+  validateTool,
+  validateToolSync,
+  validateBatchTool,
+  getValidationSummary,
+} from './validate.js';
 export { createTool, getAvailableTemplates } from './create.js';
 export { analyzeTool, getAnalysisSummary } from './analyze.js';
 export { extractTool, getExtractionTypes, getCommonPaths } from './extract.js';
@@ -112,8 +117,10 @@ export function getToolsByCategory(category: keyof typeof TOOL_CATEGORIES) {
   if (!categoryInfo) {
     return [];
   }
-  
-  return categoryInfo.tools.map(toolName => TOOL_REGISTRY[toolName as keyof typeof TOOL_REGISTRY]);
+
+  return categoryInfo.tools.map(
+    (toolName) => TOOL_REGISTRY[toolName as keyof typeof TOOL_REGISTRY]
+  );
 }
 
 /**

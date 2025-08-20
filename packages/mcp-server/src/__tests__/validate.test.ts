@@ -3,7 +3,14 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { validateTool, validateToolSync, validateBatchTool, getValidationSummary } from '../tools/validate.js';
+
+import {
+  validateTool,
+  validateToolSync,
+  validateBatchTool,
+  getValidationSummary,
+} from '../tools/validate.js';
+
 import type { ValidateInput, McpServerConfig } from '../types.js';
 
 // Mock validator
@@ -152,7 +159,8 @@ describe('validateTool', () => {
     it('should validate multiple documents', async () => {
       const { createValidator } = await import('@xats/validator');
       const mockValidator = {
-        validate: vi.fn()
+        validate: vi
+          .fn()
           .mockResolvedValueOnce({
             isValid: true,
             errors: [],
@@ -202,9 +210,7 @@ describe('validateTool', () => {
           success: true,
           data: {
             isValid: false,
-            errors: [
-              { keyword: 'required', message: 'Another missing field' },
-            ],
+            errors: [{ keyword: 'required', message: 'Another missing field' }],
           },
         },
       ];

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument */
 /**
  * Schema Validation Test Suite Index
- * 
+ *
  * Comprehensive test suite for xats schema validation that imports
  * and runs all schema validation tests. This file serves as the
  * main entry point for schema testing and provides an overview
@@ -23,16 +24,16 @@ describe('Schema Validation Test Suite', () => {
   it('should have comprehensive test coverage', () => {
     // This test documents the test suite structure and ensures
     // all test categories are included
-    
+
     const testCategories = [
       'Schema Structure Validation',
-      'Definition Reference Validation', 
+      'Definition Reference Validation',
       'Required Field Validation',
       'Type Constraint Validation',
       'Pattern and Format Validation',
       'Example Document Validation',
       'Edge Case Validation',
-      'Performance Validation'
+      'Performance Validation',
     ];
 
     // Verify test suite completeness
@@ -49,55 +50,55 @@ describe('Schema Validation Test Suite', () => {
 
   it('should provide comprehensive schema coverage', () => {
     // Document the key schema areas covered by the test suite
-    
+
     const schemaCoverageAreas = [
       // Core Schema Structure
       'JSON Schema meta-validation',
       'Schema metadata and IDs',
       'Root properties and constraints',
       'Definitions structure',
-      
+
       // Reference Integrity
       'Internal reference validation',
       'External reference validation',
       'Inheritance chains (XatsObject, StructuralContainer)',
       'Definition usage tracking',
-      
+
       // Field Requirements
       'Required field enforcement',
       'Optional field handling',
       'Nested object requirements',
       'Array element requirements',
-      
+
       // Type Validation
       'Primitive type constraints',
       'Complex type validation',
       'Enum value enforcement',
       'Const value validation',
-      
+
       // Format Validation
       'URI format validation',
       'Pattern matching',
       'Special character handling',
       'Internationalization support',
-      
+
       // Real-World Usage
       'Valid example documents',
       'Invalid example documents',
       'Complex document structures',
       'Nested content validation',
-      
+
       // Edge Cases
       'Boundary conditions',
       'Empty structures',
       'Large data sets',
       'Unicode and special characters',
-      
+
       // Performance
       'Validation speed',
       'Memory usage',
       'Concurrent validation',
-      'Scalability'
+      'Scalability',
     ];
 
     expect(schemaCoverageAreas.length).toBeGreaterThan(20);
@@ -105,10 +106,10 @@ describe('Schema Validation Test Suite', () => {
 
   it('should test all core schema definitions', () => {
     // Document all schema definitions that should be tested
-    
+
     const coreDefinitions = [
       'XatsObject',
-      'StructuralContainer', 
+      'StructuralContainer',
       'SemanticText',
       'ContentBlock',
       'Unit',
@@ -128,13 +129,13 @@ describe('Schema Validation Test Suite', () => {
       'ReferenceRun',
       'CitationRun',
       'EmphasisRun',
-      'StrongRun'
+      'StrongRun',
     ];
 
     expect(coreDefinitions.length).toBeGreaterThanOrEqual(21);
-    
+
     // Each definition should be covered by multiple test categories
-    coreDefinitions.forEach(definition => {
+    coreDefinitions.forEach((definition) => {
       expect(typeof definition).toBe('string');
       expect(definition.length).toBeGreaterThan(0);
     });
@@ -142,7 +143,7 @@ describe('Schema Validation Test Suite', () => {
 
   it('should test all core block types', () => {
     // Document all core block types that should be tested
-    
+
     const coreBlockTypes = [
       'https://xats.org/core/blocks/paragraph',
       'https://xats.org/core/blocks/heading',
@@ -154,33 +155,33 @@ describe('Schema Validation Test Suite', () => {
       'https://xats.org/core/blocks/figure',
       'https://xats.org/core/placeholders/tableOfContents',
       'https://xats.org/core/placeholders/bibliography',
-      'https://xats.org/core/placeholders/index'
+      'https://xats.org/core/placeholders/index',
     ];
 
     expect(coreBlockTypes.length).toBe(11);
-    
+
     // Each block type should be a valid URI
-    coreBlockTypes.forEach(blockType => {
+    coreBlockTypes.forEach((blockType) => {
       expect(blockType).toMatch(/^https:\/\/xats\.org\/core\/(blocks|placeholders)\//);
     });
   });
 
   it('should achieve target test coverage metrics', () => {
     // Document target coverage metrics for the schema validation
-    
+
     const coverageTargets = {
       schemaValidation: '>90%', // Schema structure and definition coverage
-      fieldValidation: '>95%',  // Required and optional field coverage
-      typeValidation: '>90%',   // Type constraint coverage
+      fieldValidation: '>95%', // Required and optional field coverage
+      typeValidation: '>90%', // Type constraint coverage
       formatValidation: '>85%', // Pattern and format coverage
-      exampleCoverage: '>95%',  // Valid and invalid example coverage
+      exampleCoverage: '>95%', // Valid and invalid example coverage
       edgeCaseCoverage: '>80%', // Edge case and boundary coverage
-      performanceCoverage: '>75%' // Performance characteristic coverage
+      performanceCoverage: '>75%', // Performance characteristic coverage
     };
 
     // Verify coverage targets are defined
     expect(Object.keys(coverageTargets).length).toBe(7);
-    
+
     Object.entries(coverageTargets).forEach(([area, target]) => {
       expect(area).toBeTruthy();
       expect(target).toMatch(/>\d+%/);
