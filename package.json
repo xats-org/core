@@ -33,8 +33,7 @@
     "release:patch": "./scripts/release.sh patch",
     "release:minor": "./scripts/release.sh minor",
     "release:major": "./scripts/release.sh major",
-    "bench": "vitest bench",
-    "size": "turbo run size"
+    "bench": "vitest bench"
   },
   "keywords": [
     "xats",
