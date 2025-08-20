@@ -11,6 +11,9 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "vitest run tests/e2e",
+    "test:all": "pnpm test && pnpm test:integration && pnpm test:e2e",
     "test:turbo": "turbo run test",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
@@ -29,7 +32,9 @@
     "release": "./scripts/release.sh",
     "release:patch": "./scripts/release.sh patch",
     "release:minor": "./scripts/release.sh minor",
-    "release:major": "./scripts/release.sh major"
+    "release:major": "./scripts/release.sh major",
+    "bench": "vitest bench",
+    "size": "turbo run size"
   },
   "keywords": [
     "xats",
