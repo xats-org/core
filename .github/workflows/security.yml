@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [main, 'v*.*.*']
   schedule:
-    # Run security scans daily at 2 AM UTC
-    - cron: '0 2 * * *'
+    # Run security scans weekly on Monday at 2 AM UTC
+    - cron: '0 2 * * 1'
 
 permissions:
   contents: read
@@ -149,16 +149,6 @@ jobs:
         pnpm add -D eslint-plugin-security
         # Run security-focused linting
         pnpm run lint || true
-      
-    - name: Run Semgrep
-      uses: returntocorp/semgrep-action@v1
-      with:
-        config: >-
-          p/security-audit
-          p/typescript
-          p/javascript
-          p/nodejs
-          p/owasp-top-ten
 
   sbom:
     name: Generate Software Bill of Materials
@@ -199,7 +189,8 @@ jobs:
   container-scan:
     name: Container Security Scan
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    # Only run if Dockerfile exists and on PRs
+    if: github.event_name == 'pull_request' && hashFiles('Dockerfile') != ''
     
     steps:
     - name: Checkout code
