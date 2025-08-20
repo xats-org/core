@@ -19,7 +19,7 @@ export function createSemanticText(text: string): SemanticText {
  */
 export function extractPlainText(semanticText: SemanticText): string {
   return semanticText.runs
-    .map(run => {
+    .map((run) => {
       switch (run.type) {
         case 'text':
         case 'emphasis':
@@ -48,7 +48,7 @@ export function extractPlainText(semanticText: SemanticText): string {
  */
 export function countWords(semanticText: SemanticText): number {
   const text = extractPlainText(semanticText);
-  return text.split(/\s+/).filter(word => word.length > 0).length;
+  return text.split(/\s+/).filter((word) => word.length > 0).length;
 }
 
 /**
@@ -57,7 +57,7 @@ export function countWords(semanticText: SemanticText): number {
 export function isEmptySemanticText(semanticText: SemanticText): boolean {
   return (
     semanticText.runs.length === 0 ||
-    semanticText.runs.every(run => {
+    semanticText.runs.every((run) => {
       switch (run.type) {
         case 'text':
         case 'emphasis':
@@ -87,50 +87,55 @@ export function isEmptySemanticText(semanticText: SemanticText): boolean {
  */
 export function mergeConsecutiveRuns(semanticText: SemanticText): SemanticText {
   const mergedRuns: SemanticTextRun[] = [];
-  
+
   for (const run of semanticText.runs) {
     const lastRun = mergedRuns[mergedRuns.length - 1];
-    
+
     if (
       lastRun &&
       lastRun.type === run.type &&
       'text' in lastRun &&
       'text' in run &&
-      (run.type === 'text' || run.type === 'emphasis' || run.type === 'strong' || 
-       run.type === 'code' || run.type === 'subscript' || run.type === 'superscript' ||
-       run.type === 'strikethrough' || run.type === 'underline' || run.type === 'index')
+      (run.type === 'text' ||
+        run.type === 'emphasis' ||
+        run.type === 'strong' ||
+        run.type === 'code' ||
+        run.type === 'subscript' ||
+        run.type === 'superscript' ||
+        run.type === 'strikethrough' ||
+        run.type === 'underline' ||
+        run.type === 'index')
     ) {
       // Merge consecutive text runs of the same type
-      (lastRun as any).text += (run as any).text;
+      if ('text' in lastRun && 'text' in run) {
+        (lastRun as { text: string }).text += (run as { text: string }).text;
+      }
     } else {
       mergedRuns.push({ ...run });
     }
   }
-  
+
   return { runs: mergedRuns };
 }
 
 /**
  * Split a SemanticText object by a delimiter
  */
-export function splitSemanticText(
-  semanticText: SemanticText,
-  delimiter: string
-): SemanticText[] {
+export function splitSemanticText(semanticText: SemanticText, delimiter: string): SemanticText[] {
   const results: SemanticText[] = [];
   let currentRuns: SemanticTextRun[] = [];
-  
+
   for (const run of semanticText.runs) {
     if ('text' in run) {
       const parts = run.text.split(delimiter);
-      
+
       for (let i = 0; i < parts.length; i++) {
         if (i > 0) {
           // Found delimiter, start new SemanticText
           results.push({ runs: currentRuns });
           currentRuns = [];
         }
-        
+
         if (parts[i]) {
           currentRuns.push({
             ...run,
@@ -142,11 +147,11 @@ export function splitSemanticText(
       currentRuns.push(run);
     }
   }
-  
+
   if (currentRuns.length > 0) {
     results.push({ runs: currentRuns });
   }
-  
+
   return results;
 }
 
@@ -160,7 +165,7 @@ export function truncateSemanticText(
 ): SemanticText {
   let currentLength = 0;
   const truncatedRuns: SemanticTextRun[] = [];
-  
+
   for (const run of semanticText.runs) {
     let runText = '';
     switch (run.type) {
@@ -187,24 +192,24 @@ export function truncateSemanticText(
       default:
         runText = '';
     }
-    
+
     if (currentLength + runText.length <= maxLength) {
       truncatedRuns.push(run);
       currentLength += runText.length;
     } else {
       const remainingLength = maxLength - currentLength;
-      
+
       if (remainingLength > ellipsis.length && 'text' in run) {
         truncatedRuns.push({
           ...run,
           text: run.text.substring(0, remainingLength - ellipsis.length) + ellipsis,
         } as SemanticTextRun);
       }
-      
+
       break;
     }
   }
-  
+
   return { runs: truncatedRuns };
 }
 
@@ -255,10 +260,10 @@ export function code(text: string): SemanticText {
  */
 export function concatSemanticText(...texts: SemanticText[]): SemanticText {
   const allRuns: SemanticTextRun[] = [];
-  
+
   for (const text of texts) {
     allRuns.push(...text.runs);
   }
-  
+
   return mergeConsecutiveRuns({ runs: allRuns });
 }
