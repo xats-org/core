@@ -1,0 +1,240 @@
+{
+  "meetingDate": "2025-08-21",
+  "meetingType": "v0.5.0 Strategic Planning",
+  "version": "v0.5.0",
+  "dueDate": "2026-05-31",
+  "phases": [
+    {
+      "phase": "Phase 1: Foundation",
+      "duration": "Weeks 1-4",
+      "description": "Critical infrastructure and shared components",
+      "issues": [
+        {
+          "issueNumber": 163,
+          "title": "epic: Bidirectional Renderer Architecture for v0.5.0",
+          "priority": "P0-Critical",
+          "assignee": "xats-schema-engineer",
+          "status": "pending",
+          "dependencies": [],
+          "deliverables": [
+            "@xats-org/renderer-core package architecture",
+            "Bidirectional conversion interface definitions",
+            "Shared utility functions and types"
+          ]
+        },
+        {
+          "issueNumber": 39,
+          "title": "WCAG 2.1 AA Compliance Framework",
+          "priority": "P0-Critical",
+          "assignee": "xats-accessibility-champion",
+          "status": "pending",
+          "dependencies": [],
+          "deliverables": [
+            "@xats-org/accessibility package",
+            "WCAG validation framework",
+            "Accessibility testing standards"
+          ]
+        },
+        {
+          "issueNumber": 64,
+          "title": "AI Generation Metadata Extension",
+          "priority": "P0-Critical",
+          "assignee": "xats-schema-engineer",
+          "status": "pending",
+          "dependencies": [],
+          "deliverables": [
+            "AI metadata schema definition",
+            "TypeScript types for AI tracking",
+            "Validation rules for AI metadata"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": "Phase 2: Priority Renderers",
+      "duration": "Weeks 4-12",
+      "description": "Core bidirectional converters for primary workflows",
+      "issues": [
+        {
+          "issueNumber": 158,
+          "title": "feat: xats <-> HTML bidirectional converter",
+          "priority": "P1-High",
+          "assignee": "xats-accessibility-champion",
+          "status": "pending",
+          "dependencies": [163, 39],
+          "deliverables": [
+            "@xats-org/renderer-html package",
+            "WCAG 2.1 AA compliant HTML output",
+            "HTML to xats semantic parser",
+            "Round-trip validation suite"
+          ],
+          "timeline": "Weeks 4-6"
+        },
+        {
+          "issueNumber": 161,
+          "title": "feat: xats <-> Word/DOCX bidirectional converter",
+          "priority": "P1-High",
+          "assignee": "xats-academic-administrator",
+          "status": "pending",
+          "dependencies": [163, 39],
+          "deliverables": [
+            "@xats-org/renderer-docx package",
+            "Track changes preservation",
+            "Institutional template compatibility",
+            "Comment and collaboration feature support"
+          ],
+          "timeline": "Weeks 6-10"
+        },
+        {
+          "issueNumber": 159,
+          "title": "feat: xats <-> RMarkdown bidirectional converter",
+          "priority": "P1-High",
+          "assignee": "xats-content-author",
+          "status": "pending",
+          "dependencies": [163],
+          "deliverables": [
+            "@xats-org/renderer-rmarkdown package",
+            "R code chunk preservation",
+            "Bookdown compatibility",
+            "Academic workflow integration"
+          ],
+          "timeline": "Weeks 8-12"
+        }
+      ]
+    },
+    {
+      "phase": "Phase 3: Extended Ecosystem",
+      "duration": "Weeks 10-16",
+      "description": "Additional converters and AI integration",
+      "issues": [
+        {
+          "issueNumber": 160,
+          "title": "feat: xats <-> LaTeX bidirectional converter",
+          "priority": "P2-Medium",
+          "assignee": "xats-international-liaison",
+          "status": "pending",
+          "dependencies": [163],
+          "deliverables": [
+            "@xats-org/renderer-latex package",
+            "Journal template compatibility",
+            "Mathematical expression fidelity",
+            "Bibliography integration"
+          ],
+          "timeline": "Weeks 10-14"
+        },
+        {
+          "issueNumber": null,
+          "title": "MCP Server for AI Integration",
+          "priority": "P2-Medium",
+          "assignee": "xats-ai-education-expert",
+          "status": "pending",
+          "dependencies": [64, 163],
+          "deliverables": [
+            "@xats-org/mcp-server package",
+            "Multi-agent orchestration support",
+            "Comprehensive API coverage",
+            "AI workflow documentation"
+          ],
+          "timeline": "Weeks 12-16"
+        }
+      ]
+    },
+    {
+      "phase": "Phase 4: Completion & Polish",
+      "duration": "Weeks 14-20",
+      "description": "Final converters, testing, and release preparation",
+      "issues": [
+        {
+          "issueNumber": 162,
+          "title": "feat: xats <-> Markdown bidirectional converter",
+          "priority": "P3-Standard",
+          "assignee": "xats-doc-writer",
+          "status": "pending",
+          "dependencies": [163],
+          "deliverables": [
+            "@xats-org/renderer-markdown package",
+            "GitHub integration",
+            "Static site generator compatibility",
+            "Documentation workflow support"
+          ],
+          "timeline": "Weeks 14-16"
+        }
+      ]
+    }
+  ],
+  "riskMitigation": [
+    {
+      "risk": "Round-Trip Fidelity",
+      "severity": "High",
+      "mitigation": "Comprehensive test suites with real-world documents, semantic validation framework",
+      "owner": "xats-validation-engineer",
+      "timeline": "Ongoing"
+    },
+    {
+      "risk": "WCAG Compliance Complexity",
+      "severity": "Medium",
+      "mitigation": "Dedicated accessibility framework package, early WCAG expert consultation",
+      "owner": "xats-accessibility-champion",
+      "timeline": "Phase 1"
+    },
+    {
+      "risk": "Scope Creep",
+      "severity": "High",
+      "mitigation": "Strict MVP definition for each renderer, phase-based implementation",
+      "owner": "xats-project-steward",
+      "timeline": "Ongoing"
+    },
+    {
+      "risk": "Format Parser Complexity",
+      "severity": "Medium",
+      "mitigation": "Iterative approach starting with core features, community feedback loops",
+      "owner": "Individual renderer teams",
+      "timeline": "Phase 2-3"
+    }
+  ],
+  "milestones": [
+    {
+      "date": "2025-09-21",
+      "description": "Phase 1 completion review",
+      "deliverables": ["Foundation packages", "Core architecture", "WCAG framework"]
+    },
+    {
+      "date": "2025-11-30",
+      "description": "HTML and DOCX renderers complete",
+      "deliverables": ["HTML bidirectional converter", "Word bidirectional converter"]
+    },
+    {
+      "date": "2026-01-31",
+      "description": "Phase 2 completion",
+      "deliverables": ["All priority renderers", "Round-trip validation"]
+    },
+    {
+      "date": "2026-03-31",
+      "description": "Phase 3 completion",
+      "deliverables": ["LaTeX converter", "MCP server", "AI integration"]
+    },
+    {
+      "date": "2026-05-31",
+      "description": "v0.5.0 release",
+      "deliverables": ["All converters", "Documentation", "Migration guides"]
+    }
+  ],
+  "weeklyReviews": {
+    "schedule": "Every Friday 2:00 PM",
+    "participants": ["xats-project-steward", "Phase leads", "Risk owners"],
+    "format": "Progress review, risk assessment, blocker resolution"
+  },
+  "monthlyBoardReviews": {
+    "schedule": "Third Friday of each month",
+    "participants": ["Full xats Standards Board"],
+    "format": "Strategic review, priority adjustment, milestone assessment"
+  },
+  "successCriteria": [
+    "All 5 priority renderers implemented and tested",
+    "95%+ round-trip fidelity for educational content",
+    "WCAG 2.1 AA compliance for all visual outputs", 
+    "Performance benchmarks met for large documents",
+    "Integration documentation complete",
+    "Community adoption in target workflows"
+  ]
+}
