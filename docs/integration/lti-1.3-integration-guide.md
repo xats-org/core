@@ -29,7 +29,7 @@ Add LTI configuration to the document root `extensions` property:
 
 ```json
 {
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "extensions": {
     "ltiConfiguration": {
       "toolTitle": "xats Chemistry Textbook",

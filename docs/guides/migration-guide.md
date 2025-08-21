@@ -233,16 +233,16 @@ Validate your migrated document:
 
 ```bash
 # Install the latest version
-npm install -g @xats-org/core@latest
+npm install -g @xats-org/cli@latest
 
 # Validate your document
-xats-validate my-document.json
+xats validate my-document.json
 ```
 
 ### Programmatic Validation
 
 ```javascript
-import { validateDocument } from '@xats-org/core';
+import { validateDocument } from '@xats-org/cli';
 
 const document = require('./my-document.json');
 const { valid, errors } = await validateDocument(document);
@@ -898,29 +898,29 @@ Integrate reflection opportunities throughout your content:
 
 ```bash
 # Validate v0.3.0 documents with all features
-xats-validate --version 0.3.0 document.json
+xats validate --version 0.3.0 document.json
 
 # Check modular document integrity
-xats-validate --modular --verify-refs document.json
+xats validate --modular --verify-refs document.json
 
 # Validate accessibility compliance
-xats-validate --accessibility --wcag-level AA document.json
+xats validate --accessibility --wcag-level AA document.json
 
 # Check internationalization support
-xats-validate --i18n --check-language-tags document.json
+xats validate --i18n --check-language-tags document.json
 ```
 
 #### Modularization Helper
 
 ```bash
 # Split large document by chapters
-xats-modularize textbook.json --strategy=by-chapter --output-dir=./chapters
+xats modularize textbook.json --strategy=by-chapter --output-dir=./chapters
 
 # Generate index from IndexRun markers
-xats-generate-index textbook.json --output=generated-index.json
+xats generate-index textbook.json --output=generated-index.json
 
 # Extract translatable content
-xats-extract-i18n textbook.json --target-language=es --output=translation-strings.json
+xats extract-i18n textbook.json --target-language=es --output=translation-strings.json
 ```
 
 ### Recommended Migration Steps
@@ -990,26 +990,26 @@ The xats project provides migration utilities:
 
 ```bash
 # Install migration tools
-npm install -g @xats-org/migration-tools
+npm install -g @xats-org/cli
 
 # Migrate document from v0.1.0 to v0.2.0
-xats-migrate --from 0.1.0 --to 0.2.0 document.json
+xats migrate --from 0.1.0 --to 0.2.0 document.json
 
 # Validate migration result
-xats-validate document.json
+xats validate document.json
 ```
 
 ### Schema-Specific Validators
 
 ```bash
 # Validate against specific schema version
-xats-validate --schema 0.3.0 document.json
+xats validate --schema 0.3.0 document.json
 
 # Check accessibility compliance
-xats-validate --wcag-check document.json
+xats validate --wcag-check document.json
 
 # Validate LTI configuration
-xats-validate --lti-check document.json
+xats validate --lti-check document.json
 ```
 
 ### Custom Migration Scripts
@@ -1065,16 +1065,16 @@ Before starting migration:
 
 ```bash
 # Complete validation suite
-xats-validate --comprehensive document.json
+xats validate --comprehensive document.json
 
 # Accessibility-specific validation
-xats-validate --accessibility document.json
+xats validate --accessibility document.json
 
 # Assessment validation
-xats-validate --assessments document.json
+xats validate --assessments document.json
 
 # Extension validation
-xats-validate --extensions document.json
+xats validate --extensions document.json
 ```
 
 ## Common Migration Issues

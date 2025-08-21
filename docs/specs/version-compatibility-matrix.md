@@ -187,7 +187,7 @@ To take advantage of new features, manual updates are required:
 ```json
 // Add accessibility metadata
 {
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "language": "en-US",
   "accessibility": {
     "wcagLevel": "AA",
