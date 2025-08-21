@@ -99,7 +99,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Render xats document to HTML5
    */
-  render(document: XatsDocument, options?: HtmlRendererOptions): RenderResult {
+  async render(document: XatsDocument, options?: HtmlRendererOptions): Promise<RenderResult> {
     const startTime = performance.now();
     const renderOptions = { ...this.options, ...options };
 
@@ -143,7 +143,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Parse HTML back to xats document
    */
-  parse(content: string, options?: ParseOptions): ParseResult {
+  async parse(content: string, options?: ParseOptions): Promise<ParseResult> {
     const startTime = performance.now();
     const parseOptions = {
       preserveMetadata: true,
@@ -213,7 +213,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Validate HTML content
    */
-  validate(content: string): FormatValidationResult {
+  async validate(content: string): Promise<FormatValidationResult> {
     try {
       // Basic HTML validation using JSDOM
       const dom = new JSDOM(content);
@@ -249,7 +249,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Get HTML metadata
    */
-  getMetadata(content: string): FormatMetadata {
+  async getMetadata(content: string): Promise<FormatMetadata> {
     try {
       const dom = new JSDOM(content);
       const document = dom.window.document;
