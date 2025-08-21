@@ -5,7 +5,7 @@
  * with full WCAG 2.1 AA accessibility compliance.
  */
 
-import DOMPurify from 'dompurify';
+import * as DOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
 
 import { RoundTripTester, WcagTester } from '@xats-org/testing';
@@ -105,10 +105,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
     try {
       // Generate HTML content
-      const content = this.renderDocument(document, renderOptions);
+      const content = await this.renderDocumentAsync(document, renderOptions);
 
       // Sanitize if requested
-      const finalContent = renderOptions.sanitize ? this.sanitizeHtml(content) : content;
+      const finalContent = renderOptions.sanitize ? await this.sanitizeHtmlAsync(content) : content;
 
       const renderTime = performance.now() - startTime;
 
@@ -160,7 +160,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       const document = dom.window.document;
 
       // Extract xats document structure
-      const xatsDocument = this.parseHtmlToXats(document, parseOptions);
+      const xatsDocument = await this.parseHtmlToXatsAsync(document, parseOptions);
 
       const parseTime = performance.now() - startTime;
 
@@ -219,7 +219,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       const dom = new JSDOM(content);
       const document = dom.window.document;
 
-      const errors = this.validateHtmlStructure(document);
+      const errors = await this.validateHtmlStructureAsync(document);
 
       return {
         valid: errors.length === 0,
@@ -254,6 +254,8 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       const dom = new JSDOM(content);
       const document = dom.window.document;
 
+      const features = await this.detectFeaturesAsync(document);
+
       return {
         format: 'html',
         version: '5',
@@ -261,7 +263,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         language: document.documentElement.lang || 'en',
         wordCount: this.countWords(content),
         elementCount: document.querySelectorAll('*').length,
-        features: this.detectFeatures(document),
+        features,
       };
     } catch (error) {
       return {
@@ -286,6 +288,14 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   }
 
   // Private implementation methods
+
+  private async renderDocumentAsync(
+    document: XatsDocument,
+    options: Required<HtmlRendererOptions>
+  ): Promise<string> {
+    // Use Promise.resolve to make this truly async
+    return await Promise.resolve(this.renderDocument(document, options));
+  }
 
   private renderDocument(document: XatsDocument, options: Required<HtmlRendererOptions>): string {
     // TODO: Implement full HTML rendering
@@ -329,6 +339,14 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return parts.join('\\n');
   }
 
+  private async parseHtmlToXatsAsync(
+    _document: Document,
+    _options: Required<ParseOptions>
+  ): Promise<XatsDocument> {
+    // Use Promise.resolve to make this truly async
+    return await Promise.resolve(this.parseHtmlToXats(_document, _options));
+  }
+
   private parseHtmlToXats(_document: Document, _options: Required<ParseOptions>): XatsDocument {
     // TODO: Implement full HTML to xats parsing
     // This is a placeholder implementation
@@ -348,6 +366,11 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         contents: [],
       },
     };
+  }
+
+  private async validateHtmlStructureAsync(document: Document): Promise<FormatValidationError[]> {
+    // Use Promise.resolve to make this truly async
+    return await Promise.resolve(this.validateHtmlStructure(document));
   }
 
   private validateHtmlStructure(document: Document): FormatValidationError[] {
@@ -375,9 +398,14 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return errors;
   }
 
+  private async sanitizeHtmlAsync(content: string): Promise<string> {
+    // Use Promise.resolve to make this truly async
+    return await Promise.resolve(this.sanitizeHtml(content));
+  }
+
   private sanitizeHtml(content: string): string {
     const dom = new JSDOM(content);
-    const purify = DOMPurify(dom.window);
+    const purify = DOMPurify.default(dom.window);
 
     return purify.sanitize(content, {
       ALLOW_ARIA_ATTR: true,
@@ -407,6 +435,11 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     });
 
     return assets;
+  }
+
+  private async detectFeaturesAsync(document: Document): Promise<string[]> {
+    // Use Promise.resolve to make this truly async
+    return await Promise.resolve(this.detectFeatures(document));
   }
 
   private detectFeatures(document: Document): string[] {
