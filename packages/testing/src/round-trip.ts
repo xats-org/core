@@ -287,7 +287,7 @@ export class RoundTripTester {
    */
   private assessImpact(
     path: string,
-    diff: deepDiff.Diff<unknown, unknown>
+    _diff: deepDiff.Diff<unknown, unknown>
   ): DocumentDifference['impact'] {
     // Critical: Missing core document structure
     if (path.includes('schemaVersion') || path.includes('bibliographicEntry.title')) {

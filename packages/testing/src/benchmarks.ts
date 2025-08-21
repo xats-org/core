@@ -2,7 +2,7 @@
  * Performance benchmarking system for renderer testing
  */
 
-import type { XatsDocument, BidirectionalRenderer, RoundTripMetrics } from '@xats-org/types';
+import type { XatsDocument, BidirectionalRenderer } from '@xats-org/types';
 
 /**
  * Performance benchmark result
@@ -95,9 +95,11 @@ export class PerformanceBenchmark {
     let successCount = 0;
     let failureCount = 0;
 
+    // eslint-disable-next-line no-console
     console.log(`Starting benchmark suite for ${renderer.format} renderer...`);
 
     for (const testCase of testCases) {
+      // eslint-disable-next-line no-console
       console.log(`Running test case: ${testCase.name}`);
 
       try {
@@ -179,8 +181,6 @@ export class PerformanceBenchmark {
     try {
       // Run test iterations
       while (iterations < testCase.iterations) {
-        const iterationStart = performance.now();
-
         try {
           // Render phase
           const renderStart = performance.now();
@@ -190,7 +190,7 @@ export class PerformanceBenchmark {
 
           // Parse phase
           const parseStart = performance.now();
-          const parseResult = await renderer.parse(renderResult.content);
+          await renderer.parse(renderResult.content);
           const parseTime = performance.now() - parseStart;
           parseTimes.push(parseTime);
 
@@ -209,7 +209,7 @@ export class PerformanceBenchmark {
           }
         } catch (error) {
           errors++;
-          console.warn(`Error in iteration ${iterations}: ${error}`);
+          console.warn(`Error in iteration ${iterations}: ${String(error)}`);
 
           // Fail if too many errors
           if (errors > testCase.iterations * 0.1) {

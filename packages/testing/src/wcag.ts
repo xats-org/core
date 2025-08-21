@@ -63,7 +63,7 @@ export class WcagTester implements WcagCompliance {
           {
             criterion: 'test-error',
             level,
-            description: `Failed to run WCAG test: ${error}`,
+            description: `Failed to run WCAG test: ${String(error)}`,
             recommendation: 'Fix testing environment issues',
             impact: 'critical',
           },
