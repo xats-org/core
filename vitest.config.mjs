@@ -11,5 +11,26 @@ export default defineConfig({
       'tests/**/*.spec.ts',
     ],
     exclude: ['node_modules', 'dist', '**/dist/**'],
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: false,
+        isolate: true,
+      },
+    },
+    cache: {
+      dir: '.vitest',
+    },
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'lcov'],
+      exclude: [
+        'node_modules',
+        'dist',
+        '**/*.config.*',
+        '**/*.d.ts',
+        '**/index.ts',
+      ],
+    },
   },
 });

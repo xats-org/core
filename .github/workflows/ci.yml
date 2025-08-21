@@ -10,6 +10,9 @@ on:
       - 'docs/**'
       - '.claude/**'
       - 'LICENSE'
+      - '.gitignore'
+      - '.prettierrc'
+      - '.eslintignore'
   pull_request:
     branches: 
       - main
@@ -19,6 +22,9 @@ on:
       - 'docs/**'
       - '.claude/**'
       - 'LICENSE'
+      - '.gitignore'
+      - '.prettierrc'
+      - '.eslintignore'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -52,8 +58,10 @@ jobs:
           .turbo
           packages/*/dist
           packages/*/.turbo
-        key: ${{ runner.os }}-turbo-${{ github.sha }}
+          node_modules/.cache
+        key: ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ github.sha }}
         restore-keys: |
+          ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}-
           ${{ runner.os }}-turbo-
         
     - name: Install dependencies
@@ -74,7 +82,8 @@ jobs:
           packages/*/dist
           .turbo
         retention-days: 1
-        compression-level: 9
+        compression-level: 6  # Balanced compression for faster uploads
+        if-no-files-found: warn
 
   lint:
     name: Lint
@@ -150,6 +159,10 @@ jobs:
       fail-fast: true
       matrix:
         node-version: [18, 20, 22]
+        # Run fewer Node versions on PRs from forks
+        exclude:
+          - node-version: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork && 18 || '' }}
+          - node-version: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork && 22 || '' }}
         
     steps:
     - name: Checkout code

@@ -92,5 +92,7 @@
   "globalEnv": ["NODE_ENV", "CI", "TURBO_TELEMETRY_DISABLED"],
   "remoteCache": {
     "enabled": true
-  }
+  },
+  "daemon": true,
+  "ui": "tui"
 }
