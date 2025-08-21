@@ -193,21 +193,81 @@ Modular, composable packages for flexible ecosystem growth.
   - `@xats-org/examples`: Example documents
 - **Future Packages:** Foundation for ecosystem expansion
 
-### v0.5.0 - Rendering, AI Integration & Extended Features (Target: 2026-09-30)
+### v0.5.0 - Bidirectional Renderers, AI Integration & Workflow Integration (Target: 2026-05-31)
 
-Building on the monorepo foundation, this release focuses on content rendering, AI integration, and production workflows.
+Building on the monorepo foundation, this release establishes xats as a bridge technology between existing educational workflows and AI-enhanced content creation through bidirectional conversion capabilities.
 
-#### a. Enhanced Rendering Hints System (HIGH PRIORITY)
+#### a. Bidirectional Renderer Architecture (CRITICAL PRIORITY)
 
-Build out comprehensive rendering hints to help renderers determine and preserve author intent.
-- **Semantic Intent Vocabulary:** URI-based vocabulary for author intent (`emphasis`, `warning`, `highlight`, `aside`, `featured`)
-- **Pedagogical Roles:** Classification system for content roles (`introduction`, `example`, `summary`, `key-concept`)
-- **Prominence Levels:** Granular control over visual emphasis (1-5 scale)
-- **Layout Hints:** Suggestions for layout preservation (`keep-together`, `allow-break`, `force-new-page`)
-- **Cross-Renderer Consistency:** Standard interpretation guidelines for all renderers
-- **Fallback Strategies:** Graceful degradation for unsupported hints
+Revolutionary approach enabling seamless workflow integration by allowing educators to work in their preferred tools while leveraging xats capabilities.
 
-#### b. AI Integration Framework (HIGH PRIORITY)
+**Core Architecture:**
+- **Bidirectional Conversion Framework:** All renderers support both import and export operations
+- **Semantic Preservation:** Maintain full semantic fidelity across conversions
+- **Round-Trip Integrity:** Content can flow xats → format → xats without loss
+- **Accessibility-First Design:** All outputs meet WCAG 2.1 AA standards (addresses Issue #39)
+- **Shared Core Infrastructure:** `@xats-org/renderer-core` for common utilities
+
+**Package Structure:**
+```
+packages/
+├── @xats-org/renderer-html/       # xats ↔ HTML bidirectional converter
+├── @xats-org/renderer-rmarkdown/  # xats ↔ RMarkdown bidirectional converter
+├── @xats-org/renderer-latex/      # xats ↔ LaTeX bidirectional converter
+├── @xats-org/renderer-docx/       # xats ↔ Word/DOCX bidirectional converter
+├── @xats-org/renderer-markdown/   # xats ↔ Markdown bidirectional converter
+├── @xats-org/renderer-pdf/        # xats ↔ PDF bidirectional converter
+├── @xats-org/renderer-canvas/     # xats ↔ Canvas LMS bidirectional converter
+├── @xats-org/renderer-moodle/     # xats ↔ Moodle bidirectional converter
+├── @xats-org/renderer-scorm/      # xats ↔ SCORM bidirectional converter
+├── @xats-org/renderer-indesign/   # xats ↔ InDesign bidirectional converter
+└── @xats-org/renderer-core/       # Shared utilities and interfaces
+```
+
+**Implementation Phases:**
+
+**Phase 1: Core Formats (Q1 2026)**
+- **@xats-org/renderer-docx:** Priority 1 - Institutional workflow integration
+- **@xats-org/renderer-html:** Priority 1 - Web accessibility and preview
+- **@xats-org/renderer-pdf:** Priority 1 - Distribution and archival
+
+**Phase 2: Academic & LMS (Q2 2026)**
+- **@xats-org/renderer-rmarkdown:** Priority 2 - Academic research workflows
+- **@xats-org/renderer-canvas:** Priority 2 - Major LMS integration
+- **@xats-org/renderer-latex:** Priority 2 - Traditional academic publishing
+
+**Phase 3: Extended Ecosystem (Q2 2026)**
+- **@xats-org/renderer-markdown:** Priority 3 - Documentation workflows
+- **@xats-org/renderer-moodle:** Priority 3 - Open-source LMS support
+- **@xats-org/renderer-scorm:** Priority 3 - Enterprise learning systems
+- **@xats-org/renderer-indesign:** Priority 3 - Professional publishing
+
+**Key Features:**
+- **Workflow Preservation:** Authors can continue using familiar tools
+- **Progressive Enhancement:** Start with existing content, enhance with xats features
+- **Format Flexibility:** Switch between formats based on distribution needs
+- **Metadata Preservation:** Educational metadata survives round-trip conversions
+- **Validation Framework:** Built-in validation for both import and export
+
+#### b. WCAG 2.1 AA Compliance Framework (CRITICAL PRIORITY - Issue #39)
+
+Comprehensive accessibility implementation across all bidirectional renderers.
+
+**Core Requirements:**
+- **Language Identification:** Automatic language detection and ISO 639-1 tagging
+- **Alternative Text System:** AI-assisted alt text generation with human review
+- **Math Accessibility:** MathML and accessible equation rendering
+- **Table Accessibility:** Automatic header association and navigation
+- **Media Accessibility:** Transcript and caption extraction/generation
+- **Semantic Navigation:** Landmark generation and heading hierarchy
+
+**Implementation Strategy:**
+- **Accessibility Metadata Preservation:** All renderers maintain accessibility data
+- **Automated Validation:** WCAG compliance checking in conversion pipeline
+- **Fallback Generation:** AI-powered accessibility content when missing
+- **Audit Integration:** Built-in accessibility reporting and remediation tools
+
+#### c. AI Integration Framework (HIGH PRIORITY)
 
 Native support for AI-powered content orchestration and generation.
 - **MCP Server for xats:** Model Context Protocol server for AI agents to work with xats files
@@ -215,6 +275,7 @@ Native support for AI-powered content orchestration and generation.
   - Schema-aware content manipulation
   - Multi-agent orchestration support
   - Content generation templates
+  - Bidirectional renderer integration
 - **AI Generation Metadata Extension:** Comprehensive tracking of AI-generated content
   - Model attribution and versioning
   - Prompt preservation and parameters
@@ -231,33 +292,38 @@ Native support for AI-powered content orchestration and generation.
   - Dependency tracking
   - Version control integration
 
-#### c. R-markdown Renderer (MEDIUM PRIORITY)
+#### d. Enhanced Authoring Experience (Issue #36)
 
-Academic workflow integration through R-markdown output.
-- **Full xats to R-markdown Conversion:** Complete feature mapping
-- **Scientific Computing Integration:** Seamless R code chunk generation
-- **Statistical Graphics Support:** Automatic figure and table conversion
-- **Bibliography Integration:** CSL-JSON to BibTeX conversion
-- **Reproducible Research:** Maintain computational reproducibility
-- **Academic Publishing Pipeline:** Direct integration with journal submission systems
+Revolutionary authoring approach through bidirectional renderers, eliminating JSON complexity.
+- **Native Tool Authoring:** Authors work entirely in Word, LaTeX, or Markdown
+- **Zero JSON Exposure:** Complete abstraction of xats JSON format
+- **Visual Web Editor:** HTML renderer enables browser-based visual authoring
+- **Template Libraries:** Pre-built templates for common content patterns
+- **Real-Time Validation:** Immediate feedback on xats compliance
+- **Seamless Round-Tripping:** Edit in any format, maintain full fidelity
 
-#### d. Production & Scholarly Workflow Integration
+#### e. Enhanced Rendering Hints System (MEDIUM PRIORITY)
 
-For publishers and academics to adopt **xats**, it must integrate with established workflows.
-- **Round-Trip Conversion Tooling:** Standard for "round-tripping" content between **xats** and existing formats like InDesign (IDML)
-- **Automated Ancillary Generation:** Standard set of `tags` to facilitate automated generation of ancillary materials (e.g., study guides, slide decks)
-- **Formal Peer Review & Annotation Layer:** Core vocabulary for annotations with workflow status tracking
-- **Collaborative Project Block:** New `blockType` for group projects with roles and peer assessment
+Build out comprehensive rendering hints to help renderers determine and preserve author intent.
+- **Semantic Intent Vocabulary:** URI-based vocabulary for author intent
+- **Pedagogical Roles:** Classification system for content roles
+- **Prominence Levels:** Granular control over visual emphasis
+- **Layout Hints:** Suggestions for layout preservation
+- **Cross-Renderer Consistency:** Standard interpretation guidelines
+- **Bidirectional Preservation:** Hints survive round-trip conversions
 
-#### e. Learning Analytics & Progress Tracking
+#### f. Production & Scholarly Workflow Integration
 
-Advanced analytics for learning outcomes and content effectiveness.
-- **Learning Analytics Framework:** Detailed student interaction and performance tracking
-- **Content Performance Metrics:** Usage patterns, engagement rates, and learning outcome correlations
-- **Problem-Based Learning Blocks:** Interactive problem-solving and active learning components
-- **Privacy-First Design:** GDPR/CCPA compliant analytics with learner consent management
+Seamless integration with established academic and publishing workflows.
+- **Native Tool Integration:** Work directly in Word, RMarkdown, LaTeX
+- **LMS Direct Publishing:** Push content directly to Canvas, Moodle, Blackboard
+- **Publishing Pipeline:** InDesign integration for professional publishing
+- **Collaborative Workflows:** Multi-author support with change tracking
+- **Version Control:** Git-friendly text formats with semantic diffs
 
-### v0.6.0 - Analytics & Advanced Internationalization (Target: 2026-09-30)
+### v0.6.0 - Analytics, Advanced Pedagogy & Internationalization (Target: 2026-09-30)
+
+Building on the foundation of v0.5.0's bidirectional renderers, this release focuses on advanced pedagogical features and analytics.
 
 #### a. Advanced Analytics Platform
 
@@ -267,7 +333,25 @@ Comprehensive learning analytics and content performance measurement.
 - **Publisher Analytics:** Commercial metrics for content effectiveness and market performance
 - **Privacy-First Design:** GDPR/CCPA compliant analytics with learner consent management
 
-#### b. Advanced Internationalization
+#### b. Advanced Pedagogical Features (Issues #2, #3)
+
+Sophisticated educational enhancements building on v0.2.0's assessment framework.
+
+**Cognitive Level Metadata (Issue #2):**
+- **Bloom's Taxonomy Integration:** Tag objectives and assessments with cognitive levels
+- **DOK Level Specification:** Depth of Knowledge classification (1-4)
+- **Verb Taxonomies:** URI-based vocabulary for learning objective verbs
+- **Cognitive Alignment Validation:** Ensure objectives match assessment complexity
+- **Progressive Complexity Mapping:** Track cognitive demand throughout content
+
+**Formative Assessment & Feedback Systems (Issue #3):**
+- **Multi-Level Hint Systems:** Progressive hints with optional point penalties
+- **Misconception-Targeted Feedback:** Pattern-based feedback for common errors
+- **Self-Assessment Tools:** Confidence ratings and metacognitive prompts
+- **Low-Stakes Practice:** Formative checkpoints with immediate feedback
+- **Peer Review Integration:** Structured peer assessment workflows
+
+#### c. Advanced Internationalization
 
 Building on v0.3.0's i18n foundation for advanced multi-language support.
 - **Content Translation:** Standard patterns for multiple language versions within single objects
