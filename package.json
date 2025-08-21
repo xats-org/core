@@ -2,7 +2,7 @@
   "name": "@xats-org/monorepo",
   "version": "0.4.0",
   "private": true,
-  "description": "Extensible Academic Textbook Schema (xats) - Monorepo",
+  "description": "eXtensible Academic Text Standard (xats) - Monorepo",
   "scripts": {
     "build": "turbo run build",
     "build:watch": "turbo run build:watch",

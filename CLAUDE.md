@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-The **Extensible Academic Textbook Schema (xats)** is a JSON-based standard for defining educational materials. It creates a deeply semantic, machine-readable format for AI-driven educational tools to generate, deconstruct, and repurpose educational content.
+The **eXtensible Academic Text Standard (xats)** is a JSON-based standard for defining educational materials. It creates a deeply semantic, machine-readable format for AI-driven educational tools to generate, deconstruct, and repurpose educational content.
 
 ### Monorepo Structure (v0.4.0+)
 

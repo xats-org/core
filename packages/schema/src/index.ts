@@ -120,7 +120,7 @@ export function getSchemaMetadata(version: XatsVersion): {
 
   return {
     version: schema.version || version,
-    title: schema.title || 'Extensible Academic Textbook Schema',
+    title: schema.title || 'eXtensible Academic Text Standard',
     description: schema.description || 'JSON Schema for academic textbook content',
   };
 }

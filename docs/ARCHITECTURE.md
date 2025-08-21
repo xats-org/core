@@ -7,7 +7,7 @@
 
 ## 1. Introduction
 
-This document records the major architectural decisions made during the design of the **Extensible Academic Textbook Schema (xats)**. Its purpose is to provide a stable reference for current and future contributors, ensuring that the core philosophy of the standard is understood and maintained. Each decision includes the context, the trade-offs considered, and the final rationale.
+This document records the major architectural decisions made during the design of the **eXtensible Academic Text Standard (xats)**. Its purpose is to provide a stable reference for current and future contributors, ensuring that the core philosophy of the standard is understood and maintained. Each decision includes the context, the trade-offs considered, and the final rationale.
 
 ---
 

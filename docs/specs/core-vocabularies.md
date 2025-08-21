@@ -7,7 +7,7 @@
 
 ## 1. Introduction
 
-This document is the official registry for all core vocabulary URIs defined by the **Extensible Academic Textbook Schema (xats)**. These URIs serve as the stable, foundational identifiers for core components of the schema.
+This document is the official registry for all core vocabulary URIs defined by the **eXtensible Academic Text Standard (xats)**. These URIs serve as the stable, foundational identifiers for core components of the schema.
 
 While the **xats** standard is designed to be infinitely extensible using custom URIs, this core set provides the common language for interoperability. All compliant renderers and AI agents should be programmed to understand the semantics of these core URIs.
 

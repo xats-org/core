@@ -1,6 +1,6 @@
 # @xats/schema
 
-JSON Schema definitions for the Extensible Academic Textbook Schema (xats).
+JSON Schema definitions for the eXtensible Academic Text Standard (xats).
 
 ## Installation
 
