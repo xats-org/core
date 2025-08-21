@@ -1,5 +1,7 @@
 import * as React from 'react';
+
 import { render, type OutputFormat, type RenderOptions } from '../index.js';
+
 import type { XatsDocument } from '@xats/types';
 
 export interface XatsRendererProps {

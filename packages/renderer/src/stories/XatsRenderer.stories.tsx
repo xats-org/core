@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { XatsRenderer } from '../components/XatsRenderer';
+
+import type { Meta, StoryObj } from '@storybook/react';
 import type { XatsDocument } from '@xats/types';
 
 const meta = {
@@ -9,7 +10,8 @@ const meta = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'The XatsRenderer component renders xats documents in various formats (HTML, Markdown, or plain text).',
+        component:
+          'The XatsRenderer component renders xats documents in various formats (HTML, Markdown, or plain text).',
       },
     },
   },
