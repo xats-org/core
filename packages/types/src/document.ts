@@ -118,7 +118,24 @@ export interface SemanticText {
 /**
  * Union type for all run types
  */
-export type Run = TextRun | ReferenceRun | CitationRun | EmphasisRun | StrongRun | IndexRun;
+export type Run =
+  | TextRun
+  | ReferenceRun
+  | CitationRun
+  | EmphasisRun
+  | StrongRun
+  | IndexRun
+  | CodeRun
+  | MathInlineRun
+  | SubscriptRun
+  | SuperscriptRun
+  | StrikethroughRun
+  | UnderlineRun;
+
+/**
+ * Type alias for semantic text runs (for backward compatibility)
+ */
+export type SemanticTextRun = Run;
 
 /**
  * Plain text run
@@ -135,6 +152,7 @@ export interface ReferenceRun {
   type: 'reference';
   text: string;
   ref: string;
+  label?: string;
 }
 
 /**
@@ -150,7 +168,7 @@ export interface CitationRun {
  */
 export interface EmphasisRun {
   type: 'emphasis';
-  runs: Run[];
+  text: string;
 }
 
 /**
@@ -158,7 +176,7 @@ export interface EmphasisRun {
  */
 export interface StrongRun {
   type: 'strong';
-  runs: Run[];
+  text: string;
 }
 
 /**
@@ -171,6 +189,54 @@ export interface IndexRun {
   subEntry?: string;
   see?: string;
   seeAlso?: string[];
+}
+
+/**
+ * Inline code run
+ */
+export interface CodeRun {
+  type: 'code';
+  text: string;
+}
+
+/**
+ * Inline math run
+ */
+export interface MathInlineRun {
+  type: 'mathInline';
+  math: string;
+}
+
+/**
+ * Subscript text run
+ */
+export interface SubscriptRun {
+  type: 'subscript';
+  text: string;
+}
+
+/**
+ * Superscript text run
+ */
+export interface SuperscriptRun {
+  type: 'superscript';
+  text: string;
+}
+
+/**
+ * Strikethrough text run
+ */
+export interface StrikethroughRun {
+  type: 'strikethrough';
+  text: string;
+}
+
+/**
+ * Underlined text run
+ */
+export interface UnderlineRun {
+  type: 'underline';
+  text: string;
 }
 
 /**

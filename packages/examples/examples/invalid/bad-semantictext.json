@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "0.1.0",
+  "bibliographicEntry": {
+    "id": "invalid-003",
+    "type": "book",
+    "title": "Bad SemanticText",
+    "author": [
+      {
+        "family": "Test",
+        "given": "Author"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    }
+  },
+  "subject": "Testing",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "ch1",
+        "label": "1",
+        "title": "Chapter 1",
+        "sections": [
+          {
+            "id": "s1",
+            "label": "1.1",
+            "title": "Section 1",
+            "content": [
+              {
+                "id": "p1",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": "Should be SemanticText object, not string"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

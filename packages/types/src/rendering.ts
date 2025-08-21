@@ -6,7 +6,7 @@
  * Options for configuring document rendering
  */
 export interface RendererOptions {
-  theme?: 'default' | 'minimal' | 'academic' | 'accessibility-focused' | string;
+  theme?: string;
   cssClasses?: CssClasses;
   includeTableOfContents?: boolean;
   includeBibliography?: boolean;

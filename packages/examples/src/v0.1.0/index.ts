@@ -2,7 +2,7 @@
  * v0.1.0 Example Documents
  */
 
-import type { XatsDocument } from '@xats/types';
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * Minimal valid xats document
@@ -24,17 +24,21 @@ export const minimalDocument: XatsDocument = {
   },
   subject: 'Example',
   bodyMatter: {
-    id: 'body',
-    type: 'bodyMatter',
     contents: [
       {
         id: 'chapter-1',
-        type: 'chapter',
-        title: 'Introduction',
+        title: {
+          runs: [
+            {
+              type: 'text',
+              text: 'Introduction',
+            },
+          ],
+        },
         contents: [
           {
             id: 'para-1',
-            blockType: 'https://xats.org/core/blocks/paragraph',
+            blockType: 'https://xats.org/vocabularies/blocks/paragraph',
             content: {
               runs: [
                 {
@@ -78,85 +82,82 @@ export const completeTextbook: XatsDocument = {
   },
   subject: 'Computer Science',
   frontMatter: {
-    id: 'front',
-    type: 'frontMatter',
     contents: [
       {
         id: 'toc',
-        blockType: 'https://xats.org/core/placeholders/tableOfContents',
+        blockType: 'https://xats.org/vocabularies/placeholders/tableOfContents',
         content: {},
       },
     ],
   },
   bodyMatter: {
-    id: 'body',
-    type: 'bodyMatter',
     contents: [
       {
         id: 'unit-1',
-        type: 'unit',
         label: 'Unit 1',
-        title: 'Foundations',
+        title: {
+          runs: [
+            {
+              type: 'text',
+              text: 'Foundations',
+            },
+          ],
+        },
         contents: [
           {
             id: 'chapter-1',
-            type: 'chapter',
             label: 'Chapter 1',
-            title: 'Introduction to Programming',
-            learningObjectives: [
-              {
-                runs: [
-                  {
-                    type: 'text',
-                    text: 'Understand basic programming concepts',
-                  },
-                ],
-              },
-              {
-                runs: [
-                  {
-                    type: 'text',
-                    text: 'Write simple programs in Python',
-                  },
-                ],
-              },
-            ],
+            title: {
+              runs: [
+                {
+                  type: 'text',
+                  text: 'Introduction to Programming',
+                },
+              ],
+            },
             contents: [
               {
-                id: 'section-1-1',
-                type: 'section',
-                label: '1.1',
-                title: 'What is Programming?',
-                contents: [
-                  {
-                    id: 'para-1-1-1',
-                    blockType: 'https://xats.org/core/blocks/paragraph',
-                    content: {
-                      runs: [
-                        {
-                          type: 'text',
-                          text: 'Programming is the process of creating ',
-                        },
-                        {
-                          type: 'emphasis',
-                          text: 'instructions',
-                        },
-                        {
-                          type: 'text',
-                          text: ' that tell a computer how to perform a task.',
-                        },
-                      ],
-                    },
+                id: 'heading-1-1',
+                blockType: 'https://xats.org/vocabularies/blocks/heading',
+                content: {
+                  level: 2,
+                  text: {
+                    runs: [
+                      {
+                        type: 'text',
+                        text: 'What is Programming?',
+                      },
+                    ],
                   },
-                  {
-                    id: 'code-1-1-1',
-                    blockType: 'https://xats.org/core/blocks/codeBlock',
-                    content: {
-                      language: 'python',
-                      code: 'print("Hello, World!")',
+                },
+              },
+              {
+                id: 'para-1-1-1',
+                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                content: {
+                  runs: [
+                    {
+                      type: 'text',
+                      text: 'Programming is the process of creating ',
                     },
-                  },
-                ],
+                    {
+                      type: 'emphasis',
+                      text: 'instructions',
+                    },
+                    {
+                      type: 'text',
+                      text: ' that tell a computer how to perform a task.',
+                    },
+                  ],
+                },
+              },
+              {
+                id: 'code-1-1-1',
+                blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
+                content: {
+                  language: 'python',
+                  code: 'print("Hello, World!")',
+                },
               },
             ],
           },
@@ -170,12 +171,12 @@ export const completeTextbook: XatsDocument = {
     contents: [
       {
         id: 'bibliography-placeholder',
-        blockType: 'https://xats.org/core/placeholders/bibliography',
+        blockType: 'https://xats.org/vocabularies/placeholders/bibliography',
         content: {},
       },
       {
         id: 'index-placeholder',
-        blockType: 'https://xats.org/core/placeholders/index',
+        blockType: 'https://xats.org/vocabularies/placeholders/index',
         content: {},
       },
     ],

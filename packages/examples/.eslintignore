@@ -1,0 +1,3 @@
+# Ignore JS examples
+examples/*.js
+examples/**/*.js

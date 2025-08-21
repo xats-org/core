@@ -133,3 +133,11 @@ core.code-workspace
 .temp/
 tmp/
 temp/
+
+# NPM credentials (keep example file)
+.npmrc
+!.npmrc.example
+
+# Storybook
+storybook-static/
+screenshots/

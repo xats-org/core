@@ -1,6 +1,6 @@
 {
-  "name": "@xats/cli",
-  "version": "0.4.0",
+  "name": "@xats-org/cli",
+  "version": "0.4.1",
   "description": "Command-line interface for xats document validation and processing",
   "keywords": [
     "xats",
@@ -18,7 +18,7 @@
     "url": "git+https://github.com/xats-org/core.git",
     "directory": "packages/cli"
   },
-  "license": "MIT",
+  "license": "CC-BY-SA-4.0",
   "author": "xats Contributors",
   "type": "module",
   "exports": {
@@ -37,19 +37,19 @@
     "src"
   ],
   "scripts": {
-    "build": "tsc && chmod +x dist/cli.js",
+    "build": "tsc --build tsconfig.build.json && chmod +x dist/cli.js",
     "clean": "rm -rf dist .tsbuildinfo",
-    "dev": "tsc --watch",
+    "dev": "tsc --build tsconfig.build.json --watch",
     "lint": "eslint .",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit -p tsconfig.build.json"
   },
   "dependencies": {
-    "@xats/schema": "workspace:*",
-    "@xats/types": "workspace:*",
-    "@xats/utils": "workspace:*",
-    "@xats/validator": "workspace:*",
+    "@xats-org/schema": "workspace:*",
+    "@xats-org/types": "workspace:*",
+    "@xats-org/utils": "workspace:*",
+    "@xats-org/validator": "workspace:*",
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
     "ora": "^8.0.1"
@@ -58,8 +58,7 @@
     "@types/node": "^20.11.0",
     "@vitest/coverage-v8": "^1.2.0",
     "eslint": "^8.56.0",
-    "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*",
+    "@xats-org/eslint-config": "workspace:*",
     "typescript": "^5.3.3",
     "vitest": "^1.2.0"
   },

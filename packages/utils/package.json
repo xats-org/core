@@ -1,6 +1,6 @@
 {
-  "name": "@xats/utils",
-  "version": "0.4.0",
+  "name": "@xats-org/utils",
+  "version": "0.4.1",
   "description": "Utility functions for the xats ecosystem",
   "keywords": [
     "xats",
@@ -18,7 +18,7 @@
     "url": "git+https://github.com/xats-org/core.git",
     "directory": "packages/utils"
   },
-  "license": "MIT",
+  "license": "CC-BY-SA-4.0",
   "author": "xats Contributors",
   "type": "module",
   "exports": {
@@ -59,14 +59,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@xats/types": "workspace:*"
+    "@xats-org/types": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@vitest/coverage-v8": "^1.2.0",
     "eslint": "^8.56.0",
-    "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*",
+    "@xats-org/eslint-config": "workspace:*",
     "typescript": "^5.3.3",
     "vitest": "^1.2.0"
   },

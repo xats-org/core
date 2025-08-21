@@ -56,7 +56,7 @@
                 "contents": [
                   {
                     "id": "pendulum-theory",
-                    "blockType": "https://xats.org/core/blocks/paragraph",
+                    "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                     "content": {
                       "text": {
                         "runs": [
@@ -70,7 +70,7 @@
                   },
                   {
                     "id": "pendulum-simulation",
-                    "blockType": "https://xats.org/core/blocks/interactive",
+                    "blockType": "https://xats.org/vocabularies/blocks/interactive",
                     "content": {
                       "title": {
                         "runs": [
@@ -140,7 +140,7 @@
                   },
                   {
                     "id": "pendulum-analysis",
-                    "blockType": "https://xats.org/core/blocks/paragraph",
+                    "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                     "content": {
                       "text": {
                         "runs": [

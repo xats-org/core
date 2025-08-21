@@ -61,23 +61,27 @@ jobs:
         BRANCH="${{ steps.branch.outputs.name }}"
         
         # Define required status checks based on branch type
+        # These job names match the ci.yml workflow jobs
         if [ "$BRANCH" == "main" ]; then
           CHECKS='[
             "Lint",
+            "Type Check",
             "Test on Node.js 18",
             "Test on Node.js 20",
             "Test on Node.js 22",
             "Security Audit",
             "Validate JSON Schema",
             "Validate Example Documents",
-            "Build and Package",
+            "Build and Cache",
             "Integration Tests"
           ]'
           echo "Setting up comprehensive protection for main branch"
         else
           CHECKS='[
             "Lint",
-            "Test on Node.js 20"
+            "Type Check",
+            "Test on Node.js 20",
+            "Build and Cache"
           ]'
           echo "Setting up standard protection for version branch"
         fi

@@ -1,0 +1,6 @@
+{
+  "extends": ["@xats-org/eslint-config"],
+  "rules": {
+    "no-console": "off"
+  }
+}

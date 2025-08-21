@@ -81,7 +81,7 @@ For individual assessments with grade passback:
 ```json
 {
   "id": "quiz-chapter-1",
-  "blockType": "https://xats.org/core/blocks/multipleChoice",
+  "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
   "content": {
     "question": { /* ... */ },
     "options": [ /* ... */ ]

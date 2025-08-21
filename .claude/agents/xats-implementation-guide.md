@@ -74,9 +74,9 @@ interface XatsBlockProps {
 
 const XatsBlock: React.FC<XatsBlockProps> = ({ block }) => {
   switch (block.blockType) {
-    case 'https://xats.org/core/blocks/paragraph':
+    case 'https://xats.org/vocabularies/blocks/paragraph':
       return <Paragraph content={block.content} />;
-    case 'https://xats.org/core/blocks/heading':
+    case 'https://xats.org/vocabularies/blocks/heading':
       return <Heading content={block.content} />;
     // ... other block types
   }

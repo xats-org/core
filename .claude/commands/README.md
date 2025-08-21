@@ -1,6 +1,6 @@
 # xats Command Collection
 
-Comprehensive workflow commands for the xats (Extensible Academic Textbook Schema) project, organized by functional area.
+Comprehensive workflow commands for the xats (eXtensible Academic Text Standard) project, organized by functional area.
 
 ## Command Structure
 

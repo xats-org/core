@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/pathways/standard",
+  "title": "Standard Learning Pathway",
+  "description": "The default learning pathway for typical learner progression",
+  "type": "object",
+  "properties": {
+    "pathwayType": {
+      "const": "https://xats.org/vocabularies/pathways/standard",
+      "description": "URI identifier for standard pathway type"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of this pathway",
+      "default": "Standard learning progression for typical students"
+    },
+    "estimatedDuration": {
+      "type": "integer",
+      "description": "Estimated time in minutes",
+      "minimum": 1
+    }
+  },
+  "required": ["pathwayType"],
+  "examples": [
+    {
+      "pathwayType": "https://xats.org/vocabularies/pathways/standard",
+      "description": "Standard learning progression for typical students",
+      "estimatedDuration": 45
+    }
+  ]
+}

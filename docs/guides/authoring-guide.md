@@ -30,7 +30,7 @@ The v0.2.0 assessment framework provides powerful tools for creating pedagogical
 ```json
 {
   "id": "question-1",
-  "blockType": "https://xats.org/core/blocks/multipleChoice",
+  "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
   "language": "en",
   "content": {
     "question": {
@@ -78,7 +78,7 @@ The v0.2.0 assessment framework provides powerful tools for creating pedagogical
 ```json
 {
   "id": "short-answer-1",
-  "blockType": "https://xats.org/core/blocks/shortAnswer",
+  "blockType": "https://xats.org/vocabularies/blocks/shortAnswer",
   "language": "en",
   "content": {
     "question": {
@@ -219,7 +219,7 @@ Pathways now support assessment-based branching for adaptive learning.
   "pathways": [
     {
       "id": "remedial-path",
-      "triggerType": "https://xats.org/core/triggers/onAssessment",
+      "triggerType": "https://xats.org/vocabularies/triggers/onAssessment",
       "sourceId": "assessment-1",
       "rules": [
         {

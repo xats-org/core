@@ -1,6 +1,6 @@
 {
-  "name": "@xats/examples",
-  "version": "0.4.0",
+  "name": "@xats-org/examples",
+  "version": "0.4.1",
   "description": "Example xats documents demonstrating schema features",
   "keywords": [
     "xats",
@@ -18,7 +18,7 @@
     "url": "git+https://github.com/xats-org/core.git",
     "directory": "packages/examples"
   },
-  "license": "MIT",
+  "license": "CC-BY-SA-4.0",
   "author": "xats Contributors",
   "type": "module",
   "exports": {
@@ -59,15 +59,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@xats/types": "workspace:*"
+    "@xats-org/types": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
-    "@xats/cli": "workspace:*",
-    "@xats/validator": "workspace:*",
+    "@xats-org/cli": "workspace:*",
+    "@xats-org/validator": "workspace:*",
     "eslint": "^8.56.0",
-    "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*",
+    "@xats-org/eslint-config": "workspace:*",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },

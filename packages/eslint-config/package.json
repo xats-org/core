@@ -1,6 +1,6 @@
 {
-  "name": "@xats/eslint-config",
-  "version": "0.4.0",
+  "name": "@xats-org/eslint-config",
+  "version": "0.4.1",
   "description": "Shared ESLint configuration for xats monorepo",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "xats"
   ],
   "author": "xats.org",
-  "license": "MIT",
+  "license": "CC-BY-SA-4.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/xats-org/core.git",

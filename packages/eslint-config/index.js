@@ -59,7 +59,7 @@ module.exports = {
         ],
         pathGroups: [
           {
-            pattern: '@xats/**',
+            pattern: '@xats-org/**',
             group: 'internal'
           }
         ],

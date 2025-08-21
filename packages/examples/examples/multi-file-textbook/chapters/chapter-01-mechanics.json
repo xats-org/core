@@ -1,0 +1,52 @@
+{
+  "$schema": "https://xats.org/schemas/0.3.0/xats.json#/definitions/Chapter",
+  "type": "Chapter",
+  "id": "chapter-01",
+  "label": "Chapter 1",
+  "title": "Classical Mechanics",
+  "introduction": {
+    "runs": [
+      {
+        "type": "text",
+        "text": "This chapter introduces the fundamental concepts of classical mechanics, including Newton's laws, forces, and motion."
+      }
+    ]
+  },
+  "learningObjectives": [
+    {
+      "objectiveType": "https://xats.org/vocabularies/objectives/understand",
+      "description": {
+        "runs": [
+          {
+            "type": "text",
+            "text": "Apply Newton's laws to solve problems involving forces and motion"
+          }
+        ]
+      }
+    }
+  ],
+  "sections": [
+    {
+      "$ref": "../sections/ch01-section-01-newtons-laws.json",
+      "xats:refMetadata": {
+        "title": "Newton's Laws of Motion",
+        "lastModified": "2025-08-18T23:33:00Z"
+      }
+    },
+    {
+      "$ref": "../sections/ch01-section-02-forces.json",
+      "xats:refMetadata": {
+        "title": "Forces and Free Body Diagrams",
+        "lastModified": "2025-08-18T23:33:00Z"
+      }
+    }
+  ],
+  "summary": {
+    "runs": [
+      {
+        "type": "text",
+        "text": "Classical mechanics provides the foundation for understanding motion and forces in the physical world."
+      }
+    ]
+  }
+}

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-The **Extensible Academic Textbook Schema (xats)** is a JSON-based standard for defining educational materials. It creates a deeply semantic, machine-readable format for AI-driven educational tools to generate, deconstruct, and repurpose educational content.
+The **eXtensible Academic Text Standard (xats)** is a JSON-based standard for defining educational materials. It creates a deeply semantic, machine-readable format for AI-driven educational tools to generate, deconstruct, and repurpose educational content.
 
 ### Monorepo Structure (v0.4.0+)
 
@@ -13,14 +13,14 @@ Starting with v0.4.0, xats is organized as a TypeScript monorepo using Turborepo
 ```
 xats/
 ├── packages/
-│   ├── @xats/schema/         # Core JSON Schema definitions
-│   ├── @xats/validator/      # Validation logic and error reporting
-│   ├── @xats/types/          # Shared TypeScript types
-│   ├── @xats/cli/            # Command-line interface
-│   ├── @xats/renderer/       # Rendering framework
-│   ├── @xats/mcp-server/     # Model Context Protocol server
-│   ├── @xats/utils/          # Shared utilities
-│   └── @xats/examples/       # Example documents
+│   ├── @xats-org/schema/         # Core JSON Schema definitions
+│   ├── @xats-org/validator/      # Validation logic and error reporting
+│   ├── @xats-org/types/          # Shared TypeScript types
+│   ├── @xats-org/cli/            # Command-line interface
+│   ├── @xats-org/renderer/       # Rendering framework
+│   ├── @xats-org/mcp-server/     # Model Context Protocol server
+│   ├── @xats-org/utils/          # Shared utilities
+│   └── @xats-org/examples/       # Example documents
 ├── apps/
 │   ├── docs/                 # Documentation site
 │   └── website/              # xats.org website
@@ -36,7 +36,7 @@ When working with the monorepo:
 - Use `pnpm run build` to build all packages
 - Use `pnpm run test` to run all tests
 - Use `pnpm run dev` to start development mode
-- Individual packages can be run with `pnpm --filter @xats/[package] [command]`
+- Individual packages can be run with `pnpm --filter @xats-org/[package] [command]`
 
 ## Memory Management
 
@@ -152,9 +152,12 @@ The xats project follows a structured versioning and branching strategy to maint
 
 ### Workflow Process
 
+**⚠️ CRITICAL: NEVER commit directly to main or version branches (v0.2.0, v0.3.0, v0.4.0, etc.)**
+**ALWAYS create feature branches and use pull requests for ALL changes.**
+
 #### 1. Starting New Development
 ```bash
-# Create new version branch from main
+# Create new version branch from main (only for new versions)
 git checkout main
 git pull origin main
 git checkout -b v0.2.0
@@ -163,15 +166,21 @@ git push -u origin v0.2.0
 
 #### 2. Feature Development
 ```bash
-# Create feature branch from version branch
+# ALWAYS create feature branch from version branch
 git checkout v0.2.0
 git pull origin v0.2.0
 git checkout -b feature/issue-42-new-feature
+
+# Make your changes
+# Commit your changes
+# Push feature branch
+git push -u origin feature/issue-42-new-feature
 ```
 
 #### 3. Pull Request Creation
 ```bash
-# Target the version branch, not main
+# ALWAYS target the version branch, NOT main
+# Feature branches → Version branches (during development)
 gh pr create \
   --base "v0.2.0" \
   --title "feat: implement new feature" \
@@ -179,14 +188,29 @@ gh pr create \
   --body "Closes #42"
 ```
 
-#### 4. Version Release
+#### 4. Version Release (ONLY when version is complete)
 ```bash
-# When version is stable, merge to main
+# Version branches → main (ONLY for releases)
+# This PR is created ONLY when the version is ready for production
+gh pr create \
+  --base "main" \
+  --head "v0.2.0" \
+  --title "Release: v0.2.0" \
+  --body "Release notes..."
+
+# After PR is approved and merged
 git checkout main
-git merge v0.2.0
+git pull origin main
 git tag v0.2.0
-git push origin main --tags
+git push origin v0.2.0
 ```
+
+#### Important Rules:
+1. **NEVER commit directly to main** - All changes must go through PR review
+2. **NEVER commit directly to version branches** - Use feature branches
+3. **Feature branches target version branches** - Not main
+4. **Version branches target main ONLY for releases** - When fully ready for production
+5. **Always create PRs** - Even for small changes
 
 #### 5. Hotfix Process
 ```bash
@@ -286,17 +310,17 @@ When working with xats documents, validate against the JSON Schema to ensure com
 
 ### Core Vocabulary URIs
 Common `blockType` URIs:
-- `https://xats.org/core/blocks/paragraph`
-- `https://xats.org/core/blocks/heading`
-- `https://xats.org/core/blocks/list`
-- `https://xats.org/core/blocks/blockquote`
-- `https://xats.org/core/blocks/codeBlock`
-- `https://xats.org/core/blocks/mathBlock`
-- `https://xats.org/core/blocks/table`
-- `https://xats.org/core/blocks/figure`
-- `https://xats.org/core/placeholders/tableOfContents`
-- `https://xats.org/core/placeholders/bibliography`
-- `https://xats.org/core/placeholders/index`
+- `https://xats.org/vocabularies/blocks/paragraph`
+- `https://xats.org/vocabularies/blocks/heading`
+- `https://xats.org/vocabularies/blocks/list`
+- `https://xats.org/vocabularies/blocks/blockquote`
+- `https://xats.org/vocabularies/blocks/codeBlock`
+- `https://xats.org/vocabularies/blocks/mathBlock`
+- `https://xats.org/vocabularies/blocks/table`
+- `https://xats.org/vocabularies/blocks/figure`
+- `https://xats.org/vocabularies/placeholders/tableOfContents`
+- `https://xats.org/vocabularies/placeholders/bibliography`
+- `https://xats.org/vocabularies/placeholders/index`
 
 ### Important Patterns
 
@@ -381,6 +405,7 @@ Commands are organized into categories based on their purpose:
 - **xats-dev:schema-implement** - Implements new features with full workflow
 - **xats-dev:test-suite** - Creates comprehensive test suites
 - **xats-dev:code-review** - Performs thorough code reviews
+- **xats-dev:ci-auto-fix** - Automatically fixes CI failures for a PR (uses Opus model)
 
 #### User Commands (`xats-user:`)
 - **xats-user:create-textbook** - Helps create xats-compliant textbooks

@@ -1,5 +1,5 @@
 /**
- * @xats/utils - Utility functions for the xats ecosystem
+ * @xats-org/utils - Utility functions for the xats ecosystem
  */
 
 // JSON utilities

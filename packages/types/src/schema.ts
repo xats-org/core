@@ -55,21 +55,45 @@ export interface SchemaDefinition extends SchemaMetadata {
 /**
  * Schema validation keyword
  */
-export type SchemaKeyword = 
-  | 'type' | 'enum' | 'const' | 'multipleOf'
-  | 'maximum' | 'minimum' | 'maxLength' | 'minLength'
-  | 'pattern' | 'items' | 'properties' | 'required'
-  | 'dependencies' | 'additionalProperties' | 'format'
-  | 'allOf' | 'anyOf' | 'oneOf' | 'not';
+export type SchemaKeyword =
+  | 'type'
+  | 'enum'
+  | 'const'
+  | 'multipleOf'
+  | 'maximum'
+  | 'minimum'
+  | 'maxLength'
+  | 'minLength'
+  | 'pattern'
+  | 'items'
+  | 'properties'
+  | 'required'
+  | 'dependencies'
+  | 'additionalProperties'
+  | 'format'
+  | 'allOf'
+  | 'anyOf'
+  | 'oneOf'
+  | 'not';
 
 /**
  * Schema format type
  */
-export type SchemaFormat = 
-  | 'date-time' | 'date' | 'time' | 'duration'
-  | 'email' | 'hostname' | 'ipv4' | 'ipv6'
-  | 'uri' | 'uri-reference' | 'uri-template'
-  | 'json-pointer' | 'regex' | 'uuid';
+export type SchemaFormat =
+  | 'date-time'
+  | 'date'
+  | 'time'
+  | 'duration'
+  | 'email'
+  | 'hostname'
+  | 'ipv4'
+  | 'ipv6'
+  | 'uri'
+  | 'uri-reference'
+  | 'uri-template'
+  | 'json-pointer'
+  | 'regex'
+  | 'uuid';
 
 /**
  * Custom schema extension

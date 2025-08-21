@@ -19,7 +19,7 @@ For complete details, see:
 | Property | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | `trigger` | `object` | **Yes** | Defines the event that initiates the pathway check. |
-| `trigger.triggerType` | `string` (URI) | **Yes** | The event type (e.g., `https://xats.org/core/triggers/onCompletion`, `https://xats.org/core/triggers/onAssessment`). |
+| `trigger.triggerType` | `string` (URI) | **Yes** | The event type (e.g., `https://xats.org/vocabularies/triggers/onCompletion`, `https://xats.org/vocabularies/triggers/onAssessment`). |
 | `trigger.sourceId` | `string` | No* | The ID of the source element. *Required when `triggerType` is `onAssessment`. |
 | `rules` | `array` | **Yes** | An ordered list of routing rules (minimum 1 item). |
 | `rules[].condition` | `string` | **Yes** | A boolean expression following the [Pathway Condition Grammar](../specs/pathway-condition-grammar.md). |
@@ -52,24 +52,24 @@ For complete details, see:
 ```json
 {
   "trigger": {
-    "triggerType": "https://xats.org/core/triggers/onAssessment",
+    "triggerType": "https://xats.org/vocabularies/triggers/onAssessment",
     "sourceId": "quiz-3-1"
   },
   "rules": [
     {
       "condition": "score < 70",
       "destinationId": "section-3-1-remedial",
-      "pathwayType": "https://xats.org/core/pathways/remedial"
+      "pathwayType": "https://xats.org/vocabularies/pathways/remedial"
     },
     {
       "condition": "score >= 70 AND score < 90",
       "destinationId": "section-3-2",
-      "pathwayType": "https://xats.org/core/pathways/standard"
+      "pathwayType": "https://xats.org/vocabularies/pathways/standard"
     },
     {
       "condition": "score >= 90",
       "destinationId": "section-3-2-advanced",
-      "pathwayType": "https://xats.org/core/pathways/enrichment"
+      "pathwayType": "https://xats.org/vocabularies/pathways/enrichment"
     }
   ]
 }
@@ -79,24 +79,24 @@ For complete details, see:
 ```json
 {
   "trigger": {
-    "triggerType": "https://xats.org/core/triggers/onAssessment",
+    "triggerType": "https://xats.org/vocabularies/triggers/onAssessment",
     "sourceId": "chapter-test"
   },
   "rules": [
     {
       "condition": "(score < 70 OR time_spent < 120) AND attempts < 3",
       "destinationId": "chapter-review",
-      "pathwayType": "https://xats.org/core/pathways/remedial"
+      "pathwayType": "https://xats.org/vocabularies/pathways/remedial"
     },
     {
       "condition": "score >= 85 AND count(objectives_met) >= objectives_total * 0.9",
       "destinationId": "bonus-content",
-      "pathwayType": "https://xats.org/core/pathways/enrichment"
+      "pathwayType": "https://xats.org/vocabularies/pathways/enrichment"
     },
     {
       "condition": "passed",
       "destinationId": "next-chapter",
-      "pathwayType": "https://xats.org/core/pathways/standard"
+      "pathwayType": "https://xats.org/vocabularies/pathways/standard"
     }
   ]
 }
@@ -106,23 +106,23 @@ For complete details, see:
 ```json
 {
   "trigger": {
-    "triggerType": "https://xats.org/core/triggers/onCompletion"
+    "triggerType": "https://xats.org/vocabularies/triggers/onCompletion"
   },
   "rules": [
     {
       "condition": "user_choice == \"deep_dive\" AND score >= 80",
       "destinationId": "advanced-topics",
-      "pathwayType": "https://xats.org/core/pathways/enrichment"
+      "pathwayType": "https://xats.org/vocabularies/pathways/enrichment"
     },
     {
       "condition": "user_choice == \"practice_more\"",
       "destinationId": "practice-problems",
-      "pathwayType": "https://xats.org/core/pathways/standard"
+      "pathwayType": "https://xats.org/vocabularies/pathways/standard"
     },
     {
       "condition": "true",
       "destinationId": "next-section",
-      "pathwayType": "https://xats.org/core/pathways/standard"
+      "pathwayType": "https://xats.org/vocabularies/pathways/standard"
     }
   ]
 }

@@ -2,7 +2,7 @@
  * File modularity types for xats
  */
 
-import type { ValidatorOptions, ValidationResult } from './validation.js';
+import type { ValidatorOptions } from './validation.js';
 
 /**
  * Reference to an external file
@@ -42,7 +42,13 @@ export interface FileResolutionResult {
 export interface FileResolutionError {
   file: string;
   error: string;
-  code: 'not-found' | 'access-denied' | 'invalid-format' | 'circular-reference' | 'too-large' | 'other';
+  code:
+    | 'not-found'
+    | 'access-denied'
+    | 'invalid-format'
+    | 'circular-reference'
+    | 'too-large'
+    | 'other';
 }
 
 /**

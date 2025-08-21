@@ -1,6 +1,6 @@
 {
-  "name": "@xats/renderer",
-  "version": "0.4.0",
+  "name": "@xats-org/renderer",
+  "version": "0.4.1",
   "description": "Rendering engine for xats documents to various output formats",
   "keywords": [
     "xats",
@@ -18,7 +18,7 @@
     "url": "git+https://github.com/xats-org/core.git",
     "directory": "packages/renderer"
   },
-  "license": "MIT",
+  "license": "CC-BY-SA-4.0",
   "author": "xats Contributors",
   "type": "module",
   "exports": {
@@ -55,17 +55,26 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@xats/types": "workspace:*",
-    "@xats/utils": "workspace:*"
+    "@xats-org/types": "workspace:*",
+    "@xats-org/utils": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
+    "@types/react": "^18.2.0",
     "@vitest/coverage-v8": "^1.2.0",
     "eslint": "^8.56.0",
-    "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*",
+    "@xats-org/eslint-config": "workspace:*",
+    "react": "^18.2.0",
     "typescript": "^5.3.3",
     "vitest": "^1.2.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=18"

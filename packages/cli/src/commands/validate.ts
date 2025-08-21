@@ -1,10 +1,17 @@
-import { Command } from 'commander';
-import { readFileSync, existsSync } from 'fs';
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
+import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
+
 import chalk from 'chalk';
+import { Command } from 'commander';
 import ora from 'ora';
-import { XatsValidator } from '@xats/validator';
-import type { XatsVersion } from '@xats/types';
+
+import { XatsValidator } from '@xats-org/validator';
+
+import { isXatsDocument } from '../types.js';
+
+import type { ValidateCommandOptions } from '../types.js';
+import type { XatsVersion } from '@xats-org/types';
 
 export const validateCommand = new Command('validate')
   .description('Validate a xats document against the schema')
@@ -13,9 +20,9 @@ export const validateCommand = new Command('validate')
   .option('--strict', 'enable strict validation mode')
   .option('--no-extensions', 'disallow extensions')
   .option('--format <format>', 'output format (text, json)', 'text')
-  .action(async (file: string, options: any) => {
+  .action(async (file: string, options: ValidateCommandOptions) => {
     const spinner = ora('Loading document...').start();
-    
+
     try {
       // Check if file exists
       const filePath = resolve(file);
@@ -23,12 +30,12 @@ export const validateCommand = new Command('validate')
         spinner.fail(chalk.red(`File not found: ${file}`));
         process.exit(1);
       }
-      
+
       // Read and parse document
       spinner.text = 'Parsing document...';
       const content = readFileSync(filePath, 'utf-8');
-      let document: any;
-      
+      let document: unknown;
+
       try {
         document = JSON.parse(content);
       } catch (error) {
@@ -38,20 +45,27 @@ export const validateCommand = new Command('validate')
         }
         process.exit(1);
       }
-      
+
+      // Validate that it's a xats document
+      if (!isXatsDocument(document)) {
+        spinner.fail(chalk.red('Document is not a valid xats document structure'));
+        process.exit(1);
+      }
+
       // Validate document
       spinner.text = 'Validating document...';
       const validator = new XatsValidator({
-        strictMode: options.strict,
-        allowExtensions: options.extensions !== false,
+        strict: Boolean(options.strict),
+        allErrors: true,
+        verbose: Boolean(options.verbose),
       });
-      
-      const version = options.schema === 'latest' ? undefined : options.schema as XatsVersion;
-      const result = await validator.validate(document, { version });
-      
-      if (result.valid) {
+
+      const _version = options.schema === 'latest' ? undefined : (options.schema as XatsVersion);
+      const result = await validator.validate(document);
+
+      if (result.isValid) {
         spinner.succeed(chalk.green('Document is valid!'));
-        
+
         if (options.verbose && result.warnings && result.warnings.length > 0) {
           console.log(chalk.yellow('\nWarnings:'));
           result.warnings.forEach((warning, index) => {
@@ -61,13 +75,13 @@ export const validateCommand = new Command('validate')
             }
           });
         }
-        
+
         if (options.format === 'json') {
           console.log(JSON.stringify(result, null, 2));
         }
       } else {
         spinner.fail(chalk.red('Document is invalid'));
-        
+
         if (result.errors && result.errors.length > 0) {
           console.log(chalk.red('\nErrors:'));
           result.errors.forEach((error, index) => {
@@ -75,16 +89,16 @@ export const validateCommand = new Command('validate')
             if (error.path) {
               console.log(chalk.gray(`     at: ${error.path}`));
             }
-            if (options.verbose && error.schemaPath) {
-              console.log(chalk.gray(`     schema: ${error.schemaPath}`));
+            if (options.verbose && error.keyword) {
+              console.log(chalk.gray(`     keyword: ${error.keyword}`));
             }
           });
         }
-        
+
         if (options.format === 'json') {
           console.log(JSON.stringify(result, null, 2));
         }
-        
+
         process.exit(1);
       }
     } catch (error) {

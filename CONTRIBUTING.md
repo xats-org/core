@@ -1,6 +1,6 @@
 # Contributing to xats
 
-First off, thank you for considering contributing to the **Extensible Academic Textbook Schema (xats)**. This project is a community effort, and we welcome any contribution, from fixing typos in the documentation to proposing major architectural changes.
+First off, thank you for considering contributing to the **eXtensible Academic Text Standard (xats)**. This project is a community effort, and we welcome any contribution, from fixing typos in the documentation to proposing major architectural changes.
 
 This document provides a set of guidelines for contributing to the project.
 
@@ -69,7 +69,7 @@ The bar for adding a new URI to the core vocabulary is high, as it must be broad
 1.  **Start with a custom URI.** The best way to prove the utility of a new type is to define it in your own namespace and use it in real-world projects.
 2.  **Open an issue** with the label "Vocabulary Proposal."
 3.  **Provide a detailed rationale:**
-    * The full URI you are proposing (e.g., `https://xats.org/core/blocks/new-block`).
+    * The full URI you are proposing (e.g., `https://xats.org/vocabularies/blocks/new-block`).
     * A clear description of its purpose.
     * For `blockType`s, a complete JSON Schema for its `content` object.
     * Examples of its use and evidence of its adoption by the community.
@@ -194,10 +194,10 @@ pnpm run dev
 ```
 xats/
 ├── packages/           # Core packages
-│   ├── @xats/schema/   # JSON Schema definitions
-│   ├── @xats/validator/# Validation logic
-│   ├── @xats/types/    # Shared TypeScript types
-│   ├── @xats/cli/      # Command-line interface
+│   ├── @xats-org/schema/   # JSON Schema definitions
+│   ├── @xats-org/validator/# Validation logic
+│   ├── @xats-org/types/    # Shared TypeScript types
+│   ├── @xats-org/cli/      # Command-line interface
 │   └── ...
 ├── apps/              # Applications
 │   ├── docs/          # Documentation site
@@ -208,11 +208,11 @@ xats/
 ### Working with Packages
 ```bash
 # Run commands for specific packages
-pnpm --filter @xats/schema build
-pnpm --filter @xats/validator test
+pnpm --filter @xats-org/schema build
+pnpm --filter @xats-org/validator test
 
 # Add dependencies to a specific package
-pnpm --filter @xats/schema add ajv
+pnpm --filter @xats-org/schema add ajv
 
 # Add dev dependencies to root
 pnpm add -D -w eslint

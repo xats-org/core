@@ -1,0 +1,198 @@
+{
+  "schemaVersion": "0.2.0",
+  "bibliographicEntry": {
+    "id": "textbook-2023",
+    "type": "book",
+    "title": "Introduction to Computer Science",
+    "author": [
+      { "family": "Smith", "given": "Jane" },
+      { "family": "Johnson", "given": "Robert" }
+    ],
+    "publisher": "Academic Press",
+    "issued": { "date-parts": [[2023]] },
+    "ISBN": "978-0-123456-78-9"
+  },
+  "subject": "Computer Science",
+  "rights": {
+    "license": "https://xats.org/licenses/cc-by-sa-4.0",
+    "copyrightHolder": "Academic Press Inc.",
+    "copyrightYear": "2023",
+    "permissions": {
+      "redistribute": true,
+      "modify": true,
+      "commercialUse": true,
+      "createDerivatives": true,
+      "shareAlike": true
+    },
+    "attribution": {
+      "required": true,
+      "format": "Smith, J. & Johnson, R. (2023). Introduction to Computer Science. Academic Press. Licensed under CC BY-SA 4.0.",
+      "includeUrl": true,
+      "includeLicense": true
+    },
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "contactInfo": {
+      "email": "licensing@academicpress.com",
+      "organization": "Academic Press Licensing Department",
+      "url": "https://academicpress.com/licensing"
+    }
+  },
+  "resources": [
+    {
+      "id": "proprietary-diagram",
+      "language": "en",
+      "type": "https://xats.org/vocabularies/resources/image",
+      "url": "https://cdn.example.com/diagram.png",
+      "altText": "System architecture diagram showing client-server communication",
+      "resourceRights": {
+        "license": "https://xats.org/licenses/proprietary",
+        "copyrightHolder": "TechCorp Solutions",
+        "copyrightYear": "2023",
+        "permissions": {
+          "redistribute": false,
+          "modify": false,
+          "commercialUse": false,
+          "createDerivatives": false,
+          "shareAlike": false
+        },
+        "restrictions": {
+          "educationalUseOnly": true,
+          "institutionalUseOnly": true
+        },
+        "attribution": {
+          "required": true,
+          "format": "© 2023 TechCorp Solutions. Used with permission for educational purposes only."
+        },
+        "rightsStatement": "This diagram is proprietary to TechCorp Solutions and is licensed exclusively for educational use within accredited institutions. No commercial use, redistribution, or modification permitted without explicit written consent.",
+        "contactInfo": {
+          "email": "rights@techcorp.com",
+          "organization": "TechCorp Solutions Legal Department"
+        }
+      }
+    },
+    {
+      "id": "public-domain-chart",
+      "language": "en", 
+      "type": "https://xats.org/vocabularies/resources/image",
+      "url": "https://cdn.example.com/chart.png",
+      "altText": "Historical timeline of computing milestones",
+      "resourceRights": {
+        "license": "https://xats.org/licenses/public-domain",
+        "copyrightHolder": "US Government",
+        "copyrightYear": "2020",
+        "permissions": {
+          "redistribute": true,
+          "modify": true,
+          "commercialUse": true,
+          "createDerivatives": true,
+          "shareAlike": false
+        },
+        "attribution": {
+          "required": false
+        },
+        "rightsStatement": "This work is in the public domain and may be used for any purpose without restriction."
+      }
+    }
+  ],
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "chapter-1",
+        "language": "en",
+        "title": "Foundations of Computing",
+        "label": "Chapter 1",
+        "rights": {
+          "license": "https://xats.org/licenses/cc-by-nc-4.0", 
+          "copyrightHolder": "Dr. Alice Cooper",
+          "copyrightYear": "2023",
+          "additionalCopyrightHolders": [
+            {
+              "name": "Computing Education Foundation",
+              "year": "2023",
+              "contribution": "Pedagogical framework and assessment design"
+            }
+          ],
+          "permissions": {
+            "redistribute": true,
+            "modify": true,
+            "commercialUse": false,
+            "createDerivatives": true,
+            "shareAlike": false
+          },
+          "restrictions": {
+            "noCommercialUse": true,
+            "educationalUseOnly": true
+          },
+          "attribution": {
+            "required": true,
+            "format": "Cooper, A. (2023). Foundations of Computing. In Introduction to Computer Science (Chapter 1). Licensed under CC BY-NC 4.0.",
+            "includeUrl": true,
+            "includeLicense": true
+          },
+          "expirationDate": "2028-12-31",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "rightsStatement": "This chapter content is available for non-commercial educational use. Commercial publishers must obtain separate licensing agreements."
+        },
+        "sections": [
+          {
+            "id": "section-1-1",
+            "language": "en",
+            "title": "What is Computer Science?",
+            "label": "1.1",
+            "content": [
+              {
+                "id": "intro-paragraph",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Computer science is a multidisciplinary field that combines mathematical rigor with creative problem-solving to study algorithmic processes and computational systems."
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "architecture-figure",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/figure",
+                "content": {
+                  "resourceId": "proprietary-diagram",
+                  "altText": "System architecture diagram showing client-server communication",
+                  "caption": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Figure 1.1: Basic client-server architecture demonstrating foundational computing concepts."
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "timeline-figure", 
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/figure",
+                "content": {
+                  "resourceId": "public-domain-chart",
+                  "altText": "Historical timeline of computing milestones",
+                  "caption": {
+                    "runs": [
+                      {
+                        "type": "text", 
+                        "text": "Figure 1.2: Major milestones in the history of computing."
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

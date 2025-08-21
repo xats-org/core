@@ -1,8 +1,11 @@
-import { Command } from 'commander';
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
+
 import chalk from 'chalk';
+import { Command } from 'commander';
 import ora from 'ora';
+
+import type { FormatCommandOptions } from '../types.js';
 
 export const formatCommand = new Command('format')
   .description('Format a xats document with proper indentation')
@@ -11,9 +14,9 @@ export const formatCommand = new Command('format')
   .option('-i, --indent <spaces>', 'number of spaces for indentation', '2')
   .option('--no-sort-keys', 'do not sort object keys')
   .option('--compact', 'use compact formatting (no extra whitespace)')
-  .action((file: string, options: any) => {
+  .action((file: string, options: FormatCommandOptions) => {
     const spinner = ora('Loading document...').start();
-    
+
     try {
       // Check if file exists
       const filePath = resolve(file);
@@ -21,12 +24,12 @@ export const formatCommand = new Command('format')
         spinner.fail(chalk.red(`File not found: ${file}`));
         process.exit(1);
       }
-      
+
       // Read and parse document
       spinner.text = 'Parsing document...';
       const content = readFileSync(filePath, 'utf-8');
-      let document: any;
-      
+      let document: unknown;
+
       try {
         document = JSON.parse(content);
       } catch (error) {
@@ -36,26 +39,26 @@ export const formatCommand = new Command('format')
         }
         process.exit(1);
       }
-      
+
       // Format document
       spinner.text = 'Formatting document...';
-      
+
       let formatted: string;
-      const indent = options.compact ? 0 : parseInt(options.indent, 10);
-      
+      const indent = options.compact ? 0 : parseInt(options.indent || '2', 10);
+
       if (options.sortKeys !== false && !options.compact) {
         // Sort keys for consistent formatting
         formatted = JSON.stringify(sortObjectKeys(document), null, indent);
       } else {
         formatted = JSON.stringify(document, null, indent);
       }
-      
+
       // Write output
       const outputPath = options.output ? resolve(options.output) : filePath;
-      writeFileSync(outputPath, formatted + '\n', 'utf-8');
-      
+      writeFileSync(outputPath, `${formatted}\n`, 'utf-8');
+
       spinner.succeed(chalk.green(`Document formatted successfully!`));
-      
+
       if (options.output) {
         console.log(chalk.gray(`Output written to: ${outputPath}`));
       }
@@ -71,11 +74,11 @@ export const formatCommand = new Command('format')
 /**
  * Recursively sort object keys
  */
-function sortObjectKeys(obj: any): any {
+function sortObjectKeys(obj: unknown): unknown {
   if (Array.isArray(obj)) {
     return obj.map(sortObjectKeys);
   }
-  
+
   if (obj !== null && typeof obj === 'object') {
     // Define key order priority
     const keyOrder = [
@@ -87,48 +90,46 @@ function sortObjectKeys(obj: any): any {
       'frontMatter',
       'bodyMatter',
       'backMatter',
-      
+
       // Common object keys
       'id',
       'type',
       'label',
       'title',
       'contents',
-      
+
       // Block keys
       'blockType',
       'content',
-      
+
       // SemanticText keys
       'runs',
       'text',
-      
+
       // Extension keys (always last)
       'tags',
       'extensions',
     ];
-    
-    const sorted: any = {};
-    const keys = Object.keys(obj);
-    
+
+    const sorted: Record<string, unknown> = {};
+    const keys = Object.keys(obj as Record<string, unknown>);
+
     // First, add keys in priority order
     for (const key of keyOrder) {
       if (keys.includes(key)) {
-        sorted[key] = sortObjectKeys(obj[key]);
+        sorted[key] = sortObjectKeys((obj as Record<string, unknown>)[key]);
       }
     }
-    
+
     // Then add remaining keys alphabetically
-    const remainingKeys = keys
-      .filter(key => !keyOrder.includes(key))
-      .sort();
-    
+    const remainingKeys = keys.filter((key) => !keyOrder.includes(key)).sort();
+
     for (const key of remainingKeys) {
-      sorted[key] = sortObjectKeys(obj[key]);
+      sorted[key] = sortObjectKeys((obj as Record<string, unknown>)[key]);
     }
-    
+
     return sorted;
   }
-  
+
   return obj;
 }

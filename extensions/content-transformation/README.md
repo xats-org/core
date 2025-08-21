@@ -66,7 +66,7 @@ The Content Transformation extension provides tools for converting content betwe
         {
           "ruleId": "heading-to-title",
           "sourceFormat": "markdown",
-          "targetBlockType": "https://xats.org/core/blocks/heading",
+          "targetBlockType": "https://xats.org/vocabularies/blocks/heading",
           "pattern": "^(#{1,6})\\s+(.+)$",
           "transformation": {
             "extractText": {
@@ -86,7 +86,7 @@ The Content Transformation extension provides tools for converting content betwe
         {
           "ruleId": "paragraph-to-paragraph",
           "sourceFormat": "markdown",
-          "targetBlockType": "https://xats.org/core/blocks/paragraph",
+          "targetBlockType": "https://xats.org/vocabularies/blocks/paragraph",
           "pattern": "^(?!#|\\*|\\-|\\d+\\.)(.+)$",
           "transformation": {
             "preserveFormatting": {
@@ -156,7 +156,7 @@ The Content Transformation extension provides tools for converting content betwe
         {
           "ruleId": "math-block",
           "sourceFormat": "markdown",
-          "targetBlockType": "https://xats.org/core/blocks/mathBlock",
+          "targetBlockType": "https://xats.org/vocabularies/blocks/mathBlock",
           "pattern": "^\\$\\$([\\s\\S]*?)\\$\\$$",
           "transformation": {
             "extractText": {
@@ -172,7 +172,7 @@ The Content Transformation extension provides tools for converting content betwe
         {
           "ruleId": "citation",
           "sourceFormat": "markdown",
-          "targetBlockType": "https://xats.org/core/blocks/paragraph",
+          "targetBlockType": "https://xats.org/vocabularies/blocks/paragraph",
           "pattern": "\\[@([^\\]]+)\\]",
           "transformation": {
             "extractText": {
@@ -226,19 +226,19 @@ The Content Transformation extension provides tools for converting content betwe
       },
       "contentMapping": {
         "blockTypeMapping": {
-          "https://xats.org/core/blocks/paragraph": {
+          "https://xats.org/vocabularies/blocks/paragraph": {
             "element": "p",
             "attributes": {
               "class": "xats-paragraph"
             }
           },
-          "https://xats.org/core/blocks/heading": {
+          "https://xats.org/vocabularies/blocks/heading": {
             "element": "h{level}",
             "attributes": {
               "class": "xats-heading xats-heading-{level}"
             }
           },
-          "https://xats.org/core/blocks/mathBlock": {
+          "https://xats.org/vocabularies/blocks/mathBlock": {
             "element": "div",
             "attributes": {
               "class": "math-block"
@@ -295,11 +295,11 @@ The Content Transformation extension provides tools for converting content betwe
             {
               "property": "blockType",
               "operator": "equals",
-              "value": "https://xats.org/core/blocks/quiz"
+              "value": "https://xats.org/vocabularies/blocks/quiz"
             }
           ],
-          "from": "https://xats.org/core/blocks/quiz",
-          "to": "https://xats.org/core/blocks/multipleChoice"
+          "from": "https://xats.org/vocabularies/blocks/quiz",
+          "to": "https://xats.org/vocabularies/blocks/multipleChoice"
         },
         {
           "path": "$..assessmentFramework",
@@ -516,7 +516,7 @@ export class ContentTransformer {
         const paragraph = token as marked.Tokens.Paragraph;
         return {
           id: this.generateId('paragraph'),
-          blockType: 'https://xats.org/core/blocks/paragraph',
+          blockType: 'https://xats.org/vocabularies/blocks/paragraph',
           content: {
             text: this.parseInlineTokensToSemanticText(paragraph.tokens)
           }
@@ -526,7 +526,7 @@ export class ContentTransformer {
         const blockquote = token as marked.Tokens.Blockquote;
         return {
           id: this.generateId('blockquote'),
-          blockType: 'https://xats.org/core/blocks/blockquote',
+          blockType: 'https://xats.org/vocabularies/blocks/blockquote',
           content: {
             text: this.parseTokensToSemanticText(blockquote.tokens)
           }
@@ -536,7 +536,7 @@ export class ContentTransformer {
         const list = token as marked.Tokens.List;
         return {
           id: this.generateId('list'),
-          blockType: 'https://xats.org/core/blocks/list',
+          blockType: 'https://xats.org/vocabularies/blocks/list',
           content: {
             listType: list.ordered ? 'ordered' : 'unordered',
             items: list.items.map(item => ({
@@ -549,7 +549,7 @@ export class ContentTransformer {
         const table = token as marked.Tokens.Table;
         return {
           id: this.generateId('table'),
-          blockType: 'https://xats.org/core/blocks/table',
+          blockType: 'https://xats.org/vocabularies/blocks/table',
           content: {
             headers: table.header.map(cell => ({
               content: this.parseInlineTokensToSemanticText(cell.tokens)
@@ -565,7 +565,7 @@ export class ContentTransformer {
       default:
         return {
           id: this.generateId('unknown'),
-          blockType: 'https://xats.org/core/blocks/paragraph',
+          blockType: 'https://xats.org/vocabularies/blocks/paragraph',
           content: {
             text: { runs: [{ type: 'text', content: 'Unknown content type' }] }
           }
@@ -898,7 +898,7 @@ This is a paragraph.
     });
     
     const mathBlock = result.bodyMatter.contents[0].contents[0];
-    expect(mathBlock.blockType).toBe('https://xats.org/core/blocks/mathBlock');
+    expect(mathBlock.blockType).toBe('https://xats.org/vocabularies/blocks/mathBlock');
     expect(mathBlock.content.formula).toBe('E = mc^2');
   });
 });

@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/hints/toc",
+  "title": "Table of Contents Hint",
+  "description": "Rendering hint for table of contents generation and display",
+  "type": "object",
+  "properties": {
+    "maxDepth": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 6,
+      "default": 3,
+      "description": "Maximum heading depth to include in TOC"
+    },
+    "style": {
+      "type": "string",
+      "enum": ["nested", "flat", "accordion", "sidebar"],
+      "default": "nested",
+      "description": "Display style for the table of contents"
+    },
+    "includeNumbers": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to include section numbers"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "maxDepth": 2,
+      "style": "flat",
+      "includeNumbers": false
+    },
+    {
+      "maxDepth": 3,
+      "style": "nested",
+      "includeNumbers": true
+    }
+  ]
+}

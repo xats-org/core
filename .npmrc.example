@@ -1,0 +1,15 @@
+# Example NPM configuration file
+# Copy this to .npmrc and replace with your actual token
+
+# NPM Registry Authentication
+# Replace YOUR_NPM_TOKEN with your actual npm token
+//registry.npmjs.org/:_authToken=YOUR_NPM_TOKEN
+
+# Optional: Set registry explicitly
+registry=https://registry.npmjs.org/
+
+# Optional: Set scope for @xats packages
+@xats:registry=https://registry.npmjs.org/
+
+# Optional: Always authenticate for publish
+always-auth=true

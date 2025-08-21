@@ -2,7 +2,7 @@
 
 ## Overview
 
-The xats (Extensible Academic Textbook Schema) follows a comprehensive versioning strategy designed to ensure long-term stability, clear migration paths, and predictable evolution of the standard. This document outlines the official versioning policy, breaking change guidelines, and compatibility guarantees.
+The xats (eXtensible Academic Text Standard) follows a comprehensive versioning strategy designed to ensure long-term stability, clear migration paths, and predictable evolution of the standard. This document outlines the official versioning policy, breaking change guidelines, and compatibility guarantees.
 
 ## Table of Contents
 
@@ -236,8 +236,8 @@ Always prefer additive changes that enhance functionality:
   "type": "string",
   "format": "uri",
   "examples": [
-    "https://xats.org/core/blocks/paragraph",
-    "https://xats.org/core/blocks/newBlockType"  // Added in v0.3.0
+    "https://xats.org/vocabularies/blocks/paragraph",
+    "https://xats.org/vocabularies/blocks/newBlockType"  // Added in v0.3.0
   ]
 }
 ```
@@ -263,7 +263,7 @@ Extend vocabularies through URI namespaces:
 
 ```json
 // Core vocabulary
-"https://xats.org/core/blocks/paragraph"
+"https://xats.org/vocabularies/blocks/paragraph"
 
 // Extension vocabulary
 "https://xats.org/extensions/assessment/quiz"

@@ -1,0 +1,49 @@
+{
+  "name": "@xats-org/vocabularies",
+  "version": "0.4.1",
+  "description": "Core vocabulary definitions for the xats schema",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./vocabularies/*": "./vocabularies/*"
+  },
+  "files": [
+    "dist",
+    "vocabularies",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "xats",
+    "vocabulary",
+    "schema",
+    "education"
+  ],
+  "author": "xats.org",
+  "license": "CC-BY-SA-4.0",
+  "dependencies": {
+    "@xats-org/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@xats-org/eslint-config": "workspace:*",
+    "@xats-org/prettier-config": "workspace:*",
+    "@xats-org/vitest-config": "workspace:*",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/triggers/onCompletion",
+  "title": "On Completion Trigger",
+  "description": "A trigger that fires when a section or unit is completed",
+  "type": "object",
+  "properties": {
+    "triggerType": {
+      "const": "https://xats.org/vocabularies/triggers/onCompletion",
+      "description": "The URI identifier for this trigger type"
+    },
+    "sourceId": {
+      "type": "string",
+      "description": "The ID of the object whose completion triggers this pathway"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "completionCriteria": {
+          "type": "string",
+          "enum": ["viewed", "allActivitiesComplete", "assessmentPassed", "custom"],
+          "description": "The criteria for determining completion"
+        },
+        "customCriteria": {
+          "type": "string",
+          "description": "Custom completion criteria if completionCriteria is 'custom'"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "required": ["triggerType"],
+  "examples": [
+    {
+      "triggerType": "https://xats.org/vocabularies/triggers/onCompletion",
+      "sourceId": "section-2.3",
+      "metadata": {
+        "completionCriteria": "viewed"
+      }
+    },
+    {
+      "triggerType": "https://xats.org/vocabularies/triggers/onCompletion",
+      "sourceId": "chapter-5",
+      "metadata": {
+        "completionCriteria": "allActivitiesComplete"
+      }
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
-  "name": "@xats/schema",
-  "version": "0.4.0",
-  "description": "JSON Schema definitions for the Extensible Academic Textbook Schema",
+  "name": "@xats-org/schema",
+  "version": "0.4.1",
+  "description": "JSON Schema definitions for the eXtensible Academic Text Standard",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,8 +13,8 @@
     "./schemas/*": "./schemas/*"
   },
   "scripts": {
-    "build": "tsc --build",
-    "dev": "tsc --build --watch",
+    "build": "tsc --build tsconfig.build.json",
+    "dev": "tsc --build tsconfig.build.json --watch",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -22,7 +22,7 @@
     "lint:fix": "eslint src --ext .ts,.js --fix",
     "format": "prettier --write \"src/**/*.{ts,js,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,js,json}\"",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig.build.json",
     "clean": "rm -rf dist .tsbuildinfo"
   },
   "keywords": [
@@ -33,7 +33,7 @@
     "textbook"
   ],
   "author": "xats.org",
-  "license": "MIT",
+  "license": "CC-BY-SA-4.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/xats-org/core.git",
@@ -44,18 +44,18 @@
   },
   "homepage": "https://xats.org",
   "dependencies": {
-    "@xats/types": "workspace:*"
+    "@xats-org/types": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
-    "@xats/vitest-config": "workspace:*",
+    "@xats-org/vitest-config": "workspace:*",
     "ajv": "^8.12.0",
     "ajv-formats": "^2.1.1",
     "typescript": "^5.3.0",
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "@xats/types": "workspace:*"
+    "@xats-org/types": "workspace:*"
   },
   "files": [
     "dist/",

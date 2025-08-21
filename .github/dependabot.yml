@@ -1,18 +1,20 @@
 version: 2
 updates:
-  # Root package.json
+  # Monorepo root - handles all npm dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "03:00"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 5  # Reduced from 10
     groups:
+      # Group all development dependencies together
       development-dependencies:
         dependency-type: "development"
         patterns:
           - "*"
+      # Group all production dependencies together  
       production-dependencies:
         dependency-type: "production"
         patterns:
@@ -26,149 +28,23 @@ updates:
     reviewers:
       - "xats-org/maintainers"
     milestone: 4  # v0.4.0 milestone
-
-  # Individual packages - Core packages
-  - package-ecosystem: "npm"
-    directory: "/packages/schema"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-    labels:
-      - "dependencies"
-      - "component:schema"
-
-  - package-ecosystem: "npm"
-    directory: "/packages/validator"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-    labels:
-      - "dependencies"
-      - "component:validation"
-
-  - package-ecosystem: "npm"
-    directory: "/packages/types"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-    labels:
-      - "dependencies"
-      - "component:types"
-
-  - package-ecosystem: "npm"
-    directory: "/packages/cli"
-    schedule:
-      interval: "weekly"
-      day: "tuesday"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-    labels:
-      - "dependencies"
-      - "component:cli"
-
-  - package-ecosystem: "npm"
-    directory: "/packages/renderer"
-    schedule:
-      interval: "weekly"
-      day: "tuesday"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-    labels:
-      - "dependencies"
-      - "component:renderer"
-
-  - package-ecosystem: "npm"
-    directory: "/packages/utils"
-    schedule:
-      interval: "weekly"
-      day: "tuesday"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-    labels:
-      - "dependencies"
-      - "component:utils"
-
-  - package-ecosystem: "npm"
-    directory: "/packages/examples"
-    schedule:
-      interval: "weekly"
-      day: "wednesday"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-    labels:
-      - "dependencies"
-      - "component:examples"
-
-  - package-ecosystem: "npm"
-    directory: "/packages/mcp-server"
-    schedule:
-      interval: "weekly"
-      day: "wednesday"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-    labels:
-      - "dependencies"
-      - "component:mcp"
+    # Ignore individual package updates - handled by root
     ignore:
-      # MCP server might have specific version requirements
-      - dependency-name: "@modelcontextprotocol/*"
-
-  # Apps
-  - package-ecosystem: "npm"
-    directory: "/apps/docs"
-    schedule:
-      interval: "weekly"
-      day: "thursday"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-    labels:
-      - "dependencies"
-      - "component:documentation"
-
-  - package-ecosystem: "npm"
-    directory: "/apps/website"
-    schedule:
-      interval: "weekly"
-      day: "thursday"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-    labels:
-      - "dependencies"
-      - "component:website"
+      - dependency-name: "*"
+        update-types: ["version-update:semver-patch"]  # Ignore patch updates
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "friday"
-    open-pull-requests-limit: 5
+      interval: "monthly"  # Less frequent for actions
+      day: "monday"
+    open-pull-requests-limit: 2  # Reduced limit
+    groups:
+      # Group all GitHub Actions updates together
+      github-actions:
+        patterns:
+          - "*"
     commit-message:
       prefix: "ci"
     labels:
@@ -176,16 +52,3 @@ updates:
       - "component:ci-cd"
     reviewers:
       - "xats-org/maintainers"
-
-  # Docker dependencies (if Dockerfile exists)
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "friday"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "docker"
-    labels:
-      - "dependencies"
-      - "component:infrastructure"

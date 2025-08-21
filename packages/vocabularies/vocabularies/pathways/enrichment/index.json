@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/pathways/enrichment",
+  "title": "Enrichment Learning Pathway",
+  "description": "Advanced pathway for learners ready for additional challenge",
+  "type": "object",
+  "properties": {
+    "pathwayType": {
+      "const": "https://xats.org/vocabularies/pathways/enrichment",
+      "description": "URI identifier for enrichment pathway type"
+    },
+    "description": {
+      "type": "string", 
+      "description": "Description of this pathway",
+      "default": "Advanced content and challenges for high-achieving learners"
+    },
+    "additionalTopics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Additional topics to explore"
+    },
+    "challengeLevel": {
+      "type": "string",
+      "enum": ["moderate", "high", "expert"],
+      "description": "Level of additional challenge"
+    },
+    "estimatedDuration": {
+      "type": "integer",
+      "description": "Estimated time in minutes", 
+      "minimum": 1
+    }
+  },
+  "required": ["pathwayType"],
+  "examples": [
+    {
+      "pathwayType": "https://xats.org/vocabularies/pathways/enrichment",
+      "description": "Explore advanced applications and real-world connections",
+      "additionalTopics": ["optimization problems", "modeling with derivatives"],
+      "challengeLevel": "high",
+      "estimatedDuration": 90
+    }
+  ]
+}

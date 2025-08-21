@@ -35,15 +35,15 @@ export function isExtensionUri(uri: string): boolean {
  */
 export function extractNamespace(uri: string): string | null {
   if (!isValidUri(uri)) return null;
-  
+
   try {
     const url = new URL(uri);
     const pathParts = url.pathname.split('/').filter(Boolean);
-    
+
     if (pathParts.length >= 2) {
       return `${url.origin}/${pathParts[0]}`;
     }
-    
+
     return url.origin;
   } catch {
     return null;
@@ -55,9 +55,9 @@ export function extractNamespace(uri: string): string | null {
  */
 export function extractVocabularyType(uri: string): string | null {
   if (!uri.startsWith(XATS_BASE_URI)) return null;
-  
+
   const match = uri.match(/^https:\/\/xats\.org\/(\w+)\//);
-  return match ? match[1] : null;
+  return match ? (match[1] ?? null) : null;
 }
 
 /**
@@ -93,10 +93,10 @@ export interface ParsedUri {
 
 export function parseXatsUri(uri: string): ParsedUri | null {
   if (!isValidUri(uri)) return null;
-  
+
   const isCore = isXatsCoreUri(uri);
   const isExtension = isExtensionUri(uri);
-  
+
   if (!isCore && !isExtension) {
     return {
       namespace: extractNamespace(uri) || uri,
@@ -107,33 +107,33 @@ export function parseXatsUri(uri: string): ParsedUri | null {
       isExtension: false,
     };
   }
-  
+
   try {
     const url = new URL(uri);
     const pathParts = url.pathname.split('/').filter(Boolean);
-    
+
     if (isCore && pathParts.length >= 3) {
       return {
         namespace: XATS_BASE_URI,
         vocabulary: 'core',
-        category: pathParts[1],
-        name: pathParts[2],
+        category: pathParts[1] ?? null,
+        name: pathParts[2] ?? null,
         isCore: true,
         isExtension: false,
       };
     }
-    
+
     if (isExtension && pathParts.length >= 5) {
       return {
         namespace: XATS_BASE_URI,
         vocabulary: `${pathParts[1]}/${pathParts[2]}`,
-        category: pathParts[3],
-        name: pathParts[4],
+        category: pathParts[3] ?? null,
+        name: pathParts[4] ?? null,
         isCore: false,
         isExtension: true,
       };
     }
-    
+
     return null;
   } catch {
     return null;
@@ -145,17 +145,17 @@ export function parseXatsUri(uri: string): ParsedUri | null {
  */
 export function normalizeUri(uri: string): string {
   if (!isValidUri(uri)) return uri;
-  
+
   try {
     const url = new URL(uri);
     url.protocol = url.protocol.toLowerCase();
     url.hostname = url.hostname.toLowerCase();
-    
+
     // Remove trailing slash from pathname unless it's root
     if (url.pathname !== '/' && url.pathname.endsWith('/')) {
       url.pathname = url.pathname.slice(0, -1);
     }
-    
+
     return url.toString();
   } catch {
     return uri;

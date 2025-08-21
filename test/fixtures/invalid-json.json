@@ -1,9 +1,0 @@
-{
-  "schemaVersion": "0.1.0",
-  "bibliographicEntry": {
-    "id": "textbook-004",
-    "type": "book",
-    "title": "Invalid JSON"
-    // Missing comma and other syntax errors
-  },
-  "subject": "Test"

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/hints/layoutMode",
+  "title": "Layout Mode Hint",
+  "description": "Rendering hint to suggest layout presentation mode",
+  "type": "string",
+  "enum": [
+    "single-column",
+    "multi-column", 
+    "sidebar",
+    "split-view",
+    "full-width",
+    "narrow",
+    "responsive"
+  ],
+  "examples": [
+    "single-column",
+    "multi-column",
+    "sidebar"
+  ]
+}

@@ -89,5 +89,10 @@
     }
   },
   "globalDependencies": ["**/.env", "**/.env.*", "tsconfig.json", "tsconfig.base.json"],
-  "globalEnv": ["NODE_ENV", "CI", "TURBO_TELEMETRY_DISABLED"]
+  "globalEnv": ["NODE_ENV", "CI", "TURBO_TELEMETRY_DISABLED"],
+  "remoteCache": {
+    "enabled": true
+  },
+  "daemon": true,
+  "ui": "tui"
 }

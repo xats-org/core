@@ -1,6 +1,6 @@
 {
-  "name": "@xats/vitest-config",
-  "version": "0.4.0",
+  "name": "@xats-org/vitest-config",
+  "version": "0.4.1",
   "description": "Shared Vitest configuration for xats monorepo",
   "type": "module",
   "main": "index.js",
@@ -14,7 +14,7 @@
     "xats"
   ],
   "author": "xats.org",
-  "license": "MIT",
+  "license": "CC-BY-SA-4.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/xats-org/core.git",

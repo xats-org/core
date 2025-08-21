@@ -1,12 +1,16 @@
 #!/usr/bin/env node
-import { Command } from 'commander';
 import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { validateCommand } from './commands/validate.js';
+import { fileURLToPath } from 'url';
+
+import { Command } from 'commander';
+
+import { formatCommand } from './commands/format.js';
 import { infoCommand } from './commands/info.js';
 import { statsCommand } from './commands/stats.js';
-import { formatCommand } from './commands/format.js';
+import { validateCommand } from './commands/validate.js';
+
+import type { PackageJson } from './types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,7 +18,7 @@ const __dirname = dirname(__filename);
 // Read package.json for version
 const packageJson = JSON.parse(
   readFileSync(join(__dirname, '..', 'package.json'), 'utf-8')
-);
+) as PackageJson;
 
 const program = new Command();
 

@@ -6,7 +6,7 @@
 [![Development](https://img.shields.io/badge/development-v0.4.0-orange.svg)](https://github.com/xats-org/core/tree/main)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![CI Status](https://img.shields.io/github/actions/workflow/status/xats-org/core/ci.yml?branch=v0.2.0&label=CI)](https://github.com/xats-org/core/actions)
-[![npm version](https://img.shields.io/npm/v/@xats-org/core.svg)](https://www.npmjs.com/package/@xats-org/core)
+[![npm version](https://img.shields.io/npm/v/@xats-org/cli.svg)](https://www.npmjs.com/package/@xats-org/cli)
 
 **The Modern Standard for Academic and Educational Content**
 
@@ -84,19 +84,23 @@ Unlike general-purpose formats, xats is designed specifically for academic and e
 ### Installation
 
 ```bash
-npm install -g @xats-org/core
+# Install the CLI globally
+pnpm add -g @xats-org/cli
+
+# Or use individual packages
+pnpm add @xats-org/validator @xats-org/schema
 ```
 
 ### Validate a Document
 
 ```bash
-xats-validate my-textbook.json
+xats validate my-textbook.json
 ```
 
 ### Programmatic Usage
 
 ```javascript
-import { validateDocument } from '@xats-org/core';
+import { validateDocument } from '@xats-org/validator';
 
 const document = {
   schemaVersion: "0.3.0",
@@ -152,7 +156,7 @@ const { valid, errors } = await validateDocument(document);
               {
                 "id": "para-1",
                 "language": "en-US",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -178,7 +182,7 @@ const { valid, errors } = await validateDocument(document);
               {
                 "id": "assessment-1",
                 "language": "en-US",
-                "blockType": "https://xats.org/core/blocks/multipleChoice",
+                "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
                 "content": {
                   "question": {
                     "runs": [
@@ -237,21 +241,25 @@ const { valid, errors } = await validateDocument(document);
 | **[Accessibility Guide](./docs/guides/accessibility-guide.md)** | WCAG compliance guide |
 | **[Release Notes](./docs/releases/)** | Complete release history and feature announcements |
 
-## 🏗️ Project Structure
+## 🏗️ Project Structure (v0.4.0+ Monorepo)
 
 ```
 xats-org/core/
-├── schemas/           # JSON Schema definitions
-│   ├── v0.1.0/       # Legacy release
-│   ├── v0.2.0/       # Previous stable
-│   └── v0.3.0/       # Current stable
-├── src/              # TypeScript source code
-│   ├── validator/    # Validation logic
-│   └── types/        # TypeScript definitions
-├── test/             # Comprehensive test suite
-├── examples/         # Example documents
-├── docs/             # Documentation
-└── bin/              # CLI tools
+├── packages/              # Monorepo packages
+│   ├── @xats-org/schema/     # Core JSON Schema definitions
+│   ├── @xats-org/validator/  # Validation logic and error reporting
+│   ├── @xats-org/types/      # Shared TypeScript types
+│   ├── @xats-org/cli/        # Command-line interface
+│   ├── @xats-org/renderer/   # Rendering framework
+│   ├── @xats-org/mcp-server/ # Model Context Protocol server
+│   ├── @xats-org/utils/      # Shared utilities
+│   └── @xats-org/examples/   # Example documents
+├── apps/                  # Applications
+│   ├── docs/             # Documentation site
+│   └── website/          # xats.org website
+├── turbo.json            # Turborepo configuration
+├── pnpm-workspace.yaml   # pnpm workspace configuration
+└── package.json          # Root package.json
 ```
 
 ## 🔄 Version Management
@@ -281,14 +289,20 @@ We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md)
 git clone https://github.com/xats-org/core.git
 cd core
 
+# Install pnpm if needed
+npm install -g pnpm
+
 # Install dependencies
-npm install
+pnpm install
+
+# Build all packages
+pnpm run build
 
 # Run tests
-npm test
+pnpm run test
 
 # Validate examples
-npm run validate examples/
+pnpm --filter @xats-org/cli run validate:examples
 ```
 
 ### Key Contributors
