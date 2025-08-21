@@ -1,8 +1,8 @@
 # Voluntary Product Accessibility Template (VPAT®) 2.5
-## xats - Extensible Academic Textbook Schema v0.2.0
+## xats - eXtensible Academic Text Standard v0.2.0
 
 **Date:** January 18, 2025  
-**Product Name:** xats (Extensible Academic Textbook Schema)  
+**Product Name:** xats (eXtensible Academic Text Standard)  
 **Product Version:** v0.2.0  
 **Product Description:** JSON-based standard for defining accessible educational materials  
 **Contact Information:** xats-org/core on GitHub  

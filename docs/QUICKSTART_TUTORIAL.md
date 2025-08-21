@@ -161,7 +161,7 @@ Sections contain the actual content blocks. Let's add a section with a paragraph
                   "runs": [
                     {
                       "type": "text",
-                      "text": "The Extensible Academic Textbook Schema (xats) is a JSON-based standard for educational materials."
+                      "text": "The eXtensible Academic Text Standard (xats) is a JSON-based standard for educational materials."
                     }
                   ]
                 }

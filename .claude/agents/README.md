@@ -1,6 +1,6 @@
 # xats Agent Collection
 
-A comprehensive collection of specialized AI agents for the xats (Extensible Academic Textbook Schema) project, designed to manage schema development, support third-party developers, and ensure quality across the ecosystem.
+A comprehensive collection of specialized AI agents for the xats (eXtensible Academic Text Standard) project, designed to manage schema development, support third-party developers, and ensure quality across the ecosystem.
 
 ## Overview
 

@@ -1,6 +1,6 @@
 # xats Schema Reference Guide
 
-Welcome to the official technical reference for the **Extensible Academic Textbook Schema (xats)**. This guide provides a detailed, item-by-item explanation of every object and property within the schema, including the comprehensive assessment framework, accessibility features, and LTI 1.3 integration support.
+Welcome to the official technical reference for the **eXtensible Academic Text Standard (xats)**. This guide provides a detailed, item-by-item explanation of every object and property within the schema, including the comprehensive assessment framework, accessibility features, and LTI 1.3 integration support.
 
 **Current Version:** v0.3.0  
 **Previous Versions:** v0.2.0, v0.1.0

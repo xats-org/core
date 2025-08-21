@@ -8,7 +8,7 @@
  
 ## 1. Introduction
 
-This document outlines the future direction for the **Extensible Academic Textbook Schema (xats)**. It details planned features, known limitations in the current version, and the long-term vision for the ecosystem. Its purpose is to provide context for current design decisions and to guide future development, ensuring the standard remains relevant, credible, and powerful within the academic and publishing communities.
+This document outlines the future direction for the **eXtensible Academic Text Standard (xats)**. It details planned features, known limitations in the current version, and the long-term vision for the ecosystem. Its purpose is to provide context for current design decisions and to guide future development, ensuring the standard remains relevant, credible, and powerful within the academic and publishing communities.
 
 ---
 

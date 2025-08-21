@@ -2,7 +2,7 @@
 
 ## Overview
 
-The xats (Extensible Academic Textbook Schema) follows a comprehensive versioning strategy designed to ensure long-term stability, clear migration paths, and predictable evolution of the standard. This document outlines the official versioning policy, breaking change guidelines, and compatibility guarantees.
+The xats (eXtensible Academic Text Standard) follows a comprehensive versioning strategy designed to ensure long-term stability, clear migration paths, and predictable evolution of the standard. This document outlines the official versioning policy, breaking change guidelines, and compatibility guarantees.
 
 ## Table of Contents
 

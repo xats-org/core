@@ -1,6 +1,6 @@
 # Contributing to xats
 
-First off, thank you for considering contributing to the **Extensible Academic Textbook Schema (xats)**. This project is a community effort, and we welcome any contribution, from fixing typos in the documentation to proposing major architectural changes.
+First off, thank you for considering contributing to the **eXtensible Academic Text Standard (xats)**. This project is a community effort, and we welcome any contribution, from fixing typos in the documentation to proposing major architectural changes.
 
 This document provides a set of guidelines for contributing to the project.
 

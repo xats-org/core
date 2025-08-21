@@ -1,6 +1,6 @@
 # xats Documentation Hub
 
-Welcome to the comprehensive documentation for the **Extensible Academic Textbook Schema (xats)**. This documentation hub provides everything you need to understand, implement, and work with the xats standard.
+Welcome to the comprehensive documentation for the **eXtensible Academic Text Standard (xats)**. This documentation hub provides everything you need to understand, implement, and work with the xats standard.
 
 ## Quick Start
 
