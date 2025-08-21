@@ -135,7 +135,7 @@ This implementation adds comprehensive LTI 1.3 support to xats v0.2.0, enabling 
         {
           "condition": "lti_score_percentage >= 85",
           "destinationId": "advanced-content",
-          "pathwayType": "https://xats.org/core/pathways/enrichment"
+          "pathwayType": "https://xats.org/vocabularies/pathways/enrichment"
         }
       ]
     }

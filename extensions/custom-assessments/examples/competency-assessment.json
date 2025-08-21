@@ -31,7 +31,7 @@
             "blocks": [
               {
                 "id": "intro-vital-signs",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {"type": "text", "text": "Accurate vital signs assessment is fundamental to patient care. This competency assessment evaluates your ability to measure, interpret, and respond to vital signs."}

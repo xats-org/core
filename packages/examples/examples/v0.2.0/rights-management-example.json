@@ -41,7 +41,7 @@
     {
       "id": "proprietary-diagram",
       "language": "en",
-      "type": "https://xats.org/core/resources/image",
+      "type": "https://xats.org/vocabularies/resources/image",
       "url": "https://cdn.example.com/diagram.png",
       "altText": "System architecture diagram showing client-server communication",
       "resourceRights": {
@@ -73,7 +73,7 @@
     {
       "id": "public-domain-chart",
       "language": "en", 
-      "type": "https://xats.org/core/resources/image",
+      "type": "https://xats.org/vocabularies/resources/image",
       "url": "https://cdn.example.com/chart.png",
       "altText": "Historical timeline of computing milestones",
       "resourceRights": {
@@ -143,7 +143,7 @@
               {
                 "id": "intro-paragraph",
                 "language": "en",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -158,7 +158,7 @@
               {
                 "id": "architecture-figure",
                 "language": "en",
-                "blockType": "https://xats.org/core/blocks/figure",
+                "blockType": "https://xats.org/vocabularies/blocks/figure",
                 "content": {
                   "resourceId": "proprietary-diagram",
                   "altText": "System architecture diagram showing client-server communication",
@@ -175,7 +175,7 @@
               {
                 "id": "timeline-figure", 
                 "language": "en",
-                "blockType": "https://xats.org/core/blocks/figure",
+                "blockType": "https://xats.org/vocabularies/blocks/figure",
                 "content": {
                   "resourceId": "public-domain-chart",
                   "altText": "Historical timeline of computing milestones",

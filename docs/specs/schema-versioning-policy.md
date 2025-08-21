@@ -236,8 +236,8 @@ Always prefer additive changes that enhance functionality:
   "type": "string",
   "format": "uri",
   "examples": [
-    "https://xats.org/core/blocks/paragraph",
-    "https://xats.org/core/blocks/newBlockType"  // Added in v0.3.0
+    "https://xats.org/vocabularies/blocks/paragraph",
+    "https://xats.org/vocabularies/blocks/newBlockType"  // Added in v0.3.0
   ]
 }
 ```
@@ -263,7 +263,7 @@ Extend vocabularies through URI namespaces:
 
 ```json
 // Core vocabulary
-"https://xats.org/core/blocks/paragraph"
+"https://xats.org/vocabularies/blocks/paragraph"
 
 // Extension vocabulary
 "https://xats.org/extensions/assessment/quiz"

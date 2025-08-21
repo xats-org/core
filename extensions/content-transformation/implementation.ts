@@ -470,7 +470,7 @@ export class ContentTransformer {
         const paragraph = token as marked.Tokens.Paragraph;
         return {
           id: this.generateId('paragraph'),
-          blockType: 'https://xats.org/core/blocks/paragraph',
+          blockType: 'https://xats.org/vocabularies/blocks/paragraph',
           content: {
             text: this.tokensToSemanticText(paragraph.tokens)
           }
@@ -480,7 +480,7 @@ export class ContentTransformer {
         const blockquote = token as marked.Tokens.Blockquote;
         return {
           id: this.generateId('blockquote'),
-          blockType: 'https://xats.org/core/blocks/blockquote',
+          blockType: 'https://xats.org/vocabularies/blocks/blockquote',
           content: {
             text: this.parseBlockTokensToSemanticText(blockquote.tokens)
           }
@@ -490,7 +490,7 @@ export class ContentTransformer {
         const list = token as marked.Tokens.List;
         return {
           id: this.generateId('list'),
-          blockType: 'https://xats.org/core/blocks/list',
+          blockType: 'https://xats.org/vocabularies/blocks/list',
           content: {
             listType: list.ordered ? 'ordered' : 'unordered',
             items: list.items.map(item => ({
@@ -503,7 +503,7 @@ export class ContentTransformer {
         const table = token as marked.Tokens.Table;
         return {
           id: this.generateId('table'),
-          blockType: 'https://xats.org/core/blocks/table',
+          blockType: 'https://xats.org/vocabularies/blocks/table',
           content: {
             headers: table.header.map(cell => ({
               content: this.tokensToSemanticText(cell.tokens)
@@ -520,7 +520,7 @@ export class ContentTransformer {
         const code = token as marked.Tokens.Code;
         return {
           id: this.generateId('code'),
-          blockType: 'https://xats.org/core/blocks/codeBlock',
+          blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
           content: {
             code: code.text,
             language: code.lang || 'text'
@@ -533,7 +533,7 @@ export class ContentTransformer {
         if (html.text.includes('$$') || html.text.includes('\\[')) {
           return {
             id: this.generateId('math'),
-            blockType: 'https://xats.org/core/blocks/mathBlock',
+            blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
             content: {
               formula: html.text.replace(/\$\$|\\[\[\]]/g, '').trim()
             }
@@ -658,14 +658,14 @@ export class ContentTransformer {
 
   private blockToMarkdown(block: any): string[] {
     switch (block.blockType) {
-      case 'https://xats.org/core/blocks/paragraph':
+      case 'https://xats.org/vocabularies/blocks/paragraph':
         return [this.semanticTextToMarkdown(block.content.text)];
         
-      case 'https://xats.org/core/blocks/blockquote':
+      case 'https://xats.org/vocabularies/blocks/blockquote':
         const quoteText = this.semanticTextToMarkdown(block.content.text);
         return quoteText.split('\n').map(line => `> ${line}`);
         
-      case 'https://xats.org/core/blocks/list':
+      case 'https://xats.org/vocabularies/blocks/list':
         const lines: string[] = [];
         block.content.items.forEach((item: any, index: number) => {
           const itemText = this.semanticTextToMarkdown(item.content);
@@ -674,7 +674,7 @@ export class ContentTransformer {
         });
         return lines;
         
-      case 'https://xats.org/core/blocks/codeBlock':
+      case 'https://xats.org/vocabularies/blocks/codeBlock':
         const language = block.content.language || '';
         return [
           `\`\`\`${language}`,
@@ -682,7 +682,7 @@ export class ContentTransformer {
           '```'
         ];
         
-      case 'https://xats.org/core/blocks/mathBlock':
+      case 'https://xats.org/vocabularies/blocks/mathBlock':
         return [`$$${block.content.formula}$$`];
         
       default:
@@ -745,23 +745,23 @@ export class ContentTransformer {
 
   private blockToHTML(block: any): string {
     switch (block.blockType) {
-      case 'https://xats.org/core/blocks/paragraph':
+      case 'https://xats.org/vocabularies/blocks/paragraph':
         return `<p class="xats-paragraph">${this.semanticTextToHTML(block.content.text)}</p>\n`;
         
-      case 'https://xats.org/core/blocks/blockquote':
+      case 'https://xats.org/vocabularies/blocks/blockquote':
         return `<blockquote class="xats-blockquote">${this.semanticTextToHTML(block.content.text)}</blockquote>\n`;
         
-      case 'https://xats.org/core/blocks/list':
+      case 'https://xats.org/vocabularies/blocks/list':
         const tag = block.content.listType === 'ordered' ? 'ol' : 'ul';
         const items = block.content.items.map((item: any) => 
           `<li>${this.semanticTextToHTML(item.content)}</li>`
         ).join('\n');
         return `<${tag} class="xats-list">\n${items}\n</${tag}>\n`;
         
-      case 'https://xats.org/core/blocks/codeBlock':
+      case 'https://xats.org/vocabularies/blocks/codeBlock':
         return `<pre class="xats-code"><code class="language-${block.content.language || 'text'}">${block.content.code}</code></pre>\n`;
         
-      case 'https://xats.org/core/blocks/mathBlock':
+      case 'https://xats.org/vocabularies/blocks/mathBlock':
         return `<div class="xats-math">\\[${block.content.formula}\\]</div>\n`;
         
       default:
@@ -903,7 +903,7 @@ export class ContentTransformer {
       case 'p':
         return {
           id: this.generateId('paragraph'),
-          blockType: 'https://xats.org/core/blocks/paragraph',
+          blockType: 'https://xats.org/vocabularies/blocks/paragraph',
           content: {
             text: this.htmlToSemanticText(element)
           }
@@ -912,7 +912,7 @@ export class ContentTransformer {
       case 'blockquote':
         return {
           id: this.generateId('blockquote'),
-          blockType: 'https://xats.org/core/blocks/blockquote',
+          blockType: 'https://xats.org/vocabularies/blocks/blockquote',
           content: {
             text: this.htmlToSemanticText(element)
           }
@@ -926,7 +926,7 @@ export class ContentTransformer {
         
         return {
           id: this.generateId('list'),
-          blockType: 'https://xats.org/core/blocks/list',
+          blockType: 'https://xats.org/vocabularies/blocks/list',
           content: {
             listType: tagName === 'ol' ? 'ordered' : 'unordered',
             items
@@ -937,7 +937,7 @@ export class ContentTransformer {
         const code = element.querySelector('code');
         return {
           id: this.generateId('code'),
-          blockType: 'https://xats.org/core/blocks/codeBlock',
+          blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
           content: {
             code: code ? code.textContent || '' : element.textContent || '',
             language: code?.className.match(/language-(\w+)/)?.[1] || 'text'
@@ -1051,7 +1051,7 @@ export class ContentTransformer {
       {
         ruleId: 'paragraph-text',
         sourceFormat: 'markdown',
-        targetBlockType: 'https://xats.org/core/blocks/paragraph',
+        targetBlockType: 'https://xats.org/vocabularies/blocks/paragraph',
         pattern: '^(?!#|\\*|\\-|\\d+\\.|```|\\$\\$)(.+)$',
         transformation: {
           preserveFormatting: {

@@ -38,7 +38,7 @@ export const accessibilityExample: XatsDocument = {
         contents: [
           {
             id: 'figure-1',
-            blockType: 'https://xats.org/core/blocks/figure',
+            blockType: 'https://xats.org/vocabularies/blocks/figure',
             content: {
               src: 'diagram.png',
               alt: 'A flowchart showing the software development lifecycle',
@@ -62,7 +62,7 @@ export const accessibilityExample: XatsDocument = {
           },
           {
             id: 'math-1',
-            blockType: 'https://xats.org/core/blocks/mathBlock',
+            blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
             content: {
               math: 'E = mc^2',
               mathML:
@@ -110,7 +110,7 @@ export const adaptivePathwayExample: XatsDocument = {
         pathways: [
           {
             id: 'pathway-1',
-            pathwayType: 'https://xats.org/core/pathways/conditional',
+            pathwayType: 'https://xats.org/vocabularies/pathways/conditional',
             condition: 'assessment:pretest-1:greater_than:80',
             description: {
               runs: [
@@ -123,7 +123,7 @@ export const adaptivePathwayExample: XatsDocument = {
           },
           {
             id: 'pathway-2',
-            pathwayType: 'https://xats.org/core/pathways/conditional',
+            pathwayType: 'https://xats.org/vocabularies/pathways/conditional',
             condition: 'assessment:pretest-1:less_than:60',
             description: {
               runs: [
@@ -138,7 +138,7 @@ export const adaptivePathwayExample: XatsDocument = {
         contents: [
           {
             id: 'pretest-1',
-            blockType: 'https://xats.org/core/blocks/assessment',
+            blockType: 'https://xats.org/vocabularies/blocks/assessment',
             content: {
               assessmentType: 'formative',
               title: {
@@ -186,7 +186,7 @@ export const adaptivePathwayExample: XatsDocument = {
             contents: [
               {
                 id: 'para-standard',
-                blockType: 'https://xats.org/core/blocks/paragraph',
+                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                 content: {
                   runs: [
                     {
@@ -211,7 +211,7 @@ export const adaptivePathwayExample: XatsDocument = {
             contents: [
               {
                 id: 'para-remedial',
-                blockType: 'https://xats.org/core/blocks/paragraph',
+                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                 content: {
                   runs: [
                     {
@@ -236,7 +236,7 @@ export const adaptivePathwayExample: XatsDocument = {
             contents: [
               {
                 id: 'para-advanced',
-                blockType: 'https://xats.org/core/blocks/paragraph',
+                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                 content: {
                   runs: [
                     {

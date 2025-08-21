@@ -40,7 +40,7 @@ describe('Performance Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [{ type: 'text', text: 'Small content' }],
@@ -123,7 +123,7 @@ describe('Performance Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [{ type: 'text', text: 'Concurrent validation test' }],
@@ -413,7 +413,7 @@ describe('Performance Validation', () => {
               .fill(null)
               .map((_, k) => ({
                 id: `block-${i}-${j}-${k}`,
-                blockType: 'https://xats.org/core/blocks/paragraph',
+                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                 content: {
                   text: {
                     runs: [
@@ -455,7 +455,7 @@ describe('Performance Validation', () => {
               .fill(null)
               .map((_, k) => ({
                 id: `block-${i}-${j}-${k}`,
-                blockType: 'https://xats.org/core/blocks/paragraph',
+                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                 content: {
                   text: {
                     runs: [
@@ -485,7 +485,7 @@ describe('Performance Validation', () => {
         .fill(null)
         .map((_, i) => ({
           id: `resource-${i}`,
-          type: 'https://xats.org/core/resources/image',
+          type: 'https://xats.org/vocabularies/resources/image',
           url: `https://example.com/image-${i}.png`,
         })),
       bodyMatter: {
@@ -511,7 +511,7 @@ describe('Performance Validation', () => {
                 .fill(null)
                 .map((_, k) => ({
                   id: `unit-${u}-block-${i}-${j}-${k}`,
-                  blockType: 'https://xats.org/core/blocks/paragraph',
+                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                   content: {
                     text: {
                       runs: [
@@ -546,7 +546,7 @@ describe('Performance Validation', () => {
         .fill(null)
         .map((_, i) => ({
           id: `resource-${i}`,
-          type: 'https://xats.org/core/resources/image',
+          type: 'https://xats.org/vocabularies/resources/image',
           url: `https://example.com/image-${i}.png`,
         })),
       bodyMatter: {
@@ -560,7 +560,7 @@ describe('Performance Validation', () => {
       .fill(null)
       .map((_, i) => ({
         id: `block-${i}`,
-        blockType: 'https://xats.org/core/blocks/paragraph',
+        blockType: 'https://xats.org/vocabularies/blocks/paragraph',
         content: {
           text: {
             runs: [{ type: 'text', text: `Scalable content block ${i}` }],
@@ -605,7 +605,7 @@ describe('Performance Validation', () => {
           content: [
             {
               id: 'base-block',
-              blockType: 'https://xats.org/core/blocks/paragraph',
+              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
               content: {
                 text: {
                   runs: [{ type: 'text', text: `Deep nested content at depth ${depth}` }],
@@ -696,7 +696,7 @@ describe('Performance Validation', () => {
                 .fill(null)
                 .map((_, k) => ({
                   id: `extreme-unit-${u}-block-${i}-${j}-${k}`,
-                  blockType: 'https://xats.org/core/blocks/paragraph',
+                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                   content: {
                     text: {
                       runs: [
@@ -731,7 +731,7 @@ describe('Performance Validation', () => {
         .fill(null)
         .map((_, i) => ({
           id: `extreme-resource-${i}`,
-          type: 'https://xats.org/core/resources/image',
+          type: 'https://xats.org/vocabularies/resources/image',
           url: `https://example.com/extreme-image-${i}.png`,
         })),
       bodyMatter: {

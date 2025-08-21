@@ -49,7 +49,7 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
 ```json
 {
   "id": "algebra-adaptive-test",
-  "blockType": "https://xats.org/core/blocks/assessment",
+  "blockType": "https://xats.org/vocabularies/blocks/assessment",
   "content": {
     "assessmentType": "https://xats.org/extensions/custom-assessments/adaptive"
   },
@@ -83,7 +83,7 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
           "discrimination": 1.5,
           "content": {
             "id": "alg-q1",
-            "blockType": "https://xats.org/core/blocks/multipleChoice",
+            "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
             "content": {
               "question": {
                 "runs": [
@@ -158,7 +158,7 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
 ```json
 {
   "id": "essay-peer-review",
-  "blockType": "https://xats.org/core/blocks/assessment",
+  "blockType": "https://xats.org/vocabularies/blocks/assessment",
   "content": {
     "assessmentType": "https://xats.org/extensions/custom-assessments/peer"
   },
@@ -340,7 +340,7 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
 ```json
 {
   "id": "design-portfolio",
-  "blockType": "https://xats.org/core/blocks/assessment",
+  "blockType": "https://xats.org/vocabularies/blocks/assessment",
   "content": {
     "assessmentType": "https://xats.org/extensions/custom-assessments/portfolio"
   },
@@ -579,7 +579,7 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
 ```json
 {
   "id": "ecosystem-simulation",
-  "blockType": "https://xats.org/core/blocks/assessment",
+  "blockType": "https://xats.org/vocabularies/blocks/assessment",
   "content": {
     "assessmentType": "https://xats.org/extensions/custom-assessments/game-based"
   },
@@ -793,7 +793,7 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
 ```json
 {
   "id": "leadership-scenarios",
-  "blockType": "https://xats.org/core/blocks/assessment",
+  "blockType": "https://xats.org/vocabularies/blocks/assessment",
   "content": {
     "assessmentType": "https://xats.org/extensions/custom-assessments/situational-judgment"
   },

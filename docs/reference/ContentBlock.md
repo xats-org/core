@@ -26,7 +26,7 @@ The `ContentBlock` is the most granular unit of instructional content in a **xat
 ```json
 {
   "id": "block-1-1-a",
-  "blockType": "[https://xats.org/core/blocks/paragraph](https://xats.org/core/blocks/paragraph)",
+  "blockType": "[https://xats.org/vocabularies/blocks/paragraph](https://xats.org/vocabularies/blocks/paragraph)",
   "content": {
     "runs": [
       { "type": "text", "text": "This is a simple paragraph." }

@@ -40,13 +40,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Redirect support for index aliases ("See" references)
   - Machine-readable index entries for automated index generation
 - **New Pedagogical Content Types**: Enhanced learning experiences
-  - **Case Study Blocks** (`https://xats.org/core/blocks/caseStudy`):
+  - **Case Study Blocks** (`https://xats.org/vocabularies/blocks/caseStudy`):
     - Comprehensive scenario and background support
     - Stakeholder perspectives and timeline tracking
     - Analysis questions with cognitive level specification
     - Resource attachments and exhibits
     - Learning objectives integration
-  - **Metacognitive Prompt Blocks** (`https://xats.org/core/blocks/metacognitivePrompt`):
+  - **Metacognitive Prompt Blocks** (`https://xats.org/vocabularies/blocks/metacognitivePrompt`):
     - 8 distinct prompt types for different cognitive activities
     - Scaffolding with sentence starters and examples
     - Self-assessment and reflection integration

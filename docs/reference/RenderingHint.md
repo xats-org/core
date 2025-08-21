@@ -23,7 +23,7 @@ A rendering hint provides guidance to rendering systems about how content should
 
 ```json
 {
-  "hintType": "https://xats.org/core/hints/emphasis",
+  "hintType": "https://xats.org/vocabularies/hints/emphasis",
   "value": "strong"
 }
 ```

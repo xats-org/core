@@ -99,7 +99,7 @@
             "contents": [
               {
                 "id": "skip-nav-1",
-                "blockType": "https://xats.org/core/blocks/skipNavigation",
+                "blockType": "https://xats.org/vocabularies/blocks/skipNavigation",
                 "content": {
                   "targetId": "assessment-1",
                   "label": {
@@ -114,7 +114,7 @@
               },
               {
                 "id": "para-1",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
@@ -126,7 +126,7 @@
               },
               {
                 "id": "math-example-1",
-                "blockType": "https://xats.org/core/blocks/mathBlock",
+                "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
                 "content": {
                   "notation": "LaTeX",
                   "expression": "\\mu = \\frac{1}{n} \\sum_{i=1}^{n} x_i",
@@ -154,7 +154,7 @@
               },
               {
                 "id": "table-1",
-                "blockType": "https://xats.org/core/blocks/table",
+                "blockType": "https://xats.org/vocabularies/blocks/table",
                 "content": {
                   "caption": {
                     "runs": [
@@ -270,7 +270,7 @@
               },
               {
                 "id": "assessment-1",
-                "blockType": "https://xats.org/core/blocks/multipleChoice",
+                "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
                 "linkedObjectiveIds": ["obj-1-1"],
                 "content": {
                   "question": {
@@ -372,7 +372,7 @@
               },
               {
                 "id": "assessment-2",
-                "blockType": "https://xats.org/core/blocks/shortAnswer",
+                "blockType": "https://xats.org/vocabularies/blocks/shortAnswer",
                 "linkedObjectiveIds": ["obj-1-2"],
                 "content": {
                   "question": {
@@ -432,7 +432,7 @@
               },
               {
                 "id": "assessment-3",
-                "blockType": "https://xats.org/core/blocks/essayPrompt",
+                "blockType": "https://xats.org/vocabularies/blocks/essayPrompt",
                 "linkedObjectiveIds": ["obj-1-1", "obj-1-2"],
                 "content": {
                   "question": {

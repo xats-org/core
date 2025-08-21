@@ -14,7 +14,7 @@
   },
   "learningObjectives": [
     {
-      "objectiveType": "https://xats.org/core/objectives/understand",
+      "objectiveType": "https://xats.org/vocabularies/objectives/understand",
       "description": {
         "runs": [
           {

@@ -21,9 +21,9 @@ This phase completed the most critical missing features to make **xats** a viabl
 **COMPLETED:** The comprehensive assessment framework has been implemented with full pedagogical metadata support.
 
 **Implemented `blockType` URIs:**
-- ✅ `https://xats.org/core/blocks/multipleChoice`
-- ✅ `https://xats.org/core/blocks/shortAnswer`
-- ✅ `https://xats.org/core/blocks/essayPrompt`
+- ✅ `https://xats.org/vocabularies/blocks/multipleChoice`
+- ✅ `https://xats.org/vocabularies/blocks/shortAnswer`
+- ✅ `https://xats.org/vocabularies/blocks/essayPrompt`
 
 **Completed Enhancements for Pedagogical Rigor:**
 - ✅ **Cognitive Metadata:** Full support for Bloom's Taxonomy levels, difficulty scaling (1-5), and estimated time requirements
@@ -38,8 +38,8 @@ This phase completed the most critical missing features to make **xats** a viabl
 **COMPLETED:** Expanded beyond traditional testing formats to support modern pedagogy.
 
 **Implemented `blockType` URIs:**
-- ✅ `https://xats.org/core/blocks/caseStudy`
-- ✅ `https://xats.org/core/blocks/metacognitivePrompt`
+- ✅ `https://xats.org/vocabularies/blocks/caseStudy`
+- ✅ `https://xats.org/vocabularies/blocks/metacognitivePrompt`
 
 **Completed Features:**
 - ✅ **Case Study Blocks:** Complete support for case-based learning with scenarios, stakeholders, timelines, and analysis questions

@@ -88,7 +88,7 @@ See [AssessmentAccessibilitySettings](./AssessmentAccessibilitySettings.md) for 
 
 ```json
 {
-  "blockType": "https://xats.org/core/blocks/assessment/multipleChoice",
+  "blockType": "https://xats.org/vocabularies/blocks/assessment/multipleChoice",
   "content": {
     "question": {
       "runs": [
@@ -168,7 +168,7 @@ See [AssessmentAccessibilitySettings](./AssessmentAccessibilitySettings.md) for 
 
 ```json
 {
-  "blockType": "https://xats.org/core/blocks/assessment/multipleChoice",
+  "blockType": "https://xats.org/vocabularies/blocks/assessment/multipleChoice",
   "content": {
     "question": {
       "runs": [

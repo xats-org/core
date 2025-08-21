@@ -188,45 +188,45 @@ interface CssClasses {
 ### Core Blocks
 
 #### Paragraph
-- **Block Type**: `https://xats.org/core/blocks/paragraph`
+- **Block Type**: `https://xats.org/vocabularies/blocks/paragraph`
 - **HTML Output**: `<p>` with SemanticText content
 - **CSS Class**: `xats-paragraph`
 
 #### Heading
-- **Block Type**: `https://xats.org/core/blocks/heading`
+- **Block Type**: `https://xats.org/vocabularies/blocks/heading`
 - **HTML Output**: `<h1>` to `<h6>` based on structural level
 - **CSS Class**: `xats-heading`
 
 #### List
-- **Block Type**: `https://xats.org/core/blocks/list`
+- **Block Type**: `https://xats.org/vocabularies/blocks/list`
 - **HTML Output**: `<ul>` or `<ol>` with nested support
 - **CSS Class**: `xats-list`, `xats-list-item`
 
 #### Blockquote
-- **Block Type**: `https://xats.org/core/blocks/blockquote`
+- **Block Type**: `https://xats.org/vocabularies/blocks/blockquote`
 - **HTML Output**: `<blockquote>`
 - **CSS Class**: `xats-blockquote`
 
 #### Code Block
-- **Block Type**: `https://xats.org/core/blocks/codeBlock`
+- **Block Type**: `https://xats.org/vocabularies/blocks/codeBlock`
 - **HTML Output**: `<pre><code>` with language class
 - **CSS Class**: `xats-code-block`
 - **Features**: Syntax highlighting class support
 
 #### Math Block
-- **Block Type**: `https://xats.org/core/blocks/mathBlock`
+- **Block Type**: `https://xats.org/vocabularies/blocks/mathBlock`
 - **HTML Output**: `<div role="img">` with alt text
 - **CSS Class**: `xats-math-block`
 - **Features**: MathJax/KaTeX ready, accessibility compliant
 
 #### Table
-- **Block Type**: `https://xats.org/core/blocks/table`
+- **Block Type**: `https://xats.org/vocabularies/blocks/table`
 - **HTML Output**: `<table>` with full accessibility
 - **CSS Class**: `xats-table`
 - **Features**: Headers, captions, summary, scope attributes
 
 #### Figure
-- **Block Type**: `https://xats.org/core/blocks/figure`
+- **Block Type**: `https://xats.org/vocabularies/blocks/figure`
 - **HTML Output**: `<figure>` with media element
 - **CSS Class**: `xats-figure`
 - **Features**: Images, video, audio support, captions
@@ -234,7 +234,7 @@ interface CssClasses {
 ### v0.3.0 Features
 
 #### Case Study Block
-- **Block Type**: `https://xats.org/core/blocks/caseStudy`
+- **Block Type**: `https://xats.org/vocabularies/blocks/caseStudy`
 - **HTML Output**: `<article>` with structured content
 - **CSS Class**: `xats-case-study`
 
@@ -271,7 +271,7 @@ interface CssClasses {
 ```
 
 #### Metacognitive Prompt Block
-- **Block Type**: `https://xats.org/core/blocks/metacognitivePrompt`
+- **Block Type**: `https://xats.org/vocabularies/blocks/metacognitivePrompt`
 - **HTML Output**: `<aside>` with scaffolded content
 - **CSS Class**: `xats-metacognitive-prompt`
 
@@ -342,13 +342,13 @@ interface CssClasses {
 ## Generated Content
 
 ### Table of Contents
-- **Placeholder**: `https://xats.org/core/placeholders/tableOfContents`
+- **Placeholder**: `https://xats.org/vocabularies/placeholders/tableOfContents`
 - **Generation**: Automatic from document structure
 - **HTML**: Nested `<ul>` with internal links
 - **Features**: Skip links, hierarchical navigation
 
 ### Bibliography
-- **Placeholder**: `https://xats.org/core/placeholders/bibliography`
+- **Placeholder**: `https://xats.org/vocabularies/placeholders/bibliography`
 - **Generation**: From `backMatter.bibliography` CSL-JSON data
 - **HTML**: `<section id="bibliography">` with formatted entries
 - **Features**: CSL-style formatting, linked citations

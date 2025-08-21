@@ -145,24 +145,26 @@ describe('Schema Validation Test Suite', () => {
     // Document all core block types that should be tested
 
     const coreBlockTypes = [
-      'https://xats.org/core/blocks/paragraph',
-      'https://xats.org/core/blocks/heading',
-      'https://xats.org/core/blocks/blockquote',
-      'https://xats.org/core/blocks/list',
-      'https://xats.org/core/blocks/codeBlock',
-      'https://xats.org/core/blocks/mathBlock',
-      'https://xats.org/core/blocks/table',
-      'https://xats.org/core/blocks/figure',
+      'https://xats.org/vocabularies/blocks/paragraph',
+      'https://xats.org/vocabularies/blocks/heading',
+      'https://xats.org/vocabularies/blocks/blockquote',
+      'https://xats.org/vocabularies/blocks/list',
+      'https://xats.org/vocabularies/blocks/codeBlock',
+      'https://xats.org/vocabularies/blocks/mathBlock',
+      'https://xats.org/vocabularies/blocks/table',
+      'https://xats.org/vocabularies/blocks/figure',
       'https://xats.org/core/placeholders/tableOfContents',
-      'https://xats.org/core/placeholders/bibliography',
-      'https://xats.org/core/placeholders/index',
+      'https://xats.org/vocabularies/placeholders/bibliography',
+      'https://xats.org/vocabularies/placeholders/index',
     ];
 
     expect(coreBlockTypes.length).toBe(11);
 
     // Each block type should be a valid URI
     coreBlockTypes.forEach((blockType) => {
-      expect(blockType).toMatch(/^https:\/\/xats\.org\/core\/(blocks|placeholders)\//);
+      expect(blockType).toMatch(
+        /^https:\/\/xats\.org\/(vocabularies|core)\/(blocks|placeholders)\//
+      );
     });
   });
 

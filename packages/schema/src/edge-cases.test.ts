@@ -66,7 +66,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [], // Empty runs array
@@ -106,7 +106,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/list',
+                      blockType: 'https://xats.org/vocabularies/blocks/list',
                       content: {
                         listType: 'unordered',
                         items: [], // Empty items array
@@ -145,7 +145,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/table',
+                      blockType: 'https://xats.org/vocabularies/blocks/table',
                       content: {
                         rows: [], // Empty rows array
                       },
@@ -187,7 +187,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [{ type: 'text', text: veryLongString }],
@@ -222,7 +222,7 @@ describe('Edge Case Validation', () => {
                 content: [
                   {
                     id: 'block-base',
-                    blockType: 'https://xats.org/core/blocks/paragraph',
+                    blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                     content: {
                       text: { runs: [{ type: 'text', text: 'Deep content' }] },
                     },
@@ -273,7 +273,7 @@ describe('Edge Case Validation', () => {
               content: [
                 {
                   id: `block-${i}`,
-                  blockType: 'https://xats.org/core/blocks/paragraph',
+                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                   content: {
                     text: { runs: [{ type: 'text', text: `Content ${i}` }] },
                   },
@@ -324,7 +324,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [
@@ -370,7 +370,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [
@@ -415,7 +415,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'math-1',
-                      blockType: 'https://xats.org/core/blocks/mathBlock',
+                      blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
                       content: {
                         notation: 'latex',
                         expression:
@@ -475,7 +475,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'b',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [{ type: 'text', text: '.' }],
@@ -515,7 +515,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [{ type: 'text', text: '     ' }],
@@ -653,7 +653,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [
@@ -705,7 +705,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [
@@ -752,7 +752,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       unknownBlockField: 'Unknown block field',
                       content: {
                         text: {
@@ -831,7 +831,7 @@ describe('Edge Case Validation', () => {
           subItems: [
             {
               id: `nested-block-${i}`,
-              blockType: 'https://xats.org/core/blocks/list',
+              blockType: 'https://xats.org/vocabularies/blocks/list',
               content: {
                 listType: 'unordered',
                 items: [deepContent],
@@ -861,7 +861,7 @@ describe('Edge Case Validation', () => {
                   content: [
                     {
                       id: 'deep-list',
-                      blockType: 'https://xats.org/core/blocks/list',
+                      blockType: 'https://xats.org/vocabularies/blocks/list',
                       content: {
                         listType: 'ordered',
                         items: [deepContent],
@@ -958,7 +958,7 @@ describe('Edge Case Validation', () => {
           resources: [
             {
               id: 'resource-1',
-              type: 'https://xats.org/core/resources/image',
+              type: 'https://xats.org/vocabularies/resources/image',
               url: uri,
             },
           ],
@@ -982,7 +982,7 @@ describe('Edge Case Validation', () => {
         resources: [
           {
             id: 'resource-1',
-            type: 'https://xats.org/core/resources/image',
+            type: 'https://xats.org/vocabularies/resources/image',
             url: 'https://例え.テスト/画像.png',
           },
         ],

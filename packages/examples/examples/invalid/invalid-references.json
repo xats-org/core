@@ -33,7 +33,7 @@
             "content": [
               {
                 "id": "p1",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [

@@ -31,7 +31,7 @@
             "blocks": [
               {
                 "id": "adaptive-definition",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {"type": "text", "text": "The derivative of a function "},
@@ -51,7 +51,7 @@
                           "learningStyle": "visual"
                         },
                         "output": {
-                          "blockType": "https://xats.org/core/blocks/figure",
+                          "blockType": "https://xats.org/vocabularies/blocks/figure",
                           "content": {
                             "mediaUrl": "https://example.edu/derivatives/visual-limit.svg",
                             "altText": "Interactive graph showing the limit definition of a derivative",
@@ -99,7 +99,7 @@
               },
               {
                 "id": "math-block-derivative",
-                "blockType": "https://xats.org/core/blocks/mathBlock",
+                "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
                 "content": {
                   "mathType": "latex",
                   "expression": "f'(x) = \\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h}"
@@ -146,7 +146,7 @@
               },
               {
                 "id": "example-problem",
-                "blockType": "https://xats.org/core/blocks/example",
+                "blockType": "https://xats.org/vocabularies/blocks/example",
                 "content": {
                   "title": {
                     "runs": [{"type": "text", "text": "Example: Finding the Derivative of x²"}]

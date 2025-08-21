@@ -31,7 +31,7 @@
             "blocks": [
               {
                 "id": "block-1",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {"type": "text", "text": "Data science combines mathematics, statistics, and computer science to extract insights from data."}
@@ -64,7 +64,7 @@
               },
               {
                 "id": "interactive-quiz-1",
-                "blockType": "https://xats.org/core/blocks/assessment",
+                "blockType": "https://xats.org/vocabularies/blocks/assessment",
                 "content": {
                   "assessmentType": "formative",
                   "questions": [

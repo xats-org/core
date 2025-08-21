@@ -398,8 +398,8 @@
               "type": "string", 
               "format": "uri",
               "examples": [
-                "https://xats.org/core/triggers/onCompletion",
-                "https://xats.org/core/triggers/onAssessment"
+                "https://xats.org/vocabularies/triggers/onCompletion",
+                "https://xats.org/vocabularies/triggers/onAssessment"
               ]
             },
             "sourceId": { 
@@ -439,10 +439,10 @@
                 "type": "string", 
                 "format": "uri",
                 "examples": [
-                  "https://xats.org/core/pathways/remedial",
-                  "https://xats.org/core/pathways/standard",
-                  "https://xats.org/core/pathways/enrichment",
-                  "https://xats.org/core/pathways/prerequisite"
+                  "https://xats.org/vocabularies/pathways/remedial",
+                  "https://xats.org/vocabularies/pathways/standard",
+                  "https://xats.org/vocabularies/pathways/enrichment",
+                  "https://xats.org/vocabularies/pathways/prerequisite"
                 ]
               }
             },
@@ -470,9 +470,9 @@
             "properties": {
               "blockType": {
                 "enum": [
-                  "https://xats.org/core/blocks/paragraph",
-                  "https://xats.org/core/blocks/heading",
-                  "https://xats.org/core/blocks/blockquote"
+                  "https://xats.org/vocabularies/blocks/paragraph",
+                  "https://xats.org/vocabularies/blocks/heading",
+                  "https://xats.org/vocabularies/blocks/blockquote"
                 ]
               }
             }
@@ -494,7 +494,7 @@
               "properties": {
                 "blockType": {
                   "enum": [
-                    "https://xats.org/core/blocks/list"
+                    "https://xats.org/vocabularies/blocks/list"
                   ]
                 }
               }
@@ -533,7 +533,7 @@
                 "properties": {
                   "blockType": {
                     "enum": [
-                      "https://xats.org/core/blocks/codeBlock"
+                      "https://xats.org/vocabularies/blocks/codeBlock"
                     ]
                   }
                 }
@@ -556,7 +556,7 @@
                   "properties": {
                     "blockType": {
                       "enum": [
-                        "https://xats.org/core/blocks/mathBlock"
+                        "https://xats.org/vocabularies/blocks/mathBlock"
                       ]
                     }
                   }
@@ -599,7 +599,7 @@
                     "properties": {
                       "blockType": {
                         "enum": [
-                          "https://xats.org/core/blocks/table"
+                          "https://xats.org/vocabularies/blocks/table"
                         ]
                       }
                     }
@@ -704,7 +704,7 @@
                       "properties": {
                         "blockType": {
                           "enum": [
-                            "https://xats.org/core/blocks/figure"
+                            "https://xats.org/vocabularies/blocks/figure"
                           ]
                         }
                       }
@@ -735,7 +735,7 @@
                       "if": {
                         "properties": {
                           "blockType": {
-                            "const": "https://xats.org/core/blocks/multipleChoice"
+                            "const": "https://xats.org/vocabularies/blocks/multipleChoice"
                           }
                         }
                       },
@@ -748,7 +748,7 @@
                         "if": {
                           "properties": {
                             "blockType": {
-                              "const": "https://xats.org/core/blocks/shortAnswer"
+                              "const": "https://xats.org/vocabularies/blocks/shortAnswer"
                             }
                           }
                         },
@@ -761,7 +761,7 @@
                           "if": {
                             "properties": {
                               "blockType": {
-                                "const": "https://xats.org/core/blocks/essayPrompt"
+                                "const": "https://xats.org/vocabularies/blocks/essayPrompt"
                               }
                             }
                           },
@@ -774,7 +774,7 @@
                             "if": {
                               "properties": {
                                 "blockType": {
-                                  "const": "https://xats.org/core/blocks/navigation"
+                                  "const": "https://xats.org/vocabularies/blocks/navigation"
                                 }
                               }
                             },
@@ -787,7 +787,7 @@
                               "if": {
                                 "properties": {
                                   "blockType": {
-                                    "const": "https://xats.org/core/blocks/skipNavigation"
+                                    "const": "https://xats.org/vocabularies/blocks/skipNavigation"
                                   }
                                 }
                               },

@@ -119,7 +119,7 @@
               {
                 "id": "atomic-theory-intro",
                 "language": "en",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -141,7 +141,7 @@
               {
                 "id": "bonding-assessment",
                 "language": "en",
-                "blockType": "https://xats.org/core/blocks/multipleChoice",
+                "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
                 "extensions": {
                   "ltiGradePassback": {
                     "enabled": true,
@@ -246,7 +246,7 @@
         "pathways": [
           {
             "trigger": {
-              "triggerType": "https://xats.org/core/triggers/onAssessment",
+              "triggerType": "https://xats.org/vocabularies/triggers/onAssessment",
               "sourceId": "bonding-assessment"
             },
             "extensions": {
@@ -273,17 +273,17 @@
               {
                 "condition": "lti_score_percentage >= 85 AND lti_attempts == 1",
                 "destinationId": "advanced-bonding-concepts",
-                "pathwayType": "https://xats.org/core/pathways/enrichment"
+                "pathwayType": "https://xats.org/vocabularies/pathways/enrichment"
               },
               {
                 "condition": "lti_score_percentage >= 70 AND lti_score_percentage < 85",
                 "destinationId": "chapter-2",
-                "pathwayType": "https://xats.org/core/pathways/standard"
+                "pathwayType": "https://xats.org/vocabularies/pathways/standard"
               },
               {
                 "condition": "lti_score_percentage < 70 OR lti_attempts >= 2",
                 "destinationId": "bonding-review-section",
-                "pathwayType": "https://xats.org/core/pathways/remedial"
+                "pathwayType": "https://xats.org/vocabularies/pathways/remedial"
               }
             ]
           }

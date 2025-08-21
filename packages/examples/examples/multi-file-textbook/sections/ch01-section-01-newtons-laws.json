@@ -6,7 +6,7 @@
   "title": "Newton's Laws of Motion",
   "contents": [
     {
-      "blockType": "https://xats.org/core/blocks/heading",
+      "blockType": "https://xats.org/vocabularies/blocks/heading",
       "content": {
         "level": 3,
         "text": {
@@ -20,7 +20,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/core/blocks/paragraph",
+      "blockType": "https://xats.org/vocabularies/blocks/paragraph",
       "content": {
         "text": {
           "runs": [
@@ -33,7 +33,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/core/blocks/heading",
+      "blockType": "https://xats.org/vocabularies/blocks/heading",
       "content": {
         "level": 3,
         "text": {
@@ -47,7 +47,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/core/blocks/paragraph",
+      "blockType": "https://xats.org/vocabularies/blocks/paragraph",
       "content": {
         "text": {
           "runs": [
@@ -60,7 +60,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/core/blocks/mathBlock",
+      "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
       "content": {
         "expression": "\\vec{F} = m\\vec{a}",
         "format": "latex"
