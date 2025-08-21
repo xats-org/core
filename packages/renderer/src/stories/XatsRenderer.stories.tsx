@@ -54,12 +54,16 @@ const sampleDocument: XatsDocument = {
       {
         id: 'ch-1',
         label: 'Chapter 1',
-        title: 'Introduction to xats',
-        sections: [
+        title: {
+          runs: [{ type: 'text', text: 'Introduction to xats' }],
+        },
+        contents: [
           {
             id: 'sec-1-1',
-            title: 'What is xats?',
-            content: [
+            title: {
+              runs: [{ type: 'text', text: 'What is xats?' }],
+            },
+            contents: [
               {
                 id: 'para-1',
                 blockType: 'https://xats.org/vocabularies/blocks/paragraph',
@@ -166,12 +170,16 @@ const complexDocument: XatsDocument = {
       {
         id: 'ch-1',
         label: 'Chapter 1',
-        title: 'Mathematical Concepts',
-        sections: [
+        title: {
+          runs: [{ type: 'text', text: 'Mathematical Concepts' }],
+        },
+        contents: [
           {
             id: 'sec-1-1',
-            title: 'Equations and Code',
-            content: [
+            title: {
+              runs: [{ type: 'text', text: 'Equations and Code' }],
+            },
+            contents: [
               {
                 id: 'para-1',
                 blockType: 'https://xats.org/vocabularies/blocks/paragraph',
@@ -248,12 +256,16 @@ const assessmentDocument: XatsDocument = {
       {
         id: 'ch-1',
         label: 'Chapter 1',
-        title: 'Cell Biology Quiz',
-        sections: [
+        title: {
+          runs: [{ type: 'text', text: 'Cell Biology Quiz' }],
+        },
+        contents: [
           {
             id: 'sec-1-1',
-            title: 'Multiple Choice Questions',
-            content: [
+            title: {
+              runs: [{ type: 'text', text: 'Multiple Choice Questions' }],
+            },
+            contents: [
               {
                 id: 'assessment-1',
                 blockType: 'https://xats.org/vocabularies/blocks/multipleChoice',
