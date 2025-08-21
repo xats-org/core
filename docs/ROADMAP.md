@@ -292,7 +292,17 @@ Native support for AI-powered content orchestration and generation.
   - Dependency tracking
   - Version control integration
 
-#### d. Enhanced Rendering Hints System (MEDIUM PRIORITY)
+#### d. Enhanced Authoring Experience (Issue #36)
+
+Revolutionary authoring approach through bidirectional renderers, eliminating JSON complexity.
+- **Native Tool Authoring:** Authors work entirely in Word, LaTeX, or Markdown
+- **Zero JSON Exposure:** Complete abstraction of xats JSON format
+- **Visual Web Editor:** HTML renderer enables browser-based visual authoring
+- **Template Libraries:** Pre-built templates for common content patterns
+- **Real-Time Validation:** Immediate feedback on xats compliance
+- **Seamless Round-Tripping:** Edit in any format, maintain full fidelity
+
+#### e. Enhanced Rendering Hints System (MEDIUM PRIORITY)
 
 Build out comprehensive rendering hints to help renderers determine and preserve author intent.
 - **Semantic Intent Vocabulary:** URI-based vocabulary for author intent
@@ -302,7 +312,7 @@ Build out comprehensive rendering hints to help renderers determine and preserve
 - **Cross-Renderer Consistency:** Standard interpretation guidelines
 - **Bidirectional Preservation:** Hints survive round-trip conversions
 
-#### e. Production & Scholarly Workflow Integration
+#### f. Production & Scholarly Workflow Integration
 
 Seamless integration with established academic and publishing workflows.
 - **Native Tool Integration:** Work directly in Word, RMarkdown, LaTeX
@@ -311,7 +321,9 @@ Seamless integration with established academic and publishing workflows.
 - **Collaborative Workflows:** Multi-author support with change tracking
 - **Version Control:** Git-friendly text formats with semantic diffs
 
-### v0.6.0 - Analytics & Advanced Internationalization (Target: 2026-09-30)
+### v0.6.0 - Analytics, Advanced Pedagogy & Internationalization (Target: 2026-09-30)
+
+Building on the foundation of v0.5.0's bidirectional renderers, this release focuses on advanced pedagogical features and analytics.
 
 #### a. Advanced Analytics Platform
 
@@ -321,7 +333,25 @@ Comprehensive learning analytics and content performance measurement.
 - **Publisher Analytics:** Commercial metrics for content effectiveness and market performance
 - **Privacy-First Design:** GDPR/CCPA compliant analytics with learner consent management
 
-#### b. Advanced Internationalization
+#### b. Advanced Pedagogical Features (Issues #2, #3)
+
+Sophisticated educational enhancements building on v0.2.0's assessment framework.
+
+**Cognitive Level Metadata (Issue #2):**
+- **Bloom's Taxonomy Integration:** Tag objectives and assessments with cognitive levels
+- **DOK Level Specification:** Depth of Knowledge classification (1-4)
+- **Verb Taxonomies:** URI-based vocabulary for learning objective verbs
+- **Cognitive Alignment Validation:** Ensure objectives match assessment complexity
+- **Progressive Complexity Mapping:** Track cognitive demand throughout content
+
+**Formative Assessment & Feedback Systems (Issue #3):**
+- **Multi-Level Hint Systems:** Progressive hints with optional point penalties
+- **Misconception-Targeted Feedback:** Pattern-based feedback for common errors
+- **Self-Assessment Tools:** Confidence ratings and metacognitive prompts
+- **Low-Stakes Practice:** Formative checkpoints with immediate feedback
+- **Peer Review Integration:** Structured peer assessment workflows
+
+#### c. Advanced Internationalization
 
 Building on v0.3.0's i18n foundation for advanced multi-language support.
 - **Content Translation:** Standard patterns for multiple language versions within single objects
