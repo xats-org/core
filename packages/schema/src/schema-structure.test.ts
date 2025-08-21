@@ -308,7 +308,9 @@ describe('Schema Structure Validation', () => {
       expect(listBlockContent.properties.listType.enum).toEqual(['ordered', 'unordered']);
 
       // Check math notation enum
-      const mathBlockContent = getContentBlockSchema('https://xats.org/vocabularies/blocks/mathBlock');
+      const mathBlockContent = getContentBlockSchema(
+        'https://xats.org/vocabularies/blocks/mathBlock'
+      );
       expect(mathBlockContent.properties.notation.enum).toEqual(['latex', 'mathml', 'asciimath']);
     });
 

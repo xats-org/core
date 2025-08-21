@@ -752,7 +752,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/vocabularies/placeholders/tableOfContents',
+                      blockType: 'https://xats.org/core/placeholders/tableOfContents',
                       content: {
                         placeholder: 'not-a-boolean', // Should be boolean
                       },
@@ -793,7 +793,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/vocabularies/placeholders/tableOfContents',
+                      blockType: 'https://xats.org/core/placeholders/tableOfContents',
                       content: {
                         placeholder: true, // Valid boolean
                       },

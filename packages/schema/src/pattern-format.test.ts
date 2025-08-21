@@ -669,7 +669,8 @@ describe('Pattern and Format Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/vocabularies/blocks/custom-block?param=value&other=123', // URI with query params
+                      blockType:
+                        'https://xats.org/vocabularies/blocks/custom-block?param=value&other=123', // URI with query params
                       content: {
                         customField: 'value',
                       },

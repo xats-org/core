@@ -136,7 +136,9 @@ describe('Definition Reference Validation', () => {
       expect(paragraphContent.properties.text.$ref).toBe(semanticTextRef);
 
       // Check heading block content
-      const headingContent = getContentBlockContentSchema('https://xats.org/vocabularies/blocks/heading');
+      const headingContent = getContentBlockContentSchema(
+        'https://xats.org/vocabularies/blocks/heading'
+      );
       expect(headingContent.properties.text.$ref).toBe(semanticTextRef);
 
       // Check blockquote content

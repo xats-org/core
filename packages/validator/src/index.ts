@@ -4,6 +4,7 @@
  * Provides validation capabilities for xats documents against the JSON Schema.
  */
 
+// @ts-expect-error - Ajv has complex default export handling
 import Ajv, { type ValidateFunction, type ErrorObject } from 'ajv';
 import addFormats from 'ajv-formats';
 

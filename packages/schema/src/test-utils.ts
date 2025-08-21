@@ -6,6 +6,7 @@ import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
+// @ts-expect-error - Ajv has complex default export handling
 import Ajv, { type ValidationError } from 'ajv';
 import addFormats from 'ajv-formats';
 
