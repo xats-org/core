@@ -162,7 +162,9 @@ describe('Schema Validation Test Suite', () => {
 
     // Each block type should be a valid URI
     coreBlockTypes.forEach((blockType) => {
-      expect(blockType).toMatch(/^https:\/\/xats\.org\/(vocabularies|core)\/(blocks|placeholders)\//);
+      expect(blockType).toMatch(
+        /^https:\/\/xats\.org\/(vocabularies|core)\/(blocks|placeholders)\//
+      );
     });
   });
 
