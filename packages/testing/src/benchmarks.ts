@@ -138,7 +138,7 @@ export class PerformanceBenchmark {
         successCount,
         failureCount,
         totalTime,
-        averageThroughput: aggregateMetrics.throughput,
+        averageThroughput: aggregateMetrics.metrics.throughput,
         averageMemoryUsage: aggregateMetrics.memoryUsage.averageUsage,
         peakMemoryUsage: Math.max(...results.map(r => r.memoryUsage.peakUsage)),
       },
@@ -294,7 +294,7 @@ export class PerformanceBenchmark {
       return process.memoryUsage().heapUsed;
     }
     // Browser fallback (less accurate)
-    return performance.memory?.usedJSHeapSize || 0;
+    return (performance as any).memory?.usedJSHeapSize || 0;
   }
 
   /**

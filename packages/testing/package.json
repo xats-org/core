@@ -58,10 +58,11 @@
   "dependencies": {
     "@xats-org/types": "workspace:*",
     "@xats-org/utils": "workspace:*",
-    "axe-core": "^4.8.0",
+    "axe-core": "^4.10.0",
     "deep-diff": "^1.0.2"
   },
   "devDependencies": {
+    "@types/deep-diff": "^1.0.0",
     "@types/node": "^20.11.0",
     "@vitest/coverage-v8": "^1.2.0",
     "eslint": "^8.56.0",

@@ -17,7 +17,7 @@ import type {
  */
 export class RoundTripTester {
   private renderer: BidirectionalRenderer;
-  private options: Required<RoundTripOptions>;
+  private options: RoundTripOptions;
 
   constructor(renderer: BidirectionalRenderer, options: RoundTripOptions = {}) {
     this.renderer = renderer;
@@ -25,9 +25,6 @@ export class RoundTripTester {
       fidelityThreshold: 0.95,
       semanticComparison: true,
       ignoreElements: ['id', 'extensions'],
-      includeIds: false,
-      includeTags: false,
-      includeExtensions: false,
       preserveMetadata: true,
       strictMode: false,
       customParsers: {},
@@ -57,7 +54,7 @@ export class RoundTripTester {
       // Step 3: Compare documents
       const differences = this.compareDocuments(document, parseResult.document);
       const fidelityScore = this.calculateFidelityScore(differences);
-      const success = fidelityScore >= this.options.fidelityThreshold;
+      const success = fidelityScore >= (this.options.fidelityThreshold ?? 0.95);
 
       // Step 4: Collect metrics
       const totalTime = performance.now() - startTime;
@@ -141,7 +138,7 @@ export class RoundTripTester {
         averageFidelityScore,
         totalTime,
         renderer: this.renderer.format,
-        threshold: this.options.fidelityThreshold,
+        threshold: this.options.fidelityThreshold ?? 0.95,
       },
     };
   }
@@ -170,8 +167,8 @@ export class RoundTripTester {
       const documentDiff: DocumentDifference = {
         type: this.mapDiffType(diff.kind),
         path,
-        original: diff.lhs,
-        roundTrip: diff.rhs,
+        original: 'lhs' in diff ? diff.lhs : undefined,
+        roundTrip: 'rhs' in diff ? diff.rhs : undefined,
         impact: this.assessImpact(path, diff),
       };
 
@@ -218,7 +215,7 @@ export class RoundTripTester {
     const normalized = JSON.parse(JSON.stringify(document)) as XatsDocument;
 
     // Remove elements that should be ignored
-    this.removeIgnoredElements(normalized, this.options.ignoreElements);
+    this.removeIgnoredElements(normalized, this.options.ignoreElements ?? []);
 
     return normalized;
   }
@@ -263,7 +260,7 @@ export class RoundTripTester {
    * Check if a path should be ignored during comparison
    */
   private shouldIgnorePath(path: string): boolean {
-    return this.options.ignoreElements.some(ignored => path.includes(ignored));
+    return (this.options.ignoreElements ?? []).some(ignored => path.includes(ignored));
   }
 
   /**

@@ -81,7 +81,7 @@ export class RendererTestSuite {
       const renderResult = await this.roundTripTester['renderer'].render(document);
       const wcagResult = await this.wcagTester.auditAccessibility(renderResult.content);
       wcagResults.push({
-        documentId: document.id || 'unnamed',
+        documentId: document.bibliographicEntry?.title || 'unnamed',
         audit: wcagResult,
       });
     }

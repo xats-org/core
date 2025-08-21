@@ -140,7 +140,7 @@ export interface BidirectionalRenderer<TOptions extends RendererOptions = Render
   testRoundTrip(document: XatsDocument, options?: RoundTripOptions): Promise<RoundTripResult>;
   
   /** Validate format-specific content */
-  validate(content: string): Promise<ValidationResult>;
+  validate(content: string): Promise<FormatValidationResult>;
   
   /** Get format-specific metadata */
   getMetadata?(content: string): Promise<FormatMetadata>;
@@ -299,10 +299,10 @@ export interface RoundTripMetrics {
 /**
  * Validation result for format-specific content
  */
-export interface ValidationResult {
+export interface FormatValidationResult {
   valid: boolean;
-  errors: ValidationError[];
-  warnings: ValidationWarning[];
+  errors: FormatValidationError[];
+  warnings: FormatValidationWarning[];
   metadata?: {
     validator: string;
     version: string;
@@ -313,7 +313,7 @@ export interface ValidationResult {
 /**
  * Error from format validation
  */
-export interface ValidationError {
+export interface FormatValidationError {
   code: string;
   message: string;
   line?: number;
@@ -324,7 +324,7 @@ export interface ValidationError {
 /**
  * Warning from format validation
  */
-export interface ValidationWarning {
+export interface FormatValidationWarning {
   code: string;
   message: string;
   line?: number;

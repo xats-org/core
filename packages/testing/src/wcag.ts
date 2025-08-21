@@ -128,7 +128,10 @@ export class WcagTester implements WcagCompliance {
 
     return {
       ...this.axeConfig,
-      tags,
+      runOnly: {
+        type: 'tag',
+        values: tags,
+      },
     };
   }
 
@@ -212,13 +215,14 @@ export class WcagTester implements WcagCompliance {
    */
   private formatElement(node?: axe.NodeResult): string {
     if (!node) return 'unknown';
-    return node.target[0] || 'unknown';
+    const selector = node.target[0];
+    return typeof selector === 'string' ? selector : String(selector) || 'unknown';
   }
 
   /**
    * Map axe impact levels to our format
    */
-  private mapImpact(impact?: string): WcagViolation['impact'] {
+  private mapImpact(impact?: string | null): WcagViolation['impact'] {
     switch (impact) {
       case 'critical': return 'critical';
       case 'serious': return 'serious';
@@ -387,7 +391,10 @@ export class WcagTestFactory {
     return new WcagTester({
       resultTypes: ['violations', 'incomplete', 'passes'],
       reporter: 'v2',
-      tags: ['wcag2a', 'wcag2aa', 'wcag2aaa', 'best-practice'],
+      runOnly: {
+        type: 'tag',
+        values: ['wcag2a', 'wcag2aa', 'wcag2aaa', 'best-practice'],
+      },
     });
   }
 
@@ -398,7 +405,10 @@ export class WcagTestFactory {
     return new WcagTester({
       resultTypes: ['violations'],
       reporter: 'v2',
-      tags: ['wcag2a', 'wcag2aa'],
+      runOnly: {
+        type: 'tag',
+        values: ['wcag2a', 'wcag2aa'],
+      },
     });
   }
 }

@@ -48,7 +48,7 @@
     "@xats-org/types": "workspace:*",
     "@xats-org/utils": "workspace:*",
     "@xats-org/testing": "workspace:*",
-    "docx": "^8.0.0",
+    "docx": "^9.0.0",
     "mammoth": "^1.6.0"
   },
   "devDependencies": {

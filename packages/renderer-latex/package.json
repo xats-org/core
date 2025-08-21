@@ -48,7 +48,7 @@
     "@xats-org/types": "workspace:*",
     "@xats-org/utils": "workspace:*",
     "@xats-org/testing": "workspace:*",
-    "latex-parser": "^0.7.0"
+    "latex-parser": "^0.6.2"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

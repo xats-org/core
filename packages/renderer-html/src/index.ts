@@ -16,7 +16,9 @@ import type {
   ParseOptions,
   RoundTripOptions,
   RoundTripResult,
-  ValidationResult,
+  FormatValidationResult,
+  FormatValidationError,
+  FormatValidationWarning,
   FormatMetadata,
   WcagCompliance,
 } from '@xats-org/types';
@@ -211,7 +213,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Validate HTML content
    */
-  async validate(content: string): Promise<ValidationResult> {
+  async validate(content: string): Promise<FormatValidationResult> {
     try {
       // Basic HTML validation using JSDOM
       const dom = new JSDOM(content);
@@ -222,7 +224,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       return {
         valid: errors.length === 0,
         errors,
-        warnings: [],
+        warnings: [] as FormatValidationWarning[],
         metadata: {
           validator: 'jsdom',
           version: '23.0.0',
@@ -237,10 +239,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
           {
             code: 'PARSE_ERROR',
             message: `HTML validation failed: ${error}`,
-            severity: 'error',
+            severity: 'error' as const,
           },
         ],
-        warnings: [],
+        warnings: [] as FormatValidationWarning[],
       };
     }
   }
@@ -353,15 +355,15 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     };
   }
 
-  private validateHtmlStructure(document: Document): ValidationError[] {
-    const errors: ValidationError[] = [];
+  private validateHtmlStructure(document: Document): FormatValidationError[] {
+    const errors: FormatValidationError[] = [];
     
     // Check for basic HTML5 structure
     if (!document.doctype) {
       errors.push({
         code: 'MISSING_DOCTYPE',
         message: 'HTML document missing DOCTYPE declaration',
-        severity: 'warning',
+        severity: 'warning' as const,
       });
     }
     
@@ -371,7 +373,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       errors.push({
         code: 'MISSING_CHARSET',
         message: 'HTML document missing charset declaration',
-        severity: 'warning',
+        severity: 'warning' as const,
       });
     }
     
