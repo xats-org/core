@@ -1,7 +1,7 @@
 import { XatsRenderer } from '../components/XatsRenderer';
 
 import type { Meta, StoryObj } from '@storybook/react';
-import type { XatsDocument } from '@xats/types';
+import type { XatsDocument } from '@xats-org/types';
 
 const meta = {
   title: 'Renderer/XatsRenderer',

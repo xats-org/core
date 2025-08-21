@@ -1,5 +1,5 @@
 /**
- * @xats/mcp-server - Comprehensive Error Handling
+ * @xats-org/mcp-server - Comprehensive Error Handling
  */
 
 import type { McpServerConfig } from './types.js';

@@ -27,7 +27,7 @@ Before starting, ensure you have:
 
 To install the xats validation tool:
 ```bash
-npm install -g @xats/validator
+npm install -g @xats-org/validator
 ```
 
 ---
@@ -703,12 +703,12 @@ Common JSON mistakes:
 
 **Solution:**
 ```bash
-npm install -g @xats/validator
+npm install -g @xats-org/validator
 ```
 
 If you get permission errors:
 ```bash
-sudo npm install -g @xats/validator
+sudo npm install -g @xats-org/validator
 ```
 
 ### Issue: "Schema validation failed with no specific error"

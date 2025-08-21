@@ -1,5 +1,5 @@
 {
-  "name": "@xats/cli",
+  "name": "@xats-org/cli",
   "version": "0.4.1",
   "description": "Command-line interface for xats document validation and processing",
   "keywords": [
@@ -46,10 +46,10 @@
     "typecheck": "tsc --noEmit -p tsconfig.build.json"
   },
   "dependencies": {
-    "@xats/schema": "workspace:*",
-    "@xats/types": "workspace:*",
-    "@xats/utils": "workspace:*",
-    "@xats/validator": "workspace:*",
+    "@xats-org/schema": "workspace:*",
+    "@xats-org/types": "workspace:*",
+    "@xats-org/utils": "workspace:*",
+    "@xats-org/validator": "workspace:*",
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
     "ora": "^8.0.1"
@@ -58,7 +58,7 @@
     "@types/node": "^20.11.0",
     "@vitest/coverage-v8": "^1.2.0",
     "eslint": "^8.56.0",
-    "@xats/eslint-config": "workspace:*",
+    "@xats-org/eslint-config": "workspace:*",
     "typescript": "^5.3.3",
     "vitest": "^1.2.0"
   },

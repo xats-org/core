@@ -1,5 +1,5 @@
 /**
- * @xats/mcp-server - Validate Tool Tests
+ * @xats-org/mcp-server - Validate Tool Tests
  */
 
 import { describe, it, expect, vi } from 'vitest';
@@ -14,7 +14,7 @@ import {
 import type { ValidateInput, McpServerConfig } from '../types.js';
 
 // Mock validator
-vi.mock('@xats/validator', () => ({
+vi.mock('@xats-org/validator', () => ({
   createValidator: vi.fn(() => ({
     validate: vi.fn(),
     validateSync: vi.fn(),
@@ -49,7 +49,7 @@ describe('validateTool', () => {
 
   describe('validateTool', () => {
     it('should validate a valid document', async () => {
-      const { createValidator } = await import('@xats/validator');
+      const { createValidator } = await import('@xats-org/validator');
       const mockValidator = {
         validate: vi.fn().mockResolvedValue({
           isValid: true,
@@ -74,7 +74,7 @@ describe('validateTool', () => {
     });
 
     it('should handle validation errors', async () => {
-      const { createValidator } = await import('@xats/validator');
+      const { createValidator } = await import('@xats-org/validator');
       const mockValidator = {
         validate: vi.fn().mockResolvedValue({
           isValid: false,
@@ -114,7 +114,7 @@ describe('validateTool', () => {
     });
 
     it('should handle validator exceptions', async () => {
-      const { createValidator } = await import('@xats/validator');
+      const { createValidator } = await import('@xats-org/validator');
       const mockValidator = {
         validate: vi.fn().mockRejectedValue(new Error('Schema compilation failed')),
       };
@@ -133,7 +133,7 @@ describe('validateTool', () => {
 
   describe('validateToolSync', () => {
     it('should validate synchronously', async () => {
-      const { createValidator } = await import('@xats/validator');
+      const { createValidator } = await import('@xats-org/validator');
       const mockValidator = {
         validateSync: vi.fn().mockReturnValue({
           isValid: true,
@@ -157,7 +157,7 @@ describe('validateTool', () => {
 
   describe('validateBatchTool', () => {
     it('should validate multiple documents', async () => {
-      const { createValidator } = await import('@xats/validator');
+      const { createValidator } = await import('@xats-org/validator');
       const mockValidator = {
         validate: vi
           .fn()

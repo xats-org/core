@@ -1,5 +1,5 @@
 /**
- * @xats/renderer - Rendering engine for xats documents
+ * @xats-org/renderer - Rendering engine for xats documents
  */
 
 export { BaseRenderer, type RendererOptions } from './base-renderer.js';
@@ -12,7 +12,7 @@ import { HtmlRenderer, type HtmlRendererOptions } from './renderers/html.js';
 import { MarkdownRenderer, type MarkdownRendererOptions } from './renderers/markdown.js';
 import { TextRenderer, type TextRendererOptions } from './renderers/text.js';
 
-import type { XatsDocument } from '@xats/types';
+import type { XatsDocument } from '@xats-org/types';
 
 export type OutputFormat = 'html' | 'markdown' | 'text';
 

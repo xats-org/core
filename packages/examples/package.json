@@ -1,5 +1,5 @@
 {
-  "name": "@xats/examples",
+  "name": "@xats-org/examples",
   "version": "0.4.1",
   "description": "Example xats documents demonstrating schema features",
   "keywords": [
@@ -59,14 +59,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@xats/types": "workspace:*"
+    "@xats-org/types": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
-    "@xats/cli": "workspace:*",
-    "@xats/validator": "workspace:*",
+    "@xats-org/cli": "workspace:*",
+    "@xats-org/validator": "workspace:*",
     "eslint": "^8.56.0",
-    "@xats/eslint-config": "workspace:*",
+    "@xats-org/eslint-config": "workspace:*",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },

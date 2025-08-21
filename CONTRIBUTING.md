@@ -194,10 +194,10 @@ pnpm run dev
 ```
 xats/
 ├── packages/           # Core packages
-│   ├── @xats/schema/   # JSON Schema definitions
-│   ├── @xats/validator/# Validation logic
-│   ├── @xats/types/    # Shared TypeScript types
-│   ├── @xats/cli/      # Command-line interface
+│   ├── @xats-org/schema/   # JSON Schema definitions
+│   ├── @xats-org/validator/# Validation logic
+│   ├── @xats-org/types/    # Shared TypeScript types
+│   ├── @xats-org/cli/      # Command-line interface
 │   └── ...
 ├── apps/              # Applications
 │   ├── docs/          # Documentation site
@@ -208,11 +208,11 @@ xats/
 ### Working with Packages
 ```bash
 # Run commands for specific packages
-pnpm --filter @xats/schema build
-pnpm --filter @xats/validator test
+pnpm --filter @xats-org/schema build
+pnpm --filter @xats-org/validator test
 
 # Add dependencies to a specific package
-pnpm --filter @xats/schema add ajv
+pnpm --filter @xats-org/schema add ajv
 
 # Add dev dependencies to root
 pnpm add -D -w eslint

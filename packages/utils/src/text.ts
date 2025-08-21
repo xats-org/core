@@ -1,4 +1,4 @@
-import type { SemanticText, SemanticTextRun } from '@xats/types';
+import type { SemanticText, SemanticTextRun } from '@xats-org/types';
 
 /**
  * Create a SemanticText object from a plain string

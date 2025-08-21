@@ -1,4 +1,4 @@
-# @xats/mcp-server
+# @xats-org/mcp-server
 
 Model Context Protocol (MCP) server for xats documents, providing AI assistants with comprehensive tools for working with educational content.
 
@@ -10,10 +10,10 @@ The xats MCP server enables AI assistants like Claude to validate, create, analy
 
 ```bash
 # Install as a dependency
-npm install @xats/mcp-server
+npm install @xats-org/mcp-server
 
 # Or install globally for CLI usage
-npm install -g @xats/mcp-server
+npm install -g @xats-org/mcp-server
 ```
 
 ## Quick Start
@@ -21,7 +21,7 @@ npm install -g @xats/mcp-server
 ### As a Library
 
 ```typescript
-import { startServer } from '@xats/mcp-server';
+import { startServer } from '@xats-org/mcp-server';
 
 // Start the MCP server with default configuration
 await startServer();
@@ -202,7 +202,7 @@ Transforms documents to different formats or schema versions.
 ### Server Configuration
 
 ```typescript
-import { createServer } from '@xats/mcp-server';
+import { createServer } from '@xats-org/mcp-server';
 
 const server = await createServer({
   name: 'my-xats-server',
@@ -242,7 +242,7 @@ import {
   DocumentError, 
   TransformError,
   createErrorResponse 
-} from '@xats/mcp-server';
+} from '@xats-org/mcp-server';
 
 // Structured error responses
 {
@@ -309,7 +309,7 @@ Add to your Claude Desktop configuration:
   "mcpServers": {
     "xats": {
       "command": "npx",
-      "args": ["@xats/mcp-server"],
+      "args": ["@xats-org/mcp-server"],
       "env": {}
     }
   }
@@ -325,7 +325,7 @@ import {
   analyzeTool,
   extractTool,
   transformTool 
-} from '@xats/mcp-server';
+} from '@xats-org/mcp-server';
 
 // Validate a document
 const validationResult = await validateTool({
@@ -381,10 +381,10 @@ MIT - See [LICENSE.md](../../LICENSE.md) for details.
 
 ## Related Packages
 
-- [@xats/schema](../schema) - JSON Schema definitions
-- [@xats/validator](../validator) - Document validation
-- [@xats/types](../types) - TypeScript type definitions
-- [@xats/utils](../utils) - Shared utilities
+- [@xats-org/schema](../schema) - JSON Schema definitions
+- [@xats-org/validator](../validator) - Document validation
+- [@xats-org/types](../types) - TypeScript type definitions
+- [@xats-org/utils](../utils) - Shared utilities
 
 ## Support
 

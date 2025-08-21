@@ -1,4 +1,4 @@
-# @xats/vitest-config
+# @xats-org/vitest-config
 
 ## 0.4.1
 
@@ -11,7 +11,7 @@
 
   ### Key Achievements
   - ✅ Complete monorepo restructuring with Turborepo and pnpm workspaces
-  - ✅ All packages migrated to @xats/\* scope
+  - ✅ All packages migrated to @xats-org/\* scope
   - ✅ Comprehensive test coverage (458 tests passing)
   - ✅ Storybook integration for component documentation
   - ✅ CI/CD pipeline with GitHub Actions
@@ -19,7 +19,7 @@
   - ✅ Documentation updates and standardization
 
   ### Breaking Changes
-  - Package imports now use @xats/\* scope
+  - Package imports now use @xats-org/\* scope
   - CLI consolidated into single xats command
   - Vocabulary URIs updated to new structure
 

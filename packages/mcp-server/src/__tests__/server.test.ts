@@ -1,5 +1,5 @@
 /**
- * @xats/mcp-server - Server Tests
+ * @xats-org/mcp-server - Server Tests
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';

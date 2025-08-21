@@ -13,7 +13,7 @@ import type {
   FrontMatter,
   BodyMatter,
   BackMatter,
-} from '@xats/types';
+} from '@xats-org/types';
 
 export interface MarkdownRendererOptions extends RendererOptions {
   headingOffset?: number;

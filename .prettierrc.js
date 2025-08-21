@@ -1,1 +1,1 @@
-module.exports = require('@xats/prettier-config');
+module.exports = require('@xats-org/prettier-config');

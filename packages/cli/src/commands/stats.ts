@@ -5,7 +5,7 @@ import { resolve } from 'path';
 import chalk from 'chalk';
 import { Command } from 'commander';
 
-import { countWords, extractContentBlocks, getStructureDepth } from '@xats/utils';
+import { countWords, extractContentBlocks, getStructureDepth } from '@xats-org/utils';
 
 import { isContentBlock, isSemanticText, isXatsDocument } from '../types.js';
 

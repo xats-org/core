@@ -65,10 +65,10 @@ importers:
       '@vitest/ui':
         specifier: ^3.2.4
         version: 3.2.4(vitest@3.2.4)
-      '@xats/eslint-config':
+      '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:packages/eslint-config
-      '@xats/prettier-config':
+      '@xats-org/prettier-config':
         specifier: workspace:*
         version: link:packages/prettier-config
       eslint:
@@ -116,16 +116,16 @@ importers:
 
   packages/cli:
     dependencies:
-      '@xats/schema':
+      '@xats-org/schema':
         specifier: workspace:*
         version: link:../schema
-      '@xats/types':
+      '@xats-org/types':
         specifier: workspace:*
         version: link:../types
-      '@xats/utils':
+      '@xats-org/utils':
         specifier: workspace:*
         version: link:../utils
-      '@xats/validator':
+      '@xats-org/validator':
         specifier: workspace:*
         version: link:../validator
       chalk:
@@ -144,7 +144,7 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^1.2.0
         version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4))
-      '@xats/eslint-config':
+      '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
       eslint:
@@ -183,20 +183,20 @@ importers:
 
   packages/examples:
     dependencies:
-      '@xats/types':
+      '@xats-org/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
       '@types/node':
         specifier: ^20.11.0
         version: 20.19.11
-      '@xats/cli':
+      '@xats-org/cli':
         specifier: workspace:*
         version: link:../cli
-      '@xats/eslint-config':
+      '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
-      '@xats/validator':
+      '@xats-org/validator':
         specifier: workspace:*
         version: link:../validator
       eslint:
@@ -214,16 +214,16 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^0.5.0
         version: 0.5.0
-      '@xats/schema':
+      '@xats-org/schema':
         specifier: workspace:*
         version: link:../schema
-      '@xats/types':
+      '@xats-org/types':
         specifier: workspace:*
         version: link:../types
-      '@xats/utils':
+      '@xats-org/utils':
         specifier: workspace:*
         version: link:../utils
-      '@xats/validator':
+      '@xats-org/validator':
         specifier: workspace:*
         version: link:../validator
       commander:
@@ -236,7 +236,7 @@ importers:
       '@types/node':
         specifier: ^20.10.0
         version: 20.19.11
-      '@xats/vitest-config':
+      '@xats-org/vitest-config':
         specifier: workspace:*
         version: link:../vitest-config
       typescript:
@@ -254,10 +254,10 @@ importers:
 
   packages/renderer:
     dependencies:
-      '@xats/types':
+      '@xats-org/types':
         specifier: workspace:*
         version: link:../types
-      '@xats/utils':
+      '@xats-org/utils':
         specifier: workspace:*
         version: link:../utils
     devDependencies:
@@ -270,7 +270,7 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^1.2.0
         version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4))
-      '@xats/eslint-config':
+      '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
       eslint:
@@ -288,14 +288,14 @@ importers:
 
   packages/schema:
     dependencies:
-      '@xats/types':
+      '@xats-org/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
       '@types/node':
         specifier: ^20.10.0
         version: 20.19.11
-      '@xats/vitest-config':
+      '@xats-org/vitest-config':
         specifier: workspace:*
         version: link:../vitest-config
       ajv:
@@ -316,7 +316,7 @@ importers:
       '@types/node':
         specifier: ^20.10.0
         version: 20.19.11
-      '@xats/vitest-config':
+      '@xats-org/vitest-config':
         specifier: workspace:*
         version: link:../vitest-config
       typescript:
@@ -328,7 +328,7 @@ importers:
 
   packages/utils:
     dependencies:
-      '@xats/types':
+      '@xats-org/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -338,7 +338,7 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^1.2.0
         version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4))
-      '@xats/eslint-config':
+      '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
       eslint:
@@ -353,10 +353,10 @@ importers:
 
   packages/validator:
     dependencies:
-      '@xats/schema':
+      '@xats-org/schema':
         specifier: workspace:*
         version: link:../schema
-      '@xats/types':
+      '@xats-org/types':
         specifier: workspace:*
         version: link:../types
       ajv:
@@ -369,7 +369,7 @@ importers:
       '@types/node':
         specifier: ^20.10.0
         version: 20.19.11
-      '@xats/vitest-config':
+      '@xats-org/vitest-config':
         specifier: workspace:*
         version: link:../vitest-config
       typescript:
@@ -390,17 +390,17 @@ importers:
 
   packages/vocabularies:
     dependencies:
-      '@xats/types':
+      '@xats-org/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
-      '@xats/eslint-config':
+      '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
-      '@xats/prettier-config':
+      '@xats-org/prettier-config':
         specifier: workspace:*
         version: link:../prettier-config
-      '@xats/vitest-config':
+      '@xats-org/vitest-config':
         specifier: workspace:*
         version: link:../vitest-config
       tsup:

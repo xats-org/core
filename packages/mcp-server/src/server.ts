@@ -1,5 +1,5 @@
 /**
- * @xats/mcp-server - Main MCP Server Implementation
+ * @xats-org/mcp-server - Main MCP Server Implementation
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';

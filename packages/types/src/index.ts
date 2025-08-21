@@ -1,5 +1,5 @@
 /**
- * @xats/types - Shared TypeScript Types for xats
+ * @xats-org/types - Shared TypeScript Types for xats
  *
  * This package contains all shared type definitions used across the xats monorepo.
  * Types are organized by domain to make them easy to discover and use.

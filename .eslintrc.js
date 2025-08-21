@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: ['@xats/eslint-config'],
+  extends: ['@xats-org/eslint-config'],
   parserOptions: {
     project: ['./tsconfig.json', './packages/*/tsconfig.json'],
     tsconfigRootDir: __dirname,

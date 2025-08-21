@@ -2,7 +2,7 @@
  * TypeScript interfaces for CLI command options
  */
 
-import type { XatsDocument } from '@xats/types';
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * Base command options available on all commands

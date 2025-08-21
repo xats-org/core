@@ -1,18 +1,18 @@
-# @xats/vocabularies
+# @xats-org/vocabularies
 
 Core vocabulary definitions for the xats schema. This package contains JSON schema definitions for all standard block types, rendering hints, pathway types, placeholders, and triggers supported by the xats ecosystem.
 
 ## Usage
 
 ```typescript
-import { getBlockVocabulary, getHintVocabulary } from '@xats/vocabularies';
+import { getBlockVocabulary, getHintVocabulary } from '@xats-org/vocabularies';
 
 // Get a specific block vocabulary
 const paragraphBlock = await getBlockVocabulary('paragraph');
 console.log(paragraphBlock.$id); // "https://xats.org/vocabularies/blocks/paragraph"
 
 // Get all available vocabularies
-import { blockTypes, hintTypes, pathwayTypes } from '@xats/vocabularies';
+import { blockTypes, hintTypes, pathwayTypes } from '@xats-org/vocabularies';
 ```
 
 ## Vocabulary Types

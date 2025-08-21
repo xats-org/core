@@ -13,14 +13,14 @@ Starting with v0.4.0, xats is organized as a TypeScript monorepo using Turborepo
 ```
 xats/
 ├── packages/
-│   ├── @xats/schema/         # Core JSON Schema definitions
-│   ├── @xats/validator/      # Validation logic and error reporting
-│   ├── @xats/types/          # Shared TypeScript types
-│   ├── @xats/cli/            # Command-line interface
-│   ├── @xats/renderer/       # Rendering framework
-│   ├── @xats/mcp-server/     # Model Context Protocol server
-│   ├── @xats/utils/          # Shared utilities
-│   └── @xats/examples/       # Example documents
+│   ├── @xats-org/schema/         # Core JSON Schema definitions
+│   ├── @xats-org/validator/      # Validation logic and error reporting
+│   ├── @xats-org/types/          # Shared TypeScript types
+│   ├── @xats-org/cli/            # Command-line interface
+│   ├── @xats-org/renderer/       # Rendering framework
+│   ├── @xats-org/mcp-server/     # Model Context Protocol server
+│   ├── @xats-org/utils/          # Shared utilities
+│   └── @xats-org/examples/       # Example documents
 ├── apps/
 │   ├── docs/                 # Documentation site
 │   └── website/              # xats.org website
@@ -36,7 +36,7 @@ When working with the monorepo:
 - Use `pnpm run build` to build all packages
 - Use `pnpm run test` to run all tests
 - Use `pnpm run dev` to start development mode
-- Individual packages can be run with `pnpm --filter @xats/[package] [command]`
+- Individual packages can be run with `pnpm --filter @xats-org/[package] [command]`
 
 ## Memory Management
 

@@ -1,5 +1,5 @@
 /**
- * @xats/schema - JSON Schema definitions for xats
+ * @xats-org/schema - JSON Schema definitions for xats
  *
  * This package provides access to all xats schema versions and utilities
  * for working with schemas.
@@ -9,7 +9,7 @@ import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import type { SchemaDefinition, XatsVersion } from '@xats/types';
+import type { SchemaDefinition, XatsVersion } from '@xats-org/types';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -139,4 +139,9 @@ export function getAllSchemas(): Record<XatsVersion, SchemaDefinition | null> {
 }
 
 // Re-export types
-export type { SchemaDefinition, SchemaProperty, SchemaMetadata, XatsVersion } from '@xats/types';
+export type {
+  SchemaDefinition,
+  SchemaProperty,
+  SchemaMetadata,
+  XatsVersion,
+} from '@xats-org/types';

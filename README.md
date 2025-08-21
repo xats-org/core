@@ -6,7 +6,7 @@
 [![Development](https://img.shields.io/badge/development-v0.4.0-orange.svg)](https://github.com/xats-org/core/tree/main)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![CI Status](https://img.shields.io/github/actions/workflow/status/xats-org/core/ci.yml?branch=v0.2.0&label=CI)](https://github.com/xats-org/core/actions)
-[![npm version](https://img.shields.io/npm/v/@xats/cli.svg)](https://www.npmjs.com/package/@xats/cli)
+[![npm version](https://img.shields.io/npm/v/@xats-org/cli.svg)](https://www.npmjs.com/package/@xats-org/cli)
 
 **The Modern Standard for Academic and Educational Content**
 
@@ -85,10 +85,10 @@ Unlike general-purpose formats, xats is designed specifically for academic and e
 
 ```bash
 # Install the CLI globally
-pnpm add -g @xats/cli
+pnpm add -g @xats-org/cli
 
 # Or use individual packages
-pnpm add @xats/validator @xats/schema
+pnpm add @xats-org/validator @xats-org/schema
 ```
 
 ### Validate a Document
@@ -100,7 +100,7 @@ xats validate my-textbook.json
 ### Programmatic Usage
 
 ```javascript
-import { validateDocument } from '@xats/validator';
+import { validateDocument } from '@xats-org/validator';
 
 const document = {
   schemaVersion: "0.3.0",
@@ -246,14 +246,14 @@ const { valid, errors } = await validateDocument(document);
 ```
 xats-org/core/
 ├── packages/              # Monorepo packages
-│   ├── @xats/schema/     # Core JSON Schema definitions
-│   ├── @xats/validator/  # Validation logic and error reporting
-│   ├── @xats/types/      # Shared TypeScript types
-│   ├── @xats/cli/        # Command-line interface
-│   ├── @xats/renderer/   # Rendering framework
-│   ├── @xats/mcp-server/ # Model Context Protocol server
-│   ├── @xats/utils/      # Shared utilities
-│   └── @xats/examples/   # Example documents
+│   ├── @xats-org/schema/     # Core JSON Schema definitions
+│   ├── @xats-org/validator/  # Validation logic and error reporting
+│   ├── @xats-org/types/      # Shared TypeScript types
+│   ├── @xats-org/cli/        # Command-line interface
+│   ├── @xats-org/renderer/   # Rendering framework
+│   ├── @xats-org/mcp-server/ # Model Context Protocol server
+│   ├── @xats-org/utils/      # Shared utilities
+│   └── @xats-org/examples/   # Example documents
 ├── apps/                  # Applications
 │   ├── docs/             # Documentation site
 │   └── website/          # xats.org website
@@ -302,7 +302,7 @@ pnpm run build
 pnpm run test
 
 # Validate examples
-pnpm --filter @xats/cli run validate:examples
+pnpm --filter @xats-org/cli run validate:examples
 ```
 
 ### Key Contributors

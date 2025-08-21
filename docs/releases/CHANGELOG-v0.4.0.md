@@ -10,7 +10,7 @@ This release represents a complete restructuring of the xats project into a mode
 
 ### ⚠️ Breaking Changes
 
-- **Package Structure:** Complete reorganization into scoped packages under `@xats/*`
+- **Package Structure:** Complete reorganization into scoped packages under `@xats-org/*`
 - **Import Paths:** All imports must now use the new scoped package names
 - **CLI Commands:** CLI has been consolidated into a single `xats` command with subcommands
 - **Vocabulary URIs:** All URIs updated from `https://xats.org/vocabularies/*` to `https://xats.org/vocabularies/*`
@@ -19,15 +19,15 @@ This release represents a complete restructuring of the xats project into a mode
 
 #### Packages Created
 
-- **@xats/schema** - Core JSON Schema definitions with multi-version support
-- **@xats/validator** - Comprehensive validation logic with detailed error reporting
-- **@xats/types** - Shared TypeScript type definitions for strong typing
-- **@xats/cli** - Unified command-line interface with multiple commands
-- **@xats/renderer** - Multi-format rendering engine (HTML, Markdown, Text)
-- **@xats/utils** - Shared utility functions for common operations
-- **@xats/examples** - Comprehensive example documents and use cases
-- **@xats/vocabularies** - Vocabulary definitions for blocks, hints, and more
-- **@xats/extensions** - Extension system for custom functionality
+- **@xats-org/schema** - Core JSON Schema definitions with multi-version support
+- **@xats-org/validator** - Comprehensive validation logic with detailed error reporting
+- **@xats-org/types** - Shared TypeScript type definitions for strong typing
+- **@xats-org/cli** - Unified command-line interface with multiple commands
+- **@xats-org/renderer** - Multi-format rendering engine (HTML, Markdown, Text)
+- **@xats-org/utils** - Shared utility functions for common operations
+- **@xats-org/examples** - Comprehensive example documents and use cases
+- **@xats-org/vocabularies** - Vocabulary definitions for blocks, hints, and more
+- **@xats-org/extensions** - Extension system for custom functionality
 
 #### CLI Enhancements
 
@@ -91,15 +91,15 @@ This release represents a complete restructuring of the xats project into a mode
 ```
 xats/
 ├── packages/           # Core packages
-│   ├── @xats/schema
-│   ├── @xats/validator
-│   ├── @xats/types
-│   ├── @xats/cli
-│   ├── @xats/renderer
-│   ├── @xats/utils
-│   ├── @xats/examples
-│   ├── @xats/vocabularies
-│   └── @xats/extensions
+│   ├── @xats-org/schema
+│   ├── @xats-org/validator
+│   ├── @xats-org/types
+│   ├── @xats-org/cli
+│   ├── @xats-org/renderer
+│   ├── @xats-org/utils
+│   ├── @xats-org/examples
+│   ├── @xats-org/vocabularies
+│   └── @xats-org/extensions
 ├── apps/              # Applications
 │   ├── docs/         # Documentation site
 │   └── website/      # xats.org website
@@ -128,15 +128,15 @@ xats/
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| @xats/schema | 0.4.0 | Core JSON Schema definitions |
-| @xats/validator | 0.4.0 | Validation logic |
-| @xats/types | 0.4.0 | TypeScript types |
-| @xats/cli | 0.4.0 | Command-line interface |
-| @xats/renderer | 0.4.0 | Rendering framework |
-| @xats/utils | 0.4.0 | Shared utilities |
-| @xats/examples | 0.4.0 | Example documents |
-| @xats/vocabularies | 0.4.0 | Vocabulary definitions |
-| @xats/extensions | 0.4.0 | Extension schemas |
+| @xats-org/schema | 0.4.0 | Core JSON Schema definitions |
+| @xats-org/validator | 0.4.0 | Validation logic |
+| @xats-org/types | 0.4.0 | TypeScript types |
+| @xats-org/cli | 0.4.0 | Command-line interface |
+| @xats-org/renderer | 0.4.0 | Rendering framework |
+| @xats-org/utils | 0.4.0 | Shared utilities |
+| @xats-org/examples | 0.4.0 | Example documents |
+| @xats-org/vocabularies | 0.4.0 | Vocabulary definitions |
+| @xats-org/extensions | 0.4.0 | Extension schemas |
 
 ### 🐛 Bug Fixes
 

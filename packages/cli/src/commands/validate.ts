@@ -6,12 +6,12 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import ora from 'ora';
 
-import { XatsValidator } from '@xats/validator';
+import { XatsValidator } from '@xats-org/validator';
 
 import { isXatsDocument } from '../types.js';
 
 import type { ValidateCommandOptions } from '../types.js';
-import type { XatsVersion } from '@xats/types';
+import type { XatsVersion } from '@xats-org/types';
 
 export const validateCommand = new Command('validate')
   .description('Validate a xats document against the schema')

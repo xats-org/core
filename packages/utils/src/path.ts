@@ -1,4 +1,4 @@
-import type { Unit, Chapter, ContentBlock, StructuralContainer, Pathway } from '@xats/types';
+import type { Unit, Chapter, ContentBlock, StructuralContainer, Pathway } from '@xats-org/types';
 
 /**
  * Pathway condition interface for evaluation

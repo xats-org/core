@@ -1,5 +1,5 @@
 /**
- * @xats/mcp-server - Analyze Tool Implementation
+ * @xats-org/mcp-server - Analyze Tool Implementation
  */
 
 import { AnalysisError } from '../types.js';
@@ -12,7 +12,7 @@ import type {
   DocumentStatistics,
   DocumentIssue,
 } from '../types.js';
-import type { XatsDocument, SemanticText } from '@xats/types';
+import type { XatsDocument, SemanticText } from '@xats-org/types';
 
 /**
  * Extract text content from SemanticText objects

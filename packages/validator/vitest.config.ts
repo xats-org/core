@@ -1,3 +1,3 @@
-import { createVitestConfig } from '@xats/vitest-config';
+import { createVitestConfig } from '@xats-org/vitest-config';
 
 export default createVitestConfig();

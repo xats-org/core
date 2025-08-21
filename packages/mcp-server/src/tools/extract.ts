@@ -1,11 +1,11 @@
 /**
- * @xats/mcp-server - Extract Tool Implementation
+ * @xats-org/mcp-server - Extract Tool Implementation
  */
 
 import { McpError } from '../types.js';
 
 import type { ExtractInput, ExtractResult, McpServerConfig } from '../types.js';
-import type { XatsDocument, SemanticText } from '@xats/types';
+import type { XatsDocument, SemanticText } from '@xats-org/types';
 
 /**
  * Extract content from SemanticText
