@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['@xats/eslint-config'],
+  extends: ['@xats-org/eslint-config'],
   rules: {
     // Temporarily disable strict type checking until proper types are added
     '@typescript-eslint/no-explicit-any': 'off',

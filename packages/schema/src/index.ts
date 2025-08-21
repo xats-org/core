@@ -139,4 +139,9 @@ export function getAllSchemas(): Record<XatsVersion, SchemaDefinition | null> {
 }
 
 // Re-export types
-export type { SchemaDefinition, SchemaProperty, SchemaMetadata, XatsVersion } from '@xats-org/types';
+export type {
+  SchemaDefinition,
+  SchemaProperty,
+  SchemaMetadata,
+  XatsVersion,
+} from '@xats-org/types';
