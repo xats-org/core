@@ -292,6 +292,7 @@ export class PerformanceBenchmark {
       return process.memoryUsage().heapUsed;
     }
     // Browser fallback (less accurate)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
     return (performance as any).memory?.usedJSHeapSize || 0;
   }
 

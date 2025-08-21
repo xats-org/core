@@ -61,13 +61,16 @@ export class RendererTestSuite {
     documents: XatsDocument[],
     benchmarkCases?: BenchmarkTestCase[]
   ): Promise<CompleteSuiteResult> {
+    // eslint-disable-next-line no-console
     console.log('Starting complete renderer test suite...');
 
     // Run round-trip tests
+    // eslint-disable-next-line no-console
     console.log('Running round-trip fidelity tests...');
     const roundTripResults = await this.roundTripTester.testDocuments(documents);
 
     // Run WCAG compliance tests on rendered content
+    // eslint-disable-next-line no-console
     console.log('Running WCAG compliance tests...');
     const wcagResults: WcagSuiteResult[] = [];
 
@@ -83,6 +86,7 @@ export class RendererTestSuite {
     // Run performance benchmarks if provided
     let benchmarkResults: BenchmarkSuiteResult | null = null;
     if (benchmarkCases && benchmarkCases.length > 0) {
+      // eslint-disable-next-line no-console
       console.log('Running performance benchmarks...');
       benchmarkResults = await this.benchmark.runBenchmarkSuite(
         this.roundTripTester['renderer'],
