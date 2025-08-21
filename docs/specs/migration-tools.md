@@ -246,11 +246,11 @@ const assessmentResult = await validateAssessments(document);
 function convertToCaseStudies(document) {
   const processContent = (content) => {
     return content.map(block => {
-      if (block.blockType === 'https://xats.org/core/blocks/paragraph' &&
+      if (block.blockType === 'https://xats.org/vocabularies/blocks/paragraph' &&
           block.content.runs[0].text.includes('Consider the case')) {
         return {
           id: block.id,
-          blockType: 'https://xats.org/core/blocks/caseStudy',
+          blockType: 'https://xats.org/vocabularies/blocks/caseStudy',
           content: extractCaseStudyContent(block.content.runs[0].text)
         };
       }
@@ -366,8 +366,8 @@ function enhanceAccessibility(document) {
 function enhanceImageAccessibility(document) {
   const processContent = (content) => {
     return content.map(block => {
-      if (block.blockType === 'https://xats.org/core/blocks/figure' ||
-          block.blockType === 'https://xats.org/core/blocks/image') {
+      if (block.blockType === 'https://xats.org/vocabularies/blocks/figure' ||
+          block.blockType === 'https://xats.org/vocabularies/blocks/image') {
         
         if (!block.content.altText) {
           block.content.altText = generateAltText(block);

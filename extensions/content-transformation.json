@@ -143,15 +143,15 @@
                   "properties": {
                     "unordered": {
                       "type": "string",
-                      "default": "https://xats.org/core/blocks/list"
+                      "default": "https://xats.org/vocabularies/blocks/list"
                     },
                     "ordered": {
                       "type": "string", 
-                      "default": "https://xats.org/core/blocks/list"
+                      "default": "https://xats.org/vocabularies/blocks/list"
                     },
                     "definition": {
                       "type": "string",
-                      "default": "https://xats.org/core/blocks/list"
+                      "default": "https://xats.org/vocabularies/blocks/list"
                     }
                   }
                 },

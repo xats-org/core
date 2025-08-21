@@ -34,7 +34,7 @@
               {
                 "language": "en",
                 "id": "para-1",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -72,7 +72,7 @@
               {
                 "language": "en",
                 "id": "case-1",
-                "blockType": "https://xats.org/core/blocks/caseStudy",
+                "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
                 "content": {
                   "title": {
                     "runs": [{"type": "text", "text": "TechStart Inc: A Startup's Pivot Decision"}]
@@ -195,7 +195,7 @@
               {
                 "language": "en",
                 "id": "prompt-1",
-                "blockType": "https://xats.org/core/blocks/metacognitivePrompt",
+                "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
                 "content": {
                   "promptType": "self-assessment",
                   "prompt": {
@@ -274,7 +274,7 @@
               {
                 "language": "en",
                 "id": "para-2",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -319,7 +319,7 @@
               {
                 "language": "en",
                 "id": "prompt-2",
-                "blockType": "https://xats.org/core/blocks/metacognitivePrompt",
+                "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
                 "content": {
                   "promptType": "learning-strategy",
                   "prompt": {

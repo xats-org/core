@@ -38,7 +38,7 @@ export const minimalDocument: XatsDocument = {
         contents: [
           {
             id: 'para-1',
-            blockType: 'https://xats.org/core/blocks/paragraph',
+            blockType: 'https://xats.org/vocabularies/blocks/paragraph',
             content: {
               runs: [
                 {
@@ -85,7 +85,7 @@ export const completeTextbook: XatsDocument = {
     contents: [
       {
         id: 'toc',
-        blockType: 'https://xats.org/core/placeholders/tableOfContents',
+        blockType: 'https://xats.org/vocabularies/placeholders/tableOfContents',
         content: {},
       },
     ],
@@ -118,7 +118,7 @@ export const completeTextbook: XatsDocument = {
             contents: [
               {
                 id: 'heading-1-1',
-                blockType: 'https://xats.org/core/blocks/heading',
+                blockType: 'https://xats.org/vocabularies/blocks/heading',
                 content: {
                   level: 2,
                   text: {
@@ -133,7 +133,7 @@ export const completeTextbook: XatsDocument = {
               },
               {
                 id: 'para-1-1-1',
-                blockType: 'https://xats.org/core/blocks/paragraph',
+                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                 content: {
                   runs: [
                     {
@@ -153,7 +153,7 @@ export const completeTextbook: XatsDocument = {
               },
               {
                 id: 'code-1-1-1',
-                blockType: 'https://xats.org/core/blocks/codeBlock',
+                blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
                 content: {
                   language: 'python',
                   code: 'print("Hello, World!")',
@@ -171,12 +171,12 @@ export const completeTextbook: XatsDocument = {
     contents: [
       {
         id: 'bibliography-placeholder',
-        blockType: 'https://xats.org/core/placeholders/bibliography',
+        blockType: 'https://xats.org/vocabularies/placeholders/bibliography',
         content: {},
       },
       {
         id: 'index-placeholder',
-        blockType: 'https://xats.org/core/placeholders/index',
+        blockType: 'https://xats.org/vocabularies/placeholders/index',
         content: {},
       },
     ],

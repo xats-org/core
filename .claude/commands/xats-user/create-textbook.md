@@ -96,7 +96,7 @@ You are helping a user create a complete xats-compliant textbook. Guide them thr
 ```json
 {
   "id": "assessment-${id}",
-  "assessmentType": "https://xats.org/core/assessments/quiz",
+  "assessmentType": "https://xats.org/vocabularies/assessments/quiz",
   "title": "${title}",
   "questions": [...]
 }

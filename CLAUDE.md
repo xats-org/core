@@ -310,17 +310,17 @@ When working with xats documents, validate against the JSON Schema to ensure com
 
 ### Core Vocabulary URIs
 Common `blockType` URIs:
-- `https://xats.org/core/blocks/paragraph`
-- `https://xats.org/core/blocks/heading`
-- `https://xats.org/core/blocks/list`
-- `https://xats.org/core/blocks/blockquote`
-- `https://xats.org/core/blocks/codeBlock`
-- `https://xats.org/core/blocks/mathBlock`
-- `https://xats.org/core/blocks/table`
-- `https://xats.org/core/blocks/figure`
-- `https://xats.org/core/placeholders/tableOfContents`
-- `https://xats.org/core/placeholders/bibliography`
-- `https://xats.org/core/placeholders/index`
+- `https://xats.org/vocabularies/blocks/paragraph`
+- `https://xats.org/vocabularies/blocks/heading`
+- `https://xats.org/vocabularies/blocks/list`
+- `https://xats.org/vocabularies/blocks/blockquote`
+- `https://xats.org/vocabularies/blocks/codeBlock`
+- `https://xats.org/vocabularies/blocks/mathBlock`
+- `https://xats.org/vocabularies/blocks/table`
+- `https://xats.org/vocabularies/blocks/figure`
+- `https://xats.org/vocabularies/placeholders/tableOfContents`
+- `https://xats.org/vocabularies/placeholders/bibliography`
+- `https://xats.org/vocabularies/placeholders/index`
 
 ### Important Patterns
 

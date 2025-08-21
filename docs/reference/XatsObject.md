@@ -47,7 +47,7 @@ The `XatsObject` is the most fundamental base object in the **xats** standard. I
   },
   "renderingHints": [
     {
-      "hintType": "https://xats.org/core/hints/emphasis",
+      "hintType": "https://xats.org/vocabularies/hints/emphasis",
       "value": "important"
     }
   ]

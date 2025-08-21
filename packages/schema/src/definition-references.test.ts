@@ -131,17 +131,17 @@ describe('Definition Reference Validation', () => {
 
       // Check paragraph block content
       const paragraphContent = getContentBlockContentSchema(
-        'https://xats.org/core/blocks/paragraph'
+        'https://xats.org/vocabularies/blocks/paragraph'
       );
       expect(paragraphContent.properties.text.$ref).toBe(semanticTextRef);
 
       // Check heading block content
-      const headingContent = getContentBlockContentSchema('https://xats.org/core/blocks/heading');
+      const headingContent = getContentBlockContentSchema('https://xats.org/vocabularies/blocks/heading');
       expect(headingContent.properties.text.$ref).toBe(semanticTextRef);
 
       // Check blockquote content
       const blockquoteContent = getContentBlockContentSchema(
-        'https://xats.org/core/blocks/blockquote'
+        'https://xats.org/vocabularies/blocks/blockquote'
       );
       expect(blockquoteContent.properties.text.$ref).toBe(semanticTextRef);
     });
@@ -193,13 +193,13 @@ describe('Definition Reference Validation', () => {
 
       // Check the enum contains expected block types
       expect(ifCondition.properties.blockType.enum).toContain(
-        'https://xats.org/core/blocks/paragraph'
+        'https://xats.org/vocabularies/blocks/paragraph'
       );
       expect(ifCondition.properties.blockType.enum).toContain(
-        'https://xats.org/core/blocks/heading'
+        'https://xats.org/vocabularies/blocks/heading'
       );
       expect(ifCondition.properties.blockType.enum).toContain(
-        'https://xats.org/core/blocks/blockquote'
+        'https://xats.org/vocabularies/blocks/blockquote'
       );
 
       // Check the then condition requires text property
@@ -210,7 +210,7 @@ describe('Definition Reference Validation', () => {
     });
 
     it('should validate list content structure', () => {
-      const listContent = getContentBlockContentSchema('https://xats.org/core/blocks/list');
+      const listContent = getContentBlockContentSchema('https://xats.org/vocabularies/blocks/list');
 
       expect(listContent.required).toContain('listType');
       expect(listContent.required).toContain('items');
@@ -219,7 +219,7 @@ describe('Definition Reference Validation', () => {
     });
 
     it('should validate nested list item structure', () => {
-      const listContent = getContentBlockContentSchema('https://xats.org/core/blocks/list');
+      const listContent = getContentBlockContentSchema('https://xats.org/vocabularies/blocks/list');
       const listItemSchema = listContent.properties.items.items;
 
       expect(listItemSchema.required).toContain('text');
@@ -255,15 +255,15 @@ describe('Definition Reference Validation', () => {
 
       // Check trigger type examples
       const triggerExamples = pathway.properties.trigger.properties.triggerType.examples;
-      expect(triggerExamples).toContain('https://xats.org/core/triggers/onCompletion');
-      expect(triggerExamples).toContain('https://xats.org/core/triggers/onAssessment');
+      expect(triggerExamples).toContain('https://xats.org/vocabularies/triggers/onCompletion');
+      expect(triggerExamples).toContain('https://xats.org/vocabularies/triggers/onAssessment');
 
       // Check pathway type examples
       const pathwayExamples = pathway.properties.rules.items.properties.pathwayType.examples;
-      expect(pathwayExamples).toContain('https://xats.org/core/pathways/remedial');
-      expect(pathwayExamples).toContain('https://xats.org/core/pathways/standard');
-      expect(pathwayExamples).toContain('https://xats.org/core/pathways/enrichment');
-      expect(pathwayExamples).toContain('https://xats.org/core/pathways/prerequisite');
+      expect(pathwayExamples).toContain('https://xats.org/vocabularies/pathways/remedial');
+      expect(pathwayExamples).toContain('https://xats.org/vocabularies/pathways/standard');
+      expect(pathwayExamples).toContain('https://xats.org/vocabularies/pathways/enrichment');
+      expect(pathwayExamples).toContain('https://xats.org/vocabularies/pathways/prerequisite');
     });
   });
 
@@ -347,9 +347,9 @@ describe('Definition Reference Validation', () => {
   function getContentBlockContentSchema(blockType: string): any {
     // For testing purposes, return mock structures that match expected schema
     if (
-      blockType === 'https://xats.org/core/blocks/paragraph' ||
-      blockType === 'https://xats.org/core/blocks/heading' ||
-      blockType === 'https://xats.org/core/blocks/blockquote'
+      blockType === 'https://xats.org/vocabularies/blocks/paragraph' ||
+      blockType === 'https://xats.org/vocabularies/blocks/heading' ||
+      blockType === 'https://xats.org/vocabularies/blocks/blockquote'
     ) {
       return {
         properties: {
@@ -359,7 +359,7 @@ describe('Definition Reference Validation', () => {
       };
     }
 
-    if (blockType === 'https://xats.org/core/blocks/list') {
+    if (blockType === 'https://xats.org/vocabularies/blocks/list') {
       return {
         properties: {
           listType: { enum: ['ordered', 'unordered'] },

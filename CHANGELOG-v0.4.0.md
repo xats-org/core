@@ -13,7 +13,7 @@ This release represents a complete restructuring of the xats project into a mode
 - **Package Structure:** Complete reorganization into scoped packages under `@xats/*`
 - **Import Paths:** All imports must now use the new scoped package names
 - **CLI Commands:** CLI has been consolidated into a single `xats` command with subcommands
-- **Vocabulary URIs:** All URIs updated from `https://xats.org/core/*` to `https://xats.org/vocabularies/*`
+- **Vocabulary URIs:** All URIs updated from `https://xats.org/vocabularies/*` to `https://xats.org/vocabularies/*`
 
 ### ✨ New Features
 

@@ -66,7 +66,7 @@ Every document and content element must identify its language:
             "content": [
               {
                 "id": "para-1",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
@@ -98,7 +98,7 @@ All images must have alternative text:
 ```json
 {
   "id": "fig-1",
-  "blockType": "https://xats.org/core/blocks/figure",
+  "blockType": "https://xats.org/vocabularies/blocks/figure",
   "content": {
     "resourceId": "img-dna-structure",
     "altText": "Double helix structure of DNA molecule",
@@ -114,7 +114,7 @@ Maintain proper heading levels:
 ```json
 {
   "id": "heading-1",
-  "blockType": "https://xats.org/core/blocks/heading",
+  "blockType": "https://xats.org/vocabularies/blocks/heading",
   "content": {
     "level": 1,  // h1
     "text": {
@@ -129,7 +129,7 @@ Maintain proper heading levels:
 },
 {
   "id": "heading-2",
-  "blockType": "https://xats.org/core/blocks/heading",
+  "blockType": "https://xats.org/vocabularies/blocks/heading",
   "content": {
     "level": 2,  // h2 - properly nested under h1
     "text": {
@@ -151,7 +151,7 @@ Tables must have proper headers:
 ```json
 {
   "id": "table-1",
-  "blockType": "https://xats.org/core/blocks/table",
+  "blockType": "https://xats.org/vocabularies/blocks/table",
   "content": {
     "caption": "Comparison of Cell Types",
     "headers": ["Feature", "Plant Cell", "Animal Cell"],
@@ -211,7 +211,7 @@ Provide text alternatives for equations:
 ```json
 {
   "id": "eq-1",
-  "blockType": "https://xats.org/core/blocks/math",
+  "blockType": "https://xats.org/vocabularies/blocks/math",
   "content": {
     "notation": "latex",
     "expression": "E = mc^2",
@@ -228,7 +228,7 @@ Include captions and transcripts:
 ```json
 {
   "id": "video-1",
-  "blockType": "https://xats.org/core/blocks/video",
+  "blockType": "https://xats.org/vocabularies/blocks/video",
   "content": {
     "resourceId": "mitosis-animation",
     "captions": [
@@ -359,7 +359,7 @@ xats-validate --accessibility my-document.json
 ```json
 {
   "id": "diagram-1",
-  "blockType": "https://xats.org/core/blocks/figure",
+  "blockType": "https://xats.org/vocabularies/blocks/figure",
   "content": {
     "resourceId": "water-cycle-diagram",
     "altText": "Diagram of the water cycle",

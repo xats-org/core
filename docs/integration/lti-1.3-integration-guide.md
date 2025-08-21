@@ -54,7 +54,7 @@ Configure grade passback on assessment content blocks:
 ```json
 {
   "id": "chemistry-quiz-1",
-  "blockType": "https://xats.org/core/blocks/multipleChoice",
+  "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
   "extensions": {
     "ltiGradePassback": {
       "enabled": true,
@@ -114,7 +114,7 @@ Use LTI grade data in adaptive pathways:
   "pathways": [
     {
       "trigger": {
-        "triggerType": "https://xats.org/core/triggers/onAssessment",
+        "triggerType": "https://xats.org/vocabularies/triggers/onAssessment",
         "sourceId": "bonding-assessment"
       },
       "extensions": {
@@ -130,12 +130,12 @@ Use LTI grade data in adaptive pathways:
         {
           "condition": "lti_score_percentage >= 85 AND lti_attempts == 1",
           "destinationId": "advanced-content",
-          "pathwayType": "https://xats.org/core/pathways/enrichment"
+          "pathwayType": "https://xats.org/vocabularies/pathways/enrichment"
         },
         {
           "condition": "lti_score_percentage < 70",
           "destinationId": "remedial-content", 
-          "pathwayType": "https://xats.org/core/pathways/remedial"
+          "pathwayType": "https://xats.org/vocabularies/pathways/remedial"
         }
       ]
     }

@@ -55,7 +55,7 @@ function createMinimalTemplate(input: CreateInput): XatsDocument {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/core/blocks/paragraph',
+                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                   content: {
                     text: {
                       runs: [
@@ -99,7 +99,7 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
             preface: [
               {
                 id: generateId(),
-                blockType: 'https://xats.org/core/blocks/heading',
+                blockType: 'https://xats.org/vocabularies/blocks/heading',
                 content: {
                   level: 1,
                   text: {
@@ -114,7 +114,7 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
               },
               {
                 id: generateId(),
-                blockType: 'https://xats.org/core/placeholders/tableOfContents',
+                blockType: 'https://xats.org/vocabularies/placeholders/tableOfContents',
                 content: {},
               },
             ],
@@ -158,7 +158,7 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/core/blocks/paragraph',
+                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                   content: {
                     text: {
                       runs: [
@@ -197,7 +197,7 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/core/blocks/paragraph',
+                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                   content: {
                     text: {
                       runs: [
@@ -221,14 +221,14 @@ function createTextbookTemplate(input: CreateInput): XatsDocument {
             bibliography: [
               {
                 id: generateId(),
-                blockType: 'https://xats.org/core/placeholders/bibliography',
+                blockType: 'https://xats.org/vocabularies/placeholders/bibliography',
                 content: {},
               },
             ],
             index: [
               {
                 id: generateId(),
-                blockType: 'https://xats.org/core/placeholders/index',
+                blockType: 'https://xats.org/vocabularies/placeholders/index',
                 content: {},
               },
             ],
@@ -251,12 +251,12 @@ function createCourseTemplate(input: CreateInput): XatsDocument {
       firstChapter.pathways = [
         {
           id: generateId(),
-          pathwayType: 'https://xats.org/core/pathways/standard',
+          pathwayType: 'https://xats.org/vocabularies/pathways/standard',
           condition: 'default',
         },
         {
           id: generateId(),
-          pathwayType: 'https://xats.org/core/pathways/enrichment',
+          pathwayType: 'https://xats.org/vocabularies/pathways/enrichment',
           condition: 'assessment.score >= 0.8',
         },
       ];
@@ -307,7 +307,7 @@ function createAssessmentTemplate(input: CreateInput): XatsDocument {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/core/blocks/paragraph',
+                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                   content: {
                     text: {
                       runs: [

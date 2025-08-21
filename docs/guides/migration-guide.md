@@ -85,7 +85,7 @@ v0.2.0 includes comprehensive accessibility support:
 ```json
 {
   "id": "fig-1",
-  "blockType": "https://xats.org/core/blocks/figure",
+  "blockType": "https://xats.org/vocabularies/blocks/figure",
   "content": {
     "resourceId": "img-cell-structure",
     "altText": "Diagram of a plant cell showing organelles",
@@ -327,7 +327,7 @@ A complete migration taking advantage of all new features:
             "content": [
               {
                 "id": "para-1",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
@@ -414,7 +414,7 @@ New structured content type for case-based learning:
 ```json
 {
   "id": "case-climate-policy",
-  "blockType": "https://xats.org/core/blocks/caseStudy",
+  "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
   "content": {
     "scenario": {
       "title": "Urban Climate Policy Implementation",
@@ -460,7 +460,7 @@ Support for self-reflection and metacognitive learning:
 ```json
 {
   "id": "reflection-prompt-1",
-  "blockType": "https://xats.org/core/blocks/metacognitivePrompt",
+  "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
   "content": {
     "promptType": "self-reflection",
     "prompt": "How does this new concept of photosynthesis connect to what you already know about energy in living systems?",
@@ -539,7 +539,7 @@ Transform existing narrative content into structured case studies:
 ```json
 // Before: Generic content block
 {
-  "blockType": "https://xats.org/core/blocks/paragraph",
+  "blockType": "https://xats.org/vocabularies/blocks/paragraph",
   "content": {
     "runs": [
       {
@@ -552,7 +552,7 @@ Transform existing narrative content into structured case studies:
 
 // After: Structured case study
 {
-  "blockType": "https://xats.org/core/blocks/caseStudy",
+  "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
   "content": {
     "scenario": {
       "title": "Genetic Engineering in Agriculture",
@@ -583,7 +583,7 @@ Integrate reflection opportunities throughout your content:
 
 ```json
 {
-  "blockType": "https://xats.org/core/blocks/metacognitivePrompt",
+  "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
   "content": {
     "promptType": "comprehension-monitoring",
     "prompt": "Before moving to the next section, assess your understanding of cellular respiration. What aspects are clear? What needs more review?",
@@ -632,7 +632,7 @@ Integrate reflection opportunities throughout your content:
             "content": [
               {
                 "id": "para-intro",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
@@ -651,7 +651,7 @@ Integrate reflection opportunities throughout your content:
               },
               {
                 "id": "case-study-biofuel",
-                "blockType": "https://xats.org/core/blocks/caseStudy",
+                "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
                 "content": {
                   "scenario": {
                     "title": "Optimizing Algae for Biofuel Production",
@@ -685,7 +685,7 @@ Integrate reflection opportunities throughout your content:
               },
               {
                 "id": "metacognitive-connection",
-                "blockType": "https://xats.org/core/blocks/metacognitivePrompt",
+                "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
                 "content": {
                   "promptType": "self-reflection",
                   "prompt": "How does understanding photosynthesis change your perspective on the relationship between plants and other organisms in ecosystems?",
@@ -1112,7 +1112,7 @@ xats-validate --extensions document.json
 **Solution**: Add meaningful descriptions:
 ```json
 {
-  "blockType": "https://xats.org/core/blocks/figure",
+  "blockType": "https://xats.org/vocabularies/blocks/figure",
   "content": {
     "resourceId": "img-cell-diagram",
     "altText": "Cross-section diagram of plant cell showing labeled organelles",

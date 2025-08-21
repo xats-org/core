@@ -156,7 +156,7 @@ Sections contain the actual content blocks. Let's add a section with a paragraph
             "content": [
               {
                 "id": "para-1",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
@@ -205,7 +205,7 @@ SemanticText supports various formatting types through different run types:
 ```json
 {
   "id": "para-formatted",
-  "blockType": "https://xats.org/core/blocks/paragraph",
+  "blockType": "https://xats.org/vocabularies/blocks/paragraph",
   "content": {
     "runs": [
       {
@@ -251,7 +251,7 @@ xats supports various content block types. Here's how to add them:
 ```json
 {
   "id": "list-example",
-  "blockType": "https://xats.org/core/blocks/list",
+  "blockType": "https://xats.org/vocabularies/blocks/list",
   "content": {
     "listType": "unordered",
     "items": [
@@ -285,7 +285,7 @@ xats supports various content block types. Here's how to add them:
 ```json
 {
   "id": "code-example",
-  "blockType": "https://xats.org/core/blocks/codeBlock",
+  "blockType": "https://xats.org/vocabularies/blocks/codeBlock",
   "content": {
     "language": "python",
     "code": "def hello_world():\n    print('Hello, xats!')"
@@ -298,7 +298,7 @@ xats supports various content block types. Here's how to add them:
 ```json
 {
   "id": "quote-example",
-  "blockType": "https://xats.org/core/blocks/blockquote",
+  "blockType": "https://xats.org/vocabularies/blocks/blockquote",
   "content": {
     "quote": {
       "runs": [
@@ -325,7 +325,7 @@ xats supports various content block types. Here's how to add them:
 ```json
 {
   "id": "math-example",
-  "blockType": "https://xats.org/core/blocks/mathBlock",
+  "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
   "content": {
     "notation": "latex",
     "expression": "E = mc^2"
@@ -372,7 +372,7 @@ Here's a complete, valid xats document combining all the concepts:
             "content": [
               {
                 "id": "para-intro",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
@@ -400,7 +400,7 @@ Here's a complete, valid xats document combining all the concepts:
               },
               {
                 "id": "list-languages",
-                "blockType": "https://xats.org/core/blocks/list",
+                "blockType": "https://xats.org/vocabularies/blocks/list",
                 "content": {
                   "listType": "ordered",
                   "items": [
@@ -451,7 +451,7 @@ Here's a complete, valid xats document combining all the concepts:
             "content": [
               {
                 "id": "para-hello",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
@@ -463,7 +463,7 @@ Here's a complete, valid xats document combining all the concepts:
               },
               {
                 "id": "code-hello",
-                "blockType": "https://xats.org/core/blocks/codeBlock",
+                "blockType": "https://xats.org/vocabularies/blocks/codeBlock",
                 "content": {
                   "language": "python",
                   "code": "# This is a comment\nprint('Hello, World!')\nprint('Welcome to programming!')"
@@ -471,7 +471,7 @@ Here's a complete, valid xats document combining all the concepts:
               },
               {
                 "id": "para-explanation",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
@@ -609,7 +609,7 @@ Before validating, check:
 "blockType": "p"
 
 // ✅ CORRECT
-"blockType": "https://xats.org/core/blocks/paragraph"
+"blockType": "https://xats.org/vocabularies/blocks/paragraph"
 ```
 
 ### Pitfall 3: Missing IDs
@@ -619,14 +619,14 @@ Before validating, check:
 ```json
 // ❌ WRONG
 {
-  "blockType": "https://xats.org/core/blocks/paragraph",
+  "blockType": "https://xats.org/vocabularies/blocks/paragraph",
   "content": { ... }
 }
 
 // ✅ CORRECT
 {
   "id": "para-intro-1",
-  "blockType": "https://xats.org/core/blocks/paragraph",
+  "blockType": "https://xats.org/vocabularies/blocks/paragraph",
   "content": { ... }
 }
 ```
@@ -667,23 +667,23 @@ Common JSON mistakes:
 ### Block Types (use full URIs)
 
 **Text Content:**
-- `https://xats.org/core/blocks/paragraph` - Standard paragraph
-- `https://xats.org/core/blocks/heading` - Section heading
-- `https://xats.org/core/blocks/list` - Ordered or unordered list
-- `https://xats.org/core/blocks/blockquote` - Quoted text
+- `https://xats.org/vocabularies/blocks/paragraph` - Standard paragraph
+- `https://xats.org/vocabularies/blocks/heading` - Section heading
+- `https://xats.org/vocabularies/blocks/list` - Ordered or unordered list
+- `https://xats.org/vocabularies/blocks/blockquote` - Quoted text
 
 **Code and Math:**
-- `https://xats.org/core/blocks/codeBlock` - Source code
-- `https://xats.org/core/blocks/mathBlock` - Mathematical expressions
+- `https://xats.org/vocabularies/blocks/codeBlock` - Source code
+- `https://xats.org/vocabularies/blocks/mathBlock` - Mathematical expressions
 
 **Structured Content:**
-- `https://xats.org/core/blocks/table` - Tabular data
-- `https://xats.org/core/blocks/figure` - Images with captions
+- `https://xats.org/vocabularies/blocks/table` - Tabular data
+- `https://xats.org/vocabularies/blocks/figure` - Images with captions
 
 **Placeholders:**
-- `https://xats.org/core/placeholders/tableOfContents` - TOC placeholder
-- `https://xats.org/core/placeholders/bibliography` - Bibliography placeholder
-- `https://xats.org/core/placeholders/index` - Index placeholder
+- `https://xats.org/vocabularies/placeholders/tableOfContents` - TOC placeholder
+- `https://xats.org/vocabularies/placeholders/bibliography` - Bibliography placeholder
+- `https://xats.org/vocabularies/placeholders/index` - Index placeholder
 
 ### SemanticText Run Types
 
@@ -900,7 +900,7 @@ xats-validate -f *.xats.json || exit 1
 ```json
 {
   "id": "unique-id",
-  "blockType": "https://xats.org/core/blocks/[type]",
+  "blockType": "https://xats.org/vocabularies/blocks/[type]",
   "content": { /* type-specific content */ }
 }
 ```

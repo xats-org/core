@@ -13,7 +13,7 @@
     {
       "id": "graph-1",
       "language": "en",
-      "type": "https://xats.org/core/resources/image",
+      "type": "https://xats.org/vocabularies/resources/image",
       "url": "https://example.com/quadratic-graph.svg",
       "altText": "Graph showing a parabola opening upward with vertex at origin, representing y = x²",
       "longDescription": "A coordinate plane displaying a quadratic function y = x² as a U-shaped curve. The vertex is located at the origin (0,0), and the parabola extends symmetrically in both directions with points marked at (-2,4), (-1,1), (0,0), (1,1), and (2,4)."
@@ -34,7 +34,7 @@
               {
                 "id": "skip-nav-1",
                 "language": "en",
-                "blockType": "https://xats.org/core/blocks/skipNavigation",
+                "blockType": "https://xats.org/vocabularies/blocks/skipNavigation",
                 "content": {
                   "skipLinks": [
                     {
@@ -64,7 +64,7 @@
               {
                 "id": "intro-paragraph",
                 "language": "en",
-                "blockType": "https://xats.org/core/blocks/paragraph",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -78,7 +78,7 @@
               {
                 "id": "quadratic-equation",
                 "language": "en",
-                "blockType": "https://xats.org/core/blocks/mathBlock",
+                "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
                 "content": {
                   "notation": "latex",
                   "expression": "f(x) = ax^2 + bx + c",
@@ -89,7 +89,7 @@
               {
                 "id": "graph-figure",
                 "language": "en",
-                "blockType": "https://xats.org/core/blocks/figure",
+                "blockType": "https://xats.org/vocabularies/blocks/figure",
                 "content": {
                   "resourceId": "graph-1",
                   "altText": "Example quadratic function graph showing characteristic parabola shape",
@@ -116,7 +116,7 @@
               {
                 "id": "mc-question-1",
                 "language": "en",
-                "blockType": "https://xats.org/core/blocks/multipleChoice",
+                "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
                 "content": {
                   "question": {
                     "runs": [

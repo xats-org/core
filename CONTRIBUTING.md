@@ -69,7 +69,7 @@ The bar for adding a new URI to the core vocabulary is high, as it must be broad
 1.  **Start with a custom URI.** The best way to prove the utility of a new type is to define it in your own namespace and use it in real-world projects.
 2.  **Open an issue** with the label "Vocabulary Proposal."
 3.  **Provide a detailed rationale:**
-    * The full URI you are proposing (e.g., `https://xats.org/core/blocks/new-block`).
+    * The full URI you are proposing (e.g., `https://xats.org/vocabularies/blocks/new-block`).
     * A clear description of its purpose.
     * For `blockType`s, a complete JSON Schema for its `content` object.
     * Examples of its use and evidence of its adoption by the community.

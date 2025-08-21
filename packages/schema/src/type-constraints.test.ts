@@ -243,7 +243,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: 'not-an-array', // Should be array
@@ -322,7 +322,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: 'not-an-object', // Should be object
                     },
                   ],
@@ -409,7 +409,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [
@@ -455,7 +455,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [
@@ -503,7 +503,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/list',
+                      blockType: 'https://xats.org/vocabularies/blocks/list',
                       content: {
                         listType: 'invalid-type', // Should be 'ordered' or 'unordered'
                         items: [],
@@ -543,7 +543,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/list',
+                      blockType: 'https://xats.org/vocabularies/blocks/list',
                       content: {
                         listType: 'ordered', // Valid enum value
                         items: [
@@ -588,7 +588,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/mathBlock',
+                      blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
                       content: {
                         notation: 'invalid-notation', // Should be 'latex', 'mathml', or 'asciimath'
                         expression: 'x = y + z',
@@ -628,7 +628,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/mathBlock',
+                      blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
                       content: {
                         notation: 'latex', // Valid enum value
                         expression: '\\int_a^b f(x) dx',
@@ -700,7 +700,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [
@@ -752,7 +752,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/placeholders/tableOfContents',
+                      blockType: 'https://xats.org/vocabularies/placeholders/tableOfContents',
                       content: {
                         placeholder: 'not-a-boolean', // Should be boolean
                       },
@@ -793,7 +793,7 @@ describe('Type Constraint Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/placeholders/tableOfContents',
+                      blockType: 'https://xats.org/vocabularies/placeholders/tableOfContents',
                       content: {
                         placeholder: true, // Valid boolean
                       },

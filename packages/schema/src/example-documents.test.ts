@@ -80,7 +80,7 @@ describe('Example Document Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [{ type: 'text', text: 'Minimal content' }],
@@ -251,7 +251,7 @@ describe('Example Document Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: 'Invalid - should be SemanticText object', // Should be object with runs
                       },
@@ -382,24 +382,24 @@ describe('Example Document Validation', () => {
             pathways: [
               {
                 trigger: {
-                  triggerType: 'https://xats.org/core/triggers/onAssessment',
+                  triggerType: 'https://xats.org/vocabularies/triggers/onAssessment',
                   sourceId: 'quiz-1',
                 },
                 rules: [
                   {
                     condition: 'score >= 80',
                     destinationId: 'chapter-2',
-                    pathwayType: 'https://xats.org/core/pathways/standard',
+                    pathwayType: 'https://xats.org/vocabularies/pathways/standard',
                   },
                   {
                     condition: 'score < 80 AND score >= 60',
                     destinationId: 'review-section',
-                    pathwayType: 'https://xats.org/core/pathways/remedial',
+                    pathwayType: 'https://xats.org/vocabularies/pathways/remedial',
                   },
                   {
                     condition: 'score < 60',
                     destinationId: 'fundamentals-review',
-                    pathwayType: 'https://xats.org/core/pathways/prerequisite',
+                    pathwayType: 'https://xats.org/vocabularies/pathways/prerequisite',
                   },
                 ],
               },
@@ -411,7 +411,7 @@ describe('Example Document Validation', () => {
                 content: [
                   {
                     id: 'block-1',
-                    blockType: 'https://xats.org/core/blocks/paragraph',
+                    blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                     content: {
                       text: {
                         runs: [
@@ -459,7 +459,7 @@ describe('Example Document Validation', () => {
       resources: [
         {
           id: 'resource-1',
-          type: 'https://xats.org/core/resources/image',
+          type: 'https://xats.org/vocabularies/resources/image',
           url: 'https://example.com/images/cell-diagram.png',
           altText: 'Diagram of a typical plant cell',
         },
@@ -472,7 +472,7 @@ describe('Example Document Validation', () => {
             content: [
               {
                 id: 'preface-para',
-                blockType: 'https://xats.org/core/blocks/paragraph',
+                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                 content: {
                   text: {
                     runs: [
@@ -514,7 +514,7 @@ describe('Example Document Validation', () => {
                     content: [
                       {
                         id: 'block-1',
-                        blockType: 'https://xats.org/core/blocks/paragraph',
+                        blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                         content: {
                           text: {
                             runs: [
@@ -528,7 +528,7 @@ describe('Example Document Validation', () => {
                       },
                       {
                         id: 'figure-1',
-                        blockType: 'https://xats.org/core/blocks/figure',
+                        blockType: 'https://xats.org/vocabularies/blocks/figure',
                         content: {
                           resourceId: 'resource-1',
                           caption: {
@@ -610,28 +610,28 @@ describe('Example Document Validation', () => {
                 content: [
                   {
                     id: 'para-1',
-                    blockType: 'https://xats.org/core/blocks/paragraph',
+                    blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                     content: {
                       text: { runs: [{ type: 'text', text: 'Paragraph content' }] },
                     },
                   },
                   {
                     id: 'heading-1',
-                    blockType: 'https://xats.org/core/blocks/heading',
+                    blockType: 'https://xats.org/vocabularies/blocks/heading',
                     content: {
                       text: { runs: [{ type: 'text', text: 'Heading Content' }] },
                     },
                   },
                   {
                     id: 'quote-1',
-                    blockType: 'https://xats.org/core/blocks/blockquote',
+                    blockType: 'https://xats.org/vocabularies/blocks/blockquote',
                     content: {
                       text: { runs: [{ type: 'text', text: 'Quoted text content' }] },
                     },
                   },
                   {
                     id: 'list-1',
-                    blockType: 'https://xats.org/core/blocks/list',
+                    blockType: 'https://xats.org/vocabularies/blocks/list',
                     content: {
                       listType: 'unordered',
                       items: [
@@ -646,7 +646,7 @@ describe('Example Document Validation', () => {
                   },
                   {
                     id: 'code-1',
-                    blockType: 'https://xats.org/core/blocks/codeBlock',
+                    blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
                     content: {
                       language: 'javascript',
                       code: 'console.log("Hello, world!");',
@@ -654,7 +654,7 @@ describe('Example Document Validation', () => {
                   },
                   {
                     id: 'math-1',
-                    blockType: 'https://xats.org/core/blocks/mathBlock',
+                    blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
                     content: {
                       notation: 'latex',
                       expression: '\\int_a^b f(x) dx',
@@ -662,7 +662,7 @@ describe('Example Document Validation', () => {
                   },
                   {
                     id: 'table-1',
-                    blockType: 'https://xats.org/core/blocks/table',
+                    blockType: 'https://xats.org/vocabularies/blocks/table',
                     content: {
                       headers: [
                         { runs: [{ type: 'text', text: 'Column 1' }] },
@@ -678,7 +678,7 @@ describe('Example Document Validation', () => {
                   },
                   {
                     id: 'toc-1',
-                    blockType: 'https://xats.org/core/placeholders/tableOfContents',
+                    blockType: 'https://xats.org/vocabularies/placeholders/tableOfContents',
                     content: {
                       placeholder: true,
                     },
@@ -713,7 +713,7 @@ describe('Example Document Validation', () => {
                 content: [
                   {
                     id: 'block-1',
-                    blockType: 'https://xats.org/core/blocks/paragraph',
+                    blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                     content: {
                       text: {
                         runs: [
@@ -768,7 +768,7 @@ describe('Example Document Validation', () => {
                         content: [
                           {
                             id: 'block-1',
-                            blockType: 'https://xats.org/core/blocks/paragraph',
+                            blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                             content: {
                               text: { runs: [{ type: 'text', text: 'Nested content' }] },
                             },
@@ -832,7 +832,7 @@ describe('Example Document Validation', () => {
                 content: [
                   {
                     id: 'block-1',
-                    blockType: 'https://xats.org/core/blocks/paragraph',
+                    blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                     content: {
                       text: { runs: [{ type: 'text', text: 'Learning content' }] },
                     },
@@ -858,13 +858,13 @@ describe('Example Document Validation', () => {
       resources: [
         {
           id: 'image-1',
-          type: 'https://xats.org/core/resources/image',
+          type: 'https://xats.org/vocabularies/resources/image',
           url: 'https://example.com/image.png',
           altText: 'Example image',
         },
         {
           id: 'video-1',
-          type: 'https://xats.org/core/resources/video',
+          type: 'https://xats.org/vocabularies/resources/video',
           url: 'https://example.com/video.mp4',
           altText: 'Example video',
         },
@@ -881,7 +881,7 @@ describe('Example Document Validation', () => {
                 content: [
                   {
                     id: 'figure-1',
-                    blockType: 'https://xats.org/core/blocks/figure',
+                    blockType: 'https://xats.org/vocabularies/blocks/figure',
                     content: {
                       resourceId: 'image-1',
                       caption: {
@@ -916,7 +916,7 @@ describe('Example Document Validation', () => {
             content: [
               {
                 id: 'toc-placeholder',
-                blockType: 'https://xats.org/core/placeholders/tableOfContents',
+                blockType: 'https://xats.org/vocabularies/placeholders/tableOfContents',
                 content: { placeholder: true },
               },
             ],
@@ -935,7 +935,7 @@ describe('Example Document Validation', () => {
                 content: [
                   {
                     id: 'block-1',
-                    blockType: 'https://xats.org/core/blocks/paragraph',
+                    blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                     content: {
                       text: { runs: [{ type: 'text', text: 'Main content here' }] },
                     },
@@ -954,7 +954,7 @@ describe('Example Document Validation', () => {
             content: [
               {
                 id: 'bib-placeholder',
-                blockType: 'https://xats.org/core/placeholders/bibliography',
+                blockType: 'https://xats.org/vocabularies/placeholders/bibliography',
                 content: { placeholder: true },
               },
             ],
@@ -985,7 +985,7 @@ describe('Example Document Validation', () => {
                 content: [
                   {
                     id: 'list-1',
-                    blockType: 'https://xats.org/core/blocks/list',
+                    blockType: 'https://xats.org/vocabularies/blocks/list',
                     content: {
                       listType: 'ordered',
                       items: [
@@ -994,7 +994,7 @@ describe('Example Document Validation', () => {
                           subItems: [
                             {
                               id: 'nested-list',
-                              blockType: 'https://xats.org/core/blocks/list',
+                              blockType: 'https://xats.org/vocabularies/blocks/list',
                               content: {
                                 listType: 'unordered',
                                 items: [
@@ -1026,7 +1026,7 @@ describe('Example Document Validation', () => {
     for (let i = 1; i <= 100; i++) {
       blocks.push({
         id: `block-${i}`,
-        blockType: 'https://xats.org/core/blocks/paragraph',
+        blockType: 'https://xats.org/vocabularies/blocks/paragraph',
         content: {
           text: { runs: [{ type: 'text', text: `Content block number ${i}` }] },
         },
@@ -1076,41 +1076,41 @@ describe('Example Document Validation', () => {
             pathways: [
               {
                 trigger: {
-                  triggerType: 'https://xats.org/core/triggers/onAssessment',
+                  triggerType: 'https://xats.org/vocabularies/triggers/onAssessment',
                   sourceId: 'quiz-1',
                 },
                 rules: [
                   {
                     condition: 'score >= 90 AND time_spent < 300',
                     destinationId: 'advanced-track',
-                    pathwayType: 'https://xats.org/core/pathways/enrichment',
+                    pathwayType: 'https://xats.org/vocabularies/pathways/enrichment',
                   },
                   {
                     condition: 'score >= 70 AND score < 90',
                     destinationId: 'standard-track',
-                    pathwayType: 'https://xats.org/core/pathways/standard',
+                    pathwayType: 'https://xats.org/vocabularies/pathways/standard',
                   },
                   {
                     condition: 'score >= 50 AND score < 70 AND attempts <= 2',
                     destinationId: 'review-track',
-                    pathwayType: 'https://xats.org/core/pathways/remedial',
+                    pathwayType: 'https://xats.org/vocabularies/pathways/remedial',
                   },
                   {
                     condition: 'score < 50 OR attempts > 2',
                     destinationId: 'foundation-track',
-                    pathwayType: 'https://xats.org/core/pathways/prerequisite',
+                    pathwayType: 'https://xats.org/vocabularies/pathways/prerequisite',
                   },
                 ],
               },
               {
                 trigger: {
-                  triggerType: 'https://xats.org/core/triggers/onCompletion',
+                  triggerType: 'https://xats.org/vocabularies/triggers/onCompletion',
                 },
                 rules: [
                   {
                     condition: 'completed == true',
                     destinationId: 'next-chapter',
-                    pathwayType: 'https://xats.org/core/pathways/standard',
+                    pathwayType: 'https://xats.org/vocabularies/pathways/standard',
                   },
                 ],
               },
@@ -1122,7 +1122,7 @@ describe('Example Document Validation', () => {
                 content: [
                   {
                     id: 'block-1',
-                    blockType: 'https://xats.org/core/blocks/paragraph',
+                    blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                     content: {
                       text: { runs: [{ type: 'text', text: 'Content with complex pathways' }] },
                     },

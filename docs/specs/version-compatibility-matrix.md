@@ -62,21 +62,21 @@ v0.1.0 tools → v0.2.0 docs ❌ (May fail on new features)
 
 | Block Type | v0.1.0 | v0.2.0 | v0.3.0 | URI |
 |------------|--------|--------|--------|-----|
-| **Paragraph** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/paragraph` |
-| **Heading** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/heading` |
-| **List** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/list` |
-| **Blockquote** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/blockquote` |
-| **Code Block** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/codeBlock` |
-| **Math Block** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/mathBlock` |
-| **Table** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/table` |
-| **Figure** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/figure` |
-| **Image** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/image` |
-| **Definition** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/definition` |
-| **Example** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/example` |
-| **Theorem** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/theorem` |
-| **Quote** | ✅ | ✅ | ✅ | `https://xats.org/core/blocks/quote` |
-| **Case Study** | ❌ | ❌ | ✅ | `https://xats.org/core/blocks/caseStudy` |
-| **Metacognitive Prompt** | ❌ | ❌ | ✅ | `https://xats.org/core/blocks/metacognitivePrompt` |
+| **Paragraph** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/paragraph` |
+| **Heading** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/heading` |
+| **List** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/list` |
+| **Blockquote** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/blockquote` |
+| **Code Block** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/codeBlock` |
+| **Math Block** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/mathBlock` |
+| **Table** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/table` |
+| **Figure** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/figure` |
+| **Image** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/image` |
+| **Definition** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/definition` |
+| **Example** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/example` |
+| **Theorem** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/theorem` |
+| **Quote** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/quote` |
+| **Case Study** | ❌ | ❌ | ✅ | `https://xats.org/vocabularies/blocks/caseStudy` |
+| **Metacognitive Prompt** | ❌ | ❌ | ✅ | `https://xats.org/vocabularies/blocks/metacognitivePrompt` |
 
 ### SemanticText Runs
 
@@ -236,7 +236,7 @@ To take advantage of new features, manual updates are required:
 
 // Add case studies
 {
-  "blockType": "https://xats.org/core/blocks/caseStudy",
+  "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
   "content": {
     "scenario": {
       "title": "Climate Change Impact",
@@ -250,7 +250,7 @@ To take advantage of new features, manual updates are required:
 
 // Add metacognitive prompts
 {
-  "blockType": "https://xats.org/core/blocks/metacognitivePrompt",
+  "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
   "content": {
     "promptType": "self-reflection",
     "prompt": "How does this concept connect to what you already know?"

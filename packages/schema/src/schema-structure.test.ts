@@ -304,11 +304,11 @@ describe('Schema Structure Validation', () => {
 
     it('should have proper enum constraints', () => {
       // Check list type enum
-      const listBlockContent = getContentBlockSchema('https://xats.org/core/blocks/list');
+      const listBlockContent = getContentBlockSchema('https://xats.org/vocabularies/blocks/list');
       expect(listBlockContent.properties.listType.enum).toEqual(['ordered', 'unordered']);
 
       // Check math notation enum
-      const mathBlockContent = getContentBlockSchema('https://xats.org/core/blocks/mathBlock');
+      const mathBlockContent = getContentBlockSchema('https://xats.org/vocabularies/blocks/mathBlock');
       expect(mathBlockContent.properties.notation.enum).toEqual(['latex', 'mathml', 'asciimath']);
     });
 
@@ -331,7 +331,7 @@ describe('Schema Structure Validation', () => {
   function getContentBlockSchema(blockType: string): any {
     // For testing purposes, return a simple mock structure
     // In practice, this would navigate the complex if/then/else chains
-    if (blockType === 'https://xats.org/core/blocks/list') {
+    if (blockType === 'https://xats.org/vocabularies/blocks/list') {
       return {
         properties: {
           listType: { enum: ['ordered', 'unordered'] },
@@ -339,7 +339,7 @@ describe('Schema Structure Validation', () => {
         },
       };
     }
-    if (blockType === 'https://xats.org/core/blocks/mathBlock') {
+    if (blockType === 'https://xats.org/vocabularies/blocks/mathBlock') {
       return {
         properties: {
           notation: { enum: ['latex', 'mathml', 'asciimath'] },

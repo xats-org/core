@@ -123,7 +123,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [{ type: 'text', text: 'Test content' }],
@@ -192,7 +192,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       // Missing id field
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [{ type: 'text', text: 'Test content' }],
@@ -396,7 +396,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       // Missing content field
                     },
                   ],
@@ -435,7 +435,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           // Missing runs field
@@ -478,7 +478,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [
@@ -525,7 +525,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [
@@ -572,7 +572,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         text: {
                           runs: [
@@ -620,7 +620,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/paragraph',
+                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
                       content: {
                         // Missing text field
                       },
@@ -659,7 +659,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/list',
+                      blockType: 'https://xats.org/vocabularies/blocks/list',
                       content: {
                         // Missing listType and items fields
                       },
@@ -702,7 +702,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/codeBlock',
+                      blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
                       content: {
                         language: 'javascript',
                         // Missing code field
@@ -742,7 +742,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/mathBlock',
+                      blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
                       content: {
                         // Missing notation and expression fields
                       },
@@ -785,7 +785,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/figure',
+                      blockType: 'https://xats.org/vocabularies/blocks/figure',
                       content: {
                         // Missing resourceId field
                         caption: {
@@ -827,7 +827,7 @@ describe('Required Field Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/core/blocks/table',
+                      blockType: 'https://xats.org/vocabularies/blocks/table',
                       content: {
                         // Missing rows field
                         caption: {
@@ -1052,13 +1052,13 @@ describe('Required Field Validation', () => {
               pathways: [
                 {
                   trigger: {
-                    triggerType: 'https://xats.org/core/triggers/onAssessment',
+                    triggerType: 'https://xats.org/vocabularies/triggers/onAssessment',
                     sourceId: 'assessment-1',
                   },
                   rules: [
                     {
                       // Missing condition and destinationId fields
-                      pathwayType: 'https://xats.org/core/pathways/standard',
+                      pathwayType: 'https://xats.org/vocabularies/pathways/standard',
                     },
                   ],
                 },

@@ -68,7 +68,7 @@ export const featuresExample: XatsDocument = {
           },
           {
             id: 'annotated-text',
-            blockType: 'https://xats.org/core/blocks/paragraph',
+            blockType: 'https://xats.org/vocabularies/blocks/paragraph',
             content: {
               runs: [
                 {
