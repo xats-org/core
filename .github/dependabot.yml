@@ -28,10 +28,10 @@ updates:
     reviewers:
       - "xats-org/maintainers"
     milestone: 4  # v0.4.0 milestone
-    # Ignore individual package updates - handled by root
+    # Ignore major version updates to prevent breaking changes
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]  # Ignore patch updates
+        update-types: ["version-update:semver-major"]  # Ignore major updates
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
