@@ -111,7 +111,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
    */
   async render(document: XatsDocument, options?: HtmlRendererOptions): Promise<RenderResult> {
     const startTime = performance.now();
-    const renderOptions: Required<HtmlRendererOptions> = { ...this.options, ...options } as Required<HtmlRendererOptions>;
+    const renderOptions: Required<HtmlRendererOptions> = {
+      ...this.options,
+      ...options,
+    } as Required<HtmlRendererOptions>;
 
     try {
       // Generate HTML content
@@ -123,10 +126,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         // Check if we have a DOCTYPE to preserve
         const hasDoctype = content.startsWith('<!DOCTYPE');
         const sanitized = await this.sanitizeHtmlAsync(content);
-        
+
         // DOMPurify removes DOCTYPE, so add it back if needed
         if (hasDoctype && !sanitized.startsWith('<!DOCTYPE')) {
-          finalContent = '<!DOCTYPE html>\n' + sanitized;
+          finalContent = `<!DOCTYPE html>\n${sanitized}`;
         } else {
           finalContent = sanitized;
         }
@@ -324,7 +327,9 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
     if (options.wrapInDocument) {
       parts.push('<!DOCTYPE html>');
-      parts.push(`<html lang="${document.lang || options.language}" dir="${document.dir || options.dir}">`);
+      parts.push(
+        `<html lang="${document.lang || options.language}" dir="${document.dir || options.dir}">`
+      );
       parts.push('<head>');
       parts.push('<meta charset="UTF-8">');
       parts.push('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
@@ -336,13 +341,19 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       // Add accessibility metadata
       if (document.accessibilityMetadata) {
         if (document.accessibilityMetadata.accessibilityFeature) {
-          parts.push(`<meta name="accessibilityFeature" content="${document.accessibilityMetadata.accessibilityFeature.join(', ')}">`);
+          parts.push(
+            `<meta name="accessibilityFeature" content="${document.accessibilityMetadata.accessibilityFeature.join(', ')}">`
+          );
         }
         if (document.accessibilityMetadata.accessibilityHazard) {
-          parts.push(`<meta name="accessibilityHazard" content="${document.accessibilityMetadata.accessibilityHazard.join(', ')}">`);
+          parts.push(
+            `<meta name="accessibilityHazard" content="${document.accessibilityMetadata.accessibilityHazard.join(', ')}">`
+          );
         }
         if (document.accessibilityMetadata.accessibilitySummary) {
-          parts.push(`<meta name="accessibilitySummary" content="${this.escapeHtml(document.accessibilityMetadata.accessibilitySummary)}">`);
+          parts.push(
+            `<meta name="accessibilitySummary" content="${this.escapeHtml(document.accessibilityMetadata.accessibilitySummary)}">`
+          );
         }
       }
 
@@ -357,13 +368,13 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
       parts.push('</head>');
       parts.push('<body>');
-      
+
       // Add skip link for accessibility
       parts.push('<a href="#main-content" class="skip-link">Skip to main content</a>');
     }
 
     parts.push('<main id="main-content" class="xats-document" role="main">');
-    
+
     // Render front matter
     if (document.frontMatter) {
       parts.push('<section class="front-matter" role="region" aria-label="Front matter">');
@@ -393,13 +404,16 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return parts.join('\n');
   }
 
-  private renderFrontMatter(frontMatter: FrontMatter, options: Required<HtmlRendererOptions>): string {
+  private renderFrontMatter(
+    frontMatter: FrontMatter,
+    options: Required<HtmlRendererOptions>
+  ): string {
     const parts: string[] = [];
 
     if (frontMatter.preface) {
       parts.push('<section class="preface" role="region" aria-label="Preface">');
       parts.push('<h1>Preface</h1>');
-      frontMatter.preface.forEach(block => {
+      frontMatter.preface.forEach((block) => {
         parts.push(this.renderContentBlock(block, options));
       });
       parts.push('</section>');
@@ -408,7 +422,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (frontMatter.acknowledgments) {
       parts.push('<section class="acknowledgments" role="region" aria-label="Acknowledgments">');
       parts.push('<h1>Acknowledgments</h1>');
-      frontMatter.acknowledgments.forEach(block => {
+      frontMatter.acknowledgments.forEach((block) => {
         parts.push(this.renderContentBlock(block, options));
       });
       parts.push('</section>');
@@ -420,13 +434,16 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   private renderBodyMatter(bodyMatter: BodyMatter, options: Required<HtmlRendererOptions>): string {
     const parts: string[] = [];
 
-    bodyMatter.contents.forEach(content => {
+    bodyMatter.contents.forEach((content) => {
       // Check if this content has a contents array that contains other containers (Units have Chapters)
-      const hasChapterContents = 'contents' in content && 
-        Array.isArray(content.contents) && 
-        content.contents.length > 0 && 
-        content.contents.some(item => 'contents' in item && Array.isArray((item as any).contents));
-      
+      const hasChapterContents =
+        'contents' in content &&
+        Array.isArray(content.contents) &&
+        content.contents.length > 0 &&
+        content.contents.some(
+          (item) => 'contents' in item && Array.isArray((item as any).contents)
+        );
+
       if (hasChapterContents) {
         // This is a Unit
         parts.push(this.renderUnit(content as Unit, options));
@@ -445,7 +462,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (backMatter.appendices) {
       parts.push('<section class="appendices" role="region" aria-label="Appendices">');
       parts.push('<h1>Appendices</h1>');
-      backMatter.appendices.forEach(appendix => {
+      backMatter.appendices.forEach((appendix) => {
         parts.push(this.renderChapter(appendix, options));
       });
       parts.push('</section>');
@@ -454,7 +471,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (backMatter.glossary) {
       parts.push('<section class="glossary" role="region" aria-label="Glossary">');
       parts.push('<h1>Glossary</h1>');
-      backMatter.glossary.forEach(block => {
+      backMatter.glossary.forEach((block) => {
         parts.push(this.renderContentBlock(block, options));
       });
       parts.push('</section>');
@@ -463,7 +480,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (backMatter.bibliography) {
       parts.push('<section class="bibliography" role="region" aria-label="Bibliography">');
       parts.push('<h1>Bibliography</h1>');
-      backMatter.bibliography.forEach(block => {
+      backMatter.bibliography.forEach((block) => {
         parts.push(this.renderContentBlock(block, options));
       });
       parts.push('</section>');
@@ -472,7 +489,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (backMatter.index) {
       parts.push('<section class="index" role="region" aria-label="Index">');
       parts.push('<h1>Index</h1>');
-      backMatter.index.forEach(block => {
+      backMatter.index.forEach((block) => {
         parts.push(this.renderContentBlock(block, options));
       });
       parts.push('</section>');
@@ -486,8 +503,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const unitId = unit.id ? ` id="${this.escapeHtml(unit.id)}"` : '';
     const lang = '';
 
-    parts.push(`<section class="unit"${unitId}${lang} role="region" aria-label="Unit ${unit.label || ''}">`);
-    
+    parts.push(
+      `<section class="unit"${unitId}${lang} role="region" aria-label="Unit ${unit.label || ''}">`
+    );
+
     // Render unit title
     parts.push(`<header class="unit-header">`);
     if (unit.label) {
@@ -498,10 +517,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
     // Render unit contents
     parts.push('<div class="unit-content">');
-    unit.contents.forEach(content => {
+    unit.contents.forEach((content) => {
       if ('contents' in content && Array.isArray(content.contents)) {
         // This is a Chapter
-        parts.push(this.renderChapter(content as Chapter, options));
+        parts.push(this.renderChapter(content, options));
       } else {
         // This is a ContentBlock
         parts.push(this.renderContentBlock(content as ContentBlock, options));
@@ -518,8 +537,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const chapterId = chapter.id ? ` id="${this.escapeHtml(chapter.id)}"` : '';
     const lang = '';
 
-    parts.push(`<section class="chapter"${chapterId}${lang} role="region" aria-label="Chapter ${chapter.label || ''}">`);
-    
+    parts.push(
+      `<section class="chapter"${chapterId}${lang} role="region" aria-label="Chapter ${chapter.label || ''}">`
+    );
+
     // Render chapter title
     parts.push(`<header class="chapter-header">`);
     if (chapter.label) {
@@ -530,10 +551,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
     // Render chapter contents
     parts.push('<div class="chapter-content">');
-    chapter.contents.forEach(content => {
+    chapter.contents.forEach((content) => {
       if ('contents' in content && Array.isArray(content.contents)) {
         // This is a Section
-        parts.push(this.renderSection(content as Section, options));
+        parts.push(this.renderSection(content, options));
       } else {
         // This is a ContentBlock
         parts.push(this.renderContentBlock(content as ContentBlock, options));
@@ -550,8 +571,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const sectionId = section.id ? ` id="${this.escapeHtml(section.id)}"` : '';
     const lang = '';
 
-    parts.push(`<section class="section"${sectionId}${lang} role="region" aria-label="Section ${section.label || ''}">`);
-    
+    parts.push(
+      `<section class="section"${sectionId}${lang} role="region" aria-label="Section ${section.label || ''}">`
+    );
+
     // Render section title
     parts.push(`<header class="section-header">`);
     if (section.label) {
@@ -562,7 +585,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
     // Render section contents
     parts.push('<div class="section-content">');
-    section.contents.forEach(block => {
+    section.contents.forEach((block) => {
       parts.push(this.renderContentBlock(block, options));
     });
     parts.push('</div>');
@@ -579,46 +602,56 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     switch (block.blockType) {
       case 'https://xats.org/vocabularies/blocks/paragraph':
         return this.renderParagraph(block, blockId, lang, blockTypeClass);
-      
+
       case 'https://xats.org/vocabularies/blocks/heading':
         return this.renderHeading(block, blockId, lang, blockTypeClass);
-      
+
       case 'https://xats.org/vocabularies/blocks/list':
         return this.renderList(block, blockId, lang, blockTypeClass);
-      
+
       case 'https://xats.org/vocabularies/blocks/blockquote':
         return this.renderBlockquote(block, blockId, lang, blockTypeClass);
-      
+
       case 'https://xats.org/vocabularies/blocks/codeBlock':
         return this.renderCodeBlock(block, blockId, lang, blockTypeClass);
-      
+
       case 'https://xats.org/vocabularies/blocks/mathBlock':
         return this.renderMathBlock(block, blockId, lang, blockTypeClass);
-      
+
       case 'https://xats.org/vocabularies/blocks/table':
         return this.renderTable(block, blockId, lang, blockTypeClass);
-      
+
       case 'https://xats.org/vocabularies/blocks/figure':
         return this.renderFigure(block, blockId, lang, blockTypeClass);
-      
+
       case 'https://xats.org/vocabularies/placeholders/tableOfContents':
       case 'https://xats.org/vocabularies/placeholders/bibliography':
       case 'https://xats.org/vocabularies/placeholders/index':
         return this.renderPlaceholder(block, blockId, lang, blockTypeClass);
-      
+
       default:
         return this.renderGenericBlock(block, blockId, lang, blockTypeClass);
     }
   }
 
-  private renderParagraph(block: ContentBlock, blockId: string, lang: string, blockTypeClass: string): string {
+  private renderParagraph(
+    block: ContentBlock,
+    blockId: string,
+    lang: string,
+    blockTypeClass: string
+  ): string {
     const content = block.content as { text: SemanticText };
     return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
       <p>${this.renderSemanticText(content.text)}</p>
     </div>`;
   }
 
-  private renderHeading(block: ContentBlock, blockId: string, lang: string, blockTypeClass: string): string {
+  private renderHeading(
+    block: ContentBlock,
+    blockId: string,
+    lang: string,
+    blockTypeClass: string
+  ): string {
     const content = block.content as { text: SemanticText; level?: number };
     const level = Math.min(Math.max(content.level || 1, 1), 6);
     return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
@@ -626,11 +659,18 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     </div>`;
   }
 
-  private renderList(block: ContentBlock, blockId: string, lang: string, blockTypeClass: string): string {
+  private renderList(
+    block: ContentBlock,
+    blockId: string,
+    lang: string,
+    blockTypeClass: string
+  ): string {
     const content = block.content as { listType: 'ordered' | 'unordered'; items: SemanticText[] };
     const tag = content.listType === 'ordered' ? 'ol' : 'ul';
-    const items = content.items.map(item => `<li>${this.renderSemanticText(item)}</li>`).join('\n');
-    
+    const items = content.items
+      .map((item) => `<li>${this.renderSemanticText(item)}</li>`)
+      .join('\n');
+
     return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
       <${tag}>
         ${items}
@@ -638,32 +678,49 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     </div>`;
   }
 
-  private renderBlockquote(block: ContentBlock, blockId: string, lang: string, blockTypeClass: string): string {
+  private renderBlockquote(
+    block: ContentBlock,
+    blockId: string,
+    lang: string,
+    blockTypeClass: string
+  ): string {
     const content = block.content as { text: SemanticText; attribution?: SemanticText };
     let html = `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
       <blockquote>
         ${this.renderSemanticText(content.text)}`;
-    
+
     if (content.attribution) {
       html += `<cite>${this.renderSemanticText(content.attribution)}</cite>`;
     }
-    
+
     html += `</blockquote>
     </div>`;
-    
+
     return html;
   }
 
-  private renderCodeBlock(block: ContentBlock, blockId: string, lang: string, blockTypeClass: string): string {
+  private renderCodeBlock(
+    block: ContentBlock,
+    blockId: string,
+    lang: string,
+    blockTypeClass: string
+  ): string {
     const content = block.content as { code: string; language?: string };
-    const codeLang = content.language ? ` data-language="${this.escapeHtml(content.language)}"` : '';
-    
+    const codeLang = content.language
+      ? ` data-language="${this.escapeHtml(content.language)}"`
+      : '';
+
     return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
       <pre><code${codeLang}>${this.escapeHtml(content.code)}</code></pre>
     </div>`;
   }
 
-  private renderMathBlock(block: ContentBlock, blockId: string, lang: string, blockTypeClass: string): string {
+  private renderMathBlock(
+    block: ContentBlock,
+    blockId: string,
+    lang: string,
+    blockTypeClass: string
+  ): string {
     const content = block.content as { math: string };
     return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
       <div class="math-block" role="img" aria-label="Mathematical expression">
@@ -672,84 +729,104 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     </div>`;
   }
 
-  private renderTable(block: ContentBlock, blockId: string, lang: string, blockTypeClass: string): string {
-    const content = block.content as { 
+  private renderTable(
+    block: ContentBlock,
+    blockId: string,
+    lang: string,
+    blockTypeClass: string
+  ): string {
+    const content = block.content as {
       headers?: SemanticText[];
       rows: SemanticText[][];
       caption?: SemanticText;
     };
-    
+
     let html = `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
       <table role="table">`;
-    
+
     if (content.caption) {
       html += `<caption>${this.renderSemanticText(content.caption)}</caption>`;
     }
-    
+
     if (content.headers && content.headers.length > 0) {
       html += '<thead><tr>';
-      content.headers.forEach(header => {
+      content.headers.forEach((header) => {
         html += `<th scope="col">${this.renderSemanticText(header)}</th>`;
       });
       html += '</tr></thead>';
     }
-    
+
     html += '<tbody>';
-    content.rows.forEach(row => {
+    content.rows.forEach((row) => {
       html += '<tr>';
-      row.forEach(cell => {
+      row.forEach((cell) => {
         html += `<td>${this.renderSemanticText(cell)}</td>`;
       });
       html += '</tr>';
     });
     html += '</tbody>';
-    
+
     html += `</table>
     </div>`;
-    
+
     return html;
   }
 
-  private renderFigure(block: ContentBlock, blockId: string, lang: string, blockTypeClass: string): string {
-    const content = block.content as { 
-      src: string; 
-      alt: string; 
+  private renderFigure(
+    block: ContentBlock,
+    blockId: string,
+    lang: string,
+    blockTypeClass: string
+  ): string {
+    const content = block.content as {
+      src: string;
+      alt: string;
       caption?: SemanticText;
       width?: number;
       height?: number;
     };
-    
+
     let html = `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
       <figure>
         <img src="${this.escapeHtml(content.src)}" alt="${this.escapeHtml(content.alt)}"`;
-    
+
     if (content.width) {
       html += ` width="${content.width}"`;
     }
     if (content.height) {
       html += ` height="${content.height}"`;
     }
-    
+
     html += ' />';
-    
+
     if (content.caption) {
       html += `<figcaption>${this.renderSemanticText(content.caption)}</figcaption>`;
     }
-    
+
     html += `</figure>
     </div>`;
-    
+
     return html;
   }
 
-  private renderPlaceholder(block: ContentBlock, blockId: string, lang: string, blockTypeClass: string): string {
+  private renderPlaceholder(
+    block: ContentBlock,
+    blockId: string,
+    lang: string,
+    blockTypeClass: string
+  ): string {
     const placeholderType = this.getPlaceholderType(block.blockType);
     return `<div class="content-block ${blockTypeClass} placeholder"${blockId}${lang} role="region" aria-label="${placeholderType}">
       <p>[${placeholderType} will be generated here]</p>
     </div>`;
   }
 
-  private renderGenericBlock(block: ContentBlock, blockId: string, lang: string, blockTypeClass: string): string {
+  private renderGenericBlock(
+    block: ContentBlock,
+    blockId: string,
+    lang: string,
+    blockTypeClass: string
+  ): string {
     return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
       <div class="unknown-block" data-block-type="${this.escapeHtml(block.blockType)}">
         <!-- Unknown block type: ${this.escapeHtml(block.blockType)} -->
@@ -759,49 +836,49 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   }
 
   private renderSemanticText(semanticText: SemanticText): string {
-    return semanticText.runs.map(run => this.renderRun(run)).join('');
+    return semanticText.runs.map((run) => this.renderRun(run)).join('');
   }
 
   private renderRun(run: Run): string {
     switch (run.type) {
       case 'text':
         return this.escapeHtml(run.text);
-      
+
       case 'emphasis':
         return `<em>${this.escapeHtml(run.text)}</em>`;
-      
+
       case 'strong':
         return `<strong>${this.escapeHtml(run.text)}</strong>`;
-      
+
       case 'code':
         return `<code>${this.escapeHtml(run.text)}</code>`;
-      
+
       case 'reference':
         const refHref = run.ref ? ` href="#${this.escapeHtml(run.ref)}"` : '';
         const refLabel = run.label ? ` aria-label="${this.escapeHtml(run.label)}"` : '';
         return `<a class="reference"${refHref}${refLabel}>${this.escapeHtml(run.text)}</a>`;
-      
+
       case 'citation':
         return `<a class="citation" href="#cite-${this.escapeHtml(run.citeKey)}" role="doc-noteref" aria-label="Citation ${run.citeKey}">[${this.escapeHtml(run.citeKey)}]</a>`;
-      
+
       case 'mathInline':
         return `<span class="math-inline" role="img" aria-label="Mathematical expression">${this.escapeHtml(run.math)}</span>`;
-      
+
       case 'subscript':
         return `<sub>${this.escapeHtml(run.text)}</sub>`;
-      
+
       case 'superscript':
         return `<sup>${this.escapeHtml(run.text)}</sup>`;
-      
+
       case 'strikethrough':
         return `<del>${this.escapeHtml(run.text)}</del>`;
-      
+
       case 'underline':
         return `<u>${this.escapeHtml(run.text)}</u>`;
-      
+
       case 'index':
         return `<span class="index-entry" data-index-term="${this.escapeHtml(run.entry)}"${run.subEntry ? ` data-sub-entry="${this.escapeHtml(run.subEntry)}"` : ''}>${this.escapeHtml(run.text)}</span>`;
-      
+
       default:
         return this.escapeHtml((run as any).text || '');
     }
@@ -821,7 +898,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       'https://xats.org/vocabularies/placeholders/bibliography': 'placeholder-bibliography',
       'https://xats.org/vocabularies/placeholders/index': 'placeholder-index',
     };
-    
+
     return typeMap[blockType] || 'block-unknown';
   }
 
@@ -831,7 +908,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       'https://xats.org/vocabularies/placeholders/bibliography': 'Bibliography',
       'https://xats.org/vocabularies/placeholders/index': 'Index',
     };
-    
+
     return typeMap[blockType] || 'Placeholder';
   }
 
@@ -850,7 +927,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const schemaVersion = this.extractSchemaVersion(document) || '0.3.0';
     const title = document.title || 'Untitled Document';
     const lang = document.documentElement.lang || 'en';
-    const dir = document.documentElement.dir as 'ltr' | 'rtl' | 'auto' || 'ltr';
+    const dir = (document.documentElement.dir as 'ltr' | 'rtl' | 'auto') || 'ltr';
 
     // Create bibliographic entry from HTML metadata
     const bibliographicEntry = this.extractBibliographicEntry(document, title);
@@ -912,10 +989,12 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       if (nameParts.length >= 2) {
         const family = nameParts[nameParts.length - 1];
         if (family) {
-          return [{
-            given: nameParts.slice(0, -1).join(' '),
-            family,
-          }];
+          return [
+            {
+              given: nameParts.slice(0, -1).join(' '),
+              family,
+            },
+          ];
         }
       }
     }
@@ -929,7 +1008,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       if (dateStr) {
         const date = new Date(dateStr);
         return {
-          'date-parts': [[date.getFullYear(), date.getMonth() + 1, date.getDate()]]
+          'date-parts': [[date.getFullYear(), date.getMonth() + 1, date.getDate()]],
         };
       }
     }
@@ -941,7 +1020,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return metaElement ? metaElement.getAttribute('content') : null;
   }
 
-  private parseFrontMatter(document: Document, options: Required<ParseOptions>): FrontMatter | undefined {
+  private parseFrontMatter(
+    document: Document,
+    options: Required<ParseOptions>
+  ): FrontMatter | undefined {
     const frontMatterSection = document.querySelector('.front-matter');
     if (!frontMatterSection) return undefined;
 
@@ -971,13 +1053,13 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     // Look for units first
     const units = bodyMatterSection.querySelectorAll('.unit');
     if (units.length > 0) {
-      units.forEach(unitElement => {
+      units.forEach((unitElement) => {
         contents.push(this.parseUnit(unitElement, options));
       });
     } else {
       // No units, look for chapters directly
       const chapters = bodyMatterSection.querySelectorAll('.chapter');
-      chapters.forEach(chapterElement => {
+      chapters.forEach((chapterElement) => {
         contents.push(this.parseChapter(chapterElement, options));
       });
     }
@@ -985,7 +1067,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return { contents };
   }
 
-  private parseBackMatter(document: Document, options: Required<ParseOptions>): BackMatter | undefined {
+  private parseBackMatter(
+    document: Document,
+    options: Required<ParseOptions>
+  ): BackMatter | undefined {
     const backMatterSection = document.querySelector('.back-matter');
     if (!backMatterSection) return undefined;
 
@@ -994,7 +1079,9 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const appendicesSection = backMatterSection.querySelector('.appendices');
     if (appendicesSection) {
       const appendixElements = appendicesSection.querySelectorAll('.chapter');
-      backMatter.appendices = Array.from(appendixElements).map(el => this.parseChapter(el, options));
+      backMatter.appendices = Array.from(appendixElements).map((el) =>
+        this.parseChapter(el, options)
+      );
     }
 
     const glossarySection = backMatterSection.querySelector('.glossary');
@@ -1040,21 +1127,23 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const id = unitElement.getAttribute('id') || '';
     const labelElement = unitElement.querySelector('.unit-label');
     const titleElement = unitElement.querySelector('.unit-title');
-    
+
     const label = labelElement ? labelElement.textContent?.replace('Unit ', '') || '' : '';
-    const title = titleElement ? this.parseTextToSemanticText(titleElement.textContent || '') : { runs: [{ type: 'text' as const, text: 'Untitled Unit' }] };
+    const title = titleElement
+      ? this.parseTextToSemanticText(titleElement.textContent || '')
+      : { runs: [{ type: 'text' as const, text: 'Untitled Unit' }] };
 
     const contents: Array<Chapter | ContentBlock> = [];
 
     // Parse chapters within the unit
     const chapters = unitElement.querySelectorAll('.chapter');
-    chapters.forEach(chapterElement => {
+    chapters.forEach((chapterElement) => {
       contents.push(this.parseChapter(chapterElement, options));
     });
 
     // Parse content blocks directly in the unit
     const contentBlocks = unitElement.querySelectorAll('.content-block');
-    contentBlocks.forEach(blockElement => {
+    contentBlocks.forEach((blockElement) => {
       contents.push(this.parseContentBlock(blockElement, options));
     });
 
@@ -1065,21 +1154,23 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const id = chapterElement.getAttribute('id') || '';
     const labelElement = chapterElement.querySelector('.chapter-label');
     const titleElement = chapterElement.querySelector('.chapter-title');
-    
+
     const label = labelElement ? labelElement.textContent?.replace('Chapter ', '') || '' : '';
-    const title = titleElement ? this.parseTextToSemanticText(titleElement.textContent || '') : { runs: [{ type: 'text' as const, text: 'Untitled Chapter' }] };
+    const title = titleElement
+      ? this.parseTextToSemanticText(titleElement.textContent || '')
+      : { runs: [{ type: 'text' as const, text: 'Untitled Chapter' }] };
 
     const contents: Array<Section | ContentBlock> = [];
 
     // Parse sections within the chapter
     const sections = chapterElement.querySelectorAll('.section');
-    sections.forEach(sectionElement => {
+    sections.forEach((sectionElement) => {
       contents.push(this.parseSection(sectionElement, options));
     });
 
     // Parse content blocks directly in the chapter
     const contentBlocks = chapterElement.querySelectorAll('.content-block');
-    contentBlocks.forEach(blockElement => {
+    contentBlocks.forEach((blockElement) => {
       contents.push(this.parseContentBlock(blockElement, options));
     });
 
@@ -1090,9 +1181,11 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const id = sectionElement.getAttribute('id') || '';
     const labelElement = sectionElement.querySelector('.section-label');
     const titleElement = sectionElement.querySelector('.section-title');
-    
+
     const label = labelElement ? labelElement.textContent || '' : '';
-    const title = titleElement ? this.parseTextToSemanticText(titleElement.textContent || '') : { runs: [{ type: 'text' as const, text: 'Untitled Section' }] };
+    const title = titleElement
+      ? this.parseTextToSemanticText(titleElement.textContent || '')
+      : { runs: [{ type: 'text' as const, text: 'Untitled Section' }] };
 
     const contents = this.parseContentBlocks(sectionElement, options);
 
@@ -1101,18 +1194,20 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private parseContentBlocks(container: Element, options: Required<ParseOptions>): ContentBlock[] {
     const contentBlocks = container.querySelectorAll('.content-block');
-    return Array.from(contentBlocks).map(blockElement => this.parseContentBlock(blockElement, options));
+    return Array.from(contentBlocks).map((blockElement) =>
+      this.parseContentBlock(blockElement, options)
+    );
   }
 
   private parseContentBlock(blockElement: Element, options: Required<ParseOptions>): ContentBlock {
     const id = blockElement.getAttribute('id') || '';
-    
+
     // Determine block type from class
     const blockType = this.determineBlockType(blockElement);
     const content = this.parseBlockContent(blockElement, blockType);
 
     const block: ContentBlock = { id, blockType, content };
-    
+
     return block;
   }
 
@@ -1151,51 +1246,52 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       case 'https://xats.org/vocabularies/blocks/paragraph':
         const p = blockElement.querySelector('p');
         return { text: this.parseTextToSemanticText(p?.textContent || '') };
-      
+
       case 'https://xats.org/vocabularies/blocks/heading':
         const heading = blockElement.querySelector('h1, h2, h3, h4, h5, h6');
         const level = heading ? parseInt(heading.tagName.charAt(1)) : 1;
-        return { 
+        return {
           text: this.parseTextToSemanticText(heading?.textContent || ''),
-          level 
+          level,
         };
-      
+
       case 'https://xats.org/vocabularies/blocks/list':
         const list = blockElement.querySelector('ol, ul');
         const listType = list?.tagName.toLowerCase() === 'ol' ? 'ordered' : 'unordered';
-        const items = Array.from(list?.querySelectorAll('li') || [])
-          .map(li => this.parseTextToSemanticText(li.textContent || ''));
+        const items = Array.from(list?.querySelectorAll('li') || []).map((li) =>
+          this.parseTextToSemanticText(li.textContent || '')
+        );
         return { listType, items };
-      
+
       case 'https://xats.org/vocabularies/blocks/blockquote':
         const blockquote = blockElement.querySelector('blockquote');
         const cite = blockquote?.querySelector('cite');
         const content = {
-          text: this.parseTextToSemanticText(blockquote?.textContent || '')
+          text: this.parseTextToSemanticText(blockquote?.textContent || ''),
         };
         if (cite) {
           (content as any).attribution = this.parseTextToSemanticText(cite.textContent || '');
         }
         return content;
-      
+
       case 'https://xats.org/vocabularies/blocks/codeBlock':
         const code = blockElement.querySelector('code');
         const language = code?.getAttribute('data-language') || undefined;
-        return { 
+        return {
           code: code?.textContent || '',
-          language 
+          language,
         };
-      
+
       case 'https://xats.org/vocabularies/blocks/mathBlock':
         const math = blockElement.querySelector('.math-block');
         return { math: math?.textContent || '' };
-      
+
       case 'https://xats.org/vocabularies/blocks/table':
         return this.parseTableContent(blockElement);
-      
+
       case 'https://xats.org/vocabularies/blocks/figure':
         return this.parseFigureContent(blockElement);
-      
+
       default:
         return { text: this.parseTextToSemanticText(blockElement.textContent || '') };
     }
@@ -1206,11 +1302,14 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (!table) return { rows: [] };
 
     const caption = table.querySelector('caption');
-    const headers = Array.from(table.querySelectorAll('thead th'))
-      .map(th => this.parseTextToSemanticText(th.textContent || ''));
-    const rows = Array.from(table.querySelectorAll('tbody tr'))
-      .map(tr => Array.from(tr.querySelectorAll('td'))
-        .map(td => this.parseTextToSemanticText(td.textContent || '')));
+    const headers = Array.from(table.querySelectorAll('thead th')).map((th) =>
+      this.parseTextToSemanticText(th.textContent || '')
+    );
+    const rows = Array.from(table.querySelectorAll('tbody tr')).map((tr) =>
+      Array.from(tr.querySelectorAll('td')).map((td) =>
+        this.parseTextToSemanticText(td.textContent || '')
+      )
+    );
 
     const content: any = { rows };
     if (headers.length > 0) content.headers = headers;
@@ -1237,7 +1336,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     // Simple implementation - just return text run
     // In a complete implementation, this would parse HTML formatting
     return {
-      runs: [{ type: 'text', text }]
+      runs: [{ type: 'text', text }],
     };
   }
 
@@ -1318,23 +1417,77 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       ALLOW_ARIA_ATTR: true,
       KEEP_CONTENT: true,
       ALLOWED_TAGS: [
-        'html', 'head', 'body', 'title', 'meta', 'style', 'link',
-        'main', 'section', 'article', 'aside', 'nav', 'header', 'footer',
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-        'p', 'div', 'span', 'br', 'hr',
-        'a', 'em', 'strong', 'code', 'pre', 'sub', 'sup', 'del', 'u',
-        'ul', 'ol', 'li', 'dl', 'dt', 'dd',
-        'table', 'thead', 'tbody', 'tr', 'th', 'td', 'caption',
-        'figure', 'figcaption', 'img',
-        'blockquote', 'cite'
+        'html',
+        'head',
+        'body',
+        'title',
+        'meta',
+        'style',
+        'link',
+        'main',
+        'section',
+        'article',
+        'aside',
+        'nav',
+        'header',
+        'footer',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'p',
+        'div',
+        'span',
+        'br',
+        'hr',
+        'a',
+        'em',
+        'strong',
+        'code',
+        'pre',
+        'sub',
+        'sup',
+        'del',
+        'u',
+        'ul',
+        'ol',
+        'li',
+        'dl',
+        'dt',
+        'dd',
+        'table',
+        'thead',
+        'tbody',
+        'tr',
+        'th',
+        'td',
+        'caption',
+        'figure',
+        'figcaption',
+        'img',
+        'blockquote',
+        'cite',
       ],
       ALLOWED_ATTR: [
-        'id', 'class', 'lang', 'dir',
-        'href', 'src', 'alt', 'title',
-        'width', 'height',
-        'role', 'aria-label', 'aria-labelledby', 'aria-describedby',
-        'scope', 'data-*'
-      ]
+        'id',
+        'class',
+        'lang',
+        'dir',
+        'href',
+        'src',
+        'alt',
+        'title',
+        'width',
+        'height',
+        'role',
+        'aria-label',
+        'aria-labelledby',
+        'aria-describedby',
+        'scope',
+        'data-*',
+      ],
     });
   }
 
