@@ -64,6 +64,7 @@ jobs:
       env:
         TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
         TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+        TURBO_REMOTE_CACHE_READ_ONLY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == true }}
       
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
@@ -73,6 +74,7 @@ jobs:
           packages/*/dist
           .turbo
         retention-days: 1
+        compression-level: 9
 
   lint:
     name: Lint
@@ -145,6 +147,7 @@ jobs:
     needs: [build-and-cache]
     
     strategy:
+      fail-fast: true
       matrix:
         node-version: [18, 20, 22]
         
@@ -332,10 +335,10 @@ jobs:
       
     - name: Run integration tests
       run: |
-        if [ -d "tests/integration" ]; then
+        if [ -d "tests/integration" ] && [ "$(find tests/integration -name '*.test.ts' -o -name '*.spec.ts' 2>/dev/null | head -1)" ]; then
           pnpm run test:integration
         else
-          echo "Integration tests directory not found, skipping"
+          echo "No integration test files found, skipping"
         fi
       
     - name: Test package linking
@@ -352,10 +355,10 @@ jobs:
     - name: Test cross-package functionality
       run: |
         # Run end-to-end tests that verify package integration
-        if [ -d "tests/e2e" ]; then
+        if [ -d "tests/e2e" ] && [ "$(find tests/e2e -name '*.test.ts' -o -name '*.spec.ts' 2>/dev/null | head -1)" ]; then
           pnpm run test:e2e
         else
-          echo "E2E tests directory not found, skipping"
+          echo "No E2E test files found, skipping"
         fi
 
   performance:

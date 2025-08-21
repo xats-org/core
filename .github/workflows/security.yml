@@ -3,8 +3,20 @@ name: Security
 on:
   push:
     branches: [main, 'v*.*.*']
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.claude/**'
+      - 'LICENSE'
+      - '.github/workflows/!(security).yml'
   pull_request:
     branches: [main, 'v*.*.*']
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.claude/**'
+      - 'LICENSE'
+      - '.github/workflows/!(security).yml'
   schedule:
     # Run security scans weekly on Monday at 2 AM UTC (reduced from daily)
     - cron: '0 2 * * 1'
@@ -153,7 +165,8 @@ jobs:
   sbom:
     name: Generate Software Bill of Materials
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    # Only generate SBOM on releases and main branch pushes
+    if: github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]'))
     
     steps:
     - name: Checkout code
