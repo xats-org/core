@@ -1,6 +1,6 @@
 {
   "name": "@xats/vocabularies",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Core vocabulary definitions for the xats schema",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
