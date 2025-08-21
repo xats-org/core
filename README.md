@@ -250,10 +250,16 @@ xats-org/core/
 │   ├── @xats-org/validator/  # Validation logic and error reporting
 │   ├── @xats-org/types/      # Shared TypeScript types
 │   ├── @xats-org/cli/        # Command-line interface
-│   ├── @xats-org/renderer/   # Rendering framework
 │   ├── @xats-org/mcp-server/ # Model Context Protocol server
 │   ├── @xats-org/utils/      # Shared utilities
-│   └── @xats-org/examples/   # Example documents
+│   ├── @xats-org/examples/   # Example documents
+│   └── renderers/        # Bidirectional converters (v0.5.0+)
+│       ├── @xats-org/renderer-core/      # Shared renderer utilities
+│       ├── @xats-org/renderer-html/      # xats ↔ HTML converter
+│       ├── @xats-org/renderer-docx/      # xats ↔ Word converter
+│       ├── @xats-org/renderer-rmarkdown/ # xats ↔ RMarkdown converter
+│       ├── @xats-org/renderer-latex/     # xats ↔ LaTeX converter
+│       └── @xats-org/renderer-markdown/  # xats ↔ Markdown converter
 ├── apps/                  # Applications
 │   ├── docs/             # Documentation site
 │   └── website/          # xats.org website
@@ -322,16 +328,23 @@ pnpm --filter @xats-org/cli run validate:examples
 - ✅ Enhanced rights management and accessibility features
 - ✅ Comprehensive v0.3.0 documentation
 
-### v0.4.0 (In Development - Target: 2026-05-31)
-- 🎨 **Enhanced Rendering Hints**: Comprehensive author intent preservation system
-- 🤖 **AI Integration Framework**: MCP server and multi-agent orchestration for textbook creation
-- 📊 **R-markdown Renderer**: Academic workflow integration with scientific computing
-- 🔄 **Production Workflow Tools**: Round-trip conversion and ancillary generation
+### v0.4.0 (In Development - Target: 2026-03-31)
+- 🏗️ **Monorepo Architecture**: Modern TypeScript monorepo with Turborepo
+- 📦 **Modular Packages**: Separate packages for schema, validator, CLI, and utilities
+- 🚀 **Developer Experience**: TypeScript everywhere with intelligent IDE support
+- ⚡ **Performance**: Optimized build pipelines with caching and parallel execution
 
-### v0.5.0 (Planned - Target: 2026-09-30)
-- 📊 **Advanced Analytics Platform**: Learning analytics and content performance metrics
-- 🌍 **Advanced Internationalization**: Multi-language content and translation workflows
-- 🔒 **Privacy-First Analytics**: GDPR/CCPA compliant analytics framework
+### v0.5.0 (Planned - Target: 2026-05-31)
+- 🔄 **Bidirectional Renderers**: Revolutionary two-way converters for all major formats
+  - **xats ↔ Word**: Seamless Microsoft Word integration for institutional workflows
+  - **xats ↔ HTML**: Web-ready content with full accessibility
+  - **xats ↔ RMarkdown**: Academic research workflow integration
+  - **xats ↔ LaTeX**: Traditional academic publishing support
+  - **xats ↔ Markdown**: Documentation and lightweight content
+- ♿ **WCAG 2.1 AA Compliance**: 100% accessibility across all output formats
+- 🤖 **AI Integration Framework**: MCP server and multi-agent orchestration
+- 🎯 **Workflow Preservation**: Authors work in familiar tools while leveraging xats
+- 🔄 **Round-Trip Integrity**: Content flows between formats without semantic loss
 
 ### Future Vision
 - 🎮 **Immersive Content**: VR/AR integration and gamification
