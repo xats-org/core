@@ -1,6 +1,6 @@
 # xats Quickstart Tutorial
 
-**Version:** 2.0 (for xats schema v0.2.0)
+**Version:** 3.0 (for xats schema v0.3.0)
 **Audience:** First-time authors and developers.
 
 ---
@@ -27,7 +27,7 @@ Before starting, ensure you have:
 
 To install the xats validation tool:
 ```bash
-npm install -g @xats-org/validator
+npm install -g @xats-org/cli
 ```
 
 ---
@@ -40,7 +40,7 @@ Every `xats` document starts with a root object that defines its version and cor
 
 ```json
 {
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "bibliographicEntry": {
     "id": "my-first-xats-book",
     "type": "book",
@@ -65,7 +65,7 @@ Every `xats` document starts with a root object that defines its version and cor
 ```
 
 ### Key Points:
-- **`schemaVersion`**: Always use "0.1.0" for the current schema
+- **`schemaVersion`**: Always use "0.3.0" for the current schema
 - **`bibliographicEntry`**: Uses CSL-JSON standard for metadata
 - **`subject`**: A string describing the main topic
 - **`bodyMatter`**: Contains the actual content (chapters or units)
@@ -80,7 +80,7 @@ Chapters are the primary organizational units in xats. Each chapter must have an
 
 ```json
 {
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "bibliographicEntry": {
     "id": "my-first-xats-book",
     "type": "book",
@@ -510,18 +510,18 @@ Validation ensures your document follows the xats schema correctly. Here's how t
 
 ```bash
 # Validate a single file
-xats-validate -f tutorial.xats.json
+xats validate -f tutorial.xats.json
 
 # Validate with verbose output (shows all checks)
-xats-validate -f tutorial.xats.json -v
+xats validate -f tutorial.xats.json -v
 
 # Validate all files in a directory
-xats-validate -d ./my-xats-documents/
+xats validate -d ./my-xats-documents/
 ```
 
 **Alternative: Using npm script**
 ```bash
-# If xats-validate is not installed globally
+# If xats is not installed globally
 npm run validate -- -f tutorial.xats.json
 ```
 
@@ -703,12 +703,12 @@ Common JSON mistakes:
 
 **Solution:**
 ```bash
-npm install -g @xats-org/validator
+npm install -g @xats-org/cli
 ```
 
 If you get permission errors:
 ```bash
-sudo npm install -g @xats-org/validator
+sudo npm install -g @xats-org/cli
 ```
 
 ### Issue: "Schema validation failed with no specific error"
@@ -754,7 +754,7 @@ sudo npm install -g @xats-org/validator
 **Solution:**
 ```bash
 # Increase timeout and use streaming validation
-xats-validate -f large-book.xats.json --timeout 30000 --stream
+xats validate -f large-book.xats.json --timeout 30000 --stream
 ```
 
 ---
@@ -785,7 +785,7 @@ To explore an example:
 cat examples/single-chapter.xats.json
 
 # Validate it
-xats-validate -f examples/single-chapter.xats.json
+xats validate -f examples/single-chapter.xats.json
 
 # Copy it as a starting point
 cp examples/single-chapter.xats.json my-document.xats.json
@@ -849,10 +849,10 @@ xats is designed for extensibility. Consider building:
 Make validation part of your workflow:
 ```bash
 # Add to your build process
-npm run build && xats-validate -d ./content/
+npm run build && xats validate -d ./content/
 
 # Git pre-commit hook
-xats-validate -f *.xats.json || exit 1
+xats validate -f *.xats.json || exit 1
 ```
 
 ---
@@ -907,10 +907,10 @@ xats-validate -f *.xats.json || exit 1
 
 ### Validation Commands
 ```bash
-xats-validate -f file.json        # Single file
-xats-validate -d directory/       # Directory
-xats-validate -f file.json -v     # Verbose
-xats-validate --examples-only     # Examples only
+xats validate -f file.json        # Single file
+xats validate -d directory/       # Directory
+xats validate -f file.json -v     # Verbose
+xats validate --examples-only     # Examples only
 ```
 
 ---

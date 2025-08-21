@@ -15,7 +15,7 @@ The xats standard is designed with accessibility as a core principle. This guide
 
 ## WCAG 2.1 AA Compliance
 
-xats v0.2.0 provides 100% WCAG 2.1 AA compliance through:
+xats v0.3.0 provides 100% WCAG 2.1 AA compliance through:
 
 ### 1. Perceivable Content
 
@@ -51,7 +51,7 @@ Every document and content element must identify its language:
 
 ```json
 {
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "language": "en-US",  // Document-level language
   "bodyMatter": {
     "contents": [
@@ -275,7 +275,7 @@ Provide skip links for repetitive content:
 Use the xats validator with accessibility checks:
 
 ```bash
-xats-validate --accessibility my-document.json
+xats validate --accessibility my-document.json
 ```
 
 ### Manual Testing

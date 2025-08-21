@@ -5,7 +5,7 @@
 [![Version](https://img.shields.io/badge/stable-v0.3.0-blue.svg)](https://github.com/xats-org/core/releases)
 [![Development](https://img.shields.io/badge/development-v0.4.0-orange.svg)](https://github.com/xats-org/core/tree/main)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
-[![CI Status](https://img.shields.io/github/actions/workflow/status/xats-org/core/ci.yml?branch=v0.2.0&label=CI)](https://github.com/xats-org/core/actions)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/xats-org/core/ci.yml?branch=main&label=CI)](https://github.com/xats-org/core/actions)
 [![npm version](https://img.shields.io/npm/v/@xats-org/cli.svg)](https://www.npmjs.com/package/@xats-org/cli)
 
 **The Modern Standard for Academic and Educational Content**

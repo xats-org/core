@@ -302,8 +302,9 @@ Root
 ## Working with the Schema
 
 ### Schema Location
-- Current version: `/schemas/v0.1.0/xats.json`
-- Schema ID: `https://xats.org/schemas/0.1.0/xats.json`
+- Current stable version: `v0.3.0` (on main branch)
+- Active development: `v0.4.0` (monorepo structure)
+- Legacy versions: `v0.1.0`, `v0.2.0`
 
 ### Validation
 When working with xats documents, validate against the JSON Schema to ensure compliance.
