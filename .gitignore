@@ -102,6 +102,11 @@ coverage/
 .pytest_cache/
 htmlcov/
 
+# Vitest
+.vitest/
+.vitest-reports/
+.vitest-attachments/
+
 # Build outputs
 dist/
 build/
