@@ -32,7 +32,7 @@ LTI 1.3 is the latest version of the IMS Global Learning Tools Interoperability 
 
 ```json
 {
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.3.0",
   "extensions": {
     "https://xats.org/extensions/lti": {
       "configuration": {

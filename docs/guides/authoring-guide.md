@@ -1,6 +1,6 @@
 # xats Authoring Guide
 
-**Version:** 2.0 (for xats schema v0.2.0)
+**Version:** 3.0 (for xats schema v0.3.0)
 **Audience:** Authors, Instructional Designers, and AI Engineers
 
 ---
@@ -9,7 +9,7 @@
 
 This guide provides best practices for creating effective, semantically rich, and machine-readable documents using the **xats** standard. While the schema defines *what* is possible, this guide explains *how* to use the features to achieve the desired pedagogical and technical outcomes.
 
-**New in v0.2.0:** This guide now covers the comprehensive assessment framework, LTI 1.3 integration, accessibility features, and rights management capabilities.
+**New in v0.3.0:** This guide now covers the comprehensive assessment framework, LTI 1.3 integration, accessibility features, rights management capabilities, and enhanced monorepo tooling.
 
 ## 2. Thinking in `xats`: The Author's Mindset
 
@@ -20,9 +20,9 @@ This guide provides best practices for creating effective, semantically rich, an
 
 ## 3. Best Practices by Feature
 
-### a. Assessment Framework (New in v0.2.0)
+### a. Assessment Framework (Enhanced in v0.3.0)
 
-The v0.2.0 assessment framework provides powerful tools for creating pedagogically sound assessments with built-in analytics and accessibility support.
+The v0.3.0 assessment framework provides powerful tools for creating pedagogically sound assessments with built-in analytics and accessibility support.
 
 #### Assessment Types
 
@@ -119,9 +119,9 @@ The v0.2.0 assessment framework provides powerful tools for creating pedagogical
 - **Set Appropriate Scoring:** Configure `scoring` with proper point values, attempt limits, and penalty structures
 - **Include Helpful Hints:** Use the `hints` array in feedback to provide progressive scaffolding
 
-### b. Accessibility Best Practices (Enhanced in v0.2.0)
+### b. Accessibility Best Practices (Enhanced in v0.3.0)
 
-The v0.2.0 accessibility framework ensures WCAG 2.1 AA compliance and universal design principles.
+The v0.3.0 accessibility framework ensures WCAG 2.1 AA compliance and universal design principles.
 
 #### Language and Internationalization
 ```json
@@ -152,7 +152,7 @@ The v0.2.0 accessibility framework ensures WCAG 2.1 AA compliance and universal 
 - **Support Cognitive Accessibility:** Include `cognitiveSupport` metadata with reading levels and complexity indicators
 - **Enable Skip Navigation:** Use `SkipNavigationContent` blocks for keyboard accessibility (WCAG 2.4.1)
 
-### c. LTI 1.3 Integration (New in v0.2.0)
+### c. LTI 1.3 Integration (Enhanced in v0.3.0)
 
 The LTI 1.3 framework enables seamless integration with Learning Management Systems.
 
@@ -183,7 +183,7 @@ The LTI 1.3 framework enables seamless integration with Learning Management Syst
 - **Set Appropriate Permissions:** Configure NRPS (Names and Role Provisioning Services) for proper user management
 - **Test Across Platforms:** Validate integration with major LMS platforms (Canvas, Blackboard, Moodle)
 
-### d. Rights Management (New in v0.2.0)
+### d. Rights Management (Enhanced in v0.3.0)
 
 The comprehensive rights framework supports commercial publishing and academic integrity.
 
@@ -210,7 +210,7 @@ The comprehensive rights framework supports commercial publishing and academic i
 }
 ```
 
-### e. Content Pathways (Enhanced in v0.2.0)
+### e. Content Pathways (Enhanced in v0.3.0)
 
 Pathways now support assessment-based branching for adaptive learning.
 
