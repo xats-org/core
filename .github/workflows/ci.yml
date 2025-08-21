@@ -335,10 +335,10 @@ jobs:
       
     - name: Run integration tests
       run: |
-        if [ -d "tests/integration" ]; then
+        if [ -d "tests/integration" ] && [ "$(find tests/integration -name '*.test.ts' -o -name '*.spec.ts' 2>/dev/null | head -1)" ]; then
           pnpm run test:integration
         else
-          echo "Integration tests directory not found, skipping"
+          echo "No integration test files found, skipping"
         fi
       
     - name: Test package linking
