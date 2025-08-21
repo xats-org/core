@@ -1,0 +1,72 @@
+{
+  "name": "@xats-org/renderer-markdown",
+  "version": "0.5.0",
+  "description": "Markdown bidirectional renderer for xats documents for documentation workflows",
+  "keywords": [
+    "xats",
+    "renderer",
+    "markdown",
+    "md",
+    "documentation",
+    "simple",
+    "bidirectional"
+  ],
+  "homepage": "https://xats.org",
+  "bugs": {
+    "url": "https://github.com/xats-org/core/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xats-org/core.git",
+    "directory": "packages/renderer-markdown"
+  },
+  "license": "CC-BY-SA-4.0",
+  "author": "xats Contributors",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist .tsbuildinfo",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@xats-org/types": "workspace:*",
+    "@xats-org/utils": "workspace:*",
+    "@xats-org/testing": "workspace:*",
+    "remark": "^15.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-stringify": "^11.0.0",
+    "unified": "^11.0.0",
+    "mdast-util-to-markdown": "^2.0.0",
+    "mdast-util-from-markdown": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@vitest/coverage-v8": "^1.2.0",
+    "eslint": "^8.56.0",
+    "@xats-org/eslint-config": "workspace:*",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,5 +1,8 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import { join, dirname } from 'path';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -29,6 +32,7 @@ const config: StorybookConfig = {
     autodocs: 'tag',
   },
   viteFinal: async (config) => {
+    const __dirname = dirname(new URL(import.meta.url).pathname);
     // Customize the Vite config for Storybook
     return {
       ...config,
