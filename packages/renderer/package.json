@@ -18,7 +18,7 @@
     "url": "git+https://github.com/xats-org/core.git",
     "directory": "packages/renderer"
   },
-  "license": "MIT",
+  "license": "CC-BY-SA-4.0",
   "author": "xats Contributors",
   "type": "module",
   "exports": {
