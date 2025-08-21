@@ -3,6 +3,7 @@
  */
 
 import * as axe from 'axe-core';
+import { JSDOM } from 'jsdom';
 import type {
   WcagCompliance,
   WcagResult,
@@ -100,16 +101,9 @@ export class WcagTester implements WcagCompliance {
    * Create a test DOM environment from HTML content
    */
   private createTestEnvironment(content: string): Document {
-    // For Node.js environment, we'd typically use jsdom
-    // This is a simplified implementation
-    if (typeof window !== 'undefined' && window.document) {
-      // Browser environment
-      const parser = new DOMParser();
-      return parser.parseFromString(content, 'text/html');
-    } else {
-      // Node.js environment - would need jsdom
-      throw new Error('DOM environment required for WCAG testing');
-    }
+    // Use jsdom to create a DOM environment in Node.js
+    const dom = new JSDOM(content);
+    return dom.window.document;
   }
 
   /**
