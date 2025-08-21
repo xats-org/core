@@ -1,6 +1,6 @@
 {
   "name": "@xats/cli",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Command-line interface for xats document validation and processing",
   "keywords": [
     "xats",

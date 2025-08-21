@@ -1,6 +1,6 @@
 {
   "name": "@xats/schema",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "JSON Schema definitions for the Extensible Academic Textbook Schema",
   "type": "module",
   "main": "./dist/index.js",
