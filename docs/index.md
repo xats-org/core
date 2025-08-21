@@ -9,9 +9,16 @@ Welcome to the comprehensive documentation for the **Extensible Academic Textboo
 - [Architecture Overview](ARCHITECTURE.md) - Understand the design principles
 - [Authoring Guide](guides/authoring-guide.md) - Create your first xats document
 
-## Current Version: v0.3.0
+## Current Version: v0.4.0 (Development)
 
-**Latest Features:**
+**v0.4.0 Features (In Development):**
+- Modern monorepo infrastructure with Turborepo
+- TypeScript-first development with shared configurations
+- Comprehensive testing with Vitest
+- Component documentation with Storybook
+- Improved developer experience with standardized tooling
+
+**v0.3.0 Features (Stable):**
 - File modularity for large textbook organization
 - Enhanced internationalization with language and RTL support
 - Advanced indexing with IndexRun type

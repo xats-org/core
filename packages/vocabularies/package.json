@@ -31,7 +31,7 @@
     "education"
   ],
   "author": "xats.org",
-  "license": "MIT",
+  "license": "CC-BY-SA-4.0",
   "dependencies": {
     "@xats/types": "workspace:*"
   },
