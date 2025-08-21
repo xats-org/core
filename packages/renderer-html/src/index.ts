@@ -1,12 +1,15 @@
 /**
  * @xats-org/renderer-html - HTML5 Bidirectional Renderer
- * 
+ *
  * Provides bidirectional conversion between xats documents and HTML5
  * with full WCAG 2.1 AA accessibility compliance.
  */
 
-import { JSDOM } from 'jsdom';
 import DOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
+
+import { RoundTripTester, WcagTester } from '@xats-org/testing';
+
 import type {
   XatsDocument,
   BidirectionalRenderer,
@@ -21,8 +24,8 @@ import type {
   FormatValidationWarning,
   FormatMetadata,
   WcagCompliance,
+  RenderAsset,
 } from '@xats-org/types';
-import { RoundTripTester, WcagTester } from '@xats-org/testing';
 
 /**
  * HTML-specific renderer options
@@ -30,22 +33,22 @@ import { RoundTripTester, WcagTester } from '@xats-org/testing';
 export interface HtmlRendererOptions extends RendererOptions {
   /** Include DOCTYPE and full HTML document structure */
   wrapInDocument?: boolean;
-  
+
   /** Include default CSS styles */
   includeStyles?: boolean;
-  
+
   /** Custom CSS styles to include */
   customStyles?: string;
-  
+
   /** Language code for html lang attribute */
   language?: string;
-  
+
   /** Enable semantic HTML5 elements */
   semantic?: boolean;
-  
+
   /** Include ARIA attributes for accessibility */
   includeAria?: boolean;
-  
+
   /** Sanitize output HTML */
   sanitize?: boolean;
 }
@@ -56,7 +59,7 @@ export interface HtmlRendererOptions extends RendererOptions {
 export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>, WcagCompliance {
   readonly format = 'html' as const;
   readonly wcagLevel = 'AA' as const;
-  
+
   private options: Required<HtmlRendererOptions>;
   private roundTripTester: RoundTripTester;
   private wcagTester: WcagTester;
@@ -77,7 +80,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       customStyles: '',
       baseUrl: '',
       fragmentOnly: false,
-      
+
       // HTML-specific options
       wrapInDocument: true,
       includeStyles: true,
@@ -85,7 +88,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       semantic: true,
       includeAria: true,
       sanitize: true,
-      
+
       ...options,
     };
 
@@ -96,20 +99,19 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Render xats document to HTML5
    */
-  async render(document: XatsDocument, options?: HtmlRendererOptions): Promise<RenderResult> {
+  render(document: XatsDocument, options?: HtmlRendererOptions): RenderResult {
     const startTime = performance.now();
     const renderOptions = { ...this.options, ...options };
-    
+
     try {
       // Generate HTML content
       const content = this.renderDocument(document, renderOptions);
-      
+
       // Sanitize if requested
-      const finalContent = renderOptions.sanitize ? 
-        this.sanitizeHtml(content) : content;
-      
+      const finalContent = renderOptions.sanitize ? this.sanitizeHtml(content) : content;
+
       const renderTime = performance.now() - startTime;
-      
+
       return {
         content: finalContent,
         metadata: {
@@ -120,7 +122,6 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         assets: this.extractAssets(finalContent),
         errors: [],
       };
-      
     } catch (error) {
       return {
         content: '',
@@ -131,7 +132,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         errors: [
           {
             type: 'other',
-            message: `HTML render failed: ${error}`,
+            message: `HTML render failed: ${String(error)}`,
             recoverable: false,
           },
         ],
@@ -142,7 +143,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Parse HTML back to xats document
    */
-  async parse(content: string, options?: ParseOptions): Promise<ParseResult> {
+  parse(content: string, options?: ParseOptions): ParseResult {
     const startTime = performance.now();
     const parseOptions = {
       preserveMetadata: true,
@@ -157,12 +158,12 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       // Parse HTML using JSDOM
       const dom = new JSDOM(content);
       const document = dom.window.document;
-      
+
       // Extract xats document structure
-      const xatsDocument = await this.parseHtmlToXats(document, parseOptions);
-      
+      const xatsDocument = this.parseHtmlToXats(document, parseOptions);
+
       const parseTime = performance.now() - startTime;
-      
+
       return {
         document: xatsDocument,
         metadata: {
@@ -176,10 +177,9 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         errors: [],
         unmappedData: [],
       };
-      
     } catch (error) {
       const parseTime = performance.now() - startTime;
-      
+
       return {
         document: this.createEmptyDocument(),
         metadata: {
@@ -192,7 +192,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         errors: [
           {
             type: 'malformed-content',
-            message: `HTML parse failed: ${error}`,
+            message: `HTML parse failed: ${String(error)}`,
             fatal: true,
           },
         ],
@@ -204,8 +204,8 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
    * Test round-trip fidelity
    */
   async testRoundTrip(
-    document: XatsDocument, 
-    options?: RoundTripOptions
+    document: XatsDocument,
+    _options?: RoundTripOptions
   ): Promise<RoundTripResult> {
     return this.roundTripTester.testDocument(document);
   }
@@ -213,14 +213,14 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Validate HTML content
    */
-  async validate(content: string): Promise<FormatValidationResult> {
+  validate(content: string): FormatValidationResult {
     try {
       // Basic HTML validation using JSDOM
       const dom = new JSDOM(content);
       const document = dom.window.document;
-      
+
       const errors = this.validateHtmlStructure(document);
-      
+
       return {
         valid: errors.length === 0,
         errors,
@@ -231,14 +231,13 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
           validatedAt: new Date(),
         },
       };
-      
     } catch (error) {
       return {
         valid: false,
         errors: [
           {
             code: 'PARSE_ERROR',
-            message: `HTML validation failed: ${error}`,
+            message: `HTML validation failed: ${String(error)}`,
             severity: 'error' as const,
           },
         ],
@@ -250,11 +249,11 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Get HTML metadata
    */
-  async getMetadata(content: string): Promise<FormatMetadata> {
+  getMetadata(content: string): FormatMetadata {
     try {
       const dom = new JSDOM(content);
       const document = dom.window.document;
-      
+
       return {
         format: 'html',
         version: '5',
@@ -264,7 +263,6 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         elementCount: document.querySelectorAll('*').length,
         features: this.detectFeatures(document),
       };
-      
     } catch (error) {
       return {
         format: 'html',
@@ -288,24 +286,24 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   }
 
   // Private implementation methods
-  
+
   private renderDocument(document: XatsDocument, options: Required<HtmlRendererOptions>): string {
     // TODO: Implement full HTML rendering
     // This is a placeholder implementation
-    
+
     const parts: string[] = [];
-    
+
     if (options.wrapInDocument) {
       parts.push('<!DOCTYPE html>');
       parts.push(`<html lang="${options.language}">`);
       parts.push('<head>');
       parts.push('<meta charset="UTF-8">');
       parts.push('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
-      
+
       if (document.bibliographicEntry?.title) {
         parts.push(`<title>${this.escapeHtml(document.bibliographicEntry.title)}</title>`);
       }
-      
+
       if (options.includeStyles) {
         parts.push('<style>');
         parts.push(this.getDefaultStyles());
@@ -314,30 +312,27 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         }
         parts.push('</style>');
       }
-      
+
       parts.push('</head>');
       parts.push('<body>');
     }
-    
+
     parts.push('<main class="xats-document">');
     parts.push(`<!-- xats document content for schema version ${document.schemaVersion} -->`);
     parts.push('</main>');
-    
+
     if (options.wrapInDocument) {
       parts.push('</body>');
       parts.push('</html>');
     }
-    
+
     return parts.join('\\n');
   }
 
-  private async parseHtmlToXats(
-    document: Document, 
-    options: Required<ParseOptions>
-  ): Promise<XatsDocument> {
+  private parseHtmlToXats(_document: Document, _options: Required<ParseOptions>): XatsDocument {
     // TODO: Implement full HTML to xats parsing
     // This is a placeholder implementation
-    
+
     return this.createEmptyDocument();
   }
 
@@ -357,7 +352,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private validateHtmlStructure(document: Document): FormatValidationError[] {
     const errors: FormatValidationError[] = [];
-    
+
     // Check for basic HTML5 structure
     if (!document.doctype) {
       errors.push({
@@ -366,7 +361,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         severity: 'warning' as const,
       });
     }
-    
+
     // Check for required meta tags
     const charsetMeta = document.querySelector('meta[charset]');
     if (!charsetMeta) {
@@ -376,14 +371,14 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         severity: 'warning' as const,
       });
     }
-    
+
     return errors;
   }
 
   private sanitizeHtml(content: string): string {
     const dom = new JSDOM(content);
     const purify = DOMPurify(dom.window);
-    
+
     return purify.sanitize(content, {
       ALLOW_ARIA_ATTR: true,
       KEEP_CONTENT: true,
@@ -394,52 +389,52 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const assets: RenderAsset[] = [];
     const dom = new JSDOM(content);
     const document = dom.window.document;
-    
+
     // Extract stylesheets
-    document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+    document.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
       assets.push({
         type: 'stylesheet',
         url: (link as HTMLLinkElement).href,
       });
     });
-    
+
     // Extract scripts
-    document.querySelectorAll('script[src]').forEach(script => {
+    document.querySelectorAll('script[src]').forEach((script) => {
       assets.push({
         type: 'script',
         url: (script as HTMLScriptElement).src,
       });
     });
-    
+
     return assets;
   }
 
   private detectFeatures(document: Document): string[] {
     const features: string[] = [];
-    
+
     if (document.querySelector('[role]')) {
       features.push('aria');
     }
-    
+
     if (document.querySelector('nav')) {
       features.push('semantic-navigation');
     }
-    
+
     if (document.querySelector('main')) {
       features.push('semantic-main');
     }
-    
+
     if (document.querySelector('figure')) {
       features.push('semantic-figures');
     }
-    
+
     return features;
   }
 
   private countWords(content: string): number {
     // Remove HTML tags and count words
     const text = content.replace(/<[^>]*>/g, ' ');
-    return text.split(/\\s+/).filter(word => word.length > 0).length;
+    return text.split(/\\s+/).filter((word) => word.length > 0).length;
   }
 
   private escapeHtml(text: string): string {
@@ -498,15 +493,3 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     `;
   }
 }
-
-// Re-export types for convenience
-export type {
-  BidirectionalRenderer,
-  RenderResult,
-  ParseResult,
-  ValidationResult,
-  FormatMetadata,
-} from '@xats-org/types';
-
-// Import required types for internal use
-import type { RenderAsset, ValidationError } from '@xats-org/types';

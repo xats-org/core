@@ -2,11 +2,7 @@
  * Performance benchmarking system for renderer testing
  */
 
-import type {
-  XatsDocument,
-  BidirectionalRenderer,
-  RoundTripMetrics,
-} from '@xats-org/types';
+import type { XatsDocument, BidirectionalRenderer, RoundTripMetrics } from '@xats-org/types';
 
 /**
  * Performance benchmark result
@@ -84,8 +80,7 @@ export class PerformanceBenchmark {
     };
 
     // Check if garbage collection is available (Node.js with --expose-gc)
-    this.gcAvailable = typeof global !== 'undefined' && 
-                      typeof global.gc === 'function';
+    this.gcAvailable = typeof global !== 'undefined' && typeof global.gc === 'function';
   }
 
   /**
@@ -104,12 +99,12 @@ export class PerformanceBenchmark {
 
     for (const testCase of testCases) {
       console.log(`Running test case: ${testCase.name}`);
-      
+
       try {
         const result = await this.runBenchmarkTest(renderer, testCase);
         results.push(result);
         totalTime += result.metrics.totalTime;
-        
+
         if (result.success) {
           successCount++;
         } else {
@@ -140,7 +135,7 @@ export class PerformanceBenchmark {
         totalTime,
         averageThroughput: aggregateMetrics.metrics.throughput,
         averageMemoryUsage: aggregateMetrics.memoryUsage.averageUsage,
-        peakMemoryUsage: Math.max(...results.map(r => r.memoryUsage.peakUsage)),
+        peakMemoryUsage: Math.max(...results.map((r) => r.memoryUsage.peakUsage)),
       },
       testedAt: new Date(),
     };
@@ -163,22 +158,23 @@ export class PerformanceBenchmark {
 
     const startMemory = this.getMemoryUsage();
     const memoryReadings: number[] = [startMemory];
-    let gcCollections = 0;
+    const gcCollections = 0;
 
     // Performance measurement setup
     const renderTimes: number[] = [];
     const parseTimes: number[] = [];
     const validationTimes: number[] = [];
-    
+
     let iterations = 0;
     let errors = 0;
     const startTime = performance.now();
 
     // Memory monitoring interval
-    const memoryInterval = this.config.memoryProfiling ? 
-      setInterval(() => {
-        memoryReadings.push(this.getMemoryUsage());
-      }, 100) : null;
+    const memoryInterval = this.config.memoryProfiling
+      ? setInterval(() => {
+          memoryReadings.push(this.getMemoryUsage());
+        }, 100)
+      : null;
 
     try {
       // Run test iterations
@@ -211,13 +207,13 @@ export class PerformanceBenchmark {
             console.warn(`Test case ${testCase.name} timed out after ${iterations} iterations`);
             break;
           }
-
         } catch (error) {
           errors++;
           console.warn(`Error in iteration ${iterations}: ${error}`);
-          
+
           // Fail if too many errors
-          if (errors > testCase.iterations * 0.1) { // 10% error rate
+          if (errors > testCase.iterations * 0.1) {
+            // 10% error rate
             throw new Error(`Too many errors in test case: ${testCase.name}`);
           }
         }
@@ -258,7 +254,6 @@ export class PerformanceBenchmark {
         memoryUsage,
         success,
       };
-
     } finally {
       if (memoryInterval) {
         clearInterval(memoryInterval);
@@ -269,7 +264,10 @@ export class PerformanceBenchmark {
   /**
    * Warmup phase to stabilize JIT compilation
    */
-  private async warmup(renderer: BidirectionalRenderer, testCase: BenchmarkTestCase): Promise<void> {
+  private async warmup(
+    renderer: BidirectionalRenderer,
+    testCase: BenchmarkTestCase
+  ): Promise<void> {
     for (let i = 0; i < this.config.warmupIterations; i++) {
       try {
         const renderResult = await renderer.render(testCase.document);
@@ -332,8 +330,8 @@ export class PerformanceBenchmark {
    * Aggregate results from multiple test cases
    */
   private aggregateResults(results: BenchmarkResult[]): BenchmarkResult {
-    const successfulResults = results.filter(r => r.success);
-    
+    const successfulResults = results.filter((r) => r.success);
+
     if (successfulResults.length === 0) {
       return {
         renderer: 'aggregate',
@@ -345,19 +343,19 @@ export class PerformanceBenchmark {
     }
 
     const metrics: PerformanceMetrics = {
-      renderTime: this.average(successfulResults.map(r => r.metrics.renderTime)),
-      parseTime: this.average(successfulResults.map(r => r.metrics.parseTime)),
-      roundTripTime: this.average(successfulResults.map(r => r.metrics.roundTripTime)),
-      validationTime: this.average(successfulResults.map(r => r.metrics.validationTime)),
-      totalTime: this.average(successfulResults.map(r => r.metrics.totalTime)),
-      throughput: this.average(successfulResults.map(r => r.metrics.throughput)),
+      renderTime: this.average(successfulResults.map((r) => r.metrics.renderTime)),
+      parseTime: this.average(successfulResults.map((r) => r.metrics.parseTime)),
+      roundTripTime: this.average(successfulResults.map((r) => r.metrics.roundTripTime)),
+      validationTime: this.average(successfulResults.map((r) => r.metrics.validationTime)),
+      totalTime: this.average(successfulResults.map((r) => r.metrics.totalTime)),
+      throughput: this.average(successfulResults.map((r) => r.metrics.throughput)),
     };
 
     const memoryUsage: MemoryMetrics = {
-      peakUsage: Math.max(...successfulResults.map(r => r.memoryUsage.peakUsage)),
-      averageUsage: this.average(successfulResults.map(r => r.memoryUsage.averageUsage)),
-      gcCollections: Math.max(...successfulResults.map(r => r.memoryUsage.gcCollections)),
-      memoryLeaks: successfulResults.some(r => r.memoryUsage.memoryLeaks),
+      peakUsage: Math.max(...successfulResults.map((r) => r.memoryUsage.peakUsage)),
+      averageUsage: this.average(successfulResults.map((r) => r.memoryUsage.averageUsage)),
+      gcCollections: Math.max(...successfulResults.map((r) => r.memoryUsage.gcCollections)),
+      memoryLeaks: successfulResults.some((r) => r.memoryUsage.memoryLeaks),
     };
 
     return {

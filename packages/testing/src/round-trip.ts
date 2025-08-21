@@ -3,6 +3,7 @@
  */
 
 import * as deepDiff from 'deep-diff';
+
 import type {
   XatsDocument,
   BidirectionalRenderer,
@@ -148,7 +149,7 @@ export class RoundTripTester {
    */
   private compareDocuments(original: XatsDocument, roundTrip: XatsDocument): DocumentDifference[] {
     const differences: DocumentDifference[] = [];
-    
+
     // Normalize documents for comparison if needed
     const normalizedOriginal = this.normalizeDocument(original);
     const normalizedRoundTrip = this.normalizeDocument(roundTrip);
@@ -158,7 +159,7 @@ export class RoundTripTester {
 
     for (const diff of diffs) {
       const path = this.getDiffPath(diff);
-      
+
       // Skip ignored elements
       if (this.shouldIgnorePath(path)) {
         continue;
@@ -260,7 +261,7 @@ export class RoundTripTester {
    * Check if a path should be ignored during comparison
    */
   private shouldIgnorePath(path: string): boolean {
-    return (this.options.ignoreElements ?? []).some(ignored => path.includes(ignored));
+    return (this.options.ignoreElements ?? []).some((ignored) => path.includes(ignored));
   }
 
   /**
@@ -268,18 +269,26 @@ export class RoundTripTester {
    */
   private mapDiffType(kind: string): DocumentDifference['type'] {
     switch (kind) {
-      case 'D': return 'missing';
-      case 'N': return 'added';
-      case 'E': return 'changed';
-      case 'A': return 'changed'; // Array changes
-      default: return 'changed';
+      case 'D':
+        return 'missing';
+      case 'N':
+        return 'added';
+      case 'E':
+        return 'changed';
+      case 'A':
+        return 'changed'; // Array changes
+      default:
+        return 'changed';
     }
   }
 
   /**
    * Assess the impact of a difference
    */
-  private assessImpact(path: string, diff: deepDiff.Diff<unknown, unknown>): DocumentDifference['impact'] {
+  private assessImpact(
+    path: string,
+    diff: deepDiff.Diff<unknown, unknown>
+  ): DocumentDifference['impact'] {
     // Critical: Missing core document structure
     if (path.includes('schemaVersion') || path.includes('bibliographicEntry.title')) {
       return 'critical';

@@ -58,7 +58,15 @@ export interface CssClasses {
 /**
  * Rendered output format
  */
-export type RenderFormat = 'html' | 'pdf' | 'epub' | 'latex' | 'markdown' | 'json' | 'docx' | 'rmarkdown';
+export type RenderFormat =
+  | 'html'
+  | 'pdf'
+  | 'epub'
+  | 'latex'
+  | 'markdown'
+  | 'json'
+  | 'docx'
+  | 'rmarkdown';
 
 /**
  * Rendering context for tracking state during rendering
@@ -126,22 +134,22 @@ export interface RenderError {
 export interface BidirectionalRenderer<TOptions extends RendererOptions = RendererOptions> {
   /** Renderer format identifier */
   readonly format: RenderFormat;
-  
+
   /** WCAG compliance level supported by this renderer */
   readonly wcagLevel: 'A' | 'AA' | 'AAA' | null;
-  
+
   /** Render xats document to target format */
   render(document: XatsDocument, options?: TOptions): Promise<RenderResult>;
-  
+
   /** Parse document from target format back to xats */
   parse(content: string, options?: ParseOptions): Promise<ParseResult>;
-  
+
   /** Test round-trip fidelity between render and parse */
   testRoundTrip(document: XatsDocument, options?: RoundTripOptions): Promise<RoundTripResult>;
-  
+
   /** Validate format-specific content */
   validate(content: string): Promise<FormatValidationResult>;
-  
+
   /** Get format-specific metadata */
   getMetadata?(content: string): Promise<FormatMetadata>;
 }
@@ -152,16 +160,16 @@ export interface BidirectionalRenderer<TOptions extends RendererOptions = Render
 export interface ParseOptions {
   /** Preserve format-specific metadata in extensions */
   preserveMetadata?: boolean;
-  
+
   /** Strict parsing mode - fail on any ambiguity */
   strictMode?: boolean;
-  
+
   /** Custom parsing rules for specific elements */
   customParsers?: Record<string, (content: string) => unknown>;
-  
+
   /** Base URL for resolving relative links */
   baseUrl?: string;
-  
+
   /** Character encoding (defaults to UTF-8) */
   encoding?: string;
 }
@@ -172,16 +180,16 @@ export interface ParseOptions {
 export interface ParseResult {
   /** Parsed xats document */
   document: XatsDocument;
-  
+
   /** Metadata about the parsing process */
   metadata?: ParseMetadata;
-  
+
   /** Warnings encountered during parsing */
   warnings?: ParseWarning[];
-  
+
   /** Errors encountered during parsing */
   errors?: ParseError[];
-  
+
   /** Format-specific data that couldn't be mapped */
   unmappedData?: UnmappedData[];
 }
@@ -192,16 +200,16 @@ export interface ParseResult {
 export interface ParseMetadata {
   /** Source format that was parsed */
   sourceFormat: string;
-  
+
   /** Time taken to parse */
   parseTime: number;
-  
+
   /** Number of elements successfully mapped */
   mappedElements: number;
-  
+
   /** Number of elements that couldn't be mapped */
   unmappedElements: number;
-  
+
   /** Fidelity score (0-1) indicating how well content was preserved */
   fidelityScore: number;
 }
@@ -242,10 +250,10 @@ export interface UnmappedData {
 export interface RoundTripOptions extends RendererOptions, ParseOptions {
   /** Acceptable fidelity threshold (0-1) */
   fidelityThreshold?: number;
-  
+
   /** Compare semantic meaning rather than exact structure */
   semanticComparison?: boolean;
-  
+
   /** Elements to ignore during comparison */
   ignoreElements?: string[];
 }
@@ -256,19 +264,19 @@ export interface RoundTripOptions extends RendererOptions, ParseOptions {
 export interface RoundTripResult {
   /** Whether round-trip passed fidelity threshold */
   success: boolean;
-  
+
   /** Fidelity score (0-1) */
   fidelityScore: number;
-  
+
   /** Original document */
   original: XatsDocument;
-  
+
   /** Document after round-trip conversion */
   roundTrip: XatsDocument;
-  
+
   /** Differences found between documents */
   differences: DocumentDifference[];
-  
+
   /** Performance metrics */
   metrics: RoundTripMetrics;
 }
@@ -352,7 +360,7 @@ export interface FormatMetadata {
 export interface WcagCompliance {
   /** Test WCAG compliance level */
   testCompliance(content: string, level: 'A' | 'AA' | 'AAA'): Promise<WcagResult>;
-  
+
   /** Get accessibility audit report */
   auditAccessibility(content: string): Promise<AccessibilityAudit>;
 }
@@ -421,26 +429,26 @@ export interface AccessibilityRecommendation {
 export interface RendererPlugin<TRenderer extends BidirectionalRenderer = BidirectionalRenderer> {
   /** Plugin identifier */
   readonly id: string;
-  
+
   /** Plugin name */
   readonly name: string;
-  
+
   /** Plugin version */
   readonly version: string;
-  
+
   /** Compatible renderer formats */
   readonly compatibleFormats: RenderFormat[];
-  
+
   /** Initialize plugin with renderer instance */
   initialize(renderer: TRenderer): Promise<void>;
-  
+
   /** Cleanup plugin resources */
   cleanup?(): Promise<void>;
-  
+
   /** Extend rendering process */
   beforeRender?(document: XatsDocument, options: RendererOptions): Promise<void>;
   afterRender?(result: RenderResult): Promise<RenderResult>;
-  
+
   /** Extend parsing process */
   beforeParse?(content: string, options: ParseOptions): Promise<string>;
   afterParse?(result: ParseResult): Promise<ParseResult>;
@@ -452,16 +460,16 @@ export interface RendererPlugin<TRenderer extends BidirectionalRenderer = Bidire
 export interface PluginRegistry {
   /** Register a new plugin */
   register<T extends BidirectionalRenderer>(plugin: RendererPlugin<T>): Promise<void>;
-  
+
   /** Unregister a plugin */
   unregister(pluginId: string): Promise<void>;
-  
+
   /** Get registered plugin by ID */
   getPlugin(pluginId: string): RendererPlugin | undefined;
-  
+
   /** List all registered plugins */
   listPlugins(): RendererPlugin[];
-  
+
   /** Find plugins compatible with a format */
   findCompatiblePlugins(format: RenderFormat): RendererPlugin[];
 }
@@ -472,16 +480,16 @@ export interface PluginRegistry {
 export interface RendererFactory {
   /** Create a renderer for the specified format */
   createRenderer<T extends BidirectionalRenderer>(format: RenderFormat): Promise<T>;
-  
+
   /** Get available renderer formats */
   getAvailableFormats(): RenderFormat[];
-  
+
   /** Check if a format is supported */
   supportsFormat(format: RenderFormat): boolean;
-  
+
   /** Register a new renderer implementation */
   registerRenderer<T extends BidirectionalRenderer>(
-    format: RenderFormat, 
+    format: RenderFormat,
     rendererClass: new (...args: unknown[]) => T
   ): void;
 }

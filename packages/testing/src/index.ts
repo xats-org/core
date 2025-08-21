@@ -15,10 +15,7 @@ export {
 } from './round-trip.js';
 
 // WCAG compliance testing
-export {
-  WcagTester,
-  WcagTestFactory,
-} from './wcag.js';
+export { WcagTester, WcagTestFactory } from './wcag.js';
 
 // Performance benchmarking
 export {
@@ -51,10 +48,7 @@ export class RendererTestSuite {
   private wcagTester: WcagTester;
   private benchmark: PerformanceBenchmark;
 
-  constructor(
-    renderer: BidirectionalRenderer,
-    options: RendererTestSuiteOptions = {}
-  ) {
+  constructor(renderer: BidirectionalRenderer, options: RendererTestSuiteOptions = {}) {
     this.roundTripTester = new RoundTripTester(renderer, options.roundTrip);
     this.wcagTester = new WcagTester(options.wcag);
     this.benchmark = new PerformanceBenchmark(options.benchmark);
@@ -76,7 +70,7 @@ export class RendererTestSuite {
     // Run WCAG compliance tests on rendered content
     console.log('Running WCAG compliance tests...');
     const wcagResults: WcagSuiteResult[] = [];
-    
+
     for (const document of documents) {
       const renderResult = await this.roundTripTester['renderer'].render(document);
       const wcagResult = await this.wcagTester.auditAccessibility(renderResult.content);
@@ -112,9 +106,9 @@ export class RendererTestSuite {
         totalDocuments: documents.length,
         roundTripPassRate: roundTripResults.summary.passCount / roundTripResults.summary.totalTests,
         wcagComplianceRate: this.calculateWcagComplianceRate(wcagResults),
-        benchmarkPassRate: benchmarkResults ? 
-          benchmarkResults.summary.successCount / benchmarkResults.summary.totalTests : 
-          null,
+        benchmarkPassRate: benchmarkResults
+          ? benchmarkResults.summary.successCount / benchmarkResults.summary.totalTests
+          : null,
       },
       testedAt: new Date(),
     };
@@ -125,8 +119,8 @@ export class RendererTestSuite {
    */
   private calculateWcagComplianceRate(wcagResults: WcagSuiteResult[]): number {
     if (wcagResults.length === 0) return 0;
-    
-    const compliantCount = wcagResults.filter(r => r.audit.compliant).length;
+
+    const compliantCount = wcagResults.filter((r) => r.audit.compliant).length;
     return compliantCount / wcagResults.length;
   }
 
@@ -140,13 +134,13 @@ export class RendererTestSuite {
   ): boolean {
     // Round-trip tests must have > 80% pass rate
     const roundTripPass = roundTrip.summary.passCount / roundTrip.summary.totalTests > 0.8;
-    
+
     // WCAG tests must have > 90% compliance rate
     const wcagPass = this.calculateWcagComplianceRate(wcag) > 0.9;
-    
+
     // Benchmark tests must have > 80% pass rate (if run)
-    const benchmarkPass = !benchmark || 
-      (benchmark.summary.successCount / benchmark.summary.totalTests > 0.8);
+    const benchmarkPass =
+      !benchmark || benchmark.summary.successCount / benchmark.summary.totalTests > 0.8;
 
     return roundTripPass && wcagPass && benchmarkPass;
   }
@@ -192,12 +186,20 @@ export interface SuiteSummary {
 }
 
 // Import required types
-import type { XatsDocument, RoundTripOptions } from '@xats-org/types';
-import type { BenchmarkTestCase, BenchmarkSuiteConfig, BenchmarkSuiteResult } from './benchmarks.js';
-import type { RoundTripTestSuite } from './round-trip.js';
-import type { AccessibilityAudit } from '@xats-org/types';
-import type { BidirectionalRenderer } from '@xats-org/types';
+import { PerformanceBenchmark } from './benchmarks.js';
 import { RoundTripTester } from './round-trip.js';
 import { WcagTester } from './wcag.js';
-import { PerformanceBenchmark } from './benchmarks.js';
-import * as axe from 'axe-core';
+
+import type {
+  BenchmarkTestCase,
+  BenchmarkSuiteConfig,
+  BenchmarkSuiteResult,
+} from './benchmarks.js';
+import type { RoundTripTestSuite } from './round-trip.js';
+import type {
+  XatsDocument,
+  RoundTripOptions,
+  AccessibilityAudit,
+  BidirectionalRenderer,
+} from '@xats-org/types';
+import type * as axe from 'axe-core';

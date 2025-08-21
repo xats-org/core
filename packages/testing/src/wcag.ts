@@ -4,6 +4,7 @@
 
 import * as axe from 'axe-core';
 import { JSDOM } from 'jsdom';
+
 import type {
   WcagCompliance,
   WcagResult,
@@ -35,18 +36,18 @@ export class WcagTester implements WcagCompliance {
     try {
       // Create a DOM environment for testing
       const dom = this.createTestEnvironment(content);
-      
+
       // Configure axe for the specified WCAG level
       const config = this.getWcagConfig(level);
-      
+
       // Run axe analysis
       const results = await this.runAxeAnalysis(dom, config);
-      
+
       // Convert results to our format
       const violations = this.convertViolations(results.violations, level);
       const warnings = this.convertWarnings(results.incomplete, level);
       const score = this.calculateComplianceScore(violations, warnings);
-      
+
       return {
         level,
         compliant: violations.length === 0,
@@ -111,11 +112,11 @@ export class WcagTester implements WcagCompliance {
    */
   private getWcagConfig(level: 'A' | 'AA' | 'AAA'): axe.RunOptions {
     const tags = ['wcag2a'];
-    
+
     if (level === 'AA' || level === 'AAA') {
       tags.push('wcag2aa');
     }
-    
+
     if (level === 'AAA') {
       tags.push('wcag2aaa');
     }
@@ -153,10 +154,7 @@ export class WcagTester implements WcagCompliance {
   /**
    * Convert axe violations to our format
    */
-  private convertViolations(
-    violations: axe.Result[],
-    level: 'A' | 'AA' | 'AAA'
-  ): WcagViolation[] {
+  private convertViolations(violations: axe.Result[], level: 'A' | 'AA' | 'AAA'): WcagViolation[] {
     return violations.map((violation) => ({
       criterion: this.extractCriterion(violation.id),
       level,
@@ -170,10 +168,7 @@ export class WcagTester implements WcagCompliance {
   /**
    * Convert axe incomplete results to warnings
    */
-  private convertWarnings(
-    incomplete: axe.Result[],
-    level: 'A' | 'AA' | 'AAA'
-  ): WcagWarning[] {
+  private convertWarnings(incomplete: axe.Result[], level: 'A' | 'AA' | 'AAA'): WcagWarning[] {
     return incomplete.map((item) => ({
       criterion: this.extractCriterion(item.id),
       level,
@@ -191,12 +186,12 @@ export class WcagTester implements WcagCompliance {
     const criteriaMap: Record<string, string> = {
       'color-contrast': '1.4.3',
       'image-alt': '1.1.1',
-      'keyboard': '2.1.1',
+      keyboard: '2.1.1',
       'focus-order': '2.4.3',
       'heading-order': '1.3.1',
-      'label': '3.3.2',
+      label: '3.3.2',
       'link-name': '2.4.4',
-      'list': '1.3.1',
+      list: '1.3.1',
       'page-has-heading-one': '1.3.1',
       'skip-link': '2.4.1',
     };
@@ -218,11 +213,16 @@ export class WcagTester implements WcagCompliance {
    */
   private mapImpact(impact?: string | null): WcagViolation['impact'] {
     switch (impact) {
-      case 'critical': return 'critical';
-      case 'serious': return 'serious';
-      case 'moderate': return 'moderate';
-      case 'minor': return 'minor';
-      default: return 'moderate';
+      case 'critical':
+        return 'critical';
+      case 'serious':
+        return 'serious';
+      case 'moderate':
+        return 'moderate';
+      case 'minor':
+        return 'minor';
+      default:
+        return 'moderate';
     }
   }
 
@@ -242,11 +242,11 @@ export class WcagTester implements WcagCompliance {
     };
 
     let totalPenalty = 0;
-    
+
     for (const violation of violations) {
       totalPenalty += violationPenalties[violation.impact];
     }
-    
+
     // Warnings count as minor penalties
     totalPenalty += warnings.length * 2;
 
@@ -264,11 +264,7 @@ export class WcagTester implements WcagCompliance {
     const recommendations: AccessibilityRecommendation[] = [];
 
     // Process violations from all levels
-    const allViolations = [
-      ...levelA.violations,
-      ...levelAA.violations,
-      ...levelAAA.violations,
-    ];
+    const allViolations = [...levelA.violations, ...levelAA.violations, ...levelAAA.violations];
 
     // Group by category and generate recommendations
     const categoryViolations = this.groupViolationsByCategory(allViolations);
@@ -311,7 +307,7 @@ export class WcagTester implements WcagCompliance {
    */
   private categorizeViolation(violation: WcagViolation): AccessibilityRecommendation['category'] {
     const criterion = violation.criterion;
-    
+
     if (criterion.startsWith('1.1') || criterion.startsWith('1.3')) {
       return 'content';
     }
@@ -324,7 +320,7 @@ export class WcagTester implements WcagCompliance {
     if (criterion.startsWith('1.4')) {
       return 'visual';
     }
-    
+
     return 'structure';
   }
 
@@ -335,7 +331,9 @@ export class WcagTester implements WcagCompliance {
     category: AccessibilityRecommendation['category'],
     violations: WcagViolation[]
   ): AccessibilityRecommendation {
-    const highPriorityCount = violations.filter(v => v.impact === 'critical' || v.impact === 'serious').length;
+    const highPriorityCount = violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious'
+    ).length;
     const priority = highPriorityCount > 0 ? 'high' : violations.length > 3 ? 'medium' : 'low';
 
     const categoryDescriptions = {
@@ -359,7 +357,7 @@ export class WcagTester implements WcagCompliance {
       category,
       description: categoryDescriptions[category],
       implementation: categoryImplementations[category],
-      wcagCriteria: [...new Set(violations.map(v => v.criterion))],
+      wcagCriteria: [...new Set(violations.map((v) => v.criterion))],
     };
   }
 }
