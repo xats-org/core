@@ -1,5 +1,5 @@
 /**
- * @xats/validator - xats Document Validator
+ * @xats-org/validator - xats Document Validator
  *
  * Provides validation capabilities for xats documents against the JSON Schema.
  */
@@ -7,7 +7,7 @@
 import Ajv, { type ValidateFunction, type ErrorObject } from 'ajv';
 import addFormats from 'ajv-formats';
 
-import { loadSchema, getSchemaId, isVersionAvailable, LATEST_VERSION } from '@xats/schema';
+import { loadSchema, getSchemaId, isVersionAvailable, LATEST_VERSION } from '@xats-org/schema';
 
 import type {
   ValidationResult,
@@ -15,7 +15,7 @@ import type {
   ValidatorOptions,
   XatsDocument,
   XatsVersion,
-} from '@xats/types';
+} from '@xats-org/types';
 
 export class XatsValidator {
   private ajv: Ajv;
@@ -369,4 +369,4 @@ export type {
   ValidatorOptions,
   ValidationWarning,
   ValidationMetadata,
-} from '@xats/types';
+} from '@xats-org/types';

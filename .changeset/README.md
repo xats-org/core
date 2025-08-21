@@ -82,7 +82,7 @@ When changes with changesets are pushed to version branches, the GitHub Action w
 
 ## Package Linking
 
-All `@xats/*` packages are linked, meaning they'll be versioned together when any of them change.
+All `@xats-org/*` packages are linked, meaning they'll be versioned together when any of them change.
 
 ## Questions?
 

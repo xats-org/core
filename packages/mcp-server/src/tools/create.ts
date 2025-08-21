@@ -1,11 +1,11 @@
 /**
- * @xats/mcp-server - Create Tool Implementation
+ * @xats-org/mcp-server - Create Tool Implementation
  */
 
 import { McpError } from '../types.js';
 
 import type { CreateInput, CreateResult, McpServerConfig } from '../types.js';
-import type { XatsDocument } from '@xats/types';
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * Generate a unique ID for xats objects

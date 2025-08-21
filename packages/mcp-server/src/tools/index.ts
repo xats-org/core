@@ -1,5 +1,5 @@
 /**
- * @xats/mcp-server - Tools Index
+ * @xats-org/mcp-server - Tools Index
  *
  * Exports all MCP tools and utilities
  */

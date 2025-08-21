@@ -1,4 +1,4 @@
-# @xats/prettier-config
+# @xats-org/prettier-config
 
 Shared Prettier configuration for the xats monorepo.
 
@@ -7,14 +7,14 @@ Shared Prettier configuration for the xats monorepo.
 Install the package:
 
 ```bash
-pnpm add -D @xats/prettier-config
+pnpm add -D @xats-org/prettier-config
 ```
 
 Reference it in your `package.json`:
 
 ```json
 {
-  "prettier": "@xats/prettier-config"
+  "prettier": "@xats-org/prettier-config"
 }
 ```
 
@@ -22,7 +22,7 @@ Or create a `.prettierrc.js` file:
 
 ```js
 module.exports = {
-  ...require('@xats/prettier-config'),
+  ...require('@xats-org/prettier-config'),
   // Your overrides
 };
 ```

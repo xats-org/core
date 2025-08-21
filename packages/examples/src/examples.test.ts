@@ -8,7 +8,7 @@ import { join } from 'path';
 
 import { describe, it, expect } from 'vitest';
 
-import { validateXatsSync } from '@xats/validator';
+import { validateXatsSync } from '@xats-org/validator';
 
 // Alias for backwards compatibility with test code
 const validateXatsFile = (content: unknown) => {

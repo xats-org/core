@@ -1,4 +1,4 @@
-import { extractPlainText } from '@xats/utils';
+import { extractPlainText } from '@xats-org/utils';
 
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
 import { BaseRenderer, type RendererOptions } from '../base-renderer.js';
@@ -15,7 +15,7 @@ import type {
   FrontMatter,
   BodyMatter,
   BackMatter,
-} from '@xats/types';
+} from '@xats-org/types';
 
 export interface TextRendererOptions extends RendererOptions {
   lineWidth?: number;

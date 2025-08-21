@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * @xats/mcp-server - Command Line Interface
+ * @xats-org/mcp-server - Command Line Interface
  */
 
 import { Command } from 'commander';

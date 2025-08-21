@@ -1,5 +1,5 @@
 {
-  "name": "@xats/vitest-config",
+  "name": "@xats-org/vitest-config",
   "version": "0.4.1",
   "description": "Shared Vitest configuration for xats monorepo",
   "type": "module",

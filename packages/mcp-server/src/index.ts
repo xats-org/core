@@ -1,5 +1,5 @@
 /**
- * @xats/mcp-server - Main Package Entry Point
+ * @xats-org/mcp-server - Main Package Entry Point
  */
 
 import { createServer } from './server.js';
@@ -86,7 +86,7 @@ export {
 
 // Version and metadata
 export const VERSION = '0.4.0';
-export const PACKAGE_NAME = '@xats/mcp-server';
+export const PACKAGE_NAME = '@xats-org/mcp-server';
 
 /**
  * Default configuration for the MCP server

@@ -7,7 +7,7 @@ import type {
   SemanticText,
   SemanticTextRun,
   StructuralContainer,
-} from '@xats/types';
+} from '@xats-org/types';
 
 /**
  * Base renderer options

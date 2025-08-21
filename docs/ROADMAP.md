@@ -144,16 +144,16 @@ Complete restructuring of the xats project as a modern TypeScript monorepo with 
 - **Changesets Integration:** Automated versioning and changelog generation for all packages
 
 **Phase 2: Core Package Migration (Weeks 3-4)**
-- **@xats/schema:** Core JSON Schema definitions with TypeScript type generation
-- **@xats/validator:** High-performance validation with detailed error reporting
-- **@xats/types:** Shared TypeScript definitions and interfaces
+- **@xats-org/schema:** Core JSON Schema definitions with TypeScript type generation
+- **@xats-org/validator:** High-performance validation with detailed error reporting
+- **@xats-org/types:** Shared TypeScript definitions and interfaces
 - **Build Pipelines:** Optimized build processes with Turborepo caching
 
 **Phase 3: Tool Development (Weeks 5-6)**
-- **@xats/cli:** Command-line interface for validation, conversion, and generation
-- **@xats/renderer:** Pluggable rendering framework for multiple output formats
-- **@xats/mcp-server:** Model Context Protocol server for AI integration
-- **@xats/utils:** Shared utilities and helper functions
+- **@xats-org/cli:** Command-line interface for validation, conversion, and generation
+- **@xats-org/renderer:** Pluggable rendering framework for multiple output formats
+- **@xats-org/mcp-server:** Model Context Protocol server for AI integration
+- **@xats-org/utils:** Shared utilities and helper functions
 
 **Phase 4: Documentation & Testing (Week 7)**
 - **Documentation Migration:** Updated docs reflecting monorepo structure
@@ -181,16 +181,16 @@ Modern tooling and workflows for optimal developer productivity.
 
 Modular, composable packages for flexible ecosystem growth.
 - **Core Packages:**
-  - `@xats/schema`: JSON Schema definitions
-  - `@xats/validator`: Validation logic
-  - `@xats/types`: TypeScript types
+  - `@xats-org/schema`: JSON Schema definitions
+  - `@xats-org/validator`: Validation logic
+  - `@xats-org/types`: TypeScript types
 - **Tool Packages:**
-  - `@xats/cli`: Command-line tools
-  - `@xats/renderer`: Rendering framework
-  - `@xats/mcp-server`: AI integration
+  - `@xats-org/cli`: Command-line tools
+  - `@xats-org/renderer`: Rendering framework
+  - `@xats-org/mcp-server`: AI integration
 - **Utility Packages:**
-  - `@xats/utils`: Common utilities
-  - `@xats/examples`: Example documents
+  - `@xats-org/utils`: Common utilities
+  - `@xats-org/examples`: Example documents
 - **Future Packages:** Foundation for ecosystem expansion
 
 ### v0.5.0 - Rendering, AI Integration & Extended Features (Target: 2026-09-30)

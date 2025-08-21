@@ -1,5 +1,5 @@
 {
-  "name": "@xats/renderer",
+  "name": "@xats-org/renderer",
   "version": "0.4.1",
   "description": "Rendering engine for xats documents to various output formats",
   "keywords": [
@@ -55,15 +55,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@xats/types": "workspace:*",
-    "@xats/utils": "workspace:*"
+    "@xats-org/types": "workspace:*",
+    "@xats-org/utils": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.0",
     "@vitest/coverage-v8": "^1.2.0",
     "eslint": "^8.56.0",
-    "@xats/eslint-config": "workspace:*",
+    "@xats-org/eslint-config": "workspace:*",
     "react": "^18.2.0",
     "typescript": "^5.3.3",
     "vitest": "^1.2.0"

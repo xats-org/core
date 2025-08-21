@@ -2,7 +2,7 @@
  * v0.3.0 Example Documents
  */
 
-import type { XatsDocument } from '@xats/types';
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * Document demonstrating v0.3.0 features

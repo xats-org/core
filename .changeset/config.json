@@ -9,7 +9,7 @@
   "commit": false,
   "fixed": [],
   "linked": [
-    ["@xats/*"]
+    ["@xats-org/*"]
   ],
   "access": "public",
   "baseBranch": "v0.4.0",

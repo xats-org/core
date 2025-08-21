@@ -58,7 +58,7 @@ Each publishable package has:
 
 ### Changesets Configuration
 Located in `.changeset/config.json`:
-- Linked packages: All `@xats/*` packages version together
+- Linked packages: All `@xats-org/*` packages version together
 - Access: Public
 - Base branch: `v0.4.0`
 
@@ -148,10 +148,10 @@ After publishing, verify your packages:
 
 ```bash
 # Check package on npm
-npm view @xats/schema
+npm view @xats-org/schema
 
 # Install in a test project
-npm install @xats/schema @xats/validator @xats/types
+npm install @xats-org/schema @xats-org/validator @xats-org/types
 ```
 
 ## 7. Troubleshooting

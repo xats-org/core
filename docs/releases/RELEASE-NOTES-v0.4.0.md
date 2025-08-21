@@ -15,16 +15,16 @@ We are excited to announce the release of xats v0.4.0, a major milestone that tr
 - **TypeScript**: Full type safety across all packages
 
 ### Package Ecosystem
-All packages are now published under the `@xats/*` scope on npm:
-- `@xats/schema` - Core JSON Schema definitions
-- `@xats/validator` - Validation logic and error reporting
-- `@xats/types` - Shared TypeScript types
-- `@xats/cli` - Command-line interface
-- `@xats/renderer` - Multi-format rendering engine
-- `@xats/mcp-server` - Model Context Protocol server
-- `@xats/utils` - Shared utilities
-- `@xats/examples` - Example documents
-- `@xats/vocabularies` - Vocabulary definitions
+All packages are now published under the `@xats-org/*` scope on npm:
+- `@xats-org/schema` - Core JSON Schema definitions
+- `@xats-org/validator` - Validation logic and error reporting
+- `@xats-org/types` - Shared TypeScript types
+- `@xats-org/cli` - Command-line interface
+- `@xats-org/renderer` - Multi-format rendering engine
+- `@xats-org/mcp-server` - Model Context Protocol server
+- `@xats-org/utils` - Shared utilities
+- `@xats-org/examples` - Example documents
+- `@xats-org/vocabularies` - Vocabulary definitions
 
 ### Developer Experience
 - **Storybook**: Interactive component documentation and testing
@@ -36,20 +36,20 @@ All packages are now published under the `@xats/*` scope on npm:
 
 ### npm
 ```bash
-npm install @xats/schema @xats/validator @xats/types
-npm install -g @xats/cli
+npm install @xats-org/schema @xats-org/validator @xats-org/types
+npm install -g @xats-org/cli
 ```
 
 ### pnpm
 ```bash
-pnpm add @xats/schema @xats/validator @xats/types
-pnpm add -g @xats/cli
+pnpm add @xats-org/schema @xats-org/validator @xats-org/types
+pnpm add -g @xats-org/cli
 ```
 
 ### yarn
 ```bash
-yarn add @xats/schema @xats/validator @xats/types
-yarn global add @xats/cli
+yarn add @xats-org/schema @xats-org/validator @xats-org/types
+yarn global add @xats-org/cli
 ```
 
 ## 🔄 Migration from v0.3.0
@@ -62,7 +62,7 @@ yarn global add @xats/cli
    import { validate } from 'xats-validator';
    
    // After (v0.4.0)
-   import { validate } from '@xats/validator';
+   import { validate } from '@xats-org/validator';
    ```
 
 2. **CLI Commands**
@@ -75,11 +75,11 @@ yarn global add @xats/cli
    ```
 
 3. **Vocabulary URIs**
-   - URIs remain the same structure but are now imported from `@xats/vocabularies`
+   - URIs remain the same structure but are now imported from `@xats-org/vocabularies`
 
 ### Migration Steps
 
-1. Update all package dependencies to use `@xats/*` scope
+1. Update all package dependencies to use `@xats-org/*` scope
 2. Update import statements in your code
 3. Update CLI scripts to use new command structure
 4. Run tests to ensure compatibility

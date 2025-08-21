@@ -1,5 +1,5 @@
 /**
- * @xats/cli - Command-line interface for xats
+ * @xats-org/cli - Command-line interface for xats
  */
 
 export { validateCommand } from './commands/validate.js';

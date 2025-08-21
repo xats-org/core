@@ -1,9 +1,9 @@
 /**
- * @xats/examples - Example xats documents
+ * @xats-org/examples - Example xats documents
  */
 
-// @xats/types import removed - not currently used
-// import type { XatsDocument } from '@xats/types';
+// @xats-org/types import removed - not currently used
+// import type { XatsDocument } from '@xats-org/types';
 
 // Export all version examples
 export * as v010 from './v0.1.0/index.js';

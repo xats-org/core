@@ -1,5 +1,5 @@
 /**
- * @xats/mcp-server - Error Handling Tests
+ * @xats-org/mcp-server - Error Handling Tests
  */
 
 import { describe, it, expect } from 'vitest';

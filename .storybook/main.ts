@@ -36,11 +36,11 @@ const config: StorybookConfig = {
         ...config.resolve,
         alias: {
           ...config.resolve?.alias,
-          '@xats/renderer': join(__dirname, '../packages/renderer/src'),
-          '@xats/types': join(__dirname, '../packages/types/src'),
-          '@xats/utils': join(__dirname, '../packages/utils/src'),
-          '@xats/schema': join(__dirname, '../packages/schema/src'),
-          '@xats/validator': join(__dirname, '../packages/validator/src'),
+          '@xats-org/renderer': join(__dirname, '../packages/renderer/src'),
+          '@xats-org/types': join(__dirname, '../packages/types/src'),
+          '@xats-org/utils': join(__dirname, '../packages/utils/src'),
+          '@xats-org/schema': join(__dirname, '../packages/schema/src'),
+          '@xats-org/validator': join(__dirname, '../packages/validator/src'),
         },
       },
     };

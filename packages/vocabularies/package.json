@@ -1,5 +1,5 @@
 {
-  "name": "@xats/vocabularies",
+  "name": "@xats-org/vocabularies",
   "version": "0.4.1",
   "description": "Core vocabulary definitions for the xats schema",
   "main": "./dist/index.js",
@@ -33,12 +33,12 @@
   "author": "xats.org",
   "license": "CC-BY-SA-4.0",
   "dependencies": {
-    "@xats/types": "workspace:*"
+    "@xats-org/types": "workspace:*"
   },
   "devDependencies": {
-    "@xats/eslint-config": "workspace:*",
-    "@xats/prettier-config": "workspace:*",
-    "@xats/vitest-config": "workspace:*",
+    "@xats-org/eslint-config": "workspace:*",
+    "@xats-org/prettier-config": "workspace:*",
+    "@xats-org/vitest-config": "workspace:*",
     "tsup": "^8.0.0",
     "typescript": "^5.3.0",
     "vitest": "^1.0.0"

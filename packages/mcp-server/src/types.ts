@@ -1,8 +1,8 @@
 /**
- * @xats/mcp-server - Types and interfaces for MCP server
+ * @xats-org/mcp-server - Types and interfaces for MCP server
  */
 
-import type { XatsDocument, XatsVersion, ValidationResult } from '@xats/types';
+import type { XatsDocument, XatsVersion, ValidationResult } from '@xats-org/types';
 
 // MCP Tool Result Types
 export interface McpToolResult {

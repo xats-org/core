@@ -1,4 +1,4 @@
-import type { XatsObject } from '@xats/types';
+import type { XatsObject } from '@xats-org/types';
 
 /**
  * Deep clone a JSON-serializable object

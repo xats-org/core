@@ -2,7 +2,7 @@
  * v0.1.0 Example Documents
  */
 
-import type { XatsDocument } from '@xats/types';
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * Minimal valid xats document

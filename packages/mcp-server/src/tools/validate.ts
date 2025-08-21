@@ -1,8 +1,8 @@
 /**
- * @xats/mcp-server - Validate Tool Implementation
+ * @xats-org/mcp-server - Validate Tool Implementation
  */
 
-import { createValidator } from '@xats/validator';
+import { createValidator } from '@xats-org/validator';
 
 import { ValidationError } from '../types.js';
 

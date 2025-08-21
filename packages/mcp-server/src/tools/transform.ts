@@ -1,5 +1,5 @@
 /**
- * @xats/mcp-server - Transform Tool Implementation
+ * @xats-org/mcp-server - Transform Tool Implementation
  */
 
 import { TransformError } from '../types.js';
@@ -10,7 +10,7 @@ import type {
   TransformChange,
   McpServerConfig,
 } from '../types.js';
-import type { XatsDocument, SemanticText, XatsVersion } from '@xats/types';
+import type { XatsDocument, SemanticText, XatsVersion } from '@xats-org/types';
 
 /**
  * Convert SemanticText to plain text

@@ -1,4 +1,4 @@
-# @xats/vitest-config
+# @xats-org/vitest-config
 
 Shared Vitest configuration for the xats monorepo.
 
@@ -7,13 +7,13 @@ Shared Vitest configuration for the xats monorepo.
 Install the package:
 
 ```bash
-pnpm add -D @xats/vitest-config vitest
+pnpm add -D @xats-org/vitest-config vitest
 ```
 
 Create a `vitest.config.ts` file in your package:
 
 ```typescript
-import { createVitestConfig } from '@xats/vitest-config';
+import { createVitestConfig } from '@xats-org/vitest-config';
 
 export default createVitestConfig({
   // Custom options here
@@ -23,7 +23,7 @@ export default createVitestConfig({
 Or for simpler usage:
 
 ```typescript
-import vitestConfig from '@xats/vitest-config';
+import vitestConfig from '@xats-org/vitest-config';
 
 export default vitestConfig();
 ```
