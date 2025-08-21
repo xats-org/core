@@ -1,0 +1,67 @@
+{
+  "name": "@xats-org/renderer-latex",
+  "version": "0.5.0",
+  "description": "LaTeX bidirectional renderer for xats documents for academic publishing",
+  "keywords": [
+    "xats",
+    "renderer",
+    "latex",
+    "tex",
+    "academic",
+    "publishing",
+    "bidirectional"
+  ],
+  "homepage": "https://xats.org",
+  "bugs": {
+    "url": "https://github.com/xats-org/core/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xats-org/core.git",
+    "directory": "packages/renderer-latex"
+  },
+  "license": "CC-BY-SA-4.0",
+  "author": "xats Contributors",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist .tsbuildinfo",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@xats-org/types": "workspace:*",
+    "@xats-org/utils": "workspace:*",
+    "@xats-org/testing": "workspace:*",
+    "latex-parser": "^0.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@vitest/coverage-v8": "^1.2.0",
+    "eslint": "^8.56.0",
+    "@xats-org/eslint-config": "workspace:*",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
