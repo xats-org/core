@@ -586,7 +586,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       // Fallback to regular rendering
       const regularContent = this.renderDocument(document, options);
       const mainContentMatch = regularContent.match(/<main[^>]*>(.*?)<\/main>/s);
-      if (mainContentMatch) {
+      if (mainContentMatch && mainContentMatch[1]) {
         parts.push(mainContentMatch[1]);
       }
     }
@@ -656,6 +656,8 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
     for (let i = 0; i < bodyMatter.contents.length; i++) {
       const content = bodyMatter.contents[i];
+      
+      if (!content) continue;
       
       // Render content based on structure
       if ('contents' in content && Array.isArray(content.contents)) {
@@ -1046,8 +1048,13 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private renderContentBlock(block: ContentBlock, options: Required<HtmlRendererOptions>): string {
     const blockId = block.id ? ` id="${this.escapeHtml(block.id)}"` : '';
-    const lang = block.language ? ` lang="${block.language}"` : '';
-    const dir = block.textDirection && block.textDirection !== 'ltr' ? ` dir="${block.textDirection}"` : '';
+    
+    // Extract language and text direction from extensions if available
+    const language = block.extensions?.language as string | undefined;
+    const textDirection = block.extensions?.textDirection as string | undefined;
+    
+    const lang = language ? ` lang="${language}"` : '';
+    const dir = textDirection && textDirection !== 'ltr' ? ` dir="${textDirection}"` : '';
     const blockTypeClass = this.getBlockTypeClass(block.blockType);
 
     // Process rendering hints for this block
@@ -2009,14 +2016,24 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
         // Try to parse as JSON for complex values
         try {
-          value = JSON.parse(attr.value);
+          const parsed = JSON.parse(attr.value);
+          // Only accept valid hint value types
+          if (
+            typeof parsed === 'string' ||
+            typeof parsed === 'number' ||
+            typeof parsed === 'boolean' ||
+            (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) ||
+            Array.isArray(parsed)
+          ) {
+            value = parsed;
+          }
         } catch {
           // Keep as string if not valid JSON
         }
 
         hints.push({
           hintType: `https://xats.org/vocabularies/hints/${hintType}`,
-          value,
+          value: value as string | number | boolean | object | unknown[],
         });
       }
     }
