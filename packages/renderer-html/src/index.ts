@@ -619,7 +619,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return parts.join('\n');
   }
 
-  private renderContentBlock(block: ContentBlock, options: Required<HtmlRendererOptions>): string {
+  private renderContentBlock(block: ContentBlock, _options: Required<HtmlRendererOptions>): string {
     const blockId = block.id ? ` id="${this.escapeHtml(block.id)}"` : '';
     const lang = '';
     const blockTypeClass = this.getBlockTypeClass(block.blockType);
@@ -1226,7 +1226,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     );
   }
 
-  private parseContentBlock(blockElement: Element, options: Required<ParseOptions>): ContentBlock {
+  private parseContentBlock(blockElement: Element, _options: Required<ParseOptions>): ContentBlock {
     const id = blockElement.getAttribute('id') || '';
 
     // Determine block type from class
@@ -1270,27 +1270,30 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private parseBlockContent(blockElement: Element, blockType: string): Record<string, unknown> {
     switch (blockType) {
-      case 'https://xats.org/vocabularies/blocks/paragraph':
+      case 'https://xats.org/vocabularies/blocks/paragraph': {
         const p = blockElement.querySelector('p');
         return { text: this.parseTextToSemanticText(p?.textContent || '') };
+      }
 
-      case 'https://xats.org/vocabularies/blocks/heading':
+      case 'https://xats.org/vocabularies/blocks/heading': {
         const heading = blockElement.querySelector('h1, h2, h3, h4, h5, h6');
         const level = heading ? parseInt(heading.tagName.charAt(1)) : 1;
         return {
           text: this.parseTextToSemanticText(heading?.textContent || ''),
           level,
         };
+      }
 
-      case 'https://xats.org/vocabularies/blocks/list':
+      case 'https://xats.org/vocabularies/blocks/list': {
         const list = blockElement.querySelector('ol, ul');
         const listType = list?.tagName.toLowerCase() === 'ol' ? 'ordered' : 'unordered';
         const items = Array.from(list?.querySelectorAll('li') || []).map((li) =>
           this.parseTextToSemanticText(li.textContent || '')
         );
         return { listType, items };
+      }
 
-      case 'https://xats.org/vocabularies/blocks/blockquote':
+      case 'https://xats.org/vocabularies/blocks/blockquote': {
         const blockquote = blockElement.querySelector('blockquote');
         const cite = blockquote?.querySelector('cite');
         const content = {
@@ -1300,18 +1303,21 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
           (content as any).attribution = this.parseTextToSemanticText(cite.textContent || '');
         }
         return content;
+      }
 
-      case 'https://xats.org/vocabularies/blocks/codeBlock':
+      case 'https://xats.org/vocabularies/blocks/codeBlock': {
         const code = blockElement.querySelector('code');
         const language = code?.getAttribute('data-language') || undefined;
         return {
           code: code?.textContent || '',
           language,
         };
+      }
 
-      case 'https://xats.org/vocabularies/blocks/mathBlock':
+      case 'https://xats.org/vocabularies/blocks/mathBlock': {
         const math = blockElement.querySelector('.math-block');
         return { math: math?.textContent || '' };
+      }
 
       case 'https://xats.org/vocabularies/blocks/table':
         return this.parseTableContent(blockElement);
