@@ -1,0 +1,168 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/hints/cross-reference",
+  "title": "Cross-Reference Styling Hints",
+  "description": "Rendering hints for how cross-references and citations should be displayed and behave",
+  "type": "object",
+  "properties": {
+    "style": {
+      "type": "string",
+      "enum": ["inline", "superscript", "parenthetical", "footnote", "endnote", "popup", "tooltip"],
+      "description": "Visual style for the cross-reference"
+    },
+    "includePageNumber": { 
+      "type": "boolean", 
+      "default": false,
+      "description": "Whether to include page numbers in references (for print formats)"
+    },
+    "includeTitle": { 
+      "type": "boolean", 
+      "default": true,
+      "description": "Whether to include the title of the referenced content"
+    },
+    "abbreviateTitle": { 
+      "type": "boolean", 
+      "default": false,
+      "description": "Whether to abbreviate long titles"
+    },
+    "linkBehavior": {
+      "type": "string",
+      "enum": ["internal-link", "external-link", "no-link", "modal", "accordion"],
+      "description": "How the cross-reference should behave when activated"
+    },
+    "hoverPreview": { 
+      "type": "boolean", 
+      "default": false,
+      "description": "Whether to show a preview on hover (for interactive formats)"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "crossReferenceStyles": {
+      "inline": {
+        "description": "Reference appears inline with surrounding text",
+        "example": "As discussed in Chapter 3, the concept of...",
+        "bestFor": ["narrative flow", "casual references", "textbook content"],
+        "formats": ["html", "docx", "markdown"]
+      },
+      "superscript": {
+        "description": "Reference appears as superscript number or symbol",
+        "example": "The study showed significant results¹.",
+        "bestFor": ["academic papers", "scientific content", "citations"],
+        "formats": ["html", "pdf", "docx"]
+      },
+      "parenthetical": {
+        "description": "Reference appears in parentheses",
+        "example": "Recent research (Smith, 2023) indicates...",
+        "bestFor": ["APA style", "academic writing", "research papers"],
+        "formats": ["html", "pdf", "docx", "markdown"]
+      },
+      "footnote": {
+        "description": "Reference appears as footnote at bottom of page",
+        "example": "Content with footnote marker¹\n¹ Footnote text at bottom of page",
+        "bestFor": ["print formats", "academic papers", "detailed explanations"],
+        "formats": ["pdf", "docx", "print"]
+      },
+      "endnote": {
+        "description": "Reference appears as endnote at end of document/chapter",
+        "example": "Content with endnote marker¹\n[End of chapter]\n¹ Endnote text",
+        "bestFor": ["books", "long documents", "academic writing"],
+        "formats": ["pdf", "docx", "print"]
+      },
+      "popup": {
+        "description": "Reference content appears in popup when activated",
+        "example": "Clickable reference that opens popup with content",
+        "bestFor": ["interactive content", "web formats", "rich media"],
+        "formats": ["html", "interactive-pdf"]
+      },
+      "tooltip": {
+        "description": "Reference content appears in tooltip on hover",
+        "example": "Hoverable reference showing tooltip",
+        "bestFor": ["web content", "interactive formats", "quick reference"],
+        "formats": ["html", "interactive-content"]
+      }
+    },
+    "linkBehaviors": {
+      "internal-link": {
+        "description": "Creates internal hyperlink to referenced content",
+        "implementation": "Standard anchor link within document",
+        "accessibility": "Includes proper aria-label and role",
+        "formats": ["html", "pdf", "epub"]
+      },
+      "external-link": {
+        "description": "Creates external link to referenced content",
+        "implementation": "External URL with target='_blank'",
+        "accessibility": "Indicates external link to screen readers",
+        "formats": ["html", "interactive-content"]
+      },
+      "no-link": {
+        "description": "Reference is displayed but not interactive",
+        "implementation": "Plain text with reference styling",
+        "accessibility": "Text-only, no interactive elements",
+        "formats": ["pdf", "print", "static-content"]
+      },
+      "modal": {
+        "description": "Opens referenced content in modal dialog",
+        "implementation": "Modal overlay with referenced content",
+        "accessibility": "Focus management and keyboard navigation",
+        "formats": ["html", "interactive-content"]
+      },
+      "accordion": {
+        "description": "Expands to show referenced content inline",
+        "implementation": "Collapsible section with referenced content",
+        "accessibility": "Proper aria-expanded state management",
+        "formats": ["html", "interactive-content"]
+      }
+    },
+    "formatSpecificBehavior": {
+      "html": {
+        "defaultStyle": "inline",
+        "supportedBehaviors": ["internal-link", "external-link", "modal", "accordion"],
+        "features": ["hoverPreview", "tooltips", "interactive"]
+      },
+      "pdf": {
+        "defaultStyle": "footnote",
+        "supportedBehaviors": ["internal-link", "no-link"],
+        "features": ["pageNumbers", "static-content"]
+      },
+      "docx": {
+        "defaultStyle": "parenthetical", 
+        "supportedBehaviors": ["internal-link", "no-link"],
+        "features": ["pageNumbers", "cross-references"]
+      },
+      "print": {
+        "defaultStyle": "footnote",
+        "supportedBehaviors": ["no-link"],
+        "features": ["pageNumbers", "static-content"]
+      },
+      "epub": {
+        "defaultStyle": "inline",
+        "supportedBehaviors": ["internal-link"],
+        "features": ["interactive", "reflowable"]
+      }
+    }
+  },
+  "examples": [
+    {
+      "style": "superscript",
+      "includePageNumber": true,
+      "linkBehavior": "internal-link"
+    },
+    {
+      "style": "parenthetical", 
+      "includeTitle": true,
+      "abbreviateTitle": true,
+      "linkBehavior": "no-link"
+    },
+    {
+      "style": "popup",
+      "hoverPreview": true,
+      "linkBehavior": "modal"
+    },
+    {
+      "style": "inline",
+      "includeTitle": false,
+      "linkBehavior": "accordion"
+    }
+  ]
+}

@@ -1,0 +1,251 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/hints/media",
+  "title": "Media Placement and Interaction Hints",
+  "description": "Rendering hints for optimal media positioning, sizing, and interaction behavior",
+  "type": "object",
+  "properties": {
+    "placement": {
+      "type": "string",
+      "enum": ["inline", "float-left", "float-right", "full-width", "sidebar", "overlay", "background"],
+      "description": "How the media should be positioned relative to surrounding content"
+    },
+    "size": {
+      "type": "string", 
+      "enum": ["thumbnail", "small", "medium", "large", "full-size", "responsive"],
+      "description": "Preferred size for media display"
+    },
+    "aspectRatio": {
+      "type": "string",
+      "pattern": "^\\d+:\\d+$|^auto$",
+      "description": "Aspect ratio constraint for media (e.g., '16:9', '4:3', 'auto')",
+      "examples": ["16:9", "4:3", "1:1", "auto"]
+    },
+    "lazy": { 
+      "type": "boolean", 
+      "default": true,
+      "description": "Whether to use lazy loading for performance"
+    },
+    "autoplay": { 
+      "type": "boolean", 
+      "default": false,
+      "description": "Whether media should start playing automatically"
+    },
+    "controls": { 
+      "type": "boolean", 
+      "default": true,
+      "description": "Whether to show media controls (play, pause, etc.)"
+    },
+    "loop": { 
+      "type": "boolean", 
+      "default": false,
+      "description": "Whether media should loop when finished"
+    },
+    "muted": { 
+      "type": "boolean", 
+      "default": false,
+      "description": "Whether media should start muted"
+    },
+    "captionsVisible": { 
+      "type": "boolean", 
+      "default": false,
+      "description": "Whether captions should be visible by default"
+    },
+    "interactionLevel": {
+      "type": "string",
+      "enum": ["none", "basic", "interactive", "immersive"],
+      "description": "Level of user interaction supported by the media"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "placementStyles": {
+      "inline": {
+        "description": "Media appears inline with text content",
+        "example": "Image within a paragraph of text",
+        "bestFor": ["icons", "small diagrams", "inline illustrations"],
+        "accessibility": "Flows naturally with text",
+        "responsive": "Scales with text flow"
+      },
+      "float-left": {
+        "description": "Media floats to left with text wrapping around right",
+        "example": "Image on left side with text flowing around",
+        "bestFor": ["portraits", "supporting images", "side illustrations"],
+        "accessibility": "Announced before surrounding text",
+        "responsive": "May stack on mobile"
+      },
+      "float-right": {
+        "description": "Media floats to right with text wrapping around left",
+        "example": "Image on right side with text flowing around",
+        "bestFor": ["portraits", "supporting images", "side illustrations"],
+        "accessibility": "Announced with surrounding text",
+        "responsive": "May stack on mobile"
+      },
+      "full-width": {
+        "description": "Media spans the full width of its container",
+        "example": "Large banner image or video",
+        "bestFor": ["hero images", "wide charts", "panoramic content"],
+        "accessibility": "Major content element",
+        "responsive": "Scales to container width"
+      },
+      "sidebar": {
+        "description": "Media appears in sidebar or margin",
+        "example": "Supplementary image beside main content",
+        "bestFor": ["related content", "annotations", "supplementary media"],
+        "accessibility": "Secondary content element",
+        "responsive": "May move to separate section"
+      },
+      "overlay": {
+        "description": "Media appears as overlay on other content",
+        "example": "Modal image or video player",
+        "bestFor": ["focused viewing", "detailed inspection", "modal content"],
+        "accessibility": "Focus trap and proper modal behavior",
+        "responsive": "Full-screen on mobile"
+      },
+      "background": {
+        "description": "Media serves as background for other content",
+        "example": "Background video or image with text overlay",
+        "bestFor": ["atmospheric content", "decorative elements"],
+        "accessibility": "Hidden from screen readers unless decorative",
+        "responsive": "May be hidden on mobile"
+      }
+    },
+    "sizePreferences": {
+      "thumbnail": {
+        "description": "Very small size for previews",
+        "dimensions": "typically 64x64 to 150x150 pixels",
+        "bestFor": ["image galleries", "contact photos", "quick previews"],
+        "accessibility": "May need alternative full-size version"
+      },
+      "small": {
+        "description": "Small size for supporting content",
+        "dimensions": "typically 200-400 pixels wide",
+        "bestFor": ["inline illustrations", "icons", "decorative elements"],
+        "accessibility": "Usually readable without enlargement"
+      },
+      "medium": {
+        "description": "Standard size for most content",
+        "dimensions": "typically 400-800 pixels wide",
+        "bestFor": ["primary images", "charts", "standard video"],
+        "accessibility": "Good balance of size and readability"
+      },
+      "large": {
+        "description": "Large size for emphasis",
+        "dimensions": "typically 800-1200 pixels wide",
+        "bestFor": ["hero images", "detailed diagrams", "featured content"],
+        "accessibility": "High impact but may need alternative sizes"
+      },
+      "full-size": {
+        "description": "Original size without scaling",
+        "dimensions": "original media dimensions",
+        "bestFor": ["high-detail content", "print media", "archival quality"],
+        "accessibility": "May be very large, consider mobile implications"
+      },
+      "responsive": {
+        "description": "Size adapts to container and device",
+        "dimensions": "fluid based on container",
+        "bestFor": ["flexible layouts", "multi-device content", "modern web"],
+        "accessibility": "Adapts to user preferences and devices"
+      }
+    },
+    "interactionLevels": {
+      "none": {
+        "description": "Static media with no user interaction",
+        "examples": ["decorative images", "static charts", "background media"],
+        "accessibility": "May be hidden from assistive technologies",
+        "implementation": "Simple img or media tags"
+      },
+      "basic": {
+        "description": "Basic interaction like click to enlarge",
+        "examples": ["clickable images", "expandable charts", "lightbox media"],
+        "accessibility": "Keyboard accessible, proper focus management",
+        "implementation": "Click handlers with keyboard support"
+      },
+      "interactive": {
+        "description": "Rich interaction with controls and manipulation",
+        "examples": ["interactive diagrams", "360° images", "control panels"],
+        "accessibility": "Full keyboard navigation, screen reader support",
+        "implementation": "Complex interaction patterns with ARIA"
+      },
+      "immersive": {
+        "description": "Fully immersive experience",
+        "examples": ["VR content", "3D models", "interactive simulations"],
+        "accessibility": "Alternative non-immersive versions needed",
+        "implementation": "WebGL, WebVR, or embedded applications"
+      }
+    },
+    "accessibilityGuidance": {
+      "images": {
+        "altText": "Required for all informative images",
+        "longDescription": "Use for complex images like charts or diagrams",
+        "decorative": "Use alt='' for purely decorative images"
+      },
+      "video": {
+        "captions": "Required for accessibility compliance",
+        "audioDescription": "Needed for visual content in videos",
+        "transcript": "Provide for complex or important video content"
+      },
+      "audio": {
+        "transcript": "Required for accessibility compliance",
+        "visualIndicators": "Provide visual indicators for audio cues"
+      },
+      "interactive": {
+        "keyboardAccess": "All interactive elements must be keyboard accessible",
+        "focusManagement": "Proper focus indicators and management",
+        "alternativeAccess": "Provide alternative access methods"
+      }
+    },
+    "formatSpecificBehavior": {
+      "html": {
+        "supportedPlacements": "all",
+        "responsiveSupport": true,
+        "interactivitySupport": true,
+        "lazyLoadingSupport": true
+      },
+      "pdf": {
+        "supportedPlacements": ["inline", "full-width"],
+        "responsiveSupport": false,
+        "interactivitySupport": "limited",
+        "lazyLoadingSupport": false
+      },
+      "docx": {
+        "supportedPlacements": ["inline", "float-left", "float-right"],
+        "responsiveSupport": "limited",
+        "interactivitySupport": false,
+        "lazyLoadingSupport": false
+      },
+      "epub": {
+        "supportedPlacements": ["inline", "full-width"],
+        "responsiveSupport": true,
+        "interactivitySupport": "limited",
+        "lazyLoadingSupport": "depends on reader"
+      }
+    }
+  },
+  "examples": [
+    {
+      "placement": "float-right",
+      "size": "medium",
+      "aspectRatio": "4:3"
+    },
+    {
+      "placement": "full-width",
+      "size": "large",
+      "aspectRatio": "16:9",
+      "autoplay": false,
+      "controls": true,
+      "captionsVisible": true
+    },
+    {
+      "placement": "inline",
+      "size": "small",
+      "interactionLevel": "basic"
+    },
+    {
+      "placement": "overlay",
+      "size": "responsive",
+      "interactionLevel": "interactive",
+      "lazy": false
+    }
+  ]
+}

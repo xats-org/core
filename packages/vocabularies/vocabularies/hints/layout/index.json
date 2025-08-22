@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/hints/layout",
+  "title": "Layout Rendering Hints",
+  "description": "Rendering hints for layout preferences, positioning, and page breaking behavior",
+  "oneOf": [
+    {
+      "type": "string",
+      "enum": [
+        "keep-together", "allow-break", "force-new-page", "force-new-column",
+        "float-left", "float-right", "center", "full-width", "inline", "block",
+        "avoid-page-break-before", "avoid-page-break-after", "avoid-page-break-inside",
+        "single-column", "multi-column", "sidebar", "split-view", "narrow", "responsive"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "position": {
+          "type": "string",
+          "enum": ["top", "bottom", "left", "right", "center", "float", "inline", "sidebar"]
+        },
+        "width": {
+          "type": "string",
+          "pattern": "^(\\d+(\\.\\d+)?(px|em|rem|%|vw|ch)|auto|max-content|min-content)$"
+        },
+        "margin": {
+          "type": "string",
+          "pattern": "^(\\d+(\\.\\d+)?(px|em|rem|%)|auto)(\\s+(\\d+(\\.\\d+)?(px|em|rem|%)|auto)){0,3}$"
+        },
+        "padding": {
+          "type": "string",
+          "pattern": "^(\\d+(\\.\\d+)?(px|em|rem|%)|auto)(\\s+(\\d+(\\.\\d+)?(px|em|rem|%)|auto)){0,3}$"
+        }
+      },
+      "additionalProperties": false
+    }
+  ],
+  "definitions": {
+    "layoutBehaviors": {
+      "keep-together": {
+        "description": "Prevent content from being split across pages/columns",
+        "bestFor": ["code blocks", "tables", "figures with captions"],
+        "formats": ["pdf", "print", "docx"]
+      },
+      "allow-break": {
+        "description": "Explicitly allow content to break across boundaries",
+        "bestFor": ["long paragraphs", "flexible content", "flowing text"],
+        "formats": ["pdf", "print", "docx", "html"]
+      },
+      "force-new-page": {
+        "description": "Force content to start on a new page",
+        "bestFor": ["chapter beginnings", "major sections", "appendices"],
+        "formats": ["pdf", "print", "docx"]
+      },
+      "force-new-column": {
+        "description": "Force content to start in a new column",
+        "bestFor": ["section breaks", "topic changes", "column layouts"],
+        "formats": ["pdf", "print", "multi-column layouts"]
+      },
+      "float-left": {
+        "description": "Float content to the left with text wrapping",
+        "bestFor": ["images", "sidebar content", "pull quotes"],
+        "formats": ["html", "docx", "responsive layouts"]
+      },
+      "float-right": {
+        "description": "Float content to the right with text wrapping",
+        "bestFor": ["images", "sidebar content", "pull quotes"],
+        "formats": ["html", "docx", "responsive layouts"]
+      },
+      "center": {
+        "description": "Center content horizontally",
+        "bestFor": ["titles", "images", "special content"],
+        "formats": ["html", "pdf", "docx", "print"]
+      },
+      "full-width": {
+        "description": "Expand content to full container width",
+        "bestFor": ["headers", "banners", "wide content"],
+        "formats": ["html", "responsive layouts"]
+      },
+      "avoid-page-break-before": {
+        "description": "Avoid page breaks immediately before this content",
+        "bestFor": ["headings", "captions", "related content"],
+        "formats": ["pdf", "print", "docx"]
+      },
+      "avoid-page-break-after": {
+        "description": "Avoid page breaks immediately after this content", 
+        "bestFor": ["headings", "introductions", "connected content"],
+        "formats": ["pdf", "print", "docx"]
+      },
+      "avoid-page-break-inside": {
+        "description": "Avoid page breaks within this content",
+        "bestFor": ["code blocks", "important paragraphs", "coherent sections"],
+        "formats": ["pdf", "print", "docx"]
+      }
+    },
+    "layoutModes": {
+      "single-column": {
+        "description": "Display content in a single column",
+        "bestFor": ["narrative text", "mobile layouts", "simple reading"],
+        "responsive": "Default for small screens"
+      },
+      "multi-column": {
+        "description": "Display content across multiple columns", 
+        "bestFor": ["newspaper style", "wide layouts", "reference material"],
+        "responsive": "May collapse to single column"
+      },
+      "sidebar": {
+        "description": "Include sidebar alongside main content",
+        "bestFor": ["navigation", "supplementary content", "metadata"],
+        "responsive": "May stack vertically on mobile"
+      },
+      "split-view": {
+        "description": "Divide content into distinct sections",
+        "bestFor": ["before/after comparisons", "parallel content"],
+        "responsive": "May stack vertically"
+      },
+      "narrow": {
+        "description": "Constrain content width for readability",
+        "bestFor": ["long-form reading", "focus content", "optimal line length"],
+        "responsive": "Maintains readability across devices"
+      },
+      "responsive": {
+        "description": "Adapt layout based on screen size and device",
+        "bestFor": ["modern web content", "multi-device support"],
+        "responsive": "Native responsive behavior"
+      }
+    }
+  },
+  "examples": [
+    "keep-together",
+    "single-column",
+    "multi-column", 
+    "sidebar",
+    {
+      "position": "center",
+      "width": "80%",
+      "margin": "1em auto"
+    },
+    {
+      "position": "float",
+      "width": "300px",
+      "margin": "0 1em 1em 0"
+    }
+  ]
+}
