@@ -39,9 +39,9 @@ export class RendererFactory implements IRendererFactory {
   /**
    * Create a renderer for the specified format
    */
-  async createRenderer<T extends BidirectionalRenderer>(format: RenderFormat): Promise<T> {
+  createRenderer<T extends BidirectionalRenderer>(format: RenderFormat): T {
     const registration = this.registrations.get(format);
-    
+
     if (!registration) {
       throw new Error(
         `No renderer registered for format '${format}'. Available formats: ${Array.from(this.registrations.keys()).join(', ')}`
@@ -51,15 +51,13 @@ export class RendererFactory implements IRendererFactory {
     try {
       // Create renderer instance with default options
       const renderer = new registration.constructor(registration.defaultOptions) as T;
-      
+
       // Validate that the renderer implements the correct interface
       this.validateRenderer(renderer, format);
-      
+
       return renderer;
     } catch (error) {
-      throw new Error(
-        `Failed to create renderer for format '${format}': ${String(error)}`
-      );
+      throw new Error(`Failed to create renderer for format '${format}': ${String(error)}`);
     }
   }
 
@@ -132,7 +130,10 @@ export class RendererFactory implements IRendererFactory {
   /**
    * Get all renderer metadata
    */
-  getAllRendererMetadata(): Array<{ format: RenderFormat; metadata: RendererRegistration['metadata'] }> {
+  getAllRendererMetadata(): Array<{
+    format: RenderFormat;
+    metadata: RendererRegistration['metadata'];
+  }> {
     return Array.from(this.registrations.entries()).map(([format, registration]) => ({
       format,
       metadata: registration.metadata,
@@ -146,7 +147,7 @@ export class RendererFactory implements IRendererFactory {
     formats: RenderFormat[]
   ): Promise<Map<RenderFormat, T>> {
     const renderers = new Map<RenderFormat, T>();
-    
+
     const creationPromises = formats.map(async (format) => {
       try {
         const renderer = await this.createRenderer<T>(format);
@@ -157,7 +158,7 @@ export class RendererFactory implements IRendererFactory {
     });
 
     const results = await Promise.all(creationPromises);
-    
+
     for (const { format, renderer } of results) {
       renderers.set(format, renderer);
     }
@@ -170,10 +171,10 @@ export class RendererFactory implements IRendererFactory {
    */
   getRenderersByWcagLevel(level: 'A' | 'AA' | 'AAA'): RenderFormat[] {
     const compatibleFormats: RenderFormat[] = [];
-    
+
     for (const [format, registration] of this.registrations.entries()) {
       const rendererLevel = registration.metadata.wcagLevel;
-      
+
       if (rendererLevel && this.isWcagLevelCompatible(rendererLevel, level)) {
         compatibleFormats.push(format);
       }
@@ -215,8 +216,11 @@ export class RendererFactory implements IRendererFactory {
   /**
    * Check if a WCAG level is compatible with the required level
    */
-  private isWcagLevelCompatible(rendererLevel: 'A' | 'AA' | 'AAA', requiredLevel: 'A' | 'AA' | 'AAA'): boolean {
-    const levels = { 'A': 1, 'AA': 2, 'AAA': 3 };
+  private isWcagLevelCompatible(
+    rendererLevel: 'A' | 'AA' | 'AAA',
+    requiredLevel: 'A' | 'AA' | 'AAA'
+  ): boolean {
+    const levels = { A: 1, AA: 2, AAA: 3 };
     return levels[rendererLevel] >= levels[requiredLevel];
   }
 }
@@ -226,24 +230,17 @@ export class RendererFactory implements IRendererFactory {
  */
 export const rendererFactory = new RendererFactory();
 
-/**
- * Auto-register built-in renderers if available
- * This is called lazily when the factory is first used to avoid import errors
- */
-async function registerBuiltInRenderers(): Promise<void> {
-  // We'll implement auto-registration in a future update
-  // For now, renderers must be manually registered by the application
-  
-  // Example of how to register renderers:
-  // 
-  // import { HtmlRenderer } from '@xats-org/renderer-html';
-  // rendererFactory.registerRenderer('html', HtmlRenderer, {
-  //   name: 'HTML5 Bidirectional Renderer',
-  //   version: '1.0.0',
-  //   description: 'WCAG 2.1 AA compliant HTML5 renderer with full accessibility support',
-  //   wcagLevel: 'AA',
-  // });
-}
+// Note: Auto-registration of built-in renderers has been disabled to avoid import issues
+// Applications should manually register the renderers they need
+// Example of how to register renderers:
+//
+// import { HtmlRenderer } from '@xats-org/renderer-html';
+// rendererFactory.registerRenderer('html', HtmlRenderer, {
+//   name: 'HTML5 Bidirectional Renderer',
+//   version: '1.0.0',
+//   description: 'WCAG 2.1 AA compliant HTML5 renderer with full accessibility support',
+//   wcagLevel: 'AA',
+// });
 
 // Note: Auto-registration is disabled for now to avoid import issues
 // Applications should manually register the renderers they need

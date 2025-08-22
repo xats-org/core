@@ -1,6 +1,6 @@
 /**
  * Abstract base class for bidirectional renderers
- * 
+ *
  * This class provides common functionality and utilities that all bidirectional
  * renderers can inherit from, reducing code duplication and ensuring consistent
  * behavior across different format implementations.
@@ -25,7 +25,6 @@ import type {
   Section,
   ContentBlock,
   SemanticText,
-  Run,
 } from '@xats-org/types';
 
 /**
@@ -34,13 +33,13 @@ import type {
 export interface BidirectionalRendererConfig extends RendererOptions {
   /** Enable automatic round-trip testing during render operations */
   autoTestRoundTrip?: boolean;
-  
+
   /** Enable format validation during parse operations */
   autoValidate?: boolean;
-  
+
   /** Enable performance metrics collection */
   collectMetrics?: boolean;
-  
+
   /** Custom error handler for render/parse operations */
   errorHandler?: (error: Error, operation: 'render' | 'parse') => void;
 }
@@ -48,12 +47,13 @@ export interface BidirectionalRendererConfig extends RendererOptions {
 /**
  * Abstract base class for implementing bidirectional renderers
  */
-export abstract class AbstractBidirectionalRenderer<TOptions extends BidirectionalRendererConfig = BidirectionalRendererConfig> 
-  implements BidirectionalRenderer<TOptions> {
-  
+export abstract class AbstractBidirectionalRenderer<
+  TOptions extends BidirectionalRendererConfig = BidirectionalRendererConfig,
+> implements BidirectionalRenderer<TOptions>
+{
   /** Format identifier - must be implemented by subclasses */
   abstract readonly format: RenderFormat;
-  
+
   /** WCAG compliance level - can be overridden by subclasses */
   readonly wcagLevel: 'A' | 'AA' | 'AAA' | null = null;
 
@@ -76,12 +76,12 @@ export abstract class AbstractBidirectionalRenderer<TOptions extends Bidirection
       customStyles: '',
       baseUrl: '',
       fragmentOnly: false,
-      
+
       // Default bidirectional renderer config
       autoTestRoundTrip: false,
       autoValidate: true,
       collectMetrics: true,
-      
+
       ...options,
     } as Required<TOptions>;
 
@@ -109,25 +109,28 @@ export abstract class AbstractBidirectionalRenderer<TOptions extends Bidirection
   /**
    * Test round-trip fidelity between render and parse
    */
-  async testRoundTrip(document: XatsDocument, options?: RoundTripOptions): Promise<RoundTripResult> {
+  async testRoundTrip(
+    document: XatsDocument,
+    options?: RoundTripOptions
+  ): Promise<RoundTripResult> {
     if (!this.roundTripTester) {
       this.roundTripTester = new RoundTripTester(this, options);
     }
-    
+
     return this.roundTripTester.testDocument(document);
   }
 
   /**
    * Get format-specific metadata - can be overridden by subclasses
    */
-  async getMetadata?(content: string): Promise<FormatMetadata> {
-    return {
+  getMetadata?(content: string): Promise<FormatMetadata> {
+    return Promise.resolve({
       format: this.format,
       custom: {
         contentLength: content.length,
         analyzedAt: new Date().toISOString(),
       },
-    };
+    });
   }
 
   // ============================================================================
@@ -187,7 +190,7 @@ export abstract class AbstractBidirectionalRenderer<TOptions extends Bidirection
    */
   protected getSemanticTextString(semanticText: SemanticText): string {
     return semanticText.runs
-      .map(run => {
+      .map((run) => {
         if ('text' in run) {
           return run.text;
         }
@@ -212,9 +215,12 @@ export abstract class AbstractBidirectionalRenderer<TOptions extends Bidirection
   /**
    * Create performance metrics object
    */
-  protected createMetrics(startTime: number, additionalMetrics: Record<string, unknown> = {}): Record<string, unknown> {
+  protected createMetrics(
+    startTime: number,
+    additionalMetrics: Record<string, unknown> = {}
+  ): Record<string, unknown> {
     const endTime = performance.now();
-    
+
     return {
       format: this.format,
       renderTime: endTime - startTime,
@@ -230,15 +236,15 @@ export abstract class AbstractBidirectionalRenderer<TOptions extends Bidirection
     if (!document.schemaVersion) {
       throw new Error('Document missing required schemaVersion');
     }
-    
+
     if (!document.bibliographicEntry) {
       throw new Error('Document missing required bibliographicEntry');
     }
-    
+
     if (!document.subject) {
       throw new Error('Document missing required subject');
     }
-    
+
     if (!document.bodyMatter) {
       throw new Error('Document missing required bodyMatter');
     }
@@ -276,7 +282,9 @@ export abstract class AbstractBidirectionalRenderer<TOptions extends Bidirection
             wordCount += this.countWordsInContentBlock(content);
           } else {
             // This is a nested structural container
-            wordCount += this.countWordsInStructuralContainers([content as Unit | Chapter | Section]);
+            wordCount += this.countWordsInStructuralContainers([
+              content as Unit | Chapter | Section,
+            ]);
           }
         }
       }
@@ -306,7 +314,7 @@ export abstract class AbstractBidirectionalRenderer<TOptions extends Bidirection
         wordCount += this.countWordsInSemanticText(content.text);
         break;
       }
-      
+
       case 'https://xats.org/vocabularies/blocks/list': {
         const content = block.content as { items: SemanticText[] };
         for (const item of content.items) {
@@ -314,7 +322,7 @@ export abstract class AbstractBidirectionalRenderer<TOptions extends Bidirection
         }
         break;
       }
-      
+
       case 'https://xats.org/vocabularies/blocks/blockquote': {
         const content = block.content as { text: SemanticText; attribution?: SemanticText };
         wordCount += this.countWordsInSemanticText(content.text);
@@ -323,7 +331,7 @@ export abstract class AbstractBidirectionalRenderer<TOptions extends Bidirection
         }
         break;
       }
-      
+
       case 'https://xats.org/vocabularies/blocks/table': {
         const content = block.content as {
           headers?: SemanticText[];
@@ -345,7 +353,7 @@ export abstract class AbstractBidirectionalRenderer<TOptions extends Bidirection
         }
         break;
       }
-      
+
       default:
         // For other block types, try to extract text content
         if (typeof block.content === 'object' && block.content !== null) {
@@ -374,9 +382,9 @@ export abstract class AbstractBidirectionalRenderer<TOptions extends Bidirection
     if (!text || typeof text !== 'string') {
       return 0;
     }
-    
+
     // Split on whitespace and filter out empty strings
-    return text.split(/\s+/).filter(word => word.length > 0).length;
+    return text.split(/\s+/).filter((word) => word.length > 0).length;
   }
 
   /**

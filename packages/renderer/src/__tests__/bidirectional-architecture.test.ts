@@ -4,7 +4,6 @@
 
 import { describe, test, expect, beforeEach } from 'vitest';
 
-import { RendererFactory, PluginRegistry, AbstractBidirectionalRenderer } from '../index.js';
 import type {
   XatsDocument,
   RenderResult,
@@ -13,17 +12,17 @@ import type {
   BidirectionalRenderer,
   RendererPlugin,
   ParseOptions,
-  RoundTripOptions,
-  RoundTripResult,
 } from '@xats-org/types';
+
+import { RendererFactory, PluginRegistry, AbstractBidirectionalRenderer } from '../index.js';
 
 // Mock renderer for testing
 class MockRenderer extends AbstractBidirectionalRenderer {
   readonly format = 'mock' as const;
   readonly wcagLevel = 'AA' as const;
 
-  async render(document: XatsDocument): Promise<RenderResult> {
-    return {
+  render(document: XatsDocument): Promise<RenderResult> {
+    return Promise.resolve({
       content: JSON.stringify(document),
       metadata: {
         format: 'mock',
@@ -32,13 +31,13 @@ class MockRenderer extends AbstractBidirectionalRenderer {
       },
       assets: [],
       errors: [],
-    };
+    });
   }
 
-  async parse(content: string, _options?: ParseOptions): Promise<ParseResult> {
+  parse(content: string, _options?: ParseOptions): Promise<ParseResult> {
     try {
       const document = JSON.parse(content) as XatsDocument;
-      return {
+      return Promise.resolve({
         document,
         metadata: {
           sourceFormat: 'mock',
@@ -224,7 +223,7 @@ describe('Bidirectional Renderer Architecture', () => {
 
     test('should prevent duplicate registration', () => {
       factory.registerRenderer('mock', MockRenderer);
-      
+
       expect(() => {
         factory.registerRenderer('mock', MockRenderer);
       }).toThrow('already registered');
@@ -298,7 +297,7 @@ describe('Bidirectional Renderer Architecture', () => {
 
     test('should render documents', async () => {
       const result = await renderer.render(testDocument);
-      
+
       expect(result.content).toBeDefined();
       expect(result.metadata?.format).toBe('mock');
       expect(result.metadata?.wordCount).toBeGreaterThan(0);
@@ -307,7 +306,7 @@ describe('Bidirectional Renderer Architecture', () => {
     test('should parse content back to documents', async () => {
       const renderResult = await renderer.render(testDocument);
       const parseResult = await renderer.parse(renderResult.content);
-      
+
       expect(parseResult.document).toBeDefined();
       expect(parseResult.metadata?.fidelityScore).toBe(1.0);
     });
@@ -315,14 +314,14 @@ describe('Bidirectional Renderer Architecture', () => {
     test('should validate content', async () => {
       const renderResult = await renderer.render(testDocument);
       const validationResult = await renderer.validate(renderResult.content);
-      
+
       expect(validationResult.valid).toBe(true);
       expect(validationResult.errors).toHaveLength(0);
     });
 
     test('should test round-trip fidelity', async () => {
       const roundTripResult = await renderer.testRoundTrip(testDocument);
-      
+
       expect(roundTripResult.success).toBe(true);
       expect(roundTripResult.fidelityScore).toBeGreaterThan(0.9);
       expect(roundTripResult.original).toEqual(testDocument);
@@ -330,7 +329,7 @@ describe('Bidirectional Renderer Architecture', () => {
 
     test('should handle errors gracefully', async () => {
       const parseResult = await renderer.parse('invalid json');
-      
+
       expect(parseResult.errors).toHaveLength(1);
       expect(parseResult.errors?.[0]?.type).toBe('malformed-content');
     });
@@ -338,7 +337,7 @@ describe('Bidirectional Renderer Architecture', () => {
     test('should estimate word count', async () => {
       const result = await renderer.render(testDocument);
       const wordCount = result.metadata?.wordCount;
-      
+
       expect(wordCount).toBeGreaterThan(0);
       expect(wordCount).toBeLessThan(100); // Should be reasonable for test document
     });
@@ -346,7 +345,7 @@ describe('Bidirectional Renderer Architecture', () => {
     test('should provide semantic text utilities', () => {
       const semanticText = testDocument.bodyMatter.contents[0]?.title;
       const textString = renderer['getSemanticTextString'](semanticText!);
-      
+
       expect(textString).toBe('Introduction');
     });
   });
@@ -387,7 +386,7 @@ describe('Bidirectional Renderer Architecture', () => {
     test('should support multiple renderers and plugins', async () => {
       // Register multiple renderer instances (in real usage these would be different classes)
       factory.registerRenderer('mock', MockRenderer, { name: 'Mock Renderer 1' });
-      
+
       // Could register different renderer classes here:
       // factory.registerRenderer('html', HtmlRenderer, { name: 'HTML Renderer' });
       // factory.registerRenderer('docx', DocxRenderer, { name: 'DOCX Renderer' });

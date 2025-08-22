@@ -29,7 +29,7 @@ export class PluginRegistry implements IPluginRegistry {
   /**
    * Register a new plugin
    */
-  async register<T extends BidirectionalRenderer>(plugin: RendererPlugin<T>): Promise<void> {
+  register<T extends BidirectionalRenderer>(plugin: RendererPlugin<T>): void {
     // Validate plugin
     this.validatePlugin(plugin);
 
@@ -67,7 +67,7 @@ export class PluginRegistry implements IPluginRegistry {
    */
   async unregister(pluginId: string): Promise<void> {
     const registration = this.plugins.get(pluginId);
-    
+
     if (!registration) {
       throw new Error(`Plugin '${pluginId}' is not registered`);
     }
@@ -112,7 +112,7 @@ export class PluginRegistry implements IPluginRegistry {
    * List all registered plugins
    */
   listPlugins(): RendererPlugin[] {
-    return Array.from(this.plugins.values()).map(reg => reg.plugin);
+    return Array.from(this.plugins.values()).map((reg) => reg.plugin);
   }
 
   /**
@@ -120,7 +120,7 @@ export class PluginRegistry implements IPluginRegistry {
    */
   findCompatiblePlugins(format: RenderFormat): RendererPlugin[] {
     const pluginIds = this.formatIndex.get(format);
-    
+
     if (!pluginIds) {
       return [];
     }
@@ -140,20 +140,18 @@ export class PluginRegistry implements IPluginRegistry {
    * Initialize a plugin with a renderer instance
    */
   async initializePlugin<T extends BidirectionalRenderer>(
-    pluginId: string, 
+    pluginId: string,
     renderer: T
   ): Promise<void> {
     const registration = this.plugins.get(pluginId) as PluginRegistration<T> | undefined;
-    
+
     if (!registration) {
       throw new Error(`Plugin '${pluginId}' is not registered`);
     }
 
     // Check format compatibility
     if (!registration.plugin.compatibleFormats.includes(renderer.format)) {
-      throw new Error(
-        `Plugin '${pluginId}' is not compatible with format '${renderer.format}'`
-      );
+      throw new Error(`Plugin '${pluginId}' is not compatible with format '${renderer.format}'`);
     }
 
     // Initialize plugin if not already done
@@ -188,11 +186,11 @@ export class PluginRegistry implements IPluginRegistry {
   /**
    * Auto-discover and register plugins from a directory
    */
-  async discoverPlugins(pluginDirectory: string): Promise<void> {
+  async discoverPlugins(_pluginDirectory: string): Promise<void> {
     try {
       // This would typically scan a directory for plugin files
       // For now, we'll implement a simple approach that looks for known plugin packages
-      
+
       const knownPlugins = [
         '@xats-org/plugin-math-renderer',
         '@xats-org/plugin-citation-formatter',
@@ -203,11 +201,13 @@ export class PluginRegistry implements IPluginRegistry {
       for (const pluginPackage of knownPlugins) {
         try {
           // Dynamically import plugin
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const pluginModule = await import(pluginPackage);
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
           const plugin = pluginModule.default || pluginModule.plugin;
-          
+
           if (plugin && this.isValidPlugin(plugin)) {
-            await this.register(plugin);
+            this.register(plugin);
           }
         } catch (error) {
           // Plugin not available - this is okay
@@ -267,7 +267,7 @@ export class PluginRegistry implements IPluginRegistry {
    */
   async clear(): Promise<void> {
     const pluginIds = Array.from(this.plugins.keys());
-    
+
     for (const pluginId of pluginIds) {
       await this.unregister(pluginId);
     }
@@ -278,7 +278,7 @@ export class PluginRegistry implements IPluginRegistry {
    */
   private validatePlugin(plugin: RendererPlugin): void {
     const requiredProperties = ['id', 'name', 'version', 'compatibleFormats', 'initialize'];
-    
+
     for (const prop of requiredProperties) {
       if (!(prop in plugin)) {
         throw new Error(`Plugin is missing required property: ${prop}`);
@@ -326,8 +326,8 @@ export class PluginRegistry implements IPluginRegistry {
    * Detach plugin from a renderer instance
    */
   private async detachFromRenderer<T extends BidirectionalRenderer>(
-    plugin: RendererPlugin<T>, 
-    renderer: T
+    plugin: RendererPlugin<T>,
+    _renderer: T
   ): Promise<void> {
     try {
       // Call plugin cleanup hooks if available

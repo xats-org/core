@@ -1,6 +1,6 @@
 /**
  * @xats-org/renderer - Bidirectional Rendering Core for xats documents
- * 
+ *
  * This package provides the core infrastructure for the bidirectional renderer
  * architecture introduced in v0.5.0, including factory pattern, plugin system,
  * and shared utilities for all format-specific renderers.
@@ -15,9 +15,9 @@ export { TextRenderer, type TextRendererOptions } from './renderers/text.js';
 // v0.5.0 Bidirectional Renderer Architecture
 export { RendererFactory } from './factory.js';
 export { PluginRegistry } from './plugin-registry.js';
-export { 
+export {
   AbstractBidirectionalRenderer,
-  type BidirectionalRendererConfig 
+  type BidirectionalRendererConfig,
 } from './abstract-bidirectional-renderer.js';
 
 // Re-export types from @xats-org/types for convenience

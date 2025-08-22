@@ -459,7 +459,7 @@ export interface RendererPlugin<TRenderer extends BidirectionalRenderer = Bidire
  */
 export interface PluginRegistry {
   /** Register a new plugin */
-  register<T extends BidirectionalRenderer>(plugin: RendererPlugin<T>): Promise<void>;
+  register<T extends BidirectionalRenderer>(plugin: RendererPlugin<T>): void;
 
   /** Unregister a plugin */
   unregister(pluginId: string): Promise<void>;
@@ -479,7 +479,7 @@ export interface PluginRegistry {
  */
 export interface RendererFactory {
   /** Create a renderer for the specified format */
-  createRenderer<T extends BidirectionalRenderer>(format: RenderFormat): Promise<T>;
+  createRenderer<T extends BidirectionalRenderer>(format: RenderFormat): T;
 
   /** Get available renderer formats */
   getAvailableFormats(): RenderFormat[];
