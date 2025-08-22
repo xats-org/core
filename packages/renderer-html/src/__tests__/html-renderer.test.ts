@@ -15,22 +15,15 @@ import { describe, it, expect, beforeEach } from 'vitest';
 
 import { HtmlRenderer } from '../index.js';
 
-import type {
-  XatsDocument,
-  ContentBlock,
-  SemanticText,
-  Unit,
-  Chapter,
-  Section,
-} from '@xats-org/types';
+import type { XatsDocument, ContentBlock, SemanticText, Chapter } from '@xats-org/types';
 
 describe('HtmlRenderer', () => {
   let renderer: HtmlRenderer;
 
   beforeEach(() => {
     renderer = new HtmlRenderer({
-      wrapInDocument: false,  // Disable full document mode for fragment testing
-      sanitize: false,         // Disable sanitization for testing
+      wrapInDocument: false, // Disable full document mode for fragment testing
+      sanitize: false, // Disable sanitization for testing
     });
   });
 

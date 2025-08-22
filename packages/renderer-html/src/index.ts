@@ -444,19 +444,23 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       // A Unit contains Chapters which contain Sections
       // A Chapter can contain Sections or ContentBlocks
       // A Section contains only ContentBlocks
-      
+
       if ('contents' in content && Array.isArray(content.contents)) {
         // Check the nested structure to determine type
         const firstChild = content.contents[0];
-        
+
         if (!firstChild) {
           // Empty contents, treat as Chapter
           parts.push(this.renderChapter(content as Chapter, options));
         } else if ('contents' in firstChild && Array.isArray(firstChild.contents)) {
           // Has nested containers - check depth
           const firstGrandchild = firstChild.contents[0];
-          
-          if (firstGrandchild && 'contents' in firstGrandchild && Array.isArray(firstGrandchild.contents)) {
+
+          if (
+            firstGrandchild &&
+            'contents' in firstGrandchild &&
+            Array.isArray(firstGrandchild.contents)
+          ) {
             // Three levels deep - this is a Unit containing Chapters containing Sections
             parts.push(this.renderUnit(content as Unit, options));
           } else {
@@ -586,7 +590,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return parts.join('\n');
   }
 
-  private renderSection(section: Section, options: Required<HtmlRendererOptions>): string {
+  private renderSection(section: Section, _options: Required<HtmlRendererOptions>): string {
     const parts: string[] = [];
     const sectionId = section.id ? ` id="${this.escapeHtml(section.id)}"` : '';
     const lang = '';
@@ -873,10 +877,11 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       case 'code':
         return `<code>${this.escapeHtml(run.text)}</code>`;
 
-      case 'reference':
+      case 'reference': {
         const refHref = run.ref ? ` href="#${this.escapeHtml(run.ref)}"` : '';
         const refLabel = run.label ? ` aria-label="${this.escapeHtml(run.label)}"` : '';
         return `<a class="reference"${refHref}${refLabel}>${this.escapeHtml(run.text)}</a>`;
+      }
 
       case 'citation':
         return `<a class="citation" href="#cite-${this.escapeHtml(run.citeKey)}" role="doc-noteref" aria-label="Citation ${run.citeKey}">[${this.escapeHtml(run.citeKey)}]</a>`;
@@ -900,7 +905,8 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         return `<span class="index-entry" data-index-term="${this.escapeHtml(run.entry)}"${run.subEntry ? ` data-sub-entry="${this.escapeHtml(run.subEntry)}"` : ''}>${this.escapeHtml(run.text)}</span>`;
 
       default:
-        return this.escapeHtml((run as any).text || '');
+        // Handle unknown run types gracefully
+        return this.escapeHtml(('text' in run ? (run as TextRun).text : '') || '');
     }
   }
 
@@ -1062,7 +1068,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return Object.keys(frontMatter).length > 0 ? frontMatter : undefined;
   }
 
-  private parseBodyMatter(document: Document, options: Required<ParseOptions>): BodyMatter {
+  private parseBodyMatter(document: Document, _options: Required<ParseOptions>): BodyMatter {
     const bodyMatterSection = document.querySelector('.body-matter');
     if (!bodyMatterSection) {
       return { contents: [] };
@@ -1261,7 +1267,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return 'https://xats.org/vocabularies/blocks/paragraph'; // default
   }
 
-  private parseBlockContent(blockElement: Element, blockType: string): any {
+  private parseBlockContent(blockElement: Element, blockType: string): Record<string, unknown> {
     switch (blockType) {
       case 'https://xats.org/vocabularies/blocks/paragraph':
         const p = blockElement.querySelector('p');
