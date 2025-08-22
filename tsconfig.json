@@ -18,13 +18,16 @@
       "@xats-org/utils": ["./packages/utils/src"],
       "@xats-org/utils/*": ["./packages/utils/src/*"],
       "@xats-org/examples": ["./packages/examples/src"],
-      "@xats-org/examples/*": ["./packages/examples/src/*"]
+      "@xats-org/examples/*": ["./packages/examples/src/*"],
+      "@xats-org/ai-integration": ["./packages/ai-integration/src"],
+      "@xats-org/ai-integration/*": ["./packages/ai-integration/src/*"]
     }
   },
   "files": [],
   "references": [
     { "path": "./packages/schema" },
     { "path": "./packages/validator" },
-    { "path": "./packages/types" }
+    { "path": "./packages/types" },
+    { "path": "./packages/ai-integration" }
   ]
 }
