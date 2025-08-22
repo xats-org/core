@@ -6,6 +6,8 @@
  * confidence scoring, and human review tracking.
  */
 
+import { randomUUID } from 'node:crypto';
+
 import { z } from 'zod';
 
 /**
@@ -151,7 +153,7 @@ export function createAIGenerationExtension(
     prompt,
     metadata: {
       timestamp: new Date().toISOString(),
-      sessionId: sessionId || crypto.randomUUID(),
+      sessionId: sessionId || randomUUID(),
       attempts: 1,
     },
   };
@@ -186,22 +188,26 @@ export function validateAIGenerationExtension(data: unknown): AIGenerationExtens
  * Helper function to check if an object has AI generation metadata
  */
 export function hasAIGenerationMetadata(
-  obj: any
+  obj: unknown
 ): obj is { extensions: { aiGeneration: AIGenerationExtension } } {
   return Boolean(
     obj &&
       typeof obj === 'object' &&
+      obj !== null &&
+      'extensions' in obj &&
       obj.extensions &&
       typeof obj.extensions === 'object' &&
-      obj.extensions.aiGeneration &&
-      typeof obj.extensions.aiGeneration === 'object'
+      obj.extensions !== null &&
+      'aiGeneration' in obj.extensions &&
+      (obj.extensions as Record<string, unknown>).aiGeneration &&
+      typeof (obj.extensions as Record<string, unknown>).aiGeneration === 'object'
   );
 }
 
 /**
  * Helper function to extract AI generation metadata from an object
  */
-export function getAIGenerationMetadata(obj: any): AIGenerationExtension | null {
+export function getAIGenerationMetadata(obj: unknown): AIGenerationExtension | null {
   if (hasAIGenerationMetadata(obj)) {
     try {
       return validateAIGenerationExtension(obj.extensions.aiGeneration);

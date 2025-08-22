@@ -8,7 +8,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 
-import type { AIAgent, AIWorkflow, AIGenerationExtension } from '../metadata/schema.js';
+import type { AIAgent } from '../metadata/schema.js';
 import type { XatsDocument } from '@xats-org/types';
 
 /**
@@ -164,7 +164,7 @@ export class WorkflowOrchestrator {
   /**
    * Start a workflow execution
    */
-  async startWorkflow(
+  startWorkflow(
     workflowId: string,
     document: XatsDocument,
     initialState: Record<string, unknown> = {}
@@ -192,7 +192,7 @@ export class WorkflowOrchestrator {
     // Start execution asynchronously
     void this.executeWorkflow(executionId);
 
-    return executionId;
+    return Promise.resolve(executionId);
   }
 
   /**
@@ -312,7 +312,9 @@ export class WorkflowOrchestrator {
     await this.delay(Math.random() * 1000 + 500);
 
     // Add AI generation metadata to the document
-    const document = context.state.document as XatsDocument & { extensions?: any };
+    const document = context.state.document as XatsDocument & {
+      extensions?: Record<string, unknown>;
+    };
     if (!document.extensions) {
       document.extensions = {};
     }

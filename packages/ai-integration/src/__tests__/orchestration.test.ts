@@ -8,10 +8,10 @@ import {
   AgentRegistry,
   WorkflowOrchestrator,
   WORKFLOW_TEMPLATES,
-  type AIAgent,
   type WorkflowDefinition,
 } from '../orchestration/workflow.js';
 
+import type { AIAgent } from '../metadata/schema.js';
 import type { XatsDocument } from '@xats-org/types';
 
 describe('Agent Orchestration', () => {

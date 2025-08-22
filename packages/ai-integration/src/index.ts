@@ -75,7 +75,7 @@ export const VERSION = '0.5.0';
 export class AIIntegrationFramework {
   private agentRegistry: AgentRegistry;
   private orchestrator: WorkflowOrchestrator;
-  private mcpServer?: AIIntegratedMcpServer;
+  private mcpServer: AIIntegratedMcpServer | undefined;
 
   constructor() {
     this.agentRegistry = new AgentRegistry();
@@ -99,7 +99,7 @@ export class AIIntegrationFramework {
   /**
    * Start the MCP server
    */
-  async startMcpServer(config?: any): Promise<AIIntegratedMcpServer> {
+  async startMcpServer(config?: Record<string, unknown>): Promise<AIIntegratedMcpServer> {
     if (this.mcpServer) {
       throw new Error('MCP server is already running');
     }
@@ -115,7 +115,7 @@ export class AIIntegrationFramework {
   async stopMcpServer(): Promise<void> {
     if (this.mcpServer) {
       await this.mcpServer.close();
-      this.mcpServer = undefined as any;
+      this.mcpServer = undefined;
     }
   }
 

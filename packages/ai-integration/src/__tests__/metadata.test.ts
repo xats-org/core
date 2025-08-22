@@ -2,6 +2,8 @@
  * @xats-org/ai-integration - AI Metadata Schema Tests
  */
 
+import { randomUUID } from 'node:crypto';
+
 import { describe, test, expect } from 'vitest';
 
 import {
@@ -9,8 +11,6 @@ import {
   AIPromptSchema,
   AIMetadataSchema,
   AIReviewSchema,
-  AIAgentSchema,
-  AIWorkflowSchema,
   AIGenerationExtensionSchema,
   createAIGenerationExtension,
   addReviewToExtension,
@@ -81,7 +81,7 @@ describe('AI Metadata Schema', () => {
     test('validates valid metadata', () => {
       const metadata = {
         timestamp: new Date().toISOString(),
-        sessionId: crypto.randomUUID(),
+        sessionId: randomUUID(),
         confidence: 0.95,
         tokensUsed: 1500,
         cost: 0.05,
@@ -99,7 +99,7 @@ describe('AI Metadata Schema', () => {
     test('validates confidence range', () => {
       const base = {
         timestamp: new Date().toISOString(),
-        sessionId: crypto.randomUUID(),
+        sessionId: randomUUID(),
       };
 
       expect(() => AIMetadataSchema.parse({ ...base, confidence: -0.1 })).toThrow();
@@ -141,7 +141,7 @@ describe('AI Metadata Schema', () => {
         },
         metadata: {
           timestamp: new Date().toISOString(),
-          sessionId: crypto.randomUUID(),
+          sessionId: randomUUID(),
         },
         review: {
           status: 'approved' as const,
@@ -155,7 +155,7 @@ describe('AI Metadata Schema', () => {
           capabilities: ['writing', 'education'],
         },
         workflow: {
-          workflowId: crypto.randomUUID(),
+          workflowId: randomUUID(),
           step: 1,
           totalSteps: 3,
           state: {},
@@ -219,7 +219,7 @@ describe('AI Metadata Schema', () => {
             prompt: { template: 'test', parameters: {}, context: [] },
             metadata: {
               timestamp: new Date().toISOString(),
-              sessionId: crypto.randomUUID(),
+              sessionId: randomUUID(),
             },
           },
         },

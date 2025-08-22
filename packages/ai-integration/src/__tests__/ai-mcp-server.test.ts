@@ -19,6 +19,7 @@ describe('AI Integrated MCP Server', () => {
       });
     } catch (error) {
       // Server creation might fail, tests should handle this
+      // eslint-disable-next-line no-console
       console.log('Server creation failed:', error);
     }
   });
