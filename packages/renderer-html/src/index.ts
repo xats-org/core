@@ -36,7 +36,27 @@ import type {
   BodyMatter,
   BackMatter,
   AccessibilityMetadata,
+  RenderingHint,
 } from '@xats-org/types';
+
+/**
+ * Enhanced rendering hint for v0.5.0 compatibility
+ */
+export interface EnhancedRenderingHint {
+  hintType: string;
+  value: string | number | boolean | object | unknown[];
+  priority?: number;
+  fallback?: {
+    hintType: string;
+    value: string | number | boolean | object | unknown[];
+  };
+  conditions?: {
+    outputFormats?: string[];
+    mediaQuery?: string;
+    userPreferences?: Array<'high-contrast' | 'large-text' | 'reduced-motion' | 'screen-reader' | 'keyboard-only'>;
+  };
+  inheritance?: 'inherit' | 'no-inherit' | 'cascade';
+}
 
 /**
  * HTML-specific renderer options
@@ -62,6 +82,15 @@ export interface HtmlRendererOptions extends RendererOptions {
 
   /** Sanitize output HTML */
   sanitize?: boolean;
+
+  /** User accessibility preferences for conditional rendering hints */
+  userPreferences?: Array<'high-contrast' | 'large-text' | 'reduced-motion' | 'screen-reader' | 'keyboard-only'>;
+
+  /** Media query context for conditional rendering */
+  mediaContext?: string;
+
+  /** Enable v0.5.0 enhanced rendering hints processing */
+  enhancedHints?: boolean;
 }
 
 /**
@@ -99,6 +128,9 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       semantic: true,
       includeAria: true,
       sanitize: true,
+      userPreferences: [],
+      mediaContext: 'screen',
+      enhancedHints: true,
 
       ...options,
     };
@@ -619,76 +651,97 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return parts.join('\n');
   }
 
-  private renderContentBlock(block: ContentBlock, _options: Required<HtmlRendererOptions>): string {
+  private renderContentBlock(block: ContentBlock, options: Required<HtmlRendererOptions>): string {
     const blockId = block.id ? ` id="${this.escapeHtml(block.id)}"` : '';
-    const lang = '';
+    const lang = block.language ? ` lang="${block.language}"` : '';
+    const dir = block.textDirection && block.textDirection !== 'ltr' ? ` dir="${block.textDirection}"` : '';
     const blockTypeClass = this.getBlockTypeClass(block.blockType);
+
+    // Process rendering hints for this block
+    const hintResult = this.processRenderingHints(block.renderingHints, 'div', options);
+    const allClasses = ['content-block', blockTypeClass, ...hintResult.cssClasses].join(' ');
+    const style = hintResult.styles ? ` style="${hintResult.styles}"` : '';
+    
+    // Build attribute string from rendering hints
+    const attributeEntries = Object.entries(hintResult.attributes);
+    const attributeString = attributeEntries.length > 0 
+      ? ' ' + attributeEntries.map(([key, value]) => `${key}="${this.escapeHtml(value)}"`).join(' ')
+      : '';
 
     switch (block.blockType) {
       case 'https://xats.org/vocabularies/blocks/paragraph':
-        return this.renderParagraph(block, blockId, lang, blockTypeClass);
+        return this.renderParagraph(block, allClasses, blockId, lang, dir, style, attributeString);
 
       case 'https://xats.org/vocabularies/blocks/heading':
-        return this.renderHeading(block, blockId, lang, blockTypeClass);
+        return this.renderHeading(block, allClasses, blockId, lang, dir, style, attributeString);
 
       case 'https://xats.org/vocabularies/blocks/list':
-        return this.renderList(block, blockId, lang, blockTypeClass);
+        return this.renderList(block, allClasses, blockId, lang, dir, style, attributeString);
 
       case 'https://xats.org/vocabularies/blocks/blockquote':
-        return this.renderBlockquote(block, blockId, lang, blockTypeClass);
+        return this.renderBlockquote(block, allClasses, blockId, lang, dir, style, attributeString);
 
       case 'https://xats.org/vocabularies/blocks/codeBlock':
-        return this.renderCodeBlock(block, blockId, lang, blockTypeClass);
+        return this.renderCodeBlock(block, allClasses, blockId, lang, dir, style, attributeString);
 
       case 'https://xats.org/vocabularies/blocks/mathBlock':
-        return this.renderMathBlock(block, blockId, lang, blockTypeClass);
+        return this.renderMathBlock(block, allClasses, blockId, lang, dir, style, attributeString);
 
       case 'https://xats.org/vocabularies/blocks/table':
-        return this.renderTable(block, blockId, lang, blockTypeClass);
+        return this.renderTable(block, allClasses, blockId, lang, dir, style, attributeString);
 
       case 'https://xats.org/vocabularies/blocks/figure':
-        return this.renderFigure(block, blockId, lang, blockTypeClass);
+        return this.renderFigure(block, allClasses, blockId, lang, dir, style, attributeString);
 
       case 'https://xats.org/vocabularies/placeholders/tableOfContents':
       case 'https://xats.org/vocabularies/placeholders/bibliography':
       case 'https://xats.org/vocabularies/placeholders/index':
-        return this.renderPlaceholder(block, blockId, lang, blockTypeClass);
+        return this.renderPlaceholder(block, allClasses, blockId, lang, dir, style, attributeString);
 
       default:
-        return this.renderGenericBlock(block, blockId, lang, blockTypeClass);
+        return this.renderGenericBlock(block, allClasses, blockId, lang, dir, style, attributeString);
     }
   }
 
   private renderParagraph(
     block: ContentBlock,
+    allClasses: string,
     blockId: string,
     lang: string,
-    blockTypeClass: string
+    dir: string,
+    style: string,
+    attributeString: string
   ): string {
     const content = block.content as { text: SemanticText };
-    return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
+    return `<div class="${allClasses}"${blockId}${lang}${dir}${style}${attributeString}>
       <p>${this.renderSemanticText(content.text)}</p>
     </div>`;
   }
 
   private renderHeading(
     block: ContentBlock,
+    allClasses: string,
     blockId: string,
     lang: string,
-    blockTypeClass: string
+    dir: string,
+    style: string,
+    attributeString: string
   ): string {
     const content = block.content as { text: SemanticText; level?: number };
     const level = Math.min(Math.max(content.level || 1, 1), 6);
-    return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
+    return `<div class="${allClasses}"${blockId}${lang}${dir}${style}${attributeString}>
       <h${level}>${this.renderSemanticText(content.text)}</h${level}>
     </div>`;
   }
 
   private renderList(
     block: ContentBlock,
+    allClasses: string,
     blockId: string,
     lang: string,
-    blockTypeClass: string
+    dir: string,
+    style: string,
+    attributeString: string
   ): string {
     const content = block.content as { listType: 'ordered' | 'unordered'; items: SemanticText[] };
     const tag = content.listType === 'ordered' ? 'ol' : 'ul';
@@ -696,7 +749,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       .map((item) => `<li>${this.renderSemanticText(item)}</li>`)
       .join('\n');
 
-    return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
+    return `<div class="${allClasses}"${blockId}${lang}${dir}${style}${attributeString}>
       <${tag}>
         ${items}
       </${tag}>
@@ -705,12 +758,15 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private renderBlockquote(
     block: ContentBlock,
+    allClasses: string,
     blockId: string,
     lang: string,
-    blockTypeClass: string
+    dir: string,
+    style: string,
+    attributeString: string
   ): string {
     const content = block.content as { text: SemanticText; attribution?: SemanticText };
-    let html = `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
+    let html = `<div class="${allClasses}"${blockId}${lang}${dir}${style}${attributeString}>
       <blockquote>
         ${this.renderSemanticText(content.text)}`;
 
@@ -726,28 +782,34 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private renderCodeBlock(
     block: ContentBlock,
+    allClasses: string,
     blockId: string,
     lang: string,
-    blockTypeClass: string
+    dir: string,
+    style: string,
+    attributeString: string
   ): string {
     const content = block.content as { code: string; language?: string };
     const codeLang = content.language
       ? ` data-language="${this.escapeHtml(content.language)}"`
       : '';
 
-    return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
+    return `<div class="${allClasses}"${blockId}${lang}${dir}${style}${attributeString}>
       <pre><code${codeLang}>${this.escapeHtml(content.code)}</code></pre>
     </div>`;
   }
 
   private renderMathBlock(
     block: ContentBlock,
+    allClasses: string,
     blockId: string,
     lang: string,
-    blockTypeClass: string
+    dir: string,
+    style: string,
+    attributeString: string
   ): string {
     const content = block.content as { math: string };
-    return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
+    return `<div class="${allClasses}"${blockId}${lang}${dir}${style}${attributeString}>
       <div class="math-block" role="img" aria-label="Mathematical expression">
         ${this.escapeHtml(content.math)}
       </div>
@@ -756,9 +818,12 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private renderTable(
     block: ContentBlock,
+    allClasses: string,
     blockId: string,
     lang: string,
-    blockTypeClass: string
+    dir: string,
+    style: string,
+    attributeString: string
   ): string {
     const content = block.content as {
       headers?: SemanticText[];
@@ -766,7 +831,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       caption?: SemanticText;
     };
 
-    let html = `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
+    let html = `<div class="${allClasses}"${blockId}${lang}${dir}${style}${attributeString}>
       <table role="table">`;
 
     if (content.caption) {
@@ -799,9 +864,12 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private renderFigure(
     block: ContentBlock,
+    allClasses: string,
     blockId: string,
     lang: string,
-    blockTypeClass: string
+    dir: string,
+    style: string,
+    attributeString: string
   ): string {
     const content = block.content as {
       src: string;
@@ -811,7 +879,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       height?: number;
     };
 
-    let html = `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
+    let html = `<div class="${allClasses}"${blockId}${lang}${dir}${style}${attributeString}>
       <figure>
         <img src="${this.escapeHtml(content.src)}" alt="${this.escapeHtml(content.alt)}"`;
 
@@ -836,23 +904,30 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private renderPlaceholder(
     block: ContentBlock,
+    allClasses: string,
     blockId: string,
     lang: string,
-    blockTypeClass: string
+    dir: string,
+    style: string,
+    attributeString: string
   ): string {
     const placeholderType = this.getPlaceholderType(block.blockType);
-    return `<div class="content-block ${blockTypeClass} placeholder"${blockId}${lang} role="region" aria-label="${placeholderType}">
+    const placeholderClasses = `${allClasses} placeholder`;
+    return `<div class="${placeholderClasses}"${blockId}${lang}${dir}${style}${attributeString} role="region" aria-label="${placeholderType}">
       <p>[${placeholderType} will be generated here]</p>
     </div>`;
   }
 
   private renderGenericBlock(
     block: ContentBlock,
+    allClasses: string,
     blockId: string,
     lang: string,
-    blockTypeClass: string
+    dir: string,
+    style: string,
+    attributeString: string
   ): string {
-    return `<div class="content-block ${blockTypeClass}"${blockId}${lang}>
+    return `<div class="${allClasses}"${blockId}${lang}${dir}${style}${attributeString}>
       <div class="unknown-block" data-block-type="${this.escapeHtml(block.blockType)}">
         <!-- Unknown block type: ${this.escapeHtml(block.blockType)} -->
         ${JSON.stringify(block.content)}
@@ -1884,6 +1959,774 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         white-space: nowrap;
         border: 0;
       }
+      
+      /* Enhanced Rendering Hints Styles (v0.5.0) */
+      
+      /* Semantic hint styles */
+      .semantic-emphasis {
+        font-style: italic;
+        color: #495057;
+      }
+      
+      .semantic-strong-emphasis {
+        font-weight: 700;
+        color: #343a40;
+      }
+      
+      .semantic-highlight {
+        background-color: #fff3cd;
+        padding: 0.125rem 0.25rem;
+        border-radius: 3px;
+      }
+      
+      .semantic-warning {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-left: 4px solid #e17055;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      
+      .semantic-warning::before {
+        content: "⚠️ ";
+        font-weight: bold;
+        margin-right: 0.5rem;
+      }
+      
+      .semantic-info {
+        background-color: #d1ecf1;
+        border: 1px solid #bee5eb;
+        border-left: 4px solid #17a2b8;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      
+      .semantic-info::before {
+        content: "ℹ️ ";
+        font-weight: bold;
+        margin-right: 0.5rem;
+      }
+      
+      .semantic-success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-left: 4px solid #28a745;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      
+      .semantic-success::before {
+        content: "✅ ";
+        font-weight: bold;
+        margin-right: 0.5rem;
+      }
+      
+      .semantic-error {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-left: 4px solid #dc3545;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      
+      .semantic-error::before {
+        content: "❌ ";
+        font-weight: bold;
+        margin-right: 0.5rem;
+      }
+      
+      .semantic-aside {
+        background-color: #f8f9fa;
+        border-left: 4px solid #6c757d;
+        padding: 1rem;
+        margin: 1rem 0;
+        font-size: 0.9em;
+        color: #6c757d;
+      }
+      
+      .semantic-featured {
+        background-color: #fff;
+        border: 2px solid #007bff;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        box-shadow: 0 2px 4px rgba(0,123,255,0.1);
+      }
+      
+      .semantic-secondary {
+        color: #6c757d;
+        font-size: 0.875em;
+      }
+      
+      .semantic-decorative {
+        opacity: 0.7;
+      }
+      
+      .semantic-call-to-action {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 6px;
+        margin: 1rem 0;
+        text-align: center;
+        font-weight: 600;
+        box-shadow: 0 3px 6px rgba(0,123,255,0.3);
+      }
+      
+      .semantic-call-to-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0,123,255,0.4);
+      }
+      
+      .semantic-definition {
+        background-color: #e9ecef;
+        border-left: 4px solid #6610f2;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        font-style: italic;
+      }
+      
+      .semantic-example {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 1rem;
+        margin: 1rem 0;
+        position: relative;
+      }
+      
+      .semantic-example::before {
+        content: "Example";
+        position: absolute;
+        top: -0.5rem;
+        left: 1rem;
+        background-color: #fff;
+        padding: 0 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6c757d;
+        text-transform: uppercase;
+      }
+      
+      .semantic-quote {
+        font-style: italic;
+        border-left: 4px solid #6c757d;
+        padding-left: 1rem;
+        margin: 1rem 0;
+      }
+      
+      .semantic-citation {
+        font-size: 0.875em;
+        color: #6c757d;
+      }
+      
+      .semantic-footnote {
+        font-size: 0.8em;
+        color: #6c757d;
+        border-top: 1px solid #dee2e6;
+        padding-top: 0.5rem;
+        margin-top: 1rem;
+      }
+      
+      .semantic-annotation {
+        background-color: #fff9c4;
+        border-left: 4px solid #ffc107;
+        padding: 0.5rem 1rem;
+        margin: 0.5rem 0;
+        font-size: 0.9em;
+      }
+      
+      /* Accessibility hint styles */
+      .sr-priority-high {
+        /* Screen reader priority styles handled via ARIA */
+      }
+      
+      .sr-priority-low {
+        /* Screen reader priority styles handled via ARIA */
+      }
+      
+      .focus-trap {
+        outline: 2px solid #007bff;
+        outline-offset: 2px;
+      }
+      
+      .high-contrast-compatible {
+        border: 1px solid currentColor;
+        background-color: transparent;
+      }
+      
+      .motion-safe * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      
+      .cognitive-high {
+        font-size: 1.1em;
+        line-height: 1.8;
+        max-width: 60ch;
+      }
+      
+      .cognitive-low {
+        font-size: 1em;
+        line-height: 1.6;
+      }
+      
+      /* Layout hint styles */
+      .layout-keep-together {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      
+      .layout-new-page {
+        page-break-before: always;
+        break-before: page;
+      }
+      
+      .layout-float-left {
+        float: left;
+        margin: 0 1rem 1rem 0;
+      }
+      
+      .layout-float-right {
+        float: right;
+        margin: 0 0 1rem 1rem;
+      }
+      
+      .layout-center {
+        margin: 0 auto;
+        text-align: center;
+      }
+      
+      .layout-full-width {
+        width: 100%;
+      }
+      
+      .layout-responsive {
+        max-width: 100%;
+        height: auto;
+      }
+      
+      /* Pedagogical hint styles */
+      .pedagogical-key-concept {
+        background-color: #fff3e0;
+        border: 1px solid #ffcc02;
+        border-left: 4px solid #ff9800;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      
+      .pedagogical-key-concept::before {
+        content: "🔑 Key Concept";
+        display: block;
+        font-weight: 700;
+        color: #e65100;
+        margin-bottom: 0.5rem;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      
+      .pedagogical-learning-objective {
+        background-color: #e8f5e8;
+        border: 1px solid #c3e6cb;
+        border-left: 4px solid #28a745;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      
+      .pedagogical-learning-objective::before {
+        content: "🎯 Learning Objective";
+        display: block;
+        font-weight: 700;
+        color: #155724;
+        margin-bottom: 0.5rem;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      
+      .pedagogical-assessment {
+        background-color: #f3e8ff;
+        border: 1px solid #d6ccf5;
+        border-left: 4px solid #6f42c1;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      
+      .pedagogical-assessment::before {
+        content: "📝 Assessment";
+        display: block;
+        font-weight: 700;
+        color: #4c2a85;
+        margin-bottom: 0.5rem;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      
+      .pedagogical-practice {
+        background-color: #e6f7ff;
+        border: 1px solid #b3e0ff;
+        border-left: 4px solid #007bff;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      
+      .pedagogical-practice::before {
+        content: "💪 Practice";
+        display: block;
+        font-weight: 700;
+        color: #0056b3;
+        margin-bottom: 0.5rem;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      
+      .pedagogical-reflection {
+        background-color: #fff5f5;
+        border: 1px solid #fed7d7;
+        border-left: 4px solid #e53e3e;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      
+      .pedagogical-reflection::before {
+        content: "🤔 Reflection";
+        display: block;
+        font-weight: 700;
+        color: #c53030;
+        margin-bottom: 0.5rem;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      
+      /* Responsive design for accessibility */
+      @media (max-width: 768px) {
+        .semantic-call-to-action {
+          padding: 0.75rem 1rem;
+          margin: 0.75rem 0;
+        }
+        
+        .pedagogical-key-concept,
+        .pedagogical-learning-objective,
+        .pedagogical-assessment,
+        .pedagogical-practice,
+        .pedagogical-reflection {
+          padding: 0.75rem;
+          margin: 0.75rem 0;
+        }
+        
+        .layout-float-left,
+        .layout-float-right {
+          float: none;
+          margin: 1rem 0;
+        }
+      }
+      
+      /* High contrast mode support */
+      @media (prefers-contrast: high) {
+        .semantic-highlight {
+          background-color: yellow;
+          color: black;
+        }
+        
+        .semantic-call-to-action {
+          background: black;
+          color: white;
+          border: 2px solid white;
+        }
+      }
+      
+      /* Reduced motion support */
+      @media (prefers-reduced-motion: reduce) {
+        .semantic-call-to-action {
+          transition: none;
+        }
+        
+        .semantic-call-to-action:hover {
+          transform: none;
+        }
+        
+        .motion-safe * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
     `;
+  }
+
+  // Enhanced Rendering Hints Processing (v0.5.0)
+
+  /**
+   * Process rendering hints and apply them to HTML elements
+   */
+  private processRenderingHints(
+    hints: RenderingHint[] | EnhancedRenderingHint[] | undefined,
+    element: string,
+    options: Required<HtmlRendererOptions>
+  ): { element: string; cssClasses: string[]; styles: string; attributes: Record<string, string> } {
+    if (!hints || hints.length === 0 || !options.enhancedHints) {
+      return { element, cssClasses: [], styles: '', attributes: {} };
+    }
+
+    const cssClasses: string[] = [];
+    const styles: string[] = [];
+    const attributes: Record<string, string> = {};
+
+    // Sort hints by priority (highest first)
+    const sortedHints = [...hints].sort((a, b) => {
+      const priorityA = ('priority' in a ? a.priority : 3) || 3;
+      const priorityB = ('priority' in b ? b.priority : 3) || 3;
+      return priorityB - priorityA;
+    });
+
+    for (const hint of sortedHints) {
+      if (!this.shouldApplyHint(hint as EnhancedRenderingHint, options)) {
+        continue;
+      }
+
+      const processed = this.processIndividualHint(hint as EnhancedRenderingHint);
+      
+      if (processed.cssClasses) cssClasses.push(...processed.cssClasses);
+      if (processed.styles) styles.push(processed.styles);
+      if (processed.attributes) Object.assign(attributes, processed.attributes);
+    }
+
+    return {
+      element,
+      cssClasses,
+      styles: styles.join('; '),
+      attributes
+    };
+  }
+
+  /**
+   * Check if a rendering hint should be applied based on conditions
+   */
+  private shouldApplyHint(hint: EnhancedRenderingHint, options: Required<HtmlRendererOptions>): boolean {
+    if (!hint.conditions) return true;
+
+    const { conditions } = hint;
+
+    // Check output format condition
+    if (conditions.outputFormats && !conditions.outputFormats.includes('html')) {
+      return false;
+    }
+
+    // Check media query condition
+    if (conditions.mediaQuery && !this.matchesMediaQuery(conditions.mediaQuery, options.mediaContext)) {
+      return false;
+    }
+
+    // Check user preferences condition
+    if (conditions.userPreferences && conditions.userPreferences.length > 0) {
+      const hasMatchingPreference = conditions.userPreferences.some(pref => 
+        options.userPreferences?.includes(pref)
+      );
+      if (!hasMatchingPreference) return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Simple media query matching for conditional hints
+   */
+  private matchesMediaQuery(mediaQuery: string, context: string): boolean {
+    // Simple implementation - in a full implementation, this would use proper CSS media query parsing
+    if (mediaQuery.includes('screen') && context === 'screen') return true;
+    if (mediaQuery.includes('print') && context === 'print') return true;
+    if (mediaQuery.includes('speech') && context === 'speech') return true;
+    
+    // Default to true for unsupported queries to avoid breaking content
+    return true;
+  }
+
+  /**
+   * Process an individual rendering hint
+   */
+  private processIndividualHint(hint: EnhancedRenderingHint): {
+    cssClasses?: string[];
+    styles?: string;
+    attributes?: Record<string, string>;
+  } {
+    const hintType = hint.hintType;
+
+    // Semantic hints
+    if (hintType.startsWith('https://xats.org/vocabularies/hints/semantic/')) {
+      return this.processSemanticHint(hintType, hint.value);
+    }
+
+    // Accessibility hints
+    if (hintType.startsWith('https://xats.org/vocabularies/hints/accessibility/')) {
+      return this.processAccessibilityHint(hintType, hint.value);
+    }
+
+    // Layout hints
+    if (hintType.startsWith('https://xats.org/vocabularies/hints/layout/')) {
+      return this.processLayoutHint(hintType, hint.value);
+    }
+
+    // Pedagogical hints
+    if (hintType.startsWith('https://xats.org/vocabularies/hints/pedagogical/')) {
+      return this.processPedagogicalHint(hintType, hint.value);
+    }
+
+    return {};
+  }
+
+  /**
+   * Process semantic rendering hints
+   */
+  private processSemanticHint(hintType: string, value: unknown): {
+    cssClasses?: string[];
+    styles?: string;
+    attributes?: Record<string, string>;
+  } {
+    const semanticType = hintType.split('/').pop();
+    const cssClasses: string[] = [];
+    const attributes: Record<string, string> = {};
+
+    switch (semanticType) {
+      case 'emphasis':
+        cssClasses.push('semantic-emphasis');
+        break;
+      case 'strong-emphasis':
+        cssClasses.push('semantic-strong-emphasis');
+        break;
+      case 'highlight':
+        cssClasses.push('semantic-highlight');
+        break;
+      case 'warning':
+        cssClasses.push('semantic-warning');
+        attributes.role = 'alert';
+        break;
+      case 'info':
+        cssClasses.push('semantic-info');
+        attributes.role = 'note';
+        break;
+      case 'success':
+        cssClasses.push('semantic-success');
+        attributes.role = 'status';
+        break;
+      case 'error':
+        cssClasses.push('semantic-error');
+        attributes.role = 'alert';
+        attributes['aria-live'] = 'assertive';
+        break;
+      case 'aside':
+        cssClasses.push('semantic-aside');
+        attributes.role = 'complementary';
+        break;
+      case 'featured':
+        cssClasses.push('semantic-featured');
+        break;
+      case 'secondary':
+        cssClasses.push('semantic-secondary');
+        break;
+      case 'decorative':
+        cssClasses.push('semantic-decorative');
+        attributes['aria-hidden'] = 'true';
+        break;
+      case 'call-to-action':
+        cssClasses.push('semantic-call-to-action');
+        break;
+      case 'definition':
+        cssClasses.push('semantic-definition');
+        break;
+      case 'example':
+        cssClasses.push('semantic-example');
+        break;
+      case 'quote':
+        cssClasses.push('semantic-quote');
+        break;
+      case 'citation':
+        cssClasses.push('semantic-citation');
+        break;
+      case 'footnote':
+        cssClasses.push('semantic-footnote');
+        attributes.role = 'doc-footnote';
+        break;
+      case 'annotation':
+        cssClasses.push('semantic-annotation');
+        attributes.role = 'doc-pullquote';
+        break;
+      default:
+        cssClasses.push(`semantic-${semanticType}`);
+    }
+
+    return { cssClasses, attributes };
+  }
+
+  /**
+   * Process accessibility rendering hints
+   */
+  private processAccessibilityHint(hintType: string, value: unknown): {
+    cssClasses?: string[];
+    styles?: string;
+    attributes?: Record<string, string>;
+  } {
+    const accessibilityType = hintType.split('/').pop();
+    const cssClasses: string[] = [];
+    const attributes: Record<string, string> = {};
+
+    switch (accessibilityType) {
+      case 'screen-reader-priority-high':
+        attributes['aria-live'] = 'assertive';
+        cssClasses.push('sr-priority-high');
+        break;
+      case 'screen-reader-priority-low':
+        cssClasses.push('sr-priority-low');
+        break;
+      case 'skip-screen-reader':
+        attributes['aria-hidden'] = 'true';
+        break;
+      case 'keyboard-shortcut':
+        if (typeof value === 'string') {
+          attributes.accesskey = value;
+        }
+        break;
+      case 'focus-trap':
+        cssClasses.push('focus-trap');
+        break;
+      case 'aria-live-polite':
+        attributes['aria-live'] = 'polite';
+        break;
+      case 'aria-live-assertive':
+        attributes['aria-live'] = 'assertive';
+        break;
+      case 'high-contrast-compatible':
+        cssClasses.push('high-contrast-compatible');
+        break;
+      case 'motion-safe':
+        cssClasses.push('motion-safe');
+        break;
+      case 'cognitive-load-high':
+        cssClasses.push('cognitive-high');
+        break;
+      case 'cognitive-load-low':
+        cssClasses.push('cognitive-low');
+        break;
+    }
+
+    // Handle object-style accessibility hints
+    if (typeof value === 'object' && value !== null) {
+      const obj = value as Record<string, unknown>;
+      
+      if (obj.ariaLabel) attributes['aria-label'] = String(obj.ariaLabel);
+      if (obj.ariaDescription) attributes['aria-describedby'] = String(obj.ariaDescription);
+      if (typeof obj.tabIndex === 'number') attributes.tabindex = String(obj.tabIndex);
+      if (obj.keyboardShortcut) attributes.accesskey = String(obj.keyboardShortcut);
+    }
+
+    return { cssClasses, attributes };
+  }
+
+  /**
+   * Process layout rendering hints
+   */
+  private processLayoutHint(hintType: string, value: unknown): {
+    cssClasses?: string[];
+    styles?: string;
+    attributes?: Record<string, string>;
+  } {
+    const layoutType = hintType.split('/').pop();
+    const cssClasses: string[] = [];
+    let styles = '';
+
+    switch (layoutType) {
+      case 'keep-together':
+        cssClasses.push('layout-keep-together');
+        styles += 'page-break-inside: avoid; break-inside: avoid;';
+        break;
+      case 'allow-break':
+        cssClasses.push('layout-allow-break');
+        break;
+      case 'force-new-page':
+        cssClasses.push('layout-new-page');
+        styles += 'page-break-before: always; break-before: page;';
+        break;
+      case 'float-left':
+        cssClasses.push('layout-float-left');
+        styles += 'float: left;';
+        break;
+      case 'float-right':
+        cssClasses.push('layout-float-right');
+        styles += 'float: right;';
+        break;
+      case 'center':
+        cssClasses.push('layout-center');
+        styles += 'margin: 0 auto; text-align: center;';
+        break;
+      case 'full-width':
+        cssClasses.push('layout-full-width');
+        styles += 'width: 100%;';
+        break;
+      case 'responsive':
+        cssClasses.push('layout-responsive');
+        break;
+      default:
+        cssClasses.push(`layout-${layoutType}`);
+    }
+
+    // Handle object-style layout hints
+    if (typeof value === 'object' && value !== null) {
+      const obj = value as Record<string, unknown>;
+      
+      if (obj.width) styles += `width: ${obj.width}; `;
+      if (obj.margin) styles += `margin: ${obj.margin}; `;
+      if (obj.padding) styles += `padding: ${obj.padding}; `;
+    }
+
+    return { cssClasses, styles };
+  }
+
+  /**
+   * Process pedagogical rendering hints
+   */
+  private processPedagogicalHint(hintType: string, value: unknown): {
+    cssClasses?: string[];
+    styles?: string;
+    attributes?: Record<string, string>;
+  } {
+    const pedagogicalType = hintType.split('/').pop();
+    const cssClasses: string[] = [];
+    const attributes: Record<string, string> = {};
+
+    switch (pedagogicalType) {
+      case 'key-concept':
+        cssClasses.push('pedagogical-key-concept');
+        attributes.role = 'note';
+        break;
+      case 'learning-objective':
+        cssClasses.push('pedagogical-learning-objective');
+        break;
+      case 'assessment':
+        cssClasses.push('pedagogical-assessment');
+        break;
+      case 'practice':
+        cssClasses.push('pedagogical-practice');
+        break;
+      case 'reflection':
+        cssClasses.push('pedagogical-reflection');
+        break;
+      default:
+        cssClasses.push(`pedagogical-${pedagogicalType}`);
+    }
+
+    return { cssClasses, attributes };
   }
 }
