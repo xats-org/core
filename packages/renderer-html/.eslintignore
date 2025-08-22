@@ -1,0 +1,7 @@
+vitest.config.js
+vitest.config.ts
+vitest.config.mts
+*.config.js
+*.config.ts
+*.config.mjs
+*.config.cjs

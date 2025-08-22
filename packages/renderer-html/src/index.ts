@@ -1360,8 +1360,8 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       src: img?.getAttribute('src') || '',
       alt: img?.getAttribute('alt') || '',
       caption: caption ? this.parseTextToSemanticText(caption.textContent || '') : undefined,
-      width: img?.getAttribute('width') ? parseInt(img.getAttribute('width')!) : undefined,
-      height: img?.getAttribute('height') ? parseInt(img.getAttribute('height')!) : undefined,
+      width: img?.getAttribute('width') ? parseInt(img.getAttribute('width') || '0') : undefined,
+      height: img?.getAttribute('height') ? parseInt(img.getAttribute('height') || '0') : undefined,
     };
   }
 
