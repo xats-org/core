@@ -1296,11 +1296,11 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       case 'https://xats.org/vocabularies/blocks/blockquote': {
         const blockquote = blockElement.querySelector('blockquote');
         const cite = blockquote?.querySelector('cite');
-        const content = {
+        const content: Record<string, unknown> = {
           text: this.parseTextToSemanticText(blockquote?.textContent || ''),
         };
         if (cite) {
-          (content as any).attribution = this.parseTextToSemanticText(cite.textContent || '');
+          content.attribution = this.parseTextToSemanticText(cite.textContent || '');
         }
         return content;
       }
@@ -1330,7 +1330,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     }
   }
 
-  private parseTableContent(blockElement: Element) {
+  private parseTableContent(blockElement: Element): Record<string, unknown> {
     const table = blockElement.querySelector('table');
     if (!table) return { rows: [] };
 
@@ -1344,14 +1344,14 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       )
     );
 
-    const content: any = { rows };
+    const content: Record<string, unknown> = { rows };
     if (headers.length > 0) content.headers = headers;
     if (caption) content.caption = this.parseTextToSemanticText(caption.textContent || '');
 
     return content;
   }
 
-  private parseFigureContent(blockElement: Element) {
+  private parseFigureContent(blockElement: Element): Record<string, unknown> {
     const figure = blockElement.querySelector('figure');
     const img = figure?.querySelector('img');
     const caption = figure?.querySelector('figcaption');
