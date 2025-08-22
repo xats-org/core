@@ -1,0 +1,87 @@
+{
+  "name": "@xats-org/ai-integration",
+  "version": "0.5.0",
+  "description": "AI Integration Framework for Multi-Agent Textbook Creation",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./orchestration": {
+      "types": "./dist/orchestration/index.d.ts",
+      "import": "./dist/orchestration/index.js"
+    },
+    "./metadata": {
+      "types": "./dist/metadata/index.d.ts",
+      "import": "./dist/metadata/index.js"
+    },
+    "./mcp": {
+      "types": "./dist/mcp/index.d.ts",
+      "import": "./dist/mcp/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc --build tsconfig.build.json",
+    "dev": "tsc --build tsconfig.build.json --watch",
+    "clean": "rm -rf dist .tsbuildinfo",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts,.js",
+    "lint:fix": "eslint src --ext .ts,.js --fix",
+    "format": "prettier --write \"src/**/*.{ts,js,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,js,json}\"",
+    "typecheck": "tsc --noEmit -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@xats-org/schema": "workspace:*",
+    "@xats-org/types": "workspace:*",
+    "@xats-org/validator": "workspace:*",
+    "@xats-org/utils": "workspace:*",
+    "@xats-org/mcp-server": "workspace:*",
+    "@modelcontextprotocol/sdk": "^0.5.0",
+    "zod": "^3.22.4",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/uuid": "^9.0.0",
+    "@xats-org/vitest-config": "workspace:*",
+    "typescript": "^5.3.0",
+    "vitest": "^3.2.4"
+  },
+  "keywords": [
+    "xats",
+    "ai",
+    "integration",
+    "multi-agent",
+    "mcp",
+    "orchestration",
+    "metadata",
+    "education",
+    "textbook",
+    "generation"
+  ],
+  "author": "xats.org",
+  "license": "CC-BY-SA-4.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xats-org/core.git",
+    "directory": "packages/ai-integration"
+  },
+  "bugs": {
+    "url": "https://github.com/xats-org/core/issues"
+  },
+  "homepage": "https://xats.org",
+  "publishConfig": {
+    "access": "public"
+  }
+}
