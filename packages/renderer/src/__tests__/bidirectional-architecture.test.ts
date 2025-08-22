@@ -4,6 +4,8 @@
 
 import { describe, test, expect, beforeEach } from 'vitest';
 
+import { RendererFactory, PluginRegistry, AbstractBidirectionalRenderer } from '../index.js';
+
 import type {
   XatsDocument,
   RenderResult,
@@ -13,8 +15,6 @@ import type {
   RendererPlugin,
   ParseOptions,
 } from '@xats-org/types';
-
-import { RendererFactory, PluginRegistry, AbstractBidirectionalRenderer } from '../index.js';
 
 // Mock renderer for testing
 class MockRenderer extends AbstractBidirectionalRenderer {
@@ -104,12 +104,14 @@ class MockPlugin implements RendererPlugin {
 
   private initialized = false;
 
-  async initialize(_renderer: BidirectionalRenderer): Promise<void> {
+  initialize(_renderer: BidirectionalRenderer): Promise<void> {
     this.initialized = true;
+    return Promise.resolve();
   }
 
-  async cleanup(): Promise<void> {
+  cleanup(): Promise<void> {
     this.initialized = false;
+    return Promise.resolve();
   }
 
   get isInitialized(): boolean {
@@ -159,7 +161,7 @@ describe('Bidirectional Renderer Architecture', () => {
   });
 
   describe('RendererFactory', () => {
-    test('should register and create renderers', async () => {
+    test('should register and create renderers', () => {
       // Register mock renderer
       factory.registerRenderer('mock', MockRenderer, {
         name: 'Mock Renderer',
@@ -173,7 +175,7 @@ describe('Bidirectional Renderer Architecture', () => {
       expect(factory.getAvailableFormats()).toContain('mock');
 
       // Create renderer
-      const renderer = await factory.createRenderer('mock');
+      const renderer = factory.createRenderer('mock');
       expect(renderer.format).toBe('mock');
       expect(renderer.wcagLevel).toBe('AA');
     });
@@ -207,10 +209,10 @@ describe('Bidirectional Renderer Architecture', () => {
       expect(aaaRenderers).not.toContain('mock');
     });
 
-    test('should create multiple renderers efficiently', async () => {
+    test('should create multiple renderers efficiently', () => {
       factory.registerRenderer('mock', MockRenderer);
 
-      const renderers = await factory.createRenderers(['mock']);
+      const renderers = factory.createRenderers(['mock']);
       expect(renderers.size).toBe(1);
       expect(renderers.get('mock')?.format).toBe('mock');
     });
@@ -231,20 +233,20 @@ describe('Bidirectional Renderer Architecture', () => {
   });
 
   describe('PluginRegistry', () => {
-    test('should register and manage plugins', async () => {
+    test('should register and manage plugins', () => {
       const plugin = new MockPlugin();
 
       // Register plugin
-      await pluginRegistry.register(plugin);
+      pluginRegistry.register(plugin);
 
       // Check registration
       expect(pluginRegistry.getPlugin('mock-plugin')).toBe(plugin);
       expect(pluginRegistry.listPlugins()).toContain(plugin);
     });
 
-    test('should find compatible plugins', async () => {
+    test('should find compatible plugins', () => {
       const plugin = new MockPlugin();
-      await pluginRegistry.register(plugin);
+      pluginRegistry.register(plugin);
 
       const compatiblePlugins = pluginRegistry.findCompatiblePlugins('mock');
       expect(compatiblePlugins).toContain(plugin);
@@ -257,15 +259,15 @@ describe('Bidirectional Renderer Architecture', () => {
       const plugin = new MockPlugin();
       const mockRenderer = new MockRenderer();
 
-      await pluginRegistry.register(plugin);
+      pluginRegistry.register(plugin);
       await pluginRegistry.initializePlugin('mock-plugin', mockRenderer);
 
       expect(plugin.isInitialized).toBe(true);
     });
 
-    test('should provide registry statistics', async () => {
+    test('should provide registry statistics', () => {
       const plugin = new MockPlugin();
-      await pluginRegistry.register(plugin);
+      pluginRegistry.register(plugin);
 
       const stats = pluginRegistry.getStatistics();
       expect(stats.totalPlugins).toBe(1);
@@ -361,10 +363,10 @@ describe('Bidirectional Renderer Architecture', () => {
 
       // Register plugin in registry
       const plugin = new MockPlugin();
-      await pluginRegistry.register(plugin);
+      pluginRegistry.register(plugin);
 
       // Create renderer from factory
-      const renderer = await factory.createRenderer('mock');
+      const renderer = factory.createRenderer('mock');
 
       // Initialize plugin with renderer
       await pluginRegistry.initializePlugin('mock-plugin', renderer);
@@ -383,7 +385,7 @@ describe('Bidirectional Renderer Architecture', () => {
       expect(plugin.isInitialized).toBe(true);
     });
 
-    test('should support multiple renderers and plugins', async () => {
+    test('should support multiple renderers and plugins', () => {
       // Register multiple renderer instances (in real usage these would be different classes)
       factory.registerRenderer('mock', MockRenderer, { name: 'Mock Renderer 1' });
 
@@ -393,7 +395,7 @@ describe('Bidirectional Renderer Architecture', () => {
 
       // Register multiple plugins
       const plugin1 = new MockPlugin();
-      await pluginRegistry.register(plugin1);
+      pluginRegistry.register(plugin1);
 
       // Get statistics
       const factoryMetadata = factory.getAllRendererMetadata();

@@ -143,24 +143,16 @@ export class RendererFactory implements IRendererFactory {
   /**
    * Create multiple renderers efficiently
    */
-  async createRenderers<T extends BidirectionalRenderer>(
-    formats: RenderFormat[]
-  ): Promise<Map<RenderFormat, T>> {
+  createRenderers<T extends BidirectionalRenderer>(formats: RenderFormat[]): Map<RenderFormat, T> {
     const renderers = new Map<RenderFormat, T>();
 
-    const creationPromises = formats.map(async (format) => {
+    for (const format of formats) {
       try {
-        const renderer = await this.createRenderer<T>(format);
-        return { format, renderer };
+        const renderer = this.createRenderer<T>(format);
+        renderers.set(format, renderer);
       } catch (error) {
         throw new Error(`Failed to create ${format} renderer: ${String(error)}`);
       }
-    });
-
-    const results = await Promise.all(creationPromises);
-
-    for (const { format, renderer } of results) {
-      renderers.set(format, renderer);
     }
 
     return renderers;
