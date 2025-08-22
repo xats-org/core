@@ -55,6 +55,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@xats-org/testing": "workspace:*",
     "@xats-org/types": "workspace:*",
     "@xats-org/utils": "workspace:*"
   },
