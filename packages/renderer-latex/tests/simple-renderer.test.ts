@@ -3,7 +3,9 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
+
 import { SimpleLaTeXRenderer } from '../src/simple-renderer.js';
+
 import type { XatsDocument } from '@xats-org/types';
 
 describe('SimpleLaTeXRenderer', () => {
@@ -228,7 +230,7 @@ Content
       const result = await renderer.validate(invalidLatex);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'MISSING_DOCUMENT_CLASS')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'MISSING_DOCUMENT_CLASS')).toBe(true);
     });
 
     it('should detect missing document environment', async () => {
@@ -240,8 +242,8 @@ Content without document environment
       const result = await renderer.validate(invalidLatex);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'MISSING_BEGIN_DOCUMENT')).toBe(true);
-      expect(result.errors.some(e => e.code === 'MISSING_END_DOCUMENT')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'MISSING_BEGIN_DOCUMENT')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'MISSING_END_DOCUMENT')).toBe(true);
     });
   });
 

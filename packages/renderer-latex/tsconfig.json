@@ -1,21 +1,14 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src"
+    "outDir": "./dist"
   },
   "include": [
-    "src/index.ts",
-    "src/types.ts",
-    "src/simple-renderer.ts"
+    "src/**/*"
   ],
   "exclude": [
     "dist", 
     "node_modules",
-    "src/converter.ts",
-    "src/parser.ts",
-    "src/renderer.ts",
-    "src/validator.ts",
-    "src/testing/**/*"
+    "tests"
   ]
 }

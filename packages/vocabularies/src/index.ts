@@ -4,7 +4,10 @@ import { join } from 'path';
 /**
  * Load a vocabulary definition by category and name
  */
-export function loadVocabulary(category: 'blocks' | 'hints' | 'pathways' | 'placeholders' | 'triggers', name: string) {
+export function loadVocabulary(
+  category: 'blocks' | 'hints' | 'pathways' | 'placeholders' | 'triggers',
+  name: string
+) {
   const vocabularyPath = join(__dirname, '..', 'vocabularies', category, name, 'index.json');
   try {
     const content = readFileSync(vocabularyPath, 'utf-8');
@@ -17,7 +20,9 @@ export function loadVocabulary(category: 'blocks' | 'hints' | 'pathways' | 'plac
 /**
  * Get all available vocabulary names for a category
  */
-export function getVocabularyNames(category: 'blocks' | 'hints' | 'pathways' | 'placeholders' | 'triggers'): string[] {
+export function getVocabularyNames(
+  category: 'blocks' | 'hints' | 'pathways' | 'placeholders' | 'triggers'
+): string[] {
   const categoryPath = join(__dirname, '..', 'vocabularies', category);
   try {
     const { readdirSync } = require('fs');
@@ -52,5 +57,5 @@ export const triggerTypes = getVocabularyNames('triggers');
  */
 export const VOCABULARY_BASE_URI = 'https://xats.org/vocabularies';
 
-export const getVocabularyURI = (category: string, name: string) => 
+export const getVocabularyURI = (category: string, name: string) =>
   `${VOCABULARY_BASE_URI}/${category}/${name}`;

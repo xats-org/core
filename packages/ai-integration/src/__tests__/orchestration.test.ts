@@ -3,6 +3,7 @@
  */
 
 import { describe, test, expect, beforeEach } from 'vitest';
+
 import {
   AgentRegistry,
   WorkflowOrchestrator,
@@ -10,6 +11,7 @@ import {
   type AIAgent,
   type WorkflowDefinition,
 } from '../orchestration/workflow.js';
+
 import type { XatsDocument } from '@xats-org/types';
 
 describe('Agent Orchestration', () => {
@@ -29,7 +31,7 @@ describe('Agent Orchestration', () => {
       };
 
       registry.register(agent);
-      
+
       expect(registry.get('test-agent')).toEqual(agent);
       expect(registry.has('test-agent')).toBe(true);
       expect(registry.has('nonexistent')).toBe(false);
@@ -68,12 +70,12 @@ describe('Agent Orchestration', () => {
         },
       ];
 
-      agents.forEach(agent => registry.register(agent));
+      agents.forEach((agent) => registry.register(agent));
 
       const educationAgents = registry.findByCapability('education');
       expect(educationAgents).toHaveLength(2);
-      expect(educationAgents.map(a => a.id)).toContain('writer');
-      expect(educationAgents.map(a => a.id)).toContain('planner');
+      expect(educationAgents.map((a) => a.id)).toContain('writer');
+      expect(educationAgents.map((a) => a.id)).toContain('planner');
 
       const reviewAgents = registry.findByCapability('review');
       expect(reviewAgents).toHaveLength(1);
@@ -126,7 +128,7 @@ describe('Agent Orchestration', () => {
         },
       ];
 
-      agents.forEach(agent => registry.register(agent));
+      agents.forEach((agent) => registry.register(agent));
     });
 
     test('registers workflow definitions', () => {
@@ -166,7 +168,9 @@ describe('Agent Orchestration', () => {
         ],
       };
 
-      expect(() => orchestrator.registerWorkflow(workflow)).toThrow('Agent not found: unknown-agent');
+      expect(() => orchestrator.registerWorkflow(workflow)).toThrow(
+        'Agent not found: unknown-agent'
+      );
     });
 
     test('validates workflow dependencies', () => {
@@ -187,7 +191,9 @@ describe('Agent Orchestration', () => {
         },
       };
 
-      expect(() => orchestrator.registerWorkflow(workflow)).toThrow('Step step1 depends on unknown step: unknown-step');
+      expect(() => orchestrator.registerWorkflow(workflow)).toThrow(
+        'Step step1 depends on unknown step: unknown-step'
+      );
     });
 
     test('starts workflow execution', async () => {
@@ -259,12 +265,12 @@ describe('Agent Orchestration', () => {
       orchestrator.registerWorkflow(workflow);
 
       const executionId = await orchestrator.startWorkflow(workflow.id, document);
-      
+
       // Wait a moment for execution to start
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       const cancelled = orchestrator.cancelExecution(executionId);
-      
+
       // Note: In the real implementation, this might work if the workflow is running
       // For the test, we just verify the method exists and can be called
       expect(typeof cancelled).toBe('boolean');
@@ -304,10 +310,10 @@ describe('Agent Orchestration', () => {
       };
 
       const executionId = await orchestrator.startWorkflow(invalidWorkflow.id, document);
-      
+
       // Wait for execution to complete
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       const status = orchestrator.getExecutionStatus(executionId);
       expect(status?.metadata.status).toBe('failed');
     });
@@ -316,11 +322,11 @@ describe('Agent Orchestration', () => {
   describe('Workflow Templates', () => {
     test('TEXTBOOK_CREATION template is valid', () => {
       const template = WORKFLOW_TEMPLATES.TEXTBOOK_CREATION;
-      
+
       expect(template.id).toBe('textbook-creation');
       expect(template.name).toBe('Multi-Agent Textbook Creation');
       expect(template.steps).toHaveLength(4);
-      
+
       // Check step dependencies
       expect(template.dependencies.content).toContain('outline');
       expect(template.dependencies.examples).toContain('content');
@@ -329,24 +335,24 @@ describe('Agent Orchestration', () => {
 
     test('template has correct step sequence', () => {
       const template = WORKFLOW_TEMPLATES.TEXTBOOK_CREATION;
-      const stepIds = template.steps.map(s => s.id);
-      
+      const stepIds = template.steps.map((s) => s.id);
+
       expect(stepIds).toEqual(['outline', 'content', 'examples', 'review']);
     });
 
     test('template agents have required capabilities', () => {
       const template = WORKFLOW_TEMPLATES.TEXTBOOK_CREATION;
-      
-      const outlineStep = template.steps.find(s => s.id === 'outline');
+
+      const outlineStep = template.steps.find((s) => s.id === 'outline');
       expect(outlineStep?.requiredCapabilities).toContain('content-planning');
-      
-      const contentStep = template.steps.find(s => s.id === 'content');
+
+      const contentStep = template.steps.find((s) => s.id === 'content');
       expect(contentStep?.requiredCapabilities).toContain('content-generation');
-      
-      const examplesStep = template.steps.find(s => s.id === 'examples');
+
+      const examplesStep = template.steps.find((s) => s.id === 'examples');
       expect(examplesStep?.requiredCapabilities).toContain('example-creation');
-      
-      const reviewStep = template.steps.find(s => s.id === 'review');
+
+      const reviewStep = template.steps.find((s) => s.id === 'review');
       expect(reviewStep?.requiredCapabilities).toContain('content-review');
     });
   });

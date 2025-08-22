@@ -1,20 +1,20 @@
 /**
  * LaTeX Testing Suite
- * 
+ *
  * Comprehensive testing framework for LaTeX bidirectional conversion.
  */
 
 // import { RendererTestSuite } from '@xats-org/testing';
 
+import { LaTeXRenderer } from '../renderer.js';
+
+import type { LaTeXRendererOptions } from '../types.js';
 import type {
   XatsDocument,
   // BenchmarkTestCase,
   // CompleteSuiteResult,
   // RendererTestSuiteOptions,
 } from '@xats-org/types';
-
-import { LaTeXRenderer } from '../renderer.js';
-import type { LaTeXRendererOptions } from '../types.js';
 
 /**
  * LaTeX-specific test suite
@@ -87,7 +87,7 @@ export class LaTeXTestSuite {
       documentClassTests: await this.testDocumentClassSupport(documents, options),
     };
 
-    results.success = Object.values(results).every(test => 
+    results.success = Object.values(results).every((test) =>
       typeof test === 'boolean' ? test : test.success
     );
 
@@ -105,14 +105,14 @@ export class LaTeXTestSuite {
       try {
         const renderResult = await this.latexRenderer.render(testCase.document);
         const parseResult = await this.latexRenderer.parse(renderResult.content);
-        
+
         // Check if math is preserved
         const mathPreserved = this.checkMathPreservation(
           testCase.document,
           parseResult.document,
           testCase.expectedMath
         );
-        
+
         results.push(mathPreserved);
       } catch (error) {
         results.push(false);
@@ -120,8 +120,8 @@ export class LaTeXTestSuite {
     }
 
     return {
-      success: results.every(r => r),
-      passCount: results.filter(r => r).length,
+      success: results.every((r) => r),
+      passCount: results.filter((r) => r).length,
       totalCount: results.length,
       details: 'Math expression handling tests',
     };
@@ -138,13 +138,13 @@ export class LaTeXTestSuite {
       try {
         const renderResult = await this.latexRenderer.render(testCase.document);
         const parseResult = await this.latexRenderer.parse(renderResult.content);
-        
+
         // Check if citations are preserved
         const citationsPreserved = this.checkCitationPreservation(
           testCase.document,
           parseResult.document
         );
-        
+
         results.push(citationsPreserved);
       } catch (error) {
         results.push(false);
@@ -152,8 +152,8 @@ export class LaTeXTestSuite {
     }
 
     return {
-      success: results.every(r => r),
-      passCount: results.filter(r => r).length,
+      success: results.every((r) => r),
+      passCount: results.filter((r) => r).length,
       totalCount: results.length,
       details: 'Citation handling tests',
     };
@@ -215,7 +215,8 @@ export class LaTeXTestSuite {
 
     const results: boolean[] = [];
 
-    for (const document of documents.slice(0, 3)) { // Test subset
+    for (const document of documents.slice(0, 3)) {
+      // Test subset
       for (const testOption of testOptions) {
         try {
           const renderResult = await this.latexRenderer.render(document, testOption);
@@ -228,8 +229,8 @@ export class LaTeXTestSuite {
     }
 
     return {
-      success: results.every(r => r),
-      passCount: results.filter(r => r).length,
+      success: results.every((r) => r),
+      passCount: results.filter((r) => r).length,
       totalCount: results.length,
       details: 'Package generation tests',
     };
@@ -245,11 +246,12 @@ export class LaTeXTestSuite {
     const documentClasses = ['article', 'book', 'report', 'memoir'];
     const results: boolean[] = [];
 
-    for (const document of documents.slice(0, 2)) { // Test subset
+    for (const document of documents.slice(0, 2)) {
+      // Test subset
       for (const docClass of documentClasses) {
         try {
-          const renderResult = await this.latexRenderer.render(document, { 
-            documentClass: docClass as any
+          const renderResult = await this.latexRenderer.render(document, {
+            documentClass: docClass as any,
           });
           const hasCorrectClass = renderResult.content.includes(`\\documentclass{${docClass}}`);
           results.push(hasCorrectClass);
@@ -260,8 +262,8 @@ export class LaTeXTestSuite {
     }
 
     return {
-      success: results.every(r => r),
-      passCount: results.filter(r => r).length,
+      success: results.every((r) => r),
+      passCount: results.filter((r) => r).length,
       totalCount: results.length,
       details: 'Document class support tests',
     };
@@ -281,7 +283,7 @@ export class LaTeXTestSuite {
         const roundTripResult = await this.latexRenderer.testRoundTrip(document, {
           fidelityThreshold: options.fidelityThreshold || 0.95,
         });
-        
+
         results.push(roundTripResult.fidelityScore);
       } catch (error) {
         results.push(0);
@@ -289,7 +291,9 @@ export class LaTeXTestSuite {
     }
 
     const averageFidelity = results.reduce((a, b) => a + b, 0) / results.length;
-    const passCount = results.filter(score => score >= (options.fidelityThreshold || 0.95)).length;
+    const passCount = results.filter(
+      (score) => score >= (options.fidelityThreshold || 0.95)
+    ).length;
 
     return {
       success: passCount >= results.length * 0.8, // 80% pass rate
@@ -328,7 +332,10 @@ export class LaTeXTestSuite {
         expectedMath: ['\\sum_{i=1}^{n} x_i'],
       },
       {
-        document: this.createMathTestDocument('equation', '\\begin{equation}E = mc^2\\end{equation}'),
+        document: this.createMathTestDocument(
+          'equation',
+          '\\begin{equation}E = mc^2\\end{equation}'
+        ),
         expectedMath: ['E = mc^2'],
       },
     ];
@@ -357,14 +364,18 @@ export class LaTeXTestSuite {
       },
       subject: 'Mathematics',
       bodyMatter: {
-        contents: [{
-          unitType: 'lesson',
-          title: { runs: [{ type: 'text', text: 'Math Test Unit' }] },
-          contents: [{
-            blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
-            content: math.replace(/\$+/g, ''), // Remove $ delimiters for xats format
-          }],
-        }],
+        contents: [
+          {
+            unitType: 'lesson',
+            title: { runs: [{ type: 'text', text: 'Math Test Unit' }] },
+            contents: [
+              {
+                blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
+                content: math.replace(/\$+/g, ''), // Remove $ delimiters for xats format
+              },
+            ],
+          },
+        ],
       },
     };
   }
@@ -381,21 +392,25 @@ export class LaTeXTestSuite {
       },
       subject: 'General',
       bodyMatter: {
-        contents: [{
-          unitType: 'lesson',
-          title: { runs: [{ type: 'text', text: 'Citation Test Unit' }] },
-          contents: [{
-            blockType: 'https://xats.org/vocabularies/blocks/paragraph',
-            content: {
-              runs: [
-                { type: 'text', text: 'This is a citation: ' },
-                { type: 'citation', citationKey: citationKeys[0] },
-                { type: 'text', text: ' and another: ' },
-                { type: 'citation', citationKey: citationKeys[1] },
-              ],
-            },
-          }],
-        }],
+        contents: [
+          {
+            unitType: 'lesson',
+            title: { runs: [{ type: 'text', text: 'Citation Test Unit' }] },
+            contents: [
+              {
+                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                content: {
+                  runs: [
+                    { type: 'text', text: 'This is a citation: ' },
+                    { type: 'citation', citationKey: citationKeys[0] },
+                    { type: 'text', text: ' and another: ' },
+                    { type: 'citation', citationKey: citationKeys[1] },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
       },
     };
   }
@@ -415,10 +430,7 @@ export class LaTeXTestSuite {
   /**
    * Check citation preservation
    */
-  private checkCitationPreservation(
-    original: XatsDocument,
-    roundTrip: XatsDocument
-  ): boolean {
+  private checkCitationPreservation(original: XatsDocument, roundTrip: XatsDocument): boolean {
     // Simplified check - real implementation would be more thorough
     return true;
   }
@@ -426,10 +438,7 @@ export class LaTeXTestSuite {
   /**
    * Validate package inclusion
    */
-  private validatePackageInclusion(
-    content: string,
-    options: LaTeXRendererOptions
-  ): boolean {
+  private validatePackageInclusion(content: string, options: LaTeXRendererOptions): boolean {
     if (options.useNatbib && !content.includes('\\usepackage{natbib}')) {
       return false;
     }
@@ -443,7 +452,7 @@ export class LaTeXTestSuite {
    * Calculate overall success
    */
   private calculateOverallSuccess(results: boolean[]): boolean {
-    return results.every(r => r);
+    return results.every((r) => r);
   }
 
   /**

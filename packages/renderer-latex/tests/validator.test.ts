@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
+
 import { LaTeXValidator } from '../src/validator.js';
 
 describe('LaTeXValidator', () => {
@@ -47,7 +48,7 @@ Content without document class.
       const result = await validator.validateLaTeX(invalidLatex);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'MISSING_DOCUMENT_CLASS')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'MISSING_DOCUMENT_CLASS')).toBe(true);
     });
 
     it('should detect missing begin/end document', async () => {
@@ -61,8 +62,8 @@ Content without document environment.
       const result = await validator.validateLaTeX(invalidLatex);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'MISSING_BEGIN_DOCUMENT')).toBe(true);
-      expect(result.errors.some(e => e.code === 'MISSING_END_DOCUMENT')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'MISSING_BEGIN_DOCUMENT')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'MISSING_END_DOCUMENT')).toBe(true);
     });
 
     it('should detect unbalanced braces', async () => {
@@ -77,7 +78,7 @@ Content without document environment.
       const result = await validator.validateLaTeX(invalidLatex);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'UNBALANCED_BRACES')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'UNBALANCED_BRACES')).toBe(true);
     });
 
     it('should detect unbalanced environments', async () => {
@@ -94,7 +95,7 @@ Content without document environment.
       const result = await validator.validateLaTeX(invalidLatex);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'ENVIRONMENT_MISMATCH')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'ENVIRONMENT_MISMATCH')).toBe(true);
     });
 
     it('should detect unclosed environments', async () => {
@@ -110,7 +111,7 @@ Content without document environment.
       const result = await validator.validateLaTeX(invalidLatex);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'UNCLOSED_ENVIRONMENTS')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'UNCLOSED_ENVIRONMENTS')).toBe(true);
     });
   });
 
@@ -127,7 +128,7 @@ This has unbalanced $math delimiters.
       const result = await validator.validateLaTeX(invalidLatex);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'UNBALANCED_INLINE_MATH')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'UNBALANCED_INLINE_MATH')).toBe(true);
     });
 
     it('should detect unbalanced display math', async () => {
@@ -142,7 +143,7 @@ This has unbalanced $$display math.
       const result = await validator.validateLaTeX(invalidLatex);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'UNBALANCED_DISPLAY_MATH')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'UNBALANCED_DISPLAY_MATH')).toBe(true);
     });
 
     it('should detect unbalanced math environments', async () => {
@@ -159,7 +160,7 @@ E = mc^2
       const result = await validator.validateLaTeX(invalidLatex);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'UNBALANCED_MATH_ENVIRONMENT')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'UNBALANCED_MATH_ENVIRONMENT')).toBe(true);
     });
   });
 
@@ -175,7 +176,7 @@ This cites \\cite{reference1} but has no bibliography.
 
       const result = await validator.validateLaTeX(latexWithCitations);
 
-      expect(result.warnings.some(w => w.code === 'MISSING_BIBLIOGRAPHY')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'MISSING_BIBLIOGRAPHY')).toBe(true);
     });
 
     it('should validate citation key format', async () => {
@@ -190,7 +191,7 @@ This has invalid citation \\cite{123invalid-key}.
 
       const result = await validator.validateLaTeX(latexWithBadCitations);
 
-      expect(result.warnings.some(w => w.code === 'INVALID_CITATION_KEY')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'INVALID_CITATION_KEY')).toBe(true);
     });
   });
 
@@ -207,7 +208,7 @@ This has invalid citation \\cite{123invalid-key}.
 
       const result = await validator.validateLaTeX(badStructure);
 
-      expect(result.warnings.some(w => w.code === 'SKIPPED_SECTION_LEVEL')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'SKIPPED_SECTION_LEVEL')).toBe(true);
     });
 
     it('should detect undefined references', async () => {
@@ -224,7 +225,7 @@ See \\ref{sec:nonexistent}.
 
       const result = await validator.validateLaTeX(undefinedRef);
 
-      expect(result.warnings.some(w => w.code === 'UNDEFINED_REFERENCE')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'UNDEFINED_REFERENCE')).toBe(true);
     });
 
     it('should detect unused labels', async () => {
@@ -242,7 +243,7 @@ See \\ref{sec:intro}.
 
       const result = await validator.validateLaTeX(unusedLabel);
 
-      expect(result.warnings.some(w => w.code === 'UNUSED_LABEL')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'UNUSED_LABEL')).toBe(true);
     });
   });
 
@@ -260,7 +261,7 @@ Content
 
       const result = await validator.validateLaTeX(conflictingPackages);
 
-      expect(result.warnings.some(w => w.code === 'PACKAGE_CONFLICT')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'PACKAGE_CONFLICT')).toBe(true);
     });
 
     it('should warn about missing required packages', async () => {
@@ -274,7 +275,7 @@ Content
 
       const result = await validator.validateLaTeX(missingPackage);
 
-      expect(result.warnings.some(w => w.code === 'MISSING_REQUIRED_PACKAGE')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'MISSING_REQUIRED_PACKAGE')).toBe(true);
     });
   });
 
@@ -290,7 +291,7 @@ Content with typo
 
       const result = await validator.validateLaTeX(typoLatex);
 
-      expect(result.warnings.some(w => w.code === 'POSSIBLE_TYPO')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'POSSIBLE_TYPO')).toBe(true);
     });
   });
 

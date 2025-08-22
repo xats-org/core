@@ -1,10 +1,17 @@
 /**
  * LaTeX Bidirectional Renderer
- * 
+ *
  * Main renderer class implementing the BidirectionalRenderer interface
  * for LaTeX format conversion.
  */
 
+import { RoundTripTester } from '@xats-org/testing';
+
+import { LaTeXConverter } from './converter.js';
+import { LaTeXParser } from './parser.js';
+import { LaTeXValidator } from './validator.js';
+
+import type { LaTeXRendererOptions, LaTeXParseOptions, LaTeXMetadata } from './types.js';
 import type {
   XatsDocument,
   BidirectionalRenderer,
@@ -17,18 +24,6 @@ import type {
   WcagResult,
   AccessibilityAudit,
 } from '@xats-org/types';
-
-import { RoundTripTester } from '@xats-org/testing';
-
-import { LaTeXConverter } from './converter.js';
-import { LaTeXParser } from './parser.js';
-import { LaTeXValidator } from './validator.js';
-
-import type {
-  LaTeXRendererOptions,
-  LaTeXParseOptions,
-  LaTeXMetadata,
-} from './types.js';
 
 /**
  * LaTeX bidirectional renderer implementing full conversion capabilities
@@ -52,10 +47,7 @@ export class LaTeXRenderer implements BidirectionalRenderer<LaTeXRendererOptions
   /**
    * Render xats document to LaTeX format
    */
-  async render(
-    document: XatsDocument,
-    options: LaTeXRendererOptions = {}
-  ): Promise<RenderResult> {
+  async render(document: XatsDocument, options: LaTeXRendererOptions = {}): Promise<RenderResult> {
     const startTime = Date.now();
 
     try {
@@ -104,10 +96,7 @@ export class LaTeXRenderer implements BidirectionalRenderer<LaTeXRendererOptions
   /**
    * Parse LaTeX content back to xats document
    */
-  async parse(
-    content: string,
-    options: LaTeXParseOptions = {}
-  ): Promise<ParseResult> {
+  async parse(content: string, options: LaTeXParseOptions = {}): Promise<ParseResult> {
     const startTime = Date.now();
 
     try {
@@ -186,8 +175,10 @@ export class LaTeXRenderer implements BidirectionalRenderer<LaTeXRendererOptions
         {
           criterion: 'N/A',
           level,
-          description: 'LaTeX output is not directly accessible - accessibility depends on final rendered format (PDF, HTML, etc.)',
-          recommendation: 'Ensure proper semantic structure in xats document for accessible output formats',
+          description:
+            'LaTeX output is not directly accessible - accessibility depends on final rendered format (PDF, HTML, etc.)',
+          recommendation:
+            'Ensure proper semantic structure in xats document for accessible output formats',
           impact: 'moderate',
         },
       ],
@@ -208,7 +199,8 @@ export class LaTeXRenderer implements BidirectionalRenderer<LaTeXRendererOptions
           criterion: 'N/A',
           level: 'AA',
           description: 'LaTeX output requires compilation to assess accessibility',
-          recommendation: 'Use accessible PDF generation tools or convert to HTML for accessibility testing',
+          recommendation:
+            'Use accessible PDF generation tools or convert to HTML for accessibility testing',
           impact: 'moderate',
         },
       ],
@@ -227,7 +219,8 @@ export class LaTeXRenderer implements BidirectionalRenderer<LaTeXRendererOptions
           priority: 'high',
           category: 'structure',
           description: 'Ensure semantic document structure in source xats document',
-          implementation: 'Use proper heading hierarchy, alt text for figures, and meaningful labels',
+          implementation:
+            'Use proper heading hierarchy, alt text for figures, and meaningful labels',
           wcagCriteria: ['1.3.1', '2.4.6', '4.1.3'],
         },
         {
@@ -256,7 +249,7 @@ export class LaTeXRenderer implements BidirectionalRenderer<LaTeXRendererOptions
       .replace(/\s+/g, ' ') // Normalize whitespace
       .trim();
 
-    return textContent.split(/\s+/).filter(word => word.length > 0).length;
+    return textContent.split(/\s+/).filter((word) => word.length > 0).length;
   }
 
   /**

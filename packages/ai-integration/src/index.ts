@@ -1,6 +1,6 @@
 /**
  * @xats-org/ai-integration - Main Export Module
- * 
+ *
  * AI Integration Framework for Multi-Agent Textbook Creation
  * Provides comprehensive tools for AI-assisted content generation using xats.
  */
@@ -15,7 +15,7 @@ export {
   type AIAgent,
   type AIWorkflow,
   type AIGenerationExtension,
-  
+
   // Schema validation
   AIModelSchema,
   AIPromptSchema,
@@ -24,7 +24,7 @@ export {
   AIAgentSchema,
   AIWorkflowSchema,
   AIGenerationExtensionSchema,
-  
+
   // Helper functions
   createAIGenerationExtension,
   addReviewToExtension,
@@ -39,16 +39,16 @@ export {
   type WorkflowStep,
   type WorkflowDefinition,
   type WorkflowContext,
-  
+
   // Schema validation
   WorkflowStepSchema,
   WorkflowDefinitionSchema,
   WorkflowContextSchema,
-  
+
   // Core classes
   AgentRegistry,
   WorkflowOrchestrator,
-  
+
   // Templates
   WORKFLOW_TEMPLATES,
 } from './orchestration/workflow.js';
@@ -61,8 +61,8 @@ export {
 } from './mcp/ai-mcp-server.js';
 
 // Import for use in the framework class
-import { AgentRegistry, WorkflowOrchestrator } from './orchestration/workflow.js';
 import { AIIntegratedMcpServer } from './mcp/ai-mcp-server.js';
+import { AgentRegistry, WorkflowOrchestrator } from './orchestration/workflow.js';
 
 /**
  * Package version

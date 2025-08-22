@@ -3,6 +3,7 @@
  */
 
 import { describe, test, expect } from 'vitest';
+
 import {
   AIModelSchema,
   AIPromptSchema,
@@ -110,7 +111,7 @@ describe('AI Metadata Schema', () => {
   describe('AIReviewSchema', () => {
     test('validates review statuses', () => {
       const validStatuses = ['pending', 'in_review', 'approved', 'rejected', 'needs_revision'];
-      
+
       for (const status of validStatuses) {
         expect(() => AIReviewSchema.parse({ status })).not.toThrow();
       }

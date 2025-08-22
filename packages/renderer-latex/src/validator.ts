@@ -1,16 +1,15 @@
 /**
  * LaTeX Validator
- * 
+ *
  * Validates LaTeX content for syntax errors and compatibility issues.
  */
 
+import type { LaTeXError } from './types.js';
 import type {
   FormatValidationResult,
   FormatValidationError,
   FormatValidationWarning,
 } from '@xats-org/types';
-
-import type { LaTeXError } from './types.js';
 
 /**
  * Validates LaTeX documents for syntax and compatibility
@@ -26,16 +25,16 @@ export class LaTeXValidator {
     try {
       // Basic syntax validation
       this.validateBasicSyntax(content, errors, warnings);
-      
+
       // Document structure validation
       this.validateDocumentStructure(content, errors, warnings);
-      
+
       // Math validation
       this.validateMath(content, errors, warnings);
-      
+
       // Citation validation
       this.validateCitations(content, errors, warnings);
-      
+
       // Package validation
       this.validatePackages(content, errors, warnings);
 
@@ -209,8 +208,8 @@ export class LaTeXValidator {
    */
   private checkBraceBalance(content: string): number {
     let balance = 0;
-    let inString = false;
-    
+    const inString = false;
+
     for (let i = 0; i < content.length; i++) {
       const char = content[i];
       const prevChar = i > 0 ? content[i - 1] : '';
@@ -236,10 +235,7 @@ export class LaTeXValidator {
   /**
    * Validate environment balance
    */
-  private validateEnvironmentBalance(
-    content: string,
-    errors: FormatValidationError[]
-  ): void {
+  private validateEnvironmentBalance(content: string, errors: FormatValidationError[]): void {
     const envStack: string[] = [];
     const envRegex = /\\(begin|end)\s*\{([^}]+)\}/g;
 
@@ -274,10 +270,7 @@ export class LaTeXValidator {
   /**
    * Check for common command typos
    */
-  private checkCommonTypos(
-    content: string,
-    warnings: FormatValidationWarning[]
-  ): void {
+  private checkCommonTypos(content: string, warnings: FormatValidationWarning[]): void {
     const commonTypos = [
       { wrong: '\\begind', correct: '\\begin' },
       { wrong: '\\endd', correct: '\\end' },
@@ -301,12 +294,14 @@ export class LaTeXValidator {
   /**
    * Validate section hierarchy
    */
-  private validateSectionHierarchy(
-    content: string,
-    warnings: FormatValidationWarning[]
-  ): void {
+  private validateSectionHierarchy(content: string, warnings: FormatValidationWarning[]): void {
     const sectionCommands = [
-      'chapter', 'section', 'subsection', 'subsubsection', 'paragraph', 'subparagraph'
+      'chapter',
+      'section',
+      'subsection',
+      'subsubsection',
+      'paragraph',
+      'subparagraph',
     ];
 
     const sectionRegex = new RegExp(`\\\\(${sectionCommands.join('|')})(?:\\*)?\\s*\\{`, 'g');
@@ -337,10 +332,7 @@ export class LaTeXValidator {
   /**
    * Check for orphaned sections
    */
-  private checkOrphanedSections(
-    content: string,
-    warnings: FormatValidationWarning[]
-  ): void {
+  private checkOrphanedSections(content: string, warnings: FormatValidationWarning[]): void {
     // This is a simplified check
     // Real implementation would be more sophisticated
     const hasChapters = /\\chapter/.test(content);
@@ -358,10 +350,7 @@ export class LaTeXValidator {
   /**
    * Validate labels and references
    */
-  private validateLabelsAndReferences(
-    content: string,
-    warnings: FormatValidationWarning[]
-  ): void {
+  private validateLabelsAndReferences(content: string, warnings: FormatValidationWarning[]): void {
     const labels = new Set<string>();
     const references = new Set<string>();
 
@@ -441,19 +430,16 @@ export class LaTeXValidator {
   /**
    * Validate math environments
    */
-  private validateMathEnvironments(
-    content: string,
-    errors: FormatValidationError[]
-  ): void {
+  private validateMathEnvironments(content: string, errors: FormatValidationError[]): void {
     const mathEnvs = ['equation', 'align', 'gather', 'multline', 'eqnarray'];
-    
+
     for (const env of mathEnvs) {
       const beginRegex = new RegExp(`\\\\begin\\s*\\{${env}\\*?\\}`, 'g');
       const endRegex = new RegExp(`\\\\end\\s*\\{${env}\\*?\\}`, 'g');
-      
+
       const beginMatches = content.match(beginRegex) || [];
       const endMatches = content.match(endRegex) || [];
-      
+
       if (beginMatches.length !== endMatches.length) {
         errors.push({
           code: 'UNBALANCED_MATH_ENVIRONMENT',
@@ -467,24 +453,22 @@ export class LaTeXValidator {
   /**
    * Validate citation keys
    */
-  private validateCitationKeys(
-    content: string,
-    warnings: FormatValidationWarning[]
-  ): void {
+  private validateCitationKeys(content: string, warnings: FormatValidationWarning[]): void {
     const citeRegex = /\\cite(?:p|t|author|year)?\s*(?:\[[^\]]*\])?\s*\{([^}]+)\}/g;
-    
+
     let match;
     while ((match = citeRegex.exec(content)) !== null) {
       if (match[1]) {
-        const keys = match[1].split(',').map(key => key.trim());
-        
+        const keys = match[1].split(',').map((key) => key.trim());
+
         for (const key of keys) {
           // Check for valid citation key format
           if (!/^[a-zA-Z][a-zA-Z0-9_:-]*$/.test(key)) {
             warnings.push({
               code: 'INVALID_CITATION_KEY',
               message: `Invalid citation key format: ${key}`,
-              suggestion: 'Citation keys should start with a letter and contain only letters, numbers, underscores, colons, and hyphens',
+              suggestion:
+                'Citation keys should start with a letter and contain only letters, numbers, underscores, colons, and hyphens',
             });
           }
         }
@@ -495,18 +479,18 @@ export class LaTeXValidator {
   /**
    * Check for package conflicts
    */
-  private checkPackageConflicts(
-    content: string,
-    warnings: FormatValidationWarning[]
-  ): void {
+  private checkPackageConflicts(content: string, warnings: FormatValidationWarning[]): void {
     const conflicts = [
       { packages: ['natbib', 'biblatex'], message: 'natbib and biblatex conflict' },
-      { packages: ['inputenc', 'fontspec'], message: 'inputenc conflicts with fontspec (use with XeLaTeX/LuaLaTeX)' },
+      {
+        packages: ['inputenc', 'fontspec'],
+        message: 'inputenc conflicts with fontspec (use with XeLaTeX/LuaLaTeX)',
+      },
     ];
 
     for (const conflict of conflicts) {
-      const foundPackages = conflict.packages.filter(pkg => 
-        content.includes(`\\usepackage{${pkg}}`) || content.includes(`\\usepackage[`)
+      const foundPackages = conflict.packages.filter(
+        (pkg) => content.includes(`\\usepackage{${pkg}}`) || content.includes(`\\usepackage[`)
       );
 
       if (foundPackages.length > 1) {
@@ -522,25 +506,22 @@ export class LaTeXValidator {
   /**
    * Check for required packages
    */
-  private checkRequiredPackages(
-    content: string,
-    warnings: FormatValidationWarning[]
-  ): void {
+  private checkRequiredPackages(content: string, warnings: FormatValidationWarning[]): void {
     const requirements = [
-      { 
-        feature: /\\includegraphics/, 
-        package: 'graphicx', 
-        message: '\\includegraphics requires graphicx package' 
+      {
+        feature: /\\includegraphics/,
+        package: 'graphicx',
+        message: '\\includegraphics requires graphicx package',
       },
-      { 
-        feature: /\\url/, 
-        package: 'url', 
-        message: '\\url requires url package' 
+      {
+        feature: /\\url/,
+        package: 'url',
+        message: '\\url requires url package',
       },
-      { 
-        feature: /\\href/, 
-        package: 'hyperref', 
-        message: '\\href requires hyperref package' 
+      {
+        feature: /\\href/,
+        package: 'hyperref',
+        message: '\\href requires hyperref package',
       },
     ];
 

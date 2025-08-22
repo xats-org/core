@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
+
 import { LaTeXParser } from '../src/parser.js';
 
 describe('LaTeXParser', () => {
@@ -197,7 +198,7 @@ See \\ref{sec:intro}.
       `.trim();
 
       const metadata = await parser.extractMetadata(latexContent);
-      
+
       // The extraction should clean the title
       expect(metadata.format).toBe('latex');
     });

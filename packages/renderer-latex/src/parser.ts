@@ -1,11 +1,19 @@
 /**
  * LaTeX Parser - LaTeX to xats
- * 
+ *
  * Parses LaTeX documents back to xats format with semantic structure extraction.
  */
 
 // import * as LatexParser from 'latex-parser';
 
+import type {
+  LaTeXParseOptions,
+  LaTeXMetadata,
+  LaTeXContext,
+  LaTeXMathExpression,
+  LaTeXCitation,
+  LaTeXCrossReference,
+} from './types.js';
 import type {
   XatsDocument,
   Unit,
@@ -25,15 +33,6 @@ import type {
   ParseError,
   UnmappedData,
 } from '@xats-org/types';
-
-import type {
-  LaTeXParseOptions,
-  LaTeXMetadata,
-  LaTeXContext,
-  LaTeXMathExpression,
-  LaTeXCitation,
-  LaTeXCrossReference,
-} from './types.js';
 
 /**
  * Result of parsing LaTeX to xats
@@ -73,10 +72,7 @@ export class LaTeXParser {
   /**
    * Parse LaTeX content to xats document
    */
-  async parseToXats(
-    content: string,
-    options: LaTeXParseOptions = {}
-  ): Promise<LaTeXParseResult> {
+  async parseToXats(content: string, options: LaTeXParseOptions = {}): Promise<LaTeXParseResult> {
     this.options = options;
     this.context = this.createEmptyContext();
     this.warnings = [];
@@ -89,10 +85,10 @@ export class LaTeXParser {
       // Parse LaTeX content - simplified for now without latex-parser
       // TODO: Implement proper LaTeX parsing
       const parsed = { content }; // Placeholder
-      
+
       // Extract document structure
       const document = await this.extractDocument(parsed, content);
-      
+
       // Calculate fidelity score
       const fidelityScore = this.calculateFidelityScore();
 
@@ -131,7 +127,7 @@ export class LaTeXParser {
   async extractMetadata(content: string): Promise<LaTeXMetadata> {
     try {
       // const parsed = LatexParser.parse(content); // TODO: Implement proper parsing
-      
+
       return {
         format: 'latex',
         documentClass: this.extractDocumentClass(content),
@@ -162,7 +158,7 @@ export class LaTeXParser {
   private async extractDocument(parsed: any, originalContent: string): Promise<XatsDocument> {
     // Extract metadata
     const metadata = await this.extractMetadata(originalContent);
-    
+
     // Create base document
     const document: XatsDocument = {
       schemaVersion: '0.3.0',
@@ -175,15 +171,15 @@ export class LaTeXParser {
 
     // Extract document structure
     const structure = this.extractDocumentStructure(parsed);
-    
+
     if (structure.frontMatter && structure.frontMatter.length > 0) {
       document.frontMatter = {
         contents: structure.frontMatter,
       };
     }
-    
+
     document.bodyMatter.contents = structure.bodyMatter;
-    
+
     if (structure.backMatter && structure.backMatter.length > 0) {
       document.backMatter = {
         contents: structure.backMatter,
@@ -225,14 +221,14 @@ export class LaTeXParser {
     if (!authorMatch || !authorMatch[1]) return null;
 
     const authorText = this.cleanLatexText(authorMatch[1]);
-    
+
     // Split multiple authors
-    const authors = authorText.split(/\\and/).map(author => author.trim());
-    
+    const authors = authorText.split(/\\and/).map((author) => author.trim());
+
     if (authors.length === 1) {
       return authors[0];
     }
-    
+
     return authors;
   }
 
@@ -244,7 +240,7 @@ export class LaTeXParser {
     if (!dateMatch || !dateMatch[1]) return null;
 
     const dateText = this.cleanLatexText(dateMatch[1]);
-    
+
     // Try to parse date
     const date = new Date(dateText);
     if (!isNaN(date.getTime())) {
@@ -272,9 +268,9 @@ export class LaTeXParser {
 
     // This is a simplified implementation
     // Real implementation would traverse the parsed AST and extract structure
-    
+
     this.mappedElements++;
-    
+
     return result;
   }
 
@@ -292,8 +288,8 @@ export class LaTeXParser {
   private extractDocumentOptions(content: string): string[] {
     const match = content.match(/\\documentclass\[([^\]]+)\]/);
     if (!match || !match[1]) return [];
-    
-    return match[1].split(',').map(opt => opt.trim());
+
+    return match[1].split(',').map((opt) => opt.trim());
   }
 
   /**
@@ -302,17 +298,17 @@ export class LaTeXParser {
   private extractPackages(content: string): any[] {
     const packages: any[] = [];
     const packageRegex = /\\usepackage(?:\[([^\]]*)\])?\s*\{([^}]+)\}/g;
-    
+
     let match;
     while ((match = packageRegex.exec(content)) !== null) {
       if (match[2]) {
         packages.push({
           name: match[2],
-          options: match[1] ? match[1].split(',').map(opt => opt.trim()) : [],
+          options: match[1] ? match[1].split(',').map((opt) => opt.trim()) : [],
         });
       }
     }
-    
+
     return packages;
   }
 
@@ -322,14 +318,14 @@ export class LaTeXParser {
   private extractCustomCommands(content: string): string[] {
     const commands: string[] = [];
     const commandRegex = /\\(?:new|renew)command\s*\{([^}]+)\}/g;
-    
+
     let match;
     while ((match = commandRegex.exec(content)) !== null) {
       if (match[1]) {
         commands.push(match[1]);
       }
     }
-    
+
     return commands;
   }
 
@@ -339,14 +335,14 @@ export class LaTeXParser {
   private extractBibliographyFiles(content: string): string[] {
     const files: string[] = [];
     const bibRegex = /\\bibliography\s*\{([^}]+)\}/g;
-    
+
     let match;
     while ((match = bibRegex.exec(content)) !== null) {
       if (match[1]) {
-        files.push(...match[1].split(',').map(file => file.trim()));
+        files.push(...match[1].split(',').map((file) => file.trim()));
       }
     }
-    
+
     return files;
   }
 
@@ -356,9 +352,9 @@ export class LaTeXParser {
   private extractMathEnvironments(content: string): string[] {
     const environments = new Set<string>();
     const envRegex = /\\begin\s*\{([^}]+)\}/g;
-    
+
     const mathEnvs = ['equation', 'align', 'gather', 'multline', 'eqnarray', 'split', 'cases'];
-    
+
     let match;
     while ((match = envRegex.exec(content)) !== null) {
       if (match[1]) {
@@ -368,7 +364,7 @@ export class LaTeXParser {
         }
       }
     }
-    
+
     return Array.from(environments);
   }
 
@@ -394,15 +390,15 @@ export class LaTeXParser {
   private extractCitations(content: string): string[] {
     const citations = new Set<string>();
     const citeRegex = /\\(?:cite|citep|citet|textcite)(?:\[[^\]]*\])?\s*\{([^}]+)\}/g;
-    
+
     let match;
     while ((match = citeRegex.exec(content)) !== null) {
       if (match[1]) {
-        const keys = match[1].split(',').map(key => key.trim());
-        keys.forEach(key => citations.add(key));
+        const keys = match[1].split(',').map((key) => key.trim());
+        keys.forEach((key) => citations.add(key));
       }
     }
-    
+
     return Array.from(citations);
   }
 
@@ -412,14 +408,14 @@ export class LaTeXParser {
   private extractLabels(content: string): string[] {
     const labels = new Set<string>();
     const labelRegex = /\\label\s*\{([^}]+)\}/g;
-    
+
     let match;
     while ((match = labelRegex.exec(content)) !== null) {
       if (match[1]) {
         labels.add(match[1]);
       }
     }
-    
+
     return Array.from(labels);
   }
 
@@ -429,14 +425,14 @@ export class LaTeXParser {
   private extractReferences(content: string): string[] {
     const references = new Set<string>();
     const refRegex = /\\(?:ref|pageref|autoref|eqref)\s*\{([^}]+)\}/g;
-    
+
     let match;
     while ((match = refRegex.exec(content)) !== null) {
       if (match[1]) {
         references.add(match[1]);
       }
     }
-    
+
     return Array.from(references);
   }
 
@@ -446,7 +442,8 @@ export class LaTeXParser {
   private assessEngineCompatibility(content: string): any {
     return {
       pdflatex: true, // Default assumption
-      xelatex: content.includes('\\usepackage{fontspec}') || content.includes('\\usepackage{xltxtra}'),
+      xelatex:
+        content.includes('\\usepackage{fontspec}') || content.includes('\\usepackage{xltxtra}'),
       lualatex: content.includes('\\usepackage{luacode}') || content.includes('\\directlua'),
     };
   }
@@ -456,19 +453,23 @@ export class LaTeXParser {
    */
   private estimateCompilationPasses(content: string): number {
     let passes = 1;
-    
+
     if (content.includes('\\cite') || content.includes('\\bibliography')) {
       passes = Math.max(passes, 3); // LaTeX + BibTeX + LaTeX
     }
-    
+
     if (content.includes('\\ref') || content.includes('\\pageref')) {
       passes = Math.max(passes, 2); // References need two passes
     }
-    
-    if (content.includes('\\tableofcontents') || content.includes('\\listoffigures') || content.includes('\\listoftables')) {
+
+    if (
+      content.includes('\\tableofcontents') ||
+      content.includes('\\listoffigures') ||
+      content.includes('\\listoftables')
+    ) {
       passes = Math.max(passes, 2); // TOC needs two passes
     }
-    
+
     return passes;
   }
 
@@ -491,13 +492,13 @@ export class LaTeXParser {
   private calculateFidelityScore(): number {
     const total = this.mappedElements + this.unmappedElements;
     if (total === 0) return 1.0;
-    
+
     const baseScore = this.mappedElements / total;
-    
+
     // Penalty for errors and warnings
     const errorPenalty = this.errors.length * 0.1;
     const warningPenalty = this.warnings.length * 0.05;
-    
+
     return Math.max(0, Math.min(1, baseScore - errorPenalty - warningPenalty));
   }
 

@@ -1,6 +1,6 @@
 /**
  * @xats-org/ai-integration - Enhanced MCP Server for AI Workflows
- * 
+ *
  * This module extends the base xats MCP server with AI-specific operations
  * for orchestration, metadata tracking, and multi-agent workflows.
  */
@@ -8,11 +8,10 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
-import { XatsMcpServer } from '@xats-org/mcp-server';
-import type { XatsDocument } from '@xats-org/types';
 
-import { AgentRegistry, WorkflowOrchestrator, WORKFLOW_TEMPLATES } from '../orchestration/workflow.js';
-import { 
+import { XatsMcpServer } from '@xats-org/mcp-server';
+
+import {
   createAIGenerationExtension,
   addReviewToExtension,
   validateAIGenerationExtension,
@@ -23,6 +22,13 @@ import {
   type AIPrompt,
   type AIAgent,
 } from '../metadata/schema.js';
+import {
+  AgentRegistry,
+  WorkflowOrchestrator,
+  WORKFLOW_TEMPLATES,
+} from '../orchestration/workflow.js';
+
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * Enhanced MCP Server with AI Integration capabilities
@@ -36,7 +42,7 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
     super(config);
     this.agentRegistry = new AgentRegistry();
     this.orchestrator = new WorkflowOrchestrator(this.agentRegistry);
-    
+
     // Workflow templates will be registered when appropriate agents are available
     // For now, we'll register them manually when needed
 
@@ -58,7 +64,7 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
   private registerAITools(): void {
     // Get the server instance from parent and add our tools
     const server = (this as any).server;
-    
+
     server.setRequestHandler(ListToolsRequestSchema, async () => {
       // Return all tools including AI-specific ones
       const aiTools = [
@@ -224,41 +230,49 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
         switch (name) {
           case 'ai_add_generation_metadata':
             return await this.handleAddGenerationMetadata(args);
-          
+
           case 'ai_start_workflow':
             return await this.handleStartWorkflow(args);
-          
+
           case 'ai_get_workflow_status':
             return await this.handleGetWorkflowStatus(args);
-          
+
           case 'ai_register_agent':
             return await this.handleRegisterAgent(args);
-          
+
           case 'ai_analyze_generation_metadata':
             return await this.handleAnalyzeGenerationMetadata(args);
-          
+
           case 'ai_update_review_status':
             return await this.handleUpdateReviewStatus(args);
 
           default:
             return {
-              content: [{
-                type: 'text',
-                text: JSON.stringify({ success: false, error: `Unknown tool: ${name}` }, null, 2),
-              }],
+              content: [
+                {
+                  type: 'text',
+                  text: JSON.stringify({ success: false, error: `Unknown tool: ${name}` }, null, 2),
+                },
+              ],
               isError: true,
             };
         }
       } catch (error) {
         return {
-          content: [{
-            type: 'text',
-            text: JSON.stringify({
-              success: false,
-              error: error instanceof Error ? error.message : 'Unknown error',
-              details: error instanceof Error ? error.stack : undefined,
-            }, null, 2),
-          }],
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(
+                {
+                  success: false,
+                  error: error instanceof Error ? error.message : 'Unknown error',
+                  details: error instanceof Error ? error.stack : undefined,
+                },
+                null,
+                2
+              ),
+            },
+          ],
           isError: true,
         };
       }
@@ -270,9 +284,9 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
    */
   private async handleAddGenerationMetadata(args: any) {
     const { target, model, prompt, sessionId } = args;
-    
+
     const extension = createAIGenerationExtension(model as AIModel, prompt as AIPrompt, sessionId);
-    
+
     // Add extension to target object
     if (!target.extensions) {
       target.extensions = {};
@@ -280,14 +294,20 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
     target.extensions.aiGeneration = extension;
 
     return {
-      content: [{
-        type: 'text',
-        text: JSON.stringify({
-          success: true,
-          message: 'AI generation metadata added successfully',
-          metadata: extension,
-        }, null, 2),
-      }],
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              success: true,
+              message: 'AI generation metadata added successfully',
+              metadata: extension,
+            },
+            null,
+            2
+          ),
+        },
+      ],
     };
   }
 
@@ -296,25 +316,31 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
    */
   private async handleStartWorkflow(args: any) {
     const { workflowId, document, initialState = {} } = args;
-    
+
     const executionId = await this.orchestrator.startWorkflow(
       workflowId,
       document as XatsDocument,
       initialState
     );
-    
+
     this.activeWorkflows.set(executionId, workflowId);
 
     return {
-      content: [{
-        type: 'text',
-        text: JSON.stringify({
-          success: true,
-          executionId,
-          workflowId,
-          message: 'Workflow started successfully',
-        }, null, 2),
-      }],
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              success: true,
+              executionId,
+              workflowId,
+              message: 'Workflow started successfully',
+            },
+            null,
+            2
+          ),
+        },
+      ],
     };
   }
 
@@ -323,21 +349,27 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
    */
   private async handleGetWorkflowStatus(args: any) {
     const { executionId } = args;
-    
+
     const status = this.orchestrator.getExecutionStatus(executionId);
-    
+
     if (!status) {
       throw new Error(`Workflow execution not found: ${executionId}`);
     }
 
     return {
-      content: [{
-        type: 'text',
-        text: JSON.stringify({
-          success: true,
-          status,
-        }, null, 2),
-      }],
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              success: true,
+              status,
+            },
+            null,
+            2
+          ),
+        },
+      ],
     };
   }
 
@@ -346,18 +378,24 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
    */
   private async handleRegisterAgent(args: any) {
     const { agent } = args;
-    
+
     this.agentRegistry.register(agent as AIAgent);
 
     return {
-      content: [{
-        type: 'text',
-        text: JSON.stringify({
-          success: true,
-          message: `Agent ${agent.id} registered successfully`,
-          agent,
-        }, null, 2),
-      }],
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              success: true,
+              message: `Agent ${agent.id} registered successfully`,
+              agent,
+            },
+            null,
+            2
+          ),
+        },
+      ],
     };
   }
 
@@ -366,17 +404,23 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
    */
   private async handleAnalyzeGenerationMetadata(args: any) {
     const { document, includeStatistics = true } = args;
-    
+
     const analysis = this.analyzeDocumentMetadata(document, includeStatistics);
 
     return {
-      content: [{
-        type: 'text',
-        text: JSON.stringify({
-          success: true,
-          analysis,
-        }, null, 2),
-      }],
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              success: true,
+              analysis,
+            },
+            null,
+            2
+          ),
+        },
+      ],
     };
   }
 
@@ -385,7 +429,7 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
    */
   private async handleUpdateReviewStatus(args: any) {
     const { target, review } = args;
-    
+
     if (!hasAIGenerationMetadata(target)) {
       throw new Error('Target object does not have AI generation metadata');
     }
@@ -394,14 +438,20 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
     target.extensions.aiGeneration = updatedExtension;
 
     return {
-      content: [{
-        type: 'text',
-        text: JSON.stringify({
-          success: true,
-          message: 'Review status updated successfully',
-          review: updatedExtension.review,
-        }, null, 2),
-      }],
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              success: true,
+              message: 'Review status updated successfully',
+              review: updatedExtension.review,
+            },
+            null,
+            2
+          ),
+        },
+      ],
     };
   }
 
@@ -412,14 +462,16 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
     const results = {
       hasAIContent: false,
       aiGeneratedBlocks: [] as any[],
-      statistics: includeStatistics ? {
-        totalBlocks: 0,
-        aiGeneratedCount: 0,
-        humanReviewedCount: 0,
-        approvedCount: 0,
-        pendingReviewCount: 0,
-        modelUsage: {} as Record<string, number>,
-      } : undefined,
+      statistics: includeStatistics
+        ? {
+            totalBlocks: 0,
+            aiGeneratedCount: 0,
+            humanReviewedCount: 0,
+            approvedCount: 0,
+            pendingReviewCount: 0,
+            modelUsage: {} as Record<string, number>,
+          }
+        : undefined,
     };
 
     // Recursively analyze document structure
@@ -451,8 +503,9 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
 
       if (results.statistics) {
         const modelKey = `${metadata.model.provider}:${metadata.model.id}`;
-        results.statistics.modelUsage[modelKey] = (results.statistics.modelUsage[modelKey] || 0) + 1;
-        
+        results.statistics.modelUsage[modelKey] =
+          (results.statistics.modelUsage[modelKey] || 0) + 1;
+
         if (metadata.review) {
           results.statistics.humanReviewedCount++;
           if (metadata.review.status === 'approved') {
@@ -466,9 +519,9 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
 
     // Recursively check child objects and arrays
     if (Array.isArray(obj)) {
-      obj.forEach(item => this.analyzeObjectMetadata(item, results));
+      obj.forEach((item) => this.analyzeObjectMetadata(item, results));
     } else {
-      Object.values(obj).forEach(value => this.analyzeObjectMetadata(value, results));
+      Object.values(obj).forEach((value) => this.analyzeObjectMetadata(value, results));
     }
 
     if (results.statistics) {

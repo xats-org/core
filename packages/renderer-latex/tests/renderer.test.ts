@@ -3,7 +3,9 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import { LaTeXRenderer } from '../src/renderer.js';
+
+import { LaTeXRenderer } from '../src/index.js';
+
 import type { XatsDocument } from '@xats-org/types';
 
 describe('LaTeXRenderer', () => {
@@ -24,18 +26,22 @@ describe('LaTeXRenderer', () => {
         },
         subject: 'Testing',
         bodyMatter: {
-          contents: [{
-            unitType: 'lesson',
-            title: {
-              runs: [{ runType: 'text', text: 'Introduction' }],
-            },
-            contents: [{
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
-              content: {
-                runs: [{ runType: 'text', text: 'This is a test paragraph.' }],
+          contents: [
+            {
+              unitType: 'lesson',
+              title: {
+                runs: [{ runType: 'text', text: 'Introduction' }],
               },
-            }],
-          }],
+              contents: [
+                {
+                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  content: {
+                    runs: [{ runType: 'text', text: 'This is a test paragraph.' }],
+                  },
+                },
+              ],
+            },
+          ],
         },
       };
 
@@ -100,22 +106,26 @@ describe('LaTeXRenderer', () => {
         },
         subject: 'Testing',
         bodyMatter: {
-          contents: [{
-            unitType: 'lesson',
-            title: {
-              runs: [{ runType: 'text', text: 'Test Unit' }],
-            },
-            contents: [{
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
-              content: {
-                runs: [
-                  { runType: 'text', text: 'This is ' },
-                  { runType: 'emphasis', runs: [{ runType: 'text', text: 'emphasized' }] },
-                  { runType: 'text', text: ' text.' },
-                ],
+          contents: [
+            {
+              unitType: 'lesson',
+              title: {
+                runs: [{ runType: 'text', text: 'Test Unit' }],
               },
-            }],
-          }],
+              contents: [
+                {
+                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  content: {
+                    runs: [
+                      { runType: 'text', text: 'This is ' },
+                      { runType: 'emphasis', runs: [{ runType: 'text', text: 'emphasized' }] },
+                      { runType: 'text', text: ' text.' },
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
         },
       };
 
@@ -133,18 +143,22 @@ describe('LaTeXRenderer', () => {
         },
         subject: 'Mathematics',
         bodyMatter: {
-          contents: [{
-            unitType: 'lesson',
-            title: {
-              runs: [{ runType: 'text', text: 'Math Test' }],
+          contents: [
+            {
+              unitType: 'lesson',
+              title: {
+                runs: [{ runType: 'text', text: 'Math Test' }],
+              },
+              contents: [
+                {
+                  blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
+                  content: 'E = mc^2',
+                  id: 'equation:einstein',
+                  renderingHints: [{ hintType: 'numbered', value: true }],
+                },
+              ],
             },
-            contents: [{
-              blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
-              content: 'E = mc^2',
-              id: 'equation:einstein',
-              renderingHints: [{ hintType: 'numbered', value: true }],
-            }],
-          }],
+          ],
         },
       };
 
@@ -165,22 +179,26 @@ describe('LaTeXRenderer', () => {
         },
         subject: 'Testing',
         bodyMatter: {
-          contents: [{
-            unitType: 'lesson',
-            title: {
-              runs: [{ runType: 'text', text: 'Citation Test' }],
-            },
-            contents: [{
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
-              content: {
-                runs: [
-                  { runType: 'text', text: 'As stated in ' },
-                  { runType: 'citation', citationKey: 'smith2023' },
-                  { runType: 'text', text: ', this is important.' },
-                ],
+          contents: [
+            {
+              unitType: 'lesson',
+              title: {
+                runs: [{ runType: 'text', text: 'Citation Test' }],
               },
-            }],
-          }],
+              contents: [
+                {
+                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  content: {
+                    runs: [
+                      { runType: 'text', text: 'As stated in ' },
+                      { runType: 'citation', citationKey: 'smith2023' },
+                      { runType: 'text', text: ', this is important.' },
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
         },
       };
 
@@ -200,18 +218,27 @@ describe('LaTeXRenderer', () => {
         },
         subject: 'Testing',
         bodyMatter: {
-          contents: [{
-            unitType: 'lesson',
-            title: {
-              runs: [{ runType: 'text', text: 'Special Characters Test' }],
-            },
-            contents: [{
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
-              content: {
-                runs: [{ runType: 'text', text: 'Cost: $50 & 25% tax #1 item^2 file_name {group} ~home \\path' }],
+          contents: [
+            {
+              unitType: 'lesson',
+              title: {
+                runs: [{ runType: 'text', text: 'Special Characters Test' }],
               },
-            }],
-          }],
+              contents: [
+                {
+                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  content: {
+                    runs: [
+                      {
+                        runType: 'text',
+                        text: 'Cost: $50 & 25% tax #1 item^2 file_name {group} ~home \\path',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
         },
       };
 
@@ -259,9 +286,9 @@ describe('LaTeXRenderer', () => {
         },
       };
 
-      const result = await renderer.render(document, { 
+      const result = await renderer.render(document, {
         useBiblatex: true,
-        citationStyle: 'apa'
+        citationStyle: 'apa',
       });
 
       expect(result.content).toContain('\\usepackage[style=apa]{biblatex}');
