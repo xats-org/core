@@ -53,7 +53,9 @@ export interface EnhancedRenderingHint {
   conditions?: {
     outputFormats?: string[];
     mediaQuery?: string;
-    userPreferences?: Array<'high-contrast' | 'large-text' | 'reduced-motion' | 'screen-reader' | 'keyboard-only'>;
+    userPreferences?: Array<
+      'high-contrast' | 'large-text' | 'reduced-motion' | 'screen-reader' | 'keyboard-only'
+    >;
   };
   inheritance?: 'inherit' | 'no-inherit' | 'cascade';
 }
@@ -84,7 +86,9 @@ export interface HtmlRendererOptions extends RendererOptions {
   sanitize?: boolean;
 
   /** User accessibility preferences for conditional rendering hints */
-  userPreferences?: Array<'high-contrast' | 'large-text' | 'reduced-motion' | 'screen-reader' | 'keyboard-only'>;
+  userPreferences?: Array<
+    'high-contrast' | 'large-text' | 'reduced-motion' | 'screen-reader' | 'keyboard-only'
+  >;
 
   /** Media query context for conditional rendering */
   mediaContext?: string;
@@ -369,7 +373,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   private enhanceAccessibility(content: string, document: XatsDocument): string {
     // Add schema.org structured data for better machine readability
     const structuredData = this.generateStructuredData(document);
-    
+
     // Insert structured data before closing head tag
     if (content.includes('</head>')) {
       content = content.replace(
@@ -457,7 +461,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (options.optimizeForLargeDocuments && this.isLargeDocument(document)) {
       return await this.renderLargeDocumentOptimized(document, options);
     }
-    
+
     // Use Promise.resolve to make this truly async
     return await Promise.resolve(this.renderDocument(document, options));
   }
@@ -475,18 +479,19 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
    */
   private estimateDocumentSize(document: XatsDocument): number {
     let count = 0;
-    
+
     // Count front matter blocks
     if (document.frontMatter) {
       if (document.frontMatter.preface) count += document.frontMatter.preface.length;
-      if (document.frontMatter.acknowledgments) count += document.frontMatter.acknowledgments.length;
+      if (document.frontMatter.acknowledgments)
+        count += document.frontMatter.acknowledgments.length;
     }
-    
+
     // Count body matter blocks
     for (const content of document.bodyMatter.contents) {
       count += this.countContentBlocks(content);
     }
-    
+
     // Count back matter blocks
     if (document.backMatter) {
       if (document.backMatter.appendices) {
@@ -498,28 +503,31 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       if (document.backMatter.bibliography) count += document.backMatter.bibliography.length;
       if (document.backMatter.index) count += document.backMatter.index.length;
     }
-    
+
     return count;
   }
 
   /**
    * Count content blocks in a structural container
    */
-  private countContentBlocks(container: any): number {
+  private countContentBlocks(container: Unit | Chapter | Section): number {
     let count = 0;
-    
-    if (container && container.contents) {
+
+    if (container.contents) {
       for (const item of container.contents) {
-        if (item.blockType) {
+        if ('blockType' in item) {
           // This is a ContentBlock
           count += 1;
-        } else if (item.contents) {
-          // This is another container, recurse
-          count += this.countContentBlocks(item);
+        } else {
+          // This is another container (Section), recurse
+          const section = item as Section;
+          if (section.contents) {
+            count += this.countContentBlocks(section);
+          }
         }
       }
     }
-    
+
     return count;
   }
 
@@ -613,32 +621,32 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (frontMatter.preface) {
       parts.push('<section class="preface" role="region" aria-label="Preface">');
       parts.push('<h1>Preface</h1>');
-      
+
       // Process in chunks to avoid memory pressure
       for (const block of frontMatter.preface) {
         parts.push(this.renderContentBlock(block, options));
-        
+
         // Yield control periodically for large sections
         if (parts.length % 10 === 0) {
-          await new Promise(resolve => setImmediate(resolve));
+          await new Promise((resolve) => setImmediate(resolve));
         }
       }
-      
+
       parts.push('</section>');
     }
 
     if (frontMatter.acknowledgments) {
       parts.push('<section class="acknowledgments" role="region" aria-label="Acknowledgments">');
       parts.push('<h1>Acknowledgments</h1>');
-      
+
       for (const block of frontMatter.acknowledgments) {
         parts.push(this.renderContentBlock(block, options));
-        
+
         if (parts.length % 10 === 0) {
-          await new Promise(resolve => setImmediate(resolve));
+          await new Promise((resolve) => setImmediate(resolve));
         }
       }
-      
+
       parts.push('</section>');
     }
 
@@ -656,19 +664,23 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
     for (let i = 0; i < bodyMatter.contents.length; i++) {
       const content = bodyMatter.contents[i];
-      
+
       if (!content) continue;
-      
+
       // Render content based on structure
       if ('contents' in content && Array.isArray(content.contents)) {
         const firstChild = content.contents[0];
-        
+
         if (!firstChild) {
           parts.push(this.renderChapter(content as Chapter, options));
         } else if ('contents' in firstChild && Array.isArray(firstChild.contents)) {
           const firstGrandchild = firstChild.contents[0];
-          
-          if (firstGrandchild && 'contents' in firstGrandchild && Array.isArray(firstGrandchild.contents)) {
+
+          if (
+            firstGrandchild &&
+            'contents' in firstGrandchild &&
+            Array.isArray(firstGrandchild.contents)
+          ) {
             parts.push(this.renderUnit(content as Unit, options));
           } else {
             parts.push(this.renderChapter(content as Chapter, options));
@@ -682,7 +694,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
       // Yield control periodically for large documents
       if (i % options.maxChunks === 0 && i > 0) {
-        await new Promise(resolve => setImmediate(resolve));
+        await new Promise((resolve) => setImmediate(resolve));
       }
     }
 
@@ -701,49 +713,49 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (backMatter.appendices) {
       parts.push('<section class="appendices" role="region" aria-label="Appendices">');
       parts.push('<h1>Appendices</h1>');
-      
+
       for (const appendix of backMatter.appendices) {
         parts.push(this.renderChapter(appendix, options));
-        await new Promise(resolve => setImmediate(resolve));
+        await new Promise((resolve) => setImmediate(resolve));
       }
-      
+
       parts.push('</section>');
     }
 
     if (backMatter.glossary) {
       parts.push('<section class="glossary" role="region" aria-label="Glossary">');
       parts.push('<h1>Glossary</h1>');
-      
+
       for (const block of backMatter.glossary) {
         parts.push(this.renderContentBlock(block, options));
-        
+
         if (parts.length % 10 === 0) {
-          await new Promise(resolve => setImmediate(resolve));
+          await new Promise((resolve) => setImmediate(resolve));
         }
       }
-      
+
       parts.push('</section>');
     }
 
     if (backMatter.bibliography) {
       parts.push('<section class="bibliography" role="region" aria-label="Bibliography">');
       parts.push('<h1>Bibliography</h1>');
-      
+
       for (const block of backMatter.bibliography) {
         parts.push(this.renderContentBlock(block, options));
       }
-      
+
       parts.push('</section>');
     }
 
     if (backMatter.index) {
       parts.push('<section class="index" role="region" aria-label="Index">');
       parts.push('<h1>Index</h1>');
-      
+
       for (const block of backMatter.index) {
         parts.push(this.renderContentBlock(block, options));
       }
-      
+
       parts.push('</section>');
     }
 
@@ -1048,11 +1060,11 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private renderContentBlock(block: ContentBlock, options: Required<HtmlRendererOptions>): string {
     const blockId = block.id ? ` id="${this.escapeHtml(block.id)}"` : '';
-    
+
     // Extract language and text direction from extensions if available
     const language = block.extensions?.language as string | undefined;
     const textDirection = block.extensions?.textDirection as string | undefined;
-    
+
     const lang = language ? ` lang="${language}"` : '';
     const dir = textDirection && textDirection !== 'ltr' ? ` dir="${textDirection}"` : '';
     const blockTypeClass = this.getBlockTypeClass(block.blockType);
@@ -1061,12 +1073,15 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const hintResult = this.processRenderingHints(block.renderingHints, 'div', options);
     const allClasses = ['content-block', blockTypeClass, ...hintResult.cssClasses].join(' ');
     const style = hintResult.styles ? ` style="${hintResult.styles}"` : '';
-    
+
     // Build attribute string from rendering hints
     const attributeEntries = Object.entries(hintResult.attributes);
-    const attributeString = attributeEntries.length > 0 
-      ? ' ' + attributeEntries.map(([key, value]) => `${key}="${this.escapeHtml(value)}"`).join(' ')
-      : '';
+    const attributeString =
+      attributeEntries.length > 0
+        ? ` ${attributeEntries
+            .map(([key, value]) => `${key}="${this.escapeHtml(value)}"`)
+            .join(' ')}`
+        : '';
 
     switch (block.blockType) {
       case 'https://xats.org/vocabularies/blocks/paragraph':
@@ -1096,10 +1111,26 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       case 'https://xats.org/vocabularies/placeholders/tableOfContents':
       case 'https://xats.org/vocabularies/placeholders/bibliography':
       case 'https://xats.org/vocabularies/placeholders/index':
-        return this.renderPlaceholder(block, allClasses, blockId, lang, dir, style, attributeString);
+        return this.renderPlaceholder(
+          block,
+          allClasses,
+          blockId,
+          lang,
+          dir,
+          style,
+          attributeString
+        );
 
       default:
-        return this.renderGenericBlock(block, allClasses, blockId, lang, dir, style, attributeString);
+        return this.renderGenericBlock(
+          block,
+          allClasses,
+          blockId,
+          lang,
+          dir,
+          style,
+          attributeString
+        );
     }
   }
 
@@ -1701,7 +1732,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     );
   }
 
-  private parseContentBlock(blockElement: Element, options: Required<ParseOptions>): ContentBlock {
+  private parseContentBlock(blockElement: Element, _options: Required<ParseOptions>): ContentBlock {
     const id = blockElement.getAttribute('id') || '';
 
     // Determine block type from class
@@ -1715,9 +1746,9 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const language = blockElement.getAttribute('lang') || undefined;
     const textDirection = (blockElement.getAttribute('dir') as 'ltr' | 'rtl' | 'auto') || undefined;
 
-    const block: ContentBlock = { 
-      id, 
-      blockType, 
+    const block: ContentBlock = {
+      id,
+      blockType,
       content,
       ...(renderingHints.length > 0 && { renderingHints }),
       ...(language && { language }),
@@ -1870,7 +1901,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
     // Parse CSS classes to extract rendering hints
     const classList = Array.from(element.classList);
-    
+
     for (const className of classList) {
       const hint = this.parseClassNameToHint(className);
       if (hint) {
@@ -1887,7 +1918,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     hints.push(...dataHints);
 
     // Convert to base RenderingHint type
-    return hints.map(hint => ({
+    return hints.map((hint) => ({
       hintType: hint.hintType,
       value: hint.value,
     }));
@@ -1907,7 +1938,13 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     }
 
     // Accessibility hints
-    if (className.startsWith('sr-') || className.startsWith('cognitive-') || className === 'high-contrast-compatible' || className === 'motion-safe' || className === 'focus-trap') {
+    if (
+      className.startsWith('sr-') ||
+      className.startsWith('cognitive-') ||
+      className === 'high-contrast-compatible' ||
+      className === 'motion-safe' ||
+      className === 'focus-trap'
+    ) {
       let accessibilityType = className;
       if (className === 'sr-priority-high') accessibilityType = 'screen-reader-priority-high';
       if (className === 'sr-priority-low') accessibilityType = 'screen-reader-priority-low';
@@ -1925,7 +1962,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       const layoutType = className.replace('layout-', '');
       let mappedType = layoutType;
       if (layoutType === 'new-page') mappedType = 'force-new-page';
-      
+
       return {
         hintType: `https://xats.org/vocabularies/hints/layout/${mappedType}`,
         value: mappedType,
@@ -2016,7 +2053,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
         // Try to parse as JSON for complex values
         try {
-          const parsed = JSON.parse(attr.value);
+          const parsed = JSON.parse(attr.value) as unknown;
           // Only accept valid hint value types
           if (
             typeof parsed === 'string' ||
@@ -2992,7 +3029,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       }
 
       const processed = this.processIndividualHint(hint as EnhancedRenderingHint);
-      
+
       if (processed.cssClasses) cssClasses.push(...processed.cssClasses);
       if (processed.styles) styles.push(processed.styles);
       if (processed.attributes) Object.assign(attributes, processed.attributes);
@@ -3002,14 +3039,17 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       element,
       cssClasses,
       styles: styles.join('; '),
-      attributes
+      attributes,
     };
   }
 
   /**
    * Check if a rendering hint should be applied based on conditions
    */
-  private shouldApplyHint(hint: EnhancedRenderingHint, options: Required<HtmlRendererOptions>): boolean {
+  private shouldApplyHint(
+    hint: EnhancedRenderingHint,
+    options: Required<HtmlRendererOptions>
+  ): boolean {
     if (!hint.conditions) return true;
 
     const { conditions } = hint;
@@ -3020,13 +3060,16 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     }
 
     // Check media query condition
-    if (conditions.mediaQuery && !this.matchesMediaQuery(conditions.mediaQuery, options.mediaContext)) {
+    if (
+      conditions.mediaQuery &&
+      !this.matchesMediaQuery(conditions.mediaQuery, options.mediaContext)
+    ) {
       return false;
     }
 
     // Check user preferences condition
     if (conditions.userPreferences && conditions.userPreferences.length > 0) {
-      const hasMatchingPreference = conditions.userPreferences.some(pref => 
+      const hasMatchingPreference = conditions.userPreferences.some((pref) =>
         options.userPreferences?.includes(pref)
       );
       if (!hasMatchingPreference) return false;
@@ -3043,7 +3086,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (mediaQuery.includes('screen') && context === 'screen') return true;
     if (mediaQuery.includes('print') && context === 'print') return true;
     if (mediaQuery.includes('speech') && context === 'speech') return true;
-    
+
     // Default to true for unsupported queries to avoid breaking content
     return true;
   }
@@ -3084,7 +3127,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Process semantic rendering hints
    */
-  private processSemanticHint(hintType: string, value: unknown): {
+  private processSemanticHint(
+    hintType: string,
+    _value: unknown
+  ): {
     cssClasses?: string[];
     styles?: string;
     attributes?: Record<string, string>;
@@ -3167,7 +3213,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Process accessibility rendering hints
    */
-  private processAccessibilityHint(hintType: string, value: unknown): {
+  private processAccessibilityHint(
+    hintType: string,
+    value: unknown
+  ): {
     cssClasses?: string[];
     styles?: string;
     attributes?: Record<string, string>;
@@ -3218,7 +3267,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     // Handle object-style accessibility hints
     if (typeof value === 'object' && value !== null) {
       const obj = value as Record<string, unknown>;
-      
+
       if (obj.ariaLabel) attributes['aria-label'] = String(obj.ariaLabel);
       if (obj.ariaDescription) attributes['aria-describedby'] = String(obj.ariaDescription);
       if (typeof obj.tabIndex === 'number') attributes.tabindex = String(obj.tabIndex);
@@ -3231,7 +3280,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Process layout rendering hints
    */
-  private processLayoutHint(hintType: string, value: unknown): {
+  private processLayoutHint(
+    hintType: string,
+    value: unknown
+  ): {
     cssClasses?: string[];
     styles?: string;
     attributes?: Record<string, string>;
@@ -3278,10 +3330,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     // Handle object-style layout hints
     if (typeof value === 'object' && value !== null) {
       const obj = value as Record<string, unknown>;
-      
-      if (obj.width) styles += `width: ${obj.width}; `;
-      if (obj.margin) styles += `margin: ${obj.margin}; `;
-      if (obj.padding) styles += `padding: ${obj.padding}; `;
+
+      if (obj.width) styles += `width: ${String(obj.width)}; `;
+      if (obj.margin) styles += `margin: ${String(obj.margin)}; `;
+      if (obj.padding) styles += `padding: ${String(obj.padding)}; `;
     }
 
     return { cssClasses, styles };
@@ -3290,7 +3342,10 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
   /**
    * Process pedagogical rendering hints
    */
-  private processPedagogicalHint(hintType: string, value: unknown): {
+  private processPedagogicalHint(
+    hintType: string,
+    _value: unknown
+  ): {
     cssClasses?: string[];
     styles?: string;
     attributes?: Record<string, string>;

@@ -838,7 +838,9 @@ describe('HtmlRenderer', () => {
   });
 
   describe('Enhanced Rendering Hints (v0.5.0)', () => {
-    const createDocumentWithHints = (hints: Array<{ hintType: string; value: unknown }>): XatsDocument => ({
+    const createDocumentWithHints = (
+      hints: Array<{ hintType: string; value: unknown }>
+    ): XatsDocument => ({
       schemaVersion: '0.5.0',
       bibliographicEntry: { type: 'book', title: 'Rendering Hints Test' },
       subject: 'Testing',
@@ -878,8 +880,14 @@ describe('HtmlRenderer', () => {
 
     it('should render accessibility hints correctly', async () => {
       const hints = [
-        { hintType: 'https://xats.org/vocabularies/hints/accessibility/screen-reader-priority-high', value: 'high' },
-        { hintType: 'https://xats.org/vocabularies/hints/accessibility/keyboard-shortcut', value: 'Ctrl+1' },
+        {
+          hintType: 'https://xats.org/vocabularies/hints/accessibility/screen-reader-priority-high',
+          value: 'high',
+        },
+        {
+          hintType: 'https://xats.org/vocabularies/hints/accessibility/keyboard-shortcut',
+          value: 'Ctrl+1',
+        },
       ];
 
       const result = await renderer.render(createDocumentWithHints(hints), { enhancedHints: true });
@@ -891,7 +899,10 @@ describe('HtmlRenderer', () => {
 
     it('should render layout hints correctly', async () => {
       const hints = [
-        { hintType: 'https://xats.org/vocabularies/hints/layout/keep-together', value: 'keep-together' },
+        {
+          hintType: 'https://xats.org/vocabularies/hints/layout/keep-together',
+          value: 'keep-together',
+        },
         { hintType: 'https://xats.org/vocabularies/hints/layout/center', value: 'center' },
       ];
 
@@ -905,8 +916,14 @@ describe('HtmlRenderer', () => {
 
     it('should render pedagogical hints correctly', async () => {
       const hints = [
-        { hintType: 'https://xats.org/vocabularies/hints/pedagogical/key-concept', value: 'key-concept' },
-        { hintType: 'https://xats.org/vocabularies/hints/pedagogical/learning-objective', value: 'learning-objective' },
+        {
+          hintType: 'https://xats.org/vocabularies/hints/pedagogical/key-concept',
+          value: 'key-concept',
+        },
+        {
+          hintType: 'https://xats.org/vocabularies/hints/pedagogical/learning-objective',
+          value: 'learning-objective',
+        },
       ];
 
       const result = await renderer.render(createDocumentWithHints(hints), { enhancedHints: true });
@@ -918,25 +935,25 @@ describe('HtmlRenderer', () => {
 
     it('should handle conditional hints based on user preferences', async () => {
       const hints = [
-        { 
-          hintType: 'https://xats.org/vocabularies/hints/accessibility/high-contrast-compatible', 
+        {
+          hintType: 'https://xats.org/vocabularies/hints/accessibility/high-contrast-compatible',
           value: 'high-contrast',
-          conditions: { userPreferences: ['high-contrast'] }
+          conditions: { userPreferences: ['high-contrast'] },
         },
       ];
 
       // Test with matching preference
-      const resultWithPreference = await renderer.render(
-        createDocumentWithHints(hints), 
-        { enhancedHints: true, userPreferences: ['high-contrast'] }
-      );
+      const resultWithPreference = await renderer.render(createDocumentWithHints(hints), {
+        enhancedHints: true,
+        userPreferences: ['high-contrast'],
+      });
       expect(resultWithPreference.content).toContain('high-contrast-compatible');
 
-      // Test without matching preference  
-      const resultWithoutPreference = await renderer.render(
-        createDocumentWithHints(hints), 
-        { enhancedHints: true, userPreferences: [] }
-      );
+      // Test without matching preference
+      const resultWithoutPreference = await renderer.render(createDocumentWithHints(hints), {
+        enhancedHints: true,
+        userPreferences: [],
+      });
       expect(resultWithoutPreference.content).not.toContain('high-contrast-compatible');
     });
 
@@ -946,9 +963,9 @@ describe('HtmlRenderer', () => {
       ];
 
       // Render with hints
-      const renderResult = await renderer.render(createDocumentWithHints(originalHints), { 
-        enhancedHints: true, 
-        wrapInDocument: true 
+      const renderResult = await renderer.render(createDocumentWithHints(originalHints), {
+        enhancedHints: true,
+        wrapInDocument: true,
       });
 
       // Parse back to xats
@@ -956,16 +973,19 @@ describe('HtmlRenderer', () => {
       expect(parseResult.errors).toHaveLength(0);
 
       // Check that hints were reconstructed
-      const firstChapter = parseResult.document.bodyMatter.contents[0] as any;
-      const firstBlock = firstChapter.contents[0];
-      
-      if (firstBlock.renderingHints) {
-        expect(firstBlock.renderingHints.length).toBeGreaterThan(0);
-        
-        // Check that we can find at least one semantic hint
-        const hintTypes = firstBlock.renderingHints.map((h: any) => h.hintType);
-        const hasSemanticHint = hintTypes.some((type: string) => type.includes('semantic'));
-        expect(hasSemanticHint).toBe(true);
+      const firstChapter = parseResult.document.bodyMatter.contents[0];
+      if (firstChapter && 'contents' in firstChapter && firstChapter.contents) {
+        const firstBlock = firstChapter.contents[0];
+
+        if (firstBlock && 'renderingHints' in firstBlock) {
+          const hints = firstBlock.renderingHints as Array<{ hintType: string; value: unknown }>;
+          expect(hints.length).toBeGreaterThan(0);
+
+          // Check that we can find at least one semantic hint
+          const hintTypes = hints.map((h) => h.hintType);
+          const hasSemanticHint = hintTypes.some((type) => type.includes('semantic'));
+          expect(hasSemanticHint).toBe(true);
+        }
       }
     });
   });
@@ -1006,10 +1026,10 @@ describe('HtmlRenderer', () => {
       expect(smallResult.errors).toHaveLength(0);
 
       // Large document should use optimized rendering
-      const largeResult = await renderer.render(largeDoc, { 
+      const largeResult = await renderer.render(largeDoc, {
         optimizeForLargeDocuments: true,
         memoryOptimized: true,
-        wrapInDocument: true
+        wrapInDocument: true,
       });
       expect(largeResult.errors).toHaveLength(0);
       expect(largeResult.content).toContain('Large Document Test'); // Should be in title tag
@@ -1018,10 +1038,10 @@ describe('HtmlRenderer', () => {
     it('should handle memory optimization settings', async () => {
       const doc = createLargeDocument(100);
 
-      const result = await renderer.render(doc, { 
+      const result = await renderer.render(doc, {
         optimizeForLargeDocuments: true,
         memoryOptimized: true,
-        maxChunks: 10
+        maxChunks: 10,
       });
 
       expect(result.errors).toHaveLength(0);
