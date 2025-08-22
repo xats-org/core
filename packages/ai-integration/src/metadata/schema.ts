@@ -6,6 +6,7 @@
  * confidence scoring, and human review tracking.
  */
 
+import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 
 /**
@@ -151,7 +152,7 @@ export function createAIGenerationExtension(
     prompt,
     metadata: {
       timestamp: new Date().toISOString(),
-      sessionId: sessionId || crypto.randomUUID(),
+      sessionId: sessionId || randomUUID(),
       attempts: 1,
     },
   };
