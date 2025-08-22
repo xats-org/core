@@ -6,7 +6,7 @@
  */
 
 import * as docx from 'docx';
-import * as mammoth from 'mammoth';
+import mammoth from 'mammoth';
 
 import { RoundTripTester } from '@xats-org/testing';
 
@@ -20,10 +20,8 @@ import type {
   RoundTripOptions,
   RoundTripResult,
   FormatValidationResult,
-  FormatValidationError,
   FormatValidationWarning,
   FormatMetadata,
-  RenderAsset,
   Unit,
   Chapter,
   Section,
@@ -144,7 +142,7 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
     try {
       // Create DOCX document
-      const docxDoc = await this.createDocxDocument(document, renderOptions);
+      const docxDoc = this.createDocxDocument(document, renderOptions);
 
       // Generate binary content
       const buffer = await docx.Packer.toBuffer(docxDoc);
@@ -200,9 +198,9 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
       // Use mammoth to extract text and structure
       const result = await mammoth.convertToHtml({ buffer });
-      
+
       // Parse the HTML to extract xats structure
-      const xatsDocument = await this.parseDocxHtmlToXats(result.value, parseOptions);
+      const xatsDocument = this.parseDocxHtmlToXats(result.value, parseOptions);
 
       const parseTime = performance.now() - startTime;
 
@@ -215,7 +213,7 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
           unmappedElements: 0,
           fidelityScore: 0.8, // TODO: implement scoring based on complexity
         },
-        warnings: result.messages.map(msg => ({
+        warnings: result.messages.map((msg) => ({
           type: 'other' as const,
           message: msg.message,
           path: `mammoth-message-${msg.type || 'unknown'}`,
@@ -263,7 +261,7 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     try {
       // Basic validation - attempt to parse
       const buffer = Buffer.from(content, 'base64');
-      
+
       // Try to read with mammoth as basic validation
       await mammoth.convertToHtml({ buffer });
 
@@ -299,8 +297,8 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     try {
       const buffer = Buffer.from(content, 'base64');
       const result = await mammoth.convertToHtml({ buffer });
-      
-      const wordCount = result.value.split(/\s+/).filter(word => word.length > 0).length;
+
+      const wordCount = result.value.split(/\s+/).filter((word) => word.length > 0).length;
 
       return {
         format: 'docx',
@@ -319,15 +317,15 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
   // Private implementation methods
 
-  private async createDocxDocument(
+  private createDocxDocument(
     document: XatsDocument,
     options: Required<DocxRendererOptions>
-  ): Promise<docx.Document> {
+  ): docx.Document {
     const sections: docx.ISectionOptions[] = [];
 
     // Create mutable children array
     const children: docx.Paragraph[] = [];
-    
+
     // Add front matter
     if (document.frontMatter) {
       const frontMatterElements = this.renderFrontMatter(document.frontMatter, options);
@@ -351,9 +349,10 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
           size: {
             width: options.pageSize.width || 12240,
             height: options.pageSize.height || 15840,
-            orientation: options.orientation === 'landscape' 
-              ? docx.PageOrientation.LANDSCAPE 
-              : docx.PageOrientation.PORTRAIT,
+            orientation:
+              options.orientation === 'landscape'
+                ? docx.PageOrientation.LANDSCAPE
+                : docx.PageOrientation.PORTRAIT,
           },
           margin: {
             top: options.margins.top || 1440,
@@ -387,14 +386,14 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
     if (frontMatter.preface) {
       elements.push(this.createHeading('Preface', 1));
-      frontMatter.preface.forEach(block => {
+      frontMatter.preface.forEach((block) => {
         elements.push(...this.renderContentBlock(block, options));
       });
     }
 
     if (frontMatter.acknowledgments) {
       elements.push(this.createHeading('Acknowledgments', 1));
-      frontMatter.acknowledgments.forEach(block => {
+      frontMatter.acknowledgments.forEach((block) => {
         elements.push(...this.renderContentBlock(block, options));
       });
     }
@@ -408,11 +407,11 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
   ): docx.Paragraph[] {
     const elements: docx.Paragraph[] = [];
 
-    bodyMatter.contents.forEach(content => {
+    bodyMatter.contents.forEach((content) => {
       // Determine the type and render accordingly
       if ('contents' in content && Array.isArray(content.contents)) {
         const firstChild = content.contents[0];
-        
+
         if (!firstChild) {
           // Empty contents, treat as Chapter
           elements.push(...this.renderChapter(content as Chapter, options));
@@ -447,28 +446,28 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
     if (backMatter.appendices) {
       elements.push(this.createHeading('Appendices', 1));
-      backMatter.appendices.forEach(appendix => {
+      backMatter.appendices.forEach((appendix) => {
         elements.push(...this.renderChapter(appendix, options));
       });
     }
 
     if (backMatter.glossary) {
       elements.push(this.createHeading('Glossary', 1));
-      backMatter.glossary.forEach(block => {
+      backMatter.glossary.forEach((block) => {
         elements.push(...this.renderContentBlock(block, options));
       });
     }
 
     if (backMatter.bibliography) {
       elements.push(this.createHeading('Bibliography', 1));
-      backMatter.bibliography.forEach(block => {
+      backMatter.bibliography.forEach((block) => {
         elements.push(...this.renderContentBlock(block, options));
       });
     }
 
     if (backMatter.index) {
       elements.push(this.createHeading('Index', 1));
-      backMatter.index.forEach(block => {
+      backMatter.index.forEach((block) => {
         elements.push(...this.renderContentBlock(block, options));
       });
     }
@@ -480,11 +479,13 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     const elements: docx.Paragraph[] = [];
 
     // Unit title
-    const unitTitle = unit.label ? `Unit ${unit.label}: ${this.getSemanticTextString(unit.title)}` : this.getSemanticTextString(unit.title);
+    const unitTitle = unit.label
+      ? `Unit ${unit.label}: ${this.getSemanticTextString(unit.title)}`
+      : this.getSemanticTextString(unit.title);
     elements.push(this.createHeading(unitTitle, 1));
 
     // Unit contents
-    unit.contents.forEach(content => {
+    unit.contents.forEach((content) => {
       if ('contents' in content && Array.isArray(content.contents)) {
         elements.push(...this.renderChapter(content, options));
       } else {
@@ -495,15 +496,20 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     return elements;
   }
 
-  private renderChapter(chapter: Chapter, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderChapter(
+    chapter: Chapter,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     const elements: docx.Paragraph[] = [];
 
     // Chapter title
-    const chapterTitle = chapter.label ? `Chapter ${chapter.label}: ${this.getSemanticTextString(chapter.title)}` : this.getSemanticTextString(chapter.title);
+    const chapterTitle = chapter.label
+      ? `Chapter ${chapter.label}: ${this.getSemanticTextString(chapter.title)}`
+      : this.getSemanticTextString(chapter.title);
     elements.push(this.createHeading(chapterTitle, 2));
 
     // Chapter contents
-    chapter.contents.forEach(content => {
+    chapter.contents.forEach((content) => {
       if ('contents' in content && Array.isArray(content.contents)) {
         elements.push(...this.renderSection(content, options));
       } else {
@@ -514,49 +520,57 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     return elements;
   }
 
-  private renderSection(section: Section, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderSection(
+    section: Section,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     const elements: docx.Paragraph[] = [];
 
     // Section title
-    const sectionTitle = section.label ? `${section.label} ${this.getSemanticTextString(section.title)}` : this.getSemanticTextString(section.title);
+    const sectionTitle = section.label
+      ? `${section.label} ${this.getSemanticTextString(section.title)}`
+      : this.getSemanticTextString(section.title);
     elements.push(this.createHeading(sectionTitle, 3));
 
     // Section contents
-    section.contents.forEach(block => {
+    section.contents.forEach((block) => {
       elements.push(...this.renderContentBlock(block, options));
     });
 
     return elements;
   }
 
-  private renderContentBlock(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderContentBlock(
+    block: ContentBlock,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     switch (block.blockType) {
       case 'https://xats.org/vocabularies/blocks/paragraph':
         return this.renderParagraph(block, options);
-        
+
       case 'https://xats.org/vocabularies/blocks/heading':
         return this.renderHeading(block, options);
-        
+
       case 'https://xats.org/vocabularies/blocks/list':
         return this.renderList(block, options);
-        
+
       case 'https://xats.org/vocabularies/blocks/blockquote':
         return this.renderBlockquote(block, options);
-        
+
       case 'https://xats.org/vocabularies/blocks/codeBlock':
         return this.renderCodeBlock(block, options);
-        
+
       case 'https://xats.org/vocabularies/blocks/table':
         return this.renderTable(block, options);
-        
+
       case 'https://xats.org/vocabularies/blocks/figure':
         return this.renderFigure(block, options);
-        
+
       case 'https://xats.org/vocabularies/placeholders/tableOfContents':
       case 'https://xats.org/vocabularies/placeholders/bibliography':
       case 'https://xats.org/vocabularies/placeholders/index':
         return this.renderPlaceholder(block, options);
-        
+
       default:
         return this.renderGenericBlock(block, options);
     }
@@ -564,10 +578,13 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
   // Content block rendering methods
 
-  private renderParagraph(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderParagraph(
+    block: ContentBlock,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     const content = block.content as { text: SemanticText };
     const runs = this.convertSemanticTextToRuns(content.text, options);
-    
+
     const paragraphOptions: docx.IParagraphOptions = {
       children: runs,
       ...(options.useWordStyles && { style: 'Normal' }),
@@ -575,11 +592,14 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     return [new docx.Paragraph(paragraphOptions)];
   }
 
-  private renderHeading(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderHeading(
+    block: ContentBlock,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     const content = block.content as { text: SemanticText; level?: number };
     const level = Math.min(Math.max(content.level || 1, 1), 6);
     const runs = this.convertSemanticTextToRuns(content.text, options);
-    
+
     const paragraphOptions: docx.IParagraphOptions = {
       children: runs,
       heading: this.getHeadingLevel(level),
@@ -588,28 +608,36 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     return [new docx.Paragraph(paragraphOptions)];
   }
 
-  private renderList(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderList(
+    block: ContentBlock,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     const content = block.content as { listType: 'ordered' | 'unordered'; items: SemanticText[] };
     const elements: docx.Paragraph[] = [];
 
-    content.items.forEach((item, index) => {
+    content.items.forEach((item) => {
       const runs = this.convertSemanticTextToRuns(item, options);
-      elements.push(new docx.Paragraph({
-        children: runs,
-        numbering: {
-          reference: content.listType === 'ordered' ? 'ordered-list' : 'bullet-list',
-          level: 0,
-        },
-      }));
+      elements.push(
+        new docx.Paragraph({
+          children: runs,
+          numbering: {
+            reference: content.listType === 'ordered' ? 'ordered-list' : 'bullet-list',
+            level: 0,
+          },
+        })
+      );
     });
 
     return elements;
   }
 
-  private renderBlockquote(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderBlockquote(
+    block: ContentBlock,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     const content = block.content as { text: SemanticText; attribution?: SemanticText };
     const elements: docx.Paragraph[] = [];
-    
+
     const textRuns = this.convertSemanticTextToRuns(content.text, options);
     const paragraphOptions: docx.IParagraphOptions = {
       children: textRuns,
@@ -631,15 +659,20 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     return elements;
   }
 
-  private renderCodeBlock(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderCodeBlock(
+    block: ContentBlock,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     const content = block.content as { code: string; language?: string };
-    
+
     const codeOptions: docx.IParagraphOptions = {
-      children: [new docx.TextRun({
-        text: content.code,
-        font: { name: 'Consolas' },
-        size: options.fontSize - 2, // Slightly smaller font for code
-      })],
+      children: [
+        new docx.TextRun({
+          text: content.code,
+          font: { name: 'Consolas' },
+          size: options.fontSize - 2, // Slightly smaller font for code
+        }),
+      ],
       shading: { fill: 'F8F9FA' }, // Light gray background
       border: {
         top: { style: 'single', size: 1, color: 'CCCCCC' },
@@ -652,7 +685,10 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     return [new docx.Paragraph(codeOptions)];
   }
 
-  private renderTable(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderTable(
+    block: ContentBlock,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     const content = block.content as {
       headers?: SemanticText[];
       rows: SemanticText[][];
@@ -677,7 +713,7 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
     // Add header row if present
     if (content.headers && content.headers.length > 0) {
-      const headerCells = content.headers.map(header => {
+      const headerCells = content.headers.map((header) => {
         const runs = this.convertSemanticTextToRuns(header, options);
         return new docx.TableCell({
           children: [new docx.Paragraph({ children: runs })],
@@ -688,8 +724,8 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     }
 
     // Add data rows
-    content.rows.forEach(row => {
-      const cells = row.map(cell => {
+    content.rows.forEach((row) => {
+      const cells = row.map((cell) => {
         const runs = this.convertSemanticTextToRuns(cell, options);
         return new docx.TableCell({
           children: [new docx.Paragraph({ children: runs })],
@@ -698,22 +734,22 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
       tableRows.push(new docx.TableRow({ children: cells }));
     });
 
-    // Create table - need to wrap in a special paragraph for docx library
-    const tableElement = new docx.Table({
-      rows: tableRows,
-      width: { size: 100, type: docx.WidthType.PERCENTAGE },
-    });
-
     // The docx library requires tables to be wrapped in a paragraph context
     // We'll add a placeholder paragraph and note that table handling may need refinement
-    elements.push(new docx.Paragraph({
-      children: [new docx.TextRun({ text: '[Table content rendered inline]', italics: true })],
-    }));
+    // TODO: Properly integrate table rendering when docx library supports it
+    elements.push(
+      new docx.Paragraph({
+        children: [new docx.TextRun({ text: '[Table content rendered inline]', italics: true })],
+      })
+    );
 
     return elements;
   }
 
-  private renderFigure(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderFigure(
+    block: ContentBlock,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     const content = block.content as {
       src: string;
       alt: string;
@@ -725,13 +761,17 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     const elements: docx.Paragraph[] = [];
 
     // For now, add a placeholder for the image
-    elements.push(new docx.Paragraph({
-      children: [new docx.TextRun({
-        text: `[Image: ${content.alt} (${content.src})]`,
-        italics: true,
-      })],
-      alignment: docx.AlignmentType.CENTER,
-    }));
+    elements.push(
+      new docx.Paragraph({
+        children: [
+          new docx.TextRun({
+            text: `[Image: ${content.alt} (${content.src})]`,
+            italics: true,
+          }),
+        ],
+        alignment: docx.AlignmentType.CENTER,
+      })
+    );
 
     // Add caption if present
     if (content.caption) {
@@ -747,28 +787,38 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     return elements;
   }
 
-  private renderPlaceholder(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderPlaceholder(
+    block: ContentBlock,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     const placeholderType = this.getPlaceholderType(block.blockType);
-    
+
     const placeholderOptions: docx.IParagraphOptions = {
-      children: [new docx.TextRun({
-        text: `[${placeholderType} will be generated here]`,
-        italics: true,
-        color: '666666',
-      })],
+      children: [
+        new docx.TextRun({
+          text: `[${placeholderType} will be generated here]`,
+          italics: true,
+          color: '666666',
+        }),
+      ],
       alignment: docx.AlignmentType.CENTER,
       ...(options.useWordStyles && { style: 'Normal' }),
     };
     return [new docx.Paragraph(placeholderOptions)];
   }
 
-  private renderGenericBlock(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
+  private renderGenericBlock(
+    block: ContentBlock,
+    options: Required<DocxRendererOptions>
+  ): docx.Paragraph[] {
     const genericOptions: docx.IParagraphOptions = {
-      children: [new docx.TextRun({
-        text: `[Unknown block type: ${block.blockType}]`,
-        italics: true,
-        color: 'FF0000',
-      })],
+      children: [
+        new docx.TextRun({
+          text: `[Unknown block type: ${block.blockType}]`,
+          italics: true,
+          color: 'FF0000',
+        }),
+      ],
       ...(options.useWordStyles && { style: 'Normal' }),
     };
     return [new docx.Paragraph(genericOptions)];
@@ -776,8 +826,20 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
   // Utility methods
 
-  private convertSemanticTextToRuns(semanticText: SemanticText, options: Required<DocxRendererOptions>): docx.TextRun[] {
-    return semanticText.runs.map(run => this.convertRunToTextRun(run, options));
+  private isSemanticText(value: unknown): value is SemanticText {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'runs' in value &&
+      Array.isArray((value as SemanticText).runs)
+    );
+  }
+
+  private convertSemanticTextToRuns(
+    semanticText: SemanticText,
+    options: Required<DocxRendererOptions>
+  ): docx.TextRun[] {
+    return semanticText.runs.map((run) => this.convertRunToTextRun(run, options));
   }
 
   private convertRunToTextRun(run: Run, options: Required<DocxRendererOptions>): docx.TextRun {
@@ -881,37 +943,50 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
   private createHeading(text: string, level: number): docx.Paragraph {
     const headingOptions: docx.IParagraphOptions = {
-      children: [new docx.TextRun({
-        text,
-        font: { name: this.options.defaultFont },
-        size: this.options.fontSize + (6 - level) * 4, // Larger font for higher level headings
-        bold: true,
-      })],
+      children: [
+        new docx.TextRun({
+          text,
+          font: { name: this.options.defaultFont },
+          size: this.options.fontSize + (6 - level) * 4, // Larger font for higher level headings
+          bold: true,
+        }),
+      ],
       heading: this.getHeadingLevel(level),
       ...(this.options.useWordStyles && { style: `Heading${level}` }),
     };
     return new docx.Paragraph(headingOptions);
   }
 
-  private getHeadingLevel(level: number): typeof docx.HeadingLevel[keyof typeof docx.HeadingLevel] {
+  private getHeadingLevel(
+    level: number
+  ): (typeof docx.HeadingLevel)[keyof typeof docx.HeadingLevel] {
     switch (level) {
-      case 1: return docx.HeadingLevel.HEADING_1;
-      case 2: return docx.HeadingLevel.HEADING_2;
-      case 3: return docx.HeadingLevel.HEADING_3;
-      case 4: return docx.HeadingLevel.HEADING_4;
-      case 5: return docx.HeadingLevel.HEADING_5;
-      case 6: return docx.HeadingLevel.HEADING_6;
-      default: return docx.HeadingLevel.HEADING_1;
+      case 1:
+        return docx.HeadingLevel.HEADING_1;
+      case 2:
+        return docx.HeadingLevel.HEADING_2;
+      case 3:
+        return docx.HeadingLevel.HEADING_3;
+      case 4:
+        return docx.HeadingLevel.HEADING_4;
+      case 5:
+        return docx.HeadingLevel.HEADING_5;
+      case 6:
+        return docx.HeadingLevel.HEADING_6;
+      default:
+        return docx.HeadingLevel.HEADING_1;
     }
   }
 
   private getSemanticTextString(semanticText: SemanticText): string {
-    return semanticText.runs.map(run => {
-      if ('text' in run) {
-        return run.text;
-      }
-      return '';
-    }).join('');
+    return semanticText.runs
+      .map((run) => {
+        if ('text' in run) {
+          return run.text;
+        }
+        return '';
+      })
+      .join('');
   }
 
   private getPlaceholderType(blockType: string): string {
@@ -1036,35 +1111,35 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     let wordCount = 0;
 
     // Helper function to count words in semantic text
-    const countSemanticText = (semanticText: SemanticText): number => {
-      return semanticText.runs
-        .map(run => ('text' in run ? run.text : ''))
+    const countSemanticText = (semanticText: SemanticText): number =>
+      semanticText.runs
+        .map((run) => ('text' in run ? run.text : ''))
         .join(' ')
         .split(/\s+/)
-        .filter(word => word.length > 0)
-        .length;
-    };
+        .filter((word) => word.length > 0).length;
 
     // Helper function to count words in content blocks
-    const countContentBlocks = (blocks: ContentBlock[]): number => {
-      return blocks.reduce((count, block) => {
-        const content = block.content as any;
-        if (content.text) {
+    const countContentBlocks = (blocks: ContentBlock[]): number =>
+      blocks.reduce((count, block) => {
+        const content = block.content as Record<string, unknown>;
+        if (content.text && this.isSemanticText(content.text)) {
           count += countSemanticText(content.text);
         }
         if (content.items && Array.isArray(content.items)) {
-          count += content.items.reduce((itemCount: number, item: SemanticText) => 
-            itemCount + countSemanticText(item), 0);
+          count += content.items.reduce(
+            (itemCount: number, item: unknown) =>
+              this.isSemanticText(item) ? itemCount + countSemanticText(item) : itemCount,
+            0
+          );
         }
-        if (content.attribution) {
+        if (content.attribution && this.isSemanticText(content.attribution)) {
           count += countSemanticText(content.attribution);
         }
-        if (content.caption) {
+        if (content.caption && this.isSemanticText(content.caption)) {
           count += countSemanticText(content.caption);
         }
         return count;
       }, 0);
-    };
 
     // Count front matter
     if (document.frontMatter) {
@@ -1077,20 +1152,21 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     }
 
     // Count body matter
-    const countStructuralContent = (contents: Array<Unit | Chapter | Section | ContentBlock>): number => {
-      return contents.reduce((count, item) => {
+    const countStructuralContent = (
+      contents: Array<Unit | Chapter | Section | ContentBlock>
+    ): number =>
+      contents.reduce((count, item) => {
         if ('title' in item && item.title) {
           count += countSemanticText(item.title);
         }
-        if ('contents' in item) {
-          count += countStructuralContent(item.contents as any);
+        if ('contents' in item && Array.isArray(item.contents)) {
+          count += countStructuralContent(item.contents);
         } else {
           // It's a ContentBlock
           count += countContentBlocks([item as ContentBlock]);
         }
         return count;
       }, 0);
-    };
 
     wordCount += countStructuralContent(document.bodyMatter.contents);
 
@@ -1115,13 +1191,10 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
   // Parsing methods (DOCX to xats)
 
-  private async parseDocxHtmlToXats(
-    html: string,
-    options: Required<ParseOptions>
-  ): Promise<XatsDocument> {
+  private parseDocxHtmlToXats(html: string, _options: Required<ParseOptions>): XatsDocument {
     // This is a simplified parser that extracts basic structure from mammoth's HTML output
     // In a production implementation, this would be more sophisticated
-    
+
     // Create a basic document structure
     const document: XatsDocument = {
       schemaVersion: '0.3.0',
@@ -1149,10 +1222,10 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
   private parseHtmlToChapters(html: string): Chapter[] {
     const chapters: Chapter[] = [];
-    
+
     // Simple parsing - split on h1 headings to create chapters
     const h1Sections = html.split(/<h1[^>]*>/i);
-    
+
     h1Sections.forEach((section, index) => {
       if (index === 0 && !section.includes('</h1>')) {
         // Skip content before first h1
@@ -1161,7 +1234,7 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
       const titleMatch = section.match(/^(.*?)<\/h1>/i);
       const title = titleMatch?.[1]?.replace(/<[^>]*>/g, '').trim() || `Chapter ${index}`;
-      
+
       const content = titleMatch?.[0] ? section.substring(titleMatch[0].length) : section;
       const contentBlocks = this.parseHtmlToContentBlocks(content);
 
@@ -1181,9 +1254,9 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     let blockId = 1;
 
     // Split content by paragraph tags
-    const paragraphs = html.split(/<\/?p[^>]*>/i).filter(p => p.trim());
-    
-    paragraphs.forEach(paragraph => {
+    const paragraphs = html.split(/<\/?p[^>]*>/i).filter((p) => p.trim());
+
+    paragraphs.forEach((paragraph) => {
       const cleanText = paragraph.replace(/<[^>]*>/g, '').trim();
       if (cleanText) {
         blocks.push({
