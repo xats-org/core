@@ -1,0 +1,446 @@
+{
+  "schemaVersion": "0.5.0",
+  "bibliographicEntry": {
+    "id": "enhanced-rendering-demo",
+    "type": "book",
+    "title": "Enhanced Rendering Hints Demonstration",
+    "author": [
+      { "given": "xats", "family": "Schema Engineer" }
+    ],
+    "issued": { "date-parts": [["2025"]] }
+  },
+  "subject": "Enhanced Rendering Hints System",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "chapter-1",
+        "language": "en",
+        "title": "Comprehensive Rendering Hints Examples",
+        "sections": [
+          {
+            "id": "semantic-hints-section",
+            "language": "en", 
+            "title": "Semantic Intent Hints",
+            "renderingHints": [
+              {
+                "hintType": "https://xats.org/vocabularies/hints/pedagogical/introduction",
+                "value": "introduction",
+                "priority": 4,
+                "inheritance": "cascade"
+              }
+            ],
+            "content": [
+              {
+                "id": "warning-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/semantic/warning",
+                    "value": "warning",
+                    "priority": 5,
+                    "conditions": {
+                      "outputFormats": ["html", "pdf", "docx"],
+                      "userPreferences": ["high-contrast"]
+                    },
+                    "fallback": {
+                      "hintType": "https://xats.org/vocabularies/hints/prominence/level",
+                      "value": 4
+                    }
+                  },
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/accessibility/screen-reader-priority-high",
+                    "value": "screen-reader-priority-high",
+                    "priority": 5
+                  }
+                ],
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "strong",
+                        "text": "Warning: "
+                      },
+                      {
+                        "type": "text",
+                        "text": "This example demonstrates how semantic hints preserve author intent for critical information that must stand out across all renderers."
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "key-concept-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/pedagogical/key-concept",
+                    "value": "key-concept",
+                    "priority": 4
+                  },
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/semantic/featured",
+                    "value": "featured",
+                    "priority": 3
+                  },
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/layout/keep-together",
+                    "value": "keep-together",
+                    "priority": 3,
+                    "conditions": {
+                      "outputFormats": ["pdf", "docx", "print"]
+                    }
+                  }
+                ],
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "emphasis",
+                        "text": "Key Concept: "
+                      },
+                      {
+                        "type": "text", 
+                        "text": "Enhanced rendering hints provide a standardized way to communicate author intent across different output formats while maintaining backward compatibility."
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "prominence-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/prominence/level",
+                    "value": 2,
+                    "priority": 2,
+                    "inheritance": "no-inherit"
+                  },
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/semantic/secondary",
+                    "value": "secondary"
+                  }
+                ],
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "This paragraph demonstrates low prominence (level 2) with secondary semantic meaning. It should appear with reduced visual emphasis while remaining accessible."
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "layout-hints-section",
+            "language": "en",
+            "title": "Layout and Positioning Hints",
+            "content": [
+              {
+                "id": "floating-content",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/figure",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/layout/float-right",
+                    "value": {
+                      "position": "float",
+                      "width": "300px", 
+                      "margin": "0 0 1em 1em"
+                    },
+                    "conditions": {
+                      "mediaQuery": "screen and (min-width: 768px)"
+                    },
+                    "fallback": {
+                      "hintType": "https://xats.org/vocabularies/hints/layout/center",
+                      "value": "center"
+                    }
+                  },
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/media/placement",
+                    "value": {
+                      "placement": "float-right",
+                      "size": "medium",
+                      "aspectRatio": "4:3"
+                    }
+                  }
+                ],
+                "content": {
+                  "resourceId": "demo-chart",
+                  "altText": "Chart showing rendering hint usage across different formats",
+                  "caption": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Figure 1: This chart floats right on desktop but centers on mobile, demonstrating responsive layout hints."
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "page-break-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/heading",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/layout/avoid-page-break-after",
+                    "value": "avoid-page-break-after",
+                    "conditions": {
+                      "outputFormats": ["pdf", "print", "docx"]
+                    }
+                  }
+                ],
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Important Section Header"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "related-content",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/layout/keep-together",
+                    "value": "keep-together",
+                    "priority": 4,
+                    "conditions": {
+                      "outputFormats": ["pdf", "print", "docx"]
+                    }
+                  }
+                ],
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "This content should stay with the preceding heading. The keep-together hint ensures they don't get separated by page breaks in print formats."
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "accessibility-hints-section",
+            "language": "en",
+            "title": "Accessibility Enhancement Hints",
+            "renderingHints": [
+              {
+                "hintType": "https://xats.org/vocabularies/hints/accessibility/keyboard-shortcut",
+                "value": {
+                  "keyboardShortcut": "Alt+A",
+                  "ariaLabel": "Accessibility examples section"
+                }
+              }
+            ],
+            "content": [
+              {
+                "id": "high-priority-alert",
+                "language": "en", 
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/accessibility/aria-live-assertive",
+                    "value": {
+                      "ariaLabel": "Critical accessibility notice",
+                      "cognitiveSupport": {
+                        "simplifyLanguage": true,
+                        "showProgress": false
+                      }
+                    },
+                    "priority": 5
+                  },
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/semantic/error",
+                    "value": "error"
+                  }
+                ],
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "strong",
+                        "text": "Accessibility Alert: "
+                      },
+                      {
+                        "type": "text",
+                        "text": "This content will interrupt screen readers immediately and includes cognitive support features."
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "cognitive-support-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph", 
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/accessibility/cognitive-load-high",
+                    "value": {
+                      "cognitiveSupport": {
+                        "simplifyLanguage": true,
+                        "provideGlossary": true,
+                        "showProgress": true,
+                        "enablePause": true
+                      }
+                    }
+                  }
+                ],
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "This complex technical content includes cognitive support hints to provide simplified versions, glossary access, and progress indicators for users who need additional assistance."
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "mathematics-hints-section",
+            "language": "en",
+            "title": "Mathematical Rendering Hints",
+            "content": [
+              {
+                "id": "inline-math-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/mathematics/display",
+                    "value": {
+                      "displayStyle": "inline",
+                      "preferredNotation": "latex",
+                      "fontSize": "normal"
+                    }
+                  }
+                ],
+                "content": {
+                  "notation": "latex",
+                  "expression": "E = mc^2",
+                  "altText": "Einstein's mass-energy equivalence equation E equals m c squared"
+                }
+              },
+              {
+                "id": "block-math-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/mathematics/display",
+                    "value": {
+                      "displayStyle": "numbered",
+                      "preferredNotation": "mathml",
+                      "alignment": "center",
+                      "fontSize": "large",
+                      "showSteps": true,
+                      "interactive": true
+                    },
+                    "conditions": {
+                      "outputFormats": ["html"]
+                    },
+                    "fallback": {
+                      "hintType": "https://xats.org/vocabularies/hints/mathematics/display",
+                      "value": {
+                        "displayStyle": "numbered",
+                        "preferredNotation": "latex",
+                        "alignment": "center"
+                      }
+                    }
+                  }
+                ],
+                "content": {
+                  "notation": "latex",
+                  "expression": "\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}",
+                  "altText": "Integral from negative infinity to positive infinity of e to the negative x squared dx equals square root of pi"
+                }
+              }
+            ]
+          },
+          {
+            "id": "cross-reference-hints-section",
+            "language": "en",
+            "title": "Cross-Reference Styling Hints",
+            "content": [
+              {
+                "id": "reference-paragraph",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "For more information, see "
+                      },
+                      {
+                        "type": "reference",
+                        "text": "Section 2.1",
+                        "refId": "semantic-hints-section",
+                        "renderingHints": [
+                          {
+                            "hintType": "https://xats.org/vocabularies/hints/cross-reference/style",
+                            "value": {
+                              "style": "parenthetical",
+                              "includeTitle": true,
+                              "abbreviateTitle": false,
+                              "linkBehavior": "internal-link",
+                              "hoverPreview": true
+                            },
+                            "conditions": {
+                              "outputFormats": ["html"]
+                            },
+                            "fallback": {
+                              "hintType": "https://xats.org/vocabularies/hints/cross-reference/style",
+                              "value": {
+                                "style": "parenthetical",
+                                "includePageNumber": true,
+                                "linkBehavior": "no-link"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": " which demonstrates semantic intent preservation."
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "resources": [
+    {
+      "id": "demo-chart",
+      "language": "en",
+      "type": "https://xats.org/vocabularies/resources/image",
+      "url": "https://example.com/chart.svg",
+      "altText": "Chart showing rendering hint usage statistics across HTML, PDF, DOCX, and EPUB formats"
+    }
+  ]
+}

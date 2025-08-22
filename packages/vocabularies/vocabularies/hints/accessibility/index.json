@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/hints/accessibility",
+  "title": "Accessibility Rendering Hints",
+  "description": "Rendering hints that enhance accessibility and provide additional context for assistive technologies",
+  "oneOf": [
+    {
+      "type": "string",
+      "enum": [
+        "screen-reader-priority-high",
+        "screen-reader-priority-low", 
+        "skip-screen-reader",
+        "keyboard-shortcut",
+        "focus-trap",
+        "aria-live-polite",
+        "aria-live-assertive",
+        "high-contrast-compatible",
+        "motion-safe",
+        "cognitive-load-high",
+        "cognitive-load-low"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "ariaLabel": { "type": "string" },
+        "ariaDescription": { "type": "string" },
+        "tabIndex": { "type": "integer" },
+        "keyboardShortcut": { "type": "string", "pattern": "^[A-Za-z0-9+]+$" },
+        "speechRate": { "type": "string", "enum": ["slow", "normal", "fast"] },
+        "cognitiveSupport": {
+          "type": "object",
+          "properties": {
+            "simplifyLanguage": { "type": "boolean" },
+            "provideGlossary": { "type": "boolean" },
+            "showProgress": { "type": "boolean" },
+            "enablePause": { "type": "boolean" }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  ],
+  "definitions": {
+    "accessibilityHintValues": {
+      "screen-reader-priority-high": {
+        "description": "Content should be prioritized by screen readers",
+        "wcagCriterion": "4.1.3 Status Messages",
+        "implementation": "Use aria-live='assertive' or equivalent",
+        "examples": ["critical alerts", "error messages", "important announcements"]
+      },
+      "screen-reader-priority-low": {
+        "description": "Content has lower priority for screen readers", 
+        "wcagCriterion": "2.4.3 Focus Order",
+        "implementation": "Use aria-level with lower priority or aria-hidden in some contexts",
+        "examples": ["decorative elements", "secondary information", "background content"]
+      },
+      "skip-screen-reader": {
+        "description": "Content should be hidden from screen readers",
+        "wcagCriterion": "1.3.1 Info and Relationships",
+        "implementation": "Use aria-hidden='true'",
+        "examples": ["purely decorative images", "visual spacers", "redundant text"]
+      },
+      "keyboard-shortcut": {
+        "description": "Content has or needs keyboard shortcut access",
+        "wcagCriterion": "2.1.1 Keyboard",
+        "implementation": "Add accesskey attribute or keyboard event handlers",
+        "examples": ["navigation links", "important actions", "form controls"]
+      },
+      "focus-trap": {
+        "description": "Content should trap focus for modal interactions",
+        "wcagCriterion": "2.4.3 Focus Order",
+        "implementation": "Implement focus trapping logic with tabindex management", 
+        "examples": ["modal dialogs", "popup menus", "overlay content"]
+      },
+      "aria-live-polite": {
+        "description": "Content updates should be announced politely",
+        "wcagCriterion": "4.1.3 Status Messages",
+        "implementation": "Use aria-live='polite'",
+        "examples": ["form validation", "progress updates", "content changes"]
+      },
+      "aria-live-assertive": {
+        "description": "Content updates should interrupt screen reader",
+        "wcagCriterion": "4.1.3 Status Messages", 
+        "implementation": "Use aria-live='assertive'",
+        "examples": ["error alerts", "time-sensitive notifications", "critical updates"]
+      },
+      "high-contrast-compatible": {
+        "description": "Content must work well in high contrast mode",
+        "wcagCriterion": "1.4.3 Contrast (Minimum)",
+        "implementation": "Ensure sufficient color contrast and border definitions",
+        "examples": ["important text", "interactive elements", "visual indicators"]
+      },
+      "motion-safe": {
+        "description": "Content respects reduced motion preferences",
+        "wcagCriterion": "2.3.3 Animation from Interactions",
+        "implementation": "Use prefers-reduced-motion media query",
+        "examples": ["animations", "transitions", "auto-playing content"]
+      },
+      "cognitive-load-high": {
+        "description": "Content has high cognitive load and needs simplification options",
+        "wcagCriterion": "3.1.5 Reading Level",
+        "implementation": "Provide simplified versions or additional support",
+        "examples": ["complex diagrams", "technical content", "multi-step processes"]
+      },
+      "cognitive-load-low": {
+        "description": "Content is cognitively simple and accessible",
+        "wcagCriterion": "3.1.5 Reading Level", 
+        "implementation": "Standard presentation is sufficient",
+        "examples": ["simple text", "clear instructions", "straightforward concepts"]
+      }
+    },
+    "objectValueProperties": {
+      "ariaLabel": {
+        "description": "Accessible name for the element",
+        "wcagCriterion": "4.1.2 Name, Role, Value",
+        "examples": ["Close button", "Navigation menu", "Search form"]
+      },
+      "ariaDescription": {
+        "description": "Additional description for complex elements",
+        "wcagCriterion": "1.3.1 Info and Relationships",
+        "examples": ["Chart showing sales data", "Interactive map of campus", "Form with validation"]
+      },
+      "tabIndex": {
+        "description": "Custom tab order for keyboard navigation",
+        "wcagCriterion": "2.4.3 Focus Order",
+        "examples": [-1, 0, 1, 2]
+      },
+      "keyboardShortcut": {
+        "description": "Keyboard shortcut for quick access",
+        "wcagCriterion": "2.1.1 Keyboard",
+        "examples": ["Ctrl+S", "Alt+M", "Shift+F1"]
+      },
+      "speechRate": {
+        "description": "Suggested speech rate for screen readers",
+        "wcagCriterion": "1.4.2 Audio Control",
+        "examples": ["slow", "normal", "fast"]
+      },
+      "cognitiveSupport": {
+        "description": "Cognitive accessibility enhancements",
+        "wcagCriterion": "3.1.5 Reading Level",
+        "properties": {
+          "simplifyLanguage": "Provide simplified language version",
+          "provideGlossary": "Include glossary or definition support",
+          "showProgress": "Display progress indicators",
+          "enablePause": "Allow pausing of timed content"
+        }
+      }
+    }
+  },
+  "examples": [
+    "screen-reader-priority-high",
+    "high-contrast-compatible", 
+    "motion-safe",
+    {
+      "ariaLabel": "Close dialog",
+      "keyboardShortcut": "Escape"
+    },
+    {
+      "cognitiveSupport": {
+        "simplifyLanguage": true,
+        "showProgress": true
+      }
+    }
+  ]
+}

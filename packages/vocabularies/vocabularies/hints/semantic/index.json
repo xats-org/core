@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/hints/semantic",
+  "title": "Semantic Intent Rendering Hints",
+  "description": "Rendering hints that convey semantic intent and meaning to help preserve author intention across different output formats",
+  "type": "string",
+  "enum": [
+    "emphasis",
+    "strong-emphasis",
+    "highlight",
+    "warning",
+    "info",
+    "success", 
+    "error",
+    "aside",
+    "featured",
+    "secondary",
+    "decorative",
+    "functional",
+    "call-to-action",
+    "definition",
+    "example",
+    "quote",
+    "citation",
+    "footnote",
+    "annotation"
+  ],
+  "definitions": {
+    "semanticIntentValues": {
+      "emphasis": {
+        "description": "Light emphasis for drawing attention",
+        "fallback": "italic text styling",
+        "examples": ["key terms", "important phrases", "definitions"]
+      },
+      "strong-emphasis": {
+        "description": "Strong emphasis for critical content",
+        "fallback": "bold text styling", 
+        "examples": ["warnings", "critical concepts", "main points"]
+      },
+      "highlight": {
+        "description": "Content that should be visually highlighted",
+        "fallback": "background color or border",
+        "examples": ["search results", "code snippets", "important quotes"]
+      },
+      "warning": {
+        "description": "Content that warns about potential issues or dangers",
+        "fallback": "yellow/orange background with warning icon",
+        "examples": ["safety notices", "deprecated features", "common mistakes"]
+      },
+      "info": {
+        "description": "Informational content that provides additional context",
+        "fallback": "blue background with info icon",
+        "examples": ["tips", "additional context", "helpful notes"]
+      },
+      "success": {
+        "description": "Content indicating successful completion or positive outcomes",
+        "fallback": "green background with checkmark icon",
+        "examples": ["completion notices", "correct answers", "achievements"]
+      },
+      "error": {
+        "description": "Content indicating errors or negative outcomes",
+        "fallback": "red background with error icon", 
+        "examples": ["error messages", "incorrect answers", "failures"]
+      },
+      "aside": {
+        "description": "Content that is tangentially related to the main content",
+        "fallback": "sidebar or indented block",
+        "examples": ["side notes", "related information", "author commentary"]
+      },
+      "featured": {
+        "description": "Content that should be prominently featured",
+        "fallback": "larger text or special border",
+        "examples": ["key quotes", "main takeaways", "featured examples"]
+      },
+      "secondary": {
+        "description": "Content that is of secondary importance",
+        "fallback": "smaller or muted text",
+        "examples": ["optional reading", "background information", "fine print"]
+      },
+      "decorative": {
+        "description": "Content that is purely decorative with no semantic meaning",
+        "fallback": "normal rendering but hidden from screen readers",
+        "examples": ["decorative images", "ornamental elements", "visual separators"]
+      },
+      "functional": {
+        "description": "Content that has a functional purpose beyond display",
+        "fallback": "interactive elements or buttons",
+        "examples": ["navigation elements", "controls", "interactive components"]
+      },
+      "call-to-action": {
+        "description": "Content that encourages user action",
+        "fallback": "button or highlighted link styling",
+        "examples": ["sign-up prompts", "download links", "action buttons"]
+      },
+      "definition": {
+        "description": "Content that defines terms or concepts",
+        "fallback": "italics or special formatting",
+        "examples": ["glossary terms", "concept definitions", "technical explanations"]
+      },
+      "example": {
+        "description": "Content that provides examples or illustrations",
+        "fallback": "indented block or special formatting",
+        "examples": ["code examples", "sample problems", "case studies"]
+      },
+      "quote": {
+        "description": "Content that quotes other sources",
+        "fallback": "quotation marks and indentation",
+        "examples": ["block quotes", "cited passages", "testimonials"]
+      },
+      "citation": {
+        "description": "Content that provides citation information",
+        "fallback": "smaller text or special formatting",
+        "examples": ["bibliography entries", "source citations", "references"]
+      },
+      "footnote": {
+        "description": "Content that provides additional footnote information",
+        "fallback": "superscript number with bottom-of-page placement",
+        "examples": ["explanatory notes", "source attributions", "additional details"]
+      },
+      "annotation": {
+        "description": "Content that provides annotations or commentary",
+        "fallback": "margin notes or popup text",
+        "examples": ["margin comments", "editorial notes", "explanatory additions"]
+      }
+    }
+  },
+  "examples": [
+    "emphasis",
+    "warning", 
+    "call-to-action",
+    "definition",
+    "example"
+  ]
+}

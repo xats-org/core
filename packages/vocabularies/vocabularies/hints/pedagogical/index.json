@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/hints/pedagogical",
+  "title": "Pedagogical Role Rendering Hints",
+  "description": "Rendering hints that classify content based on its pedagogical role and educational purpose",
+  "type": "string",
+  "enum": [
+    "introduction",
+    "key-concept", 
+    "example",
+    "non-example",
+    "summary",
+    "conclusion",
+    "prerequisite",
+    "advanced-topic",
+    "enrichment",
+    "remedial",
+    "practice",
+    "assessment",
+    "reflection",
+    "application",
+    "synthesis",
+    "critical-thinking",
+    "case-study",
+    "simulation",
+    "hands-on",
+    "theoretical",
+    "practical"
+  ],
+  "definitions": {
+    "pedagogicalRoleValues": {
+      "introduction": {
+        "description": "Content that introduces new topics or concepts",
+        "learningStage": "beginning",
+        "cognitiveLevel": "remember",
+        "examples": ["chapter openers", "topic introductions", "overview sections"]
+      },
+      "key-concept": {
+        "description": "Content that presents essential concepts students must understand",
+        "learningStage": "core",
+        "cognitiveLevel": "understand",
+        "examples": ["main principles", "fundamental theories", "core definitions"]
+      },
+      "example": {
+        "description": "Content that provides positive examples of concepts",
+        "learningStage": "application",
+        "cognitiveLevel": "apply",
+        "examples": ["worked problems", "sample cases", "demonstration scenarios"]
+      },
+      "non-example": {
+        "description": "Content that shows what concepts are NOT",
+        "learningStage": "application",
+        "cognitiveLevel": "analyze", 
+        "examples": ["common misconceptions", "incorrect applications", "contrasting cases"]
+      },
+      "summary": {
+        "description": "Content that summarizes or reviews previously covered material",
+        "learningStage": "consolidation",
+        "cognitiveLevel": "understand",
+        "examples": ["chapter summaries", "review sections", "key takeaways"]
+      },
+      "conclusion": {
+        "description": "Content that provides conclusions or final thoughts",
+        "learningStage": "closure",
+        "cognitiveLevel": "evaluate",
+        "examples": ["chapter conclusions", "final reflections", "synthesis statements"]
+      },
+      "prerequisite": {
+        "description": "Content that covers prerequisite knowledge or skills",
+        "learningStage": "preparation",
+        "cognitiveLevel": "remember",
+        "examples": ["background information", "required prior knowledge", "foundational concepts"]
+      },
+      "advanced-topic": {
+        "description": "Content that covers advanced or specialized topics",
+        "learningStage": "extension",
+        "cognitiveLevel": "create",
+        "examples": ["specialized applications", "cutting-edge research", "expert-level content"]
+      },
+      "enrichment": {
+        "description": "Content that provides additional depth or breadth",
+        "learningStage": "extension",
+        "cognitiveLevel": "analyze",
+        "examples": ["optional readings", "interesting connections", "bonus material"]
+      },
+      "remedial": {
+        "description": "Content that provides additional support for struggling learners",
+        "learningStage": "support",
+        "cognitiveLevel": "understand",
+        "examples": ["simplified explanations", "additional practice", "review exercises"]
+      },
+      "practice": {
+        "description": "Content that provides opportunities for skill development",
+        "learningStage": "application",
+        "cognitiveLevel": "apply",
+        "examples": ["practice problems", "skill-building exercises", "drill activities"]
+      },
+      "assessment": {
+        "description": "Content used for evaluating student understanding",
+        "learningStage": "evaluation",
+        "cognitiveLevel": "evaluate",
+        "examples": ["quizzes", "tests", "performance tasks", "rubrics"]
+      },
+      "reflection": {
+        "description": "Content that encourages metacognitive reflection",
+        "learningStage": "metacognition",
+        "cognitiveLevel": "evaluate",
+        "examples": ["reflection prompts", "self-assessment", "learning journals"]
+      },
+      "application": {
+        "description": "Content that focuses on applying knowledge to new situations",
+        "learningStage": "application",
+        "cognitiveLevel": "apply",
+        "examples": ["real-world applications", "transfer tasks", "problem-solving scenarios"]
+      },
+      "synthesis": {
+        "description": "Content that combines multiple concepts or ideas",
+        "learningStage": "integration",
+        "cognitiveLevel": "create",
+        "examples": ["interdisciplinary connections", "concept integration", "project-based learning"]
+      },
+      "critical-thinking": {
+        "description": "Content that promotes critical analysis and evaluation",
+        "learningStage": "analysis",
+        "cognitiveLevel": "analyze",
+        "examples": ["debate topics", "evaluation criteria", "analytical frameworks"]
+      },
+      "case-study": {
+        "description": "Content that presents real-world scenarios for analysis",
+        "learningStage": "application",
+        "cognitiveLevel": "analyze",
+        "examples": ["business cases", "historical scenarios", "scientific investigations"]
+      },
+      "simulation": {
+        "description": "Content that simulates real-world processes or systems",
+        "learningStage": "experiential",
+        "cognitiveLevel": "apply",
+        "examples": ["virtual labs", "role-playing scenarios", "modeling activities"]
+      },
+      "hands-on": {
+        "description": "Content that involves direct manipulation or experimentation",
+        "learningStage": "experiential",
+        "cognitiveLevel": "apply",
+        "examples": ["laboratory experiments", "field work", "maker activities"]
+      },
+      "theoretical": {
+        "description": "Content that focuses on theoretical frameworks or abstract concepts",
+        "learningStage": "conceptual",
+        "cognitiveLevel": "understand",
+        "examples": ["theoretical models", "abstract principles", "conceptual frameworks"]
+      },
+      "practical": {
+        "description": "Content that focuses on practical applications and skills",
+        "learningStage": "application",
+        "cognitiveLevel": "apply", 
+        "examples": ["how-to guides", "skill demonstrations", "procedural knowledge"]
+      }
+    }
+  },
+  "examples": [
+    "key-concept",
+    "example",
+    "practice",
+    "assessment",
+    "reflection"
+  ]
+}

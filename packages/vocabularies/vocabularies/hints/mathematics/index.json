@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/hints/mathematics",
+  "title": "Mathematical Notation Display Hints",
+  "description": "Rendering hints for mathematical content display preferences and accessibility",
+  "type": "object", 
+  "properties": {
+    "displayStyle": {
+      "type": "string",
+      "enum": ["inline", "block", "numbered", "unnumbered"],
+      "description": "How the mathematical expression should be displayed"
+    },
+    "preferredNotation": {
+      "type": "string",
+      "enum": ["latex", "mathml", "asciimath", "unicode"],
+      "description": "Preferred mathematical notation format"
+    },
+    "showSteps": { 
+      "type": "boolean", 
+      "default": false,
+      "description": "Whether to show step-by-step solution breakdown"
+    },
+    "interactive": { 
+      "type": "boolean", 
+      "default": false,
+      "description": "Whether the math should be interactive (manipulable)"
+    },
+    "fontSize": {
+      "type": "string",
+      "enum": ["small", "normal", "large", "x-large"],
+      "description": "Relative font size for mathematical expressions"
+    },
+    "alignment": {
+      "type": "string",
+      "enum": ["left", "center", "right"],
+      "description": "Horizontal alignment of mathematical expressions"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "displayStyles": {
+      "inline": {
+        "description": "Math rendered inline with surrounding text",
+        "example": "The equation $E = mc^2$ is famous.",
+        "bestFor": ["variables in text", "simple expressions", "narrative flow"],
+        "accessibility": "Read as part of sentence flow"
+      },
+      "block": {
+        "description": "Math rendered as separate block element",
+        "example": "$$E = mc^2$$",
+        "bestFor": ["complex equations", "prominent formulas", "emphasis"],
+        "accessibility": "Announced as separate mathematical expression"
+      },
+      "numbered": {
+        "description": "Block math with equation numbering",
+        "example": "$$E = mc^2 \\qquad (1)$$",
+        "bestFor": ["academic papers", "referenced equations", "formal documents"],
+        "accessibility": "Includes equation number in announcement"
+      },
+      "unnumbered": {
+        "description": "Block math without equation numbering",
+        "example": "$$E = mc^2$$",
+        "bestFor": ["simple displays", "examples", "demonstrations"],
+        "accessibility": "Announced as unnumbered mathematical expression"
+      }
+    },
+    "notationFormats": {
+      "latex": {
+        "description": "LaTeX mathematical notation",
+        "example": "\\frac{d}{dx}\\sin(x) = \\cos(x)",
+        "pros": ["widespread support", "precise formatting", "extensive symbol library"],
+        "cons": ["learning curve", "markup complexity"],
+        "bestFor": ["academic content", "complex math", "print output"]
+      },
+      "mathml": {
+        "description": "MathML mathematical markup",
+        "example": "<math><mfrac><mi>d</mi><mi>dx</mi></mfrac><mo>sin</mo><mi>x</mi></math>",
+        "pros": ["web standard", "accessibility support", "semantic meaning"],
+        "cons": ["verbose markup", "limited browser support"],
+        "bestFor": ["web accessibility", "semantic math", "screen readers"]
+      },
+      "asciimath": {
+        "description": "ASCII mathematical notation",
+        "example": "(d/dx) sin(x) = cos(x)",
+        "pros": ["human readable", "easy to type", "simple syntax"],
+        "cons": ["limited symbols", "less precise formatting"],
+        "bestFor": ["simple math", "quick entry", "plain text compatibility"]
+      },
+      "unicode": {
+        "description": "Unicode mathematical symbols",
+        "example": "∂f/∂x = lim[h→0] (f(x+h)-f(x))/h",
+        "pros": ["universal support", "no markup required", "copy-paste friendly"],
+        "cons": ["limited symbol set", "formatting constraints"],
+        "bestFor": ["simple expressions", "cross-platform compatibility"]
+      }
+    },
+    "accessibilityConsiderations": {
+      "screenReaders": {
+        "mathml": "Best support with NVDA, JAWS, VoiceOver",
+        "latex": "Requires MathJax for accessibility",
+        "asciimath": "May need manual alt text",
+        "unicode": "Generally readable but may need clarification"
+      },
+      "cognitiveSupport": {
+        "showSteps": "Helps with understanding complex derivations",
+        "interactive": "Allows exploration and manipulation",
+        "simplified": "Provide simplified versions for complex expressions"
+      },
+      "visualSupport": {
+        "fontSize": "Adjustable for vision needs",
+        "highContrast": "Ensure good contrast for symbols",
+        "magnification": "Support zoom without pixelation"
+      }
+    },
+    "formatSpecificRendering": {
+      "html": {
+        "engines": ["MathJax", "KaTeX", "native MathML"],
+        "fallbacks": ["PNG images", "SVG graphics", "Unicode text"],
+        "interactive": true,
+        "responsive": true
+      },
+      "pdf": {
+        "engines": ["LaTeX", "embedded fonts", "vector graphics"],
+        "fallbacks": ["bitmap images"],
+        "interactive": false,
+        "quality": "high resolution"
+      },
+      "docx": {
+        "engines": ["Office Math", "MathType", "equation objects"],
+        "fallbacks": ["images", "formatted text"],
+        "interactive": "limited",
+        "compatibility": "Microsoft Office"
+      },
+      "epub": {
+        "engines": ["MathML", "MathJax", "images"],
+        "fallbacks": ["alt text", "description"],
+        "interactive": "depends on reader",
+        "accessibility": "varies by reader"
+      }
+    }
+  },
+  "examples": [
+    {
+      "displayStyle": "inline",
+      "preferredNotation": "latex",
+      "fontSize": "normal"
+    },
+    {
+      "displayStyle": "block",
+      "preferredNotation": "mathml",
+      "alignment": "center",
+      "showSteps": true
+    },
+    {
+      "displayStyle": "numbered",
+      "preferredNotation": "latex",
+      "fontSize": "large",
+      "interactive": true
+    },
+    {
+      "displayStyle": "block",
+      "preferredNotation": "asciimath",
+      "alignment": "left",
+      "showSteps": false
+    }
+  ]
+}
