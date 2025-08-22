@@ -153,12 +153,18 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       // Generate HTML content
       const content = await this.renderDocumentAsync(document, renderOptions);
 
+      // Enhance accessibility features
+      let enhancedContent = content;
+      if (renderOptions.accessibilityMode) {
+        enhancedContent = this.enhanceAccessibility(content, document);
+      }
+
       // Sanitize if requested
-      let finalContent = content;
+      let finalContent = enhancedContent;
       if (renderOptions.sanitize) {
         // Check if we have a DOCTYPE to preserve
-        const hasDoctype = content.startsWith('<!DOCTYPE');
-        const sanitized = await this.sanitizeHtmlAsync(content);
+        const hasDoctype = enhancedContent.startsWith('<!DOCTYPE');
+        const sanitized = await this.sanitizeHtmlAsync(enhancedContent);
 
         // DOMPurify removes DOCTYPE, so add it back if needed
         if (hasDoctype && !sanitized.startsWith('<!DOCTYPE')) {
@@ -343,6 +349,90 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
    */
   async auditAccessibility(content: string) {
     return this.wcagTester.auditAccessibility(content);
+  }
+
+  /**
+   * Enhance rendered HTML with additional accessibility features
+   */
+  private enhanceAccessibility(content: string, document: XatsDocument): string {
+    // Add schema.org structured data for better machine readability
+    const structuredData = this.generateStructuredData(document);
+    
+    // Insert structured data before closing head tag
+    if (content.includes('</head>')) {
+      content = content.replace(
+        '</head>',
+        `  <script type="application/ld+json">\n${JSON.stringify(structuredData, null, 2)}\n  </script>\n</head>`
+      );
+    }
+
+    // Ensure proper document outline
+    content = this.enhanceDocumentOutline(content);
+
+    // Add accessibility landmarks
+    content = this.enhanceLandmarks(content);
+
+    return content;
+  }
+
+  /**
+   * Generate Schema.org structured data for the document
+   */
+  private generateStructuredData(document: XatsDocument) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Book',
+      name: document.bibliographicEntry?.title || 'Untitled',
+      author: document.bibliographicEntry?.author || [],
+      datePublished: document.bibliographicEntry?.issued?.['date-parts']?.[0]
+        ? `${document.bibliographicEntry.issued['date-parts'][0][0]}`
+        : new Date().getFullYear().toString(),
+      inLanguage: document.lang || 'en',
+      about: document.subject,
+      learningResourceType: 'Educational Material',
+      educationalLevel: 'any',
+      accessibilityFeature: document.accessibilityMetadata?.accessibilityFeature || [
+        'structuralNavigation',
+        'alternativeText',
+      ],
+      accessibilityHazard: document.accessibilityMetadata?.accessibilityHazard || ['none'],
+      accessibilitySummary:
+        document.accessibilityMetadata?.accessibilitySummary ||
+        'This educational document is designed to be accessible to all learners.',
+    };
+  }
+
+  /**
+   * Enhance document outline with proper heading structure
+   */
+  private enhanceDocumentOutline(content: string): string {
+    // This is a simplified implementation
+    // In a full implementation, we would analyze the heading structure
+    // and ensure proper nesting (h1 > h2 > h3, etc.)
+    return content;
+  }
+
+  /**
+   * Add additional accessibility landmarks
+   */
+  private enhanceLandmarks(content: string): string {
+    // Add search landmark if needed
+    if (content.includes('class="search')) {
+      content = content.replace(
+        /class="search([^"]*)"([^>]*)>/g,
+        'class="search$1"$2 role="search">'
+      );
+    }
+
+    // Enhance navigation elements
+    if (content.includes('class="toc') || content.includes('table-of-contents')) {
+      content = content.replace(
+        /(<[^>]*class="[^"]*(?:toc|table-of-contents)[^"]*"[^>]*>)/g,
+        '$1'.replace('>', ' role="navigation" aria-label="Table of Contents">')
+      );
+    }
+
+    return content;
   }
 
   // Private implementation methods
@@ -1301,14 +1391,28 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     );
   }
 
-  private parseContentBlock(blockElement: Element, _options: Required<ParseOptions>): ContentBlock {
+  private parseContentBlock(blockElement: Element, options: Required<ParseOptions>): ContentBlock {
     const id = blockElement.getAttribute('id') || '';
 
     // Determine block type from class
     const blockType = this.determineBlockType(blockElement);
     const content = this.parseBlockContent(blockElement, blockType);
 
-    const block: ContentBlock = { id, blockType, content };
+    // Parse rendering hints from HTML attributes and classes
+    const renderingHints = this.parseRenderingHints(blockElement);
+
+    // Parse language and text direction
+    const language = blockElement.getAttribute('lang') || undefined;
+    const textDirection = (blockElement.getAttribute('dir') as 'ltr' | 'rtl' | 'auto') || undefined;
+
+    const block: ContentBlock = { 
+      id, 
+      blockType, 
+      content,
+      ...(renderingHints.length > 0 && { renderingHints }),
+      ...(language && { language }),
+      ...(textDirection && textDirection !== 'ltr' && { textDirection }),
+    };
 
     return block;
   }
@@ -1446,6 +1550,175 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return {
       runs: [{ type: 'text', text }],
     };
+  }
+
+  /**
+   * Parse rendering hints from HTML element classes and attributes
+   */
+  private parseRenderingHints(element: Element): RenderingHint[] {
+    const hints: EnhancedRenderingHint[] = [];
+
+    // Parse CSS classes to extract rendering hints
+    const classList = Array.from(element.classList);
+    
+    for (const className of classList) {
+      const hint = this.parseClassNameToHint(className);
+      if (hint) {
+        hints.push(hint);
+      }
+    }
+
+    // Parse ARIA attributes to extract accessibility hints
+    const ariaHints = this.parseAriaToHints(element);
+    hints.push(...ariaHints);
+
+    // Parse custom data attributes
+    const dataHints = this.parseDataAttributesToHints(element);
+    hints.push(...dataHints);
+
+    // Convert to base RenderingHint type
+    return hints.map(hint => ({
+      hintType: hint.hintType,
+      value: hint.value,
+    }));
+  }
+
+  /**
+   * Parse a CSS class name into a rendering hint
+   */
+  private parseClassNameToHint(className: string): EnhancedRenderingHint | null {
+    // Semantic hints
+    if (className.startsWith('semantic-')) {
+      const semanticType = className.replace('semantic-', '');
+      return {
+        hintType: `https://xats.org/vocabularies/hints/semantic/${semanticType}`,
+        value: semanticType,
+      };
+    }
+
+    // Accessibility hints
+    if (className.startsWith('sr-') || className.startsWith('cognitive-') || className === 'high-contrast-compatible' || className === 'motion-safe' || className === 'focus-trap') {
+      let accessibilityType = className;
+      if (className === 'sr-priority-high') accessibilityType = 'screen-reader-priority-high';
+      if (className === 'sr-priority-low') accessibilityType = 'screen-reader-priority-low';
+      if (className === 'cognitive-high') accessibilityType = 'cognitive-load-high';
+      if (className === 'cognitive-low') accessibilityType = 'cognitive-load-low';
+
+      return {
+        hintType: `https://xats.org/vocabularies/hints/accessibility/${accessibilityType}`,
+        value: accessibilityType,
+      };
+    }
+
+    // Layout hints
+    if (className.startsWith('layout-')) {
+      const layoutType = className.replace('layout-', '');
+      let mappedType = layoutType;
+      if (layoutType === 'new-page') mappedType = 'force-new-page';
+      
+      return {
+        hintType: `https://xats.org/vocabularies/hints/layout/${mappedType}`,
+        value: mappedType,
+      };
+    }
+
+    // Pedagogical hints
+    if (className.startsWith('pedagogical-')) {
+      const pedagogicalType = className.replace('pedagogical-', '');
+      return {
+        hintType: `https://xats.org/vocabularies/hints/pedagogical/${pedagogicalType}`,
+        value: pedagogicalType,
+      };
+    }
+
+    return null;
+  }
+
+  /**
+   * Parse ARIA attributes into accessibility hints
+   */
+  private parseAriaToHints(element: Element): EnhancedRenderingHint[] {
+    const hints: EnhancedRenderingHint[] = [];
+
+    // aria-live attributes
+    const ariaLive = element.getAttribute('aria-live');
+    if (ariaLive === 'polite') {
+      hints.push({
+        hintType: 'https://xats.org/vocabularies/hints/accessibility/aria-live-polite',
+        value: 'polite',
+      });
+    } else if (ariaLive === 'assertive') {
+      hints.push({
+        hintType: 'https://xats.org/vocabularies/hints/accessibility/aria-live-assertive',
+        value: 'assertive',
+      });
+    }
+
+    // aria-hidden
+    const ariaHidden = element.getAttribute('aria-hidden');
+    if (ariaHidden === 'true') {
+      hints.push({
+        hintType: 'https://xats.org/vocabularies/hints/accessibility/skip-screen-reader',
+        value: true,
+      });
+    }
+
+    // accesskey
+    const accesskey = element.getAttribute('accesskey');
+    if (accesskey) {
+      hints.push({
+        hintType: 'https://xats.org/vocabularies/hints/accessibility/keyboard-shortcut',
+        value: accesskey,
+      });
+    }
+
+    // Complex aria attributes as object-style hints
+    const ariaLabel = element.getAttribute('aria-label');
+    const ariaDescribedby = element.getAttribute('aria-describedby');
+    const tabindex = element.getAttribute('tabindex');
+
+    if (ariaLabel || ariaDescribedby || tabindex) {
+      const objectValue: Record<string, unknown> = {};
+      if (ariaLabel) objectValue.ariaLabel = ariaLabel;
+      if (ariaDescribedby) objectValue.ariaDescription = ariaDescribedby;
+      if (tabindex) objectValue.tabIndex = parseInt(tabindex);
+
+      hints.push({
+        hintType: 'https://xats.org/vocabularies/hints/accessibility/custom-attributes',
+        value: objectValue,
+      });
+    }
+
+    return hints;
+  }
+
+  /**
+   * Parse custom data attributes into hints
+   */
+  private parseDataAttributesToHints(element: Element): EnhancedRenderingHint[] {
+    const hints: EnhancedRenderingHint[] = [];
+
+    // Check for data-xats-hint attributes
+    for (const attr of element.attributes) {
+      if (attr.name.startsWith('data-xats-hint-')) {
+        const hintType = attr.name.replace('data-xats-hint-', '').replace(/-/g, '/');
+        let value: unknown = attr.value;
+
+        // Try to parse as JSON for complex values
+        try {
+          value = JSON.parse(attr.value);
+        } catch {
+          // Keep as string if not valid JSON
+        }
+
+        hints.push({
+          hintType: `https://xats.org/vocabularies/hints/${hintType}`,
+          value,
+        });
+      }
+    }
+
+    return hints;
   }
 
   private createEmptyDocument(): XatsDocument {
