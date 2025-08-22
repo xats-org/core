@@ -215,8 +215,8 @@ describe('Bidirectional Renderer Architecture', () => {
       expect(renderers.get('mock')?.format).toBe('mock');
     });
 
-    test('should throw error for unsupported format', async () => {
-      await expect(factory.createRenderer('unsupported')).rejects.toThrow(
+    test('should throw error for unsupported format', () => {
+      expect(() => factory.createRenderer('unsupported')).toThrow(
         'No renderer registered for format'
       );
     });
@@ -272,16 +272,16 @@ describe('Bidirectional Renderer Architecture', () => {
       expect(stats.pluginsByFormat.mock).toBe(1);
     });
 
-    test('should prevent duplicate plugin registration', async () => {
+    test('should prevent duplicate plugin registration', () => {
       const plugin = new MockPlugin();
-      await pluginRegistry.register(plugin);
+      pluginRegistry.register(plugin);
 
-      await expect(pluginRegistry.register(plugin)).rejects.toThrow('already registered');
+      expect(() => pluginRegistry.register(plugin)).toThrow('already registered');
     });
 
     test('should unregister plugins', async () => {
       const plugin = new MockPlugin();
-      await pluginRegistry.register(plugin);
+      pluginRegistry.register(plugin);
 
       await pluginRegistry.unregister('mock-plugin');
       expect(pluginRegistry.getPlugin('mock-plugin')).toBeUndefined();
