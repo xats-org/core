@@ -10,6 +10,82 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
     ajv = new Ajv({ allErrors: true, strict: false });
     addFormats(ajv);
     
+    // Add CSL schema stub to prevent external reference resolution errors
+    const cslSchema = {
+      type: 'object',
+      properties: {
+        id: { type: 'string' },
+        type: { type: 'string' },
+        title: { type: 'string' },
+        author: { type: 'array' },
+        issued: { type: 'object' },
+        'container-title': { type: 'string' },
+        publisher: { type: 'string' },
+        page: { type: 'string' },
+        volume: { type: 'string' },
+        issue: { type: 'string' },
+        URL: { type: 'string' },
+        DOI: { type: 'string' },
+        ISBN: { type: 'string' },
+      },
+      additionalProperties: true,
+    };
+
+    ajv.addSchema(
+      cslSchema,
+      'https://raw.githubusercontent.com/citation-style-language/schema/master/csl-data.json'
+    );
+    
+    // Add LTI extension schema stub to prevent external reference resolution errors
+    const ltiSchema = {
+      $id: 'https://xats.org/extensions/lti-1.3/schema.json',
+      definitions: {
+        LtiConfiguration: {
+          type: 'object',
+          properties: {
+            ltiVersion: { type: 'string' },
+            platformId: { type: 'string' },
+            clientId: { type: 'string' },
+          },
+          additionalProperties: true,
+        },
+        LtiLaunchMetadata: {
+          type: 'object',
+          properties: {
+            contextId: { type: 'string' },
+            resourceLinkId: { type: 'string' },
+          },
+          additionalProperties: true,
+        },
+        LtiGradePassback: {
+          type: 'object',
+          properties: {
+            enabled: { type: 'boolean' },
+            maxScore: { type: 'number' },
+          },
+          additionalProperties: true,
+        },
+        LtiDeepLinking: {
+          type: 'object',
+          properties: {
+            enabled: { type: 'boolean' },
+            returnUrl: { type: 'string' },
+          },
+          additionalProperties: true,
+        },
+        LtiPathwayIntegration: {
+          type: 'object',
+          properties: {
+            enabled: { type: 'boolean' },
+            pathwayMappings: { type: 'array' },
+          },
+          additionalProperties: true,
+        },
+      },
+    };
+
+    ajv.addSchema(ltiSchema);
+    
     try {
       schemaV050 = require('../../schemas/0.5.0/xats.schema.json');
       ajv.addSchema(schemaV050, 'xats-v0.5.0');
@@ -94,8 +170,8 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
   describe('Enhanced Features', () => {
     it('should validate conditions object', () => {
       const hintWithConditions = {
-        hintType: 'https://xats.org/vocabularies/hints/layout/responsive',
-        value: 'responsive',
+        hintType: 'https://xats.org/vocabularies/hints/layout/position',
+        value: 'center',
         conditions: {
           outputFormats: ['html', 'epub'],
           mediaQuery: 'screen and (max-width: 768px)',
