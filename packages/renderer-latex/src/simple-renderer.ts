@@ -51,15 +51,15 @@ export class SimpleLaTeXRenderer
       const latexContent = this.generateLaTeX(document, options);
       const renderTime = Date.now() - startTime;
 
-      return {
+      return Promise.resolve({
         content: latexContent,
         metadata: {
           format: 'latex',
           renderTime,
         },
-      };
+      });
     } catch (error) {
-      return {
+      return Promise.resolve({
         content: '',
         metadata: {
           format: 'latex',
@@ -72,7 +72,7 @@ export class SimpleLaTeXRenderer
             recoverable: false,
           },
         ],
-      };
+      });
     }
   }
 
@@ -248,11 +248,11 @@ export class SimpleLaTeXRenderer
         message: 'Invalid input: content must be a non-empty string',
         severity: 'error' as const,
       });
-      return {
+      return Promise.resolve({
         valid: false,
         errors,
         warnings,
-      };
+      });
     }
 
     // Basic validation checks
