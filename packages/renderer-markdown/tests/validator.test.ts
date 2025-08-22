@@ -181,7 +181,7 @@ And **unbalanced strong markers.`;
 
       const result = await renderer.validate(unbalancedMarkdown);
 
-      expect(result.warnings.some(w => w.code === 'UNBALANCED_EMPHASIS')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'UNBALANCED_EMPHASIS')).toBe(true);
       expect(result.warnings[0].suggestion).toContain('missing opening or closing');
     });
 
@@ -195,9 +195,10 @@ No separator row above.`;
 
       const result = await renderer.validate(malformedTableMarkdown);
 
-      expect(result.warnings.some(w => w.code === 'MALFORMED_TABLE')).toBe(true);
-      expect(result.warnings.find(w => w.code === 'MALFORMED_TABLE')?.suggestion)
-        .toContain('separator rows with dashes');
+      expect(result.warnings.some((w) => w.code === 'MALFORMED_TABLE')).toBe(true);
+      expect(result.warnings.find((w) => w.code === 'MALFORMED_TABLE')?.suggestion).toContain(
+        'separator rows with dashes'
+      );
     });
 
     it('should not warn about properly formatted tables', async () => {
@@ -211,7 +212,7 @@ No separator row above.`;
       const result = await renderer.validate(properTableMarkdown);
 
       expect(result.valid).toBe(true);
-      expect(result.warnings.some(w => w.code === 'MALFORMED_TABLE')).toBe(false);
+      expect(result.warnings.some((w) => w.code === 'MALFORMED_TABLE')).toBe(false);
     });
 
     it('should handle tables with different separator styles', async () => {
@@ -322,7 +323,9 @@ Symbols: ∞ ∑ ∫ ∆ π α β γ`;
   describe('Performance', () => {
     it('should validate large documents quickly', async () => {
       // Generate a large document
-      const sections = Array.from({ length: 100 }, (_, i) => `
+      const sections = Array.from(
+        { length: 100 },
+        (_, i) => `
 ## Section ${i + 1}
 
 This is section ${i + 1} with some content.
@@ -336,7 +339,8 @@ console.log("Section ${i + 1}");
 \`\`\`
 
 Some more text here.
-`).join('\n');
+`
+      ).join('\n');
 
       const largeMarkdown = `# Large Document\n\n${sections}`;
 

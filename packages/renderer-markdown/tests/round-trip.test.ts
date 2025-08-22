@@ -300,7 +300,12 @@ describe('Markdown Round-trip Tests', () => {
               id: 'para1',
               blockType: 'https://xats.org/vocabularies/blocks/paragraph',
               content: {
-                runs: [{ type: 'text', text: 'Content with *asterisks* and [brackets] and `backticks`.' }],
+                runs: [
+                  {
+                    type: 'text',
+                    text: 'Content with *asterisks* and [brackets] and `backticks`.',
+                  },
+                ],
               },
             },
           ],
@@ -356,7 +361,9 @@ describe('Markdown Round-trip Tests', () => {
         id: `para${i}`,
         blockType: 'https://xats.org/vocabularies/blocks/paragraph' as const,
         content: {
-          runs: [{ type: 'text' as const, text: `This is paragraph ${i + 1} with some test content.` }],
+          runs: [
+            { type: 'text' as const, text: `This is paragraph ${i + 1} with some test content.` },
+          ],
         },
       }));
 

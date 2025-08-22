@@ -50,8 +50,8 @@ describe('SimpleMarkdownRenderer', () => {
         },
       };
 
-      const result = await renderer.render(document, { 
-        includeFrontMatter: true 
+      const result = await renderer.render(document, {
+        includeFrontMatter: true,
       });
 
       expect(result.content).toContain('---');
@@ -75,8 +75,8 @@ describe('SimpleMarkdownRenderer', () => {
         },
       };
 
-      const result = await renderer.render(document, { 
-        includeFrontMatter: true 
+      const result = await renderer.render(document, {
+        includeFrontMatter: true,
       });
 
       expect(result.content).toContain('author: "Author One, Author Two"');
@@ -111,7 +111,9 @@ describe('SimpleMarkdownRenderer', () => {
 
       const result = await renderer.render(document);
 
-      expect(result.content).toContain('This is a test paragraph with *emphasized text* and **bold text**.');
+      expect(result.content).toContain(
+        'This is a test paragraph with *emphasized text* and **bold text**.'
+      );
     });
 
     it('should handle blockquote content blocks', async () => {
@@ -128,9 +130,7 @@ describe('SimpleMarkdownRenderer', () => {
               id: 'quote1',
               blockType: 'https://xats.org/vocabularies/blocks/blockquote',
               content: {
-                runs: [
-                  { type: 'text', text: 'This is a blockquote.' },
-                ],
+                runs: [{ type: 'text', text: 'This is a blockquote.' }],
               },
             },
           ],
@@ -291,7 +291,9 @@ This paragraph has *emphasized* and **strong** text.`;
       const unit = units[0];
       expect(unit.contents).toBeDefined();
       const blocks = unit.contents;
-      const blockquote = blocks.find((b: any) => b.blockType === 'https://xats.org/vocabularies/blocks/blockquote');
+      const blockquote = blocks.find(
+        (b: any) => b.blockType === 'https://xats.org/vocabularies/blocks/blockquote'
+      );
       expect(blockquote).toBeDefined();
     });
 
@@ -310,7 +312,9 @@ console.log("Hello");
       const unit = units[0];
       expect(unit.contents).toBeDefined();
       const blocks = unit.contents;
-      const codeBlock = blocks.find((b: any) => b.blockType === 'https://xats.org/vocabularies/blocks/codeBlock');
+      const codeBlock = blocks.find(
+        (b: any) => b.blockType === 'https://xats.org/vocabularies/blocks/codeBlock'
+      );
       expect(codeBlock).toBeDefined();
       expect(codeBlock?.extensions?.language).toBe('javascript');
     });
@@ -423,7 +427,7 @@ This is valid Markdown content.
       const result = await renderer.validate(emptyMarkdown);
 
       expect(result.valid).toBe(false);
-      expect(result.warnings.some(w => w.code === 'EMPTY_CONTENT')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'EMPTY_CONTENT')).toBe(true);
     });
 
     it('should detect unbalanced emphasis markers', async () => {
@@ -433,14 +437,14 @@ This has *unbalanced emphasis.`;
 
       const result = await renderer.validate(unbalancedMarkdown);
 
-      expect(result.warnings.some(w => w.code === 'UNBALANCED_EMPHASIS')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'UNBALANCED_EMPHASIS')).toBe(true);
     });
 
     it('should handle null input', async () => {
       const result = await renderer.validate(null as any);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === 'VALIDATION_ERROR')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'VALIDATION_ERROR')).toBe(true);
     });
 
     it('should detect malformed tables', async () => {
@@ -451,7 +455,7 @@ This has *unbalanced emphasis.`;
 
       const result = await renderer.validate(malformedTable);
 
-      expect(result.warnings.some(w => w.code === 'MALFORMED_TABLE')).toBe(true);
+      expect(result.warnings.some((w) => w.code === 'MALFORMED_TABLE')).toBe(true);
     });
   });
 
@@ -524,7 +528,7 @@ console.log("code");
       const result = await renderer.testCompliance(inaccessibleMarkdown, 'AA');
 
       expect(result.compliant).toBe(false);
-      expect(result.violations.some(v => v.criterion === '1.1.1')).toBe(true);
+      expect(result.violations.some((v) => v.criterion === '1.1.1')).toBe(true);
     });
 
     it('should detect poor link text', async () => {
@@ -535,7 +539,7 @@ console.log("code");
 
       const result = await renderer.testCompliance(poorLinksMarkdown, 'AA');
 
-      expect(result.warnings.some(w => w.criterion === '2.4.4')).toBe(true);
+      expect(result.warnings.some((w) => w.criterion === '2.4.4')).toBe(true);
     });
 
     it('should detect improper heading hierarchy', async () => {
@@ -545,7 +549,7 @@ console.log("code");
 
       const result = await renderer.testCompliance(badHierarchyMarkdown, 'AA');
 
-      expect(result.warnings.some(w => w.criterion === '1.3.1')).toBe(true);
+      expect(result.warnings.some((w) => w.criterion === '1.3.1')).toBe(true);
     });
 
     it('should provide accessibility audit', async () => {
