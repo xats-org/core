@@ -13,6 +13,16 @@ import type {
   ContentBlock,
   SemanticText,
   Run,
+  ReferenceRun,
+  CitationRun,
+  EmphasisRun,
+  StrongRun,
+  CodeRun,
+  MathInlineRun,
+  SubscriptRun,
+  SuperscriptRun,
+  StrikethroughRun,
+  UnderlineRun,
   FrontMatter,
   BackMatter,
 } from '@xats-org/types';
@@ -210,9 +220,9 @@ export class LaTeXConverter {
       if (typeof date === 'object' && date['date-parts']) {
         const dateparts = date['date-parts'][0];
         if (dateparts && dateparts.length > 0) {
-          const year = dateparts[0];
-          const month = dateparts[1] || 1;
-          const day = dateparts[2] || 1;
+          const year = dateparts[0] ?? new Date().getFullYear();
+          const month = dateparts[1] ?? 1;
+          const day = dateparts[2] ?? 1;
           parts.push(`\\date{${new Date(year, month - 1, day).toLocaleDateString()}}`);
         }
       }
@@ -237,7 +247,7 @@ export class LaTeXConverter {
     const parts: string[] = [];
 
     if (frontMatter.contents) {
-      for (const block of frontMatter.contents) {
+      for (const block of frontMatter.contents as unknown[]) {
         parts.push(this.convertContentBlock(block as ContentBlock));
       }
     }
@@ -252,12 +262,16 @@ export class LaTeXConverter {
     const parts: string[] = [];
 
     for (const content of bodyMatter.contents) {
-      if ('unitType' in content) {
-        // Unit
-        parts.push(this.convertUnit(content));
-      } else if ('chapterType' in content) {
-        // Chapter
-        parts.push(this.convertChapter(content));
+      // Check if it's a Unit by checking for Unit-specific structure
+      if ('contents' in content && Array.isArray(content.contents)) {
+        const firstContent = content.contents[0];
+        if (firstContent && ('chapterType' in firstContent || 'blockType' in firstContent)) {
+          // It's a Unit containing Chapters or ContentBlocks
+          parts.push(this.convertUnit(content as Unit));
+        } else {
+          // It's a Chapter containing Sections or ContentBlocks
+          parts.push(this.convertChapter(content as Chapter));
+        }
       }
     }
 
@@ -271,7 +285,7 @@ export class LaTeXConverter {
     const parts: string[] = [];
 
     if (backMatter.contents) {
-      for (const block of backMatter.contents) {
+      for (const block of backMatter.contents as unknown[]) {
         parts.push(this.convertContentBlock(block as ContentBlock));
       }
     }
@@ -307,10 +321,15 @@ export class LaTeXConverter {
     // Contents
     if (unit.contents) {
       for (const content of unit.contents) {
-        if ('sectionType' in content) {
-          parts.push(this.convertSection(content));
+        if ('contents' in content && 'title' in content && !('blockType' in content)) {
+          // It's a Chapter or Section
+          if ('fileReference' in content) {
+            parts.push(this.convertChapter(content as Chapter));
+          } else {
+            parts.push(this.convertSection(content as Section));
+          }
         } else {
-          parts.push(this.convertContentBlock(content));
+          parts.push(this.convertContentBlock(content as ContentBlock));
         }
       }
     }
@@ -342,10 +361,11 @@ export class LaTeXConverter {
     // Contents
     if (chapter.contents) {
       for (const content of chapter.contents) {
-        if ('sectionType' in content) {
-          parts.push(this.convertSection(content));
+        if ('contents' in content && 'title' in content && !('blockType' in content)) {
+          // It's a Section
+          parts.push(this.convertSection(content as Section));
         } else {
-          parts.push(this.convertContentBlock(content));
+          parts.push(this.convertContentBlock(content as ContentBlock));
         }
       }
     }
@@ -361,7 +381,7 @@ export class LaTeXConverter {
 
     // Section title
     if (section.title) {
-      const level = this.getSectionLevel(section.sectionType as string);
+      const level = this.getSectionLevel('primary'); // Default to primary section
       const titleText = this.convertSemanticText(section.title);
       parts.push(`\\${level}{${titleText}}`);
 
@@ -378,11 +398,8 @@ export class LaTeXConverter {
     // Contents
     if (section.contents) {
       for (const content of section.contents) {
-        if ('sectionType' in content) {
-          parts.push(this.convertSection(content));
-        } else {
-          parts.push(this.convertContentBlock(content));
-        }
+        // Section can only contain ContentBlocks, not other Sections
+        parts.push(this.convertContentBlock(content));
       }
     }
 
@@ -483,8 +500,8 @@ export class LaTeXConverter {
    * Convert paragraph block
    */
   private convertParagraphBlock(block: ContentBlock): string {
-    if (typeof block.content === 'object' && 'runs' in block.content) {
-      return this.convertSemanticText(block.content);
+    if (block.content && typeof block.content === 'object' && 'runs' in block.content) {
+      return this.convertSemanticText(block.content as SemanticText);
     }
     return '';
   }
@@ -493,11 +510,11 @@ export class LaTeXConverter {
    * Convert heading block
    */
   private convertHeadingBlock(block: ContentBlock): string {
-    if (typeof block.content === 'object' && 'runs' in block.content) {
+    if (block.content && typeof block.content === 'object' && 'runs' in block.content) {
       const level =
-        (block.renderingHints?.find((hint) => hint.hintType === 'level')?.value as number) || 1;
+        (block.renderingHints?.find((hint) => hint.hintType === 'level')?.value as number) ?? 1;
       const command = this.getHeadingCommand(level);
-      const text = this.convertSemanticText(block.content);
+      const text = this.convertSemanticText(block.content as SemanticText);
 
       let result = `\\${command}{${text}}`;
 
@@ -571,8 +588,8 @@ export class LaTeXConverter {
     if (!listContent.items) return '';
 
     for (const item of listContent.items) {
-      if (typeof item === 'object' && 'runs' in item) {
-        const itemText = this.convertSemanticText(item);
+      if (item && typeof item === 'object' && 'runs' in item) {
+        const itemText = this.convertSemanticText(item as SemanticText);
         parts.push(`\\item ${itemText}`);
       }
     }
@@ -586,8 +603,8 @@ export class LaTeXConverter {
    * Convert blockquote block
    */
   private convertBlockquoteBlock(block: ContentBlock): string {
-    if (typeof block.content === 'object' && 'runs' in block.content) {
-      const text = this.convertSemanticText(block.content);
+    if (block.content && typeof block.content === 'object' && 'runs' in block.content) {
+      const text = this.convertSemanticText(block.content as SemanticText);
       return `\\begin{quote}\n${text}\n\\end{quote}`;
     }
     return '';
@@ -649,10 +666,10 @@ export class LaTeXConverter {
    * Convert figure block
    */
   private convertFigureBlock(block: ContentBlock): string {
-    if (typeof block.content === 'object' && 'src' in block.content) {
+    if (block.content && typeof block.content === 'object' && 'src' in block.content) {
       const figureContent = block.content as { src?: string; alt?: string; caption?: string };
-      const src = figureContent.src || '';
-      const caption = figureContent.caption || '';
+      const src = figureContent.src ?? '';
+      const caption = figureContent.caption ?? '';
 
       const parts = [
         '\\begin{figure}[h]',
@@ -712,26 +729,23 @@ export class LaTeXConverter {
       }
 
       case 'reference': {
-        const refRun = run as { targetId: string };
-        return `\\ref{${this.escapeLatex(refRun.targetId)}}`;
+        const refRun = run as ReferenceRun;
+        return `\\ref{${this.escapeLatex(refRun.ref)}}`;
       }
 
       case 'citation': {
-        const citRun = run as { citationKey: string | string[] };
-        const keys = Array.isArray(citRun.citationKey) ? citRun.citationKey : [citRun.citationKey];
-        return `\\cite{${keys.map((key) => this.escapeLatex(key)).join(',')}}`;
+        const citRun = run as CitationRun;
+        return `\\cite{${this.escapeLatex(citRun.citeKey)}}`;
       }
 
       case 'emphasis': {
-        const emRun = run as { runs: Run[] };
-        const emText = this.convertSemanticText({ runs: emRun.runs });
-        return `\\emph{${emText}}`;
+        const emRun = run as EmphasisRun;
+        return `\\emph{${this.escapeLatex(emRun.text)}}`;
       }
 
       case 'strong': {
-        const strongRun = run as { runs: Run[] };
-        const strongText = this.convertSemanticText({ runs: strongRun.runs });
-        return `\\textbf{${strongText}}`;
+        const strongRun = run as StrongRun;
+        return `\\textbf{${this.escapeLatex(strongRun.text)}}`;
       }
 
       case 'index': {
@@ -739,11 +753,34 @@ export class LaTeXConverter {
         return `${this.escapeLatex(indexRun.text)}\\index{${this.escapeLatex(indexRun.entry)}}`;
       }
 
-      case 'keyTerm': {
-        // KeyTerm handling - treat as strong text
-        const keyRun = run as { text?: string };
-        const keyText = keyRun.text || '';
-        return `\\textbf{${this.escapeLatex(keyText)}}`;
+      case 'code': {
+        const codeRun = run as CodeRun;
+        return `\\texttt{${this.escapeLatex(codeRun.text)}}`;
+      }
+
+      case 'mathInline': {
+        const mathRun = run as MathInlineRun;
+        return `$${mathRun.math}$`;
+      }
+
+      case 'subscript': {
+        const subRun = run as SubscriptRun;
+        return `\\textsubscript{${this.escapeLatex(subRun.text)}}`;
+      }
+
+      case 'superscript': {
+        const supRun = run as SuperscriptRun;
+        return `\\textsuperscript{${this.escapeLatex(supRun.text)}}`;
+      }
+
+      case 'strikethrough': {
+        const strikeRun = run as StrikethroughRun;
+        return `\\sout{${this.escapeLatex(strikeRun.text)}}`;
+      }
+
+      case 'underline': {
+        const underRun = run as UnderlineRun;
+        return `\\underline{${this.escapeLatex(underRun.text)}}`;
       }
 
       default: {

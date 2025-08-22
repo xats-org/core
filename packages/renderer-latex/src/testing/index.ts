@@ -366,7 +366,6 @@ export class LaTeXTestSuite {
       bodyMatter: {
         contents: [
           {
-            unitType: 'lesson',
             title: { runs: [{ type: 'text', text: 'Math Test Unit' }] },
             contents: [
               {
@@ -394,7 +393,6 @@ export class LaTeXTestSuite {
       bodyMatter: {
         contents: [
           {
-            unitType: 'lesson',
             title: { runs: [{ type: 'text', text: 'Citation Test Unit' }] },
             contents: [
               {
@@ -402,9 +400,9 @@ export class LaTeXTestSuite {
                 content: {
                   runs: [
                     { type: 'text', text: 'This is a citation: ' },
-                    { type: 'citation', citationKey: citationKeys[0] },
+                    { type: 'citation', citeKey: citationKeys[0] },
                     { type: 'text', text: ' and another: ' },
-                    { type: 'citation', citationKey: citationKeys[1] },
+                    { type: 'citation', citeKey: citationKeys[1] },
                   ],
                 },
               },

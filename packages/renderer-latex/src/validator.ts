@@ -310,8 +310,10 @@ export class LaTeXValidator {
     let match;
     while ((match = sectionRegex.exec(content)) !== null) {
       const command = match[1];
-      const level = sectionCommands.indexOf(command);
-      sections.push({ command, level });
+      if (command) {
+        const level = sectionCommands.indexOf(command);
+        sections.push({ command, level });
+      }
     }
 
     // Check for skipped levels

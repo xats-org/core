@@ -147,7 +147,7 @@ export class LaTeXRenderer implements BidirectionalRenderer<LaTeXRendererOptions
     document: XatsDocument,
     options: RoundTripOptions = {}
   ): Promise<RoundTripResult> {
-    return this.roundTripTester.testDocument(document, options);
+    return this.roundTripTester.testDocument(document);
   }
 
   /**
