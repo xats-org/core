@@ -8,6 +8,7 @@
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 
+// eslint-disable-next-line import/order
 import type { MarkdownRendererOptions, MarkdownParseOptions, MarkdownMetadata } from './types.js';
 
 /**
