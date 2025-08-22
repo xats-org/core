@@ -1,14 +1,15 @@
 /**
  * @xats-org/ai-integration - Agent Orchestration Framework
- * 
+ *
  * This module provides the infrastructure for orchestrating multiple AI agents
  * in collaborative textbook creation workflows using xats as the data interchange format.
  */
 
-import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
+import { z } from 'zod';
+
+import type { AIAgent } from '../metadata/schema.js';
 import type { XatsDocument } from '@xats-org/types';
-import type { AIAgent, AIWorkflow, AIGenerationExtension } from '../metadata/schema.js';
 
 /**
  * Workflow step definition
@@ -31,10 +32,12 @@ export const WorkflowStepSchema = z.object({
   /** Validation criteria */
   validation: z.record(z.unknown()).optional(),
   /** Retry configuration */
-  retry: z.object({
-    maxAttempts: z.number().int().positive().default(3),
-    backoffMs: z.number().int().positive().default(1000),
-  }).optional(),
+  retry: z
+    .object({
+      maxAttempts: z.number().int().positive().default(3),
+      backoffMs: z.number().int().positive().default(1000),
+    })
+    .optional(),
 });
 
 /**
@@ -117,7 +120,7 @@ export class AgentRegistry {
    * Find agents by capability
    */
   findByCapability(capability: string): AIAgent[] {
-    return Array.from(this.agents.values()).filter(agent =>
+    return Array.from(this.agents.values()).filter((agent) =>
       agent.capabilities.includes(capability)
     );
   }
@@ -161,7 +164,7 @@ export class WorkflowOrchestrator {
   /**
    * Start a workflow execution
    */
-  async startWorkflow(
+  startWorkflow(
     workflowId: string,
     document: XatsDocument,
     initialState: Record<string, unknown> = {}
@@ -185,11 +188,11 @@ export class WorkflowOrchestrator {
     };
 
     this.executions.set(executionId, context);
-    
+
     // Start execution asynchronously
     void this.executeWorkflow(executionId);
-    
-    return executionId;
+
+    return Promise.resolve(executionId);
   }
 
   /**
@@ -231,15 +234,15 @@ export class WorkflowOrchestrator {
 
       // Execute steps in dependency order
       const executionOrder = this.getExecutionOrder(workflow);
-      
+
       for (const stepId of executionOrder) {
-        const step = workflow.steps.find(s => s.id === stepId);
+        const step = workflow.steps.find((s) => s.id === stepId);
         if (!step) {
           throw new Error(`Step not found: ${stepId}`);
         }
 
         context.currentStep = stepId;
-        
+
         try {
           await this.executeStep(step, context);
           context.completedSteps.push(stepId);
@@ -287,7 +290,7 @@ export class WorkflowOrchestrator {
         return;
       } catch (error) {
         lastError = error instanceof Error ? error : new Error('Unknown error');
-        
+
         if (attempt < retryConfig.maxAttempts) {
           await this.delay(retryConfig.backoffMs * attempt);
         }
@@ -309,34 +312,36 @@ export class WorkflowOrchestrator {
     await this.delay(Math.random() * 1000 + 500);
 
     // Add AI generation metadata to the document
-    const document = context.state.document as XatsDocument & { extensions?: any };
+    const document = context.state.document as XatsDocument & {
+      extensions?: Record<string, unknown>;
+    };
     if (!document.extensions) {
       document.extensions = {};
     }
     document.extensions.aiGeneration = {
-        model: {
-          provider: 'simulation',
-          id: agent.id,
-          version: agent.version || '1.0.0',
-        },
-        prompt: {
-          template: `Execute step: ${step.name}`,
-          parameters: {},
-          context: [`Step: ${step.id}`, `Agent: ${agent.id}`],
-        },
-        metadata: {
-          timestamp: new Date().toISOString(),
-          sessionId: context.executionId,
-          confidence: 0.95,
-          attempts: 1,
-        },
-        agent,
-        workflow: {
-          workflowId: context.workflowId,
-          step: context.completedSteps.length + 1,
-          state: { stepId: step.id },
-        },
-      };
+      model: {
+        provider: 'simulation',
+        id: agent.id,
+        version: agent.version || '1.0.0',
+      },
+      prompt: {
+        template: `Execute step: ${step.name}`,
+        parameters: {},
+        context: [`Step: ${step.id}`, `Agent: ${agent.id}`],
+      },
+      metadata: {
+        timestamp: new Date().toISOString(),
+        sessionId: context.executionId,
+        confidence: 0.95,
+        attempts: 1,
+      },
+      agent,
+      workflow: {
+        workflowId: context.workflowId,
+        step: context.completedSteps.length + 1,
+        state: { stepId: step.id },
+      },
+    };
   }
 
   /**
@@ -388,7 +393,7 @@ export class WorkflowOrchestrator {
     }
 
     // Check that all dependencies reference valid steps
-    const stepIds = new Set(workflow.steps.map(s => s.id));
+    const stepIds = new Set(workflow.steps.map((s) => s.id));
     for (const [stepId, deps] of Object.entries(workflow.dependencies)) {
       if (!stepIds.has(stepId)) {
         throw new Error(`Dependency references unknown step: ${stepId}`);
@@ -405,7 +410,7 @@ export class WorkflowOrchestrator {
    * Utility delay function
    */
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 

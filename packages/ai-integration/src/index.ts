@@ -1,6 +1,6 @@
 /**
  * @xats-org/ai-integration - Main Export Module
- * 
+ *
  * AI Integration Framework for Multi-Agent Textbook Creation
  * Provides comprehensive tools for AI-assisted content generation using xats.
  */
@@ -15,7 +15,7 @@ export {
   type AIAgent,
   type AIWorkflow,
   type AIGenerationExtension,
-  
+
   // Schema validation
   AIModelSchema,
   AIPromptSchema,
@@ -24,7 +24,7 @@ export {
   AIAgentSchema,
   AIWorkflowSchema,
   AIGenerationExtensionSchema,
-  
+
   // Helper functions
   createAIGenerationExtension,
   addReviewToExtension,
@@ -39,16 +39,16 @@ export {
   type WorkflowStep,
   type WorkflowDefinition,
   type WorkflowContext,
-  
+
   // Schema validation
   WorkflowStepSchema,
   WorkflowDefinitionSchema,
   WorkflowContextSchema,
-  
+
   // Core classes
   AgentRegistry,
   WorkflowOrchestrator,
-  
+
   // Templates
   WORKFLOW_TEMPLATES,
 } from './orchestration/workflow.js';
@@ -61,8 +61,8 @@ export {
 } from './mcp/ai-mcp-server.js';
 
 // Import for use in the framework class
-import { AgentRegistry, WorkflowOrchestrator } from './orchestration/workflow.js';
 import { AIIntegratedMcpServer } from './mcp/ai-mcp-server.js';
+import { AgentRegistry, WorkflowOrchestrator } from './orchestration/workflow.js';
 
 /**
  * Package version
@@ -75,7 +75,7 @@ export const VERSION = '0.5.0';
 export class AIIntegrationFramework {
   private agentRegistry: AgentRegistry;
   private orchestrator: WorkflowOrchestrator;
-  private mcpServer?: AIIntegratedMcpServer;
+  private mcpServer: AIIntegratedMcpServer | undefined;
 
   constructor() {
     this.agentRegistry = new AgentRegistry();
@@ -99,7 +99,7 @@ export class AIIntegrationFramework {
   /**
    * Start the MCP server
    */
-  async startMcpServer(config?: any): Promise<AIIntegratedMcpServer> {
+  async startMcpServer(config?: Record<string, unknown>): Promise<AIIntegratedMcpServer> {
     if (this.mcpServer) {
       throw new Error('MCP server is already running');
     }
@@ -115,7 +115,7 @@ export class AIIntegrationFramework {
   async stopMcpServer(): Promise<void> {
     if (this.mcpServer) {
       await this.mcpServer.close();
-      this.mcpServer = undefined as any;
+      this.mcpServer = undefined;
     }
   }
 

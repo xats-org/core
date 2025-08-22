@@ -1,6 +1,6 @@
 /**
  * @xats-org/ai-integration - AI Generation Metadata Extension Schema
- * 
+ *
  * This module defines the schema for tracking AI-generated content within xats documents.
  * It provides comprehensive metadata about model attribution, prompt preservation,
  * confidence scoring, and human review tracking.
@@ -185,19 +185,27 @@ export function validateAIGenerationExtension(data: unknown): AIGenerationExtens
 /**
  * Helper function to check if an object has AI generation metadata
  */
-export function hasAIGenerationMetadata(obj: any): obj is { extensions: { aiGeneration: AIGenerationExtension } } {
-  return Boolean(obj && 
-         typeof obj === 'object' && 
-         obj.extensions && 
-         typeof obj.extensions === 'object' &&
-         obj.extensions.aiGeneration &&
-         typeof obj.extensions.aiGeneration === 'object');
+export function hasAIGenerationMetadata(
+  obj: unknown
+): obj is { extensions: { aiGeneration: AIGenerationExtension } } {
+  return Boolean(
+    obj &&
+      typeof obj === 'object' &&
+      obj !== null &&
+      'extensions' in obj &&
+      obj.extensions &&
+      typeof obj.extensions === 'object' &&
+      obj.extensions !== null &&
+      'aiGeneration' in obj.extensions &&
+      (obj.extensions as Record<string, unknown>).aiGeneration &&
+      typeof (obj.extensions as Record<string, unknown>).aiGeneration === 'object'
+  );
 }
 
 /**
  * Helper function to extract AI generation metadata from an object
  */
-export function getAIGenerationMetadata(obj: any): AIGenerationExtension | null {
+export function getAIGenerationMetadata(obj: unknown): AIGenerationExtension | null {
   if (hasAIGenerationMetadata(obj)) {
     try {
       return validateAIGenerationExtension(obj.extensions.aiGeneration);

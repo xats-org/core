@@ -3,7 +3,9 @@
  */
 
 import { describe, test, expect, beforeEach, afterEach } from 'vitest';
+
 import { AIIntegratedMcpServer, createAIIntegratedServer } from '../mcp/ai-mcp-server.js';
+
 import type { XatsDocument } from '@xats-org/types';
 
 describe('AI Integrated MCP Server', () => {
@@ -17,6 +19,7 @@ describe('AI Integrated MCP Server', () => {
       });
     } catch (error) {
       // Server creation might fail, tests should handle this
+      // eslint-disable-next-line no-console
       console.log('Server creation failed:', error);
     }
   });
@@ -53,7 +56,7 @@ describe('AI Integrated MCP Server', () => {
 
   test('registers agents through registry', () => {
     const registry = server.getAgentRegistry();
-    
+
     const agent = {
       id: 'test-agent',
       role: 'content-writer',
@@ -62,7 +65,7 @@ describe('AI Integrated MCP Server', () => {
     };
 
     registry.register(agent);
-    
+
     const retrieved = registry.get('test-agent');
     expect(retrieved).toEqual(agent);
   });
@@ -95,7 +98,7 @@ describe('AI Integrated MCP Server', () => {
       },
     ];
 
-    agents.forEach(agent => registry.register(agent));
+    agents.forEach((agent) => registry.register(agent));
 
     const document: XatsDocument = {
       schemaVersion: '0.5.0',
@@ -122,17 +125,15 @@ describe('AI Integrated MCP Server', () => {
           requiredCapabilities: ['content-planning'],
           inputs: [],
           outputs: ['outline'],
-        }
+        },
       ],
       dependencies: {},
       config: {},
     });
 
-    const executionId = await orchestrator.startWorkflow(
-      'textbook-creation',
-      document,
-      { testMode: true }
-    );
+    const executionId = await orchestrator.startWorkflow('textbook-creation', document, {
+      testMode: true,
+    });
 
     expect(executionId).toBeDefined();
     expect(typeof executionId).toBe('string');
@@ -144,7 +145,7 @@ describe('AI Integrated MCP Server', () => {
 
   test('inherits base MCP server functionality', () => {
     const config = server.getConfig();
-    
+
     expect(config.capabilities).toBeDefined();
     expect(config.capabilities?.tools).toBe(true);
     expect(config.defaultSchemaVersion).toBe('0.3.0');
@@ -158,12 +159,12 @@ describe('AI Integrated MCP Server', () => {
 
     expect(agentRegistry).toBeDefined();
     expect(orchestrator).toBeDefined();
-    
+
     // Verify that we can register agents
     expect(typeof agentRegistry.register).toBe('function');
     expect(typeof agentRegistry.get).toBe('function');
     expect(typeof agentRegistry.findByCapability).toBe('function');
-    
+
     // Verify that we can work with workflows
     expect(typeof orchestrator.getExecutionStatus).toBe('function');
     expect(typeof orchestrator.cancelExecution).toBe('function');
@@ -177,13 +178,13 @@ describe('AI Integrated MCP Server', () => {
   describe('AI-specific functionality', () => {
     test('agent registry manages agents correctly', () => {
       const registry = server.getAgentRegistry();
-      
+
       const agent1 = {
         id: 'writer-1',
         role: 'content-writer',
         capabilities: ['writing', 'technical-writing'],
       };
-      
+
       const agent2 = {
         id: 'reviewer-1',
         role: 'content-reviewer',
@@ -196,7 +197,7 @@ describe('AI Integrated MCP Server', () => {
       expect(registry.list()).toHaveLength(2);
       expect(registry.has('writer-1')).toBe(true);
       expect(registry.has('reviewer-1')).toBe(true);
-      
+
       const writers = registry.findByCapability('writing');
       expect(writers).toHaveLength(1);
       expect(writers[0].id).toBe('writer-1');
@@ -247,9 +248,9 @@ describe('AI Integrated MCP Server', () => {
       };
 
       const executionId = await orchestrator.startWorkflow('simple-workflow', document);
-      
+
       expect(executionId).toBeDefined();
-      
+
       const status = orchestrator.getExecutionStatus(executionId);
       expect(status?.executionId).toBe(executionId);
       expect(status?.workflowId).toBe('simple-workflow');
