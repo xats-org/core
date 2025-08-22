@@ -84,6 +84,7 @@ export interface DocxRendererOptions extends RendererOptions {
  */
 export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> {
   readonly format = 'docx' as const;
+  readonly wcagLevel = null;
 
   private options: Required<DocxRendererOptions>;
   private roundTripTester: RoundTripTester;
@@ -215,9 +216,9 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
           fidelityScore: 0.8, // TODO: implement scoring based on complexity
         },
         warnings: result.messages.map(msg => ({
-          type: 'unmapped-element' as const,
+          type: 'other' as const,
           message: msg.message,
-          element: msg.type || 'unknown',
+          path: `mammoth-message-${msg.type || 'unknown'}`,
         })),
         errors: [],
         unmappedData: [],
@@ -324,43 +325,46 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
   ): Promise<docx.Document> {
     const sections: docx.ISectionOptions[] = [];
 
+    // Create mutable children array
+    const children: docx.Paragraph[] = [];
+    
+    // Add front matter
+    if (document.frontMatter) {
+      const frontMatterElements = this.renderFrontMatter(document.frontMatter, options);
+      children.push(...frontMatterElements);
+    }
+
+    // Add body matter
+    const bodyMatterElements = this.renderBodyMatter(document.bodyMatter, options);
+    children.push(...bodyMatterElements);
+
+    // Add back matter
+    if (document.backMatter) {
+      const backMatterElements = this.renderBackMatter(document.backMatter, options);
+      children.push(...backMatterElements);
+    }
+
     // Create main section with document content
     const mainSection: docx.ISectionOptions = {
       properties: {
         page: {
           size: {
-            width: options.pageSize.width,
-            height: options.pageSize.height,
+            width: options.pageSize.width || 12240,
+            height: options.pageSize.height || 15840,
             orientation: options.orientation === 'landscape' 
               ? docx.PageOrientation.LANDSCAPE 
               : docx.PageOrientation.PORTRAIT,
           },
           margin: {
-            top: options.margins.top,
-            right: options.margins.right,
-            bottom: options.margins.bottom,
-            left: options.margins.left,
+            top: options.margins.top || 1440,
+            right: options.margins.right || 1440,
+            bottom: options.margins.bottom || 1440,
+            left: options.margins.left || 1440,
           },
         },
       },
-      children: [],
+      children,
     };
-
-    // Add front matter
-    if (document.frontMatter) {
-      const frontMatterElements = this.renderFrontMatter(document.frontMatter, options);
-      mainSection.children!.push(...frontMatterElements);
-    }
-
-    // Add body matter
-    const bodyMatterElements = this.renderBodyMatter(document.bodyMatter, options);
-    mainSection.children!.push(...bodyMatterElements);
-
-    // Add back matter
-    if (document.backMatter) {
-      const backMatterElements = this.renderBackMatter(document.backMatter, options);
-      mainSection.children!.push(...backMatterElements);
-    }
 
     sections.push(mainSection);
 
@@ -564,10 +568,11 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     const content = block.content as { text: SemanticText };
     const runs = this.convertSemanticTextToRuns(content.text, options);
     
-    return [new docx.Paragraph({
+    const paragraphOptions: docx.IParagraphOptions = {
       children: runs,
-      style: options.useWordStyles ? 'Normal' : undefined,
-    })];
+      ...(options.useWordStyles && { style: 'Normal' }),
+    };
+    return [new docx.Paragraph(paragraphOptions)];
   }
 
   private renderHeading(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
@@ -575,11 +580,12 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     const level = Math.min(Math.max(content.level || 1, 1), 6);
     const runs = this.convertSemanticTextToRuns(content.text, options);
     
-    return [new docx.Paragraph({
+    const paragraphOptions: docx.IParagraphOptions = {
       children: runs,
       heading: this.getHeadingLevel(level),
-      style: options.useWordStyles ? `Heading${level}` : undefined,
-    })];
+      ...(options.useWordStyles && { style: `Heading${level}` }),
+    };
+    return [new docx.Paragraph(paragraphOptions)];
   }
 
   private renderList(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
@@ -605,19 +611,21 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     const elements: docx.Paragraph[] = [];
     
     const textRuns = this.convertSemanticTextToRuns(content.text, options);
-    elements.push(new docx.Paragraph({
+    const paragraphOptions: docx.IParagraphOptions = {
       children: textRuns,
-      style: options.useWordStyles ? 'Quote' : undefined,
       indent: { left: 720 }, // 0.5 inch indent
-    }));
+      ...(options.useWordStyles && { style: 'Quote' }),
+    };
+    elements.push(new docx.Paragraph(paragraphOptions));
 
     if (content.attribution) {
       const attributionRuns = this.convertSemanticTextToRuns(content.attribution, options);
-      elements.push(new docx.Paragraph({
+      const attributionOptions: docx.IParagraphOptions = {
         children: [new docx.TextRun({ text: '— ', italics: true }), ...attributionRuns],
-        style: options.useWordStyles ? 'Quote' : undefined,
         indent: { left: 720 },
-      }));
+        ...(options.useWordStyles && { style: 'Quote' }),
+      };
+      elements.push(new docx.Paragraph(attributionOptions));
     }
 
     return elements;
@@ -626,13 +634,12 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
   private renderCodeBlock(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
     const content = block.content as { code: string; language?: string };
     
-    return [new docx.Paragraph({
+    const codeOptions: docx.IParagraphOptions = {
       children: [new docx.TextRun({
         text: content.code,
         font: { name: 'Consolas' },
         size: options.fontSize - 2, // Slightly smaller font for code
       })],
-      style: options.useWordStyles ? 'Code' : undefined,
       shading: { fill: 'F8F9FA' }, // Light gray background
       border: {
         top: { style: 'single', size: 1, color: 'CCCCCC' },
@@ -640,7 +647,9 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
         left: { style: 'single', size: 1, color: 'CCCCCC' },
         right: { style: 'single', size: 1, color: 'CCCCCC' },
       },
-    })];
+      ...(options.useWordStyles && { style: 'Code' }),
+    };
+    return [new docx.Paragraph(codeOptions)];
   }
 
   private renderTable(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
@@ -655,11 +664,12 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     // Add caption if present
     if (content.caption) {
       const captionRuns = this.convertSemanticTextToRuns(content.caption, options);
-      elements.push(new docx.Paragraph({
+      const captionOptions: docx.IParagraphOptions = {
         children: captionRuns,
-        style: options.useWordStyles ? 'Caption' : undefined,
         alignment: docx.AlignmentType.CENTER,
-      }));
+        ...(options.useWordStyles && { style: 'Caption' }),
+      };
+      elements.push(new docx.Paragraph(captionOptions));
     }
 
     // Create table rows
@@ -726,11 +736,12 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     // Add caption if present
     if (content.caption) {
       const captionRuns = this.convertSemanticTextToRuns(content.caption, options);
-      elements.push(new docx.Paragraph({
+      const captionOptions: docx.IParagraphOptions = {
         children: captionRuns,
-        style: options.useWordStyles ? 'Caption' : undefined,
         alignment: docx.AlignmentType.CENTER,
-      }));
+        ...(options.useWordStyles && { style: 'Caption' }),
+      };
+      elements.push(new docx.Paragraph(captionOptions));
     }
 
     return elements;
@@ -739,26 +750,28 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
   private renderPlaceholder(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
     const placeholderType = this.getPlaceholderType(block.blockType);
     
-    return [new docx.Paragraph({
+    const placeholderOptions: docx.IParagraphOptions = {
       children: [new docx.TextRun({
         text: `[${placeholderType} will be generated here]`,
         italics: true,
         color: '666666',
       })],
-      style: options.useWordStyles ? 'Normal' : undefined,
       alignment: docx.AlignmentType.CENTER,
-    })];
+      ...(options.useWordStyles && { style: 'Normal' }),
+    };
+    return [new docx.Paragraph(placeholderOptions)];
   }
 
   private renderGenericBlock(block: ContentBlock, options: Required<DocxRendererOptions>): docx.Paragraph[] {
-    return [new docx.Paragraph({
+    const genericOptions: docx.IParagraphOptions = {
       children: [new docx.TextRun({
         text: `[Unknown block type: ${block.blockType}]`,
         italics: true,
         color: 'FF0000',
       })],
-      style: options.useWordStyles ? 'Normal' : undefined,
-    })];
+      ...(options.useWordStyles && { style: 'Normal' }),
+    };
+    return [new docx.Paragraph(genericOptions)];
   }
 
   // Utility methods
@@ -867,7 +880,7 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
   }
 
   private createHeading(text: string, level: number): docx.Paragraph {
-    return new docx.Paragraph({
+    const headingOptions: docx.IParagraphOptions = {
       children: [new docx.TextRun({
         text,
         font: { name: this.options.defaultFont },
@@ -875,11 +888,12 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
         bold: true,
       })],
       heading: this.getHeadingLevel(level),
-      style: this.options.useWordStyles ? `Heading${level}` : undefined,
-    });
+      ...(this.options.useWordStyles && { style: `Heading${level}` }),
+    };
+    return new docx.Paragraph(headingOptions);
   }
 
-  private getHeadingLevel(level: number): docx.HeadingLevel {
+  private getHeadingLevel(level: number): typeof docx.HeadingLevel[keyof typeof docx.HeadingLevel] {
     switch (level) {
       case 1: return docx.HeadingLevel.HEADING_1;
       case 2: return docx.HeadingLevel.HEADING_2;
@@ -1015,42 +1029,6 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
           },
         },
       ],
-      numbering: {
-        config: [
-          {
-            reference: 'bullet-list',
-            levels: [
-              {
-                level: 0,
-                format: docx.LevelFormat.BULLET,
-                text: '•',
-                alignment: docx.AlignmentType.LEFT,
-                style: {
-                  paragraph: {
-                    indent: { left: 720, hanging: 360 }, // 0.5" left, 0.25" hanging
-                  },
-                },
-              },
-            ],
-          },
-          {
-            reference: 'ordered-list',
-            levels: [
-              {
-                level: 0,
-                format: docx.LevelFormat.DECIMAL,
-                text: '%1.',
-                alignment: docx.AlignmentType.LEFT,
-                style: {
-                  paragraph: {
-                    indent: { left: 720, hanging: 360 }, // 0.5" left, 0.25" hanging
-                  },
-                },
-              },
-            ],
-          },
-        ],
-      },
     };
   }
 
@@ -1163,7 +1141,7 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
   private extractTitleFromHtml(html: string): string | null {
     // Simple title extraction from first heading
     const h1Match = html.match(/<h1[^>]*>(.*?)<\/h1>/i);
-    if (h1Match) {
+    if (h1Match?.[1]) {
       return h1Match[1].replace(/<[^>]*>/g, '').trim();
     }
     return null;
@@ -1182,9 +1160,9 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
       }
 
       const titleMatch = section.match(/^(.*?)<\/h1>/i);
-      const title = titleMatch ? titleMatch[1].replace(/<[^>]*>/g, '').trim() : `Chapter ${index}`;
+      const title = titleMatch?.[1]?.replace(/<[^>]*>/g, '').trim() || `Chapter ${index}`;
       
-      const content = titleMatch ? section.substring(titleMatch[0].length) : section;
+      const content = titleMatch?.[0] ? section.substring(titleMatch[0].length) : section;
       const contentBlocks = this.parseHtmlToContentBlocks(content);
 
       chapters.push({
