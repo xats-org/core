@@ -837,6 +837,198 @@ describe('HtmlRenderer', () => {
     });
   });
 
+  describe('Enhanced Rendering Hints (v0.5.0)', () => {
+    const createDocumentWithHints = (hints: Array<{ hintType: string; value: unknown }>): XatsDocument => ({
+      schemaVersion: '0.5.0',
+      bibliographicEntry: { type: 'book', title: 'Rendering Hints Test' },
+      subject: 'Testing',
+      bodyMatter: {
+        contents: [
+          {
+            id: 'ch-1',
+            label: '1',
+            title: { runs: [{ type: 'text', text: 'Test Chapter' }] },
+            contents: [
+              {
+                id: 'para-1',
+                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                content: {
+                  text: { runs: [{ type: 'text', text: 'Test content with rendering hints.' }] },
+                },
+                renderingHints: hints,
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    it('should render semantic hints correctly', async () => {
+      const hints = [
+        { hintType: 'https://xats.org/vocabularies/hints/semantic/warning', value: 'warning' },
+        { hintType: 'https://xats.org/vocabularies/hints/semantic/featured', value: 'featured' },
+      ];
+
+      const result = await renderer.render(createDocumentWithHints(hints), { enhancedHints: true });
+
+      expect(result.content).toContain('semantic-warning');
+      expect(result.content).toContain('semantic-featured');
+      expect(result.content).toContain('role="alert"'); // From semantic warning
+    });
+
+    it('should render accessibility hints correctly', async () => {
+      const hints = [
+        { hintType: 'https://xats.org/vocabularies/hints/accessibility/screen-reader-priority-high', value: 'high' },
+        { hintType: 'https://xats.org/vocabularies/hints/accessibility/keyboard-shortcut', value: 'Ctrl+1' },
+      ];
+
+      const result = await renderer.render(createDocumentWithHints(hints), { enhancedHints: true });
+
+      expect(result.content).toContain('sr-priority-high');
+      expect(result.content).toContain('accesskey="Ctrl+1"');
+      expect(result.content).toContain('aria-live="assertive"');
+    });
+
+    it('should render layout hints correctly', async () => {
+      const hints = [
+        { hintType: 'https://xats.org/vocabularies/hints/layout/keep-together', value: 'keep-together' },
+        { hintType: 'https://xats.org/vocabularies/hints/layout/center', value: 'center' },
+      ];
+
+      const result = await renderer.render(createDocumentWithHints(hints), { enhancedHints: true });
+
+      expect(result.content).toContain('layout-keep-together');
+      expect(result.content).toContain('layout-center');
+      expect(result.content).toContain('page-break-inside: avoid');
+      expect(result.content).toContain('margin: 0 auto');
+    });
+
+    it('should render pedagogical hints correctly', async () => {
+      const hints = [
+        { hintType: 'https://xats.org/vocabularies/hints/pedagogical/key-concept', value: 'key-concept' },
+        { hintType: 'https://xats.org/vocabularies/hints/pedagogical/learning-objective', value: 'learning-objective' },
+      ];
+
+      const result = await renderer.render(createDocumentWithHints(hints), { enhancedHints: true });
+
+      expect(result.content).toContain('pedagogical-key-concept');
+      expect(result.content).toContain('pedagogical-learning-objective');
+      expect(result.content).toContain('role="note"'); // From key-concept hint
+    });
+
+    it('should handle conditional hints based on user preferences', async () => {
+      const hints = [
+        { 
+          hintType: 'https://xats.org/vocabularies/hints/accessibility/high-contrast-compatible', 
+          value: 'high-contrast',
+          conditions: { userPreferences: ['high-contrast'] }
+        },
+      ];
+
+      // Test with matching preference
+      const resultWithPreference = await renderer.render(
+        createDocumentWithHints(hints), 
+        { enhancedHints: true, userPreferences: ['high-contrast'] }
+      );
+      expect(resultWithPreference.content).toContain('high-contrast-compatible');
+
+      // Test without matching preference  
+      const resultWithoutPreference = await renderer.render(
+        createDocumentWithHints(hints), 
+        { enhancedHints: true, userPreferences: [] }
+      );
+      expect(resultWithoutPreference.content).not.toContain('high-contrast-compatible');
+    });
+
+    it('should parse rendering hints back from HTML', async () => {
+      const originalHints = [
+        { hintType: 'https://xats.org/vocabularies/hints/semantic/warning', value: 'warning' },
+      ];
+
+      // Render with hints
+      const renderResult = await renderer.render(createDocumentWithHints(originalHints), { 
+        enhancedHints: true, 
+        wrapInDocument: true 
+      });
+
+      // Parse back to xats
+      const parseResult = await renderer.parse(renderResult.content);
+      expect(parseResult.errors).toHaveLength(0);
+
+      // Check that hints were reconstructed
+      const firstChapter = parseResult.document.bodyMatter.contents[0] as any;
+      const firstBlock = firstChapter.contents[0];
+      
+      if (firstBlock.renderingHints) {
+        expect(firstBlock.renderingHints.length).toBeGreaterThan(0);
+        
+        // Check that we can find at least one semantic hint
+        const hintTypes = firstBlock.renderingHints.map((h: any) => h.hintType);
+        const hasSemanticHint = hintTypes.some((type: string) => type.includes('semantic'));
+        expect(hasSemanticHint).toBe(true);
+      }
+    });
+  });
+
+  describe('Performance Optimizations', () => {
+    const createLargeDocument = (blockCount: number): XatsDocument => {
+      const blocks = Array.from({ length: blockCount }, (_, i) => ({
+        id: `block-${i}`,
+        blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+        content: {
+          text: { runs: [{ type: 'text', text: `This is paragraph ${i + 1}.` }] },
+        },
+      }));
+
+      return {
+        schemaVersion: '0.3.0',
+        bibliographicEntry: { type: 'book', title: 'Large Document Test' },
+        subject: 'Performance',
+        bodyMatter: {
+          contents: [
+            {
+              id: 'ch-1',
+              label: '1',
+              title: { runs: [{ type: 'text', text: 'Large Chapter' }] },
+              contents: blocks,
+            },
+          ],
+        },
+      };
+    };
+
+    it('should detect large documents correctly', async () => {
+      const smallDoc = createLargeDocument(10);
+      const largeDoc = createLargeDocument(1500);
+
+      // Small document should render normally
+      const smallResult = await renderer.render(smallDoc, { optimizeForLargeDocuments: true });
+      expect(smallResult.errors).toHaveLength(0);
+
+      // Large document should use optimized rendering
+      const largeResult = await renderer.render(largeDoc, { 
+        optimizeForLargeDocuments: true,
+        memoryOptimized: true,
+        wrapInDocument: true
+      });
+      expect(largeResult.errors).toHaveLength(0);
+      expect(largeResult.content).toContain('Large Document Test'); // Should be in title tag
+    });
+
+    it('should handle memory optimization settings', async () => {
+      const doc = createLargeDocument(100);
+
+      const result = await renderer.render(doc, { 
+        optimizeForLargeDocuments: true,
+        memoryOptimized: true,
+        maxChunks: 10
+      });
+
+      expect(result.errors).toHaveLength(0);
+      expect(result.content).toContain('This is paragraph');
+    });
+  });
+
   describe('Sanitization', () => {
     it('should sanitize HTML when enabled', async () => {
       const testDoc: XatsDocument = {

@@ -91,6 +91,15 @@ export interface HtmlRendererOptions extends RendererOptions {
 
   /** Enable v0.5.0 enhanced rendering hints processing */
   enhancedHints?: boolean;
+
+  /** Enable performance optimizations for large documents */
+  optimizeForLargeDocuments?: boolean;
+
+  /** Maximum chunks for streaming rendering (default: 50) */
+  maxChunks?: number;
+
+  /** Enable memory-efficient processing */
+  memoryOptimized?: boolean;
 }
 
 /**
@@ -131,6 +140,9 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       userPreferences: [],
       mediaContext: 'screen',
       enhancedHints: true,
+      optimizeForLargeDocuments: false,
+      maxChunks: 50,
+      memoryOptimized: false,
 
       ...options,
     };
@@ -441,8 +453,299 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     document: XatsDocument,
     options: Required<HtmlRendererOptions>
   ): Promise<string> {
+    // Check if we should use performance optimizations
+    if (options.optimizeForLargeDocuments && this.isLargeDocument(document)) {
+      return await this.renderLargeDocumentOptimized(document, options);
+    }
+    
     // Use Promise.resolve to make this truly async
     return await Promise.resolve(this.renderDocument(document, options));
+  }
+
+  /**
+   * Check if document is considered "large" and would benefit from optimization
+   */
+  private isLargeDocument(document: XatsDocument): boolean {
+    const estimatedSize = this.estimateDocumentSize(document);
+    return estimatedSize > 1000; // More than 1000 content blocks
+  }
+
+  /**
+   * Estimate document size by counting content blocks
+   */
+  private estimateDocumentSize(document: XatsDocument): number {
+    let count = 0;
+    
+    // Count front matter blocks
+    if (document.frontMatter) {
+      if (document.frontMatter.preface) count += document.frontMatter.preface.length;
+      if (document.frontMatter.acknowledgments) count += document.frontMatter.acknowledgments.length;
+    }
+    
+    // Count body matter blocks
+    for (const content of document.bodyMatter.contents) {
+      count += this.countContentBlocks(content);
+    }
+    
+    // Count back matter blocks
+    if (document.backMatter) {
+      if (document.backMatter.appendices) {
+        for (const appendix of document.backMatter.appendices) {
+          count += this.countContentBlocks(appendix);
+        }
+      }
+      if (document.backMatter.glossary) count += document.backMatter.glossary.length;
+      if (document.backMatter.bibliography) count += document.backMatter.bibliography.length;
+      if (document.backMatter.index) count += document.backMatter.index.length;
+    }
+    
+    return count;
+  }
+
+  /**
+   * Count content blocks in a structural container
+   */
+  private countContentBlocks(container: any): number {
+    let count = 0;
+    
+    if (container && container.contents) {
+      for (const item of container.contents) {
+        if (item.blockType) {
+          // This is a ContentBlock
+          count += 1;
+        } else if (item.contents) {
+          // This is another container, recurse
+          count += this.countContentBlocks(item);
+        }
+      }
+    }
+    
+    return count;
+  }
+
+  /**
+   * Render large documents with performance optimizations
+   */
+  private async renderLargeDocumentOptimized(
+    document: XatsDocument,
+    options: Required<HtmlRendererOptions>
+  ): Promise<string> {
+    const parts: string[] = [];
+
+    // Start with document structure
+    if (options.wrapInDocument) {
+      parts.push('<!DOCTYPE html>');
+      parts.push(
+        `<html lang="${document.lang || options.language}" dir="${document.dir || options.dir}">`
+      );
+      parts.push('<head>');
+      parts.push('<meta charset="UTF-8">');
+      parts.push('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
+
+      if (document.bibliographicEntry?.title) {
+        parts.push(`<title>${this.escapeHtml(document.bibliographicEntry.title)}</title>`);
+      }
+
+      if (options.includeStyles) {
+        parts.push('<style>');
+        parts.push(this.getDefaultStyles());
+        if (options.customStyles) {
+          parts.push(options.customStyles);
+        }
+        parts.push('</style>');
+      }
+
+      parts.push('</head>');
+      parts.push('<body>');
+      parts.push('<a href="#main-content" class="skip-link">Skip to main content</a>');
+    }
+
+    parts.push('<main id="main-content" class="xats-document" role="main">');
+
+    // Process sections in chunks to avoid memory issues
+    if (options.memoryOptimized) {
+      // Render front matter
+      if (document.frontMatter) {
+        parts.push('<section class="front-matter" role="region" aria-label="Front matter">');
+        parts.push(await this.renderFrontMatterOptimized(document.frontMatter, options));
+        parts.push('</section>');
+      }
+
+      // Render body matter in chunks
+      parts.push('<section class="body-matter" role="region" aria-label="Main content">');
+      parts.push(await this.renderBodyMatterOptimized(document.bodyMatter, options));
+      parts.push('</section>');
+
+      // Render back matter
+      if (document.backMatter) {
+        parts.push('<section class="back-matter" role="region" aria-label="Back matter">');
+        parts.push(await this.renderBackMatterOptimized(document.backMatter, options));
+        parts.push('</section>');
+      }
+    } else {
+      // Fallback to regular rendering
+      const regularContent = this.renderDocument(document, options);
+      const mainContentMatch = regularContent.match(/<main[^>]*>(.*?)<\/main>/s);
+      if (mainContentMatch) {
+        parts.push(mainContentMatch[1]);
+      }
+    }
+
+    parts.push('</main>');
+
+    if (options.wrapInDocument) {
+      parts.push('</body>');
+      parts.push('</html>');
+    }
+
+    return parts.join('\n');
+  }
+
+  /**
+   * Render front matter with memory optimization
+   */
+  private async renderFrontMatterOptimized(
+    frontMatter: FrontMatter,
+    options: Required<HtmlRendererOptions>
+  ): Promise<string> {
+    const parts: string[] = [];
+
+    if (frontMatter.preface) {
+      parts.push('<section class="preface" role="region" aria-label="Preface">');
+      parts.push('<h1>Preface</h1>');
+      
+      // Process in chunks to avoid memory pressure
+      for (const block of frontMatter.preface) {
+        parts.push(this.renderContentBlock(block, options));
+        
+        // Yield control periodically for large sections
+        if (parts.length % 10 === 0) {
+          await new Promise(resolve => setImmediate(resolve));
+        }
+      }
+      
+      parts.push('</section>');
+    }
+
+    if (frontMatter.acknowledgments) {
+      parts.push('<section class="acknowledgments" role="region" aria-label="Acknowledgments">');
+      parts.push('<h1>Acknowledgments</h1>');
+      
+      for (const block of frontMatter.acknowledgments) {
+        parts.push(this.renderContentBlock(block, options));
+        
+        if (parts.length % 10 === 0) {
+          await new Promise(resolve => setImmediate(resolve));
+        }
+      }
+      
+      parts.push('</section>');
+    }
+
+    return parts.join('\n');
+  }
+
+  /**
+   * Render body matter with memory optimization
+   */
+  private async renderBodyMatterOptimized(
+    bodyMatter: BodyMatter,
+    options: Required<HtmlRendererOptions>
+  ): Promise<string> {
+    const parts: string[] = [];
+
+    for (let i = 0; i < bodyMatter.contents.length; i++) {
+      const content = bodyMatter.contents[i];
+      
+      // Render content based on structure
+      if ('contents' in content && Array.isArray(content.contents)) {
+        const firstChild = content.contents[0];
+        
+        if (!firstChild) {
+          parts.push(this.renderChapter(content as Chapter, options));
+        } else if ('contents' in firstChild && Array.isArray(firstChild.contents)) {
+          const firstGrandchild = firstChild.contents[0];
+          
+          if (firstGrandchild && 'contents' in firstGrandchild && Array.isArray(firstGrandchild.contents)) {
+            parts.push(this.renderUnit(content as Unit, options));
+          } else {
+            parts.push(this.renderChapter(content as Chapter, options));
+          }
+        } else {
+          parts.push(this.renderChapter(content as Chapter, options));
+        }
+      } else {
+        parts.push(this.renderChapter(content as Chapter, options));
+      }
+
+      // Yield control periodically for large documents
+      if (i % options.maxChunks === 0 && i > 0) {
+        await new Promise(resolve => setImmediate(resolve));
+      }
+    }
+
+    return parts.join('\n');
+  }
+
+  /**
+   * Render back matter with memory optimization
+   */
+  private async renderBackMatterOptimized(
+    backMatter: BackMatter,
+    options: Required<HtmlRendererOptions>
+  ): Promise<string> {
+    const parts: string[] = [];
+
+    if (backMatter.appendices) {
+      parts.push('<section class="appendices" role="region" aria-label="Appendices">');
+      parts.push('<h1>Appendices</h1>');
+      
+      for (const appendix of backMatter.appendices) {
+        parts.push(this.renderChapter(appendix, options));
+        await new Promise(resolve => setImmediate(resolve));
+      }
+      
+      parts.push('</section>');
+    }
+
+    if (backMatter.glossary) {
+      parts.push('<section class="glossary" role="region" aria-label="Glossary">');
+      parts.push('<h1>Glossary</h1>');
+      
+      for (const block of backMatter.glossary) {
+        parts.push(this.renderContentBlock(block, options));
+        
+        if (parts.length % 10 === 0) {
+          await new Promise(resolve => setImmediate(resolve));
+        }
+      }
+      
+      parts.push('</section>');
+    }
+
+    if (backMatter.bibliography) {
+      parts.push('<section class="bibliography" role="region" aria-label="Bibliography">');
+      parts.push('<h1>Bibliography</h1>');
+      
+      for (const block of backMatter.bibliography) {
+        parts.push(this.renderContentBlock(block, options));
+      }
+      
+      parts.push('</section>');
+    }
+
+    if (backMatter.index) {
+      parts.push('<section class="index" role="region" aria-label="Index">');
+      parts.push('<h1>Index</h1>');
+      
+      for (const block of backMatter.index) {
+        parts.push(this.renderContentBlock(block, options));
+      }
+      
+      parts.push('</section>');
+    }
+
+    return parts.join('\n');
   }
 
   private renderDocument(document: XatsDocument, options: Required<HtmlRendererOptions>): string {
