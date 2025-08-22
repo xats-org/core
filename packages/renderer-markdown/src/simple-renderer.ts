@@ -7,6 +7,7 @@
 
 import remarkParse from 'remark-parse';
 import { unified } from 'unified';
+
 import type { MarkdownRendererOptions, MarkdownParseOptions, MarkdownMetadata } from './types.js';
 
 /**

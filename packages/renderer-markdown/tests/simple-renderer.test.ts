@@ -6,7 +6,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 
 import { SimpleMarkdownRenderer } from '../src/simple-renderer.js';
 
-import type { XatsDocument } from '@xats-org/types';
+import type { XatsDocument, Unit, ContentBlock } from '@xats-org/types';
 
 describe('SimpleMarkdownRenderer', () => {
   let renderer: SimpleMarkdownRenderer;
@@ -258,7 +258,7 @@ This is the content.`;
     });
 
     it('should handle parsing errors', async () => {
-      const invalidMarkdown = null as any;
+      const invalidMarkdown = null as unknown as string;
 
       const result = await renderer.parse(invalidMarkdown);
 
@@ -286,13 +286,13 @@ This paragraph has *emphasized* and **strong** text.`;
       const result = await renderer.parse(markdownContent);
 
       expect(result.document.bodyMatter.contents).toBeDefined();
-      const units = result.document.bodyMatter.contents as any[];
+      const units = result.document.bodyMatter.contents as Unit[];
       expect(units.length).toBeGreaterThan(0);
       const unit = units[0];
       expect(unit.contents).toBeDefined();
-      const blocks = unit.contents;
+      const blocks = unit.contents as ContentBlock[];
       const blockquote = blocks.find(
-        (b: any) => b.blockType === 'https://xats.org/vocabularies/blocks/blockquote'
+        (b: ContentBlock) => b.blockType === 'https://xats.org/vocabularies/blocks/blockquote'
       );
       expect(blockquote).toBeDefined();
     });
@@ -307,13 +307,13 @@ console.log("Hello");
       const result = await renderer.parse(markdownContent);
 
       expect(result.document.bodyMatter.contents).toBeDefined();
-      const units = result.document.bodyMatter.contents as any[];
+      const units = result.document.bodyMatter.contents as Unit[];
       expect(units.length).toBeGreaterThan(0);
       const unit = units[0];
       expect(unit.contents).toBeDefined();
-      const blocks = unit.contents;
+      const blocks = unit.contents as ContentBlock[];
       const codeBlock = blocks.find(
-        (b: any) => b.blockType === 'https://xats.org/vocabularies/blocks/codeBlock'
+        (b: ContentBlock) => b.blockType === 'https://xats.org/vocabularies/blocks/codeBlock'
       );
       expect(codeBlock).toBeDefined();
       expect(codeBlock?.extensions?.language).toBe('javascript');
@@ -441,7 +441,7 @@ This has *unbalanced emphasis.`;
     });
 
     it('should handle null input', async () => {
-      const result = await renderer.validate(null as any);
+      const result = await renderer.validate(null as unknown as string);
 
       expect(result.valid).toBe(false);
       expect(result.errors.some((e) => e.code === 'VALIDATION_ERROR')).toBe(true);
@@ -494,7 +494,7 @@ console.log("code");
     });
 
     it('should handle parsing errors in metadata extraction', async () => {
-      const invalidContent = null as any;
+      const invalidContent = null as unknown as string;
 
       const metadata = await renderer.getMetadata(invalidContent);
 

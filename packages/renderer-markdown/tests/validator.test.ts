@@ -112,7 +112,7 @@ Content goes here.`;
 
   describe('Invalid Input', () => {
     it('should reject null input', async () => {
-      const result = await renderer.validate(null as any);
+      const result = await renderer.validate(null as unknown as string);
 
       expect(result.valid).toBe(false);
       expect(result.errors).toHaveLength(1);
@@ -121,7 +121,7 @@ Content goes here.`;
     });
 
     it('should reject undefined input', async () => {
-      const result = await renderer.validate(undefined as any);
+      const result = await renderer.validate(undefined as unknown as string);
 
       expect(result.valid).toBe(false);
       expect(result.errors).toHaveLength(1);
@@ -129,7 +129,7 @@ Content goes here.`;
     });
 
     it('should reject non-string input', async () => {
-      const result = await renderer.validate(123 as any);
+      const result = await renderer.validate(123 as unknown as string);
 
       expect(result.valid).toBe(false);
       expect(result.errors).toHaveLength(1);
@@ -230,7 +230,7 @@ No separator row above.`;
 
   describe('Edge Cases', () => {
     it('should handle very long content', async () => {
-      const longContent = '#'.repeat(10000) + ' Title\n\n' + 'Content. '.repeat(10000);
+      const longContent = `${'#'.repeat(10000)} Title\n\n${'Content. '.repeat(10000)}`;
 
       const result = await renderer.validate(longContent);
 
@@ -453,7 +453,7 @@ Also works with <https://example.org> and <email@example.org>.`;
 
   describe('Error Messages', () => {
     it('should provide helpful error messages', async () => {
-      const result = await renderer.validate(null as any);
+      const result = await renderer.validate(null as unknown as string);
 
       expect(result.errors[0].message).toContain('non-empty string');
       expect(result.errors[0].code).toBe('VALIDATION_ERROR');
