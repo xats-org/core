@@ -1,8 +1,34 @@
 /**
- * @xats-org/renderer-markdown - MARKDOWN Bidirectional Renderer
+ * @xats-org/renderer-markdown - Markdown Bidirectional Renderer
  *
- * This package is a placeholder for the MARKDOWN bidirectional renderer.
- * Implementation will be added in future releases.
+ * Provides bidirectional conversion between xats documents and Markdown format
+ * supporting documentation workflows with high fidelity preservation.
  */
 
-export const placeholder = 'This renderer is not yet implemented';
+// Main simplified renderer (working implementation)
+export { SimpleMarkdownRenderer as MarkdownRenderer } from './simple-renderer.js';
+export { SimpleMarkdownRenderer as default } from './simple-renderer.js';
+
+// Types
+export type {
+  MarkdownRendererOptions,
+  MarkdownParseOptions,
+  MarkdownVariant,
+  MarkdownMetadata,
+  MarkdownSyntaxPreferences,
+  MarkdownHeading,
+  MarkdownLink,
+  MarkdownImage,
+  MarkdownCodeBlock,
+  MarkdownTable,
+  MarkdownFootnote,
+  MarkdownCitation,
+  MarkdownTaskList,
+  MarkdownTaskItem,
+  MarkdownContext,
+  MarkdownSyntaxError,
+  MarkdownFormatting,
+  MarkdownElementType,
+  MarkdownPipelineStage,
+  AcademicMarkdownOptions,
+} from './types.js';
