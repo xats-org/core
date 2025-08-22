@@ -254,6 +254,9 @@ importers:
 
   packages/renderer:
     dependencies:
+      '@xats-org/testing':
+        specifier: workspace:*
+        version: link:../testing
       '@xats-org/types':
         specifier: workspace:*
         version: link:../types
