@@ -4,6 +4,18 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "include": [
+    "src/index.ts",
+    "src/types.ts",
+    "src/simple-renderer.ts"
+  ],
+  "exclude": [
+    "dist", 
+    "node_modules",
+    "src/converter.ts",
+    "src/parser.ts",
+    "src/renderer.ts",
+    "src/validator.ts",
+    "src/testing/**/*"
+  ]
 }
