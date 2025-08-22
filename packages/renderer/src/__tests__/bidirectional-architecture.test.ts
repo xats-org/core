@@ -49,9 +49,9 @@ class MockRenderer extends AbstractBidirectionalRenderer {
         warnings: [],
         errors: [],
         unmappedData: [],
-      };
+      });
     } catch (error) {
-      return {
+      return Promise.resolve({
         document: this.createEmptyDocument(),
         metadata: {
           sourceFormat: 'mock',
@@ -67,20 +67,20 @@ class MockRenderer extends AbstractBidirectionalRenderer {
             fatal: true,
           },
         ],
-      };
+      });
     }
   }
 
-  async validate(content: string): Promise<FormatValidationResult> {
+  validate(content: string): Promise<FormatValidationResult> {
     try {
       JSON.parse(content);
-      return {
+      return Promise.resolve({
         valid: true,
         errors: [],
         warnings: [],
-      };
+      });
     } catch (error) {
-      return {
+      return Promise.resolve({
         valid: false,
         errors: [
           {
@@ -90,7 +90,7 @@ class MockRenderer extends AbstractBidirectionalRenderer {
           },
         ],
         warnings: [],
-      };
+      });
     }
   }
 }
