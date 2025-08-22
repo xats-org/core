@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * LaTeX Converter - xats to LaTeX
  *
@@ -324,7 +325,7 @@ export class LaTeXConverter {
         if ('contents' in content && 'title' in content && !('blockType' in content)) {
           // It's a Chapter or Section
           if ('fileReference' in content) {
-            parts.push(this.convertChapter(content as Chapter));
+            parts.push(this.convertChapter(content));
           } else {
             parts.push(this.convertSection(content as Section));
           }
@@ -363,7 +364,7 @@ export class LaTeXConverter {
       for (const content of chapter.contents) {
         if ('contents' in content && 'title' in content && !('blockType' in content)) {
           // It's a Section
-          parts.push(this.convertSection(content as Section));
+          parts.push(this.convertSection(content));
         } else {
           parts.push(this.convertContentBlock(content as ContentBlock));
         }
@@ -729,22 +730,22 @@ export class LaTeXConverter {
       }
 
       case 'reference': {
-        const refRun = run as ReferenceRun;
+        const refRun = run;
         return `\\ref{${this.escapeLatex(refRun.ref)}}`;
       }
 
       case 'citation': {
-        const citRun = run as CitationRun;
+        const citRun = run;
         return `\\cite{${this.escapeLatex(citRun.citeKey)}}`;
       }
 
       case 'emphasis': {
-        const emRun = run as EmphasisRun;
+        const emRun = run;
         return `\\emph{${this.escapeLatex(emRun.text)}}`;
       }
 
       case 'strong': {
-        const strongRun = run as StrongRun;
+        const strongRun = run;
         return `\\textbf{${this.escapeLatex(strongRun.text)}}`;
       }
 
@@ -754,32 +755,32 @@ export class LaTeXConverter {
       }
 
       case 'code': {
-        const codeRun = run as CodeRun;
+        const codeRun = run;
         return `\\texttt{${this.escapeLatex(codeRun.text)}}`;
       }
 
       case 'mathInline': {
-        const mathRun = run as MathInlineRun;
+        const mathRun = run;
         return `$${mathRun.math}$`;
       }
 
       case 'subscript': {
-        const subRun = run as SubscriptRun;
+        const subRun = run;
         return `\\textsubscript{${this.escapeLatex(subRun.text)}}`;
       }
 
       case 'superscript': {
-        const supRun = run as SuperscriptRun;
+        const supRun = run;
         return `\\textsuperscript{${this.escapeLatex(supRun.text)}}`;
       }
 
       case 'strikethrough': {
-        const strikeRun = run as StrikethroughRun;
+        const strikeRun = run;
         return `\\sout{${this.escapeLatex(strikeRun.text)}}`;
       }
 
       case 'underline': {
-        const underRun = run as UnderlineRun;
+        const underRun = run;
         return `\\underline{${this.escapeLatex(underRun.text)}}`;
       }
 

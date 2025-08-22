@@ -20,8 +20,7 @@ export type LaTeXDocumentClass =
   | 'amsproc'
   | 'ieeetran'
   | 'beamer'
-  | 'standalone'
-  | string; // Allow custom classes
+  | 'standalone'; // Allow custom classes
 
 /**
  * LaTeX package definition
@@ -78,7 +77,7 @@ export interface LaTeXRendererOptions extends RendererOptions {
   useUTF8?: boolean;
 
   /** Bibliography style */
-  bibliographyStyle?: 'plain' | 'alpha' | 'unsrt' | 'abbrv' | 'ieeetr' | 'acm' | 'siam' | string;
+  bibliographyStyle?: 'plain' | 'alpha' | 'unsrt' | 'abbrv' | 'ieeetr' | 'acm' | 'siam';
 
   /** Whether to use natbib for citations */
   useNatbib?: boolean;

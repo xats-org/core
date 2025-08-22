@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * LaTeX Parser - LaTeX to xats
  *

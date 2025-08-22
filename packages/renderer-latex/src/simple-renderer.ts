@@ -77,7 +77,7 @@ export class SimpleLaTeXRenderer
     try {
       // Check if content is valid LaTeX first
       const validation = await this.validate(content);
-      
+
       if (!validation.valid) {
         return {
           document: this.createEmptyDocument(),
