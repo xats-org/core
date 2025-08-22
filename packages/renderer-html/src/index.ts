@@ -31,6 +31,7 @@ import type {
   ContentBlock,
   SemanticText,
   Run,
+  TextRun,
   FrontMatter,
   BodyMatter,
   BackMatter,
@@ -590,7 +591,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return parts.join('\n');
   }
 
-  private renderSection(section: Section, _options: Required<HtmlRendererOptions>): string {
+  private renderSection(section: Section, options: Required<HtmlRendererOptions>): string {
     const parts: string[] = [];
     const sectionId = section.id ? ` id="${this.escapeHtml(section.id)}"` : '';
     const lang = '';
@@ -1068,7 +1069,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     return Object.keys(frontMatter).length > 0 ? frontMatter : undefined;
   }
 
-  private parseBodyMatter(document: Document, _options: Required<ParseOptions>): BodyMatter {
+  private parseBodyMatter(document: Document, options: Required<ParseOptions>): BodyMatter {
     const bodyMatterSection = document.querySelector('.body-matter');
     if (!bodyMatterSection) {
       return { contents: [] };
