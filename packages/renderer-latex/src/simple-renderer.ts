@@ -14,9 +14,17 @@ import type {
   RoundTripOptions,
   RoundTripResult,
   FormatValidationResult,
+  FormatValidationError,
+  FormatValidationWarning,
   WcagCompliance,
   WcagResult,
   AccessibilityAudit,
+  SemanticText,
+  Run,
+  Unit,
+  Chapter,
+  Section,
+  ContentBlock,
 } from '@xats-org/types';
 
 /**
@@ -31,7 +39,7 @@ export class SimpleLaTeXRenderer
   /**
    * Render xats document to LaTeX format
    */
-  async render(document: XatsDocument, options: LaTeXRendererOptions = {}): Promise<RenderResult> {
+  render(document: XatsDocument, options: LaTeXRendererOptions = {}): Promise<RenderResult> {
     const startTime = Date.now();
 
     try {
@@ -71,7 +79,7 @@ export class SimpleLaTeXRenderer
   /**
    * Parse LaTeX content back to xats document
    */
-  async parse(content: string, options: LaTeXParseOptions = {}): Promise<ParseResult> {
+  async parse(content: string, _options: LaTeXParseOptions = {}): Promise<ParseResult> {
     const startTime = Date.now();
 
     try {
@@ -102,7 +110,7 @@ export class SimpleLaTeXRenderer
 
       // Simplified parsing - extract basic information
       const title = this.extractTitle(content);
-      const author = this.extractAuthor(content);
+      const _author = this.extractAuthor(content);
 
       const document: XatsDocument = {
         schemaVersion: '0.3.0',
@@ -229,16 +237,16 @@ export class SimpleLaTeXRenderer
   /**
    * Validate LaTeX content
    */
-  async validate(content: string): Promise<FormatValidationResult> {
-    const errors: any[] = [];
-    const warnings: any[] = [];
+  validate(content: string): Promise<FormatValidationResult> {
+    const errors: FormatValidationError[] = [];
+    const warnings: FormatValidationWarning[] = [];
 
     // Handle null/undefined input
     if (!content || typeof content !== 'string') {
       errors.push({
         code: 'VALIDATION_ERROR',
         message: 'Invalid input: content must be a non-empty string',
-        severity: 'error',
+        severity: 'error' as const,
       });
       return {
         valid: false,
@@ -252,7 +260,7 @@ export class SimpleLaTeXRenderer
       errors.push({
         code: 'MISSING_DOCUMENT_CLASS',
         message: 'Document class declaration is required',
-        severity: 'error',
+        severity: 'error' as const,
       });
     }
 
@@ -260,7 +268,7 @@ export class SimpleLaTeXRenderer
       errors.push({
         code: 'MISSING_BEGIN_DOCUMENT',
         message: '\\begin{document} is required',
-        severity: 'error',
+        severity: 'error' as const,
       });
     }
 
@@ -268,32 +276,32 @@ export class SimpleLaTeXRenderer
       errors.push({
         code: 'MISSING_END_DOCUMENT',
         message: '\\end{document} is required',
-        severity: 'error',
+        severity: 'error' as const,
       });
     }
 
-    return {
+    return Promise.resolve({
       valid: errors.length === 0,
       errors,
       warnings,
-    };
+    });
   }
 
   /**
    * Get LaTeX document metadata
    */
-  async getMetadata(content: string): Promise<LaTeXMetadata> {
-    return {
+  getMetadata(content: string): Promise<LaTeXMetadata> {
+    return Promise.resolve({
       format: 'latex',
       documentClass: this.extractDocumentClass(content),
-    };
+    });
   }
 
   /**
    * WCAG compliance testing (not applicable for LaTeX)
    */
-  async testCompliance(content: string, level: 'A' | 'AA' | 'AAA'): Promise<WcagResult> {
-    return {
+  testCompliance(_content: string, level: 'A' | 'AA' | 'AAA'): Promise<WcagResult> {
+    return Promise.resolve({
       level,
       compliant: false,
       violations: [
@@ -307,13 +315,13 @@ export class SimpleLaTeXRenderer
       ],
       warnings: [],
       score: 0,
-    };
+    });
   }
 
   /**
    * Accessibility audit (not applicable for LaTeX)
    */
-  async auditAccessibility(content: string): Promise<AccessibilityAudit> {
+  auditAccessibility(_content: string): Promise<AccessibilityAudit> {
     const mockResult: WcagResult = {
       level: 'AA',
       compliant: false,
@@ -322,7 +330,7 @@ export class SimpleLaTeXRenderer
       score: 0,
     };
 
-    return {
+    return Promise.resolve({
       compliant: false,
       overallScore: 0,
       levelA: mockResult,
@@ -330,7 +338,7 @@ export class SimpleLaTeXRenderer
       levelAAA: mockResult,
       recommendations: [],
       testedAt: new Date(),
-    };
+    });
   }
 
   /**
@@ -371,9 +379,9 @@ export class SimpleLaTeXRenderer
     // Simple content generation
     if (document.bodyMatter?.contents) {
       for (const content of document.bodyMatter.contents) {
-        if (content.contents) {
+        if ('contents' in content && content.contents) {
           // This is a Unit or Chapter
-          if (content.title) {
+          if ('title' in content && content.title) {
             const titleText = this.convertSemanticText(content.title);
             parts.push(`\\section{${titleText}}`);
           }
@@ -396,24 +404,24 @@ export class SimpleLaTeXRenderer
   /**
    * Convert content item to LaTeX
    */
-  private convertContent(content: any): string {
+  private convertContent(content: Unit | Chapter | Section | ContentBlock): string {
     const parts: string[] = [];
 
     // Handle Units and Chapters (they have titles and contents)
-    if (content.title) {
+    if ('title' in content && content.title) {
       const titleText = this.convertSemanticText(content.title);
       parts.push(`\\section{${titleText}}`);
     }
 
     // Process nested contents (for Units/Chapters)
-    if (content.contents) {
+    if ('contents' in content && content.contents) {
       for (const nestedContent of content.contents) {
         parts.push(this.convertContent(nestedContent));
       }
     }
 
     // Handle content blocks (they have blockType)
-    if (content.blockType) {
+    if ('blockType' in content && content.blockType) {
       parts.push(this.convertContentBlock(content));
     }
 
@@ -423,16 +431,20 @@ export class SimpleLaTeXRenderer
   /**
    * Convert content block to LaTeX
    */
-  private convertContentBlock(block: any): string {
+  private convertContentBlock(block: ContentBlock): string {
     if (!block.content) return '';
 
     switch (block.blockType) {
-      case 'https://xats.org/vocabularies/blocks/paragraph':
-        if (typeof block.content === 'object' && 'runs' in block.content) {
-          return this.convertSemanticText(block.content);
+      case 'https://xats.org/vocabularies/blocks/paragraph': {
+        if (
+          typeof block.content === 'object' &&
+          block.content !== null &&
+          'runs' in block.content
+        ) {
+          return this.convertSemanticText(block.content as SemanticText);
         }
         return '';
-
+      }
       default:
         return '';
     }
@@ -441,54 +453,47 @@ export class SimpleLaTeXRenderer
   /**
    * Convert SemanticText to LaTeX with proper formatting
    */
-  private convertSemanticText(semanticText: any): string {
+  private convertSemanticText(semanticText: SemanticText): string {
     if (!semanticText?.runs) return '';
 
-    return semanticText.runs.map((run: any) => this.convertRun(run)).join('');
+    return semanticText.runs.map((run: Run) => this.convertRun(run)).join('');
   }
 
   /**
    * Convert individual run to LaTeX
    */
-  private convertRun(run: any): string {
-    switch (run.runType || run.type) {
-      case 'text':
+  private convertRun(run: Run): string {
+    switch (run.type) {
+      case 'text': {
         return this.escapeLatex(run.text || '');
-
-      case 'emphasis':
-        if (run.runs) {
-          const innerText = run.runs.map((r: any) => this.convertRun(r)).join('');
-          return `\\emph{${innerText}}`;
-        }
-        return '';
-
-      case 'strong':
-        if (run.runs) {
-          const innerText = run.runs.map((r: any) => this.convertRun(r)).join('');
-          return `\\textbf{${innerText}}`;
-        }
-        return '';
-
-      case 'citation':
-        const citationKey = run.citationKey || '';
+      }
+      case 'emphasis': {
+        return `\\emph{${this.escapeLatex(run.text)}}`;
+      }
+      case 'strong': {
+        return `\\textbf{${this.escapeLatex(run.text)}}`;
+      }
+      case 'citation': {
+        const citationKey = 'citeKey' in run ? run.citeKey : '';
         return `\\cite{${this.escapeLatex(citationKey)}}`;
-
-      case 'reference':
-        const targetId = run.targetId || '';
+      }
+      case 'reference': {
+        const targetId = 'ref' in run ? run.ref : '';
         return `\\ref{${this.escapeLatex(targetId)}}`;
-
-      default:
-        return this.escapeLatex(run.text || '');
+      }
+      default: {
+        return 'text' in run ? this.escapeLatex(run.text) : '';
+      }
     }
   }
 
   /**
    * Extract plain text from SemanticText (for titles, etc.)
    */
-  private extractTextFromSemanticText(semanticText: any): string {
+  private extractTextFromSemanticText(semanticText: SemanticText): string {
     if (!semanticText?.runs) return '';
 
-    return semanticText.runs.map((run: any) => run.text || '').join('');
+    return semanticText.runs.map((run: Run) => ('text' in run ? run.text : '')).join('');
   }
 
   /**

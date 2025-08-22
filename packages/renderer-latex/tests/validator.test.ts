@@ -297,7 +297,7 @@ Content with typo
 
   describe('Error Recovery', () => {
     it('should handle validation errors gracefully', async () => {
-      const nullInput = null as any;
+      const nullInput: string = null as unknown as string;
 
       const result = await validator.validateLaTeX(nullInput);
 

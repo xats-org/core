@@ -326,8 +326,8 @@ Content
       };
 
       // Force an error by mocking render to throw
-      const originalRender = renderer.render;
-      renderer.render = async () => {
+      const originalRender = renderer.render.bind(renderer);
+      renderer.render = () => {
         throw new Error('Test error');
       };
 
