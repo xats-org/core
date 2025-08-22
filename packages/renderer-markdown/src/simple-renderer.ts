@@ -5,13 +5,24 @@
  * that can be extended with more features over time.
  */
 
-import { fromMarkdown } from 'mdast-util-from-markdown';
-import { toMarkdown } from 'mdast-util-to-markdown';
 import remarkParse from 'remark-parse';
-import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
-
 import type { MarkdownRendererOptions, MarkdownParseOptions, MarkdownMetadata } from './types.js';
+
+/**
+ * Internal interface for MDAST nodes
+ */
+interface MDASTNode {
+  type: string;
+  value?: string;
+  depth?: number;
+  lang?: string;
+  alt?: string;
+  url?: string | null;
+  title?: string | null;
+  children?: MDASTNode[];
+}
+
 import type {
   XatsDocument,
   BidirectionalRenderer,
@@ -31,6 +42,7 @@ import type {
   Chapter,
   Section,
   ContentBlock,
+  DocumentDifference,
 } from '@xats-org/types';
 
 /**
@@ -118,8 +130,8 @@ export class SimpleMarkdownRenderer
       const ast = processor.parse(content);
 
       // Extract basic document information
-      const title = this.extractTitle(content, ast);
-      const body = this.convertMarkdownToXats(ast);
+      const title = this.extractTitle(content, ast as unknown as MDASTNode);
+      const body = this.convertMarkdownToXats(ast as unknown as MDASTNode);
 
       const document: XatsDocument = {
         schemaVersion: '0.5.0',
@@ -144,7 +156,7 @@ export class SimpleMarkdownRenderer
         metadata: {
           sourceFormat: 'markdown',
           parseTime: Date.now() - startTime,
-          mappedElements: this.countElements(ast),
+          mappedElements: this.countElements(ast as unknown as MDASTNode),
           unmappedElements: 0,
           fidelityScore: 0.9, // Markdown generally has good round-trip fidelity
         },
@@ -223,7 +235,7 @@ export class SimpleMarkdownRenderer
         roundTrip: this.createEmptyDocument(),
         differences: [
           {
-            type: 'missing',
+            type: 'missing' as const,
             path: 'entire-document',
             impact: 'critical',
           },
@@ -333,13 +345,13 @@ export class SimpleMarkdownRenderer
         format: 'markdown',
         variant: 'commonmark',
         wordCount: this.countWords(content),
-        elementCount: this.countElements(ast),
-        headings: this.extractHeadings(ast),
-        links: this.extractLinks(ast),
-        images: this.extractImages(ast),
-        codeBlocks: this.extractCodeBlocks(ast),
+        elementCount: this.countElements(ast as unknown as MDASTNode),
+        headings: this.extractHeadings(ast as unknown as MDASTNode),
+        links: this.extractLinks(ast as unknown as MDASTNode),
+        images: this.extractImages(ast as unknown as MDASTNode),
+        codeBlocks: this.extractCodeBlocks(ast as unknown as MDASTNode),
         readingTime: Math.ceil(this.countWords(content) / 200), // ~200 words per minute
-        complexityScore: this.calculateComplexityScore(ast),
+        complexityScore: this.calculateComplexityScore(ast as unknown as MDASTNode),
       });
     } catch (error) {
       return Promise.resolve({
@@ -476,7 +488,6 @@ export class SimpleMarkdownRenderer
    */
   private generateMarkdown(document: XatsDocument, options: MarkdownRendererOptions): string {
     const lines: string[] = [];
-    const variant = options.variant || 'commonmark';
 
     // Add front matter if requested
     if (options.includeFrontMatter && document.bibliographicEntry) {
@@ -518,7 +529,10 @@ export class SimpleMarkdownRenderer
       lines.push('');
       for (const entry of document.backMatter.bibliography) {
         if (typeof entry === 'object' && entry !== null && 'title' in entry) {
-          lines.push(`- ${entry.title}`);
+          const title = (entry as { title?: string }).title;
+          if (title) {
+            lines.push(`- ${title}`);
+          }
         }
       }
     }
@@ -595,19 +609,22 @@ export class SimpleMarkdownRenderer
       }
 
       case 'https://xats.org/vocabularies/blocks/list': {
-        if (typeof block.content === 'object' && Array.isArray((block.content as any).items)) {
-          const items = (block.content as any).items;
-          const ordered = (block.content as any).ordered || false;
-          return items
-            .map((item: any, index: number) => {
-              const marker = ordered ? `${index + 1}.` : '-';
-              const text =
-                typeof item === 'object' && 'runs' in item
-                  ? this.convertSemanticText(item)
-                  : String(item);
-              return `${marker} ${text}`;
-            })
-            .join('\n');
+        if (typeof block.content === 'object' && block.content !== null) {
+          const listContent = block.content as { items?: unknown[]; ordered?: boolean };
+          if (Array.isArray(listContent.items)) {
+            const items = listContent.items;
+            const ordered = listContent.ordered || false;
+            return items
+              .map((item: unknown, index: number) => {
+                const marker = ordered ? `${index + 1}.` : '-';
+                const text =
+                  typeof item === 'object' && item !== null && 'runs' in item
+                    ? this.convertSemanticText(item as SemanticText)
+                    : String(item);
+                return `${marker} ${text}`;
+              })
+              .join('\n');
+          }
         }
         return '';
       }
@@ -720,7 +737,7 @@ export class SimpleMarkdownRenderer
   /**
    * Extract title from Markdown content or AST
    */
-  private extractTitle(content: string, ast: any): string | null {
+  private extractTitle(content: string, ast: MDASTNode): string | null {
     // Look for front matter title first
     const frontMatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
     if (frontMatterMatch && frontMatterMatch[1]) {
@@ -746,7 +763,7 @@ export class SimpleMarkdownRenderer
   /**
    * Convert Markdown AST to xats content
    */
-  private convertMarkdownToXats(ast: any): ContentBlock[] {
+  private convertMarkdownToXats(ast: MDASTNode): ContentBlock[] {
     const contents: ContentBlock[] = [];
 
     if (!ast || !ast.children) return contents;
@@ -764,7 +781,7 @@ export class SimpleMarkdownRenderer
   /**
    * Convert AST node to content block
    */
-  private convertASTNodeToContentBlock(node: any): ContentBlock | null {
+  private convertASTNodeToContentBlock(node: MDASTNode): ContentBlock | null {
     switch (node.type) {
       case 'paragraph': {
         return {
@@ -812,13 +829,15 @@ export class SimpleMarkdownRenderer
   /**
    * Convert AST node to SemanticText
    */
-  private convertASTToSemanticText(node: any): SemanticText {
+  private convertASTToSemanticText(node: MDASTNode): SemanticText {
     const runs: Run[] = [];
 
-    const processNode = (n: any): void => {
+    const processNode = (n: MDASTNode): void => {
       switch (n.type) {
         case 'text':
-          runs.push({ type: 'text', text: n.value });
+          if (n.value) {
+            runs.push({ type: 'text', text: n.value });
+          }
           break;
         case 'emphasis':
           if (n.children) {
@@ -857,10 +876,10 @@ export class SimpleMarkdownRenderer
   /**
    * Extract plain text from AST node
    */
-  private extractTextFromASTNode(node: any): string {
+  private extractTextFromASTNode(node: MDASTNode): string {
     if (node.value) return node.value;
     if (node.children) {
-      return node.children.map((child: any) => this.extractTextFromASTNode(child)).join('');
+      return node.children.map((child) => this.extractTextFromASTNode(child)).join('');
     }
     return '';
   }
@@ -875,7 +894,7 @@ export class SimpleMarkdownRenderer
   /**
    * Count elements in AST
    */
-  private countElements(ast: any): number {
+  private countElements(ast: MDASTNode): number {
     if (!ast) return 0;
     let count = 1;
     if (ast.children) {
@@ -889,13 +908,13 @@ export class SimpleMarkdownRenderer
   /**
    * Extract headings from AST
    */
-  private extractHeadings(ast: any): any[] {
-    const headings: any[] = [];
+  private extractHeadings(ast: MDASTNode): Array<{ level: number; text: string; style: 'atx' }> {
+    const headings: Array<{ level: number; text: string; style: 'atx' }> = [];
 
-    const traverse = (node: any): void => {
+    const traverse = (node: MDASTNode): void => {
       if (node.type === 'heading') {
         headings.push({
-          level: node.depth,
+          level: node.depth || 1,
           text: this.extractTextFromASTNode(node),
           style: 'atx',
         });
@@ -914,17 +933,22 @@ export class SimpleMarkdownRenderer
   /**
    * Extract links from AST
    */
-  private extractLinks(ast: any): any[] {
-    const links: any[] = [];
+  private extractLinks(
+    ast: MDASTNode
+  ): Array<{ text: string; url: string; title?: string; type: 'inline' }> {
+    const links: Array<{ text: string; url: string; title?: string; type: 'inline' }> = [];
 
-    const traverse = (node: any): void => {
+    const traverse = (node: MDASTNode): void => {
       if (node.type === 'link') {
-        links.push({
+        const linkEntry: { text: string; url: string; title?: string; type: 'inline' } = {
           text: this.extractTextFromASTNode(node),
-          url: node.url,
-          title: node.title,
+          url: node.url || '',
           type: 'inline',
-        });
+        };
+        if (node.title) {
+          linkEntry.title = node.title;
+        }
+        links.push(linkEntry);
       }
       if (node.children) {
         for (const child of node.children) {
@@ -940,17 +964,22 @@ export class SimpleMarkdownRenderer
   /**
    * Extract images from AST
    */
-  private extractImages(ast: any): any[] {
-    const images: any[] = [];
+  private extractImages(
+    ast: MDASTNode
+  ): Array<{ alt: string; src: string; title?: string; type: 'inline' }> {
+    const images: Array<{ alt: string; src: string; title?: string; type: 'inline' }> = [];
 
-    const traverse = (node: any): void => {
+    const traverse = (node: MDASTNode): void => {
       if (node.type === 'image') {
-        images.push({
+        const imageEntry: { alt: string; src: string; title?: string; type: 'inline' } = {
           alt: node.alt || '',
-          src: node.url,
-          title: node.title,
+          src: node.url || '',
           type: 'inline',
-        });
+        };
+        if (node.title) {
+          imageEntry.title = node.title;
+        }
+        images.push(imageEntry);
       }
       if (node.children) {
         for (const child of node.children) {
@@ -966,16 +995,21 @@ export class SimpleMarkdownRenderer
   /**
    * Extract code blocks from AST
    */
-  private extractCodeBlocks(ast: any): any[] {
-    const codeBlocks: any[] = [];
+  private extractCodeBlocks(
+    ast: MDASTNode
+  ): Array<{ code: string; language?: string; fence: '```' }> {
+    const codeBlocks: Array<{ code: string; language?: string; fence: '```' }> = [];
 
-    const traverse = (node: any): void => {
+    const traverse = (node: MDASTNode): void => {
       if (node.type === 'code') {
-        codeBlocks.push({
-          code: node.value,
-          language: node.lang,
+        const codeEntry: { code: string; language?: string; fence: '```' } = {
+          code: node.value || '',
           fence: '```',
-        });
+        };
+        if (node.lang) {
+          codeEntry.language = node.lang;
+        }
+        codeBlocks.push(codeEntry);
       }
       if (node.children) {
         for (const child of node.children) {
@@ -991,10 +1025,10 @@ export class SimpleMarkdownRenderer
   /**
    * Calculate complexity score
    */
-  private calculateComplexityScore(ast: any): number {
+  private calculateComplexityScore(ast: MDASTNode): number {
     let score = 0;
 
-    const traverse = (node: any): void => {
+    const traverse = (node: MDASTNode): void => {
       switch (node.type) {
         case 'table':
           score += 2;
@@ -1073,17 +1107,25 @@ export class SimpleMarkdownRenderer
   /**
    * Find differences between documents
    */
-  private findDocumentDifferences(original: XatsDocument, roundTrip: XatsDocument): any[] {
-    const differences: any[] = [];
+  private findDocumentDifferences(
+    original: XatsDocument,
+    roundTrip: XatsDocument
+  ): DocumentDifference[] {
+    const differences: DocumentDifference[] = [];
 
     if (original.bibliographicEntry?.title !== roundTrip.bibliographicEntry?.title) {
-      differences.push({
+      const diff: DocumentDifference = {
         type: 'changed',
         path: 'bibliographicEntry.title',
-        original: original.bibliographicEntry?.title,
-        roundTrip: roundTrip.bibliographicEntry?.title,
         impact: 'major',
-      });
+      };
+      if (original.bibliographicEntry?.title !== undefined) {
+        diff.original = original.bibliographicEntry.title;
+      }
+      if (roundTrip.bibliographicEntry?.title !== undefined) {
+        diff.roundTrip = roundTrip.bibliographicEntry.title;
+      }
+      differences.push(diff);
     }
 
     return differences;
