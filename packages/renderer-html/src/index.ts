@@ -338,6 +338,11 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         parts.push(`<title>${this.escapeHtml(document.bibliographicEntry.title)}</title>`);
       }
 
+      // Add subject as meta tag for round-trip conversion
+      if (document.subject) {
+        parts.push(`<meta name="subject" content="${this.escapeHtml(document.subject)}">`);
+      }
+
       // Add accessibility metadata
       if (document.accessibilityMetadata) {
         if (document.accessibilityMetadata.accessibilityFeature) {
@@ -435,20 +440,35 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const parts: string[] = [];
 
     bodyMatter.contents.forEach((content) => {
-      // Check if this content has a contents array that contains other containers (Units have Chapters)
-      const hasChapterContents =
-        'contents' in content &&
-        Array.isArray(content.contents) &&
-        content.contents.length > 0 &&
-        content.contents.some(
-          (item) => 'contents' in item && Array.isArray((item as any).contents)
-        );
-
-      if (hasChapterContents) {
-        // This is a Unit
-        parts.push(this.renderUnit(content as Unit, options));
+      // Determine the type based on structure depth
+      // A Unit contains Chapters which contain Sections
+      // A Chapter can contain Sections or ContentBlocks
+      // A Section contains only ContentBlocks
+      
+      if ('contents' in content && Array.isArray(content.contents)) {
+        // Check the nested structure to determine type
+        const firstChild = content.contents[0];
+        
+        if (!firstChild) {
+          // Empty contents, treat as Chapter
+          parts.push(this.renderChapter(content as Chapter, options));
+        } else if ('contents' in firstChild && Array.isArray(firstChild.contents)) {
+          // Has nested containers - check depth
+          const firstGrandchild = firstChild.contents[0];
+          
+          if (firstGrandchild && 'contents' in firstGrandchild && Array.isArray(firstGrandchild.contents)) {
+            // Three levels deep - this is a Unit containing Chapters containing Sections
+            parts.push(this.renderUnit(content as Unit, options));
+          } else {
+            // Two levels deep - this is a Chapter containing Sections
+            parts.push(this.renderChapter(content as Chapter, options));
+          }
+        } else {
+          // First child has no contents array - this is a Chapter with ContentBlocks
+          parts.push(this.renderChapter(content as Chapter, options));
+        }
       } else {
-        // This is a Chapter
+        // No contents array - shouldn't happen at body matter level but handle gracefully
         parts.push(this.renderChapter(content as Chapter, options));
       }
     });
