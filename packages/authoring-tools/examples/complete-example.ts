@@ -2,8 +2,12 @@
  * Complete example demonstrating the xats authoring tools
  */
 
+/* eslint-disable no-console */
+
 import { XatsAuthoringTool } from '../src/index.js';
 import type { SimplifiedDocument } from '../src/types.js';
+
+import type { XatsDocument } from '@xats-org/types';
 
 async function demonstrateAuthoringTools() {
   console.log('🚀 xats Authoring Tools Demo\n');
@@ -22,7 +26,7 @@ async function demonstrateAuthoringTools() {
 
   // Example 1: Create a complete educational document
   console.log('📝 Creating a comprehensive educational document...');
-  
+
   const educationalContent: SimplifiedDocument = {
     title: 'Introduction to Data Structures and Algorithms',
     author: 'Dr. Jane Computer-Scientist',
@@ -178,12 +182,12 @@ In the next chapter, we'll dive deep into arrays and their variants, exploring:
 
   try {
     const result = await authoringTool.createDocument(educationalContent);
-    
+
     if (result.success) {
       console.log('✅ Document created successfully!');
       console.log(`📊 Quality Score: ${result.validation?.qualityScore}/100`);
       console.log(`⏱️  Processing Time: ${result.processingTime?.toFixed(2)}ms`);
-      
+
       if (result.validation?.errors.length) {
         console.log(`⚠️  Validation Issues: ${result.validation.errors.length}`);
         result.validation.errors.slice(0, 3).forEach((error, index) => {
@@ -193,30 +197,30 @@ In the next chapter, we'll dive deep into arrays and their variants, exploring:
 
       // Generate HTML preview
       console.log('\n🎨 Generating HTML preview...');
-      const htmlPreview = await authoringTool.generatePreview(result.document!, {
+      const htmlPreview = await authoringTool.generatePreview(result.document as XatsDocument, {
         format: 'html',
         includeStyles: true,
         theme: 'academic',
         accessibilityMode: true,
       });
-      
+
       console.log(`✅ HTML preview generated (${htmlPreview.content.length} characters)`);
       console.log(`⏱️  Generation Time: ${htmlPreview.generationTime.toFixed(2)}ms`);
 
       // Generate Markdown preview
       console.log('\n📝 Generating Markdown preview...');
-      const mdPreview = await authoringTool.generatePreview(result.document!, {
+      const mdPreview = await authoringTool.generatePreview(result.document as XatsDocument, {
         format: 'markdown',
       });
-      
+
       console.log(`✅ Markdown preview generated (${mdPreview.content.length} characters)`);
 
       // Demonstrate export functionality
       console.log('\n📤 Testing export functionality...');
-      
+
       const exportResults = await Promise.all([
-        authoringTool.exportDocument(result.document!, 'html'),
-        authoringTool.exportDocument(result.document!, 'markdown'),
+        authoringTool.exportDocument(result.document as XatsDocument, 'html'),
+        authoringTool.exportDocument(result.document as XatsDocument, 'markdown'),
         // Note: DOCX export would work but requires binary handling in this example
       ]);
 
@@ -228,7 +232,6 @@ In the next chapter, we'll dive deep into arrays and their variants, exploring:
           console.log(`❌ ${formats[index]} export failed: ${exportResult.errors?.[0]?.message}`);
         }
       });
-
     } else {
       console.log('❌ Document creation failed:');
       result.errors?.forEach((error, index) => {
@@ -238,14 +241,13 @@ In the next chapter, we'll dive deep into arrays and their variants, exploring:
         }
       });
     }
-
   } catch (error) {
     console.error('💥 Unexpected error:', error);
   }
 
   // Example 2: Demonstrate import from Markdown
   console.log('\n📥 Demonstrating Markdown import...');
-  
+
   const markdownContent = `# Quick Start Guide
 
 ## Installation
@@ -276,12 +278,12 @@ console.log(result);
 
   try {
     const importResult = await authoringTool.importFromMarkdown(markdownContent);
-    
+
     if (importResult.success) {
       console.log('✅ Markdown import successful!');
-      console.log(`📊 Fidelity Score: ${(importResult.fidelityScore! * 100).toFixed(1)}%`);
+      console.log(`📊 Fidelity Score: ${((importResult.fidelityScore ?? 0) * 100).toFixed(1)}%`);
       console.log(`⏱️  Import Time: ${importResult.processingTime?.toFixed(2)}ms`);
-      
+
       if (importResult.warnings?.length) {
         console.log(`⚠️  Import Warnings: ${importResult.warnings.length}`);
         importResult.warnings.slice(0, 2).forEach((warning, index) => {
@@ -290,7 +292,7 @@ console.log(result);
       }
     } else {
       console.log('❌ Markdown import failed');
-      importResult.errors?.forEach(error => console.log(`   - ${error.message}`));
+      importResult.errors?.forEach((error) => console.log(`   - ${error.message}`));
     }
   } catch (error) {
     console.error('💥 Import error:', error);
@@ -299,7 +301,7 @@ console.log(result);
   // Example 3: Show authoring help
   console.log('\n📚 Available authoring help:');
   const help = authoringTool.getAuthoringHelp();
-  
+
   help.slice(0, 3).forEach((item, index) => {
     console.log(`\n${index + 1}. ${item.title}`);
     console.log(`   ${item.description}`);
@@ -308,8 +310,12 @@ console.log(result);
 
   // Example 4: Demonstrate different user levels
   console.log('\n👤 Testing different user experience levels...');
-  
-  const userLevels: Array<'beginner' | 'intermediate' | 'advanced'> = ['beginner', 'intermediate', 'advanced'];
+
+  const userLevels: Array<'beginner' | 'intermediate' | 'advanced'> = [
+    'beginner',
+    'intermediate',
+    'advanced',
+  ];
   const invalidDoc: SimplifiedDocument = {
     title: '', // Invalid: empty title
     content: '# Test\n\nContent without required fields.',
@@ -318,7 +324,7 @@ console.log(result);
   for (const level of userLevels) {
     const levelTool = new XatsAuthoringTool({ userLevel: level });
     const result = await levelTool.createDocument(invalidDoc);
-    
+
     console.log(`\n${level.toUpperCase()} level error message:`);
     if (result.validation?.errors.length) {
       console.log(`   "${result.validation.errors[0]?.message}"`);
