@@ -98,7 +98,7 @@ describe('R Markdown Utilities', () => {
         warning: false,
       });
 
-      expect(result).toBe('{r, test, echo=FALSE, eval=TRUE, warning=FALSE}');
+      expect(result).toBe('{r test, echo=FALSE, eval=TRUE, warning=FALSE}');
     });
 
     it('should handle chunk without label', () => {
@@ -115,7 +115,7 @@ describe('R Markdown Utilities', () => {
         echo: true,
       });
 
-      expect(result).toContain('{r, plot');
+      expect(result).toContain('{r plot');
       expect(result).toContain('echo=TRUE');
     });
   });
@@ -174,7 +174,7 @@ keywords: ["R", "statistics", "analysis"]
       const result = serializeYamlFrontmatter(frontmatter);
 
       expect(result).toContain('---');
-      expect(result).toContain('title: Test Document');
+      expect(result).toContain('title: "Test Document"');
       expect(result).toContain('author: John Doe');
       expect(result).toContain('toc: true');
     });
@@ -187,7 +187,7 @@ keywords: ["R", "statistics", "analysis"]
 
       const result = serializeYamlFrontmatter(frontmatter);
 
-      expect(result).toContain('author: [John Doe, Jane Smith]');
+      expect(result).toContain('author: ["John Doe", "Jane Smith"]');
     });
   });
 
@@ -332,7 +332,7 @@ y <- 2
       expect(options.echo).toBe(false);
       expect(options.eval).toBe(true); // default
       expect(options.include).toBe(true); // default
-      expect(options.warning).toBe(true); // default
+      expect(options.warning).toBe(undefined); // not set by default
     });
 
     it('should override with custom defaults', () => {

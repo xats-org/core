@@ -377,8 +377,8 @@ export class XatsToRMarkdownConverter {
 
     const uri = normalizeUri(block.blockType);
 
-    // Handle core block types
-    if (uri.startsWith('https://xats.org/vocabularies/blocks/')) {
+    // Handle core block types (both old vocabularies and new core URIs)
+    if (uri.startsWith('https://xats.org/vocabularies/blocks/') || uri.startsWith('https://xats.org/core/blocks/')) {
       const blockTypeName = uri.split('/').pop();
 
       switch (blockTypeName) {
@@ -404,7 +404,7 @@ export class XatsToRMarkdownConverter {
     }
 
     // Handle placeholder blocks
-    if (uri.startsWith('https://xats.org/vocabularies/placeholders/')) {
+    if (uri.startsWith('https://xats.org/vocabularies/placeholders/') || uri.startsWith('https://xats.org/core/placeholders/')) {
       const placeholderType = uri.split('/').pop();
 
       switch (placeholderType) {

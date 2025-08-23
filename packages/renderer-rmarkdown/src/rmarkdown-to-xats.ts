@@ -124,9 +124,12 @@ export class RMarkdownToXatsParser {
     let processedContent = content;
 
     // Replace code chunks with placeholders temporarily
+    // Process chunks in reverse order to maintain position validity
     const chunkPlaceholders = new Map<string, ReturnType<typeof extractCodeChunks>[0]>();
-    chunks.forEach((chunk, index) => {
-      const placeholder = `__CHUNK_${index}__`;
+    const sortedChunks = chunks.sort((a, b) => b.start - a.start); // Sort by start position descending
+    
+    sortedChunks.forEach((chunk, index) => {
+      const placeholder = `__CHUNK_${chunks.length - 1 - index}__`; // Maintain original indexing
       chunkPlaceholders.set(placeholder, chunk);
       processedContent =
         processedContent.substring(0, chunk.start) +
@@ -134,11 +137,8 @@ export class RMarkdownToXatsParser {
         processedContent.substring(chunk.end);
     });
 
-    // Parse markdown structure
-    const sections = this.parseMarkdownSections(processedContent);
-
-    // Restore code chunks in content
-    const contentWithChunks = this.restoreCodeChunks(sections, chunkPlaceholders);
+    // Parse markdown structure with chunk placeholders
+    const sections = this.parseMarkdownSections(processedContent, chunkPlaceholders);
 
     // Build document structure
     const document: XatsDocument = {
@@ -161,7 +161,7 @@ export class RMarkdownToXatsParser {
   /**
    * Parse markdown into hierarchical sections
    */
-  private parseMarkdownSections(content: string): Array<Unit | Chapter> {
+  private parseMarkdownSections(content: string, chunkPlaceholders?: Map<string, ReturnType<typeof extractCodeChunks>[0]>): Array<Unit | Chapter> {
     const lines = content.split('\n');
     const structure: Array<Unit | Chapter> = [];
     let currentChapter: Chapter | null = null;
@@ -251,7 +251,7 @@ export class RMarkdownToXatsParser {
   /**
    * Parse content blocks from markdown text
    */
-  private parseContentBlocks(content: string): ContentBlock[] {
+  private parseContentBlocks(content: string, chunkPlaceholders?: Map<string, ReturnType<typeof extractCodeChunks>[0]>): ContentBlock[] {
     if (!content.trim()) return [];
 
     const blocks: ContentBlock[] = [];
@@ -262,6 +262,29 @@ export class RMarkdownToXatsParser {
     let inList = false;
 
     for (const line of lines) {
+      // Check for chunk placeholders first
+      if (chunkPlaceholders) {
+        for (const [placeholder, chunk] of chunkPlaceholders) {
+          if (line.includes(placeholder)) {
+            // Process any accumulated content before the chunk
+            if (currentBlock.length > 0) {
+              blocks.push(...this.parseTextContent(currentBlock.join('\n')));
+              currentBlock = [];
+            }
+            
+            // Add the chunk block
+            blocks.push(this.createChunkBlock(chunk));
+            
+            // Continue with any remaining content on the same line
+            const remainingText = line.replace(placeholder, '').trim();
+            if (remainingText) {
+              currentBlock.push(remainingText);
+            }
+            continue;
+          }
+        }
+      }
+      
       // Code block detection
       if (line.match(/^```/)) {
         if (inCodeBlock) {

@@ -152,11 +152,13 @@ export function serializeChunkOptions(
   label?: string,
   options: RChunkOptions = {}
 ): string {
-  const parts: string[] = [engine];
-
-  // Add label if present
+  const parts: string[] = [];
+  
+  // Engine and label go together
   if (label) {
-    parts.push(label);
+    parts.push(`${engine} ${label}`);
+  } else {
+    parts.push(engine);
   }
 
   // Add other options
@@ -325,14 +327,20 @@ function serializeYamlValue(value: unknown): string {
     return `{${parts.join(', ')}}`;
   }
 
-  // String values - quote if necessary
+  // String values - quote only when necessary (more YAML-like)
   const str = String(value);
+  
+  // Quote if the string contains special characters, spaces, or looks like other types
   if (
+    str.includes(' ') ||
     str.includes(':') ||
     str.includes('[') ||
     str.includes('{') ||
     str.includes('\n') ||
-    str.trim() !== str
+    str.includes(',') ||
+    str.includes('#') ||
+    str.trim() !== str ||
+    /^(true|false|null|yes|no|\d+(\.\d+)?|\[.*\]|\{.*\})$/i.test(str)
   ) {
     return `"${str.replace(/"/g, '\\"')}"`;
   }
@@ -580,14 +588,15 @@ export function normalizeChunkOptions(
   options: RChunkOptions = {},
   defaults: Partial<RChunkOptions> = {}
 ): RChunkOptions {
-  return {
+  // Only apply minimal defaults, let user options override everything
+  const baseDefaults: Partial<RChunkOptions> = {
     eval: true,
-    echo: true,
     include: true,
-    warning: true,
-    error: false,
-    message: true,
     results: 'markup',
+  };
+  
+  return {
+    ...baseDefaults,
     ...defaults,
     ...options,
   };
