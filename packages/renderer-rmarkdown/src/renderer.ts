@@ -55,7 +55,7 @@ export class RMarkdownRenderer
   ): Promise<RenderResult> {
     const mergedOptions = { ...this.rendererOptions, ...options };
     const converter = new XatsToRMarkdownConverter(mergedOptions);
-    return converter.convert(document);
+    return Promise.resolve(converter.convert(document));
   }
 
   /**
@@ -67,7 +67,7 @@ export class RMarkdownRenderer
   ): Promise<RMarkdownParseResult> {
     const mergedOptions = { ...this.parseOptions, ...options };
     const parser = new RMarkdownToXatsParser(mergedOptions);
-    return parser.parse(content);
+    return Promise.resolve(parser.parse(content));
   }
 
   /**
@@ -173,7 +173,7 @@ export class RMarkdownRenderer
   public async validate(content: string): Promise<FormatValidationResult> {
     const errors = validateRMarkdown(content);
 
-    return {
+    return Promise.resolve({
       valid: errors.filter((e) => e.severity === 'error').length === 0,
       errors: errors
         .filter((e) => e.severity === 'error')
@@ -196,7 +196,7 @@ export class RMarkdownRenderer
         version: '1.0.0',
         validatedAt: new Date(),
       },
-    };
+    });
   }
 
   /**
@@ -226,14 +226,14 @@ export class RMarkdownRenderer
       })),
     };
 
-    return metadata;
+    return Promise.resolve(metadata);
   }
 
   /**
    * Test WCAG compliance (not applicable for source format)
    */
   public async testCompliance(content: string, level: 'A' | 'AA' | 'AAA'): Promise<WcagResult> {
-    return {
+    return Promise.resolve({
       level,
       compliant: false,
       violations: [
@@ -247,7 +247,7 @@ export class RMarkdownRenderer
       ],
       warnings: [],
       score: 0,
-    };
+    });
   }
 
   /**

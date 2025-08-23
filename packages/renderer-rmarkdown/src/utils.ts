@@ -23,15 +23,21 @@ export function parseChunkHeader(header: string): {
   // Remove the opening and closing braces
   const content = header.replace(/^```?\{|\}$/, '').trim();
 
-  // Split engine from options
-  const parts = content.split(/[,\s]+/);
-  const engine = (parts[0]?.trim() || 'r') as RChunkEngine;
+  // First separate engine and label from options
+  const spaceIndex = content.search(/[,\s]/);
+  const enginePart = spaceIndex === -1 ? content : content.substring(0, spaceIndex);
+  const optionsPart = spaceIndex === -1 ? '' : content.substring(spaceIndex);
+  
+  const engine = (enginePart.trim() || 'r') as RChunkEngine;
+  
+  // Smart split the options part by commas, respecting parentheses
+  const parts = optionsPart ? smartSplit(optionsPart, ',') : [];
 
   const options: RChunkOptions = {};
   let label: string | undefined;
 
-  // Parse remaining parts as options
-  for (let i = 1; i < parts.length; i++) {
+  // Parse all parts as options (since we already extracted the engine)
+  for (let i = 0; i < parts.length; i++) {
     const part = parts[i]?.trim();
     if (!part) continue;
 
@@ -63,6 +69,48 @@ export function parseChunkHeader(header: string): {
   if (label) {
     result.label = label;
   }
+  return result;
+}
+
+/**
+ * Smart split function that respects parentheses and quotes
+ */
+function smartSplit(str: string, delimiter: string): string[] {
+  const result: string[] = [];
+  let current = '';
+  let parenCount = 0;
+  let inQuotes = false;
+  let quoteChar = '';
+
+  for (let i = 0; i < str.length; i++) {
+    const char = str[i]!;
+    
+    if (!inQuotes && (char === '"' || char === "'")) {
+      inQuotes = true;
+      quoteChar = char;
+      current += char;
+    } else if (inQuotes && char === quoteChar) {
+      inQuotes = false;
+      quoteChar = '';
+      current += char;
+    } else if (!inQuotes && char === '(') {
+      parenCount++;
+      current += char;
+    } else if (!inQuotes && char === ')') {
+      parenCount--;
+      current += char;
+    } else if (!inQuotes && char === delimiter && parenCount === 0) {
+      result.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  
+  if (current.trim()) {
+    result.push(current.trim());
+  }
+  
   return result;
 }
 
@@ -158,7 +206,7 @@ export function serializeChunkOptionValue(value: unknown): string | undefined {
  * Parse YAML frontmatter
  */
 export function parseYamlFrontmatter(content: string): RMarkdownFrontmatter | null {
-  const match = content.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
+  const match = content.match(/^---\s*\n([\s\S]*?)\n---\s*/);
   if (!match?.[1]) return null;
 
   const yamlContent = match[1];
@@ -219,10 +267,14 @@ function parseYamlValue(value: string): unknown {
     return isNaN(num) ? cleaned : num;
   }
 
-  // Arrays (simple format)
+  // Arrays (YAML format with quotes)
   if (cleaned.startsWith('[') && cleaned.endsWith(']')) {
     const arrayContent = cleaned.slice(1, -1);
-    return arrayContent.split(',').map((item) => parseYamlValue(item.trim()));
+    return arrayContent.split(',').map((item) => {
+      const trimmed = item.trim();
+      // Remove quotes from array items
+      return trimmed.replace(/^["']|["']$/g, '');
+    });
   }
 
   return cleaned;

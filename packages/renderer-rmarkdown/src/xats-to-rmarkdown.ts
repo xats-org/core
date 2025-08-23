@@ -3,10 +3,10 @@
  */
 
 import {
-  extractPlainText,
-  createSemanticText,
-  buildCoreUri,
-  isValidUri,
+  // extractPlainText,
+  // createSemanticText,
+  // buildCoreUri,
+  // isValidUri,
   normalizeUri,
 } from '@xats-org/utils';
 
@@ -23,7 +23,7 @@ import type {
   RChunkOptions,
   RChunkEngine,
   RMarkdownContext,
-  BookdownRefType,
+  // BookdownRefType,
 } from './types.js';
 import type {
   XatsDocument,
@@ -32,9 +32,9 @@ import type {
   Section,
   ContentBlock,
   SemanticText,
-  RendererOptions,
+  // RendererOptions,
   RenderResult,
-  BidirectionalRenderer,
+  // BidirectionalRenderer,
 } from '@xats-org/types';
 
 /**

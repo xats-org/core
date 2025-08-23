@@ -2,7 +2,7 @@
  * R Markdown-specific types and interfaces
  */
 
-import type { RendererOptions, ParseOptions, FormatMetadata } from '@xats-org/types';
+import type { RendererOptions, ParseOptions, FormatMetadata, ParseResult } from '@xats-org/types';
 
 /**
  * R Markdown output format types supported by knitr/rmarkdown
@@ -666,7 +666,7 @@ export interface RMarkdownPipelineStage {
  * R Markdown-specific parse result extending base ParseResult
  */
 export interface RMarkdownParseResult
-  extends Omit<import('@xats-org/types').ParseResult, 'metadata'> {
+  extends Omit<ParseResult, 'metadata'> {
   /** R Markdown-specific metadata */
   metadata?: RMarkdownMetadata;
 }
