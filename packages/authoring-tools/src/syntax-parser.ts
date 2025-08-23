@@ -40,7 +40,7 @@ export class SimplifiedSyntaxParser {
   /**
    * Parse simplified syntax to xats document
    */
-  async parse(simplifiedDoc: SimplifiedDocument): Promise<AuthoringResult> {
+  parse(simplifiedDoc: SimplifiedDocument): AuthoringResult {
     const startTime = performance.now();
     const errors: UserFriendlyError[] = [];
 
@@ -81,10 +81,7 @@ export class SimplifiedSyntaxParser {
   /**
    * Convert MDAST to xats document structure
    */
-  private convertMdastToXats(
-    mdast: Root,
-    simplifiedDoc: SimplifiedDocument
-  ): XatsDocument {
+  private convertMdastToXats(mdast: Root, simplifiedDoc: SimplifiedDocument): XatsDocument {
     // Extract document metadata
     const title = simplifiedDoc.title || this.extractTitleFromContent(mdast);
     const author = simplifiedDoc.author || 'Unknown Author';

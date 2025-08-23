@@ -81,7 +81,7 @@ export class XatsAuthoringTool {
 
     try {
       // Parse simplified syntax to xats document
-      const parseResult = await this.syntaxParser.parse(simplifiedDoc);
+      const parseResult = this.syntaxParser.parse(simplifiedDoc);
 
       if (!parseResult.success || !parseResult.document) {
         return {
