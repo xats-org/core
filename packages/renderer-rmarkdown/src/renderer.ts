@@ -77,7 +77,7 @@ export class RMarkdownRenderer
     document: XatsDocument,
     options: RoundTripOptions = {}
   ): Promise<RoundTripResult> {
-    const startTime = Date.now();
+    const startTime = performance.now();
 
     try {
       // Render to R Markdown
@@ -90,16 +90,16 @@ export class RMarkdownRenderer
           roundTrip: this.createEmptyDocument(),
           differences: [],
           metrics: {
-            renderTime: Date.now() - startTime,
+            renderTime: performance.now() - startTime,
             parseTime: 0,
-            totalTime: Date.now() - startTime,
+            totalTime: performance.now() - startTime,
             documentSize: JSON.stringify(document).length,
             outputSize: 0,
           },
         };
       }
 
-      const renderTime = Date.now() - startTime;
+      const renderTime = performance.now() - startTime;
 
       // Parse back to xats
       const parseResult = await this.parse(renderResult.content, options);
@@ -111,16 +111,16 @@ export class RMarkdownRenderer
           roundTrip: parseResult.document,
           differences: [],
           metrics: {
-            renderTime: renderTime,
-            parseTime: Date.now() - startTime - renderTime,
-            totalTime: Date.now() - startTime,
+            renderTime,
+            parseTime: performance.now() - startTime - renderTime,
+            totalTime: performance.now() - startTime,
             documentSize: JSON.stringify(document).length,
             outputSize: renderResult.content.length,
           },
         };
       }
 
-      const totalTime = Date.now() - startTime;
+      const totalTime = performance.now() - startTime;
 
       // Compare documents
       const differences = this.compareDocuments(document, parseResult.document);
@@ -134,7 +134,7 @@ export class RMarkdownRenderer
         roundTrip: parseResult.document,
         differences,
         metrics: {
-          renderTime: renderTime,
+          renderTime,
           parseTime: totalTime - renderTime,
           totalTime,
           documentSize: JSON.stringify(document).length,
@@ -159,7 +159,7 @@ export class RMarkdownRenderer
         metrics: {
           renderTime: 0,
           parseTime: 0,
-          totalTime: Date.now() - startTime,
+          totalTime: performance.now() - startTime,
           documentSize: JSON.stringify(document).length,
           outputSize: 0,
         },
