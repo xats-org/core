@@ -20,14 +20,32 @@ export function isValidUri(uri: string): boolean {
  * Check if a URI belongs to the xats core vocabulary
  */
 export function isXatsCoreUri(uri: string): boolean {
-  return uri.startsWith(`${XATS_BASE_URI}/core/`);
+  if (!isValidXatsUri(uri)) return false;
+  
+  try {
+    const url = new URL(uri);
+    return url.hostname === 'xats.org' && 
+           url.protocol === 'https:' &&
+           url.pathname.startsWith('/core/');
+  } catch {
+    return false;
+  }
 }
 
 /**
  * Check if a URI is an extension vocabulary
  */
 export function isExtensionUri(uri: string): boolean {
-  return uri.startsWith(`${XATS_BASE_URI}/extensions/`);
+  if (!isValidXatsUri(uri)) return false;
+  
+  try {
+    const url = new URL(uri);
+    return url.hostname === 'xats.org' && 
+           url.protocol === 'https:' &&
+           url.pathname.startsWith('/extensions/');
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -54,10 +72,28 @@ export function extractNamespace(uri: string): string | null {
  * Extract the vocabulary type from a xats URI
  */
 export function extractVocabularyType(uri: string): string | null {
-  if (!uri.startsWith(XATS_BASE_URI)) return null;
+  // Strict validation to prevent domain bypass attacks
+  if (!isValidXatsUri(uri)) return null;
 
   const match = uri.match(/^https:\/\/xats\.org\/(\w+)\//);
   return match ? (match[1] ?? null) : null;
+}
+
+/**
+ * Strict validation for xats URIs to prevent domain bypass
+ */
+function isValidXatsUri(uri: string): boolean {
+  if (!isValidUri(uri)) return false;
+  
+  try {
+    const url = new URL(uri);
+    // Strict hostname check - must be exactly xats.org
+    return url.hostname === 'xats.org' && 
+           url.protocol === 'https:' &&
+           url.pathname.startsWith('/');
+  } catch {
+    return false;
+  }
 }
 
 /**

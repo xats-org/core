@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
-import { existsSync, readFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 import chalk from 'chalk';
@@ -18,15 +18,20 @@ export const statsCommand = new Command('stats')
   .option('--detailed', 'show detailed statistics')
   .action((file: string, options: StatsCommandOptions) => {
     try {
-      // Check if file exists
+      // Read and parse document (this will throw if file doesn't exist)
       const filePath = resolve(file);
-      if (!existsSync(filePath)) {
-        console.error(chalk.red(`File not found: ${file}`));
+      let content: string;
+      
+      try {
+        content = readFileSync(filePath, 'utf-8');
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+          console.error(chalk.red(`File not found: ${file}`));
+        } else {
+          console.error(chalk.red(`Failed to read file: ${file}`));
+        }
         process.exit(1);
       }
-
-      // Read and parse document
-      const content = readFileSync(filePath, 'utf-8');
       let document: unknown;
 
       try {

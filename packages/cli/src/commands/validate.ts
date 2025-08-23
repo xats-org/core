@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
-import { existsSync, readFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 import chalk from 'chalk';
@@ -24,16 +24,24 @@ export const validateCommand = new Command('validate')
     const spinner = ora('Loading document...').start();
 
     try {
-      // Check if file exists
+      // Read and parse document (this will throw if file doesn't exist)
+      spinner.text = 'Parsing document...';
       const filePath = resolve(file);
-      if (!existsSync(filePath)) {
-        spinner.fail(chalk.red(`File not found: ${file}`));
+      let content: string;
+      
+      try {
+        content = readFileSync(filePath, 'utf-8');
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+          spinner.fail(chalk.red(`File not found: ${file}`));
+        } else {
+          spinner.fail(chalk.red(`Failed to read file: ${file}`));
+        }
+        if (options.verbose) {
+          console.error(error);
+        }
         process.exit(1);
       }
-
-      // Read and parse document
-      spinner.text = 'Parsing document...';
-      const content = readFileSync(filePath, 'utf-8');
       let document: unknown;
 
       try {
