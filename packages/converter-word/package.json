@@ -1,0 +1,64 @@
+{
+  "name": "@xats-org/converter-word",
+  "version": "0.5.0",
+  "description": "Advanced bidirectional Word converter for xats with production workflow support",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "xats",
+    "word",
+    "docx",
+    "converter",
+    "bidirectional",
+    "education",
+    "academic",
+    "publishing"
+  ],
+  "author": "xats contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xats-org/core.git",
+    "directory": "packages/converter-word"
+  },
+  "dependencies": {
+    "@xats-org/types": "workspace:*",
+    "@xats-org/schema": "workspace:*",
+    "@xats-org/validator": "workspace:*",
+    "@xats-org/testing": "workspace:*",
+    "docx": "^8.5.0",
+    "mammoth": "^1.8.0",
+    "jszip": "^3.10.1",
+    "xml-js": "^1.6.11"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5",
+    "@vitest/coverage-v8": "^2.0.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
