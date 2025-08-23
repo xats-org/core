@@ -2,10 +2,7 @@
  * Preview generator for xats documents
  */
 
-import type {
-  PreviewOptions,
-  PreviewResult,
-} from './types.js';
+import type { PreviewOptions, PreviewResult } from './types.js';
 import type { XatsDocument } from '@xats-org/types';
 
 /**
@@ -14,7 +11,7 @@ import type { XatsDocument } from '@xats-org/types';
 export interface PreviewGeneratorOptions {
   /** HTML renderer instance */
   htmlRenderer?: any;
-  
+
   /** Markdown renderer instance */
   markdownRenderer?: any;
 }
@@ -55,13 +52,13 @@ export class PreviewGenerator {
           content = htmlResult.content;
           assets = htmlResult.assets;
           break;
-          
+
         case 'markdown':
           const mdResult = await this.generateMarkdownPreview(document, opts);
           content = mdResult.content;
           assets = mdResult.assets;
           break;
-          
+
         default:
           throw new Error(`Unsupported preview format: ${opts.format}`);
       }
@@ -79,7 +76,9 @@ export class PreviewGenerator {
         format: opts.format,
         assets: [],
         generationTime: performance.now() - startTime,
-        warnings: [`Preview generation failed: ${error instanceof Error ? error.message : String(error)}`],
+        warnings: [
+          `Preview generation failed: ${error instanceof Error ? error.message : String(error)}`,
+        ],
       };
     }
   }
@@ -88,7 +87,7 @@ export class PreviewGenerator {
    * Generate HTML preview
    */
   private async generateHtmlPreview(
-    document: XatsDocument, 
+    document: XatsDocument,
     options: Required<PreviewOptions>
   ): Promise<{ content: string; assets: Array<{ type: string; content: string; name?: string }> }> {
     if (!this.htmlRenderer) {
@@ -303,7 +302,7 @@ tr:nth-child(even) {
     // Theme-specific styles
     switch (theme) {
       case 'dark':
-        return baseStyles + `
+        return `${baseStyles}
 /* Dark theme overrides */
 body {
   background-color: #1a1a1a;
@@ -340,7 +339,7 @@ tr:nth-child(even) {
         `;
 
       case 'high-contrast':
-        return baseStyles + `
+        return `${baseStyles}
 /* High contrast theme */
 body {
   background-color: #ffffff;
@@ -384,7 +383,7 @@ th {
         `;
 
       case 'academic':
-        return baseStyles + `
+        return `${baseStyles}
 /* Academic theme */
 body {
   font-family: 'Times New Roman', Times, serif;

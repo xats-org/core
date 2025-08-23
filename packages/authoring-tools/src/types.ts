@@ -2,12 +2,7 @@
  * Type definitions for the xats authoring tools
  */
 
-import type {
-  XatsDocument,
-  ValidationResult,
-  RenderResult,
-  ParseResult,
-} from '@xats-org/types';
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * Options for the authoring tool
@@ -294,3 +289,79 @@ export interface ErrorSuggestion {
  * Error severity levels
  */
 export type ErrorSeverity = 'error' | 'warning' | 'info' | 'hint';
+
+/**
+ * Renderer error information
+ */
+export interface RendererError {
+  /** Error message */
+  message: string;
+  /** Error type/keyword */
+  type?: string;
+  /** Whether this is a fatal error */
+  fatal?: boolean;
+}
+
+/**
+ * Renderer warning information
+ */
+export interface RendererWarning {
+  /** Warning message */
+  message: string;
+  /** Warning type */
+  type?: string;
+}
+
+/**
+ * Renderer result metadata
+ */
+export interface RendererMetadata {
+  /** Fidelity score for import operations */
+  fidelityScore?: number;
+  /** Additional metadata */
+  [key: string]: unknown;
+}
+
+/**
+ * Enhanced render result with proper typing
+ */
+export interface TypedRenderResult {
+  /** Rendered content */
+  content?: string;
+  /** Parsing/rendering errors */
+  errors?: RendererError[];
+  /** Warnings during processing */
+  warnings?: RendererWarning[];
+  /** Metadata about the operation */
+  metadata?: RendererMetadata;
+}
+
+/**
+ * Enhanced parse result with proper typing
+ */
+export interface TypedParseResult {
+  /** Whether parsing was successful */
+  success: boolean;
+  /** Parsed document */
+  document?: XatsDocument;
+  /** Parsing errors */
+  errors?: RendererError[];
+  /** Warnings during parsing */
+  warnings?: RendererWarning[];
+  /** Unmapped data from source */
+  unmappedData?: unknown[];
+  /** Metadata about the parsing */
+  metadata?: RendererMetadata;
+}
+
+/**
+ * Validation error from validator
+ */
+export interface ValidatorError {
+  /** JSON path where error occurred */
+  path: string;
+  /** Error message */
+  message: string;
+  /** JSON Schema keyword that failed */
+  keyword: string;
+}

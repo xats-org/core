@@ -2,11 +2,7 @@
  * Service for converting technical validation errors into user-friendly messages
  */
 
-import type {
-  UserFriendlyError,
-  ErrorSuggestion,
-  ErrorSeverity,
-} from './types.js';
+import type { UserFriendlyError, ErrorSuggestion, ErrorSeverity } from './types.js';
 import type { ValidationError } from '@xats-org/types';
 
 /**
@@ -15,10 +11,10 @@ import type { ValidationError } from '@xats-org/types';
 export interface ErrorMessagesServiceOptions {
   /** User experience level */
   userLevel: 'beginner' | 'intermediate' | 'advanced';
-  
+
   /** Language for messages */
   language: string;
-  
+
   /** Include suggestions with errors */
   includeSuggestions: boolean;
 }
@@ -62,7 +58,7 @@ export class ErrorMessagesService {
    */
   async generateSuggestions(validationErrors: ValidationError[]): Promise<ErrorSuggestion[]> {
     const suggestions: ErrorSuggestion[] = [];
-    const errorTypes = new Set(validationErrors.map(e => e.keyword));
+    const errorTypes = new Set(validationErrors.map((e) => e.keyword));
 
     // Generate contextual suggestions based on error patterns
     if (errorTypes.has('required')) {
@@ -108,7 +104,7 @@ export class ErrorMessagesService {
   private async convertSingleError(error: ValidationError): Promise<UserFriendlyError> {
     const template = this.errorTemplates.get(error.keyword || 'unknown');
     const severity = this.determineSeverity(error);
-    
+
     let message: string;
     let code: string;
 
@@ -120,8 +116,9 @@ export class ErrorMessagesService {
       code = 'UNKNOWN_ERROR';
     }
 
-    const suggestions = this.options.includeSuggestions ? 
-      await this.generateErrorSuggestions(error) : [];
+    const suggestions = this.options.includeSuggestions
+      ? await this.generateErrorSuggestions(error)
+      : [];
 
     const location = this.extractLocation(error);
     const userError: UserFriendlyError = {
@@ -131,11 +128,11 @@ export class ErrorMessagesService {
       suggestions,
       documentation: this.getDocumentationLinks(error.keyword || 'unknown'),
     };
-    
+
     if (location) {
       userError.location = location;
     }
-    
+
     return userError;
   }
 
@@ -197,7 +194,9 @@ export class ErrorMessagesService {
   /**
    * Extract location information from error
    */
-  private extractLocation(error: ValidationError): { line?: number; column?: number; path?: string } | undefined {
+  private extractLocation(
+    error: ValidationError
+  ): { line?: number; column?: number; path?: string } | undefined {
     if (error.path) {
       return {
         path: error.path,
@@ -211,7 +210,7 @@ export class ErrorMessagesService {
    */
   private getDocumentationLinks(keyword: string): Array<{ title: string; url: string }> {
     const baseUrl = 'https://xats.org/docs/authoring-guide';
-    
+
     const linkMap: Record<string, Array<{ title: string; url: string }>> = {
       required: [
         { title: 'Required Fields Guide', url: `${baseUrl}#required-fields` },
@@ -231,9 +230,7 @@ export class ErrorMessagesService {
       ],
     };
 
-    return linkMap[keyword] || [
-      { title: 'Authoring Guide', url: baseUrl },
-    ];
+    return linkMap[keyword] || [{ title: 'Authoring Guide', url: baseUrl }];
   }
 
   /**
@@ -241,18 +238,20 @@ export class ErrorMessagesService {
    */
   private async generateErrorSuggestions(error: ValidationError): Promise<ErrorSuggestion[]> {
     const generator = this.suggestionGenerators.get(error.keyword || 'unknown');
-    
+
     if (generator) {
       return generator.generateSuggestions(error, this.options.userLevel);
     }
 
     // Generic suggestions
-    return [{
-      description: 'Review the error details and check the documentation',
-      action: 'fix',
-      fix: 'Refer to the xats documentation for guidance',
-      confidence: 0.5,
-    }];
+    return [
+      {
+        description: 'Review the error details and check the documentation',
+        action: 'fix',
+        fix: 'Refer to the xats documentation for guidance',
+        confidence: 0.5,
+      },
+    ];
   }
 
   /**
@@ -285,7 +284,7 @@ class RequiredFieldErrorTemplate extends ErrorTemplate {
 
   getMessage(error: ValidationError, userLevel: string): string {
     const field = (error.params as any)?.missingProperty || 'field';
-    
+
     switch (userLevel) {
       case 'beginner':
         return `You need to include a "${field}" in your document. This is a required field that cannot be left empty.`;
@@ -304,7 +303,7 @@ class TypeMismatchErrorTemplate extends ErrorTemplate {
 
   getMessage(error: ValidationError, userLevel: string): string {
     const expected = (error.params as any)?.type || 'unknown';
-    
+
     switch (userLevel) {
       case 'beginner':
         return `The data type is incorrect. Expected ${expected}, but got something else. Check if you need quotes around text or if numbers should not have quotes.`;
@@ -323,7 +322,7 @@ class FormatErrorTemplate extends ErrorTemplate {
 
   getMessage(error: ValidationError, userLevel: string): string {
     const format = (error.params as any)?.format || 'unknown';
-    
+
     switch (userLevel) {
       case 'beginner':
         return `The format is not correct. This field expects a ${format} format. Check the examples in the documentation.`;
@@ -342,7 +341,7 @@ class EnumErrorTemplate extends ErrorTemplate {
 
   getMessage(error: ValidationError, userLevel: string): string {
     const allowedValues = (error.params as any)?.allowedValues || [];
-    
+
     switch (userLevel) {
       case 'beginner':
         return `The value must be one of these options: ${allowedValues.join(', ')}. Please choose from the list of valid values.`;
@@ -378,7 +377,7 @@ class AdditionalPropertiesErrorTemplate extends ErrorTemplate {
 
   getMessage(error: ValidationError, userLevel: string): string {
     const additionalProperty = (error.params as any)?.additionalProperty || 'property';
-    
+
     switch (userLevel) {
       case 'beginner':
         return `There's an extra field "${additionalProperty}" that shouldn't be there. You might have a typo in the field name.`;
@@ -431,7 +430,7 @@ class ConstantErrorTemplate extends ErrorTemplate {
 
   getMessage(error: ValidationError, userLevel: string): string {
     const expected = (error.params as any)?.allowedValue;
-    
+
     switch (userLevel) {
       case 'beginner':
         return `This field must have the exact value: ${JSON.stringify(expected)}. You cannot change this value.`;
@@ -450,7 +449,7 @@ class MinimumErrorTemplate extends ErrorTemplate {
 
   getMessage(error: ValidationError, userLevel: string): string {
     const limit = (error.params as any)?.limit;
-    
+
     switch (userLevel) {
       case 'beginner':
         return `The number is too small. It must be at least ${limit}.`;
@@ -469,7 +468,7 @@ class MaximumErrorTemplate extends ErrorTemplate {
 
   getMessage(error: ValidationError, userLevel: string): string {
     const limit = (error.params as any)?.limit;
-    
+
     switch (userLevel) {
       case 'beginner':
         return `The number is too large. It must be at most ${limit}.`;
@@ -488,7 +487,7 @@ class MinLengthErrorTemplate extends ErrorTemplate {
 
   getMessage(error: ValidationError, userLevel: string): string {
     const limit = (error.params as any)?.limit;
-    
+
     switch (userLevel) {
       case 'beginner':
         return `The text is too short. It must be at least ${limit} characters long.`;
@@ -507,7 +506,7 @@ class MaxLengthErrorTemplate extends ErrorTemplate {
 
   getMessage(error: ValidationError, userLevel: string): string {
     const limit = (error.params as any)?.limit;
-    
+
     switch (userLevel) {
       case 'beginner':
         return `The text is too long. It must be at most ${limit} characters long.`;

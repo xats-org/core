@@ -3,7 +3,9 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
+
 import { XatsAuthoringTool } from '../authoring-tool.js';
+
 import type { SimplifiedDocument, AuthoringToolOptions } from '../types.js';
 
 describe('XatsAuthoringTool', () => {
@@ -118,10 +120,9 @@ This is some content.
       expect(createResult.success).toBe(true);
       expect(createResult.document).toBeDefined();
 
-      const previewResult = await authoringTool.generatePreview(
-        createResult.document!,
-        { format: 'html' }
-      );
+      const previewResult = await authoringTool.generatePreview(createResult.document!, {
+        format: 'html',
+      });
 
       expect(previewResult.content).toBeDefined();
       expect(previewResult.format).toBe('html');

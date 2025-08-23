@@ -2,32 +2,23 @@
  * Simplified syntax parser for converting markdown-like syntax to xats documents
  */
 
-import { unified } from 'unified';
 import remarkParse from 'remark-parse';
-import remarkStringify from 'remark-stringify';
-import type { Root, Node } from 'mdast';
+import { unified } from 'unified';
 
 import type {
   SimplifiedDocument,
   SimplifiedSyntaxOptions,
   AuthoringResult,
-  SyntaxElement,
-  SyntaxError,
   UserFriendlyError,
 } from './types.js';
-import type { 
-  XatsDocument, 
-  SemanticText, 
-  ContentBlock,
-  Chapter,
-  Section,
-} from '@xats-org/types';
+import type { XatsDocument, SemanticText, ContentBlock, Chapter, Section } from '@xats-org/types';
+import type { Root, Node, Heading, List, Code, Table, Image } from 'mdast';
 
 /**
  * Parser for converting simplified markdown-like syntax to xats documents
  */
 export class SimplifiedSyntaxParser {
-  private processor: any;
+  private processor: ReturnType<typeof unified>;
   private options: Required<SimplifiedSyntaxOptions>;
 
   constructor(options: SimplifiedSyntaxOptions = {}) {
@@ -39,7 +30,7 @@ export class SimplifiedSyntaxParser {
       ...options,
     };
 
-    this.processor = unified().use(remarkParse);
+    this.processor = unified().use(remarkParse) as any;
   }
 
   /**
@@ -51,8 +42,8 @@ export class SimplifiedSyntaxParser {
 
     try {
       // Parse markdown content
-      const mdast = this.processor.parse(simplifiedDoc.content);
-      
+      const mdast = this.processor.parse(simplifiedDoc.content) as Root;
+
       // Convert MDAST to xats structure
       const xatsDocument = await this.convertMdastToXats(mdast, simplifiedDoc);
 
@@ -65,12 +56,14 @@ export class SimplifiedSyntaxParser {
       errors.push({
         message: `Parsing failed: ${error instanceof Error ? error.message : String(error)}`,
         severity: 'error' as const,
-        suggestions: [{
-          description: 'Check your syntax for common markdown errors',
-          action: 'fix',
-          fix: 'Review headings, lists, and code blocks for proper formatting',
-          confidence: 0.6,
-        }],
+        suggestions: [
+          {
+            description: 'Check your syntax for common markdown errors',
+            action: 'fix',
+            fix: 'Review headings, lists, and code blocks for proper formatting',
+            confidence: 0.6,
+          },
+        ],
       });
 
       return {
@@ -84,7 +77,10 @@ export class SimplifiedSyntaxParser {
   /**
    * Convert MDAST to xats document structure
    */
-  private async convertMdastToXats(mdast: Root, simplifiedDoc: SimplifiedDocument): Promise<XatsDocument> {
+  private async convertMdastToXats(
+    mdast: Root,
+    simplifiedDoc: SimplifiedDocument
+  ): Promise<XatsDocument> {
     // Extract document metadata
     const title = simplifiedDoc.title || this.extractTitleFromContent(mdast);
     const author = simplifiedDoc.author || 'Unknown Author';
@@ -132,8 +128,8 @@ export class SimplifiedSyntaxParser {
 
     for (const node of nodes) {
       if (node.type === 'heading') {
-        const heading = node as any;
-        
+        const heading = node as Heading;
+
         if (heading.depth === 1) {
           // Save current chapter if exists
           if (currentChapter) {
@@ -169,7 +165,7 @@ export class SimplifiedSyntaxParser {
           }
 
           // Start new section
-          const sectionTitle = this.convertTextToSemanticText(this.extractTextFromNode(heading));
+          // const sectionTitle = this.convertTextToSemanticText(this.extractTextFromNode(heading));
           // Section will be created when we have content
         } else {
           // Convert heading to content block
@@ -233,7 +229,10 @@ export class SimplifiedSyntaxParser {
   /**
    * Convert markdown node to xats content block
    */
-  private async convertNodeToContentBlock(node: Node, blockId: number): Promise<ContentBlock | null> {
+  private async convertNodeToContentBlock(
+    node: Node,
+    blockId: number
+  ): Promise<ContentBlock | null> {
     const baseBlock = {
       id: `block-${blockId}`,
     };
@@ -249,13 +248,13 @@ export class SimplifiedSyntaxParser {
         };
 
       case 'list':
-        const listNode = node as any;
+        const listNode = node as List;
         return {
           ...baseBlock,
           blockType: 'https://xats.org/vocabularies/blocks/list',
           content: {
             listType: listNode.ordered ? 'ordered' : 'unordered',
-            items: listNode.children.map((item: any) => 
+            items: listNode.children.map((item) =>
               this.convertTextToSemanticText(this.extractTextFromNode(item))
             ),
           },
@@ -271,7 +270,7 @@ export class SimplifiedSyntaxParser {
         };
 
       case 'code':
-        const codeNode = node as any;
+        const codeNode = node as Code;
         return {
           ...baseBlock,
           blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
@@ -282,18 +281,17 @@ export class SimplifiedSyntaxParser {
         };
 
       case 'table':
-        return this.convertTableNode(node as any, baseBlock);
+        return this.convertTableNode(node as Table, baseBlock);
 
       case 'image':
-        const imageNode = node as any;
+        const imageNode = node as Image;
         return {
           ...baseBlock,
           blockType: 'https://xats.org/vocabularies/blocks/figure',
           content: {
             src: imageNode.url || '',
             alt: imageNode.alt || '',
-            caption: imageNode.title ? 
-              this.convertTextToSemanticText(imageNode.title) : undefined,
+            caption: imageNode.title ? this.convertTextToSemanticText(imageNode.title) : undefined,
           },
         };
 
@@ -316,17 +314,17 @@ export class SimplifiedSyntaxParser {
   /**
    * Convert table node to content block
    */
-  private convertTableNode(tableNode: any, baseBlock: any): ContentBlock {
+  private convertTableNode(tableNode: Table, baseBlock: Partial<ContentBlock>): ContentBlock {
     const rows: SemanticText[][] = [];
     let headers: SemanticText[] | undefined;
 
     if (tableNode.children && tableNode.children.length > 0) {
-      tableNode.children.forEach((row: any, index: number) => {
-        if (row.children) {
-          const cells = row.children.map((cell: any) => 
+      tableNode.children.forEach((row, index: number) => {
+        if ('children' in row && row.children) {
+          const cells = row.children.map((cell) =>
             this.convertTextToSemanticText(this.extractTextFromNode(cell))
           );
-          
+
           if (index === 0 && tableNode.align) {
             // First row is header if table has alignment info
             headers = cells;
@@ -350,17 +348,17 @@ export class SimplifiedSyntaxParser {
   /**
    * Extract plain text from any node
    */
-  private extractTextFromNode(node: any): string {
+  private extractTextFromNode(node: Node | string): string {
     if (typeof node === 'string') {
       return node;
     }
 
-    if (node.value) {
+    if ('value' in node && typeof node.value === 'string') {
       return node.value;
     }
 
-    if (node.children && Array.isArray(node.children)) {
-      return node.children.map((child: any) => this.extractTextFromNode(child)).join('');
+    if ('children' in node && Array.isArray(node.children)) {
+      return node.children.map((child) => this.extractTextFromNode(child)).join('');
     }
 
     return '';
@@ -389,59 +387,39 @@ export class SimplifiedSyntaxParser {
     return [
       {
         title: 'Basic Structure',
-        description: 'Use markdown-style headings to organize your content into chapters and sections',
-        examples: [
-          '# Chapter 1: Introduction',
-          '## Section 1.1: Overview',
-          '### Subsection',
-        ],
+        description:
+          'Use markdown-style headings to organize your content into chapters and sections',
+        examples: ['# Chapter 1: Introduction', '## Section 1.1: Overview', '### Subsection'],
         references: ['https://xats.org/docs/authoring-guide#structure'],
       },
       {
         title: 'Text Formatting',
         description: 'Use standard markdown formatting for emphasis and styling',
-        examples: [
-          '*italic text*',
-          '**bold text**',
-          '`inline code`',
-        ],
+        examples: ['*italic text*', '**bold text**', '`inline code`'],
         references: ['https://xats.org/docs/authoring-guide#formatting'],
       },
       {
         title: 'Lists',
         description: 'Create ordered and unordered lists using standard markdown syntax',
-        examples: [
-          '- Bullet point',
-          '1. Numbered item',
-          '   - Nested item',
-        ],
+        examples: ['- Bullet point', '1. Numbered item', '   - Nested item'],
         references: ['https://xats.org/docs/authoring-guide#lists'],
       },
       {
         title: 'Code Blocks',
         description: 'Include code snippets with syntax highlighting',
-        examples: [
-          '```javascript\nconst x = 42;\n```',
-          '```python\nprint("Hello, World!")\n```',
-        ],
+        examples: ['```javascript\nconst x = 42;\n```', '```python\nprint("Hello, World!")\n```'],
         references: ['https://xats.org/docs/authoring-guide#code'],
       },
       {
         title: 'Tables',
         description: 'Create tables using markdown table syntax',
-        examples: [
-          '| Header 1 | Header 2 |',
-          '|----------|----------|',
-          '| Cell 1   | Cell 2   |',
-        ],
+        examples: ['| Header 1 | Header 2 |', '|----------|----------|', '| Cell 1   | Cell 2   |'],
         references: ['https://xats.org/docs/authoring-guide#tables'],
       },
       {
         title: 'Images and Figures',
         description: 'Include images with captions',
-        examples: [
-          '![Alt text](image.jpg "Caption")',
-        ],
+        examples: ['![Alt text](image.jpg "Caption")'],
         references: ['https://xats.org/docs/authoring-guide#figures'],
       },
     ];

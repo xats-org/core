@@ -2,14 +2,14 @@
  * Main authoring tool class that coordinates all authoring functionality
  */
 
-import { XatsValidator } from '@xats-org/validator';
-import { MarkdownRenderer } from '@xats-org/renderer-markdown';
 import { DocxRenderer } from '@xats-org/renderer-docx';
 import { HtmlRenderer } from '@xats-org/renderer-html';
+import { MarkdownRenderer } from '@xats-org/renderer-markdown';
+import { XatsValidator } from '@xats-org/validator';
 
-import { SimplifiedSyntaxParser } from './syntax-parser.js';
 import { ErrorMessagesService } from './error-messages.js';
 import { PreviewGenerator } from './preview-generator.js';
+import { SimplifiedSyntaxParser } from './syntax-parser.js';
 
 import type {
   AuthoringToolOptions,
@@ -20,8 +20,11 @@ import type {
   PreviewOptions,
   PreviewResult,
   SimplifiedDocument,
+  TypedParseResult,
+  TypedRenderResult,
+  ValidatorError,
 } from './types.js';
-import type { XatsDocument } from '@xats-org/types';
+import type { XatsDocument, ValidationResult } from '@xats-org/types';
 
 /**
  * Enhanced authoring tool for creating xats documents
@@ -79,7 +82,7 @@ export class XatsAuthoringTool {
     try {
       // Parse simplified syntax to xats document
       const parseResult = await this.syntaxParser.parse(simplifiedDoc);
-      
+
       if (!parseResult.success || !parseResult.document) {
         return {
           success: false,
@@ -103,25 +106,29 @@ export class XatsAuthoringTool {
         document,
         processingTime,
       };
-      
+
       if (validation) {
         result.validation = validation;
       }
-      
+
       return result;
     } catch (error) {
       return {
         success: false,
-        errors: [{
-          message: `Failed to create document: ${error instanceof Error ? error.message : String(error)}`,
-          severity: 'error' as const,
-          suggestions: [{
-            description: 'Check your syntax and try again',
-            action: 'fix',
-            fix: 'Verify that your content follows the expected format',
-            confidence: 0.7,
-          }],
-        }],
+        errors: [
+          {
+            message: `Failed to create document: ${error instanceof Error ? error.message : String(error)}`,
+            severity: 'error' as const,
+            suggestions: [
+              {
+                description: 'Check your syntax and try again',
+                action: 'fix',
+                fix: 'Verify that your content follows the expected format',
+                confidence: 0.7,
+              },
+            ],
+          },
+        ],
         processingTime: performance.now() - startTime,
       };
     }
@@ -134,17 +141,22 @@ export class XatsAuthoringTool {
     const startTime = performance.now();
 
     try {
-      const parseResult = await this.docxRenderer.parse(docxContent);
-      
+      const parseResult = (await this.docxRenderer.parse(
+        docxContent
+      )) as unknown as TypedParseResult;
+
       const result: ImportResult = {
         success: !parseResult.errors || parseResult.errors.length === 0,
-        document: parseResult.document,
         sourceFormat: 'docx',
-        warnings: parseResult.warnings?.map((w: any) => w.message) || [],
-        unmappedElements: parseResult.unmappedData?.map((d: any) => String(d)) || [],
+        warnings: parseResult.warnings?.map((w) => w.message) || [],
+        unmappedElements: parseResult.unmappedData?.map((d) => String(d)) || [],
         processingTime: performance.now() - startTime,
       };
-      
+
+      if (parseResult.document) {
+        result.document = parseResult.document;
+      }
+
       if (parseResult.metadata?.fidelityScore !== undefined) {
         result.fidelityScore = parseResult.metadata.fidelityScore;
       }
@@ -157,11 +169,14 @@ export class XatsAuthoringTool {
       // Convert parse errors to user-friendly format
       if (parseResult.errors && parseResult.errors.length > 0) {
         result.errors = await this.errorMessagesService.convertValidationErrors(
-          parseResult.errors.map((e: any) => ({
-            path: 'import',
-            message: e.message,
-            keyword: e.type,
-          }))
+          parseResult.errors.map(
+            (e) =>
+              ({
+                path: 'import',
+                message: e.message,
+                keyword: e.type || 'unknown',
+              }) as ValidatorError
+          )
         );
       }
 
@@ -170,16 +185,20 @@ export class XatsAuthoringTool {
       return {
         success: false,
         sourceFormat: 'docx',
-        errors: [{
-          message: `Import failed: ${error instanceof Error ? error.message : String(error)}`,
-          severity: 'error' as const,
-          suggestions: [{
-            description: 'Verify that the file is a valid DOCX document',
-            action: 'fix',
-            fix: 'Check file format and try again',
-            confidence: 0.8,
-          }],
-        }],
+        errors: [
+          {
+            message: `Import failed: ${error instanceof Error ? error.message : String(error)}`,
+            severity: 'error' as const,
+            suggestions: [
+              {
+                description: 'Verify that the file is a valid DOCX document',
+                action: 'fix',
+                fix: 'Check file format and try again',
+                confidence: 0.8,
+              },
+            ],
+          },
+        ],
         processingTime: performance.now() - startTime,
       };
     }
@@ -192,17 +211,22 @@ export class XatsAuthoringTool {
     const startTime = performance.now();
 
     try {
-      const parseResult = await this.markdownRenderer.parse(markdownContent);
-      
+      const parseResult = (await this.markdownRenderer.parse(
+        markdownContent
+      )) as unknown as TypedParseResult;
+
       const result: ImportResult = {
         success: !parseResult.errors || parseResult.errors.length === 0,
-        document: parseResult.document,
         sourceFormat: 'markdown',
-        warnings: parseResult.warnings?.map((w: any) => w.message) || [],
-        unmappedElements: parseResult.unmappedData?.map((d: any) => String(d)) || [],
+        warnings: parseResult.warnings?.map((w) => w.message) || [],
+        unmappedElements: parseResult.unmappedData?.map((d) => String(d)) || [],
         processingTime: performance.now() - startTime,
       };
-      
+
+      if (parseResult.document) {
+        result.document = parseResult.document;
+      }
+
       if (parseResult.metadata?.fidelityScore !== undefined) {
         result.fidelityScore = parseResult.metadata.fidelityScore;
       }
@@ -215,11 +239,14 @@ export class XatsAuthoringTool {
       // Convert parse errors to user-friendly format
       if (parseResult.errors && parseResult.errors.length > 0) {
         result.errors = await this.errorMessagesService.convertValidationErrors(
-          parseResult.errors.map((e: any) => ({
-            path: 'import',
-            message: e.message,
-            keyword: e.type,
-          }))
+          parseResult.errors.map(
+            (e) =>
+              ({
+                path: 'import',
+                message: e.message,
+                keyword: e.type || 'unknown',
+              }) as ValidatorError
+          )
         );
       }
 
@@ -228,16 +255,20 @@ export class XatsAuthoringTool {
       return {
         success: false,
         sourceFormat: 'markdown',
-        errors: [{
-          message: `Import failed: ${error instanceof Error ? error.message : String(error)}`,
-          severity: 'error' as const,
-          suggestions: [{
-            description: 'Verify that the content is valid Markdown',
-            action: 'fix',
-            fix: 'Check Markdown syntax and try again',
-            confidence: 0.8,
-          }],
-        }],
+        errors: [
+          {
+            message: `Import failed: ${error instanceof Error ? error.message : String(error)}`,
+            severity: 'error' as const,
+            suggestions: [
+              {
+                description: 'Verify that the content is valid Markdown',
+                action: 'fix',
+                fix: 'Check Markdown syntax and try again',
+                confidence: 0.8,
+              },
+            ],
+          },
+        ],
         processingTime: performance.now() - startTime,
       };
     }
@@ -246,25 +277,26 @@ export class XatsAuthoringTool {
   /**
    * Export a document to the specified format
    */
-  async exportDocument(document: XatsDocument, format: 'docx' | 'markdown' | 'html'): Promise<ExportResult> {
+  async exportDocument(
+    document: XatsDocument,
+    format: 'docx' | 'markdown' | 'html'
+  ): Promise<ExportResult> {
     const startTime = performance.now();
 
     try {
-      let renderResult;
-      let renderer;
+      let renderResult: TypedRenderResult;
 
       switch (format) {
         case 'docx':
-          renderer = this.docxRenderer;
-          renderResult = await renderer.render(document);
+          renderResult = (await this.docxRenderer.render(document)) as unknown as TypedRenderResult;
           break;
         case 'markdown':
-          renderer = this.markdownRenderer;
-          renderResult = await renderer.render(document);
+          renderResult = (await this.markdownRenderer.render(
+            document
+          )) as unknown as TypedRenderResult;
           break;
         case 'html':
-          renderer = this.htmlRenderer;
-          renderResult = await renderer.render(document);
+          renderResult = (await this.htmlRenderer.render(document)) as unknown as TypedRenderResult;
           break;
         default:
           throw new Error(`Unsupported export format: ${format}`);
@@ -272,21 +304,27 @@ export class XatsAuthoringTool {
 
       const result: ExportResult = {
         success: !renderResult.errors || renderResult.errors.length === 0,
-        content: renderResult.content,
         format,
-        warnings: renderResult.errors?.filter((e: any) => !e.fatal).map((e: any) => e.message) || [],
+        warnings: renderResult.errors?.filter((e) => !e.fatal).map((e) => e.message) || [],
         processingTime: performance.now() - startTime,
       };
 
+      if (renderResult.content) {
+        result.content = renderResult.content;
+      }
+
       // Convert render errors to user-friendly format
-      const fatalErrors = renderResult.errors?.filter((e: any) => e.fatal) || [];
+      const fatalErrors = renderResult.errors?.filter((e) => e.fatal) || [];
       if (fatalErrors.length > 0) {
         result.errors = await this.errorMessagesService.convertValidationErrors(
-          fatalErrors.map((e: any) => ({
-            path: 'export',
-            message: e.message,
-            keyword: e.type,
-          }))
+          fatalErrors.map(
+            (e) =>
+              ({
+                path: 'export',
+                message: e.message,
+                keyword: e.type || 'unknown',
+              }) as ValidatorError
+          )
         );
       }
 
@@ -295,16 +333,20 @@ export class XatsAuthoringTool {
       return {
         success: false,
         format,
-        errors: [{
-          message: `Export failed: ${error instanceof Error ? error.message : String(error)}`,
-          severity: 'error' as const,
-          suggestions: [{
-            description: 'Check document structure and try again',
-            action: 'fix',
-            fix: 'Verify that the document is valid before exporting',
-            confidence: 0.7,
-          }],
-        }],
+        errors: [
+          {
+            message: `Export failed: ${error instanceof Error ? error.message : String(error)}`,
+            severity: 'error' as const,
+            suggestions: [
+              {
+                description: 'Check document structure and try again',
+                action: 'fix',
+                fix: 'Verify that the document is valid before exporting',
+                confidence: 0.7,
+              },
+            ],
+          },
+        ],
         processingTime: performance.now() - startTime,
       };
     }
@@ -322,7 +364,7 @@ export class XatsAuthoringTool {
    */
   async validateDocument(document: XatsDocument): Promise<ValidationFeedback> {
     const validationResult = await this.validator.validate(document);
-    
+
     const feedback: ValidationFeedback = {
       isValid: validationResult.isValid,
       errors: await this.errorMessagesService.convertValidationErrors(
@@ -331,11 +373,11 @@ export class XatsAuthoringTool {
       suggestions: await this.errorMessagesService.generateSuggestions(validationResult.errors),
       qualityScore: this.calculateQualityScore(validationResult),
     };
-    
+
     if (validationResult.schemaVersion) {
       feedback.schemaVersion = validationResult.schemaVersion;
     }
-    
+
     return feedback;
   }
 
@@ -356,9 +398,13 @@ export class XatsAuthoringTool {
    */
   updateOptions(newOptions: Partial<AuthoringToolOptions>): void {
     this.options = { ...this.options, ...newOptions };
-    
+
     // Update error messages service if relevant options changed
-    if (newOptions.userLevel || newOptions.language || newOptions.includeSuggestions !== undefined) {
+    if (
+      newOptions.userLevel ||
+      newOptions.language ||
+      newOptions.includeSuggestions !== undefined
+    ) {
       this.errorMessagesService.updateOptions({
         userLevel: this.options.userLevel,
         language: this.options.language,
@@ -370,12 +416,12 @@ export class XatsAuthoringTool {
   /**
    * Calculate quality score based on validation results
    */
-  private calculateQualityScore(validationResult: any): number {
+  private calculateQualityScore(validationResult: ValidationResult): number {
     if (validationResult.isValid) {
       return 100;
     }
 
-    const errorCount = validationResult.errors.length;
+    // const errorCount = validationResult.errors.length;
     const severityWeights = {
       required: 10,
       type: 8,
@@ -385,7 +431,7 @@ export class XatsAuthoringTool {
     };
 
     let totalDeduction = 0;
-    validationResult.errors.forEach((error: any) => {
+    validationResult.errors.forEach((error) => {
       const weight = severityWeights[error.keyword as keyof typeof severityWeights] || 3;
       totalDeduction += weight;
     });
