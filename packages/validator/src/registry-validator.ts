@@ -160,10 +160,8 @@ export class RegistryValidator {
       );
     }
 
-    // Validate package name format
-    if (
-      !/^[a-z0-9]([a-z0-9_-]*[a-z0-9])?([/][a-z0-9]([a-z0-9_-]*[a-z0-9])?)*$/.test(parsed.package)
-    ) {
+    // Validate package name format - using a more efficient regex to prevent ReDoS
+    if (!isValidPackageName(parsed.package)) {
       errors.push('Package name must follow reverse domain notation (e.g., org/package)');
     }
 
@@ -832,6 +830,54 @@ export class DependencyResolver {
 
     return 0;
   }
+}
+
+/**
+ * Validate package name format safely without ReDoS vulnerability
+ * Package names follow reverse domain notation: org/package, org/sub/package
+ */
+function isValidPackageName(packageName: string): boolean {
+  // Basic checks first
+  if (!packageName || packageName.length === 0 || packageName.length > 200) {
+    return false;
+  }
+
+  // Split by slash and validate each segment
+  const segments = packageName.split('/');
+  if (segments.length < 1 || segments.length > 10) {
+    return false;
+  }
+
+  // Validate each segment individually
+  for (const segment of segments) {
+    if (!isValidPackageSegment(segment)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Validate a single package name segment
+ */
+function isValidPackageSegment(segment: string): boolean {
+  // Must not be empty and not too long
+  if (!segment || segment.length === 0 || segment.length > 50) {
+    return false;
+  }
+
+  // Must start and end with alphanumeric
+  if (!/^[a-z0-9]/.test(segment) || !/[a-z0-9]$/.test(segment)) {
+    return false;
+  }
+
+  // Only allow letters, numbers, underscores, hyphens
+  if (!/^[a-z0-9_-]+$/.test(segment)) {
+    return false;
+  }
+
+  return true;
 }
 
 // Export instances for convenience
