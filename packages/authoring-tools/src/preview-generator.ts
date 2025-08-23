@@ -109,7 +109,7 @@ export class PreviewGenerator {
       sanitize: true,
     });
 
-    if (renderResult.errors && renderResult.errors.length > 0) {
+    if (renderResult.errors && renderResult.errors.length > 0 && renderResult.errors[0]) {
       throw new Error(`HTML rendering failed: ${renderResult.errors[0].message}`);
     }
 
@@ -148,7 +148,7 @@ export class PreviewGenerator {
       }>
     }).render(document);
 
-    if (renderResult.errors && renderResult.errors.length > 0) {
+    if (renderResult.errors && renderResult.errors.length > 0 && renderResult.errors[0]) {
       throw new Error(`Markdown rendering failed: ${renderResult.errors[0].message}`);
     }
 
