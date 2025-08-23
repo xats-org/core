@@ -877,13 +877,20 @@ export interface StreamingLoader {
   /** Get current loading progress (0-1) */
   getProgress(): number;
   /** Subscribe to loading events */
-  on(event: LoadingEvent, callback: (data: any) => void): void;
+  on(event: LoadingEvent, callback: (data: unknown) => void): void;
 }
 
 /**
  * Loading events
  */
-export type LoadingEvent = 'start' | 'progress' | 'chunk' | 'complete' | 'error' | 'pause' | 'resume';
+export type LoadingEvent =
+  | 'start'
+  | 'progress'
+  | 'chunk'
+  | 'complete'
+  | 'error'
+  | 'pause'
+  | 'resume';
 
 /**
  * Streaming chunk
