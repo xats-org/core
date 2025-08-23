@@ -47,20 +47,22 @@ export class PreviewGenerator {
       let assets: Array<{ type: string; content: string; name?: string }> = [];
 
       switch (opts.format) {
-        case 'html':
+        case 'html': {
           const htmlResult = await this.generateHtmlPreview(document, opts);
           content = htmlResult.content;
           assets = htmlResult.assets;
           break;
+        }
 
-        case 'markdown':
+        case 'markdown': {
           const mdResult = await this.generateMarkdownPreview(document, opts);
           content = mdResult.content;
           assets = mdResult.assets;
           break;
+        }
 
         default:
-          throw new Error(`Unsupported preview format: ${opts.format}`);
+          throw new Error(`Unsupported preview format: ${opts.format as string}`);
       }
 
       return {
@@ -94,12 +96,17 @@ export class PreviewGenerator {
       throw new Error('HTML renderer not available');
     }
 
-    const renderResult = await (this.htmlRenderer as { 
-      render: (doc: XatsDocument, opts: Record<string, unknown>) => Promise<{
-        content: string;
-        errors?: Array<{ message: string }>;
-      }>
-    }).render(document, {
+    const renderResult = await (
+      this.htmlRenderer as {
+        render: (
+          doc: XatsDocument,
+          opts: Record<string, unknown>
+        ) => Promise<{
+          content: string;
+          errors?: Array<{ message: string }>;
+        }>;
+      }
+    ).render(document, {
       wrapInDocument: true,
       includeStyles: options.includeStyles,
       theme: options.theme,
@@ -135,18 +142,20 @@ export class PreviewGenerator {
    */
   private async generateMarkdownPreview(
     document: XatsDocument,
-    options: Required<PreviewOptions>
+    _options: Required<PreviewOptions>
   ): Promise<{ content: string; assets: Array<{ type: string; content: string; name?: string }> }> {
     if (!this.markdownRenderer) {
       throw new Error('Markdown renderer not available');
     }
 
-    const renderResult = await (this.markdownRenderer as { 
-      render: (doc: XatsDocument) => Promise<{
-        content: string;
-        errors?: Array<{ message: string }>;
-      }>
-    }).render(document);
+    const renderResult = await (
+      this.markdownRenderer as {
+        render: (doc: XatsDocument) => Promise<{
+          content: string;
+          errors?: Array<{ message: string }>;
+        }>;
+      }
+    ).render(document);
 
     if (renderResult.errors && renderResult.errors.length > 0 && renderResult.errors[0]) {
       throw new Error(`Markdown rendering failed: ${renderResult.errors[0].message}`);

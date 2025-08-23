@@ -46,7 +46,7 @@ export class ErrorMessagesService {
     const userFriendlyErrors: UserFriendlyError[] = [];
 
     for (const error of validationErrors) {
-      const userFriendlyError = await this.convertSingleError(error);
+      const userFriendlyError = this.convertSingleError(error);
       userFriendlyErrors.push(userFriendlyError);
     }
 
