@@ -1,0 +1,77 @@
+{
+  "name": "@xats-org/authoring-tools",
+  "version": "0.5.0",
+  "description": "Enhanced authoring tools for creating xats documents with simplified syntax and import/export capabilities",
+  "keywords": [
+    "xats",
+    "authoring",
+    "markdown",
+    "docx",
+    "educational-content",
+    "converter",
+    "validation",
+    "preview"
+  ],
+  "homepage": "https://xats.org",
+  "bugs": {
+    "url": "https://github.com/xats-org/core/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xats-org/core.git",
+    "directory": "packages/authoring-tools"
+  },
+  "license": "CC-BY-SA-4.0",
+  "author": "xats Contributors",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist .tsbuildinfo",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@xats-org/renderer-docx": "workspace:*",
+    "@xats-org/renderer-html": "workspace:*",
+    "@xats-org/renderer-markdown": "workspace:*",
+    "@xats-org/types": "workspace:*",
+    "@xats-org/utils": "workspace:*",
+    "@xats-org/validator": "workspace:*",
+    "mdast-util-from-markdown": "^2.0.0",
+    "mdast-util-to-markdown": "^2.0.0",
+    "remark": "^15.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-stringify": "^11.0.0",
+    "unified": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/mdast": "^4.0.4",
+    "@types/node": "^20.11.0",
+    "@vitest/coverage-v8": "^1.2.0",
+    "@xats-org/eslint-config": "workspace:*",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
