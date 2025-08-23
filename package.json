@@ -99,7 +99,8 @@
   "packageManager": "pnpm@10.15.0",
   "pnpm": {
     "overrides": {
-      "@types/minimatch": "5.1.2"
+      "@types/minimatch": "5.1.2",
+      "esbuild": ">=0.25.0"
     }
   }
 }
