@@ -312,12 +312,12 @@ export class LaTeXParser {
     // Extract sections and content from LaTeX
     const content = parsed.content || '';
     
-    // Extract the first section title as the unit title
-    const firstSection = this.extractFirstSection(content);
-    const unitTitle = firstSection?.title || 'Document';
+    // Extract sections from the content
+    const sections = this.extractSections(content);
+    const unitTitle = sections[0]?.title || 'Document';
     
-    // Extract paragraph content from the document body
-    const paragraphContent = this.extractParagraphContent(content);
+    // Extract paragraph content from the document body (get first section content or full content)
+    const paragraphContent = sections[0]?.content || content.replace(/\\[a-zA-Z]+\{[^}]*\}/g, '').trim();
     
     // Create a unit that matches the expected structure
     const unit: Unit = {
