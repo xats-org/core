@@ -109,7 +109,7 @@ export class RegistryValidator {
   parseRegistryReference(reference: string): RegistryReference | null {
     // Expected format: xats://registry-name/package-name[@version][/path]
     // Package name can include namespaces with forward slashes
-    const match = reference.match(/^xats:\/\/([^\/]+)\/([^@]+?)(?:@([^\/]+))?(?:\/(.+))?$/);
+    const match = reference.match(/^xats:\/\/([^\/]+)\/([^@\/]+(?:\/[^@\/]+)*)(?:@([^\/]+))?(?:\/(.+))?$/);
     
     if (!match) {
       return null;
@@ -194,13 +194,13 @@ export class RegistryValidator {
     }
 
     const pattern = algorithm === 'sha256' ? 
-      /^sha256-[A-Za-z0-9+\/]+=*$/ : 
+      /^sha256-[A-Za-z0-9]{64}$/ : 
       algorithm === 'sha384' ?
-      /^sha384-[A-Za-z0-9+\/]+=*$/ :
-      /^sha512-[A-Za-z0-9+\/]+=*$/;
+      /^sha384-[A-Za-z0-9]{96}$/ :
+      /^sha512-[A-Za-z0-9]{128}$/;
 
     if (!pattern.test(hash)) {
-      errors.push(`Integrity hash must be ${algorithm} format: ${algorithm}-<base64-hash>`);
+      errors.push(`Integrity hash must be ${algorithm} format: ${algorithm}-<hex-hash>`);
     }
 
     return { valid: errors.length === 0, errors };
@@ -636,7 +636,7 @@ export class DependencyResolver {
         
         if (resolvedVersion) {
           // Recursively resolve dependencies
-          const depResult = await this.resolveDependencies(depName, resolvedVersion, registries, new Set(visited));
+          const depResult = await this.resolveDependencies(depName, resolvedVersion, registries, visited);
           
           errors.push(...depResult.errors);
           conflicts.push(...depResult.conflicts);
@@ -705,8 +705,16 @@ export class DependencyResolver {
     if (constraint.startsWith('^')) {
       // Compatible within same major version
       const targetVersion = constraint.slice(1);
-      const [major] = targetVersion.split('.');
-      return sortedVersions.find(v => v.startsWith(`${major}.`)) || null;
+      const [targetMajor, targetMinor = 0, targetPatch = 0] = targetVersion.split('.').map(Number);
+      
+      // Find all compatible versions (same major, and >= minor.patch)
+      const compatibleVersions = sortedVersions.filter(v => {
+        const [major, minor = 0, patch = 0] = v.split('.').map(Number);
+        return major === targetMajor && 
+               (minor > targetMinor || (minor === targetMinor && patch >= targetPatch));
+      });
+      
+      return compatibleVersions[0] || null;
     } else if (constraint.startsWith('~')) {
       // Compatible within same major.minor version
       const targetVersion = constraint.slice(1);

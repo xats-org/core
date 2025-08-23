@@ -581,8 +581,8 @@ describe('DependencyResolver', () => {
 
     it('should detect circular dependencies', async () => {
       // Add circular dependency
-      if (mockRegistries[0]?.packages['package-b']?.versions['1.0.0']) {
-        mockRegistries[0].packages['package-b'].versions['1.0.0'].dependencies = {
+      if (mockRegistries[0]?.packages['package-b']?.versions['1.1.0']) {
+        mockRegistries[0].packages['package-b'].versions['1.1.0'].dependencies = {
           'package-a': '^1.0.0',
         };
       }
