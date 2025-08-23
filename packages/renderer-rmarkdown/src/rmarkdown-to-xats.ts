@@ -127,7 +127,7 @@ export class RMarkdownToXatsParser {
     // Process chunks in reverse order to maintain position validity
     const chunkPlaceholders = new Map<string, ReturnType<typeof extractCodeChunks>[0]>();
     const sortedChunks = chunks.sort((a, b) => b.start - a.start); // Sort by start position descending
-    
+
     sortedChunks.forEach((chunk, index) => {
       const placeholder = `__CHUNK_${chunks.length - 1 - index}__`; // Maintain original indexing
       chunkPlaceholders.set(placeholder, chunk);
@@ -161,7 +161,10 @@ export class RMarkdownToXatsParser {
   /**
    * Parse markdown into hierarchical sections
    */
-  private parseMarkdownSections(content: string, chunkPlaceholders?: Map<string, ReturnType<typeof extractCodeChunks>[0]>): Array<Unit | Chapter> {
+  private parseMarkdownSections(
+    content: string,
+    chunkPlaceholders?: Map<string, ReturnType<typeof extractCodeChunks>[0]>
+  ): Array<Unit | Chapter> {
     const lines = content.split('\n');
     const structure: Array<Unit | Chapter> = [];
     let currentChapter: Chapter | null = null;
@@ -251,7 +254,10 @@ export class RMarkdownToXatsParser {
   /**
    * Parse content blocks from markdown text
    */
-  private parseContentBlocks(content: string, chunkPlaceholders?: Map<string, ReturnType<typeof extractCodeChunks>[0]>): ContentBlock[] {
+  private parseContentBlocks(
+    content: string,
+    chunkPlaceholders?: Map<string, ReturnType<typeof extractCodeChunks>[0]>
+  ): ContentBlock[] {
     if (!content.trim()) return [];
 
     const blocks: ContentBlock[] = [];
@@ -271,10 +277,10 @@ export class RMarkdownToXatsParser {
               blocks.push(...this.parseTextContent(currentBlock.join('\n')));
               currentBlock = [];
             }
-            
+
             // Add the chunk block
             blocks.push(this.createChunkBlock(chunk));
-            
+
             // Continue with any remaining content on the same line
             const remainingText = line.replace(placeholder, '').trim();
             if (remainingText) {
@@ -284,7 +290,7 @@ export class RMarkdownToXatsParser {
           }
         }
       }
-      
+
       // Code block detection
       if (line.match(/^```/)) {
         if (inCodeBlock) {

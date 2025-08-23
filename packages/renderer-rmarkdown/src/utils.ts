@@ -153,7 +153,7 @@ export function serializeChunkOptions(
   options: RChunkOptions = {}
 ): string {
   const parts: string[] = [];
-  
+
   // Engine and label go together
   if (label) {
     parts.push(`${engine} ${label}`);
@@ -329,12 +329,12 @@ function serializeYamlValue(value: unknown): string {
 
   // String values - quote only when necessary (more YAML-like)
   const str = String(value);
-  
+
   // Special case for bookdown/rmarkdown output formats - don't quote these
   if (str.startsWith('bookdown::') || str.startsWith('rmarkdown::')) {
     return str;
   }
-  
+
   // Quote if the string contains special characters, spaces, or looks like other types
   if (
     str.includes(' ') ||
@@ -494,8 +494,10 @@ export function validateRMarkdown(content: string): RMarkdownValidationError[] {
       context.chunkLabels.add(options.label);
     }
 
-    // Validate chunk options
-    for (const [key, value] of Object.entries(options.options)) {
+    // Validate chunk options (filter out label and engine as they're not chunk options)
+    const actualOptions = options.options || options;
+    for (const [key, value] of Object.entries(actualOptions)) {
+      if (key === 'label' || key === 'engine') continue; // Skip label and engine as they're handled separately
       if (!validateChunkOption(key, value)) {
         const error: RMarkdownValidationError = {
           type: 'invalid-option',
@@ -599,7 +601,7 @@ export function normalizeChunkOptions(
     include: true,
     results: 'markup',
   };
-  
+
   return {
     ...baseDefaults,
     ...defaults,

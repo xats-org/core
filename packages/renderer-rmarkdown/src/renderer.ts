@@ -99,7 +99,7 @@ export class RMarkdownRenderer
         };
       }
 
-      const renderTime = Date.now();
+      const renderTime = Date.now() - startTime;
 
       // Parse back to xats
       const parseResult = await this.parse(renderResult.content, options);
@@ -111,8 +111,8 @@ export class RMarkdownRenderer
           roundTrip: parseResult.document,
           differences: [],
           metrics: {
-            renderTime: renderTime - startTime,
-            parseTime: Date.now() - renderTime,
+            renderTime: renderTime,
+            parseTime: Date.now() - startTime - renderTime,
             totalTime: Date.now() - startTime,
             documentSize: JSON.stringify(document).length,
             outputSize: renderResult.content.length,
@@ -134,8 +134,8 @@ export class RMarkdownRenderer
         roundTrip: parseResult.document,
         differences,
         metrics: {
-          renderTime: renderTime - startTime,
-          parseTime: totalTime - (renderTime - startTime),
+          renderTime: renderTime,
+          parseTime: totalTime - renderTime,
           totalTime,
           documentSize: JSON.stringify(document).length,
           outputSize: renderResult.content.length,
