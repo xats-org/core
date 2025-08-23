@@ -21,8 +21,8 @@ export function parseChunkHeader(header: string): {
   label?: string;
   options: RChunkOptions;
 } {
-  // Remove the opening and closing braces
-  const content = header.replace(/^```?\{|\}$/, '').trim();
+  // Remove the opening and closing braces (and optional backticks)
+  const content = header.replace(/^`*\{|\}`*$/g, '').trim();
 
   // First separate engine and label from options
   const spaceIndex = content.search(/[,\s]/);
@@ -330,6 +330,11 @@ function serializeYamlValue(value: unknown): string {
   // String values - quote only when necessary (more YAML-like)
   const str = String(value);
   
+  // Special case for bookdown/rmarkdown output formats - don't quote these
+  if (str.startsWith('bookdown::') || str.startsWith('rmarkdown::')) {
+    return str;
+  }
+  
   // Quote if the string contains special characters, spaces, or looks like other types
   if (
     str.includes(' ') ||
@@ -547,7 +552,7 @@ function validateChunkOption(key: string, value: unknown): boolean {
   };
 
   const validator = validOptions[key];
-  return validator ? validator(value) : true; // Allow unknown options
+  return validator ? validator(value) : false; // Reject unknown options
 }
 
 /**

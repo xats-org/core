@@ -177,7 +177,7 @@ export class RMarkdownToXatsParser {
       if (headingMatch) {
         // Process accumulated content
         if (contentBuffer.length > 0) {
-          const blocks = this.parseContentBlocks(contentBuffer.join('\n'));
+          const blocks = this.parseContentBlocks(contentBuffer.join('\n'), chunkPlaceholders);
 
           if (currentSection) {
             currentSection.contents.push(...blocks);
@@ -222,7 +222,7 @@ export class RMarkdownToXatsParser {
 
     // Process remaining content
     if (contentBuffer.length > 0) {
-      const blocks = this.parseContentBlocks(contentBuffer.join('\n'));
+      const blocks = this.parseContentBlocks(contentBuffer.join('\n'), chunkPlaceholders);
 
       if (currentSection) {
         currentSection.contents.push(...blocks);

@@ -175,7 +175,7 @@ keywords: ["R", "statistics", "analysis"]
 
       expect(result).toContain('---');
       expect(result).toContain('title: "Test Document"');
-      expect(result).toContain('author: John Doe');
+      expect(result).toContain('author: "John Doe"');
       expect(result).toContain('toc: true');
     });
 
