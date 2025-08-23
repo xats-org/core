@@ -18,7 +18,7 @@ export const infoCommand = new Command('info')
       // Read and parse document (this will throw if file doesn't exist)
       const filePath = resolve(file);
       let content: string;
-      
+
       try {
         content = readFileSync(filePath, 'utf-8');
       } catch (error) {

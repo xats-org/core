@@ -22,7 +22,7 @@ export const formatCommand = new Command('format')
       spinner.text = 'Parsing document...';
       const filePath = resolve(file);
       let content: string;
-      
+
       try {
         content = readFileSync(filePath, 'utf-8');
       } catch (error) {

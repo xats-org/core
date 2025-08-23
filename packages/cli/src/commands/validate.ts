@@ -28,7 +28,7 @@ export const validateCommand = new Command('validate')
       spinner.text = 'Parsing document...';
       const filePath = resolve(file);
       let content: string;
-      
+
       try {
         content = readFileSync(filePath, 'utf-8');
       } catch (error) {

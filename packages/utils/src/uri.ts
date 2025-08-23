@@ -21,12 +21,12 @@ export function isValidUri(uri: string): boolean {
  */
 export function isXatsCoreUri(uri: string): boolean {
   if (!isValidXatsUri(uri)) return false;
-  
+
   try {
     const url = new URL(uri);
-    return url.hostname === 'xats.org' && 
-           url.protocol === 'https:' &&
-           url.pathname.startsWith('/core/');
+    return (
+      url.hostname === 'xats.org' && url.protocol === 'https:' && url.pathname.startsWith('/core/')
+    );
   } catch {
     return false;
   }
@@ -37,12 +37,14 @@ export function isXatsCoreUri(uri: string): boolean {
  */
 export function isExtensionUri(uri: string): boolean {
   if (!isValidXatsUri(uri)) return false;
-  
+
   try {
     const url = new URL(uri);
-    return url.hostname === 'xats.org' && 
-           url.protocol === 'https:' &&
-           url.pathname.startsWith('/extensions/');
+    return (
+      url.hostname === 'xats.org' &&
+      url.protocol === 'https:' &&
+      url.pathname.startsWith('/extensions/')
+    );
   } catch {
     return false;
   }
@@ -84,13 +86,11 @@ export function extractVocabularyType(uri: string): string | null {
  */
 function isValidXatsUri(uri: string): boolean {
   if (!isValidUri(uri)) return false;
-  
+
   try {
     const url = new URL(uri);
     // Strict hostname check - must be exactly xats.org
-    return url.hostname === 'xats.org' && 
-           url.protocol === 'https:' &&
-           url.pathname.startsWith('/');
+    return url.hostname === 'xats.org' && url.protocol === 'https:' && url.pathname.startsWith('/');
   } catch {
     return false;
   }

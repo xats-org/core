@@ -21,7 +21,7 @@ export const statsCommand = new Command('stats')
       // Read and parse document (this will throw if file doesn't exist)
       const filePath = resolve(file);
       let content: string;
-      
+
       try {
         content = readFileSync(filePath, 'utf-8');
       } catch (error) {
