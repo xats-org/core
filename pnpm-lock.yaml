@@ -157,6 +157,64 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/debug@4.1.12)(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@23.2.0)(tsx@4.20.4)
 
+  packages/authoring-tools:
+    dependencies:
+      '@xats-org/renderer-docx':
+        specifier: workspace:*
+        version: link:../renderer-docx
+      '@xats-org/renderer-html':
+        specifier: workspace:*
+        version: link:../renderer-html
+      '@xats-org/renderer-markdown':
+        specifier: workspace:*
+        version: link:../renderer-markdown
+      '@xats-org/types':
+        specifier: workspace:*
+        version: link:../types
+      '@xats-org/utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@xats-org/validator':
+        specifier: workspace:*
+        version: link:../validator
+      mdast-util-from-markdown:
+        specifier: ^2.0.0
+        version: 2.0.2
+      mdast-util-to-markdown:
+        specifier: ^2.0.0
+        version: 2.1.2
+      remark:
+        specifier: ^15.0.0
+        version: 15.0.1
+      remark-parse:
+        specifier: ^11.0.0
+        version: 11.0.0
+      remark-stringify:
+        specifier: ^11.0.0
+        version: 11.0.0
+      unified:
+        specifier: ^11.0.0
+        version: 11.0.5
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.19.11
+      '@vitest/coverage-v8':
+        specifier: ^1.2.0
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@23.2.0))
+      '@xats-org/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      eslint:
+        specifier: ^8.56.0
+        version: 8.57.1
+      typescript:
+        specifier: ^5.3.3
+        version: 5.9.2
+      vitest:
+        specifier: ^1.2.0
+        version: 1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@23.2.0)
+
   packages/cli:
     dependencies:
       '@xats-org/schema':

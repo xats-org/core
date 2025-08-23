@@ -41,6 +41,7 @@ export class PreviewGenerator {
       includeStyles: true,
       theme: 'default',
       accessibilityMode: true,
+      sectionIds: [],
       ...options,
     };
 

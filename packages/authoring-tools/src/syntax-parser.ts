@@ -68,7 +68,7 @@ export class SimplifiedSyntaxParser {
         suggestions: [{
           description: 'Check your syntax for common markdown errors',
           action: 'fix',
-          to: 'Review headings, lists, and code blocks for proper formatting',
+          fix: 'Review headings, lists, and code blocks for proper formatting',
           confidence: 0.6,
         }],
       });

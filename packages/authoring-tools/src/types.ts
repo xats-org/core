@@ -274,17 +274,13 @@ export interface ErrorSuggestion {
   /** Action to take */
   action: 'fix' | 'add' | 'remove' | 'replace' | 'move';
 
-  /** Specific fix to apply */
-  fix?: {
-    /** Text to replace */
-    from?: string;
-    /** Replacement text */
-    to: string;
-    /** Location to apply fix */
-    location?: {
-      line: number;
-      column: number;
-    };
+  /** Replacement text */
+  fix: string;
+
+  /** Location to apply fix */
+  location?: {
+    line: number;
+    column: number;
   };
 
   /** Confidence level (0-1) */

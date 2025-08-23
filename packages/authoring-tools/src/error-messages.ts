@@ -28,15 +28,15 @@ export interface ErrorMessagesServiceOptions {
  */
 export class ErrorMessagesService {
   private options: Required<ErrorMessagesServiceOptions>;
-  private errorTemplates: Map<string, ErrorTemplate>;
-  private suggestionGenerators: Map<string, SuggestionGenerator>;
+  private errorTemplates: Map<string, ErrorTemplate> = new Map();
+  private suggestionGenerators: Map<string, SuggestionGenerator> = new Map();
 
   constructor(options: ErrorMessagesServiceOptions) {
     this.options = {
-      userLevel: 'intermediate',
-      language: 'en',
-      includeSuggestions: true,
       ...options,
+      userLevel: options.userLevel || 'intermediate',
+      language: options.language || 'en',
+      includeSuggestions: options.includeSuggestions ?? true,
     };
 
     this.initializeErrorTemplates();
@@ -69,7 +69,7 @@ export class ErrorMessagesService {
       suggestions.push({
         description: 'Make sure all required fields are included in your document',
         action: 'add',
-        to: 'Add missing required fields like title, author, or schemaVersion',
+        fix: 'Add missing required fields like title, author, or schemaVersion',
         confidence: 0.9,
       });
     }
@@ -78,7 +78,7 @@ export class ErrorMessagesService {
       suggestions.push({
         description: 'Check that your data types match what is expected',
         action: 'fix',
-        to: 'Ensure strings are quoted, numbers are numeric, and arrays use square brackets',
+        fix: 'Ensure strings are quoted, numbers are numeric, and arrays use square brackets',
         confidence: 0.8,
       });
     }
@@ -87,7 +87,7 @@ export class ErrorMessagesService {
       suggestions.push({
         description: 'Verify that URIs and other formatted fields follow the correct pattern',
         action: 'fix',
-        to: 'Use valid xats vocabulary URIs like "https://xats.org/vocabularies/blocks/paragraph"',
+        fix: 'Use valid xats vocabulary URIs like "https://xats.org/vocabularies/blocks/paragraph"',
         confidence: 0.85,
       });
     }
@@ -123,14 +123,20 @@ export class ErrorMessagesService {
     const suggestions = this.options.includeSuggestions ? 
       await this.generateErrorSuggestions(error) : [];
 
-    return {
+    const location = this.extractLocation(error);
+    const userError: UserFriendlyError = {
       message,
       code,
       severity,
-      location: this.extractLocation(error),
       suggestions,
       documentation: this.getDocumentationLinks(error.keyword || 'unknown'),
     };
+    
+    if (location) {
+      userError.location = location;
+    }
+    
+    return userError;
   }
 
   /**
@@ -192,9 +198,12 @@ export class ErrorMessagesService {
    * Extract location information from error
    */
   private extractLocation(error: ValidationError): { line?: number; column?: number; path?: string } | undefined {
-    return {
-      path: error.path || undefined,
-    };
+    if (error.path) {
+      return {
+        path: error.path,
+      };
+    }
+    return undefined;
   }
 
   /**
@@ -241,7 +250,7 @@ export class ErrorMessagesService {
     return [{
       description: 'Review the error details and check the documentation',
       action: 'fix',
-      to: 'Refer to the xats documentation for guidance',
+      fix: 'Refer to the xats documentation for guidance',
       confidence: 0.5,
     }];
   }
@@ -531,7 +540,7 @@ class RequiredFieldSuggestionGenerator extends SuggestionGenerator {
       suggestions.push({
         description: `Add the required ${field} field`,
         action: 'add',
-        to: `"${field}": "${fieldDefaults[field]}"`,
+        fix: `"${field}": "${fieldDefaults[field]}"`,
         confidence: 0.9,
         automatic: true,
       });
@@ -540,7 +549,7 @@ class RequiredFieldSuggestionGenerator extends SuggestionGenerator {
     suggestions.push({
       description: `Check the documentation for required fields in this section`,
       action: 'fix',
-      to: 'Review the schema documentation for required properties',
+      fix: 'Review the schema documentation for required properties',
       confidence: 0.7,
     });
 
@@ -558,7 +567,7 @@ class TypeMismatchSuggestionGenerator extends SuggestionGenerator {
         suggestions.push({
           description: 'Add quotes around the text value',
           action: 'fix',
-          to: 'Wrap the value in double quotes: "your text here"',
+          fix: 'Wrap the value in double quotes: "your text here"',
           confidence: 0.8,
         });
         break;
@@ -566,7 +575,7 @@ class TypeMismatchSuggestionGenerator extends SuggestionGenerator {
         suggestions.push({
           description: 'Remove quotes from the numeric value',
           action: 'fix',
-          to: 'Use numeric value without quotes: 42 instead of "42"',
+          fix: 'Use numeric value without quotes: 42 instead of "42"',
           confidence: 0.8,
         });
         break;
@@ -574,7 +583,7 @@ class TypeMismatchSuggestionGenerator extends SuggestionGenerator {
         suggestions.push({
           description: 'Use square brackets for arrays',
           action: 'fix',
-          to: 'Format as array: ["item1", "item2"]',
+          fix: 'Format as array: ["item1", "item2"]',
           confidence: 0.8,
         });
         break;
@@ -582,7 +591,7 @@ class TypeMismatchSuggestionGenerator extends SuggestionGenerator {
         suggestions.push({
           description: 'Use curly braces for objects',
           action: 'fix',
-          to: 'Format as object: {"property": "value"}',
+          fix: 'Format as object: {"property": "value"}',
           confidence: 0.8,
         });
         break;
@@ -601,7 +610,7 @@ class FormatSuggestionGenerator extends SuggestionGenerator {
       suggestions.push({
         description: 'Use a valid xats vocabulary URI',
         action: 'fix',
-        to: 'https://xats.org/vocabularies/blocks/paragraph',
+        fix: 'https://xats.org/vocabularies/blocks/paragraph',
         confidence: 0.9,
         automatic: true,
       });
@@ -609,7 +618,7 @@ class FormatSuggestionGenerator extends SuggestionGenerator {
       suggestions.push({
         description: 'Ensure the URI is properly formatted',
         action: 'fix',
-        to: 'Use complete URI: https://example.com/path',
+        fix: 'Use complete URI: https://example.com/path',
         confidence: 0.7,
       });
     }
@@ -628,7 +637,7 @@ class EnumSuggestionGenerator extends SuggestionGenerator {
         suggestions.push({
           description: `Use "${value}" as the value`,
           action: 'replace',
-          to: JSON.stringify(value),
+          fix: JSON.stringify(value),
           confidence: 0.8,
         });
       });

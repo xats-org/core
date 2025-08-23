@@ -98,12 +98,17 @@ export class XatsAuthoringTool {
 
       const processingTime = performance.now() - startTime;
 
-      return {
+      const result: AuthoringResult = {
         success: true,
         document,
-        validation,
         processingTime,
       };
+      
+      if (validation) {
+        result.validation = validation;
+      }
+      
+      return result;
     } catch (error) {
       return {
         success: false,
@@ -113,7 +118,7 @@ export class XatsAuthoringTool {
           suggestions: [{
             description: 'Check your syntax and try again',
             action: 'fix',
-            to: 'Verify that your content follows the expected format',
+            fix: 'Verify that your content follows the expected format',
             confidence: 0.7,
           }],
         }],
@@ -135,11 +140,14 @@ export class XatsAuthoringTool {
         success: !parseResult.errors || parseResult.errors.length === 0,
         document: parseResult.document,
         sourceFormat: 'docx',
-        warnings: parseResult.warnings?.map(w => w.message) || [],
-        unmappedElements: parseResult.unmappedData?.map(d => String(d)) || [],
-        fidelityScore: parseResult.metadata.fidelityScore,
+        warnings: parseResult.warnings?.map((w: any) => w.message) || [],
+        unmappedElements: parseResult.unmappedData?.map((d: any) => String(d)) || [],
         processingTime: performance.now() - startTime,
       };
+      
+      if (parseResult.metadata?.fidelityScore !== undefined) {
+        result.fidelityScore = parseResult.metadata.fidelityScore;
+      }
 
       // Add validation if enabled
       if (this.options.realTimeValidation && parseResult.document) {
@@ -149,7 +157,7 @@ export class XatsAuthoringTool {
       // Convert parse errors to user-friendly format
       if (parseResult.errors && parseResult.errors.length > 0) {
         result.errors = await this.errorMessagesService.convertValidationErrors(
-          parseResult.errors.map(e => ({
+          parseResult.errors.map((e: any) => ({
             path: 'import',
             message: e.message,
             keyword: e.type,
@@ -168,7 +176,7 @@ export class XatsAuthoringTool {
           suggestions: [{
             description: 'Verify that the file is a valid DOCX document',
             action: 'fix',
-            to: 'Check file format and try again',
+            fix: 'Check file format and try again',
             confidence: 0.8,
           }],
         }],
@@ -190,11 +198,14 @@ export class XatsAuthoringTool {
         success: !parseResult.errors || parseResult.errors.length === 0,
         document: parseResult.document,
         sourceFormat: 'markdown',
-        warnings: parseResult.warnings?.map(w => w.message) || [],
-        unmappedElements: parseResult.unmappedData?.map(d => String(d)) || [],
-        fidelityScore: parseResult.metadata.fidelityScore,
+        warnings: parseResult.warnings?.map((w: any) => w.message) || [],
+        unmappedElements: parseResult.unmappedData?.map((d: any) => String(d)) || [],
         processingTime: performance.now() - startTime,
       };
+      
+      if (parseResult.metadata?.fidelityScore !== undefined) {
+        result.fidelityScore = parseResult.metadata.fidelityScore;
+      }
 
       // Add validation if enabled
       if (this.options.realTimeValidation && parseResult.document) {
@@ -204,7 +215,7 @@ export class XatsAuthoringTool {
       // Convert parse errors to user-friendly format
       if (parseResult.errors && parseResult.errors.length > 0) {
         result.errors = await this.errorMessagesService.convertValidationErrors(
-          parseResult.errors.map(e => ({
+          parseResult.errors.map((e: any) => ({
             path: 'import',
             message: e.message,
             keyword: e.type,
@@ -223,7 +234,7 @@ export class XatsAuthoringTool {
           suggestions: [{
             description: 'Verify that the content is valid Markdown',
             action: 'fix',
-            to: 'Check Markdown syntax and try again',
+            fix: 'Check Markdown syntax and try again',
             confidence: 0.8,
           }],
         }],
@@ -263,15 +274,15 @@ export class XatsAuthoringTool {
         success: !renderResult.errors || renderResult.errors.length === 0,
         content: renderResult.content,
         format,
-        warnings: renderResult.errors?.filter(e => !e.fatal).map(e => e.message) || [],
+        warnings: renderResult.errors?.filter((e: any) => !e.fatal).map((e: any) => e.message) || [],
         processingTime: performance.now() - startTime,
       };
 
       // Convert render errors to user-friendly format
-      const fatalErrors = renderResult.errors?.filter(e => e.fatal) || [];
+      const fatalErrors = renderResult.errors?.filter((e: any) => e.fatal) || [];
       if (fatalErrors.length > 0) {
         result.errors = await this.errorMessagesService.convertValidationErrors(
-          fatalErrors.map(e => ({
+          fatalErrors.map((e: any) => ({
             path: 'export',
             message: e.message,
             keyword: e.type,
@@ -290,7 +301,7 @@ export class XatsAuthoringTool {
           suggestions: [{
             description: 'Check document structure and try again',
             action: 'fix',
-            to: 'Verify that the document is valid before exporting',
+            fix: 'Verify that the document is valid before exporting',
             confidence: 0.7,
           }],
         }],
@@ -312,15 +323,20 @@ export class XatsAuthoringTool {
   async validateDocument(document: XatsDocument): Promise<ValidationFeedback> {
     const validationResult = await this.validator.validate(document);
     
-    return {
+    const feedback: ValidationFeedback = {
       isValid: validationResult.isValid,
       errors: await this.errorMessagesService.convertValidationErrors(
         validationResult.errors.slice(0, this.options.maxValidationErrors)
       ),
       suggestions: await this.errorMessagesService.generateSuggestions(validationResult.errors),
       qualityScore: this.calculateQualityScore(validationResult),
-      schemaVersion: validationResult.schemaVersion,
     };
+    
+    if (validationResult.schemaVersion) {
+      feedback.schemaVersion = validationResult.schemaVersion;
+    }
+    
+    return feedback;
   }
 
   /**
@@ -354,7 +370,7 @@ export class XatsAuthoringTool {
   /**
    * Calculate quality score based on validation results
    */
-  private calculateQualityScore(validationResult: ValidationResult): number {
+  private calculateQualityScore(validationResult: any): number {
     if (validationResult.isValid) {
       return 100;
     }
@@ -369,7 +385,7 @@ export class XatsAuthoringTool {
     };
 
     let totalDeduction = 0;
-    validationResult.errors.forEach(error => {
+    validationResult.errors.forEach((error: any) => {
       const weight = severityWeights[error.keyword as keyof typeof severityWeights] || 3;
       totalDeduction += weight;
     });
