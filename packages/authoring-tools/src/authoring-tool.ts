@@ -168,7 +168,7 @@ export class XatsAuthoringTool {
 
       // Convert parse errors to user-friendly format
       if (parseResult.errors && parseResult.errors.length > 0) {
-        result.errors = await this.errorMessagesService.convertValidationErrors(
+        result.errors = this.errorMessagesService.convertValidationErrors(
           parseResult.errors.map(
             (e) =>
               ({
@@ -238,7 +238,7 @@ export class XatsAuthoringTool {
 
       // Convert parse errors to user-friendly format
       if (parseResult.errors && parseResult.errors.length > 0) {
-        result.errors = await this.errorMessagesService.convertValidationErrors(
+        result.errors = this.errorMessagesService.convertValidationErrors(
           parseResult.errors.map(
             (e) =>
               ({
@@ -316,7 +316,7 @@ export class XatsAuthoringTool {
       // Convert render errors to user-friendly format
       const fatalErrors = renderResult.errors?.filter((e) => e.fatal) || [];
       if (fatalErrors.length > 0) {
-        result.errors = await this.errorMessagesService.convertValidationErrors(
+        result.errors = this.errorMessagesService.convertValidationErrors(
           fatalErrors.map(
             (e) =>
               ({
@@ -367,7 +367,7 @@ export class XatsAuthoringTool {
 
     const feedback: ValidationFeedback = {
       isValid: validationResult.isValid,
-      errors: await this.errorMessagesService.convertValidationErrors(
+      errors: this.errorMessagesService.convertValidationErrors(
         validationResult.errors.slice(0, this.options.maxValidationErrors)
       ),
       suggestions: this.errorMessagesService.generateSuggestions(validationResult.errors),

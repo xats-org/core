@@ -42,7 +42,7 @@ export class ErrorMessagesService {
   /**
    * Convert technical validation errors to user-friendly format
    */
-  async convertValidationErrors(validationErrors: ValidationError[]): Promise<UserFriendlyError[]> {
+  convertValidationErrors(validationErrors: ValidationError[]): UserFriendlyError[] {
     const userFriendlyErrors: UserFriendlyError[] = [];
 
     for (const error of validationErrors) {

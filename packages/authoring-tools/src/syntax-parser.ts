@@ -30,7 +30,7 @@ export class SimplifiedSyntaxParser {
       ...options,
     };
 
-    this.processor = unified().use(remarkParse) as any;
+    this.processor = unified().use(remarkParse);
   }
 
   /**
@@ -180,7 +180,7 @@ export class SimplifiedSyntaxParser {
         }
       } else {
         // Convert other nodes to content blocks
-        const contentBlock = await this.convertNodeToContentBlock(node, blockId++);
+        const contentBlock = this.convertNodeToContentBlock(node, blockId++);
         if (contentBlock) {
           currentBlocks.push(contentBlock);
         }
@@ -229,10 +229,10 @@ export class SimplifiedSyntaxParser {
   /**
    * Convert markdown node to xats content block
    */
-  private async convertNodeToContentBlock(
+  private convertNodeToContentBlock(
     node: Node,
     blockId: number
-  ): Promise<ContentBlock | null> {
+  ): ContentBlock | null {
     const baseBlock = {
       id: `block-${blockId}`,
     };
@@ -247,7 +247,7 @@ export class SimplifiedSyntaxParser {
           },
         };
 
-      case 'list':
+      case 'list': {
         const listNode = node as List;
         return {
           ...baseBlock,
@@ -259,6 +259,7 @@ export class SimplifiedSyntaxParser {
             ),
           },
         };
+      }
 
       case 'blockquote':
         return {
@@ -269,7 +270,7 @@ export class SimplifiedSyntaxParser {
           },
         };
 
-      case 'code':
+      case 'code': {
         const codeNode = node as Code;
         return {
           ...baseBlock,
@@ -279,11 +280,12 @@ export class SimplifiedSyntaxParser {
             language: codeNode.lang || undefined,
           },
         };
+      }
 
       case 'table':
         return this.convertTableNode(node as Table, baseBlock);
 
-      case 'image':
+      case 'image': {
         const imageNode = node as Image;
         return {
           ...baseBlock,
@@ -294,8 +296,9 @@ export class SimplifiedSyntaxParser {
             caption: imageNode.title ? this.convertTextToSemanticText(imageNode.title) : undefined,
           },
         };
+      }
 
-      default:
+      default: {
         // Skip unknown node types or convert to paragraph if they have text content
         const text = this.extractTextFromNode(node);
         if (text.trim()) {
@@ -308,6 +311,7 @@ export class SimplifiedSyntaxParser {
           };
         }
         return null;
+      }
     }
   }
 
@@ -358,7 +362,7 @@ export class SimplifiedSyntaxParser {
     }
 
     if ('children' in node && Array.isArray(node.children)) {
-      return node.children.map((child) => this.extractTextFromNode(child)).join('');
+      return node.children.map((child: Node | string) => this.extractTextFromNode(child)).join('');
     }
 
     return '';

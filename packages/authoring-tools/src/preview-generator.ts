@@ -452,7 +452,7 @@ blockquote {
   /**
    * Filter document sections for preview
    */
-  private filterDocumentSections(document: XatsDocument, sectionIds: string[]): XatsDocument {
+  private filterDocumentSections(document: XatsDocument, _sectionIds: string[]): XatsDocument {
     // TODO: Implement section filtering based on IDs
     // For now, return the full document
     return document;
