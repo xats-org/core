@@ -101,7 +101,7 @@ export class ErrorMessagesService {
   /**
    * Convert a single validation error to user-friendly format
    */
-  private async convertSingleError(error: ValidationError): Promise<UserFriendlyError> {
+  private convertSingleError(error: ValidationError): UserFriendlyError {
     const template = this.errorTemplates.get(error.keyword || 'unknown');
     const severity = this.determineSeverity(error);
 
@@ -116,9 +116,7 @@ export class ErrorMessagesService {
       code = 'UNKNOWN_ERROR';
     }
 
-    const suggestions = this.options.includeSuggestions
-      ? this.generateErrorSuggestions(error)
-      : [];
+    const suggestions = this.options.includeSuggestions ? this.generateErrorSuggestions(error) : [];
 
     const location = this.extractLocation(error);
     const userError: UserFriendlyError = {
@@ -368,9 +366,10 @@ class PatternErrorTemplate extends ErrorTemplate {
         return `The text doesn't match the required pattern. Check the format requirements for this field.`;
       case 'intermediate':
         return `Pattern validation failed. The text doesn't match the required format.`;
-      case 'advanced':
+      case 'advanced': {
         const params = error.params as { pattern?: string } | undefined;
         return `Pattern constraint failed at ${error.path}: ${params?.pattern || 'unknown pattern'}`;
+      }
       default:
         return `Pattern validation failed`;
     }
@@ -534,7 +533,7 @@ class MaxLengthErrorTemplate extends ErrorTemplate {
 // Suggestion generator implementations
 
 class RequiredFieldSuggestionGenerator extends SuggestionGenerator {
-  generateSuggestions(error: ValidationError, userLevel: string): ErrorSuggestion[] {
+  generateSuggestions(error: ValidationError, _userLevel: string): ErrorSuggestion[] {
     const params = error.params as { missingProperty?: string } | undefined;
     const field = params?.missingProperty || 'field';
     const suggestions: ErrorSuggestion[] = [];
@@ -569,7 +568,7 @@ class RequiredFieldSuggestionGenerator extends SuggestionGenerator {
 }
 
 class TypeMismatchSuggestionGenerator extends SuggestionGenerator {
-  generateSuggestions(error: ValidationError, userLevel: string): ErrorSuggestion[] {
+  generateSuggestions(error: ValidationError, _userLevel: string): ErrorSuggestion[] {
     const params = error.params as { type?: string } | undefined;
     const expected = params?.type;
     const suggestions: ErrorSuggestion[] = [];
@@ -614,7 +613,7 @@ class TypeMismatchSuggestionGenerator extends SuggestionGenerator {
 }
 
 class FormatSuggestionGenerator extends SuggestionGenerator {
-  generateSuggestions(error: ValidationError, userLevel: string): ErrorSuggestion[] {
+  generateSuggestions(error: ValidationError, _userLevel: string): ErrorSuggestion[] {
     const params = error.params as { format?: string } | undefined;
     const format = params?.format;
     const suggestions: ErrorSuggestion[] = [];
@@ -641,7 +640,7 @@ class FormatSuggestionGenerator extends SuggestionGenerator {
 }
 
 class EnumSuggestionGenerator extends SuggestionGenerator {
-  generateSuggestions(error: ValidationError, userLevel: string): ErrorSuggestion[] {
+  generateSuggestions(error: ValidationError, _userLevel: string): ErrorSuggestion[] {
     const params = error.params as { allowedValues?: unknown[] } | undefined;
     const allowedValues = params?.allowedValues || [];
     const suggestions: ErrorSuggestion[] = [];
@@ -649,7 +648,7 @@ class EnumSuggestionGenerator extends SuggestionGenerator {
     if (allowedValues.length > 0) {
       allowedValues.slice(0, 3).forEach((value: unknown) => {
         suggestions.push({
-          description: `Use "${value}" as the value`,
+          description: `Use "${String(value)}" as the value`,
           action: 'replace',
           fix: JSON.stringify(value),
           confidence: 0.8,

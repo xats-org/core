@@ -370,7 +370,7 @@ export class XatsAuthoringTool {
       errors: await this.errorMessagesService.convertValidationErrors(
         validationResult.errors.slice(0, this.options.maxValidationErrors)
       ),
-      suggestions: await this.errorMessagesService.generateSuggestions(validationResult.errors),
+      suggestions: this.errorMessagesService.generateSuggestions(validationResult.errors),
       qualityScore: this.calculateQualityScore(validationResult),
     };
 

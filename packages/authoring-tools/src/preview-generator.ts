@@ -10,18 +10,18 @@ import type { XatsDocument } from '@xats-org/types';
  */
 export interface PreviewGeneratorOptions {
   /** HTML renderer instance */
-  htmlRenderer?: any;
+  htmlRenderer?: unknown;
 
   /** Markdown renderer instance */
-  markdownRenderer?: any;
+  markdownRenderer?: unknown;
 }
 
 /**
  * Generates previews of xats documents in various formats
  */
 export class PreviewGenerator {
-  private htmlRenderer?: any;
-  private markdownRenderer?: any;
+  private htmlRenderer?: unknown;
+  private markdownRenderer?: unknown;
 
   constructor(options: PreviewGeneratorOptions = {}) {
     this.htmlRenderer = options.htmlRenderer;
