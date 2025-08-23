@@ -1,0 +1,68 @@
+{
+  "name": "@xats-org/converter-latex",
+  "version": "0.5.0",
+  "description": "Advanced bidirectional LaTeX converter for xats with academic publishing workflow support",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "xats",
+    "latex",
+    "tex",
+    "converter",
+    "bidirectional",
+    "academic",
+    "publishing",
+    "mathematical",
+    "scientific"
+  ],
+  "author": "xats contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xats-org/core.git",
+    "directory": "packages/converter-latex"
+  },
+  "dependencies": {
+    "@xats-org/types": "workspace:*",
+    "@xats-org/schema": "workspace:*",
+    "@xats-org/validator": "workspace:*",
+    "@xats-org/testing": "workspace:*",
+    "latex-parser": "^0.6.2",
+    "node-latex": "^3.1.0",
+    "mathjax-node": "^2.1.1",
+    "unified": "^11.0.5",
+    "remark": "^15.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-math": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5",
+    "@vitest/coverage-v8": "^2.0.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
