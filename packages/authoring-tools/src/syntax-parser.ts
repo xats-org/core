@@ -17,8 +17,12 @@ import type { Root, Node, Heading, List, Code, Table, Image } from 'mdast';
 /**
  * Parser for converting simplified markdown-like syntax to xats documents
  */
+interface MarkdownProcessor {
+  parse: (content: string) => Root;
+}
+
 export class SimplifiedSyntaxParser {
-  private processor: ReturnType<typeof unified>;
+  private processor: MarkdownProcessor;
   private options: Required<SimplifiedSyntaxOptions>;
 
   constructor(options: SimplifiedSyntaxOptions = {}) {
@@ -30,7 +34,7 @@ export class SimplifiedSyntaxParser {
       ...options,
     };
 
-    this.processor = unified().use(remarkParse);
+    this.processor = unified().use(remarkParse) as MarkdownProcessor;
   }
 
   /**
