@@ -18,6 +18,8 @@ import type {
   RMarkdownContext,
   RMarkdownMetadata,
   RMarkdownParseResult,
+  RChunkEngine,
+  RMarkdownOutputFormat,
 } from './types.js';
 import type {
   XatsDocument,
@@ -603,7 +605,7 @@ export class RMarkdownToXatsParser {
       }
     }
 
-    return { runs: runs as SemanticText['runs'] };
+    return { runs: runs as unknown as SemanticText['runs'] };
   }
 
   /**
@@ -629,7 +631,12 @@ export class RMarkdownToXatsParser {
   ): void {
     if ('contents' in item && Array.isArray(item.contents)) {
       item.contents = item.contents.map((contentItem) => {
-        if (typeof contentItem === 'object' && contentItem !== null && 'content' in contentItem && contentItem.content) {
+        if (
+          typeof contentItem === 'object' &&
+          contentItem !== null &&
+          'content' in contentItem &&
+          contentItem.content
+        ) {
           // Check if content contains chunk placeholders
           if (
             typeof contentItem.content === 'object' &&
@@ -647,7 +654,13 @@ export class RMarkdownToXatsParser {
           }
 
           // Recursively check nested content
-          this.restoreChunksInContents(contentItem, chunkPlaceholders);
+          // Only restore chunks if contentItem is a structural container
+          if ('contents' in contentItem && contentItem.contents) {
+            this.restoreChunksInContents(
+              contentItem as unknown as Unit | Chapter | Section,
+              chunkPlaceholders
+            );
+          }
         }
         return contentItem;
       });
@@ -689,33 +702,24 @@ export class RMarkdownToXatsParser {
       mappedElements: chunks.length + inlineCode.length,
       unmappedElements: 0,
       fidelityScore: 1.0,
-      codeChunks: chunks.map((chunk) => {
-        const chunkData: {
-          engine: string;
-          code: string;
-          options: Record<string, unknown>;
-          line: number;
-          inline: boolean;
-          label?: string;
-        } = {
-          engine: chunk.options.engine,
-          code: chunk.code,
-          options: chunk.options.options,
-          line: Math.floor(chunk.start / 50), // Approximate line number
-          inline: false,
-        };
-        if (chunk.options.label) {
-          chunkData.label = chunk.options.label;
-        }
-        return chunkData;
-      }),
+      codeChunks: chunks.map((chunk) => ({
+        engine: chunk.options.engine as RChunkEngine,
+        code: chunk.code,
+        options: chunk.options.options,
+        line: Math.floor(chunk.start / 50), // Approximate line number
+        inline: false,
+        ...(chunk.options.label && { label: chunk.options.label }),
+      })),
       inlineCode: inlineCode.map((code) => ({
         engine: code.engine,
         code: code.code,
         line: Math.floor(code.start / 50),
       })),
       crossReferences: crossRefs,
-      outputFormat: (this.frontmatter?.output as string) || 'html_document',
+      outputFormat:
+        typeof this.frontmatter?.output === 'string'
+          ? (this.frontmatter.output as RMarkdownOutputFormat)
+          : ('html_document' as RMarkdownOutputFormat),
     };
 
     if (this.frontmatter) {

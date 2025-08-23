@@ -20,7 +20,7 @@ import {
   cleanRMarkdownContent,
 } from '../utils.js';
 
-import type { RMarkdownFrontmatter } from '../types.js';
+import type { RMarkdownFrontmatter, RMarkdownOutputFormat } from '../types.js';
 
 describe('R Markdown Utilities', () => {
   describe('parseChunkHeader', () => {
@@ -182,12 +182,7 @@ keywords: ["R", "statistics", "analysis"]
     it('should handle complex values', () => {
       const frontmatter: RMarkdownFrontmatter = {
         author: ['John Doe', 'Jane Smith'],
-        output: {
-          html_document: {
-            toc: true,
-            theme: 'united',
-          },
-        },
+        output: 'html_document' as RMarkdownOutputFormat,
       };
 
       const result = serializeYamlFrontmatter(frontmatter);

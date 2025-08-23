@@ -11,6 +11,7 @@ import type {
   RMarkdownParseOptions,
   RMarkdownMetadata,
   RMarkdownParseResult,
+  RChunkEngine,
 } from './types.js';
 import type {
   XatsDocument,
@@ -18,7 +19,6 @@ import type {
   RenderResult,
   RoundTripResult,
   FormatValidationResult,
-
   RoundTripOptions,
   WcagCompliance,
   WcagResult,
@@ -219,7 +219,11 @@ export class RMarkdownRenderer
       mappedElements: chunks.length,
       unmappedElements: 0,
       fidelityScore: 1.0,
-      codeChunks: chunks,
+      codeChunks: chunks.map((chunk) => ({
+        ...chunk,
+        engine: chunk.options.engine as RChunkEngine,
+        inline: false,
+      })),
     };
 
     return metadata;

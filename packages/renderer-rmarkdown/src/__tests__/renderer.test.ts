@@ -156,9 +156,13 @@ clean_data <- mtcars %>%
       const result = await renderer.parse(rmarkdownContent);
       const firstContent = result.document.bodyMatter.contents[0];
       if (firstContent && 'contents' in firstContent && firstContent.contents) {
-        const codeBlocks = firstContent.contents.filter((block) =>
-          block.blockType?.includes('codeBlock')
-        );
+        const codeBlocks = firstContent.contents.filter((block) => {
+          // Check if it's a ContentBlock and has blockType
+          if ('blockType' in block && block.blockType) {
+            return block.blockType.includes('codeBlock');
+          }
+          return false;
+        });
 
         expect(codeBlocks).toHaveLength(1);
         const firstBlock = codeBlocks[0];
