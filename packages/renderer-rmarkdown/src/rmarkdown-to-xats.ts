@@ -9,16 +9,11 @@ import {
   extractCodeChunks,
   extractInlineCode,
   parseBookdownReferences,
-  parseChunkHeader,
-  extractMathExpressions,
-  validateRMarkdown,
-  cleanRMarkdownContent,
 } from './utils.js';
 
 import type {
   RMarkdownParseOptions,
   RMarkdownFrontmatter,
-  RCodeChunk,
   BookdownReference,
   RMarkdownContext,
   RMarkdownMetadata,
@@ -32,9 +27,6 @@ import type {
   ContentBlock,
   SemanticText,
   CslDataItem,
-  BodyMatter,
-  ParseResult,
-  ParseOptions,
 } from '@xats-org/types';
 
 /**
@@ -412,7 +404,6 @@ export class RMarkdownToXatsParser {
   private parseCodeBlockContent(text: string): ContentBlock {
     const lines = text.split('\n');
     const firstLine = lines[0];
-    const lastLine = lines[lines.length - 1];
 
     // Extract language from first line
     const languageMatch = firstLine?.match(/^```+\s*(\w+)?/);
@@ -612,7 +603,7 @@ export class RMarkdownToXatsParser {
       }
     }
 
-    return { runs: runs as any };
+    return { runs: runs as SemanticText['runs'] };
   }
 
   /**
@@ -633,15 +624,17 @@ export class RMarkdownToXatsParser {
    * Recursively restore chunks in content structures
    */
   private restoreChunksInContents(
-    item: any,
+    item: Unit | Chapter | Section,
     chunkPlaceholders: Map<string, ReturnType<typeof extractCodeChunks>[0]>
   ): void {
-    if (Array.isArray(item.contents)) {
-      item.contents = item.contents.map((contentItem: any) => {
-        if (typeof contentItem === 'object' && contentItem.content) {
+    if ('contents' in item && Array.isArray(item.contents)) {
+      item.contents = item.contents.map((contentItem) => {
+        if (typeof contentItem === 'object' && contentItem !== null && 'content' in contentItem && contentItem.content) {
           // Check if content contains chunk placeholders
           if (
             typeof contentItem.content === 'object' &&
+            contentItem.content !== null &&
+            'text' in contentItem.content &&
             typeof contentItem.content.text === 'string'
           ) {
             const text = contentItem.content.text;
@@ -688,7 +681,7 @@ export class RMarkdownToXatsParser {
     inlineCode: ReturnType<typeof extractInlineCode>,
     crossRefs: BookdownReference[]
   ): RMarkdownMetadata {
-    const metadata: any = {
+    const metadata: RMarkdownMetadata = {
       format: 'rmarkdown',
       wordCount: 0, // Would be calculated from cleaned content
       sourceFormat: 'rmarkdown',
@@ -697,7 +690,14 @@ export class RMarkdownToXatsParser {
       unmappedElements: 0,
       fidelityScore: 1.0,
       codeChunks: chunks.map((chunk) => {
-        const chunkData: any = {
+        const chunkData: {
+          engine: string;
+          code: string;
+          options: Record<string, unknown>;
+          line: number;
+          inline: boolean;
+          label?: string;
+        } = {
           engine: chunk.options.engine,
           code: chunk.code,
           options: chunk.options.options,
@@ -715,7 +715,7 @@ export class RMarkdownToXatsParser {
         line: Math.floor(code.start / 50),
       })),
       crossReferences: crossRefs,
-      outputFormat: (this.frontmatter?.output as any) || 'html_document',
+      outputFormat: (this.frontmatter?.output as string) || 'html_document',
     };
 
     if (this.frontmatter) {
@@ -746,7 +746,7 @@ export class RMarkdownToXatsParser {
         entry.author = this.frontmatter.author.map((author) => {
           if (typeof author === 'string') {
             const parts = author.split(' ');
-            const authorData: any = {};
+            const authorData: { given?: string; family?: string } = {};
             const given = parts.slice(0, -1).join(' ');
             const family = parts[parts.length - 1];
 
@@ -755,7 +755,7 @@ export class RMarkdownToXatsParser {
 
             return authorData;
           }
-          const authorData: any = {};
+          const authorData: { given?: string; family?: string } = {};
           const nameParts = author.name?.split(' ');
           if (nameParts && nameParts.length > 0) {
             const given = nameParts.slice(0, -1).join(' ');
@@ -769,7 +769,7 @@ export class RMarkdownToXatsParser {
         });
       } else {
         const parts = this.frontmatter.author.split(' ');
-        const authorData: any = {};
+        const authorData: { given?: string; family?: string } = {};
         const given = parts.slice(0, -1).join(' ');
         const family = parts[parts.length - 1];
 

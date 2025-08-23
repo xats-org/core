@@ -247,7 +247,7 @@ importers:
         version: 20.19.11
       '@vitest/coverage-v8':
         specifier: ^1.2.0
-        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0))
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@23.2.0))
       '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -376,7 +376,7 @@ importers:
         version: 18.3.23
       '@vitest/coverage-v8':
         specifier: ^1.2.0
-        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0))
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@23.2.0))
       '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -416,7 +416,7 @@ importers:
         version: 20.19.11
       '@vitest/coverage-v8':
         specifier: ^1.2.0
-        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0))
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@23.2.0))
       '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -462,7 +462,7 @@ importers:
         version: 20.19.11
       '@vitest/coverage-v8':
         specifier: ^1.2.0
-        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0))
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@23.2.0))
       '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -499,7 +499,7 @@ importers:
         version: 20.19.11
       '@vitest/coverage-v8':
         specifier: ^1.2.0
-        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0))
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@23.2.0))
       '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -548,7 +548,7 @@ importers:
         version: 20.19.11
       '@vitest/coverage-v8':
         specifier: ^1.2.0
-        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0))
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@23.2.0))
       '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -591,7 +591,7 @@ importers:
         version: 20.19.11
       '@vitest/coverage-v8':
         specifier: ^1.2.0
-        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0))
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@23.2.0))
       '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -659,7 +659,7 @@ importers:
         version: 20.19.11
       '@vitest/coverage-v8':
         specifier: ^1.2.0
-        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@22.1.0))
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@22.1.0))
       '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -671,7 +671,7 @@ importers:
         version: 5.9.2
       vitest:
         specifier: ^1.2.0
-        version: 1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@22.1.0)
+        version: 1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@22.1.0)
 
   packages/types:
     devDependencies:
@@ -699,7 +699,7 @@ importers:
         version: 20.19.11
       '@vitest/coverage-v8':
         specifier: ^1.2.0
-        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0))
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@23.2.0))
       '@xats-org/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -773,7 +773,7 @@ importers:
         version: 5.9.2
       vitest:
         specifier: ^1.0.0
-        version: 1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0)
+        version: 1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4)(jsdom@23.2.0)
 
 packages:
 
@@ -11189,7 +11189,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/coverage-v8@1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@22.1.0))':
+  '@vitest/coverage-v8@1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@22.1.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -11204,26 +11204,7 @@ snapshots:
       std-env: 3.9.0
       strip-literal: 2.1.1
       test-exclude: 6.0.0
-      vitest: 1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@22.1.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@vitest/coverage-v8@1.6.1(vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0))':
-    dependencies:
-      '@ampproject/remapping': 2.3.0
-      '@bcoe/v8-coverage': 0.2.3
-      debug: 4.4.1
-      istanbul-lib-coverage: 3.2.2
-      istanbul-lib-report: 3.0.1
-      istanbul-lib-source-maps: 5.0.6
-      istanbul-reports: 3.2.0
-      magic-string: 0.30.17
-      magicast: 0.3.5
-      picocolors: 1.1.1
-      std-env: 3.9.0
-      strip-literal: 2.1.1
-      test-exclude: 6.0.0
-      vitest: 1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0)
+      vitest: 1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@22.1.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -16324,7 +16305,7 @@ snapshots:
       fsevents: 2.3.3
       tsx: 4.20.4
 
-  vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@22.1.0):
+  vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4)(jsdom@22.1.0):
     dependencies:
       '@vitest/expect': 1.6.1
       '@vitest/runner': 1.6.1
@@ -16350,42 +16331,6 @@ snapshots:
       '@types/node': 20.19.11
       '@vitest/ui': 3.2.4(vitest@3.2.4)
       jsdom: 22.1.0
-    transitivePeerDependencies:
-      - less
-      - lightningcss
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-
-  vitest@1.6.1(@types/node@20.19.11)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0):
-    dependencies:
-      '@vitest/expect': 1.6.1
-      '@vitest/runner': 1.6.1
-      '@vitest/snapshot': 1.6.1
-      '@vitest/spy': 1.6.1
-      '@vitest/utils': 1.6.1
-      acorn-walk: 8.3.4
-      chai: 4.5.0
-      debug: 4.4.1
-      execa: 8.0.1
-      local-pkg: 0.5.1
-      magic-string: 0.30.17
-      pathe: 1.1.2
-      picocolors: 1.1.1
-      std-env: 3.9.0
-      strip-literal: 2.1.1
-      tinybench: 2.9.0
-      tinypool: 0.8.4
-      vite: 5.4.19(@types/node@20.19.11)
-      vite-node: 1.6.1(@types/node@20.19.11)
-      why-is-node-running: 2.3.0
-    optionalDependencies:
-      '@types/node': 20.19.11
-      '@vitest/ui': 3.2.4(vitest@3.2.4)
-      jsdom: 23.2.0
     transitivePeerDependencies:
       - less
       - lightningcss
@@ -16432,7 +16377,7 @@ snapshots:
       - supports-color
       - terser
 
-  vitest@1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4(vitest@3.2.4))(jsdom@23.2.0):
+  vitest@1.6.1(@types/node@24.3.0)(@vitest/ui@3.2.4)(jsdom@23.2.0):
     dependencies:
       '@vitest/expect': 1.6.1
       '@vitest/runner': 1.6.1

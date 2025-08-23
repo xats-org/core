@@ -187,7 +187,7 @@ keywords: ["R", "statistics", "analysis"]
             toc: true,
             theme: 'united',
           },
-        } as any,
+        },
       };
 
       const result = serializeYamlFrontmatter(frontmatter);
@@ -435,7 +435,7 @@ Final paragraph.
       expect(cleaned).not.toContain('title:');
       expect(cleaned).not.toContain('```{r');
       expect(cleaned).not.toContain('library(ggplot2)');
-      expect(cleaned).not.toContain('\`r mean(x)\`');
+      expect(cleaned).not.toContain('`r mean(x)`');
       expect(cleaned).toContain('# Introduction');
       expect(cleaned).toContain('This is regular text');
       expect(cleaned).toContain('## Analysis');

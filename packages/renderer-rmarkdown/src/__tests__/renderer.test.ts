@@ -70,7 +70,7 @@ describe('RMarkdownRenderer', () => {
 
   describe('render', () => {
     it('should render xats document to R Markdown', async () => {
-      const result = await renderer.render(sampleDocument);
+      const result = renderer.render(sampleDocument);
 
       expect(result.content).toContain('---');
       expect(result.content).toContain('title: "Statistical Analysis with R"');
@@ -81,7 +81,7 @@ describe('RMarkdownRenderer', () => {
     });
 
     it('should include YAML frontmatter when enabled', async () => {
-      const result = await renderer.render(sampleDocument, {
+      const result = renderer.render(sampleDocument, {
         includeFrontmatter: true,
       });
 
@@ -92,7 +92,7 @@ describe('RMarkdownRenderer', () => {
     });
 
     it('should handle code chunks with options', async () => {
-      const result = await renderer.render(sampleDocument, {
+      const result = renderer.render(sampleDocument, {
         preserveCodeChunks: true,
         defaultChunkOptions: {
           echo: false,
@@ -106,7 +106,7 @@ describe('RMarkdownRenderer', () => {
     });
 
     it('should support bookdown format', async () => {
-      const result = await renderer.render(sampleDocument, {
+      const result = renderer.render(sampleDocument, {
         useBookdown: true,
         enableCrossReferences: true,
       });
@@ -136,7 +136,7 @@ data <- mtcars
 The analysis shows interesting results.
 `;
 
-      const result = await renderer.parse(rmarkdownContent);
+      const result = renderer.parse(rmarkdownContent);
 
       expect(result.document.bibliographicEntry.title).toBe('Test Document');
       expect(result.document.bodyMatter.contents).toHaveLength(1);
@@ -153,16 +153,35 @@ clean_data <- mtcars %>%
 \`\`\`
 `;
 
-      const result = await renderer.parse(rmarkdownContent);
+      const result = renderer.parse(rmarkdownContent);
       const firstContent = result.document.bodyMatter.contents[0];
       if (firstContent && 'contents' in firstContent && firstContent.contents) {
-        const codeBlocks = firstContent.contents.filter((block: any) =>
+        const codeBlocks = firstContent.contents.filter((block) =>
           block.blockType?.includes('codeBlock')
-        ) as any[];
+        );
 
         expect(codeBlocks).toHaveLength(1);
-        expect(codeBlocks[0]?.content?.language).toBe('r');
-        expect(codeBlocks[0]?.content?.code).toContain('clean_data');
+        const firstBlock = codeBlocks[0];
+        expect(
+          firstBlock &&
+            typeof firstBlock === 'object' &&
+            'content' in firstBlock &&
+            typeof firstBlock.content === 'object' &&
+            firstBlock.content !== null &&
+            'language' in firstBlock.content
+            ? firstBlock.content.language
+            : undefined
+        ).toBe('r');
+        expect(
+          firstBlock &&
+            typeof firstBlock === 'object' &&
+            'content' in firstBlock &&
+            typeof firstBlock.content === 'object' &&
+            firstBlock.content !== null &&
+            'code' in firstBlock.content
+            ? String(firstBlock.content.code)
+            : ''
+        ).toContain('clean_data');
       } else {
         throw new Error('Expected first content to have contents property');
       }
@@ -178,7 +197,7 @@ plot(mtcars$mpg, mtcars$hp)
 \`\`\`
 `;
 
-      const result = await renderer.parse(rmarkdownContent, {
+      const result = renderer.parse(rmarkdownContent, {
         parseBookdownReferences: true,
       });
 
@@ -250,7 +269,7 @@ library(ggplot2)
 \`\`\`
 `;
 
-      const result = await renderer.validate(validContent);
+      const result = renderer.validate(validContent);
 
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
@@ -264,7 +283,7 @@ x <- 1
 \`\`\`
 `;
 
-      const result = await renderer.validate(invalidContent);
+      const result = renderer.validate(invalidContent);
 
       expect(result.warnings.length).toBeGreaterThan(0);
     });
@@ -279,7 +298,7 @@ y <- 2
 \`\`\`
 `;
 
-      const result = await renderer.validate(duplicateContent);
+      const result = renderer.validate(duplicateContent);
 
       expect(result.errors.length).toBeGreaterThan(0);
       expect(result.errors[0]?.code).toBe('duplicate-label');
@@ -307,7 +326,7 @@ model <- lm(mpg ~ hp, data = mtcars)
 \`\`\`
 `;
 
-      const metadata = await renderer.getMetadata(content);
+      const metadata = renderer.getMetadata(content);
 
       expect(metadata.format).toBe('rmarkdown');
       expect(metadata.codeChunks?.length).toBe(2);
@@ -330,13 +349,13 @@ model <- lm(mpg ~ hp, data = mtcars)
 
   describe('output format configurations', () => {
     it('should render with HTML document configuration', async () => {
-      const result = await renderer.render(sampleDocument, OUTPUT_FORMAT_CONFIGS.HTML_DOCUMENT);
+      const result = renderer.render(sampleDocument, OUTPUT_FORMAT_CONFIGS.HTML_DOCUMENT);
 
       expect(result.content).toContain('output: html_document');
     });
 
     it('should render with Bookdown configuration', async () => {
-      const result = await renderer.render(sampleDocument, OUTPUT_FORMAT_CONFIGS.BOOKDOWN_GITBOOK);
+      const result = renderer.render(sampleDocument, OUTPUT_FORMAT_CONFIGS.BOOKDOWN_GITBOOK);
 
       expect(result.content).toContain('output: bookdown::gitbook');
       expect(result.content).toContain('{#introduction}');
@@ -345,7 +364,7 @@ model <- lm(mpg ~ hp, data = mtcars)
 
   describe('academic workflows', () => {
     it('should support statistical analysis workflow', async () => {
-      const result = await renderer.render(
+      const result = renderer.render(
         sampleDocument,
         ACADEMIC_WORKFLOW_CONFIGS.STATISTICAL_ANALYSIS
       );
@@ -355,7 +374,7 @@ model <- lm(mpg ~ hp, data = mtcars)
     });
 
     it('should support academic paper workflow', async () => {
-      const result = await renderer.render(
+      const result = renderer.render(
         sampleDocument,
         ACADEMIC_WORKFLOW_CONFIGS.ACADEMIC_PAPER
       );

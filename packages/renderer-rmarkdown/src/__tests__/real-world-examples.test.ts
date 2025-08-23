@@ -4,11 +4,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 
-import { createSemanticText, buildCoreUri } from '@xats-org/utils';
-
 import { RMarkdownRenderer, ACADEMIC_WORKFLOW_CONFIGS } from '../index.js';
-
-import type { XatsDocument } from '@xats-org/types';
 
 describe('Real-world R Markdown Examples', () => {
   let renderer: RMarkdownRenderer;

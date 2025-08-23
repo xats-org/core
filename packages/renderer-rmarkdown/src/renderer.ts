@@ -2,8 +2,6 @@
  * Main R Markdown bidirectional renderer
  */
 
-import { deepClone, extractPlainText } from '@xats-org/utils';
-
 import { RMarkdownToXatsParser } from './rmarkdown-to-xats.js';
 import { validateRMarkdown, cleanRMarkdownContent, extractCodeChunks } from './utils.js';
 import { XatsToRMarkdownConverter } from './xats-to-rmarkdown.js';
@@ -18,10 +16,9 @@ import type {
   XatsDocument,
   BidirectionalRenderer,
   RenderResult,
-  ParseResult,
   RoundTripResult,
   FormatValidationResult,
-  FormatMetadata,
+
   RoundTripOptions,
   WcagCompliance,
   WcagResult,
@@ -52,7 +49,7 @@ export class RMarkdownRenderer
   /**
    * Render xats document to R Markdown format
    */
-  public async render(
+  public render(
     document: XatsDocument,
     options: RMarkdownRendererOptions = {}
   ): Promise<RenderResult> {
@@ -64,7 +61,7 @@ export class RMarkdownRenderer
   /**
    * Parse R Markdown content back to xats format
    */
-  public async parse(
+  public parse(
     content: string,
     options: RMarkdownParseOptions = {}
   ): Promise<RMarkdownParseResult> {
@@ -90,7 +87,7 @@ export class RMarkdownRenderer
           success: false,
           fidelityScore: 0,
           original: document,
-          roundTrip: await this.createEmptyDocument(),
+          roundTrip: this.createEmptyDocument(),
           differences: [],
           metrics: {
             renderTime: Date.now() - startTime,
@@ -126,7 +123,7 @@ export class RMarkdownRenderer
       const totalTime = Date.now() - startTime;
 
       // Compare documents
-      const differences = await this.compareDocuments(document, parseResult.document);
+      const differences = this.compareDocuments(document, parseResult.document);
       const fidelityScore = this.calculateFidelityScore(differences);
       const success = fidelityScore >= (options.fidelityThreshold || 0.8);
 
@@ -149,7 +146,7 @@ export class RMarkdownRenderer
         success: false,
         fidelityScore: 0,
         original: document,
-        roundTrip: await this.createEmptyDocument(),
+        roundTrip: this.createEmptyDocument(),
         differences: [
           {
             type: 'missing',
@@ -173,7 +170,7 @@ export class RMarkdownRenderer
   /**
    * Validate R Markdown content
    */
-  public async validate(content: string): Promise<FormatValidationResult> {
+  public validate(content: string): FormatValidationResult {
     const errors = validateRMarkdown(content);
 
     return {
@@ -205,7 +202,7 @@ export class RMarkdownRenderer
   /**
    * Get R Markdown document metadata
    */
-  public async getMetadata(content: string): Promise<RMarkdownMetadata> {
+  public getMetadata(content: string): RMarkdownMetadata {
     const chunks = extractCodeChunks(content);
     const cleanContent = cleanRMarkdownContent(content);
     const wordCount = this.countWords(cleanContent);
@@ -223,7 +220,14 @@ export class RMarkdownRenderer
       unmappedElements: 0,
       fidelityScore: 1.0,
       codeChunks: chunks.map((chunk) => {
-        const chunkData: any = {
+        const chunkData: {
+          engine: string;
+          code: string;
+          options: Record<string, unknown>;
+          line: number;
+          inline: boolean;
+          label?: string;
+        } = {
           engine: chunk.options.engine,
           code: chunk.code,
           options: chunk.options.options,
@@ -243,7 +247,7 @@ export class RMarkdownRenderer
   /**
    * Test WCAG compliance (not applicable for source format)
    */
-  public async testCompliance(content: string, level: 'A' | 'AA' | 'AAA'): Promise<WcagResult> {
+  public testCompliance(content: string, level: 'A' | 'AA' | 'AAA'): WcagResult {
     return {
       level,
       compliant: false,
@@ -264,8 +268,8 @@ export class RMarkdownRenderer
   /**
    * Get accessibility audit (not applicable for source format)
    */
-  public async auditAccessibility(content: string): Promise<AccessibilityAudit> {
-    const result = await this.testCompliance(content, 'AA');
+  public auditAccessibility(content: string): AccessibilityAudit {
+    const result = this.testCompliance(content, 'AA');
 
     return {
       compliant: false,
@@ -290,18 +294,16 @@ export class RMarkdownRenderer
   /**
    * Compare two xats documents for differences
    */
-  private async compareDocuments(
+  private compareDocuments(
     original: XatsDocument,
     roundTrip: XatsDocument
-  ): Promise<
-    Array<{
-      type: 'missing' | 'added' | 'changed' | 'moved';
-      path: string;
-      original?: unknown;
-      roundTrip?: unknown;
-      impact: 'critical' | 'major' | 'minor' | 'cosmetic';
-    }>
-  > {
+  ): Array<{
+    type: 'missing' | 'added' | 'changed' | 'moved';
+    path: string;
+    original?: unknown;
+    roundTrip?: unknown;
+    impact: 'critical' | 'major' | 'minor' | 'cosmetic';
+  }> {
     const differences: Array<{
       type: 'missing' | 'added' | 'changed' | 'moved';
       path: string;
@@ -395,7 +397,7 @@ export class RMarkdownRenderer
   /**
    * Create empty xats document
    */
-  private async createEmptyDocument(): Promise<XatsDocument> {
+  private createEmptyDocument(): XatsDocument {
     return {
       schemaVersion: '0.3.0',
       bibliographicEntry: { type: 'article-journal' },
