@@ -202,8 +202,8 @@ jobs:
   container-scan:
     name: Container Security Scan
     runs-on: ubuntu-latest
-    # Only run if Dockerfile exists and on PRs
-    if: github.event_name == 'pull_request' && hashFiles('Dockerfile') != ''
+    # Only run on PRs
+    if: github.event_name == 'pull_request'
     
     steps:
     - name: Checkout code
