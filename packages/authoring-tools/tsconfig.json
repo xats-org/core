@@ -4,6 +4,6 @@
     "outDir": "./dist",
     "declarationDir": "./dist"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "examples/**/*", "vitest.config.ts"],
   "exclude": ["dist", "node_modules"]
 }

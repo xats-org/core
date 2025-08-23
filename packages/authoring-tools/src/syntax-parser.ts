@@ -46,10 +46,10 @@ export class SimplifiedSyntaxParser {
 
     try {
       // Parse markdown content
-      const mdast = this.processor.parse(simplifiedDoc.content) as Root;
+      const mdast = this.processor.parse(simplifiedDoc.content);
 
       // Convert MDAST to xats structure
-      const xatsDocument = await this.convertMdastToXats(mdast, simplifiedDoc);
+      const xatsDocument = this.convertMdastToXats(mdast, simplifiedDoc);
 
       return {
         success: true,
@@ -81,10 +81,10 @@ export class SimplifiedSyntaxParser {
   /**
    * Convert MDAST to xats document structure
    */
-  private async convertMdastToXats(
+  private convertMdastToXats(
     mdast: Root,
     simplifiedDoc: SimplifiedDocument
-  ): Promise<XatsDocument> {
+  ): XatsDocument {
     // Extract document metadata
     const title = simplifiedDoc.title || this.extractTitleFromContent(mdast);
     const author = simplifiedDoc.author || 'Unknown Author';
@@ -100,7 +100,7 @@ export class SimplifiedSyntaxParser {
       },
       subject,
       bodyMatter: {
-        contents: await this.convertContentToChapters(mdast.children),
+        contents: this.convertContentToChapters(mdast.children),
       },
     };
 
@@ -122,7 +122,7 @@ export class SimplifiedSyntaxParser {
   /**
    * Convert markdown content to xats chapters
    */
-  private async convertContentToChapters(nodes: Node[]): Promise<Chapter[]> {
+  private convertContentToChapters(nodes: Node[]): Chapter[] {
     const chapters: Chapter[] = [];
     let currentChapter: Chapter | null = null;
     let currentSections: Section[] = [];
@@ -233,10 +233,7 @@ export class SimplifiedSyntaxParser {
   /**
    * Convert markdown node to xats content block
    */
-  private convertNodeToContentBlock(
-    node: Node,
-    blockId: number
-  ): ContentBlock | null {
+  private convertNodeToContentBlock(node: Node, blockId: number): ContentBlock | null {
     const baseBlock = {
       id: `block-${blockId}`,
     };
