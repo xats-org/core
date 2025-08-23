@@ -3,16 +3,10 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import {
-  RegistryValidator,
-  RegistryResolver,
-  DependencyResolver,
-} from './registry-validator.js';
-import type {
-  RegistryConfig,
-  CacheConfig,
-  RegistryResolutionOptions,
-} from '@xats-org/types';
+
+import { RegistryValidator, RegistryResolver, DependencyResolver } from './registry-validator.js';
+
+import type { RegistryConfig, CacheConfig, RegistryResolutionOptions } from '@xats-org/types';
 
 describe('RegistryValidator', () => {
   let validator: RegistryValidator;
@@ -132,14 +126,7 @@ describe('RegistryValidator', () => {
     });
 
     it('should reject invalid version constraints', () => {
-      const invalidConstraints = [
-        'invalid',
-        '1.0',
-        'v1.0.0',
-        '>=1.0',
-        '1.0.0.0',
-        '1.0.0-',
-      ];
+      const invalidConstraints = ['invalid', '1.0', 'v1.0.0', '>=1.0', '1.0.0.0', '1.0.0-'];
 
       for (const constraint of invalidConstraints) {
         const result = validator.validateVersionConstraint(constraint);
@@ -207,13 +194,7 @@ describe('RegistryValidator', () => {
     });
 
     it('should reject invalid MIME types', () => {
-      const invalidMimeTypes = [
-        'invalid',
-        'text/',
-        '/json',
-        'text//json',
-        'TEXT/PLAIN',
-      ];
+      const invalidMimeTypes = ['invalid', 'text/', '/json', 'text//json', 'TEXT/PLAIN'];
 
       for (const mimeType of invalidMimeTypes) {
         const result = validator.validateMimeType(mimeType);
@@ -245,10 +226,12 @@ describe('RegistryValidator', () => {
                     path: 'index.json',
                     type: 'xats-document',
                     size: 1024,
-                    integrity: 'sha256-abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx1234yz567890abcdef12',
+                    integrity:
+                      'sha256-abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx1234yz567890abcdef12',
                   },
                 ],
-                integrity: 'sha256-1234abcd5678efgh9012ijkl3456mnop7890qrst1234uvwx5678yz9012abcdef',
+                integrity:
+                  'sha256-1234abcd5678efgh9012ijkl3456mnop7890qrst1234uvwx5678yz9012abcdef',
                 size: 1024,
                 published: '2024-01-01T00:00:00Z',
               },
@@ -283,10 +266,12 @@ describe('RegistryValidator', () => {
                     path: 'index.json',
                     type: 'xats-document',
                     size: 1024,
-                    integrity: 'sha256-abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx1234yz567890abcdef12',
+                    integrity:
+                      'sha256-abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx1234yz567890abcdef12',
                   },
                 ],
-                integrity: 'sha256-1234abcd5678efgh9012ijkl3456mnop7890qrst1234uvwx5678yz9012abcdef',
+                integrity:
+                  'sha256-1234abcd5678efgh9012ijkl3456mnop7890qrst1234uvwx5678yz9012abcdef',
                 size: 1024,
                 published: '2024-01-01T00:00:00Z',
               },
@@ -298,7 +283,7 @@ describe('RegistryValidator', () => {
 
       const result = validator.validateRegistryConfig(config);
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.includes('latest version'))).toBe(true);
+      expect(result.errors.some((e) => e.includes('latest version'))).toBe(true);
     });
   });
 
@@ -345,7 +330,7 @@ describe('RegistryValidator', () => {
 
       const result = validator.validateCacheConfig(config);
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.includes('path'))).toBe(true);
+      expect(result.errors.some((e) => e.includes('path'))).toBe(true);
     });
 
     it('should warn about conflicting memory cache settings', () => {
@@ -364,7 +349,7 @@ describe('RegistryValidator', () => {
 
       const result = validator.validateCacheConfig(config);
       expect(result.valid).toBe(true);
-      expect(result.warnings.some(w => w.includes('maxSize and maxItems'))).toBe(true);
+      expect(result.warnings.some((w) => w.includes('maxSize and maxItems'))).toBe(true);
     });
   });
 });
@@ -394,7 +379,8 @@ describe('RegistryResolver', () => {
                   path: 'index.json',
                   type: 'xats-document',
                   size: 1024,
-                  integrity: 'sha256-abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx1234yz567890abcdef12',
+                  integrity:
+                    'sha256-abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx1234yz567890abcdef12',
                 },
               ],
               integrity: 'sha256-1234abcd5678efgh9012ijkl3456mnop7890qrst1234uvwx5678yz9012abcdef',
@@ -409,15 +395,12 @@ describe('RegistryResolver', () => {
   });
 
   describe('resolveReference', () => {
-    it('should resolve valid registry reference', async () => {
+    it('should resolve valid registry reference', () => {
       const options: RegistryResolutionOptions = {
         registries: [mockRegistry],
       };
 
-      const result = await resolver.resolveReference(
-        'xats://test-registry/test/package@1.0.0',
-        options
-      );
+      const result = resolver.resolveReference('xats://test-registry/test/package@1.0.0', options);
 
       expect(result).toBeDefined();
       if (result) {
@@ -428,15 +411,12 @@ describe('RegistryResolver', () => {
       }
     });
 
-    it('should resolve reference without explicit version to latest', async () => {
+    it('should resolve reference without explicit version to latest', () => {
       const options: RegistryResolutionOptions = {
         registries: [mockRegistry],
       };
 
-      const result = await resolver.resolveReference(
-        'xats://test-registry/test/package',
-        options
-      );
+      const result = resolver.resolveReference('xats://test-registry/test/package', options);
 
       expect(result).toBeDefined();
       if (result) {
@@ -444,38 +424,35 @@ describe('RegistryResolver', () => {
       }
     });
 
-    it('should throw error for unknown registry', async () => {
+    it('should throw error for unknown registry', () => {
       const options: RegistryResolutionOptions = {
         registries: [mockRegistry],
       };
 
-      await expect(
+      expect(() =>
         resolver.resolveReference('xats://unknown-registry/test/package', options)
-      ).rejects.toThrow("Registry 'unknown-registry' not found");
+      ).toThrow("Registry 'unknown-registry' not found");
     });
 
-    it('should throw error for unknown package', async () => {
+    it('should throw error for unknown package', () => {
       const options: RegistryResolutionOptions = {
         registries: [mockRegistry],
       };
 
-      await expect(
+      expect(() =>
         resolver.resolveReference('xats://test-registry/unknown/package', options)
-      ).rejects.toThrow("Package 'unknown/package' not found");
+      ).toThrow("Package 'unknown/package' not found");
     });
   });
 
   describe('resolveReferences', () => {
-    it('should resolve multiple references', async () => {
+    it('should resolve multiple references', () => {
       const options: RegistryResolutionOptions = {
         registries: [mockRegistry],
       };
 
-      const result = await resolver.resolveReferences(
-        [
-          'xats://test-registry/test/package@1.0.0',
-          'xats://test-registry/test/package',
-        ],
+      const result = resolver.resolveReferences(
+        ['xats://test-registry/test/package@1.0.0', 'xats://test-registry/test/package'],
         options
       );
 
@@ -484,12 +461,12 @@ describe('RegistryResolver', () => {
       expect(result.stats.successful).toBe(2);
     });
 
-    it('should handle mix of valid and invalid references', async () => {
+    it('should handle mix of valid and invalid references', () => {
       const options: RegistryResolutionOptions = {
         registries: [mockRegistry],
       };
 
-      const result = await resolver.resolveReferences(
+      const result = resolver.resolveReferences(
         [
           'xats://test-registry/test/package@1.0.0',
           'xats://unknown-registry/test/package',
@@ -590,7 +567,7 @@ describe('DependencyResolver', () => {
       const result = await resolver.resolveDependencies('package-a', '1.0.0', mockRegistries);
 
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors.some(e => e.code === 'circular-dependency')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'circular-dependency')).toBe(true);
     });
 
     it('should handle missing dependencies', async () => {
@@ -604,7 +581,7 @@ describe('DependencyResolver', () => {
       const result = await resolver.resolveDependencies('package-a', '1.0.0', mockRegistries);
 
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors.some(e => e.code === 'version-not-found')).toBe(true);
+      expect(result.errors.some((e) => e.code === 'version-not-found')).toBe(true);
     });
   });
 });

@@ -2,11 +2,13 @@
  * Registry validation logic for xats v0.5.0 advanced file modularity
  */
 
-import Ajv from 'ajv';
-import addFormats from 'ajv-formats';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
+
 import type {
   RegistryConfig,
   CacheConfig,
@@ -17,7 +19,10 @@ import type {
   RegistryResolutionError,
   RegistryResolutionWarning,
   DependencyResolutionResult,
+  DependencyResolutionError,
+  DependencyConflict,
   DependencyNode,
+  ResolvedDependency,
   VersionConstraint,
 } from '@xats-org/types';
 
@@ -30,18 +35,18 @@ const __dirname = dirname(__filename);
  */
 export class RegistryValidator {
   private ajv: Ajv;
-  private registrySchema: any;
-  private cacheSchema: any;
+  private registrySchema!: object;
+  private cacheSchema!: object;
 
   constructor() {
-    this.ajv = new Ajv({ 
-      strict: false, 
+    this.ajv = new Ajv({
+      strict: false,
       allErrors: true,
       verbose: true,
       validateFormats: true,
     });
     addFormats(this.ajv);
-    
+
     this.loadSchemas();
   }
 
@@ -52,20 +57,22 @@ export class RegistryValidator {
     try {
       // Try to load from the monorepo structure
       const schemaBasePath = join(__dirname, '../../schema/schemas/0.5.0/registry');
-      
+
       this.registrySchema = JSON.parse(
         readFileSync(join(schemaBasePath, 'registry.schema.json'), 'utf8')
-      );
-      
+      ) as object;
+
       this.cacheSchema = JSON.parse(
         readFileSync(join(schemaBasePath, 'cache.schema.json'), 'utf8')
-      );
+      ) as object;
 
       // Compile schemas
       this.ajv.addSchema(this.registrySchema, 'registry');
       this.ajv.addSchema(this.cacheSchema, 'cache');
     } catch (error) {
-      throw new Error(`Failed to load registry schemas: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Failed to load registry schemas: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
@@ -79,9 +86,9 @@ export class RegistryValidator {
     }
 
     const valid = validate(config);
-    const errors = validate.errors ? 
-      validate.errors.map(error => `${error.instancePath}: ${error.message}`) : 
-      [];
+    const errors = validate.errors
+      ? validate.errors.map((error) => `${error.instancePath}: ${error.message}`)
+      : [];
 
     return { valid: !!valid, errors };
   }
@@ -96,9 +103,9 @@ export class RegistryValidator {
     }
 
     const valid = validate(config);
-    const errors = validate.errors ? 
-      validate.errors.map(error => `${error.instancePath}: ${error.message}`) : 
-      [];
+    const errors = validate.errors
+      ? validate.errors.map((error) => `${error.instancePath}: ${error.message}`)
+      : [];
 
     return { valid: !!valid, errors };
   }
@@ -109,18 +116,24 @@ export class RegistryValidator {
   parseRegistryReference(reference: string): RegistryReference | null {
     // Expected format: xats://registry-name/package-name[@version][/path]
     // Package name can include namespaces with forward slashes
-    const match = reference.match(/^xats:\/\/([^\/]+)\/([^@\/]+(?:\/[^@\/]+)*)(?:@([^\/]+))?(?:\/(.+))?$/);
-    
+    const match = reference.match(
+      /^xats:\/\/([^/]+)\/([^@/]+(?:\/[^@/]+)*)(?:@([^/]+))?(?:\/(.+))?$/
+    );
+
     if (!match) {
       return null;
     }
 
     const [, registry, packageName, version, path] = match;
-    
+
+    if (!registry || !packageName) {
+      return null;
+    }
+
     return {
       protocol: 'xats',
-      registry: registry!,
-      package: packageName!,
+      registry,
+      package: packageName,
       version: version || undefined,
       path: path || undefined,
     };
@@ -134,27 +147,36 @@ export class RegistryValidator {
     const errors: string[] = [];
 
     if (!parsed) {
-      errors.push('Invalid registry reference format. Expected: xats://registry/package[@version][/path]');
+      errors.push(
+        'Invalid registry reference format. Expected: xats://registry/package[@version][/path]'
+      );
       return { valid: false, errors };
     }
 
     // Validate registry name format
     if (!/^[a-z0-9][a-z0-9_-]*[a-z0-9]$/.test(parsed.registry)) {
-      errors.push('Registry name must contain only lowercase letters, numbers, underscores, and hyphens');
+      errors.push(
+        'Registry name must contain only lowercase letters, numbers, underscores, and hyphens'
+      );
     }
 
     // Validate package name format
-    if (!/^[a-z0-9]([a-z0-9_-]*[a-z0-9])?([\/][a-z0-9]([a-z0-9_-]*[a-z0-9])?)*$/.test(parsed.package)) {
+    if (
+      !/^[a-z0-9]([a-z0-9_-]*[a-z0-9])?([/][a-z0-9]([a-z0-9_-]*[a-z0-9])?)*$/.test(parsed.package)
+    ) {
       errors.push('Package name must follow reverse domain notation (e.g., org/package)');
     }
 
     // Validate version format (if provided)
-    if (parsed.version && !/^\d+\.\d+\.\d+(-[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)?$/.test(parsed.version)) {
+    if (
+      parsed.version &&
+      !/^\d+\.\d+\.\d+(-[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)?$/.test(parsed.version)
+    ) {
       errors.push('Version must follow semantic versioning format (e.g., 1.2.3, 1.0.0-alpha.1)');
     }
 
     // Validate path format (if provided)
-    if (parsed.path && !/^[^\/].*$/.test(parsed.path)) {
+    if (parsed.path && !/^[^/].*$/.test(parsed.path)) {
       errors.push('Path must not start with a forward slash');
     }
 
@@ -173,10 +195,13 @@ export class RegistryValidator {
     }
 
     // Check for valid constraint operators and version format
-    const constraintPattern = /^(\^|~|>=|<=|>|<|=)?\d+\.\d+\.\d+(-[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)?$/;
-    
+    const constraintPattern =
+      /^(\^|~|>=|<=|>|<|=)?\d+\.\d+\.\d+(-[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)?$/;
+
     if (!constraintPattern.test(constraint)) {
-      errors.push('Version constraint must use valid operators (^, ~, >=, <=, >, <, =) followed by semantic version');
+      errors.push(
+        'Version constraint must use valid operators (^, ~, >=, <=, >, <, =) followed by semantic version'
+      );
     }
 
     return { valid: errors.length === 0, errors };
@@ -185,7 +210,10 @@ export class RegistryValidator {
   /**
    * Validate integrity hash format
    */
-  validateIntegrityHash(hash: string, algorithm: 'sha256' | 'sha384' | 'sha512' = 'sha256'): { valid: boolean; errors: string[] } {
+  validateIntegrityHash(
+    hash: string,
+    algorithm: 'sha256' | 'sha384' | 'sha512' = 'sha256'
+  ): { valid: boolean; errors: string[] } {
     const errors: string[] = [];
 
     if (!hash || hash.trim() === '') {
@@ -193,11 +221,12 @@ export class RegistryValidator {
       return { valid: false, errors };
     }
 
-    const pattern = algorithm === 'sha256' ? 
-      /^sha256-[A-Za-z0-9]{64}$/ : 
-      algorithm === 'sha384' ?
-      /^sha384-[A-Za-z0-9]{96}$/ :
-      /^sha512-[A-Za-z0-9]{128}$/;
+    const pattern =
+      algorithm === 'sha256'
+        ? /^sha256-[A-Za-z0-9]{64}$/
+        : algorithm === 'sha384'
+          ? /^sha384-[A-Za-z0-9]{96}$/
+          : /^sha512-[A-Za-z0-9]{128}$/;
 
     if (!pattern.test(hash)) {
       errors.push(`Integrity hash must be ${algorithm} format: ${algorithm}-<hex-hash>`);
@@ -216,8 +245,8 @@ export class RegistryValidator {
       return { valid: true, errors: [] }; // MIME type is optional
     }
 
-    const mimePattern = /^[a-z0-9][a-z0-9!#$&\-\^_]*\/[a-z0-9][a-z0-9!#$&\-\^_.]*$/;
-    
+    const mimePattern = /^[a-z0-9][a-z0-9!#$&\-^_]*\/[a-z0-9][a-z0-9!#$&\-^_.]*$/;
+
     if (!mimePattern.test(mimeType)) {
       errors.push('Invalid MIME type format');
     }
@@ -228,7 +257,11 @@ export class RegistryValidator {
   /**
    * Validate registry configuration with additional business rules
    */
-  validateRegistryConfig(config: RegistryConfig): { valid: boolean; errors: string[]; warnings: string[] } {
+  validateRegistryConfig(config: RegistryConfig): {
+    valid: boolean;
+    errors: string[];
+    warnings: string[];
+  } {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -238,7 +271,7 @@ export class RegistryValidator {
 
     if (schemaValidation.valid) {
       // Additional business rule validations
-      
+
       // Validate package names are unique
       const packageNames = Object.keys(config.packages);
       const uniqueNames = new Set(packageNames);
@@ -250,7 +283,9 @@ export class RegistryValidator {
       for (const [packageName, packageMetadata] of Object.entries(config.packages)) {
         // Check if latest version exists
         if (!packageMetadata.versions[packageMetadata.latest]) {
-          errors.push(`Package ${packageName}: latest version ${packageMetadata.latest} not found in versions`);
+          errors.push(
+            `Package ${packageName}: latest version ${packageMetadata.latest} not found in versions`
+          );
         }
 
         // Validate each version
@@ -264,14 +299,18 @@ export class RegistryValidator {
           for (const file of versionData.files) {
             const integrityValidation = this.validateIntegrityHash(file.integrity);
             if (!integrityValidation.valid) {
-              errors.push(`Package ${packageName} version ${versionNumber} file ${file.path}: ${integrityValidation.errors.join(', ')}`);
+              errors.push(
+                `Package ${packageName} version ${versionNumber} file ${file.path}: ${integrityValidation.errors.join(', ')}`
+              );
             }
 
             // Validate MIME type
             if (file.mimeType) {
               const mimeValidation = this.validateMimeType(file.mimeType);
               if (!mimeValidation.valid) {
-                errors.push(`Package ${packageName} version ${versionNumber} file ${file.path}: ${mimeValidation.errors.join(', ')}`);
+                errors.push(
+                  `Package ${packageName} version ${versionNumber} file ${file.path}: ${mimeValidation.errors.join(', ')}`
+                );
               }
             }
           }
@@ -281,14 +320,18 @@ export class RegistryValidator {
             for (const [depName, constraint] of Object.entries(versionData.dependencies)) {
               const constraintValidation = this.validateVersionConstraint(constraint);
               if (!constraintValidation.valid) {
-                errors.push(`Package ${packageName} version ${versionNumber} dependency ${depName}: ${constraintValidation.errors.join(', ')}`);
+                errors.push(
+                  `Package ${packageName} version ${versionNumber} dependency ${depName}: ${constraintValidation.errors.join(', ')}`
+                );
               }
             }
           }
 
           // Check for deprecated versions without messages
           if (versionData.deprecated && !versionData.deprecationMessage) {
-            warnings.push(`Package ${packageName} version ${versionNumber}: deprecated but no deprecation message provided`);
+            warnings.push(
+              `Package ${packageName} version ${versionNumber}: deprecated but no deprecation message provided`
+            );
           }
         }
       }
@@ -300,21 +343,27 @@ export class RegistryValidator {
 
       // Warn about potential security issues
       if (config.access?.public === true && config.access?.authentication?.required === false) {
-        warnings.push('Public registry without authentication may be vulnerable to unauthorized modifications');
+        warnings.push(
+          'Public registry without authentication may be vulnerable to unauthorized modifications'
+        );
       }
     }
 
-    return { 
-      valid: errors.length === 0, 
-      errors, 
-      warnings 
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings,
     };
   }
 
   /**
    * Validate cache configuration with performance considerations
    */
-  validateCacheConfig(config: CacheConfig): { valid: boolean; errors: string[]; warnings: string[] } {
+  validateCacheConfig(config: CacheConfig): {
+    valid: boolean;
+    errors: string[];
+    warnings: string[];
+  } {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -324,11 +373,13 @@ export class RegistryValidator {
 
     if (schemaValidation.valid) {
       // Additional validation for cache configuration
-      
+
       // Memory cache validation
       if (config.levels.memory?.enabled) {
         if (config.levels.memory.maxSize && config.levels.memory.maxItems) {
-          warnings.push('Both maxSize and maxItems specified for memory cache; maxSize will take precedence');
+          warnings.push(
+            'Both maxSize and maxItems specified for memory cache; maxSize will take precedence'
+          );
         }
 
         if (config.levels.memory.compressionEnabled && !config.levels.memory.compressionThreshold) {
@@ -357,7 +408,10 @@ export class RegistryValidator {
           errors.push('Distributed cache enabled but no host specified');
         }
 
-        if (config.levels.distributed.provider === 'redis' && config.levels.distributed.connection?.cluster) {
+        if (
+          config.levels.distributed.provider === 'redis' &&
+          config.levels.distributed.connection?.cluster
+        ) {
           if (config.levels.distributed.connection.cluster.length < 3) {
             warnings.push('Redis cluster should have at least 3 nodes for proper failover');
           }
@@ -367,12 +421,18 @@ export class RegistryValidator {
       // Performance threshold validation
       if (config.performance?.thresholds) {
         const thresholds = config.performance.thresholds;
-        
-        if (thresholds.hitRateMinimum !== undefined && (thresholds.hitRateMinimum < 0 || thresholds.hitRateMinimum > 1)) {
+
+        if (
+          thresholds.hitRateMinimum !== undefined &&
+          (thresholds.hitRateMinimum < 0 || thresholds.hitRateMinimum > 1)
+        ) {
           errors.push('Hit rate minimum must be between 0 and 1');
         }
 
-        if (thresholds.memoryUsageMaximum !== undefined && (thresholds.memoryUsageMaximum < 0 || thresholds.memoryUsageMaximum > 1)) {
+        if (
+          thresholds.memoryUsageMaximum !== undefined &&
+          (thresholds.memoryUsageMaximum < 0 || thresholds.memoryUsageMaximum > 1)
+        ) {
           errors.push('Memory usage maximum must be between 0 and 1');
         }
 
@@ -400,10 +460,10 @@ export class RegistryValidator {
       }
     }
 
-    return { 
-      valid: errors.length === 0, 
-      errors, 
-      warnings 
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings,
     };
   }
 }
@@ -421,10 +481,10 @@ export class RegistryResolver {
   /**
    * Resolve a single registry reference
    */
-  async resolveReference(
+  resolveReference(
     reference: string,
     options: RegistryResolutionOptions
-  ): Promise<ResolvedRegistryReference | null> {
+  ): ResolvedRegistryReference | null {
     // Parse the reference
     const parsed = this.validator.parseRegistryReference(reference);
     if (!parsed) {
@@ -432,7 +492,7 @@ export class RegistryResolver {
     }
 
     // Find the appropriate registry
-    const registry = options.registries.find(r => r.registryInfo.name === parsed.registry);
+    const registry = options.registries.find((r) => r.registryInfo.name === parsed.registry);
     if (!registry) {
       throw new Error(`Registry '${parsed.registry}' not found`);
     }
@@ -453,20 +513,22 @@ export class RegistryResolver {
     // Find file metadata if path is specified
     let fileMetadata;
     if (parsed.path) {
-      fileMetadata = versionMetadata.files.find(f => f.path === parsed.path);
+      fileMetadata = versionMetadata.files.find((f) => f.path === parsed.path);
       if (!fileMetadata) {
-        throw new Error(`File '${parsed.path}' not found in package '${parsed.package}' version '${targetVersion}'`);
+        throw new Error(
+          `File '${parsed.path}' not found in package '${parsed.package}' version '${targetVersion}'`
+        );
       }
     }
 
     // Construct resolved URL
-    const baseUrl = registry.registryInfo.url.endsWith('/') ? 
-      registry.registryInfo.url.slice(0, -1) : 
-      registry.registryInfo.url;
-    
-    const resolvedUrl = parsed.path ?
-      `${baseUrl}/${parsed.package}/${targetVersion}/${parsed.path}` :
-      `${baseUrl}/${parsed.package}/${targetVersion}`;
+    const baseUrl = registry.registryInfo.url.endsWith('/')
+      ? registry.registryInfo.url.slice(0, -1)
+      : registry.registryInfo.url;
+
+    const resolvedUrl = parsed.path
+      ? `${baseUrl}/${parsed.package}/${targetVersion}/${parsed.path}`
+      : `${baseUrl}/${parsed.package}/${targetVersion}`;
 
     const result: ResolvedRegistryReference = {
       ...parsed,
@@ -486,21 +548,21 @@ export class RegistryResolver {
   /**
    * Resolve multiple registry references
    */
-  async resolveReferences(
+  resolveReferences(
     references: string[],
     options: RegistryResolutionOptions
-  ): Promise<RegistryResolutionResult> {
+  ): RegistryResolutionResult {
     const resolved: ResolvedRegistryReference[] = [];
     const errors: RegistryResolutionError[] = [];
     const warnings: RegistryResolutionWarning[] = [];
     const startTime = Date.now();
-    let cacheHits = 0;
+    const cacheHits = 0;
     let cacheMisses = 0;
     let totalBytes = 0;
 
     for (const reference of references) {
       try {
-        const resolvedRef = await this.resolveReference(reference, options);
+        const resolvedRef = this.resolveReference(reference, options);
         if (resolvedRef) {
           resolved.push(resolvedRef);
           // TODO: Implement actual cache tracking
@@ -588,8 +650,8 @@ export class DependencyResolver {
     registries: RegistryConfig[],
     visited: Set<string> = new Set()
   ): Promise<DependencyResolutionResult> {
-    const errors: any[] = [];
-    const conflicts: any[] = [];
+    const errors: DependencyResolutionError[] = [];
+    const conflicts: DependencyConflict[] = [];
 
     // Check for circular dependencies
     const packageKey = `${packageName}@${version}`;
@@ -599,7 +661,13 @@ export class DependencyResolver {
         error: `Circular dependency detected: ${Array.from(visited).join(' -> ')} -> ${packageKey}`,
         code: 'circular-dependency',
       });
-      return { dependencyGraph: null as any, flattenedDependencies: [], conflicts, errors };
+      const emptyGraph: DependencyNode = {
+        package: packageName,
+        version,
+        dependencies: [],
+        depth: 0,
+      };
+      return { dependencyGraph: emptyGraph, flattenedDependencies: [], conflicts, errors };
     }
 
     visited.add(packageKey);
@@ -607,7 +675,7 @@ export class DependencyResolver {
     // Find the package in registries
     let packageMetadata;
     let versionMetadata;
-    
+
     for (const registry of registries) {
       packageMetadata = registry.packages[packageName];
       if (packageMetadata) {
@@ -622,25 +690,36 @@ export class DependencyResolver {
         error: `Package ${packageName}@${version} not found in any registry`,
         code: 'version-not-found',
       });
-      return { dependencyGraph: null as any, flattenedDependencies: [], conflicts, errors };
+      const emptyGraph: DependencyNode = {
+        package: packageName,
+        version,
+        dependencies: [],
+        depth: 0,
+      };
+      return { dependencyGraph: emptyGraph, flattenedDependencies: [], conflicts, errors };
     }
 
     // Build dependency tree
     const dependencyNodes: DependencyNode[] = [];
-    const flattenedDependencies: any[] = [];
+    const flattenedDependencies: ResolvedDependency[] = [];
 
     if (versionMetadata.dependencies) {
       for (const [depName, constraint] of Object.entries(versionMetadata.dependencies)) {
         // Resolve version constraint to actual version
         const resolvedVersion = this.resolveVersionConstraint(depName, constraint, registries);
-        
+
         if (resolvedVersion) {
           // Recursively resolve dependencies
-          const depResult = await this.resolveDependencies(depName, resolvedVersion, registries, visited);
-          
+          const depResult = await this.resolveDependencies(
+            depName,
+            resolvedVersion,
+            registries,
+            visited
+          );
+
           errors.push(...depResult.errors);
           conflicts.push(...depResult.conflicts);
-          
+
           if (depResult.dependencyGraph) {
             dependencyNodes.push(depResult.dependencyGraph);
           }
@@ -651,7 +730,7 @@ export class DependencyResolver {
             resolvedVersion,
             requestedBy: packageName,
           });
-          
+
           flattenedDependencies.push(...depResult.flattenedDependencies);
         } else {
           errors.push({
@@ -683,10 +762,14 @@ export class DependencyResolver {
   /**
    * Resolve a version constraint to an actual version
    */
-  private resolveVersionConstraint(packageName: string, constraint: string, registries: RegistryConfig[]): string | null {
+  private resolveVersionConstraint(
+    packageName: string,
+    constraint: string,
+    registries: RegistryConfig[]
+  ): string | null {
     // Find all available versions for the package
     const availableVersions: string[] = [];
-    
+
     for (const registry of registries) {
       const packageMetadata = registry.packages[packageName];
       if (packageMetadata) {
@@ -706,27 +789,29 @@ export class DependencyResolver {
       // Compatible within same major version
       const targetVersion = constraint.slice(1);
       const [targetMajor, targetMinor = 0, targetPatch = 0] = targetVersion.split('.').map(Number);
-      
+
       // Find all compatible versions (same major, and >= minor.patch)
-      const compatibleVersions = sortedVersions.filter(v => {
+      const compatibleVersions = sortedVersions.filter((v) => {
         const [major, minor = 0, patch = 0] = v.split('.').map(Number);
-        return major === targetMajor && 
-               (minor > targetMinor || (minor === targetMinor && patch >= targetPatch));
+        return (
+          major === targetMajor &&
+          (minor > targetMinor || (minor === targetMinor && patch >= targetPatch))
+        );
       });
-      
+
       return compatibleVersions[0] || null;
     } else if (constraint.startsWith('~')) {
       // Compatible within same major.minor version
       const targetVersion = constraint.slice(1);
       const [major, minor] = targetVersion.split('.');
-      return sortedVersions.find(v => v.startsWith(`${major}.${minor}.`)) || null;
+      return sortedVersions.find((v) => v.startsWith(`${major}.${minor}.`)) || null;
     } else if (constraint.startsWith('>=')) {
       // Greater than or equal
       const targetVersion = constraint.slice(2);
-      return sortedVersions.find(v => this.compareVersions(v, targetVersion) >= 0) || null;
+      return sortedVersions.find((v) => this.compareVersions(v, targetVersion) >= 0) || null;
     } else {
       // Exact match or latest
-      return sortedVersions.includes(constraint) ? constraint : (sortedVersions[0] || null);
+      return sortedVersions.includes(constraint) ? constraint : sortedVersions[0] || null;
     }
   }
 
