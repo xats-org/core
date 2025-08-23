@@ -49,7 +49,7 @@ export class RMarkdownRenderer
   /**
    * Render xats document to R Markdown format
    */
-  public render(
+  public async render(
     document: XatsDocument,
     options: RMarkdownRendererOptions = {}
   ): Promise<RenderResult> {
@@ -61,7 +61,7 @@ export class RMarkdownRenderer
   /**
    * Parse R Markdown content back to xats format
    */
-  public parse(
+  public async parse(
     content: string,
     options: RMarkdownParseOptions = {}
   ): Promise<RMarkdownParseResult> {
@@ -170,7 +170,7 @@ export class RMarkdownRenderer
   /**
    * Validate R Markdown content
    */
-  public validate(content: string): FormatValidationResult {
+  public async validate(content: string): Promise<FormatValidationResult> {
     const errors = validateRMarkdown(content);
 
     return {
@@ -202,7 +202,7 @@ export class RMarkdownRenderer
   /**
    * Get R Markdown document metadata
    */
-  public getMetadata(content: string): RMarkdownMetadata {
+  public async getMetadata(content: string): Promise<RMarkdownMetadata> {
     const chunks = extractCodeChunks(content);
     const cleanContent = cleanRMarkdownContent(content);
     const wordCount = this.countWords(cleanContent);
@@ -219,26 +219,7 @@ export class RMarkdownRenderer
       mappedElements: chunks.length,
       unmappedElements: 0,
       fidelityScore: 1.0,
-      codeChunks: chunks.map((chunk) => {
-        const chunkData: {
-          engine: string;
-          code: string;
-          options: Record<string, unknown>;
-          line: number;
-          inline: boolean;
-          label?: string;
-        } = {
-          engine: chunk.options.engine,
-          code: chunk.code,
-          options: chunk.options.options,
-          line: 0,
-          inline: false,
-        };
-        if (chunk.options.label) {
-          chunkData.label = chunk.options.label;
-        }
-        return chunkData;
-      }),
+      codeChunks: chunks,
     };
 
     return metadata;
@@ -247,7 +228,7 @@ export class RMarkdownRenderer
   /**
    * Test WCAG compliance (not applicable for source format)
    */
-  public testCompliance(content: string, level: 'A' | 'AA' | 'AAA'): WcagResult {
+  public async testCompliance(content: string, level: 'A' | 'AA' | 'AAA'): Promise<WcagResult> {
     return {
       level,
       compliant: false,
@@ -268,8 +249,8 @@ export class RMarkdownRenderer
   /**
    * Get accessibility audit (not applicable for source format)
    */
-  public auditAccessibility(content: string): AccessibilityAudit {
-    const result = this.testCompliance(content, 'AA');
+  public async auditAccessibility(content: string): Promise<AccessibilityAudit> {
+    const result = await this.testCompliance(content, 'AA');
 
     return {
       compliant: false,

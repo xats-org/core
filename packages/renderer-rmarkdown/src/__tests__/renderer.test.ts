@@ -70,7 +70,7 @@ describe('RMarkdownRenderer', () => {
 
   describe('render', () => {
     it('should render xats document to R Markdown', async () => {
-      const result = renderer.render(sampleDocument);
+      const result = await renderer.render(sampleDocument);
 
       expect(result.content).toContain('---');
       expect(result.content).toContain('title: "Statistical Analysis with R"');
@@ -81,7 +81,7 @@ describe('RMarkdownRenderer', () => {
     });
 
     it('should include YAML frontmatter when enabled', async () => {
-      const result = renderer.render(sampleDocument, {
+      const result = await renderer.render(sampleDocument, {
         includeFrontmatter: true,
       });
 
@@ -92,7 +92,7 @@ describe('RMarkdownRenderer', () => {
     });
 
     it('should handle code chunks with options', async () => {
-      const result = renderer.render(sampleDocument, {
+      const result = await renderer.render(sampleDocument, {
         preserveCodeChunks: true,
         defaultChunkOptions: {
           echo: false,
@@ -106,7 +106,7 @@ describe('RMarkdownRenderer', () => {
     });
 
     it('should support bookdown format', async () => {
-      const result = renderer.render(sampleDocument, {
+      const result = await renderer.render(sampleDocument, {
         useBookdown: true,
         enableCrossReferences: true,
       });
@@ -136,7 +136,7 @@ data <- mtcars
 The analysis shows interesting results.
 `;
 
-      const result = renderer.parse(rmarkdownContent);
+      const result = await renderer.parse(rmarkdownContent);
 
       expect(result.document.bibliographicEntry.title).toBe('Test Document');
       expect(result.document.bodyMatter.contents).toHaveLength(1);
@@ -153,7 +153,7 @@ clean_data <- mtcars %>%
 \`\`\`
 `;
 
-      const result = renderer.parse(rmarkdownContent);
+      const result = await renderer.parse(rmarkdownContent);
       const firstContent = result.document.bodyMatter.contents[0];
       if (firstContent && 'contents' in firstContent && firstContent.contents) {
         const codeBlocks = firstContent.contents.filter((block) =>
@@ -197,7 +197,7 @@ plot(mtcars$mpg, mtcars$hp)
 \`\`\`
 `;
 
-      const result = renderer.parse(rmarkdownContent, {
+      const result = await renderer.parse(rmarkdownContent, {
         parseBookdownReferences: true,
       });
 
@@ -269,7 +269,7 @@ library(ggplot2)
 \`\`\`
 `;
 
-      const result = renderer.validate(validContent);
+      const result = await renderer.validate(validContent);
 
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
@@ -283,7 +283,7 @@ x <- 1
 \`\`\`
 `;
 
-      const result = renderer.validate(invalidContent);
+      const result = await renderer.validate(invalidContent);
 
       expect(result.warnings.length).toBeGreaterThan(0);
     });
@@ -298,7 +298,7 @@ y <- 2
 \`\`\`
 `;
 
-      const result = renderer.validate(duplicateContent);
+      const result = await renderer.validate(duplicateContent);
 
       expect(result.errors.length).toBeGreaterThan(0);
       expect(result.errors[0]?.code).toBe('duplicate-label');
@@ -326,7 +326,7 @@ model <- lm(mpg ~ hp, data = mtcars)
 \`\`\`
 `;
 
-      const metadata = renderer.getMetadata(content);
+      const metadata = await renderer.getMetadata(content);
 
       expect(metadata.format).toBe('rmarkdown');
       expect(metadata.codeChunks?.length).toBe(2);
@@ -349,13 +349,13 @@ model <- lm(mpg ~ hp, data = mtcars)
 
   describe('output format configurations', () => {
     it('should render with HTML document configuration', async () => {
-      const result = renderer.render(sampleDocument, OUTPUT_FORMAT_CONFIGS.HTML_DOCUMENT);
+      const result = await renderer.render(sampleDocument, OUTPUT_FORMAT_CONFIGS.HTML_DOCUMENT);
 
       expect(result.content).toContain('output: html_document');
     });
 
     it('should render with Bookdown configuration', async () => {
-      const result = renderer.render(sampleDocument, OUTPUT_FORMAT_CONFIGS.BOOKDOWN_GITBOOK);
+      const result = await renderer.render(sampleDocument, OUTPUT_FORMAT_CONFIGS.BOOKDOWN_GITBOOK);
 
       expect(result.content).toContain('output: bookdown::gitbook');
       expect(result.content).toContain('{#introduction}');
@@ -364,7 +364,7 @@ model <- lm(mpg ~ hp, data = mtcars)
 
   describe('academic workflows', () => {
     it('should support statistical analysis workflow', async () => {
-      const result = renderer.render(
+      const result = await renderer.render(
         sampleDocument,
         ACADEMIC_WORKFLOW_CONFIGS.STATISTICAL_ANALYSIS
       );
@@ -374,7 +374,7 @@ model <- lm(mpg ~ hp, data = mtcars)
     });
 
     it('should support academic paper workflow', async () => {
-      const result = renderer.render(
+      const result = await renderer.render(
         sampleDocument,
         ACADEMIC_WORKFLOW_CONFIGS.ACADEMIC_PAPER
       );
