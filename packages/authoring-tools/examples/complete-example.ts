@@ -4,10 +4,10 @@
 
 /* eslint-disable no-console */
 
-import type { XatsDocument } from '@xats-org/types';
-
 import { XatsAuthoringTool } from '../src/index.js';
+
 import type { SimplifiedDocument } from '../src/types.js';
+import type { XatsDocument } from '@xats-org/types';
 
 async function demonstrateAuthoringTools() {
   console.log('🚀 xats Authoring Tools Demo\n');
