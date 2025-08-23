@@ -27,9 +27,9 @@ export function parseChunkHeader(header: string): {
   const spaceIndex = content.search(/[,\s]/);
   const enginePart = spaceIndex === -1 ? content : content.substring(0, spaceIndex);
   const optionsPart = spaceIndex === -1 ? '' : content.substring(spaceIndex);
-  
+
   const engine = (enginePart.trim() || 'r') as RChunkEngine;
-  
+
   // Smart split the options part by commas, respecting parentheses
   const parts = optionsPart ? smartSplit(optionsPart, ',') : [];
 
@@ -84,7 +84,7 @@ function smartSplit(str: string, delimiter: string): string[] {
 
   for (let i = 0; i < str.length; i++) {
     const char = str[i]!;
-    
+
     if (!inQuotes && (char === '"' || char === "'")) {
       inQuotes = true;
       quoteChar = char;
@@ -106,11 +106,11 @@ function smartSplit(str: string, delimiter: string): string[] {
       current += char;
     }
   }
-  
+
   if (current.trim()) {
     result.push(current.trim());
   }
-  
+
   return result;
 }
 
@@ -467,7 +467,7 @@ export function validateRMarkdown(content: string): RMarkdownValidationError[] {
     const { options } = chunk;
 
     // Check for duplicate labels
-    if (options.label) {
+    if (options.label && typeof options.label === 'string') {
       if (context.chunkLabels.has(options.label)) {
         errors.push({
           type: 'duplicate-label',
@@ -485,7 +485,7 @@ export function validateRMarkdown(content: string): RMarkdownValidationError[] {
       if (!validateChunkOption(key, value)) {
         const error: RMarkdownValidationError = {
           type: 'invalid-option',
-          message: `Invalid chunk option: ${key}=${value}`,
+          message: `Invalid chunk option: ${key}=${String(value)}`,
           line: getLineNumber(content, chunk.start),
           severity: 'warning',
         };

@@ -665,8 +665,7 @@ export interface RMarkdownPipelineStage {
 /**
  * R Markdown-specific parse result extending base ParseResult
  */
-export interface RMarkdownParseResult
-  extends Omit<ParseResult, 'metadata'> {
+export interface RMarkdownParseResult extends Omit<ParseResult, 'metadata'> {
   /** R Markdown-specific metadata */
   metadata?: RMarkdownMetadata;
 }
