@@ -1,0 +1,528 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/schemas/0.5.0/registry/registry.json",
+  "title": "xats Content Registry Schema v0.5.0",
+  "description": "Schema for xats content registry configuration and package metadata, enabling distributed content sharing and dependency management.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "description": "The semantic version of the registry schema this configuration conforms to.",
+      "type": "string",
+      "enum": ["0.5.0"]
+    },
+    "registryInfo": {
+      "description": "Information about the registry itself.",
+      "$ref": "#/definitions/RegistryInfo"
+    },
+    "packages": {
+      "description": "Map of available packages in this registry.",
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9]([a-z0-9_-]*[a-z0-9])?(/[a-z0-9]([a-z0-9_-]*[a-z0-9])?)*$": {
+          "$ref": "#/definitions/PackageMetadata"
+        }
+      },
+      "additionalProperties": false
+    },
+    "access": {
+      "description": "Access control configuration for the registry.",
+      "$ref": "#/definitions/AccessConfig"
+    }
+  },
+  "required": ["schemaVersion", "registryInfo", "packages"],
+  
+  "definitions": {
+    "RegistryInfo": {
+      "description": "Information about the registry itself.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Human-readable name of the registry.",
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "description": "Description of the registry's purpose and content.",
+          "type": "string"
+        },
+        "url": {
+          "description": "Base URL where the registry content is hosted.",
+          "type": "string",
+          "format": "uri"
+        },
+        "apiVersion": {
+          "description": "API version supported by this registry.",
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "maintainers": {
+          "description": "List of registry maintainers.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Maintainer"
+          }
+        },
+        "license": {
+          "description": "Default license for content in this registry.",
+          "type": "string",
+          "format": "uri"
+        },
+        "publicKey": {
+          "description": "Public key for verifying registry content signatures (base64-encoded).",
+          "type": "string",
+          "pattern": "^[A-Za-z0-9+/]+=*$"
+        },
+        "trustLevel": {
+          "description": "Trust level of this registry.",
+          "type": "string",
+          "enum": ["verified", "trusted", "community", "experimental"],
+          "default": "community"
+        },
+        "created": {
+          "description": "ISO 8601 timestamp when the registry was created.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated": {
+          "description": "ISO 8601 timestamp when the registry was last updated.",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["name", "url", "apiVersion"],
+      "additionalProperties": false
+    },
+    
+    "PackageMetadata": {
+      "description": "Metadata for a package in the registry.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Package name following reverse domain notation.",
+          "type": "string",
+          "pattern": "^[a-z0-9]([a-z0-9_-]*[a-z0-9])?(/[a-z0-9]([a-z0-9_-]*[a-z0-9])?)*$"
+        },
+        "title": {
+          "description": "Human-readable title of the package.",
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "description": "Detailed description of the package content.",
+          "type": "string"
+        },
+        "versions": {
+          "description": "Available versions of this package.",
+          "type": "object",
+          "patternProperties": {
+            "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*)?$": {
+              "$ref": "#/definitions/PackageVersion"
+            }
+          },
+          "additionalProperties": false
+        },
+        "latest": {
+          "description": "Latest stable version identifier.",
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*)?$"
+        },
+        "tags": {
+          "description": "Searchable tags for content discovery.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          }
+        },
+        "categories": {
+          "description": "Content categories for organization.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "biology", "chemistry", "physics", "mathematics", "engineering",
+              "computer-science", "medicine", "business", "economics", "psychology",
+              "education", "literature", "history", "philosophy", "art", "language"
+            ]
+          }
+        },
+        "maintainers": {
+          "description": "Package maintainers.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Maintainer"
+          }
+        },
+        "license": {
+          "description": "Package license (overrides registry default).",
+          "type": "string",
+          "format": "uri"
+        },
+        "homepage": {
+          "description": "Package homepage URL.",
+          "type": "string",
+          "format": "uri"
+        },
+        "repository": {
+          "description": "Source code repository information.",
+          "$ref": "#/definitions/Repository"
+        },
+        "created": {
+          "description": "ISO 8601 timestamp when the package was created.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated": {
+          "description": "ISO 8601 timestamp when the package was last updated.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "downloadCount": {
+          "description": "Total download count across all versions.",
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": ["name", "title", "versions", "latest"],
+      "additionalProperties": false
+    },
+    
+    "PackageVersion": {
+      "description": "A specific version of a package.",
+      "type": "object",
+      "properties": {
+        "version": {
+          "description": "Semantic version number.",
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*)?$"
+        },
+        "description": {
+          "description": "Description of changes in this version.",
+          "type": "string"
+        },
+        "files": {
+          "description": "Files included in this package version.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PackageFile"
+          },
+          "minItems": 1
+        },
+        "dependencies": {
+          "description": "Package dependencies with version constraints.",
+          "type": "object",
+          "patternProperties": {
+            "^[a-z0-9]([a-z0-9_-]*[a-z0-9])?(/[a-z0-9]([a-z0-9_-]*[a-z0-9])?)*$": {
+              "type": "string",
+              "pattern": "^(\\^|~|>=|<=|>|<|=)?\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*)?$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "peerDependencies": {
+          "description": "Peer dependencies that should be provided by the consuming project.",
+          "type": "object",
+          "patternProperties": {
+            "^[a-z0-9]([a-z0-9_-]*[a-z0-9])?(/[a-z0-9]([a-z0-9_-]*[a-z0-9])?)*$": {
+              "type": "string",
+              "pattern": "^(\\^|~|>=|<=|>|<|=)?\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*)?$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "integrity": {
+          "description": "Integrity hash for the package version (SHA-256).",
+          "type": "string",
+          "pattern": "^sha256-[A-Za-z0-9+/]+=*$"
+        },
+        "size": {
+          "description": "Total size of the package in bytes.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "published": {
+          "description": "ISO 8601 timestamp when this version was published.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "deprecated": {
+          "description": "Whether this version is deprecated.",
+          "type": "boolean",
+          "default": false
+        },
+        "deprecationMessage": {
+          "description": "Message explaining why the version is deprecated.",
+          "type": "string"
+        },
+        "engines": {
+          "description": "Compatible xats engine versions.",
+          "$ref": "#/definitions/EngineRequirements"
+        },
+        "dist": {
+          "description": "Distribution information for this version.",
+          "$ref": "#/definitions/DistributionInfo"
+        }
+      },
+      "required": ["version", "files", "integrity", "size", "published"],
+      "additionalProperties": false
+    },
+    
+    "PackageFile": {
+      "description": "A file within a package version.",
+      "type": "object",
+      "properties": {
+        "path": {
+          "description": "Relative path within the package.",
+          "type": "string",
+          "pattern": "^[^/].*$"
+        },
+        "type": {
+          "description": "Type of file content.",
+          "type": "string",
+          "enum": [
+            "xats-document", "xats-chapter", "xats-section", 
+            "resource", "schema", "template", "metadata"
+          ]
+        },
+        "size": {
+          "description": "File size in bytes.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "integrity": {
+          "description": "File integrity hash (SHA-256).",
+          "type": "string",
+          "pattern": "^sha256-[A-Za-z0-9+/]+=*$"
+        },
+        "mimeType": {
+          "description": "MIME type of the file.",
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9!#$&\\-\\^_]*\\/[a-z0-9][a-z0-9!#$&\\-\\^_.]*$"
+        },
+        "encoding": {
+          "description": "Text encoding (for text files).",
+          "type": "string",
+          "enum": ["utf-8", "utf-16", "ascii", "iso-8859-1"],
+          "default": "utf-8"
+        }
+      },
+      "required": ["path", "type", "size", "integrity"],
+      "additionalProperties": false
+    },
+    
+    "Maintainer": {
+      "description": "A package or registry maintainer.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Maintainer's name.",
+          "type": "string",
+          "minLength": 1
+        },
+        "email": {
+          "description": "Maintainer's email address.",
+          "type": "string",
+          "format": "email"
+        },
+        "url": {
+          "description": "Maintainer's website or profile URL.",
+          "type": "string",
+          "format": "uri"
+        },
+        "organization": {
+          "description": "Maintainer's organization.",
+          "type": "string"
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    
+    "Repository": {
+      "description": "Source code repository information.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "Version control system type.",
+          "type": "string",
+          "enum": ["git", "svn", "hg", "bzr"]
+        },
+        "url": {
+          "description": "Repository URL.",
+          "type": "string",
+          "format": "uri"
+        },
+        "directory": {
+          "description": "Subdirectory within the repository (for monorepos).",
+          "type": "string"
+        }
+      },
+      "required": ["type", "url"],
+      "additionalProperties": false
+    },
+    
+    "EngineRequirements": {
+      "description": "xats engine compatibility requirements.",
+      "type": "object",
+      "properties": {
+        "xats": {
+          "description": "Compatible xats schema versions.",
+          "type": "string",
+          "pattern": "^(\\^|~|>=|<=|>|<|=)?\\d+\\.\\d+\\.\\d+$"
+        },
+        "node": {
+          "description": "Compatible Node.js versions (for tooling).",
+          "type": "string",
+          "pattern": "^(\\^|~|>=|<=|>|<|=)?\\d+\\.\\d+\\.\\d+$"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "DistributionInfo": {
+      "description": "Distribution and download information.",
+      "type": "object",
+      "properties": {
+        "tarball": {
+          "description": "URL to the package tarball.",
+          "type": "string",
+          "format": "uri"
+        },
+        "shasum": {
+          "description": "SHA-1 checksum of the tarball.",
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "integrity": {
+          "description": "Integrity hash of the tarball.",
+          "type": "string",
+          "pattern": "^sha[0-9]+-[A-Za-z0-9+/]+=*$"
+        },
+        "unpackedSize": {
+          "description": "Total size when unpacked in bytes.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "fileCount": {
+          "description": "Number of files in the package.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "npm": {
+          "description": "npm-compatible distribution information.",
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": ["tarball", "integrity"],
+      "additionalProperties": false
+    },
+    
+    "AccessConfig": {
+      "description": "Access control configuration for the registry.",
+      "type": "object",
+      "properties": {
+        "public": {
+          "description": "Whether the registry is publicly accessible.",
+          "type": "boolean",
+          "default": true
+        },
+        "authentication": {
+          "description": "Authentication requirements.",
+          "type": "object",
+          "properties": {
+            "required": {
+              "description": "Whether authentication is required.",
+              "type": "boolean",
+              "default": false
+            },
+            "methods": {
+              "description": "Supported authentication methods.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["token", "oauth", "saml", "ldap", "basic"]
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "permissions": {
+          "description": "Permission-based access controls.",
+          "type": "object",
+          "properties": {
+            "read": {
+              "description": "Read permission requirements.",
+              "$ref": "#/definitions/PermissionRule"
+            },
+            "write": {
+              "description": "Write permission requirements.",
+              "$ref": "#/definitions/PermissionRule"
+            },
+            "admin": {
+              "description": "Administrative permission requirements.",
+              "$ref": "#/definitions/PermissionRule"
+            }
+          },
+          "additionalProperties": false
+        },
+        "rateLimit": {
+          "description": "Rate limiting configuration.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether rate limiting is enabled.",
+              "type": "boolean",
+              "default": false
+            },
+            "requestsPerHour": {
+              "description": "Maximum requests per hour.",
+              "type": "integer",
+              "minimum": 1
+            },
+            "burstLimit": {
+              "description": "Maximum burst requests.",
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "PermissionRule": {
+      "description": "A permission rule for access control.",
+      "type": "object",
+      "properties": {
+        "roles": {
+          "description": "Required user roles.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "users": {
+          "description": "Specific allowed users.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "organizations": {
+          "description": "Allowed organizations.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "conditions": {
+          "description": "Additional conditions (JSON Logic format).",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

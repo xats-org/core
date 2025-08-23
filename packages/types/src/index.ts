@@ -10,6 +10,7 @@ export * from './document.js';
 export * from './validation.js';
 export * from './rendering.js';
 export * from './file-modularity.js';
+export * from './registry.js';
 export * from './schema.js';
 export * from './common.js';
 

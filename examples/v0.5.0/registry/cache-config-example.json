@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "0.5.0",
+  "strategy": "adaptive",
+  "levels": {
+    "memory": {
+      "enabled": true,
+      "maxSize": "256MB",
+      "maxItems": 1000,
+      "ttl": "1h",
+      "algorithm": "lru",
+      "compressionEnabled": false,
+      "compressionThreshold": 1024
+    },
+    "disk": {
+      "enabled": true,
+      "path": "~/.xats/cache",
+      "maxSize": "2GB",
+      "maxFiles": 10000,
+      "ttl": "24h",
+      "compressionEnabled": true,
+      "compressionLevel": 6,
+      "cleanup": {
+        "enabled": true,
+        "interval": "2h",
+        "maxAge": "7d",
+        "diskSpaceThreshold": 0.85
+      },
+      "indexing": {
+        "enabled": true,
+        "indexPath": "~/.xats/cache/index.db",
+        "rebuildInterval": "24h"
+      }
+    },
+    "network": {
+      "enabled": true,
+      "provider": "cloudflare",
+      "endpoints": [
+        "https://cdn.xats.org/registry/",
+        "https://cache.xats.org/registry/"
+      ],
+      "headers": {
+        "maxAge": 3600,
+        "staleWhileRevalidate": 86400,
+        "staleIfError": 604800,
+        "immutable": false
+      },
+      "purging": {
+        "enabled": true,
+        "apiKey": "${CLOUDFLARE_API_KEY}",
+        "webhookUrl": "https://api.xats.org/cache/purge-webhook"
+      }
+    },
+    "distributed": {
+      "enabled": false,
+      "provider": "redis",
+      "connection": {
+        "host": "localhost",
+        "port": 6379,
+        "database": 0
+      },
+      "serialization": "json",
+      "compression": {
+        "enabled": true,
+        "algorithm": "lz4",
+        "threshold": 1024
+      }
+    }
+  },
+  "invalidation": {
+    "strategy": "hybrid",
+    "timeBasedTtl": "1h",
+    "dependencyTracking": {
+      "enabled": true,
+      "trackFileModification": true,
+      "trackContentHash": true,
+      "cascadeInvalidation": true
+    },
+    "webhooks": [
+      {
+        "url": "https://api.xats.org/cache/invalidation",
+        "secret": "${WEBHOOK_SECRET}",
+        "events": ["cache-invalidate", "cache-expire"]
+      }
+    ]
+  },
+  "performance": {
+    "monitoring": {
+      "enabled": true,
+      "metricsInterval": "30s",
+      "historyRetention": "7d"
+    },
+    "optimization": {
+      "enabled": true,
+      "adaptiveSizing": true,
+      "preloading": false,
+      "prefetchThreshold": 0.8
+    },
+    "thresholds": {
+      "hitRateMinimum": 0.75,
+      "responseTimeMaximum": 100,
+      "memoryUsageMaximum": 0.85
+    }
+  },
+  "security": {
+    "encryption": {
+      "enabled": false,
+      "algorithm": "aes-256-gcm",
+      "keyRotationInterval": "30d"
+    },
+    "accessControl": {
+      "enabled": false,
+      "allowedOrigins": ["https://xats.org", "https://*.xats.org"],
+      "requireAuthentication": false
+    },
+    "integrity": {
+      "enabled": true,
+      "algorithm": "sha256",
+      "verifyOnRead": true
+    }
+  }
+}
