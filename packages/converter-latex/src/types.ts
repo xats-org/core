@@ -3,7 +3,7 @@
  * Supports academic publishing workflows with high-fidelity mathematical content
  */
 
-import type { RendererOptions, ParseOptions } from '@xats-org/types';
+import type { RendererOptions, ParseOptions, XatsDocument } from '@xats-org/types';
 
 /**
  * Advanced LaTeX converter options extending base renderer options
@@ -483,4 +483,43 @@ export interface LaTeXFidelityIssue {
   recommendation?: string;
   command?: string;
   environment?: string;
+}
+/**
+ * Result of parsing a LaTeX document
+ */
+export interface LaTeXParseResult {
+  /** Whether parsing was successful */
+  success: boolean;
+  
+  /** Parsed xats document */
+  document: XatsDocument;
+  
+  /** Parsing metadata */
+  metadata: Record<string, any>;
+  
+  /** Any parsing errors */
+  errors?: Array<{
+    message: string;
+    location?: string;
+  }>;
+}
+
+/**
+ * Result of rendering to LaTeX format
+ */
+export interface LaTeXRenderResult {
+  /** Whether rendering was successful */
+  success: boolean;
+  
+  /** Rendered LaTeX content */
+  content: string;
+  
+  /** Rendering metadata */
+  metadata: Record<string, any>;
+  
+  /** Any rendering errors */
+  errors?: Array<{
+    message: string;
+    location?: string;
+  }>;
 }

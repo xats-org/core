@@ -3,7 +3,7 @@
  * Supports Microsoft Word bidirectional conversion with production workflow features
  */
 
-import type { RendererOptions, ParseOptions } from '@xats-org/types';
+import type { RendererOptions, ParseOptions, XatsDocument } from '@xats-org/types';
 
 /**
  * Advanced Word converter options extending base renderer options
@@ -471,4 +471,43 @@ export interface WordConversionContext {
     paragraph?: number;
     run?: number;
   };
+}
+/**
+ * Result of parsing a Word document
+ */
+export interface WordParseResult {
+  /** Whether parsing was successful */
+  success: boolean;
+  
+  /** Parsed xats document */
+  document: XatsDocument;
+  
+  /** Parsing metadata */
+  metadata: Record<string, any>;
+  
+  /** Any parsing errors */
+  errors?: Array<{
+    message: string;
+    location?: string;
+  }>;
+}
+
+/**
+ * Result of rendering to Word format
+ */
+export interface WordRenderResult {
+  /** Whether rendering was successful */
+  success: boolean;
+  
+  /** Rendered Word content */
+  content: string;
+  
+  /** Rendering metadata */
+  metadata: Record<string, any>;
+  
+  /** Any rendering errors */
+  errors?: Array<{
+    message: string;
+    location?: string;
+  }>;
 }
