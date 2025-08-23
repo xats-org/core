@@ -234,7 +234,7 @@ In the next chapter, we'll dive deep into arrays and their variants, exploring:
       result.errors?.forEach((error, index) => {
         console.log(`   ${index + 1}. ${error.message}`);
         if (error.suggestions.length > 0) {
-          console.log(`      💡 Suggestion: ${error.suggestions[0].description}`);
+          console.log(`      💡 Suggestion: ${error.suggestions[0]?.description}`);
         }
       });
     }
@@ -321,7 +321,7 @@ console.log(result);
     
     console.log(`\n${level.toUpperCase()} level error message:`);
     if (result.validation?.errors.length) {
-      console.log(`   "${result.validation.errors[0].message}"`);
+      console.log(`   "${result.validation.errors[0]?.message}"`);
     }
   }
 
@@ -335,9 +335,5 @@ console.log(result);
   console.log('   ✅ Comprehensive accessibility support');
 }
 
-// Run the demo
-if (import.meta.main) {
-  demonstrateAuthoringTools().catch(console.error);
-}
-
+// To run the demo, import and call demonstrateAuthoringTools()
 export { demonstrateAuthoringTools };
