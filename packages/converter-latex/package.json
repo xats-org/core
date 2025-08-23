@@ -1,0 +1,76 @@
+{
+  "name": "@xats-org/converter-latex",
+  "version": "0.5.0",
+  "description": "Academic publishing-grade bidirectional conversion between xats and LaTeX documents",
+  "keywords": [
+    "xats",
+    "converter",
+    "latex",
+    "tex",
+    "academic",
+    "mathematical",
+    "publishing"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "xats-org",
+    "email": "hello@xats.org",
+    "url": "https://xats.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xats-org/core.git",
+    "directory": "packages/converter-latex"
+  },
+  "bugs": {
+    "url": "https://github.com/xats-org/core/issues"
+  },
+  "homepage": "https://xats.org/docs/conversion/latex",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix"
+  },
+  "dependencies": {
+    "@xats-org/types": "workspace:*",
+    "@xats-org/utils": "workspace:*",
+    "@xats-org/validator": "workspace:*",
+    "latex-parser": "^0.7.3",
+    "mathjax": "^3.2.2",
+    "bibtex-parser": "^0.3.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.7",
+    "@xats-org/eslint-config": "workspace:*",
+    "@xats-org/vitest-config": "workspace:*",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
