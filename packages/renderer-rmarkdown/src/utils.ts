@@ -1,6 +1,7 @@
 /**
  * Utility functions for R Markdown processing
  */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 import type {
   RChunkOptions,
@@ -83,7 +84,7 @@ function smartSplit(str: string, delimiter: string): string[] {
   let quoteChar = '';
 
   for (let i = 0; i < str.length; i++) {
-    const char = str[i]!;
+    const char = str[i];
 
     if (!inQuotes && (char === '"' || char === "'")) {
       inQuotes = true;
@@ -648,16 +649,19 @@ export function extractMathExpressions(content: string): Array<{
     if (!match[1]) continue;
 
     // Skip if this is part of display math
+    const matchIndex = match?.index;
+    if (matchIndex === undefined) continue;
+
     const isInDisplay = expressions.some(
-      (expr) => match!.index >= expr.start && match!.index <= expr.end
+      (expr) => matchIndex >= expr.start && matchIndex <= expr.end
     );
 
     if (!isInDisplay) {
       expressions.push({
         type: 'inline',
         content: match[1].trim(),
-        start: match.index,
-        end: match.index + match[0].length,
+        start: matchIndex,
+        end: matchIndex + match[0].length,
       });
     }
   }

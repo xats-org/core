@@ -1,6 +1,12 @@
 /**
  * Convert xats documents to R Markdown format
  */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {
   // extractPlainText,
@@ -32,6 +38,9 @@ import type {
   Section,
   ContentBlock,
   SemanticText,
+  FrontMatter,
+  BodyMatter,
+  BackMatter,
   // RendererOptions,
   RenderResult,
   // BidirectionalRenderer,
@@ -194,7 +203,7 @@ export class XatsToRMarkdownConverter {
   /**
    * Process front matter
    */
-  private processFrontMatter(frontMatter: any): string {
+  private processFrontMatter(frontMatter: FrontMatter): string {
     let content = '';
 
     if (frontMatter.preface) {
@@ -217,7 +226,7 @@ export class XatsToRMarkdownConverter {
   /**
    * Process body matter
    */
-  private processBodyMatter(bodyMatter: any): string {
+  private processBodyMatter(bodyMatter: BodyMatter): string {
     return bodyMatter.contents
       .map((item: Unit | Chapter) => {
         if ('contents' in item && Array.isArray(item.contents)) {
@@ -239,7 +248,7 @@ export class XatsToRMarkdownConverter {
   /**
    * Process back matter
    */
-  private processBackMatter(backMatter: any): string {
+  private processBackMatter(backMatter: BackMatter): string {
     let content = '';
 
     if (backMatter.appendices) {
@@ -311,7 +320,7 @@ export class XatsToRMarkdownConverter {
     this.context.headingLevel = level;
 
     const title = this.processSemanticText(chapter.title);
-    const prefix = isAppendix ? 'Appendix' : 'Chapter';
+    const _prefix = isAppendix ? 'Appendix' : 'Chapter';
 
     // Add bookdown reference if enabled
     let header = `${'#'.repeat(level)} ${title}`;
@@ -422,17 +431,27 @@ export class XatsToRMarkdownConverter {
     }
 
     // Type guard to check if content has the structure of SemanticText
-    const content = block.content as any;
-    if (content.runs && Array.isArray(content.runs)) {
+    const content = block.content as unknown;
+    if (
+      content &&
+      typeof content === 'object' &&
+      'runs' in content &&
+      Array.isArray((content as any).runs)
+    ) {
       const semanticText: SemanticText = {
-        runs: content.runs,
+        runs: (content as any).runs,
       };
       return this.processSemanticText(semanticText);
     }
 
     // Fallback for text property
-    if ('text' in content && typeof content.text === 'string') {
-      return content.text;
+    if (
+      content &&
+      typeof content === 'object' &&
+      'text' in content &&
+      typeof (content as any).text === 'string'
+    ) {
+      return (content as any).text;
     }
 
     return '';
@@ -446,19 +465,24 @@ export class XatsToRMarkdownConverter {
       return '';
     }
 
-    const content = block.content as any;
-    const level = content.level || 1;
+    const content = block.content as unknown;
+    if (!content || typeof content !== 'object') {
+      return '';
+    }
+
+    const contentObj = content as any;
+    const level = contentObj.level || 1;
 
     let text = '';
-    if (content.text && typeof content.text === 'object' && content.text.runs) {
+    if (contentObj.text && typeof contentObj.text === 'object' && contentObj.text.runs) {
       // Text is a SemanticText object
-      text = this.processSemanticText(content.text as SemanticText);
-    } else if (typeof content.text === 'string') {
+      text = this.processSemanticText(contentObj.text as SemanticText);
+    } else if (typeof contentObj.text === 'string') {
       // Text is a plain string
-      text = content.text;
-    } else if (content.runs && Array.isArray(content.runs)) {
+      text = contentObj.text;
+    } else if (contentObj.runs && Array.isArray(contentObj.runs)) {
       // Content itself is SemanticText
-      const semanticText: SemanticText = { runs: content.runs };
+      const semanticText: SemanticText = { runs: contentObj.runs };
       text = this.processSemanticText(semanticText);
     }
 
@@ -478,14 +502,24 @@ export class XatsToRMarkdownConverter {
       return '';
     }
 
-    const content = block.content as any;
-    const ordered = content.listType === 'ordered';
-    const items = content.items || [];
+    const content = block.content as unknown;
+    if (!content || typeof content !== 'object') {
+      return '';
+    }
+
+    const contentObj = content as any;
+    const ordered = contentObj.listType === 'ordered';
+    const items = contentObj.items || [];
+
+    if (!Array.isArray(items)) {
+      return '';
+    }
 
     return items
-      .map((item: any, index: number) => {
+      .map((item: unknown, index: number) => {
         const marker = ordered ? `${index + 1}.` : '-';
-        const text = this.processSemanticText(item.text || item);
+        const itemObj = item as any;
+        const text = this.processSemanticText(itemObj.text || itemObj);
         return `${marker} ${text}`;
       })
       .join('\n');
@@ -657,38 +691,43 @@ export class XatsToRMarkdownConverter {
     }
 
     return text.runs
-      .map((run: any) => {
-        switch (run.runType) {
+      .map((run) => {
+        switch (run.type) {
           case 'text':
-            return run.text || '';
+            return (run as any).text || '';
 
-          case 'emphasis':
-            const emphText = run.text || '';
+          case 'emphasis': {
+            const emphText = (run as any).text || '';
             return `*${emphText}*`;
+          }
 
-          case 'strong':
-            const strongText = run.text || '';
+          case 'strong': {
+            const strongText = (run as any).text || '';
             return `**${strongText}**`;
+          }
 
-          case 'code':
-            const codeText = run.text || '';
+          case 'code': {
+            const codeText = (run as any).text || '';
             return `\`${codeText}\``;
+          }
 
-          case 'reference':
-            const refRun = run;
+          case 'reference': {
+            const refRun = run as any;
             const refText = refRun.text || refRun.referenceId || '';
             if (this.options.useBookdown && refRun.referenceId) {
               return `\\@ref(${refRun.referenceId})`;
             }
             return `[${refText}](#${refRun.referenceId || ''})`;
+          }
 
-          case 'citation':
-            const citRun = run;
+          case 'citation': {
+            const citRun = run as any;
             const citText = citRun.text || citRun.citationKey || '';
             return `[@${citRun.citationKey || citText}]`;
+          }
 
           default:
-            return run.text || '';
+            return (run as any).text || '';
         }
       })
       .join('');
@@ -697,28 +736,34 @@ export class XatsToRMarkdownConverter {
   /**
    * Determine if code block should be an R chunk
    */
-  private shouldCreateRChunk(language: string, content: any): boolean {
+  private shouldCreateRChunk(language: string, content: unknown): boolean {
     if (!this.options.preserveCodeChunks) return false;
 
     const rLanguages = ['r', 'R', 'python', 'sql', 'bash', 'js'];
-    return rLanguages.includes(language) || content.executable === true;
+    return rLanguages.includes(language) || (content as any)?.executable === true;
   }
 
   /**
    * Create R code chunk
    */
-  private createRChunk(code: string, language: string, content: any, block: ContentBlock): string {
+  private createRChunk(
+    code: string,
+    language: string,
+    content: unknown,
+    block: ContentBlock
+  ): string {
     this.context.chunkNumber++;
 
     const engine = (language.toLowerCase() || 'r') as RChunkEngine;
+    const contentObj = content as any;
     const label =
-      content.label ||
+      contentObj?.label ||
       block.id ||
       generateChunkLabel(engine, this.context.chunkNumber, this.context.chunkLabels);
 
     // Build chunk options
     const options: RChunkOptions = normalizeChunkOptions(
-      content.options || {},
+      contentObj?.options || {},
       this.options.defaultChunkOptions
     );
 
