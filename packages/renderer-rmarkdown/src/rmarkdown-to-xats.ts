@@ -146,7 +146,7 @@ export class RMarkdownToXatsParser {
       bibliographicEntry: this.createBibliographicEntry(),
       subject: buildCoreUri('subjects', 'general'),
       bodyMatter: {
-        contents: contentWithChunks,
+        contents: sections,
       },
     };
 
