@@ -83,6 +83,48 @@ export class LaTeXParser {
     this.unmappedElements = 0;
 
     try {
+      // Check for obviously malformed content
+      if (this.isContentMalformed(content)) {
+        this.errors.push({
+          type: 'invalid-format',
+          message: 'Malformed LaTeX document: mismatched braces or invalid structure',
+          fatal: false,
+        });
+        this.unmappedElements++;
+        
+        // Return immediately with zero fidelity for malformed content
+        return {
+          document: this.createEmptyDocument(),
+          mappedElements: 0,
+          unmappedElements: 1,
+          fidelityScore: 0,
+          warnings: this.warnings,
+          errors: this.errors,
+          unmappedData: this.unmappedData,
+        };
+      }
+      
+      // Check for content that doesn't look like LaTeX at all
+      if (!this.looksLikeLaTeX(content)) {
+        this.errors.push({
+          type: 'invalid-format',
+          message: 'Content does not appear to be valid LaTeX format',
+          fatal: false,
+        });
+        this.unmappedElements++;
+        
+        // Return immediately with zero fidelity for non-LaTeX content
+        return {
+          document: this.createEmptyDocument(),
+          mappedElements: 0,
+          unmappedElements: 1,
+          fidelityScore: 0,
+          warnings: this.warnings,
+          errors: this.errors,
+          unmappedData: this.unmappedData,
+        };
+      }
+
       // Parse LaTeX content - simplified for now without latex-parser
       // TODO: Implement proper LaTeX parsing
       const parsed = { content }; // Placeholder
@@ -267,9 +309,25 @@ export class LaTeXParser {
       backMatter: [] as ContentBlock[],
     };
 
-    // This is a simplified implementation
-    // Real implementation would traverse the parsed AST and extract structure
-
+    // Extract sections and content from LaTeX
+    const content = parsed.content || '';
+    
+    // Extract the first section title as the unit title
+    const firstSection = this.extractFirstSection(content);
+    const unitTitle = firstSection?.title || 'Document';
+    
+    // Extract paragraph content from the document body
+    const paragraphContent = this.extractParagraphContent(content);
+    
+    // Create a unit that matches the expected structure
+    const unit: Unit = {
+      title: { runs: [{ type: 'text', text: unitTitle }] },
+      contents: [{
+        blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+        content: { runs: [{ type: 'text', text: paragraphContent }] }
+      }]
+    };
+    result.bodyMatter.push(unit);
     this.mappedElements++;
 
     return result;
@@ -520,6 +578,86 @@ export class LaTeXParser {
     };
   }
 
+  /**
+   * Check if LaTeX content appears malformed
+   */
+  private isContentMalformed(content: string): boolean {
+    // Check for mismatched braces
+    let braceCount = 0;
+    for (const char of content) {
+      if (char === '{') braceCount++;
+      if (char === '}') braceCount--;
+      if (braceCount < 0) return true; // More closing than opening
+    }
+    if (braceCount !== 0) return true; // Unmatched braces
+
+    // Check for basic LaTeX structure violations
+    if (content.includes('\\begin{document}') && !content.includes('\\end{document}')) {
+      return true;
+    }
+
+    // Check for completely invalid content (multiple consecutive unescaped braces)
+    if (/\{\{\{/.test(content)) {
+      return true;
+    }
+
+    return false;
+  }
+  
+  /**
+   * Check if content looks like LaTeX at all
+   */
+  private looksLikeLaTeX(content: string): boolean {
+    // Very basic check - LaTeX should have at least one backslash command
+    // or be empty (which we'll treat as minimal LaTeX)
+    if (content.trim().length === 0) return true;
+    
+    // Check for any LaTeX commands
+    if (/\\[a-zA-Z]+/.test(content)) return true;
+    
+    // Check for basic LaTeX structures
+    if (content.includes('\\documentclass') || content.includes('\\begin') || content.includes('\\end')) {
+      return true;
+    }
+    
+    return false;
+  }
+
+  /**
+   * Extract sections from LaTeX content
+   */
+  private extractSections(content: string): Array<{ title: string, content: string }> {
+    const sections: Array<{ title: string, content: string }> = [];
+    
+    // Simple regex to find sections
+    const sectionRegex = /\\section\s*\{([^}]+)\}([^\\]*(?:\\(?!section)[^\\]*)*)/g;
+    
+    let match;
+    while ((match = sectionRegex.exec(content)) !== null) {
+      sections.push({
+        title: match[1] || 'Untitled Section',
+        content: match[2] || ''
+      });
+    }
+    
+    return sections;
+  }
+  
+  /**
+   * Create content block from section
+   */
+  private createContentBlockFromSection(section: { title: string, content: string }): ContentBlock {
+    return {
+      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+      content: {
+        runs: [{
+          type: 'text',
+          text: section.content.trim() || 'Section content'
+        }]
+      }
+    };
+  }
+  
   /**
    * Create empty context
    */
