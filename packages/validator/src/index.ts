@@ -362,6 +362,16 @@ export function validateXatsSync(document: unknown, options?: ValidatorOptions):
   return validator.validateSync(document, options);
 }
 
+// Re-export registry validation functionality
+export {
+  RegistryValidator,
+  RegistryResolver,
+  DependencyResolver,
+  registryValidator,
+  registryResolver,
+  dependencyResolver,
+} from './registry-validator.js';
+
 // Re-export types
 export type {
   ValidationResult,
@@ -369,4 +379,12 @@ export type {
   ValidatorOptions,
   ValidationWarning,
   ValidationMetadata,
+  // Registry types
+  RegistryConfig,
+  CacheConfig,
+  RegistryReference,
+  ResolvedRegistryReference,
+  RegistryResolutionOptions,
+  RegistryResolutionResult,
+  DependencyResolutionResult,
 } from '@xats-org/types';

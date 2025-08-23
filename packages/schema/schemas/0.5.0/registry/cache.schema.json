@@ -1,0 +1,611 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/schemas/0.5.0/registry/cache.json",
+  "title": "xats Cache Configuration Schema v0.5.0",
+  "description": "Schema for configuring multi-level caching strategies in xats file modularity system.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "description": "The semantic version of the cache schema this configuration conforms to.",
+      "type": "string",
+      "enum": ["0.5.0"]
+    },
+    "strategy": {
+      "description": "Overall caching strategy.",
+      "type": "string",
+      "enum": ["aggressive", "conservative", "adaptive", "custom"],
+      "default": "adaptive"
+    },
+    "levels": {
+      "description": "Multi-level cache configuration.",
+      "$ref": "#/definitions/CacheLevels"
+    },
+    "invalidation": {
+      "description": "Cache invalidation strategies.",
+      "$ref": "#/definitions/InvalidationStrategy"
+    },
+    "performance": {
+      "description": "Performance monitoring and optimization settings.",
+      "$ref": "#/definitions/PerformanceConfig"
+    },
+    "security": {
+      "description": "Security settings for cached content.",
+      "$ref": "#/definitions/SecurityConfig"
+    }
+  },
+  "required": ["schemaVersion", "strategy", "levels"],
+  
+  "definitions": {
+    "CacheLevels": {
+      "description": "Configuration for different cache levels.",
+      "type": "object",
+      "properties": {
+        "memory": {
+          "description": "In-memory cache configuration.",
+          "$ref": "#/definitions/MemoryCacheConfig"
+        },
+        "disk": {
+          "description": "Disk cache configuration.",
+          "$ref": "#/definitions/DiskCacheConfig"
+        },
+        "network": {
+          "description": "Network cache configuration (CDN/proxy).",
+          "$ref": "#/definitions/NetworkCacheConfig"
+        },
+        "distributed": {
+          "description": "Distributed cache configuration (Redis/Memcached).",
+          "$ref": "#/definitions/DistributedCacheConfig"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "MemoryCacheConfig": {
+      "description": "In-memory cache configuration.",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Whether memory caching is enabled.",
+          "type": "boolean",
+          "default": true
+        },
+        "maxSize": {
+          "description": "Maximum memory cache size (e.g., '100MB', '1GB').",
+          "type": "string",
+          "pattern": "^\\d+(\\.\\d+)?(B|KB|MB|GB|TB)$"
+        },
+        "maxItems": {
+          "description": "Maximum number of cached items.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "ttl": {
+          "description": "Default time-to-live (e.g., '1h', '30m', '60s').",
+          "type": "string",
+          "pattern": "^\\d+(ms|s|m|h|d)$"
+        },
+        "algorithm": {
+          "description": "Cache eviction algorithm.",
+          "type": "string",
+          "enum": ["lru", "lfu", "fifo", "random"],
+          "default": "lru"
+        },
+        "compressionEnabled": {
+          "description": "Whether to compress cached content in memory.",
+          "type": "boolean",
+          "default": false
+        },
+        "compressionThreshold": {
+          "description": "Minimum size for compression (bytes).",
+          "type": "integer",
+          "minimum": 0,
+          "default": 1024
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "DiskCacheConfig": {
+      "description": "Disk cache configuration.",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Whether disk caching is enabled.",
+          "type": "boolean",
+          "default": true
+        },
+        "path": {
+          "description": "Cache directory path.",
+          "type": "string"
+        },
+        "maxSize": {
+          "description": "Maximum disk cache size (e.g., '1GB', '10GB').",
+          "type": "string",
+          "pattern": "^\\d+(\\.\\d+)?(B|KB|MB|GB|TB)$"
+        },
+        "maxFiles": {
+          "description": "Maximum number of cached files.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "ttl": {
+          "description": "Default time-to-live for disk cache.",
+          "type": "string",
+          "pattern": "^\\d+(ms|s|m|h|d)$"
+        },
+        "compressionEnabled": {
+          "description": "Whether to compress cached files.",
+          "type": "boolean",
+          "default": true
+        },
+        "compressionLevel": {
+          "description": "Compression level (1-9).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9,
+          "default": 6
+        },
+        "cleanup": {
+          "description": "Automatic cleanup configuration.",
+          "$ref": "#/definitions/CleanupConfig"
+        },
+        "indexing": {
+          "description": "Cache indexing for faster lookups.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether indexing is enabled.",
+              "type": "boolean",
+              "default": true
+            },
+            "indexPath": {
+              "description": "Path to the cache index file.",
+              "type": "string"
+            },
+            "rebuildInterval": {
+              "description": "Interval to rebuild the index.",
+              "type": "string",
+              "pattern": "^\\d+(ms|s|m|h|d)$",
+              "default": "24h"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "NetworkCacheConfig": {
+      "description": "Network cache configuration (CDN/proxy).",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Whether network caching is enabled.",
+          "type": "boolean",
+          "default": false
+        },
+        "provider": {
+          "description": "CDN provider configuration.",
+          "type": "string",
+          "enum": ["cloudflare", "aws-cloudfront", "fastly", "azure-cdn", "custom"]
+        },
+        "endpoints": {
+          "description": "CDN endpoint URLs.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "headers": {
+          "description": "Cache control headers.",
+          "type": "object",
+          "properties": {
+            "maxAge": {
+              "description": "Cache-Control max-age in seconds.",
+              "type": "integer",
+              "minimum": 0
+            },
+            "staleWhileRevalidate": {
+              "description": "Stale-while-revalidate time in seconds.",
+              "type": "integer",
+              "minimum": 0
+            },
+            "staleIfError": {
+              "description": "Stale-if-error time in seconds.",
+              "type": "integer",
+              "minimum": 0
+            },
+            "immutable": {
+              "description": "Whether content is immutable.",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "purging": {
+          "description": "Cache purging configuration.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether automatic purging is enabled.",
+              "type": "boolean",
+              "default": true
+            },
+            "apiKey": {
+              "description": "API key for purging operations.",
+              "type": "string"
+            },
+            "webhookUrl": {
+              "description": "Webhook URL for purge notifications.",
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "DistributedCacheConfig": {
+      "description": "Distributed cache configuration (Redis/Memcached).",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Whether distributed caching is enabled.",
+          "type": "boolean",
+          "default": false
+        },
+        "provider": {
+          "description": "Distributed cache provider.",
+          "type": "string",
+          "enum": ["redis", "memcached", "hazelcast"]
+        },
+        "connection": {
+          "description": "Connection configuration.",
+          "type": "object",
+          "properties": {
+            "host": {
+              "description": "Cache server host.",
+              "type": "string"
+            },
+            "port": {
+              "description": "Cache server port.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            },
+            "password": {
+              "description": "Authentication password.",
+              "type": "string"
+            },
+            "database": {
+              "description": "Database number (Redis only).",
+              "type": "integer",
+              "minimum": 0
+            },
+            "cluster": {
+              "description": "Cluster nodes for Redis cluster.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "host": { "type": "string" },
+                  "port": { "type": "integer", "minimum": 1, "maximum": 65535 }
+                },
+                "required": ["host", "port"]
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "serialization": {
+          "description": "Data serialization format.",
+          "type": "string",
+          "enum": ["json", "msgpack", "protobuf"],
+          "default": "json"
+        },
+        "compression": {
+          "description": "Compression settings for distributed cache.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether compression is enabled.",
+              "type": "boolean",
+              "default": true
+            },
+            "algorithm": {
+              "description": "Compression algorithm.",
+              "type": "string",
+              "enum": ["gzip", "lz4", "snappy"],
+              "default": "lz4"
+            },
+            "threshold": {
+              "description": "Minimum size for compression (bytes).",
+              "type": "integer",
+              "minimum": 0,
+              "default": 1024
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "InvalidationStrategy": {
+      "description": "Cache invalidation strategies.",
+      "type": "object",
+      "properties": {
+        "strategy": {
+          "description": "Primary invalidation strategy.",
+          "type": "string",
+          "enum": ["time-based", "dependency-based", "manual", "hybrid"],
+          "default": "hybrid"
+        },
+        "timeBasedTtl": {
+          "description": "Default TTL for time-based invalidation.",
+          "type": "string",
+          "pattern": "^\\d+(ms|s|m|h|d)$",
+          "default": "1h"
+        },
+        "dependencyTracking": {
+          "description": "Dependency-based invalidation settings.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether dependency tracking is enabled.",
+              "type": "boolean",
+              "default": true
+            },
+            "trackFileModification": {
+              "description": "Track file modification times.",
+              "type": "boolean",
+              "default": true
+            },
+            "trackContentHash": {
+              "description": "Track content hashes for changes.",
+              "type": "boolean",
+              "default": true
+            },
+            "cascadeInvalidation": {
+              "description": "Invalidate dependent entries when dependencies change.",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "webhooks": {
+          "description": "Webhook-based invalidation.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "description": "Webhook URL.",
+                "type": "string",
+                "format": "uri"
+              },
+              "secret": {
+                "description": "Webhook secret for verification.",
+                "type": "string"
+              },
+              "events": {
+                "description": "Events that trigger this webhook.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["cache-miss", "cache-hit", "cache-invalidate", "cache-expire"]
+                }
+              }
+            },
+            "required": ["url", "events"]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "PerformanceConfig": {
+      "description": "Performance monitoring and optimization settings.",
+      "type": "object",
+      "properties": {
+        "monitoring": {
+          "description": "Performance monitoring settings.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether performance monitoring is enabled.",
+              "type": "boolean",
+              "default": true
+            },
+            "metricsInterval": {
+              "description": "Interval for collecting metrics.",
+              "type": "string",
+              "pattern": "^\\d+(ms|s|m|h)$",
+              "default": "30s"
+            },
+            "historyRetention": {
+              "description": "How long to retain performance history.",
+              "type": "string",
+              "pattern": "^\\d+(h|d)$",
+              "default": "7d"
+            }
+          },
+          "additionalProperties": false
+        },
+        "optimization": {
+          "description": "Automatic optimization settings.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether automatic optimization is enabled.",
+              "type": "boolean",
+              "default": true
+            },
+            "adaptiveSizing": {
+              "description": "Automatically adjust cache sizes based on usage.",
+              "type": "boolean",
+              "default": true
+            },
+            "preloading": {
+              "description": "Preload frequently accessed content.",
+              "type": "boolean",
+              "default": false
+            },
+            "prefetchThreshold": {
+              "description": "Hit rate threshold for prefetching (0-1).",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.8
+            }
+          },
+          "additionalProperties": false
+        },
+        "thresholds": {
+          "description": "Performance thresholds for alerts.",
+          "type": "object",
+          "properties": {
+            "hitRateMinimum": {
+              "description": "Minimum acceptable cache hit rate (0-1).",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.7
+            },
+            "responseTimeMaximum": {
+              "description": "Maximum acceptable response time (ms).",
+              "type": "integer",
+              "minimum": 1,
+              "default": 100
+            },
+            "memoryUsageMaximum": {
+              "description": "Maximum acceptable memory usage (0-1).",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.9
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "SecurityConfig": {
+      "description": "Security settings for cached content.",
+      "type": "object",
+      "properties": {
+        "encryption": {
+          "description": "Encryption settings for sensitive cached content.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether encryption is enabled.",
+              "type": "boolean",
+              "default": false
+            },
+            "algorithm": {
+              "description": "Encryption algorithm.",
+              "type": "string",
+              "enum": ["aes-256-gcm", "chacha20-poly1305"],
+              "default": "aes-256-gcm"
+            },
+            "keyRotationInterval": {
+              "description": "Key rotation interval.",
+              "type": "string",
+              "pattern": "^\\d+(d|w|m)$",
+              "default": "30d"
+            }
+          },
+          "additionalProperties": false
+        },
+        "accessControl": {
+          "description": "Access control for cached content.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether access control is enabled.",
+              "type": "boolean",
+              "default": false
+            },
+            "allowedOrigins": {
+              "description": "Allowed origins for cache access.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "requireAuthentication": {
+              "description": "Whether authentication is required for cache access.",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "integrity": {
+          "description": "Content integrity verification.",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Whether integrity verification is enabled.",
+              "type": "boolean",
+              "default": true
+            },
+            "algorithm": {
+              "description": "Hash algorithm for integrity checking.",
+              "type": "string",
+              "enum": ["sha256", "sha384", "sha512"],
+              "default": "sha256"
+            },
+            "verifyOnRead": {
+              "description": "Verify integrity when reading from cache.",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "CleanupConfig": {
+      "description": "Automatic cleanup configuration for disk cache.",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Whether automatic cleanup is enabled.",
+          "type": "boolean",
+          "default": true
+        },
+        "interval": {
+          "description": "Cleanup interval.",
+          "type": "string",
+          "pattern": "^\\d+(m|h|d)$",
+          "default": "1h"
+        },
+        "maxAge": {
+          "description": "Maximum age for cached files.",
+          "type": "string",
+          "pattern": "^\\d+(h|d|w)$",
+          "default": "7d"
+        },
+        "diskSpaceThreshold": {
+          "description": "Disk space threshold for aggressive cleanup (0-1).",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.9
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

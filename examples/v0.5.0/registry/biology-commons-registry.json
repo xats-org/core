@@ -1,0 +1,311 @@
+{
+  "schemaVersion": "0.5.0",
+  "registryInfo": {
+    "name": "biology-commons",
+    "description": "A community registry for shared biology educational content",
+    "url": "https://registry.xats.org/biology/",
+    "apiVersion": "1.0.0",
+    "maintainers": [
+      {
+        "name": "Dr. Sarah Chen",
+        "email": "sarah.chen@university.edu",
+        "organization": "University Biology Department"
+      },
+      {
+        "name": "Prof. Michael Rodriguez",
+        "email": "m.rodriguez@college.edu", 
+        "organization": "Community College Biology"
+      }
+    ],
+    "license": "https://xats.org/licenses/cc-by-4.0",
+    "publicKey": "c2hhMjU2LWFiYzEyM2RlZjQ1Njc4OWdoaWprbG1ub3BxcnN0dXZ3eHl6QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo=",
+    "trustLevel": "community",
+    "created": "2024-01-15T10:30:00Z",
+    "updated": "2024-08-23T14:22:00Z"
+  },
+  "packages": {
+    "cell-biology/diagrams": {
+      "name": "cell-biology/diagrams",
+      "title": "Cell Biology Diagrams Collection",
+      "description": "Comprehensive collection of cell structure diagrams with labels and descriptions",
+      "versions": {
+        "1.0.0": {
+          "version": "1.0.0",
+          "description": "Initial release with basic cell diagrams",
+          "files": [
+            {
+              "path": "diagrams/prokaryotic-cell.json",
+              "type": "xats-section",
+              "size": 2048,
+              "integrity": "sha256-abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx1234yz567890abcdef12",
+              "mimeType": "application/json",
+              "encoding": "utf-8"
+            },
+            {
+              "path": "diagrams/eukaryotic-cell.json", 
+              "type": "xats-section",
+              "size": 3072,
+              "integrity": "sha256-1234abcd5678efgh9012ijkl3456mnop7890qrst1234uvwx5678yz9012abcdef",
+              "mimeType": "application/json",
+              "encoding": "utf-8"
+            },
+            {
+              "path": "resources/cell-membrane.png",
+              "type": "resource",
+              "size": 15360,
+              "integrity": "sha256-efgh1234ijkl5678mnop9012qrst3456uvwx7890yz123456abcdefgh78901234",
+              "mimeType": "image/png"
+            }
+          ],
+          "dependencies": {
+            "biology-commons/terminology": "^2.0.0"
+          },
+          "integrity": "sha256-9876fed5432109876543210fedcba098765432100123456789abcdefghijklmn",
+          "size": 20480,
+          "published": "2024-01-20T16:45:00Z",
+          "deprecated": false,
+          "engines": {
+            "xats": ">=0.3.0",
+            "node": ">=18.0.0"
+          },
+          "dist": {
+            "tarball": "https://registry.xats.org/biology/cell-biology/diagrams/-/diagrams-1.0.0.tgz",
+            "integrity": "sha512-9876fed5432109876543210fedcba098765432100123456789abcdefghijklmn",
+            "unpackedSize": 25600,
+            "fileCount": 3
+          }
+        },
+        "1.1.0": {
+          "version": "1.1.0", 
+          "description": "Added mitochondria and chloroplast detailed diagrams",
+          "files": [
+            {
+              "path": "diagrams/prokaryotic-cell.json",
+              "type": "xats-section", 
+              "size": 2048,
+              "integrity": "sha256-abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx1234yz567890abcdef12",
+              "mimeType": "application/json",
+              "encoding": "utf-8"
+            },
+            {
+              "path": "diagrams/eukaryotic-cell.json",
+              "type": "xats-section",
+              "size": 3584,
+              "integrity": "sha256-2345bcde6789fghi0123jklm4567nopq8901rstu2345vwxy6789za0123bcde",
+              "mimeType": "application/json", 
+              "encoding": "utf-8"
+            },
+            {
+              "path": "diagrams/mitochondria.json",
+              "type": "xats-section",
+              "size": 2560,
+              "integrity": "sha256-3456cdef789012ab3456789012cdef3456789012abcd56789012ef3456789012",
+              "mimeType": "application/json",
+              "encoding": "utf-8"
+            },
+            {
+              "path": "diagrams/chloroplast.json", 
+              "type": "xats-section",
+              "size": 2304,
+              "integrity": "sha256-456789de01234fgh56789012345678cd90123456789efab123456789cdef0123",
+              "mimeType": "application/json",
+              "encoding": "utf-8"
+            },
+            {
+              "path": "resources/cell-membrane.png",
+              "type": "resource",
+              "size": 15360,
+              "integrity": "sha256-efgh1234ijkl5678mnop9012qrst3456uvwx7890yz123456abcdefgh78901234",
+              "mimeType": "image/png"
+            },
+            {
+              "path": "resources/mitochondria-detailed.svg",
+              "type": "resource", 
+              "size": 8192,
+              "integrity": "sha256-567890ef1234567890abcdef1234567890abcdef1234567890abcdef12345678",
+              "mimeType": "image/svg+xml"
+            }
+          ],
+          "dependencies": {
+            "biology-commons/terminology": "^2.1.0"
+          },
+          "integrity": "sha256-abcdef123456789012345678901234567890abcdef123456789012345678901",
+          "size": 34048,
+          "published": "2024-05-15T09:20:00Z", 
+          "deprecated": false,
+          "engines": {
+            "xats": ">=0.4.0",
+            "node": ">=18.0.0"
+          },
+          "dist": {
+            "tarball": "https://registry.xats.org/biology/cell-biology/diagrams/-/diagrams-1.1.0.tgz",
+            "integrity": "sha512-abcdef123456789012345678901234567890abcdef123456789012345678901",
+            "unpackedSize": 42560,
+            "fileCount": 6
+          }
+        }
+      },
+      "latest": "1.1.0",
+      "tags": ["cell-biology", "diagrams", "education", "illustrations"],
+      "categories": ["biology"],
+      "maintainers": [
+        {
+          "name": "Dr. Sarah Chen",
+          "email": "sarah.chen@university.edu",
+          "organization": "University Biology Department"
+        }
+      ],
+      "homepage": "https://biology-commons.org/packages/cell-diagrams",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/biology-commons/cell-diagrams.git"
+      },
+      "created": "2024-01-15T10:30:00Z",
+      "updated": "2024-05-15T09:20:00Z",
+      "downloadCount": 1247
+    },
+    "biology-commons/terminology": {
+      "name": "biology-commons/terminology",
+      "title": "Biology Terminology Definitions",
+      "description": "Standardized definitions for biological terms and concepts",
+      "versions": {
+        "2.0.0": {
+          "version": "2.0.0",
+          "description": "Major update with comprehensive term definitions",
+          "files": [
+            {
+              "path": "definitions/cellular.json",
+              "type": "metadata",
+              "size": 5120,
+              "integrity": "sha256-789012ab3456cdef789012ab3456cdef789012ab3456cdef789012ab3456cdef",
+              "mimeType": "application/json",
+              "encoding": "utf-8"
+            },
+            {
+              "path": "definitions/molecular.json", 
+              "type": "metadata",
+              "size": 7168,
+              "integrity": "sha256-890123bc4567d0ef890123bc4567d0ef890123bc4567d0ef890123bc4567d0ef",
+              "mimeType": "application/json",
+              "encoding": "utf-8"
+            },
+            {
+              "path": "glossary.json",
+              "type": "xats-section",
+              "size": 12288,
+              "integrity": "sha256-901234cd5678e1f0901234cd5678e1f0901234cd5678e1f0901234cd5678e1f0",
+              "mimeType": "application/json",
+              "encoding": "utf-8"
+            }
+          ],
+          "integrity": "sha256-012345de6789f2a1012345de6789f2a1012345de6789f2a1012345de6789f2a1",
+          "size": 24576,
+          "published": "2024-02-01T11:15:00Z",
+          "deprecated": false,
+          "engines": {
+            "xats": ">=0.3.0"
+          },
+          "dist": {
+            "tarball": "https://registry.xats.org/biology/biology-commons/terminology/-/terminology-2.0.0.tgz",
+            "integrity": "sha512-012345de6789f2a1012345de6789f2a1012345de6789f2a1012345de6789f2a1",
+            "unpackedSize": 30720,
+            "fileCount": 3
+          }
+        },
+        "2.1.0": {
+          "version": "2.1.0",
+          "description": "Added organelle-specific terminology",
+          "files": [
+            {
+              "path": "definitions/cellular.json",
+              "type": "metadata",
+              "size": 5632,
+              "integrity": "sha256-123456ef789012a3456789b123456ef789012a3456789b123456ef789012a345",
+              "mimeType": "application/json", 
+              "encoding": "utf-8"
+            },
+            {
+              "path": "definitions/molecular.json",
+              "type": "metadata", 
+              "size": 7680,
+              "integrity": "sha256-234567f0890123b4567890c234567f0890123b4567890c234567f0890123b456",
+              "mimeType": "application/json",
+              "encoding": "utf-8"
+            },
+            {
+              "path": "definitions/organelles.json",
+              "type": "metadata",
+              "size": 4096,
+              "integrity": "sha256-345678901234c56789d0345678901234c56789d0345678901234c56789d0345678",
+              "mimeType": "application/json",
+              "encoding": "utf-8"
+            },
+            {
+              "path": "glossary.json",
+              "type": "xats-section",
+              "size": 14336,
+              "integrity": "sha256-456789012345d67890e1456789012345d67890e1456789012345d67890e14567",
+              "mimeType": "application/json",
+              "encoding": "utf-8"
+            }
+          ],
+          "integrity": "sha256-567890123456e78901f2567890123456e78901f2567890123456e78901f25678",
+          "size": 31744,
+          "published": "2024-04-10T14:30:00Z",
+          "deprecated": false,
+          "engines": {
+            "xats": ">=0.4.0"
+          },
+          "dist": {
+            "tarball": "https://registry.xats.org/biology/biology-commons/terminology/-/terminology-2.1.0.tgz",
+            "integrity": "sha512-567890123456e78901f2567890123456e78901f2567890123456e78901f25678",
+            "unpackedSize": 39680,
+            "fileCount": 4
+          }
+        }
+      },
+      "latest": "2.1.0",
+      "tags": ["terminology", "glossary", "definitions", "biology"],
+      "categories": ["biology"],
+      "maintainers": [
+        {
+          "name": "Prof. Michael Rodriguez",
+          "email": "m.rodriguez@college.edu",
+          "organization": "Community College Biology"
+        }
+      ],
+      "homepage": "https://biology-commons.org/packages/terminology",
+      "repository": {
+        "type": "git", 
+        "url": "https://github.com/biology-commons/terminology.git"
+      },
+      "created": "2024-01-20T08:45:00Z",
+      "updated": "2024-04-10T14:30:00Z",
+      "downloadCount": 2891
+    }
+  },
+  "access": {
+    "public": true,
+    "authentication": {
+      "required": false,
+      "methods": ["token"]
+    },
+    "permissions": {
+      "read": {
+        "roles": ["public"]
+      },
+      "write": {
+        "roles": ["maintainer", "admin"],
+        "organizations": ["biology-commons"]
+      },
+      "admin": {
+        "users": ["sarah.chen@university.edu", "m.rodriguez@college.edu"]
+      }
+    },
+    "rateLimit": {
+      "enabled": true,
+      "requestsPerHour": 1000,
+      "burstLimit": 50
+    }
+  }
+}
