@@ -46,24 +46,25 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@xats-org/types": "workspace:*",
-    "@xats-org/validator": "workspace:*",
-    "@xats-org/renderer-markdown": "workspace:*",
     "@xats-org/renderer-docx": "workspace:*",
     "@xats-org/renderer-html": "workspace:*",
+    "@xats-org/renderer-markdown": "workspace:*",
+    "@xats-org/types": "workspace:*",
     "@xats-org/utils": "workspace:*",
-    "unified": "^11.0.0",
+    "@xats-org/validator": "workspace:*",
+    "mdast-util-from-markdown": "^2.0.0",
+    "mdast-util-to-markdown": "^2.0.0",
     "remark": "^15.0.0",
     "remark-parse": "^11.0.0",
     "remark-stringify": "^11.0.0",
-    "mdast-util-to-markdown": "^2.0.0",
-    "mdast-util-from-markdown": "^2.0.0"
+    "unified": "^11.0.0"
   },
   "devDependencies": {
+    "@types/mdast": "^4.0.4",
     "@types/node": "^20.11.0",
     "@vitest/coverage-v8": "^1.2.0",
-    "eslint": "^8.56.0",
     "@xats-org/eslint-config": "workspace:*",
+    "eslint": "^8.56.0",
     "typescript": "^5.3.3",
     "vitest": "^1.2.0"
   },
