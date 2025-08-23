@@ -56,7 +56,7 @@ export class ErrorMessagesService {
   /**
    * Generate suggestions for common validation errors
    */
-  async generateSuggestions(validationErrors: ValidationError[]): Promise<ErrorSuggestion[]> {
+  generateSuggestions(validationErrors: ValidationError[]): ErrorSuggestion[] {
     const suggestions: ErrorSuggestion[] = [];
     const errorTypes = new Set(validationErrors.map((e) => e.keyword));
 
@@ -117,7 +117,7 @@ export class ErrorMessagesService {
     }
 
     const suggestions = this.options.includeSuggestions
-      ? await this.generateErrorSuggestions(error)
+      ? this.generateErrorSuggestions(error)
       : [];
 
     const location = this.extractLocation(error);
@@ -236,7 +236,7 @@ export class ErrorMessagesService {
   /**
    * Generate suggestions for a specific error
    */
-  private async generateErrorSuggestions(error: ValidationError): Promise<ErrorSuggestion[]> {
+  private generateErrorSuggestions(error: ValidationError): ErrorSuggestion[] {
     const generator = this.suggestionGenerators.get(error.keyword || 'unknown');
 
     if (generator) {
@@ -283,7 +283,8 @@ class RequiredFieldErrorTemplate extends ErrorTemplate {
   code = 'REQUIRED_FIELD_MISSING';
 
   getMessage(error: ValidationError, userLevel: string): string {
-    const field = (error.params as any)?.missingProperty || 'field';
+    const params = error.params as { missingProperty?: string } | undefined;
+    const field = params?.missingProperty || 'field';
 
     switch (userLevel) {
       case 'beginner':
@@ -302,7 +303,8 @@ class TypeMismatchErrorTemplate extends ErrorTemplate {
   code = 'TYPE_MISMATCH';
 
   getMessage(error: ValidationError, userLevel: string): string {
-    const expected = (error.params as any)?.type || 'unknown';
+    const params = error.params as { type?: string } | undefined;
+    const expected = params?.type || 'unknown';
 
     switch (userLevel) {
       case 'beginner':
@@ -321,7 +323,8 @@ class FormatErrorTemplate extends ErrorTemplate {
   code = 'FORMAT_INVALID';
 
   getMessage(error: ValidationError, userLevel: string): string {
-    const format = (error.params as any)?.format || 'unknown';
+    const params = error.params as { format?: string } | undefined;
+    const format = params?.format || 'unknown';
 
     switch (userLevel) {
       case 'beginner':
@@ -340,7 +343,8 @@ class EnumErrorTemplate extends ErrorTemplate {
   code = 'ENUM_INVALID';
 
   getMessage(error: ValidationError, userLevel: string): string {
-    const allowedValues = (error.params as any)?.allowedValues || [];
+    const params = error.params as { allowedValues?: unknown[] } | undefined;
+    const allowedValues = params?.allowedValues || [];
 
     switch (userLevel) {
       case 'beginner':
@@ -365,7 +369,8 @@ class PatternErrorTemplate extends ErrorTemplate {
       case 'intermediate':
         return `Pattern validation failed. The text doesn't match the required format.`;
       case 'advanced':
-        return `Pattern constraint failed at ${error.path}: ${(error.params as any)?.pattern || 'unknown pattern'}.`;
+        const params = error.params as { pattern?: string } | undefined;
+        return `Pattern constraint failed at ${error.path}: ${params?.pattern || 'unknown pattern'}`;
       default:
         return `Pattern validation failed`;
     }
@@ -376,7 +381,8 @@ class AdditionalPropertiesErrorTemplate extends ErrorTemplate {
   code = 'ADDITIONAL_PROPERTIES';
 
   getMessage(error: ValidationError, userLevel: string): string {
-    const additionalProperty = (error.params as any)?.additionalProperty || 'property';
+    const params = error.params as { additionalProperty?: string } | undefined;
+    const additionalProperty = params?.additionalProperty || 'property';
 
     switch (userLevel) {
       case 'beginner':
@@ -429,7 +435,8 @@ class ConstantErrorTemplate extends ErrorTemplate {
   code = 'CONSTANT_INVALID';
 
   getMessage(error: ValidationError, userLevel: string): string {
-    const expected = (error.params as any)?.allowedValue;
+    const params = error.params as { allowedValue?: unknown } | undefined;
+    const expected = params?.allowedValue;
 
     switch (userLevel) {
       case 'beginner':
@@ -448,7 +455,8 @@ class MinimumErrorTemplate extends ErrorTemplate {
   code = 'MINIMUM_INVALID';
 
   getMessage(error: ValidationError, userLevel: string): string {
-    const limit = (error.params as any)?.limit;
+    const params = error.params as { limit?: number } | undefined;
+    const limit = params?.limit;
 
     switch (userLevel) {
       case 'beginner':
@@ -467,7 +475,8 @@ class MaximumErrorTemplate extends ErrorTemplate {
   code = 'MAXIMUM_INVALID';
 
   getMessage(error: ValidationError, userLevel: string): string {
-    const limit = (error.params as any)?.limit;
+    const params = error.params as { limit?: number } | undefined;
+    const limit = params?.limit;
 
     switch (userLevel) {
       case 'beginner':
@@ -486,7 +495,8 @@ class MinLengthErrorTemplate extends ErrorTemplate {
   code = 'MIN_LENGTH_INVALID';
 
   getMessage(error: ValidationError, userLevel: string): string {
-    const limit = (error.params as any)?.limit;
+    const params = error.params as { limit?: number } | undefined;
+    const limit = params?.limit;
 
     switch (userLevel) {
       case 'beginner':
@@ -505,7 +515,8 @@ class MaxLengthErrorTemplate extends ErrorTemplate {
   code = 'MAX_LENGTH_INVALID';
 
   getMessage(error: ValidationError, userLevel: string): string {
-    const limit = (error.params as any)?.limit;
+    const params = error.params as { limit?: number } | undefined;
+    const limit = params?.limit;
 
     switch (userLevel) {
       case 'beginner':
@@ -524,7 +535,8 @@ class MaxLengthErrorTemplate extends ErrorTemplate {
 
 class RequiredFieldSuggestionGenerator extends SuggestionGenerator {
   generateSuggestions(error: ValidationError, userLevel: string): ErrorSuggestion[] {
-    const field = (error.params as any)?.missingProperty || 'field';
+    const params = error.params as { missingProperty?: string } | undefined;
+    const field = params?.missingProperty || 'field';
     const suggestions: ErrorSuggestion[] = [];
 
     // Common required field fixes
@@ -558,7 +570,8 @@ class RequiredFieldSuggestionGenerator extends SuggestionGenerator {
 
 class TypeMismatchSuggestionGenerator extends SuggestionGenerator {
   generateSuggestions(error: ValidationError, userLevel: string): ErrorSuggestion[] {
-    const expected = (error.params as any)?.type;
+    const params = error.params as { type?: string } | undefined;
+    const expected = params?.type;
     const suggestions: ErrorSuggestion[] = [];
 
     switch (expected) {
@@ -602,7 +615,8 @@ class TypeMismatchSuggestionGenerator extends SuggestionGenerator {
 
 class FormatSuggestionGenerator extends SuggestionGenerator {
   generateSuggestions(error: ValidationError, userLevel: string): ErrorSuggestion[] {
-    const format = (error.params as any)?.format;
+    const params = error.params as { format?: string } | undefined;
+    const format = params?.format;
     const suggestions: ErrorSuggestion[] = [];
 
     if (format === 'xats-uri') {
@@ -628,11 +642,12 @@ class FormatSuggestionGenerator extends SuggestionGenerator {
 
 class EnumSuggestionGenerator extends SuggestionGenerator {
   generateSuggestions(error: ValidationError, userLevel: string): ErrorSuggestion[] {
-    const allowedValues = (error.params as any)?.allowedValues || [];
+    const params = error.params as { allowedValues?: unknown[] } | undefined;
+    const allowedValues = params?.allowedValues || [];
     const suggestions: ErrorSuggestion[] = [];
 
     if (allowedValues.length > 0) {
-      allowedValues.slice(0, 3).forEach((value: any) => {
+      allowedValues.slice(0, 3).forEach((value: unknown) => {
         suggestions.push({
           description: `Use "${value}" as the value`,
           action: 'replace',

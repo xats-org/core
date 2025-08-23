@@ -299,7 +299,7 @@ export class XatsAuthoringTool {
           renderResult = (await this.htmlRenderer.render(document)) as unknown as TypedRenderResult;
           break;
         default:
-          throw new Error(`Unsupported export format: ${format}`);
+          throw new Error(`Unsupported export format: ${format as string}`);
       }
 
       const result: ExportResult = {
