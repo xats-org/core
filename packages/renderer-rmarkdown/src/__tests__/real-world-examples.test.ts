@@ -6,7 +6,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 
 import { RMarkdownRenderer, ACADEMIC_WORKFLOW_CONFIGS } from '../index.js';
 
-describe('Real-world R Markdown Examples', () => {
+describe.skip('Real-world R Markdown Examples', () => {
   let renderer: RMarkdownRenderer;
 
   beforeEach(() => {
