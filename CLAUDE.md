@@ -123,7 +123,7 @@ The xats project follows a structured versioning and branching strategy to maint
 ### Branch Structure
 
 #### **main branch**
-- Contains the **latest stable release** (currently v0.1.0)
+- Contains the **latest stable release** (currently v0.3.0)
 - **Protected from force pushes and deletion**
 - Only receives merges from version branches when they are stable
 - Tagged with release versions (e.g., `v0.1.0`, `v0.1.1`)
@@ -264,10 +264,10 @@ git tag v0.2.0-rc1  # Release candidates
 
 ### Current Active Branches
 
-- **main** - v0.1.0 (stable)
-- **v0.2.0** - Assessment framework (feature complete)
-- **v0.3.0** - Extended features (current development)
-- **v0.4.0** - Monorepo infrastructure (planned)
+- **main** - v0.3.0 (stable)
+- **v0.4.0** - Monorepo infrastructure (completed)
+- **v0.5.0** - Enhanced rendering and AI integration (completed)
+- **v0.6.0** - Analytics and advanced internationalization (planned)
 
 ## Key Architecture Principles
 
@@ -303,7 +303,8 @@ Root
 
 ### Schema Location
 - Current stable version: `v0.3.0` (on main branch)
-- Active development: `v0.4.0` (monorepo structure)
+- Completed versions: `v0.4.0` (monorepo structure), `v0.5.0` (enhanced rendering)
+- Active development: `v0.6.0` (analytics and i18n)
 - Legacy versions: `v0.1.0`, `v0.2.0`
 
 ### Validation
@@ -498,8 +499,8 @@ gh issue create \
 - `v0.1.0` - Core functionality and infrastructure (Completed)
 - `v0.2.0` - Assessment framework and pedagogy (Due: 2025-11-30)
 - `v0.3.0` - Extended features and ecosystem (Due: 2026-01-31)
-- `v0.4.0` - Monorepo infrastructure and modern tooling (Due: 2026-03-31)
-- `v0.5.0` - Rendering, AI integration & extended features (Due: 2026-05-31)
+- `v0.4.0` - Monorepo infrastructure and modern tooling (Completed)
+- `v0.5.0` - Rendering, AI integration & extended features (Completed)
 - `v0.6.0` - Analytics and advanced internationalization (Due: 2026-09-30)
 - `v0.7.0` - Extended ecosystem and blockchain (Due: 2027-01-31)
 

@@ -15,9 +15,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Available schema versions
-export const SCHEMA_VERSIONS: XatsVersion[] = ['0.1.0', '0.2.0', '0.3.0'];
-export const LATEST_VERSION: XatsVersion = '0.3.0';
-export const CURRENT_VERSION: XatsVersion = '0.3.0';
+export const SCHEMA_VERSIONS: XatsVersion[] = ['0.1.0', '0.2.0', '0.3.0', '0.5.0'];
+export const LATEST_VERSION: XatsVersion = '0.5.0';
+export const CURRENT_VERSION: XatsVersion = '0.5.0';
 export const DEFAULT_VERSION: XatsVersion = '0.1.0'; // Default for backwards compatibility
 
 // Schema cache to avoid repeated file reads

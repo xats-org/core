@@ -384,7 +384,7 @@ export class RMarkdownRenderer
    */
   private createEmptyDocument(): XatsDocument {
     return {
-      schemaVersion: '0.3.0',
+      schemaVersion: '0.5.0',
       bibliographicEntry: { type: 'article-journal' },
       subject: 'https://xats.org/vocabularies/subjects/general',
       bodyMatter: { contents: [] },

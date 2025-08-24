@@ -1,6 +1,6 @@
 {
   "name": "@xats-org/eslint-config",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Shared ESLint configuration for xats monorepo",
   "main": "index.js",
   "scripts": {
