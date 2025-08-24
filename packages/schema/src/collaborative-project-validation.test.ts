@@ -120,7 +120,7 @@ describe('Collaborative Project Block Validation', () => {
     expect(Array.isArray(project?.roles)).toBe(true);
     expect(project?.roles?.length).toBeGreaterThan(0);
 
-    for (const role of project.roles) {
+    for (const role of project?.roles || []) {
       expect(role.roleId).toBeDefined();
       expect(role.title).toBeDefined();
       expect(role.description).toBeDefined();
@@ -132,10 +132,10 @@ describe('Collaborative Project Block Validation', () => {
   test('project has valid deliverables structure', () => {
     const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
 
-    expect(Array.isArray(project.deliverables)).toBe(true);
-    expect(project.deliverables.length).toBeGreaterThan(0);
+    expect(Array.isArray(project?.deliverables)).toBe(true);
+    expect(project?.deliverables?.length).toBeGreaterThan(0);
 
-    for (const deliverable of project.deliverables) {
+    for (const deliverable of project?.deliverables || []) {
       expect(deliverable.deliverableId).toBeDefined();
       expect(deliverable.title).toBeDefined();
       expect(deliverable.description).toBeDefined();
@@ -147,23 +147,23 @@ describe('Collaborative Project Block Validation', () => {
   test('project has valid peer assessment configuration', () => {
     const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
 
-    expect(project.peerAssessment).toBeDefined();
-    expect(typeof project.peerAssessment.enabled).toBe('boolean');
-    expect(project.peerAssessment.enabled).toBe(true);
-    expect(project.peerAssessment.assessmentType).toBeDefined();
-    expect(Array.isArray(project.peerAssessment.criteria)).toBe(true);
-    expect(project.peerAssessment.criteria.length).toBeGreaterThan(0);
+    expect(project?.peerAssessment).toBeDefined();
+    expect(typeof project?.peerAssessment?.enabled).toBe('boolean');
+    expect(project?.peerAssessment?.enabled).toBe(true);
+    expect(project?.peerAssessment?.assessmentType).toBeDefined();
+    expect(Array.isArray(project?.peerAssessment?.criteria)).toBe(true);
+    expect(project?.peerAssessment?.criteria?.length).toBeGreaterThan(0);
   });
 
   test('project has valid timeline structure', () => {
     const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
 
-    expect(project.timeline).toBeDefined();
-    expect(Array.isArray(project.timeline.phases)).toBe(true);
-    expect(project.timeline.phases.length).toBeGreaterThan(0);
-    expect(typeof project.timeline.estimatedHours).toBe('number');
+    expect(project?.timeline).toBeDefined();
+    expect(Array.isArray(project?.timeline?.phases)).toBe(true);
+    expect(project?.timeline?.phases?.length).toBeGreaterThan(0);
+    expect(typeof project?.timeline?.estimatedHours).toBe('number');
 
-    for (const phase of project.timeline.phases) {
+    for (const phase of project?.timeline?.phases || []) {
       expect(phase.phaseId).toBeDefined();
       expect(phase.title).toBeDefined();
       expect(phase.description).toBeDefined();
@@ -173,7 +173,7 @@ describe('Collaborative Project Block Validation', () => {
 
   test('role IDs are unique', () => {
     const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
-    const roleIds = project.roles.map((role) => role.roleId);
+    const roleIds = project?.roles?.map((role) => role.roleId) || [];
     const uniqueIds = new Set(roleIds);
 
     expect(roleIds.length).toBe(uniqueIds.size);
@@ -181,7 +181,8 @@ describe('Collaborative Project Block Validation', () => {
 
   test('deliverable IDs are unique', () => {
     const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
-    const deliverableIds = project.deliverables.map((deliverable) => deliverable.deliverableId);
+    const deliverableIds =
+      project?.deliverables?.map((deliverable) => deliverable.deliverableId) || [];
     const uniqueIds = new Set(deliverableIds);
 
     expect(deliverableIds.length).toBe(uniqueIds.size);
@@ -190,7 +191,7 @@ describe('Collaborative Project Block Validation', () => {
   test('assessment criteria weights are valid', () => {
     const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
 
-    for (const deliverable of project.deliverables) {
+    for (const deliverable of project?.deliverables || []) {
       if (deliverable.assessmentCriteria) {
         const totalWeight = deliverable.assessmentCriteria.reduce(
           (sum, criterion) => sum + criterion.weight,
@@ -205,9 +206,9 @@ describe('Collaborative Project Block Validation', () => {
 
   test('phase deliverable references are valid', () => {
     const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
-    const deliverableIds = new Set(project.deliverables.map((d) => d.deliverableId));
+    const deliverableIds = new Set(project?.deliverables?.map((d) => d.deliverableId) || []);
 
-    for (const phase of project.timeline.phases) {
+    for (const phase of project?.timeline?.phases || []) {
       if (phase.deliverableIds) {
         for (const deliverableId of phase.deliverableIds) {
           expect(deliverableIds.has(deliverableId)).toBe(true);
@@ -220,16 +221,16 @@ describe('Collaborative Project Block Validation', () => {
     const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
 
     // Check title and description
-    expect(project.title.runs).toBeDefined();
-    expect(Array.isArray(project.title.runs)).toBe(true);
-    expect(project.title.runs.length).toBeGreaterThan(0);
+    expect(project?.title?.runs).toBeDefined();
+    expect(Array.isArray(project?.title?.runs)).toBe(true);
+    expect(project?.title?.runs?.length).toBeGreaterThan(0);
 
-    expect(project.description.runs).toBeDefined();
-    expect(Array.isArray(project.description.runs)).toBe(true);
-    expect(project.description.runs.length).toBeGreaterThan(0);
+    expect(project?.description?.runs).toBeDefined();
+    expect(Array.isArray(project?.description?.runs)).toBe(true);
+    expect(project?.description?.runs?.length).toBeGreaterThan(0);
 
     // Check role descriptions
-    for (const role of project.roles) {
+    for (const role of project?.roles || []) {
       expect(role.description.runs).toBeDefined();
       expect(Array.isArray(role.description.runs)).toBe(true);
       expect(role.description.runs.length).toBeGreaterThan(0);
@@ -257,7 +258,7 @@ describe('Collaborative Project Block Validation', () => {
       'peer-teaching-activity',
     ];
 
-    expect(validTypes.includes(project.projectType)).toBe(true);
+    expect(validTypes.includes(project?.projectType || '')).toBe(true);
   });
 
   test('deliverable formats are from valid enum', () => {
@@ -273,7 +274,7 @@ describe('Collaborative Project Block Validation', () => {
       'other',
     ];
 
-    for (const deliverable of project.deliverables) {
+    for (const deliverable of project?.deliverables || []) {
       expect(validFormats.includes(deliverable.format)).toBe(true);
     }
   });
@@ -282,19 +283,19 @@ describe('Collaborative Project Block Validation', () => {
     const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
     const validScaleTypes = ['numeric', 'likert', 'categorical', 'binary'];
 
-    for (const criterion of project.peerAssessment.criteria) {
+    for (const criterion of project?.peerAssessment?.criteria || []) {
       expect(validScaleTypes.includes(criterion.scale.type)).toBe(true);
 
       if (criterion.scale.type === 'numeric') {
         expect(criterion.scale.range).toBeDefined();
-        expect(typeof criterion.scale.range.min).toBe('number');
-        expect(typeof criterion.scale.range.max).toBe('number');
-        expect(criterion.scale.range.max).toBeGreaterThan(criterion.scale.range.min);
+        expect(typeof criterion.scale.range?.min).toBe('number');
+        expect(typeof criterion.scale.range?.max).toBe('number');
+        expect(criterion.scale.range?.max).toBeGreaterThan(criterion.scale.range?.min || 0);
       }
 
       if (criterion.scale.type === 'likert' || criterion.scale.type === 'categorical') {
         expect(Array.isArray(criterion.scale.labels)).toBe(true);
-        expect(criterion.scale.labels.length).toBeGreaterThan(0);
+        expect(criterion.scale.labels?.length).toBeGreaterThan(0);
       }
     }
   });
