@@ -78,15 +78,15 @@ export class MathProcessor {
         type: 'environment',
         latex: content?.trim() || '',
       };
-      
+
       if (environment) {
         expression.environment = environment;
       }
-      
+
       if (options.preserveLaTeX) {
         expression.rendered = fullMatch;
       }
-      
+
       expressions.push(expression);
     }
 
@@ -97,11 +97,11 @@ export class MathProcessor {
         type: 'display',
         latex: match[1]?.trim() || '',
       };
-      
+
       if (options.preserveLaTeX && match[0]) {
         expression.rendered = match[0];
       }
-      
+
       expressions.push(expression);
     }
 
@@ -112,11 +112,11 @@ export class MathProcessor {
         type: 'inline',
         latex: match[1]?.trim() || '',
       };
-      
+
       if (options.preserveLaTeX && match[0]) {
         expression.rendered = match[0];
       }
-      
+
       expressions.push(expression);
     }
 
@@ -138,13 +138,13 @@ export class MathProcessor {
 
       // Extract label if present
       const labelMatch = content?.match(/\\label\{([^}]+)\}/);
-      
+
       const environment: MathEnvironment = {
         name: envName || '',
         content: content?.trim() || '',
         numbered,
       };
-      
+
       if (labelMatch && labelMatch[1]) {
         environment.label = labelMatch[1];
       }
@@ -158,7 +158,11 @@ export class MathProcessor {
   /**
    * Wrap display math with appropriate delimiters
    */
-  private wrapDisplayMath(latex: string, delimiters: MathDelimiters, content?: { label?: string; numbered?: boolean }): string {
+  private wrapDisplayMath(
+    latex: string,
+    delimiters: MathDelimiters,
+    content?: { label?: string; numbered?: boolean }
+  ): string {
     // Check if it's already an environment
     if (latex.startsWith('\\begin{')) {
       return latex;

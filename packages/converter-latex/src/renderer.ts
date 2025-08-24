@@ -5,7 +5,7 @@
 import type { BibliographyProcessor } from './bibliography-processor';
 import type { MathProcessor } from './math-processor';
 import type { PackageManager } from './package-manager';
-import type { LaTeXRenderOptions, LaTeXRenderResult, LaTeXMetadata, LaTeXRenderMetadata } from './types';
+import type { LaTeXRenderOptions, LaTeXRenderResult, LaTeXRenderMetadata } from './types';
 import type { XatsDocument, ContentBlock } from '@xats-org/types';
 
 /**
@@ -100,7 +100,7 @@ export class DocumentRenderer {
 
     return {
       content: latex,
-      metadata: metadata as LaTeXMetadata, // Cast to union type
+      metadata, // Cast to render metadata
       packages: options.packages || [],
       customCommands: options.customCommands || {},
     };
@@ -227,13 +227,15 @@ export class DocumentRenderer {
   }
 
   private renderParagraph(block: ContentBlock): string {
-    const text = this.extractText(block.content?.text || '');
+    const content = block.content as { text?: string } | undefined;
+    const text = this.extractText(content?.text || '');
     return text;
   }
 
   private renderHeading(block: ContentBlock): string {
-    const level = block.content?.level || 1;
-    const text = this.extractText(block.content?.text || '');
+    const content = block.content as { level?: number; text?: string } | undefined;
+    const level = content?.level || 1;
+    const text = this.extractText(content?.text || '');
     return this.createSectionHeading(text, level);
   }
 
@@ -241,26 +243,29 @@ export class DocumentRenderer {
     return await this.mathProcessor.renderMathBlock(block.content, {
       delimiters: options.mathDelimiters || {
         inline: { open: '$', close: '$' },
-        display: { open: '\\[', close: '\\]' }
+        display: { open: '\\[', close: '\\]' },
       },
     });
   }
 
   private renderCodeBlock(block: ContentBlock): string {
-    const code = block.content?.code || block.content?.text || '';
+    const content = block.content as { code?: string; text?: string } | undefined;
+    const code = content?.code || content?.text || '';
     // Note: language information available but not used in basic verbatim rendering
 
     return `\\begin{verbatim}\n${code}\n\\end{verbatim}`;
   }
 
   private renderBlockquote(block: ContentBlock): string {
-    const text = this.extractText(block.content?.text || '');
+    const content = block.content as { text?: string } | undefined;
+    const text = this.extractText(content?.text || '');
     return `\\begin{quote}\n${text}\n\\end{quote}`;
   }
 
   private renderList(block: ContentBlock): string {
-    const items = block.content?.items || [];
-    const ordered = block.content?.ordered === true;
+    const content = block.content as { items?: any[]; ordered?: boolean } | undefined;
+    const items = content?.items || [];
+    const ordered = content?.ordered === true;
     const env = ordered ? 'enumerate' : 'itemize';
 
     let latex = `\\begin{${env}}\n`;
@@ -274,7 +279,8 @@ export class DocumentRenderer {
   }
 
   private renderTable(block: ContentBlock): string {
-    const rows = block.content?.rows || [];
+    const content = block.content as { rows?: any[] } | undefined;
+    const rows = content?.rows || [];
     if (rows.length === 0) return '';
 
     const colCount = rows[0]?.cells?.length || 1;
@@ -293,8 +299,9 @@ export class DocumentRenderer {
   }
 
   private renderFigure(block: ContentBlock): string {
-    const caption = block.content?.caption || '';
-    const src = block.content?.src || '';
+    const content = block.content as { caption?: string; src?: string } | undefined;
+    const caption = content?.caption || '';
+    const src = content?.src || '';
 
     let latex = '\\begin{figure}[h]\n\\centering\n';
 
@@ -313,7 +320,8 @@ export class DocumentRenderer {
   }
 
   private renderEducationalBlock(block: ContentBlock, type: string): string {
-    const text = this.extractText(block.content?.text || '');
+    const content = block.content as { text?: string } | undefined;
+    const text = this.extractText(content?.text || '');
 
     return `\\begin{tcolorbox}[title=${type}]\n${text}\n\\end{tcolorbox}`;
   }

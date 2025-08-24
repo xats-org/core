@@ -408,7 +408,7 @@ export class BibliographyProcessor {
         if (typeof author === 'string') return author;
         if (typeof author === 'object' && author !== null) {
           // Type narrowing - author is now narrowed to object type
-          const { family, given } = author as CSLAuthor;
+          const { family, given } = author;
           if (family && given) {
             return `${family}, ${given}`;
           }

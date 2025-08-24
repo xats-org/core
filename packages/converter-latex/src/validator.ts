@@ -179,6 +179,7 @@ export class LaTeXValidator {
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
+      if (!line) continue;
       const lineNum = i + 1;
 
       // Count inline math delimiters
@@ -247,6 +248,7 @@ export class LaTeXValidator {
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
+      if (!line) continue;
       const lineNum = i + 1;
 
       // Check for unescaped special characters
@@ -286,10 +288,12 @@ export class LaTeXValidator {
 
     // Extract package names
     const packageMatches = content.match(/\\usepackage(?:\[[^\]]*\])?\{([^}]+)\}/g) || [];
-    const packages = packageMatches.map((match) => {
-      const nameMatch = match.match(/\{([^}]+)\}/);
-      return nameMatch ? nameMatch[1] : '';
-    });
+    const packages = packageMatches
+      .map((match) => {
+        const nameMatch = match.match(/\{([^}]+)\}/);
+        return nameMatch ? nameMatch[1] : '';
+      })
+      .filter((pkg): pkg is string => pkg !== '');
 
     // Check for common package conflicts
     const conflicts = this.checkPackageConflicts(packages);
