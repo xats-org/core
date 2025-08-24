@@ -332,7 +332,8 @@ export class XatsValidator {
    * Add custom keyword validator
    */
   addKeyword(keyword: string, definition: Record<string, unknown>): void {
-    this.ajv.addKeyword(keyword, definition);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    this.ajv.addKeyword(keyword, definition as any);
   }
 }
 
