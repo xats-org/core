@@ -7,8 +7,6 @@ import type {
   RenderFormat,
   RendererOptions,
   RenderResult,
-  ParseResult,
-  ValidationResult,
 } from '@xats-org/types';
 
 // Core converter types

@@ -58,7 +58,7 @@ export class WordConverter implements IWordConverter {
 
     try {
       // Validate input document
-      const validation = await this.validator.validateXatsDocument(document);
+      const validation = this.validator.validateXatsDocument(document);
       if (!validation.valid) {
         throw new Error(`Invalid xats document: ${validation.errors.join(', ')}`);
       }

@@ -42,10 +42,10 @@ export class AnnotationProcessor {
       trackChanges.push({
         id: `insert_${id}`,
         type: 'insert',
-        author: options.authorMappings?.[author] || author,
-        timestamp: new Date(dateStr),
-        content: this.cleanWordContent(content),
-        location: this.extractLocation(match.index),
+        author: (author && options.authorMappings?.[author]) || author || 'Unknown',
+        timestamp: dateStr ? new Date(dateStr) : new Date(),
+        content: this.cleanWordContent(content || ''),
+        location: this.extractLocation(match.index || 0),
         status: 'pending',
       });
     }
@@ -57,11 +57,11 @@ export class AnnotationProcessor {
       trackChanges.push({
         id: `delete_${id}`,
         type: 'delete',
-        author: options.authorMappings?.[author] || author,
-        timestamp: new Date(dateStr),
+        author: (author && options.authorMappings?.[author]) || author || 'Unknown',
+        timestamp: dateStr ? new Date(dateStr) : new Date(),
         content: '',
-        originalContent: this.cleanWordContent(content),
-        location: this.extractLocation(match.index),
+        originalContent: this.cleanWordContent(content || ''),
+        location: this.extractLocation(match.index || 0),
         status: 'pending',
       });
     }
@@ -96,10 +96,10 @@ export class AnnotationProcessor {
       const rangeMatch = commentRangeStart.exec(documentXml);
 
       comments.push({
-        id,
-        author,
-        timestamp: new Date(dateStr),
-        content: this.cleanWordContent(content),
+        id: id || 'unknown',
+        author: author || 'Unknown',
+        timestamp: dateStr ? new Date(dateStr) : new Date(),
+        content: this.cleanWordContent(content || ''),
         location: this.extractLocation(rangeMatch?.index || 0),
         status: 'open',
       });
@@ -257,10 +257,11 @@ export class AnnotationProcessor {
         threadComments.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
 
         for (let i = 1; i < threadComments.length; i++) {
-          if (!threadComments[0].thread) {
+          if (!threadComments[0]?.thread) {
+            threadComments[0] = threadComments[0] || { thread: [] };
             threadComments[0].thread = [];
           }
-          threadComments[0].thread.push(threadComments[i]);
+          threadComments[0].thread?.push(threadComments[i]);
         }
       }
     }

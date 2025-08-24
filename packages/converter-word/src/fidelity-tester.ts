@@ -5,7 +5,34 @@
 import { isEqual, difference } from 'lodash';
 
 import type { RoundTripOptions, RoundTripResult, FidelityIssue, DocumentDifference } from './types';
-import type { XatsDocument } from '@xats-org/types';
+import type { XatsDocument, ContentBlock, Unit, Chapter } from '@xats-org/types';
+
+interface FormattingInfo {
+  emphasisCount: number;
+  strongCount: number;
+  codeCount: number;
+  underlineCount: number;
+  strikethroughCount: number;
+  subscriptCount: number;
+  superscriptCount: number;
+  mathInlineCount: number;
+  referenceCount: number;
+  citationCount: number;
+}
+
+interface FormattingDifference {
+  path: string;
+  description: string;
+  original: number;
+  converted: number;
+}
+
+interface StructureInfo {
+  hasBodyMatter: boolean;
+  hasFrontMatter: boolean;
+  hasBackMatter: boolean;
+  maxNestingLevel: number;
+}
 
 /**
  * Tests round-trip conversion fidelity between xats and Word formats
@@ -245,16 +272,16 @@ export class FidelityTester {
   /**
    * Extract content blocks from document
    */
-  private extractContentBlocks(document: XatsDocument): any[] {
-    const blocks: any[] = [];
+  private extractContentBlocks(document: XatsDocument): ContentBlock[] {
+    const blocks: ContentBlock[] = [];
 
-    const processContents = (contents: any[]) => {
+    const processContents = (contents: unknown[]) => {
       for (const item of contents || []) {
-        if (item.blockType) {
-          blocks.push(item);
+        if (item && typeof item === 'object' && 'blockType' in item) {
+          blocks.push(item as ContentBlock);
         }
-        if (item.contents) {
-          processContents(item.contents);
+        if (item && typeof item === 'object' && 'contents' in item) {
+          processContents((item as any).contents);
         }
       }
     };
@@ -276,8 +303,8 @@ export class FidelityTester {
    * Compare content blocks
    */
   private compareContentBlocks(
-    originalBlocks: any[],
-    convertedBlocks: any[],
+    originalBlocks: ContentBlock[],
+    convertedBlocks: ContentBlock[],
     issues: FidelityIssue[],
     differences: DocumentDifference[]
   ): number {
@@ -338,7 +365,7 @@ export class FidelityTester {
   /**
    * Check if two blocks match
    */
-  private blocksMatch(block1: any, block2: any): boolean {
+  private blocksMatch(block1: ContentBlock, block2: ContentBlock): boolean {
     // Check block type
     if (block1.blockType !== block2.blockType) {
       return false;
@@ -360,13 +387,16 @@ export class FidelityTester {
   /**
    * Extract text content from block
    */
-  private extractTextFromBlock(block: any): string {
-    if (block.content?.text) {
-      if (typeof block.content.text === 'string') {
-        return block.content.text;
-      }
-      if (block.content.text.runs) {
-        return block.content.text.runs.map((run: any) => run.text || '').join('');
+  private extractTextFromBlock(block: ContentBlock): string {
+    if (block.content && typeof block.content === 'object') {
+      const content = block.content as any;
+      if (content.text) {
+        if (typeof content.text === 'string') {
+          return content.text;
+        }
+        if (content.text.runs && Array.isArray(content.text.runs)) {
+          return content.text.runs.map((run: any) => run.text || '').join('');
+        }
       }
     }
     return '';
@@ -396,7 +426,7 @@ export class FidelityTester {
   /**
    * Extract formatting information
    */
-  private extractFormattingInfo(document: XatsDocument): any {
+  private extractFormattingInfo(document: XatsDocument): FormattingInfo {
     const info = {
       emphasisCount: 0,
       strongCount: 0,
@@ -410,10 +440,12 @@ export class FidelityTester {
       citationCount: 0,
     };
 
-    const processBlocks = (blocks: any[]) => {
+    const processBlocks = (blocks: unknown[]) => {
       for (const block of blocks || []) {
-        if (block.content?.text?.runs) {
-          for (const run of block.content.text.runs) {
+        if (block && typeof block === 'object') {
+          const contentBlock = block as any;
+          if (contentBlock.content?.text?.runs && Array.isArray(contentBlock.content.text.runs)) {
+            for (const run of contentBlock.content.text.runs) {
             switch (run.type) {
               case 'emphasis':
                 info.emphasisCount++;
@@ -447,11 +479,12 @@ export class FidelityTester {
                 break;
             }
           }
-        }
+          }
 
-        // Process nested content
-        if (block.contents) {
-          processBlocks(block.contents);
+          // Process nested content
+          if (contentBlock.contents && Array.isArray(contentBlock.contents)) {
+            processBlocks(contentBlock.contents);
+          }
         }
       }
     };
@@ -466,10 +499,10 @@ export class FidelityTester {
   /**
    * Compare formatting
    */
-  private compareFormatting(original: any, converted: any): any[] {
-    const differences: any[] = [];
+  private compareFormatting(original: FormattingInfo, converted: FormattingInfo): FormattingDifference[] {
+    const differences: FormattingDifference[] = [];
 
-    const formatTypes = [
+    const formatTypes: (keyof FormattingInfo)[] = [
       'emphasisCount',
       'strongCount',
       'codeCount',
@@ -499,7 +532,7 @@ export class FidelityTester {
   /**
    * Extract structure information
    */
-  private extractStructureInfo(document: XatsDocument): any {
+  private extractStructureInfo(document: XatsDocument): StructureInfo {
     return {
       hasBodyMatter: !!document.bodyMatter,
       hasFrontMatter: !!document.frontMatter,

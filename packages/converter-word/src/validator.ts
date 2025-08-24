@@ -106,7 +106,7 @@ export class WordValidator {
   /**
    * Validate xats document for Word conversion compatibility
    */
-  async validateXatsDocument(document: XatsDocument): Promise<FormatValidationResult> {
+  validateXatsDocument(document: XatsDocument): FormatValidationResult {
     const issues: WordValidationIssue[] = [];
     let structureValid = true;
     let contentValid = true;
@@ -180,27 +180,30 @@ export class WordValidator {
    * Check for unsupported block types recursively
    */
   private checkBlockTypes(
-    contents: any[],
+    contents: unknown[],
     unsupportedTypes: string[],
     issues: WordValidationIssue[]
   ): void {
     for (const item of contents) {
-      if (item.blockType && unsupportedTypes.includes(item.blockType)) {
+      if (item && typeof item === 'object' && 'blockType' in item) {
+        const contentItem = item as any;
+        if (contentItem.blockType && unsupportedTypes.includes(contentItem.blockType)) {
         issues.push({
           type: 'content',
           severity: 'warning',
-          message: `Unsupported block type for Word conversion: ${item.blockType}`,
+          message: `Unsupported block type for Word conversion: ${contentItem.blockType}`,
           suggestion: 'Consider alternative representation or skip this block',
         });
-      }
+        }
 
-      // Check nested contents
-      if (item.contents) {
-        this.checkBlockTypes(item.contents, unsupportedTypes, issues);
-      }
+        // Check nested contents
+        if (contentItem.contents && Array.isArray(contentItem.contents)) {
+          this.checkBlockTypes(contentItem.contents, unsupportedTypes, issues);
+        }
 
-      if (item.bodyMatter?.contents) {
-        this.checkBlockTypes(item.bodyMatter.contents, unsupportedTypes, issues);
+        if (contentItem.bodyMatter?.contents && Array.isArray(contentItem.bodyMatter.contents)) {
+          this.checkBlockTypes(contentItem.bodyMatter.contents, unsupportedTypes, issues);
+        }
       }
     }
   }
@@ -208,30 +211,33 @@ export class WordValidator {
   /**
    * Check mathematical content complexity
    */
-  private checkMathComplexity(contents: any[], issues: WordValidationIssue[]): void {
+  private checkMathComplexity(contents: unknown[], issues: WordValidationIssue[]): void {
     for (const item of contents) {
-      if (item.blockType === 'https://xats.org/vocabularies/blocks/mathBlock') {
-        const mathContent = item.content?.latex || item.content?.mathML || '';
+      if (item && typeof item === 'object' && 'blockType' in item) {
+        const contentItem = item as any;
+        if (contentItem.blockType === 'https://xats.org/vocabularies/blocks/mathBlock') {
+          const mathContent = contentItem.content?.latex || contentItem.content?.mathML || '';
 
-        // Check for complex LaTeX that might not convert well
-        const complexPatterns = [/\\tikz/, /\\pgfplots/, /\\xy/, /\\diagram/, /\\commutative/];
+          // Check for complex LaTeX that might not convert well
+          const complexPatterns = [/\\tikz/, /\\pgfplots/, /\\xy/, /\\diagram/, /\\commutative/];
 
-        for (const pattern of complexPatterns) {
-          if (pattern.test(mathContent)) {
-            issues.push({
-              type: 'content',
-              severity: 'warning',
-              message: 'Complex mathematical diagrams may not convert perfectly to Word',
-              suggestion: 'Consider providing alternative representations for complex diagrams',
-            });
-            break;
+          for (const pattern of complexPatterns) {
+            if (pattern.test(mathContent)) {
+              issues.push({
+                type: 'content',
+                severity: 'warning',
+                message: 'Complex mathematical diagrams may not convert perfectly to Word',
+                suggestion: 'Consider providing alternative representations for complex diagrams',
+              });
+              break;
+            }
           }
         }
-      }
 
-      // Check nested contents
-      if (item.contents) {
-        this.checkMathComplexity(item.contents, issues);
+        // Check nested contents
+        if (contentItem.contents && Array.isArray(contentItem.contents)) {
+          this.checkMathComplexity(contentItem.contents, issues);
+        }
       }
     }
   }
