@@ -55,3 +55,15 @@ export {
   getStructureDepth,
   type Breadcrumb,
 } from './path.js';
+
+// Collaborative project utilities
+export {
+  createCollaborativeProject,
+  createProjectRole,
+  createProjectDeliverable,
+  createProjectPhase,
+  createPeerAssessment,
+  CollaborativeProjectValidator,
+  CollaborativeProjectAnalyzer,
+  CollaborativeProjectTemplates,
+} from './collaborative.js';
