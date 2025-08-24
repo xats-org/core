@@ -64,8 +64,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Use javascript-typescript combined language as GitHub expects
-        language: ['javascript-typescript']
+        # Use separate javascript and typescript to match main branch configuration
+        language: ['javascript', 'typescript']
     
     steps:
     - name: Checkout repository
