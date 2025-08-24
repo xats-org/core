@@ -366,17 +366,24 @@ export class DocumentRenderer {
   }
 
   private escapeLaTeX(text: string): string {
+    // SECURITY: Comprehensive escaping to prevent LaTeX injection attacks
+    // Order is important - backslashes must be escaped first
     return text
-      .replace(/\\/g, '\\textbackslash{}')
-      .replace(/\{/g, '\\{')
-      .replace(/\}/g, '\\}')
-      .replace(/\$/g, '\\$')
-      .replace(/&/g, '\\&')
-      .replace(/%/g, '\\%')
-      .replace(/#/g, '\\#')
-      .replace(/\^/g, '\\textasciicircum{}')
-      .replace(/_/g, '\\_')
-      .replace(/~/g, '\\textasciitilde{}');
+      .replace(/\\/g, '\\textbackslash{}') // Escape backslashes first
+      .replace(/\{/g, '\\{') // Escape opening braces
+      .replace(/\}/g, '\\}') // Escape closing braces
+      .replace(/\$/g, '\\$') // Escape dollar signs (math mode)
+      .replace(/&/g, '\\&') // Escape ampersands (table alignment)
+      .replace(/%/g, '\\%') // Escape percent signs (comments)
+      .replace(/#/g, '\\#') // Escape hash signs (macro parameters)
+      .replace(/\^/g, '\\textasciicircum{}') // Escape carets (superscript)
+      .replace(/_/g, '\\_') // Escape underscores (subscript)
+      .replace(/~/g, '\\textasciitilde{}') // Escape tildes (non-breaking space)
+      .replace(/\[/g, '\\lbrack{}') // Escape square brackets (optional args)
+      .replace(/\]/g, '\\rbrack{}') // Escape square brackets
+      .replace(/</g, '\\textless{}') // Escape less than
+      .replace(/>/g, '\\textgreater{}') // Escape greater than
+      .replace(/\|/g, '\\textbar{}'); // Escape pipe characters
   }
 
   // Utility methods for metadata
@@ -407,8 +414,15 @@ export class DocumentRenderer {
   }
 
   private estimateWordCount(latex: string): number {
-    // Remove LaTeX commands and count words - Fixed ReDoS vulnerability
-    const text = latex.replace(/\\[a-zA-Z]{1,20}(?:\[[^\]]{0,200}\])*(?:\{[^}]{0,200}\})*/g, '').replace(/[{}]/g, '');
-    return text.split(/\s+/).filter((word) => word.length > 0).length;
+    // SECURITY: Fixed ReDoS vulnerability by using more efficient regex pattern
+    // Remove LaTeX commands and count words
+    const text = latex
+      .replace(/\\[a-zA-Z]{1,20}(?:\[[^\]]{0,200}\])*(?:\{[^}]{0,200}\})*/g, '') // Remove LaTeX commands
+      .replace(/[{}\\]/g, ' ') // Replace special chars with spaces
+      .replace(/\s+/g, ' ') // Normalize whitespace
+      .trim();
+
+    if (!text) return 0;
+    return text.split(' ').filter((word) => word.length > 0).length;
   }
 }

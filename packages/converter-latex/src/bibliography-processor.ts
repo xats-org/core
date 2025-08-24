@@ -93,11 +93,14 @@ export class BibliographyProcessor {
   parseBibTeX(content: string): BibliographyEntry[] {
     const entries: BibliographyEntry[] = [];
 
-    // Simple BibTeX parsing (would use proper parser in production)
-    const entryRegex = /@(\w+)\s*\{\s*([^,]+),\s*([\s\S]*?)\s*\}/g;
+    // SECURITY: Fixed ReDoS vulnerability by limiting backtracking and adding match counting
+    const entryRegex = /@(\w{1,20})\s*\{\s*([^,]{1,100}),\s*([\s\S]{0,2000}?)\s*\}/g;
     let match;
+    let matchCount = 0;
+    const MAX_MATCHES = 10000; // Reasonable limit for bibliography entries
 
-    while ((match = entryRegex.exec(content)) !== null) {
+    while ((match = entryRegex.exec(content)) !== null && matchCount < MAX_MATCHES) {
+      matchCount++;
       const [, type, id, fieldsString] = match;
       const fields = this.parseFields(fieldsString || '');
 
@@ -165,12 +168,15 @@ export class BibliographyProcessor {
   extractCitations(content: string): Citation[] {
     const citations: Citation[] = [];
 
-    // Match various citation commands
+    // SECURITY: Fixed ReDoS vulnerability by limiting backtracking and adding match counting
     const citationRegex =
-      /\\(cite[a-z]*|ref)\*?\s*(?:\[([^\]]*)\])?\s*(?:\[([^\]]*)\])?\s*\{([^}]+)\}/g;
+      /\\(cite[a-z]{0,10}|ref)\*?\s*(?:\[([^\]]{0,200})\])?\s*(?:\[([^\]]{0,200})\])?\s*\{([^}]{1,100})\}/g;
     let match;
+    let matchCount = 0;
+    const MAX_MATCHES = 10000; // Reasonable limit for citations
 
-    while ((match = citationRegex.exec(content)) !== null) {
+    while ((match = citationRegex.exec(content)) !== null && matchCount < MAX_MATCHES) {
+      matchCount++;
       const [, command, firstOpt, secondOpt, keys] = match;
 
       // Parse multiple keys
@@ -315,8 +321,8 @@ export class BibliographyProcessor {
   private parseFields(fieldsString: string): Record<string, string> {
     const fields: Record<string, string> = {};
 
-    // Simple field parsing (would be more sophisticated in production)
-    const fieldRegex = /(\w+)\s*=\s*[{"']([^}"']*)[}"']/g;
+    // SECURITY: Fixed potential ReDoS vulnerability by limiting backtracking
+    const fieldRegex = /(\w{1,30})\s*=\s*[{"']([^}"']{0,500})[}"']/g;
     let match;
 
     while ((match = fieldRegex.exec(fieldsString)) !== null) {
@@ -331,7 +337,8 @@ export class BibliographyProcessor {
 
   private extractCrossRefs(fieldsString: string): string[] {
     const crossRefs: string[] = [];
-    const crossrefMatch = fieldsString.match(/crossref\s*=\s*[{"']([^}"']*)[}"']/i);
+    // SECURITY: Fixed potential ReDoS vulnerability by limiting backtracking
+    const crossrefMatch = fieldsString.match(/crossref\s*=\s*[{"']([^}"']{0,100})[}"']/i);
 
     if (crossrefMatch && crossrefMatch[1]) {
       crossRefs.push(crossrefMatch[1]);
@@ -372,7 +379,8 @@ export class BibliographyProcessor {
   }
 
   private isValidBibKey(key: string): boolean {
-    return /^[a-zA-Z][a-zA-Z0-9_:-]*$/.test(key);
+    // SECURITY: Fixed potential ReDoS vulnerability by limiting key length
+    return /^[a-zA-Z][a-zA-Z0-9_:-]{0,49}$/.test(key);
   }
 
   private escapeBibTeX(text: string): string {

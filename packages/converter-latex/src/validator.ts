@@ -202,8 +202,8 @@ export class LaTeXValidator {
         });
       }
 
-      // Check for undefined math commands
-      const mathCommands = line.match(/\\[a-zA-Z]+/g) || [];
+      // SECURITY: Fixed potential ReDoS vulnerability by limiting command length
+      const mathCommands = line.match(/\\[a-zA-Z]{1,30}/g) || [];
       for (const cmd of mathCommands) {
         if (this.isUnknownMathCommand(cmd)) {
           issues.push({
@@ -286,11 +286,12 @@ export class LaTeXValidator {
   private validatePackages(content: string): LaTeXValidationIssue[] {
     const issues: LaTeXValidationIssue[] = [];
 
-    // Extract package names
-    const packageMatches = content.match(/\\usepackage(?:\[[^\]]*\])?\{([^}]+)\}/g) || [];
+    // SECURITY: Fixed potential ReDoS vulnerability by limiting backtracking
+    const packageMatches =
+      content.match(/\\usepackage(?:\[[^\]]{0,200}\])?\{([^}]{1,50})\}/g) || [];
     const packages = packageMatches
       .map((match) => {
-        const nameMatch = match.match(/\{([^}]+)\}/);
+        const nameMatch = match.match(/\{([^}]{1,50})\}/);
         return nameMatch ? nameMatch[1] : '';
       })
       .filter((pkg): pkg is string => pkg !== '');
@@ -326,10 +327,10 @@ export class LaTeXValidator {
       });
     }
 
-    // Check citation format
-    const citationMatches = content.match(/\\cite[^{]*\{([^}]+)\}/g) || [];
+    // SECURITY: Fixed potential ReDoS vulnerability by limiting backtracking
+    const citationMatches = content.match(/\\cite[^{]{0,20}\{([^}]{1,100})\}/g) || [];
     for (const citation of citationMatches) {
-      const key = citation.match(/\{([^}]+)\}/)?.[1];
+      const key = citation.match(/\{([^}]{1,100})\}/)?.[1];
       if (key && !this.isValidBibKey(key)) {
         issues.push({
           type: 'bibliography',
@@ -445,7 +446,8 @@ export class LaTeXValidator {
   }
 
   private isValidBibKey(key: string): boolean {
-    return /^[a-zA-Z0-9_:-]+$/.test(key);
+    // SECURITY: Fixed potential ReDoS vulnerability by limiting key length
+    return /^[a-zA-Z0-9_:-]{1,50}$/.test(key);
   }
 
   private checkBlockTypesRecursive(

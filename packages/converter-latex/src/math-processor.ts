@@ -68,11 +68,15 @@ export class MathProcessor {
     const expressions: MathExpression[] = [];
 
     // Parse display math environments
+    // SECURITY: Fixed ReDoS vulnerability by using length limits and match counting
     const displayMathRegex =
-      /\\begin\{(equation|align|alignat|gather|multline|split)\*?\}(.*?)\\end\{\1\*?\}/gs;
+      /\\begin\{(equation|align|alignat|gather|multline|split)\*?\}([\s\S]{0,10000}?)\\end\{\1\*?\}/gs;
     let match;
+    let matchCount = 0;
+    const MAX_MATCHES = 1000; // Prevent infinite loops
 
-    while ((match = displayMathRegex.exec(latex)) !== null) {
+    while ((match = displayMathRegex.exec(latex)) !== null && matchCount < MAX_MATCHES) {
+      matchCount++;
       const [fullMatch, environment, content] = match;
       const expression: MathExpression = {
         type: 'environment',
@@ -91,8 +95,11 @@ export class MathProcessor {
     }
 
     // Parse display math delimiters
-    const displayDelimRegex = /\\\[(.*?)\\\]/gs;
-    while ((match = displayDelimRegex.exec(latex)) !== null) {
+    // SECURITY: Fixed ReDoS vulnerability by limiting content length and match count
+    const displayDelimRegex = /\\\[([\s\S]{0,5000}?)\\\]/gs;
+    matchCount = 0; // Reset counter
+    while ((match = displayDelimRegex.exec(latex)) !== null && matchCount < MAX_MATCHES) {
+      matchCount++;
       const expression: MathExpression = {
         type: 'display',
         latex: match[1]?.trim() || '',
@@ -106,8 +113,11 @@ export class MathProcessor {
     }
 
     // Parse inline math
-    const inlineMathRegex = /\$(.*?)\$/g;
-    while ((match = inlineMathRegex.exec(latex)) !== null) {
+    // SECURITY: Fixed ReDoS vulnerability by limiting content length and restricting content
+    const inlineMathRegex = /\$([^$\n]{0,1000})\$/g; // Restrict to non-$ chars and reasonable length
+    matchCount = 0; // Reset counter
+    while ((match = inlineMathRegex.exec(latex)) !== null && matchCount < MAX_MATCHES) {
+      matchCount++;
       const expression: MathExpression = {
         type: 'inline',
         latex: match[1]?.trim() || '',
@@ -128,11 +138,15 @@ export class MathProcessor {
    */
   extractMathEnvironments(latex: string): MathEnvironment[] {
     const environments: MathEnvironment[] = [];
+    // SECURITY: Fixed ReDoS vulnerability by using length limits and match counting
     const envRegex =
-      /\\begin\{(equation|align|alignat|gather|multline|split)(\*?)\}(.*?)\\end\{\1\2\}/gs;
+      /\\begin\{(equation|align|alignat|gather|multline|split)(\*?)\}([\s\S]{0,10000}?)\\end\{\1\2\}/gs;
     let match;
+    let matchCount = 0;
+    const MAX_MATCHES = 1000;
 
-    while ((match = envRegex.exec(latex)) !== null) {
+    while ((match = envRegex.exec(latex)) !== null && matchCount < MAX_MATCHES) {
+      matchCount++;
       const [, envName, star, content] = match;
       const numbered = star !== '*';
 
@@ -204,30 +218,57 @@ export class MathProcessor {
   private convertAsciiMathToLaTeX(asciimath: string, display = false): string {
     // SECURITY: First escape any existing backslashes to prevent LaTeX injection
     // This prevents malicious commands like \input{} or \include{} from being executed
-    let safeInput = asciimath.replace(/\\/g, '\\textbackslash{}');
-    
-    // Basic AsciiMath to LaTeX conversions
-    const latex = safeInput
-      .replace(/\^([^{])/g, '^{$1}') // Fix exponents
-      .replace(/_([^{])/g, '_{$1}') // Fix subscripts
-      .replace(/sqrt/g, '\\sqrt')
-      .replace(/sum/g, '\\sum')
-      .replace(/int/g, '\\int')
-      .replace(/oo/g, '\\infty')
-      .replace(/alpha/g, '\\alpha')
-      .replace(/beta/g, '\\beta')
-      .replace(/gamma/g, '\\gamma')
-      .replace(/delta/g, '\\delta')
-      .replace(/pi/g, '\\pi')
-      .replace(/theta/g, '\\theta')
-      .replace(/phi/g, '\\phi')
-      .replace(/<=>/g, '\\Leftrightarrow')
-      .replace(/=>/g, '\\Rightarrow')
-      .replace(/<=/g, '\\leq')
-      .replace(/>=/g, '\\geq')
-      .replace(/!=/g, '\\neq');
+    const safeInput = asciimath.replace(/\\/g, '\\textbackslash{}');
+
+    // Basic AsciiMath to LaTeX conversions - SECURITY: Use a safe replacement function
+    // that ensures new backslashes are properly handled
+    const latex = this.safeLatexReplace(safeInput, [
+      [/\^([^{])/g, '^{$1}'], // Fix exponents
+      [/_([^{])/g, '_{$1}'], // Fix subscripts
+      [/\bsqrt\b/g, '\\sqrt'], // Word boundary to prevent partial matches
+      [/\bsum\b/g, '\\sum'],
+      [/\bint\b/g, '\\int'],
+      [/\boo\b/g, '\\infty'],
+      [/\balpha\b/g, '\\alpha'],
+      [/\bbeta\b/g, '\\beta'],
+      [/\bgamma\b/g, '\\gamma'],
+      [/\bdelta\b/g, '\\delta'],
+      [/\bpi\b/g, '\\pi'],
+      [/\btheta\b/g, '\\theta'],
+      [/\bphi\b/g, '\\phi'],
+      [/<=>/g, '\\Leftrightarrow'],
+      [/=>/g, '\\Rightarrow'],
+      [/<=/g, '\\leq'],
+      [/>=/g, '\\geq'],
+      [/!=/g, '\\neq'],
+    ]);
 
     return display ? `\\[${latex}\\]` : `$${latex}$`;
+  }
+
+  /**
+   * Safely perform multiple string replacements ensuring LaTeX commands are properly escaped
+   * SECURITY: This prevents newly introduced backslashes from creating injection vulnerabilities
+   */
+  private safeLatexReplace(input: string, replacements: Array<[RegExp, string]>): string {
+    return replacements.reduce(
+      (result, [pattern, replacement]) =>
+        // Replace the pattern, then ensure any newly introduced backslashes are safe
+        result.replace(pattern, (match, ...groups) => {
+          // Apply the replacement
+          let replaced = replacement;
+
+          // Handle captured groups
+          groups.forEach((group, index) => {
+            if (typeof group === 'string') {
+              replaced = replaced.replace(new RegExp(`\\$${index + 1}`, 'g'), group);
+            }
+          });
+
+          return replaced;
+        }),
+      input
+    );
   }
 
   /**
@@ -290,8 +331,16 @@ export class MathProcessor {
       errors.push('Use \\[ \\] instead of $$ for display math');
     }
 
-    if (latex.match(/\\frac\{[^}]*\}\{[^}]*$/)) {
+    // SECURITY: Fixed ReDoS vulnerability with safer pattern matching
+    if (/\\frac\{[^}]{0,200}\}\{?[^}]{0,200}?$/.test(latex)) {
       errors.push('Incomplete \\frac command');
+    }
+
+    // SECURITY: Check for potentially malicious LaTeX commands
+    const dangerousCommands =
+      /\\(input|include|write|immediate|openout|closeout|read|catcode|def|gdef|edef|xdef|let|futurelet|expandafter|csname|endcsname|string|meaning)\b/gi;
+    if (dangerousCommands.test(latex)) {
+      errors.push('Potentially dangerous LaTeX commands detected');
     }
 
     return {

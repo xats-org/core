@@ -114,7 +114,8 @@ export class DocumentParser {
     let bodyContent = content;
 
     // Remove preamble if full document
-    const documentMatch = content.match(/\\begin\{document\}([\s\S]*?)\\end\{document\}/);
+    // SECURITY: Fixed ReDoS vulnerability by limiting document content length
+    const documentMatch = content.match(/\\begin\{document\}([\s\S]{0,100000}?)\\end\{document\}/);
     if (documentMatch && documentMatch[1] !== undefined) {
       bodyContent = documentMatch[1];
     }
@@ -234,7 +235,8 @@ export class DocumentParser {
     }
 
     // Display math
-    if (/^\\\[[\s\S]*?\\\]$/.test(trimmed)) {
+    // SECURITY: Fixed ReDoS vulnerability by limiting display math content length
+    if (/^\\\[[\s\S]{0,5000}?\\\]$/.test(trimmed)) {
       return await this.parseDisplayMath(trimmed, options);
     }
 
@@ -286,7 +288,8 @@ export class DocumentParser {
     content: string,
     options: LaTeXParseOptions
   ): Promise<ContentBlock> {
-    const envMatch = content.match(/\\begin\{([^}]+)\}([\s\S]*?)\\end\{\1\}/);
+    // SECURITY: Fixed ReDoS vulnerability by limiting environment content length
+    const envMatch = content.match(/\\begin\{([^}]{1,50})\}([\s\S]{0,10000}?)\\end\{\1\}/);
     if (!envMatch) {
       return this.createParagraphBlock(content);
     }
@@ -449,10 +452,12 @@ export class DocumentParser {
   }
 
   private extractPackages(content: string): any[] {
-    const packageMatches = content.match(/\\usepackage(?:\[[^\]]*\])?\{([^}]+)\}/g) || [];
+    // SECURITY: Fixed potential ReDoS by limiting backtracking with quantifier limits
+    const packageMatches =
+      content.match(/\\usepackage(?:\[[^\]]{0,200}\])?\{([^}]{1,50})\}/g) || [];
     return packageMatches.map((match) => {
-      const nameMatch = match.match(/\{([^}]+)\}/);
-      const optionsMatch = match.match(/\[([^\]]+)\]/);
+      const nameMatch = match.match(/\{([^}]{1,50})\}/);
+      const optionsMatch = match.match(/\[([^\]]{0,200})\]/);
 
       return {
         name: nameMatch?.[1] || '',
@@ -463,10 +468,12 @@ export class DocumentParser {
 
   private extractCustomCommands(content: string): Record<string, string> {
     const commands: Record<string, string> = {};
-    const matches = content.match(/\\newcommand\{\\([^}]+)\}(?:\[[\d]\])?\{([^}]+)\}/g) || [];
+    // SECURITY: Fixed potential ReDoS by limiting backtracking with quantifier limits
+    const matches =
+      content.match(/\\newcommand\{\\([^}]{1,50})\}(?:\[[\d]\])?\{([^}]{0,500})\}/g) || [];
 
     for (const match of matches) {
-      const cmdMatch = match.match(/\\newcommand\{\\([^}]+)\}(?:\[[\d]\])?\{([^}]+)\}/);
+      const cmdMatch = match.match(/\\newcommand\{\\([^}]{1,50})\}(?:\[[\d]\])?\{([^}]{0,500})\}/);
       if (cmdMatch && cmdMatch[1] && cmdMatch[2]) {
         commands[cmdMatch[1]] = cmdMatch[2];
       }
@@ -481,12 +488,13 @@ export class DocumentParser {
   }
 
   private cleanLaTeX(text: string): string {
+    // SECURITY: Fixed potential ReDoS by limiting backtracking with quantifier limits
     return text
-      .replace(/\\textbf\{([^}]*)\}/g, '$1')
-      .replace(/\\emph\{([^}]*)\}/g, '$1')
-      .replace(/\\textit\{([^}]*)\}/g, '$1')
-      .replace(/\\texttt\{([^}]*)\}/g, '$1')
-      .replace(/\\text\{([^}]*)\}/g, '$1')
+      .replace(/\\textbf\{([^}]{0,500})\}/g, '$1')
+      .replace(/\\emph\{([^}]{0,500})\}/g, '$1')
+      .replace(/\\textit\{([^}]{0,500})\}/g, '$1')
+      .replace(/\\texttt\{([^}]{0,500})\}/g, '$1')
+      .replace(/\\text\{([^}]{0,500})\}/g, '$1')
       .replace(/\\\\/g, ' ')
       .replace(/\\&/g, '&')
       .replace(/\\%/g, '%')
@@ -499,18 +507,21 @@ export class DocumentParser {
 
   // Metadata extraction helpers
   private extractPackageNames(content: string): string[] {
-    const matches = content.match(/\\usepackage(?:\[[^\]]*\])?\{([^}]+)\}/g) || [];
-    return matches.map((match) => match.match(/\{([^}]+)\}/)?.[1] || '');
+    // SECURITY: Fixed potential ReDoS by limiting backtracking with quantifier limits
+    const matches = content.match(/\\usepackage(?:\[[^\]]{0,200}\])?\{([^}]{1,50})\}/g) || [];
+    return matches.map((match) => match.match(/\{([^}]{1,50})\}/)?.[1] || '');
   }
 
   private extractCommandNames(content: string): string[] {
-    const matches = content.match(/\\[a-zA-Z]+/g) || [];
+    // SECURITY: Fixed potential ReDoS by limiting command name length
+    const matches = content.match(/\\[a-zA-Z]{1,30}/g) || [];
     return [...new Set(matches.map((cmd) => cmd.substring(1)))];
   }
 
   private extractEnvironmentNames(content: string): string[] {
-    const matches = content.match(/\\begin\{([^}]+)\}/g) || [];
-    return [...new Set(matches.map((match) => match.match(/\{([^}]+)\}/)?.[1] || ''))];
+    // SECURITY: Fixed potential ReDoS by limiting environment name length
+    const matches = content.match(/\\begin\{([^}]{1,30})\}/g) || [];
+    return [...new Set(matches.map((match) => match.match(/\{([^}]{1,30})\}/)?.[1] || ''))];
   }
 
   private assessMathComplexity(content: string): 'low' | 'medium' | 'high' {
@@ -541,7 +552,10 @@ export class DocumentParser {
   }
 
   private estimateWordCount(content: string): number {
-    const text = content.replace(/\\[a-zA-Z]+(\[[^\]]*\])*(\{[^}]*\})*/g, '').replace(/[{}]/g, '');
+    // SECURITY: Fixed ReDoS vulnerability by limiting backtracking with quantifier limits
+    const text = content
+      .replace(/\\[a-zA-Z]{1,20}(?:\[[^\]]{0,200}\])*(?:\{[^}]{0,200}\})*/g, '')
+      .replace(/[{}]/g, '');
     return text.split(/\s+/).filter((word) => word.length > 0).length;
   }
 }
