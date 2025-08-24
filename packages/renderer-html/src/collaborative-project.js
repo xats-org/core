@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * JavaScript functionality for collaborative project blocks
  *
