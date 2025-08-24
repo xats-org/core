@@ -381,8 +381,8 @@ export class DocumentRenderer {
 
   // Utility methods for metadata
   private extractUsedEnvironments(latex: string): string[] {
-    const envs = latex.match(/\\begin\{([^}]+)\}/g) || [];
-    return [...new Set(envs.map((env) => env.match(/\{([^}]+)\}/)?.[1] || ''))];
+    const envs = latex.match(/\\begin\{([^}]{1,50})\}/g) || [];
+    return [...new Set(envs.map((env) => env.match(/\{([^}]{1,50})\}/)?.[1] || ''))];
   }
 
   private assessMathComplexity(_document: XatsDocument): 'low' | 'medium' | 'high' {
@@ -391,7 +391,7 @@ export class DocumentRenderer {
   }
 
   private countEquations(latex: string): number {
-    return (latex.match(/\\begin\{equation|\\begin\{align|\\\[/g) || []).length;
+    return (latex.match(/\\begin\{equation\}|\\begin\{align\}|\\\[/g) || []).length;
   }
 
   private countFigures(latex: string): number {
@@ -407,8 +407,8 @@ export class DocumentRenderer {
   }
 
   private estimateWordCount(latex: string): number {
-    // Remove LaTeX commands and count words
-    const text = latex.replace(/\\[a-zA-Z]+(\[[^\]]*\])*(\{[^}]*\})*/g, '').replace(/[{}]/g, '');
+    // Remove LaTeX commands and count words - Fixed ReDoS vulnerability
+    const text = latex.replace(/\\[a-zA-Z]{1,20}(?:\[[^\]]{0,200}\])*(?:\{[^}]{0,200}\})*/g, '').replace(/[{}]/g, '');
     return text.split(/\s+/).filter((word) => word.length > 0).length;
   }
 }
