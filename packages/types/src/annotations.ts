@@ -1,12 +1,12 @@
 /**
  * xats v0.5.0 Annotation System Types
- * 
+ *
  * TypeScript type definitions for the peer review and annotation system
  * introduced in xats schema version 0.5.0
  */
 
-import { XatsObject } from './common.js';
-import { SemanticText } from './document.js';
+import type { XatsObject } from './common.js';
+import type { SemanticText } from './document.js';
 
 /**
  * Text range specification for precise targeting
@@ -83,7 +83,8 @@ export const ANNOTATION_TYPE_URIS = {
 /**
  * Union type for standard annotation type URIs
  */
-export type StandardAnnotationType = typeof ANNOTATION_TYPE_URIS[keyof typeof ANNOTATION_TYPE_URIS];
+export type StandardAnnotationType =
+  (typeof ANNOTATION_TYPE_URIS)[keyof typeof ANNOTATION_TYPE_URIS];
 
 /**
  * Core annotation interface extending XatsObject
@@ -255,9 +256,9 @@ export interface AnnotationExportOptions {
  */
 export function isAnnotation(obj: unknown): obj is Annotation {
   if (typeof obj !== 'object' || obj === null) return false;
-  
+
   const annotation = obj as Record<string, unknown>;
-  
+
   return (
     typeof annotation.id === 'string' &&
     typeof annotation.language === 'string' &&
@@ -293,7 +294,4 @@ export type AnnotationMap = Map<string, Annotation>;
  */
 export type ThreadCollection = AnnotationThread[];
 
-/**
- * Re-export semantic text types for convenience
- */
-export type { SemanticText } from './document.js';
+// SemanticText is already exported from document.js in index.ts
