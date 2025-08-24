@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/stable-v0.3.0-blue.svg)](https://github.com/xats-org/core/releases)
-[![Development](https://img.shields.io/badge/development-v0.5.0-orange.svg)](https://github.com/xats-org/core/tree/main)
+[![Version](https://img.shields.io/badge/stable-v0.5.0-blue.svg)](https://github.com/xats-org/core/releases)
+[![Next](https://img.shields.io/badge/next-v0.6.0-orange.svg)](https://github.com/xats-org/core/tree/v0.6.0)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![CI Status](https://img.shields.io/github/actions/workflow/status/xats-org/core/ci.yml?branch=main&label=CI)](https://github.com/xats-org/core/actions)
 [![npm version](https://img.shields.io/npm/v/@xats-org/cli.svg)](https://www.npmjs.com/package/@xats-org/cli)
@@ -272,7 +272,7 @@ xats-org/core/
 
 | Version | Status | Support Level | Key Features |
 |---------|--------|---------------|--------------|
-| **v0.5.0** | 🚧 Development | Full | Enhanced Rendering Hints, Advanced AI Integration, Comprehensive Tooling |
+| **v0.5.0** | ✅ Complete | Full | Enhanced Rendering Hints, Advanced AI Integration, Comprehensive Tooling |
 | **v0.4.0** | ✅ Complete | Full | Monorepo Architecture, Modern Tooling |
 | **v0.3.0** | ✅ Stable | Full | File Modularity, i18n, IndexRun, Case Studies, Metacognitive Prompts |
 | **v0.2.0** | 🔒 Security Only | Security Only | WCAG AA, LTI 1.3, Assessments, Rights Management |
@@ -321,19 +321,19 @@ pnpm --filter @xats-org/cli run validate:examples
 
 ## 📈 Roadmap
 
-### v0.3.0 (Current Stable Release)
-- ✅ File modularity for large textbooks
-- ✅ Enhanced internationalization with language and RTL support
-- ✅ Advanced indexing with IndexRun type
-- ✅ New pedagogical content types (case studies, metacognitive prompts)
-- ✅ Enhanced rights management and accessibility features
-- ✅ Comprehensive v0.3.0 documentation
+### v0.5.0 (Current Stable Release)
+- ✅ Enhanced rendering framework with bidirectional converters
+- ✅ AI integration with MCP server support
+- ✅ Advanced collaborative features and tooling
+- ✅ Full WCAG 2.1 AA compliance across all formats
+- ✅ Comprehensive workflow preservation
+- ✅ Complete v0.5.0 documentation
 
-### v0.5.0 (In Development - Target: 2026-05-31)
-- 🎨 **Enhanced Rendering Hints**: Advanced rendering intent preservation system
-- 🤖 **AI Integration**: Comprehensive AI-powered content generation and transformation
-- 🔧 **Advanced Tooling**: Sophisticated authoring tools and collaborative features
-- 🌐 **Extended Rendering**: Multiple output format support with high fidelity
+### v0.6.0 (Next Version - Target: 2026-09-30)
+- 📊 **Analytics Framework**: Comprehensive learning analytics and tracking
+- 🌍 **Advanced Internationalization**: Extended language support and localization
+- 🔌 **Ecosystem Extensions**: Broader integration with educational platforms
+- ⚡ **Performance Optimizations**: Enhanced rendering and processing speed
 
 ### v0.4.0 (Complete - Released: 2025-08-24)
 - 🏗️ **Monorepo Architecture**: Modern TypeScript monorepo with Turborepo
@@ -341,17 +341,12 @@ pnpm --filter @xats-org/cli run validate:examples
 - 🚀 **Developer Experience**: TypeScript everywhere with intelligent IDE support
 - ⚡ **Performance**: Optimized build pipelines with caching and parallel execution
 
-### v0.5.0 (Planned - Target: 2026-05-31)
-- 🔄 **Bidirectional Renderers**: Revolutionary two-way converters for all major formats
-  - **xats ↔ Word**: Seamless Microsoft Word integration for institutional workflows
-  - **xats ↔ HTML**: Web-ready content with full accessibility
-  - **xats ↔ RMarkdown**: Academic research workflow integration
-  - **xats ↔ LaTeX**: Traditional academic publishing support
-  - **xats ↔ Markdown**: Documentation and lightweight content
-- ♿ **WCAG 2.1 AA Compliance**: 100% accessibility across all output formats
-- 🤖 **AI Integration Framework**: MCP server and multi-agent orchestration
-- 🎯 **Workflow Preservation**: Authors work in familiar tools while leveraging xats
-- 🔄 **Round-Trip Integrity**: Content flows between formats without semantic loss
+### v0.3.0 (Previous Stable)
+- ✅ File modularity for large textbooks
+- ✅ Enhanced internationalization with language and RTL support
+- ✅ Advanced indexing with IndexRun type
+- ✅ New pedagogical content types (case studies, metacognitive prompts)
+- ✅ Enhanced rights management and accessibility features
 
 ### Future Vision
 - 🎮 **Immersive Content**: VR/AR integration and gamification
