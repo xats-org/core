@@ -28,6 +28,21 @@ class CollaborativeProjectController {
   }
 
   /**
+   * Escape HTML to prevent XSS vulnerabilities
+   */
+  escapeHtml(unsafe) {
+    if (typeof unsafe !== 'string') {
+      return '';
+    }
+    return unsafe
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  /**
    * Initialize the collaborative project controller
    */
   async init() {
@@ -264,13 +279,13 @@ class CollaborativeProjectController {
       usersList.innerHTML = users
         .map(
           (user) => `
-        <div class="xats-collab-user-card" data-user-id="${user.id}" draggable="true">
+        <div class="xats-collab-user-card" data-user-id="${this.escapeHtml(user.id)}" draggable="true">
           <div class="xats-collab-user-avatar">
-            <img src="${user.avatar || '/default-avatar.png'}" alt="${user.name}">
+            <img src="${this.escapeHtml(user.avatar || '/default-avatar.png')}" alt="${this.escapeHtml(user.name)}">
           </div>
           <div class="xats-collab-user-info">
-            <div class="xats-collab-user-name">${user.name}</div>
-            <div class="xats-collab-user-skills">${(user.skills || []).join(', ')}</div>
+            <div class="xats-collab-user-name">${this.escapeHtml(user.name)}</div>
+            <div class="xats-collab-user-skills">${this.escapeHtml((user.skills || []).join(', '))}</div>
           </div>
         </div>
       `
@@ -358,10 +373,10 @@ class CollaborativeProjectController {
       .map((userId) => {
         const member = this.getMemberById(userId);
         return `
-        <div class="xats-collab-assigned-member" data-user-id="${userId}">
-          <img src="${member.avatar || '/default-avatar.png'}" alt="${member.name}" class="member-avatar">
-          <span>${member.name}</span>
-          <button class="remove-member" onclick="collaborativeProject.removeMemberFromRole('${roleId}', '${userId}')">&times;</button>
+        <div class="xats-collab-assigned-member" data-user-id="${this.escapeHtml(userId)}">
+          <img src="${this.escapeHtml(member.avatar || '/default-avatar.png')}" alt="${this.escapeHtml(member.name)}" class="member-avatar">
+          <span>${this.escapeHtml(member.name)}</span>
+          <button class="remove-member" onclick="collaborativeProject.removeMemberFromRole('${this.escapeHtml(roleId)}', '${this.escapeHtml(userId)}')">&times;</button>
         </div>
       `;
       })
@@ -387,10 +402,10 @@ class CollaborativeProjectController {
     const config = statusConfig[status] || statusConfig['not-started'];
 
     statusArea.innerHTML = `
-      <div class="xats-collab-status-indicator ${config.class}" data-status="${status}">
-        <span class="status-dot" style="background-color: ${config.color}"></span>
-        <span class="status-label">${config.label}</span>
-        <button class="status-change" onclick="collaborativeProject.changeDeliverableStatus('${deliverableId}')">
+      <div class="xats-collab-status-indicator ${this.escapeHtml(config.class)}" data-status="${this.escapeHtml(status)}">
+        <span class="status-dot" style="background-color: ${this.escapeHtml(config.color)}"></span>
+        <span class="status-label">${this.escapeHtml(config.label)}</span>
+        <button class="status-change" onclick="collaborativeProject.changeDeliverableStatus('${this.escapeHtml(deliverableId)}')">
           Change Status
         </button>
       </div>
@@ -408,7 +423,7 @@ class CollaborativeProjectController {
     statusOptions.forEach((status) => {
       const option = document.createElement('option');
       option.value = status;
-      option.textContent = status.replace('-', ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+      option.textContent = status.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
       option.selected = status === currentStatus;
       select.appendChild(option);
     });

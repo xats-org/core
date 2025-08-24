@@ -170,8 +170,8 @@ export class DocumentParser {
     for (const line of lines) {
       const trimmedLine = line.trim();
 
-      // Check for section headings
-      if (/^\\(sub)*section\*?\{/.test(trimmedLine)) {
+      // Check for section headings - Fixed ReDoS vulnerability by limiting sub repetitions
+      if (/^\\(?:sub){0,3}section\*?\{/.test(trimmedLine)) {
         if (currentSegment.trim()) {
           segments.push(currentSegment.trim());
           currentSegment = '';
@@ -223,8 +223,8 @@ export class DocumentParser {
     const trimmed = segment.trim();
     if (!trimmed) return null;
 
-    // Section headings
-    if (/^\\(sub)*section\*?\{/.test(trimmed)) {
+    // Section headings - Fixed ReDoS vulnerability by limiting sub repetitions
+    if (/^\\(?:sub){0,3}section\*?\{/.test(trimmed)) {
       return this.parseHeading(trimmed);
     }
 
@@ -263,7 +263,7 @@ export class DocumentParser {
   }
 
   private parseHeading(content: string): ContentBlock {
-    const match = content.match(/^\\((?:sub)*)section\*?\{([^}]+)\}/);
+    const match = content.match(/^\\((?:sub){0,3})section\*?\{([^}]+)\}/);
     if (!match) {
       return this.createParagraphBlock(content);
     }

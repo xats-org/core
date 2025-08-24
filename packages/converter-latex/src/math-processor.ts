@@ -202,8 +202,12 @@ export class MathProcessor {
    * Convert AsciiMath to LaTeX (basic implementation)
    */
   private convertAsciiMathToLaTeX(asciimath: string, display = false): string {
+    // SECURITY: First escape any existing backslashes to prevent LaTeX injection
+    // This prevents malicious commands like \input{} or \include{} from being executed
+    let safeInput = asciimath.replace(/\\/g, '\\textbackslash{}');
+    
     // Basic AsciiMath to LaTeX conversions
-    const latex = asciimath
+    const latex = safeInput
       .replace(/\^([^{])/g, '^{$1}') // Fix exponents
       .replace(/_([^{])/g, '_{$1}') // Fix subscripts
       .replace(/sqrt/g, '\\sqrt')

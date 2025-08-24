@@ -28,11 +28,11 @@ export class AnnotationProcessor {
       return trackChanges;
     }
 
-    // Parse Word revision markup
+    // Parse Word revision markup - Fixed ReDoS vulnerability by limiting quantifiers
     const insertRegex =
-      /<w:ins[^>]*w:author="([^"]*)"[^>]*w:date="([^"]*)"[^>]*id="([^"]*)"[^>]*>(.*?)<\/w:ins>/gs;
+      /<w:ins[^>]{0,500}w:author="([^"]{0,100})"[^>]{0,500}w:date="([^"]{0,100})"[^>]{0,500}id="([^"]{0,100})"[^>]{0,500}>((?:(?!<\/w:ins>)[\s\S]){0,10000})<\/w:ins>/gs;
     const deleteRegex =
-      /<w:del[^>]*w:author="([^"]*)"[^>]*w:date="([^"]*)"[^>]*id="([^"]*)"[^>]*>(.*?)<\/w:del>/gs;
+      /<w:del[^>]{0,500}w:author="([^"]{0,100})"[^>]{0,500}w:date="([^"]{0,100})"[^>]{0,500}id="([^"]{0,100})"[^>]{0,500}>((?:(?!<\/w:del>)[\s\S]){0,10000})<\/w:del>/gs;
 
     // Extract insertions
     let match;
@@ -83,16 +83,16 @@ export class AnnotationProcessor {
       return comments;
     }
 
-    // Parse comments.xml for comment definitions
+    // Parse comments.xml for comment definitions - Fixed ReDoS vulnerability
     const commentRegex =
-      /<w:comment[^>]*w:id="([^"]*)"[^>]*w:author="([^"]*)"[^>]*w:date="([^"]*)"[^>]*>(.*?)<\/w:comment>/gs;
+      /<w:comment[^>]{0,500}w:id="([^"]{0,100})"[^>]{0,500}w:author="([^"]{0,100})"[^>]{0,500}w:date="([^"]{0,100})"[^>]{0,500}>((?:(?!<\/w:comment>)[\s\S]){0,10000})<\/w:comment>/gs;
 
     let match;
     while ((match = commentRegex.exec(commentsXml)) !== null) {
       const [, id, author, dateStr, content] = match;
 
-      // Find comment references in document
-      const commentRangeStart = new RegExp(`<w:commentRangeStart[^>]*w:id="${id}"[^>]*>`, 'g');
+      // Find comment references in document - Fixed ReDoS vulnerability
+      const commentRangeStart = new RegExp(`<w:commentRangeStart[^>]{0,200}w:id="${id}"[^>]{0,200}>`, 'g');
       const rangeMatch = commentRangeStart.exec(documentXml);
 
       comments.push({
@@ -161,12 +161,12 @@ export class AnnotationProcessor {
       const content = annotation.content;
 
       if (content.startsWith('Suggested addition:')) {
-        const addedText = content.replace('Suggested addition: ', '');
+        const addedText = content.replace(/Suggested addition: /g, '');
         markup += `<w:ins w:id="${annotation.id}" w:author="${author}" w:date="${timestamp}">`;
         markup += `<w:r><w:t>${this.escapeXml(addedText)}</w:t></w:r>`;
         markup += `</w:ins>`;
       } else if (content.startsWith('Suggested deletion:')) {
-        const deletedText = content.replace('Suggested deletion: ', '');
+        const deletedText = content.replace(/Suggested deletion: /g, '');
         markup += `<w:del w:id="${annotation.id}" w:author="${author}" w:date="${timestamp}">`;
         markup += `<w:r><w:t>${this.escapeXml(deletedText)}</w:t></w:r>`;
         markup += `</w:del>`;

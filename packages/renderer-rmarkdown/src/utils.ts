@@ -371,8 +371,8 @@ export function extractCodeChunks(content: string): Array<{
     options: ReturnType<typeof parseChunkHeader>;
   }> = [];
 
-  // Regex to match code chunks
-  const chunkRegex = /^```+\s*\{([^}]+)\}\s*\n([\s\S]*?)\n```+\s*$/gm;
+  // Regex to match code chunks - Fixed ReDoS vulnerability by limiting repetitions
+  const chunkRegex = /^`{3,10}\s*\{([^}]+)\}\s*\n([\s\S]{0,50000}?)\n`{3,10}\s*$/gm;
   let match;
 
   while ((match = chunkRegex.exec(content)) !== null) {
@@ -408,8 +408,8 @@ export function extractInlineCode(content: string): Array<{
     code: string;
   }> = [];
 
-  // Match `r code` or `{r} code`
-  const inlineRegex = /`\s*(\w+)?\s*([^`]+)`/g;
+  // Match `r code` or `{r} code` - Fixed ReDoS vulnerability by limiting content length
+  const inlineRegex = /`\s*(\w{1,20})?\s*([^`]{1,1000})`/g;
   let match;
 
   while ((match = inlineRegex.exec(content)) !== null) {
@@ -433,8 +433,8 @@ export function extractInlineCode(content: string): Array<{
 export function parseBookdownReferences(content: string): BookdownReference[] {
   const references: BookdownReference[] = [];
 
-  // Match references like \@ref(fig:label), \@ref(tab:label), etc.
-  const refRegex = /\\@ref\(([^)]+)\)/g;
+  // Match references like \@ref(fig:label), \@ref(tab:label), etc. - Fixed ReDoS vulnerability
+  const refRegex = /\\@ref\(([^)]{1,100})\)/g;
   let match;
 
   while ((match = refRegex.exec(content)) !== null) {
@@ -644,8 +644,8 @@ export function extractMathExpressions(content: string): Array<{
     end: number;
   }> = [];
 
-  // Display math: $$...$$
-  const displayRegex = /\$\$([^$]+)\$\$/g;
+  // Display math: $$...$$ - Fixed ReDoS vulnerability by limiting content length
+  const displayRegex = /\$\$([^$]{1,10000})\$\$/g;
   let match;
 
   while ((match = displayRegex.exec(content)) !== null) {
@@ -659,8 +659,8 @@ export function extractMathExpressions(content: string): Array<{
     }
   }
 
-  // Inline math: $...$  (avoiding display math)
-  const inlineRegex = /(?<!\$)\$([^$\n]+)\$(?!\$)/g;
+  // Inline math: $...$  (avoiding display math) - Fixed ReDoS vulnerability
+  const inlineRegex = /(?<!\$)\$([^$\n]{1,1000})\$(?!\$)/g;
   while ((match = inlineRegex.exec(content)) !== null) {
     if (!match[1]) continue;
 
