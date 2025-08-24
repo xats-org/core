@@ -4,7 +4,8 @@
  * Provides validation capabilities for xats documents against the JSON Schema.
  */
 
-import Ajv, { type ValidateFunction, type ErrorObject } from 'ajv';
+import AjvDefault, { type ValidateFunction, type ErrorObject } from 'ajv';
+const Ajv = AjvDefault;
 import addFormats from 'ajv-formats';
 
 import { loadSchema, getSchemaId, isVersionAvailable, LATEST_VERSION } from '@xats-org/schema';

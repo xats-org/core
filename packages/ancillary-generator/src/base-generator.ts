@@ -65,7 +65,10 @@ export abstract class BaseAncillaryGenerator implements AncillaryGenerator {
                 metadata: contentBlock.extensions as Record<string, unknown>,
               });
             }
-          } else if ('contents' in item && Array.isArray(item.contents)) {
+          } else if (
+            'contents' in item &&
+            Array.isArray((item as Unit | Chapter | Section).contents)
+          ) {
             // Item is a structural container with contents
             const containerItem = item as Unit | Chapter | Section;
             for (const block of containerItem.contents) {

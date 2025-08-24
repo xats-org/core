@@ -27,7 +27,7 @@ export interface Template {
   /** Template content or path to template file */
   content: string;
   /** Additional template options */
-  options?: Record<string, any>;
+  options?: Record<string, unknown>;
 }
 
 /**
@@ -44,9 +44,9 @@ export interface GenerationOptions {
   /** Template to use for generation */
   template?: Template;
   /** Custom styling options */
-  styling?: Record<string, any>;
+  styling?: Record<string, unknown>;
   /** Metadata to include in output */
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   /** Whether to include source references */
   includeReferences?: boolean;
   /** Output file path */
@@ -60,13 +60,13 @@ export interface ExtractedContent {
   /** Original block from which content was extracted */
   sourceBlock: ContentBlock;
   /** Extracted content */
-  content: any;
+  content: unknown;
   /** Tags associated with this content */
   tags: string[];
   /** Hierarchical path in document */
   path: string[];
   /** Additional metadata */
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**

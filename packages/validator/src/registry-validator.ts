@@ -6,7 +6,8 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import Ajv from 'ajv';
+import AjvDefault from 'ajv';
+const Ajv = AjvDefault;
 import addFormats from 'ajv-formats';
 
 import type {

@@ -25,47 +25,51 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
   /**
    * Generate slides from extracted content
    */
-  async generateOutput(
+  generateOutput(
     content: ExtractedContent[],
     options: SlideDeckOptions
   ): Promise<GenerationResult> {
-    const startTime = Date.now();
+    return Promise.resolve().then(() => {
+      const startTime = Date.now();
 
-    try {
-      if (!this.validateOptions(options)) {
-        return this.createErrorResult(options.format, ['Invalid options provided']);
+      try {
+        if (!this.validateOptions(options)) {
+          return this.createErrorResult(options.format, ['Invalid options provided']);
+        }
+
+        // Group content into slides
+        const slides = this.createSlides(content, options);
+
+        // Generate output based on format
+        let output: string | Buffer;
+        switch (options.format) {
+          case 'markdown':
+            output = this.generateMarkdownSlides(slides, options);
+            break;
+          case 'html':
+            output = this.generateHTMLSlides(slides, options);
+            break;
+          case 'pptx':
+            output = this.generatePowerPoint(slides, options);
+            break;
+          default:
+            return this.createErrorResult(options.format, [
+              `Unsupported format: ${options.format}`,
+            ]);
+        }
+
+        const timeElapsed = Date.now() - startTime;
+        return this.createSuccessResult(output, options.format, {
+          blocksProcessed: content.length,
+          timeElapsed,
+          outputSize: Buffer.isBuffer(output) ? output.length : output.length,
+        });
+      } catch (error) {
+        return this.createErrorResult(options.format, [
+          `Generation failed: ${error instanceof Error ? error.message : String(error)}`,
+        ]);
       }
-
-      // Group content into slides
-      const slides = this.createSlides(content, options);
-
-      // Generate output based on format
-      let output: string | Buffer;
-      switch (options.format) {
-        case 'markdown':
-          output = this.generateMarkdownSlides(slides, options);
-          break;
-        case 'html':
-          output = this.generateHTMLSlides(slides, options);
-          break;
-        case 'pptx':
-          output = this.generatePowerPoint(slides, options);
-          break;
-        default:
-          return this.createErrorResult(options.format, [`Unsupported format: ${options.format}`]);
-      }
-
-      const timeElapsed = Date.now() - startTime;
-      return this.createSuccessResult(output, options.format, {
-        blocksProcessed: content.length,
-        timeElapsed,
-        outputSize: Buffer.isBuffer(output) ? output.length : output.length,
-      });
-    } catch (error) {
-      return this.createErrorResult(options.format, [
-        `Generation failed: ${error instanceof Error ? error.message : String(error)}`,
-      ]);
-    }
+    });
   }
 
   /**
@@ -130,7 +134,10 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
       if (!sections.has(section)) {
         sections.set(section, []);
       }
-      sections.get(section)!.push(item);
+      const sectionItems = sections.get(section);
+      if (sectionItems) {
+        sectionItems.push(item);
+      }
     }
 
     return sections;

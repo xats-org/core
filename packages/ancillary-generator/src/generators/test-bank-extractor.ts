@@ -51,65 +51,66 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Generate test bank from extracted content
    */
-  async generateOutput(
-    content: ExtractedContent[],
-    options: TestBankOptions
-  ): Promise<GenerationResult> {
-    const startTime = Date.now();
+  generateOutput(content: ExtractedContent[], options: TestBankOptions): Promise<GenerationResult> {
+    return Promise.resolve().then(() => {
+      const startTime = Date.now();
 
-    try {
-      if (!this.validateOptions(options)) {
-        return this.createErrorResult(options.format, ['Invalid options provided']);
+      try {
+        if (!this.validateOptions(options)) {
+          return this.createErrorResult(options.format, ['Invalid options provided']);
+        }
+
+        // Extract and organize questions
+        const questions = this.extractQuestions(content, options);
+
+        // Randomize if requested
+        if (options.randomizeOrder) {
+          this.shuffleArray(questions);
+        }
+
+        // Build test bank structure
+        const testBank: TestBank = {
+          title: 'Test Bank',
+          generatedAt: new Date().toISOString(),
+          totalQuestions: questions.length,
+          questionTypes: this.countQuestionTypes(questions),
+          questions,
+          ...(options.includeAnswerKey ? { answerKey: this.generateAnswerKey(questions) } : {}),
+        };
+
+        // Generate output
+        let output: string | Buffer;
+        switch (options.format) {
+          case 'json':
+            output = JSON.stringify(testBank, null, 2);
+            break;
+          case 'markdown':
+            output = this.generateMarkdownTestBank(testBank, options);
+            break;
+          case 'html':
+            output = this.generateHTMLTestBank(testBank, options);
+            break;
+          case 'docx':
+            output = this.generateDOCXTestBank(testBank, options);
+            break;
+          default:
+            return this.createErrorResult(options.format, [
+              `Unsupported format: ${options.format}`,
+            ]);
+        }
+
+        const timeElapsed = Date.now() - startTime;
+        return this.createSuccessResult(output, options.format, {
+          blocksProcessed: content.length,
+          timeElapsed,
+          outputSize: Buffer.isBuffer(output) ? output.length : output.length,
+        });
+      } catch (error) {
+        return this.createErrorResult(options.format, [
+          `Generation failed: ${error instanceof Error ? error.message : String(error)}`,
+        ]);
       }
-
-      // Extract and organize questions
-      const questions = this.extractQuestions(content, options);
-
-      // Randomize if requested
-      if (options.randomizeOrder) {
-        this.shuffleArray(questions);
-      }
-
-      // Build test bank structure
-      const testBank: TestBank = {
-        title: 'Test Bank',
-        generatedAt: new Date().toISOString(),
-        totalQuestions: questions.length,
-        questionTypes: this.countQuestionTypes(questions),
-        questions,
-        ...(options.includeAnswerKey ? { answerKey: this.generateAnswerKey(questions) } : {}),
-      };
-
-      // Generate output
-      let output: string | Buffer;
-      switch (options.format) {
-        case 'json':
-          output = JSON.stringify(testBank, null, 2);
-          break;
-        case 'markdown':
-          output = this.generateMarkdownTestBank(testBank, options);
-          break;
-        case 'html':
-          output = this.generateHTMLTestBank(testBank, options);
-          break;
-        case 'docx':
-          output = this.generateDOCXTestBank(testBank, options);
-          break;
-        default:
-          return this.createErrorResult(options.format, [`Unsupported format: ${options.format}`]);
-      }
-
-      const timeElapsed = Date.now() - startTime;
-      return this.createSuccessResult(output, options.format, {
-        blocksProcessed: content.length,
-        timeElapsed,
-        outputSize: Buffer.isBuffer(output) ? output.length : output.length,
-      });
-    } catch (error) {
-      return this.createErrorResult(options.format, [
-        `Generation failed: ${error instanceof Error ? error.message : String(error)}`,
-      ]);
-    }
+    });
   }
 
   /**
@@ -130,11 +131,12 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
       if (!item.tags.includes('quiz-bank-item')) continue;
 
       const questionType = (item.metadata?.questionType || 'multiple-choice') as Question['type'];
-      const difficulty = item.metadata?.difficulty || 'medium';
+      const difficulty = String(item.metadata?.difficulty || 'medium');
 
       // Filter by type and difficulty
       if (!allowedTypes.includes(questionType)) continue;
-      if (!allowedDifficulties.includes(difficulty)) continue;
+      if (!allowedDifficulties.includes(difficulty as 'easy' | 'medium' | 'hard' | 'expert'))
+        continue;
 
       const question = this.createQuestion(item, questionType);
       if (question) {
@@ -145,7 +147,7 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
     // Limit questions per topic if specified
     if (options.questionsPerTopic) {
       const grouped = this.groupQuestionsByTopic(questions);
-      const limited: any[] = [];
+      const limited: Question[] = [];
 
       for (const topicQuestions of grouped.values()) {
         limited.push(...topicQuestions.slice(0, options.questionsPerTopic));
@@ -173,11 +175,11 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
       id: `q_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type,
       question: questionText,
-      difficulty: item.metadata?.difficulty || 'medium',
-      points: item.metadata?.points || 1,
+      difficulty: String(item.metadata?.difficulty || 'medium'),
+      points: Number(item.metadata?.points || 1),
       topic: item.path[1] || 'General',
-      cognitiveLevel: item.metadata?.cognitiveLevel || 'understand',
-      timeEstimate: item.metadata?.timeEstimate || 'PT2M',
+      cognitiveLevel: String(item.metadata?.cognitiveLevel || 'understand'),
+      timeEstimate: String(item.metadata?.timeEstimate || 'PT2M'),
     };
 
     // Add type-specific properties
@@ -209,8 +211,8 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
    */
   private generateOptions(item: ExtractedContent): QuestionOption[] {
     const options: QuestionOption[] = [];
-    const correctAnswer = item.metadata?.correctAnswer || 'Option A';
-    const distractors = item.metadata?.distractorHints || [];
+    const correctAnswer = String(item.metadata?.correctAnswer || 'Option A');
+    const distractors = (item.metadata?.distractorHints as string[]) || [];
 
     // Add correct answer
     options.push({
@@ -222,11 +224,14 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
     // Add distractors
     const labels = ['B', 'C', 'D', 'E'];
     for (let i = 0; i < Math.min(distractors.length, 4); i++) {
-      options.push({
-        label: labels[i] || 'X',
-        text: distractors[i] as string,
-        isCorrect: false,
-      });
+      const distractor = distractors[i];
+      if (distractor) {
+        options.push({
+          label: labels[i] || 'X',
+          text: distractor,
+          isCorrect: false,
+        });
+      }
     }
 
     // Fill remaining options if needed
@@ -254,7 +259,10 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
       if (!grouped.has(topic)) {
         grouped.set(topic, []);
       }
-      grouped.get(topic)!.push(question);
+      const topicQuestions = grouped.get(topic);
+      if (topicQuestions) {
+        topicQuestions.push(question);
+      }
     }
 
     return grouped;
@@ -290,9 +298,12 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   private shuffleArray<T>(array: T[]): void {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      const temp = array[i]!;
-      array[i] = array[j]!;
-      array[j] = temp;
+      const temp = array[i];
+      const swapItem = array[j];
+      if (temp !== undefined && swapItem !== undefined) {
+        array[i] = swapItem;
+        array[j] = temp;
+      }
     }
   }
 

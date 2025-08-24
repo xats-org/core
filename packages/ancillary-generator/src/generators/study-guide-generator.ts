@@ -120,7 +120,10 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
       if (!organized.has(groupKey)) {
         organized.set(groupKey, []);
       }
-      organized.get(groupKey)!.push(item);
+      const items = organized.get(groupKey);
+      if (items) {
+        items.push(item);
+      }
     }
 
     return organized;
@@ -217,9 +220,10 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
 
     for (const item of items) {
       // Look for content marked as summary-worthy
-      const importance =
-        item.metadata?.importance ||
-        (item.sourceBlock.extensions as Record<string, any>)?.ancillary?.importance;
+      const extensions = item.sourceBlock.extensions as
+        | Record<string, Record<string, unknown>>
+        | undefined;
+      const importance = item.metadata?.importance || extensions?.ancillary?.importance;
 
       if (importance === 'critical' || importance === 'important') {
         const text = this.extractPlainText(item.content as SemanticText);
