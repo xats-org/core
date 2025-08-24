@@ -3,7 +3,7 @@
 <div align="center">
 
 [![Version](https://img.shields.io/badge/stable-v0.3.0-blue.svg)](https://github.com/xats-org/core/releases)
-[![Development](https://img.shields.io/badge/development-v0.4.0-orange.svg)](https://github.com/xats-org/core/tree/main)
+[![Development](https://img.shields.io/badge/development-v0.5.0-orange.svg)](https://github.com/xats-org/core/tree/main)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![CI Status](https://img.shields.io/github/actions/workflow/status/xats-org/core/ci.yml?branch=main&label=CI)](https://github.com/xats-org/core/actions)
 [![npm version](https://img.shields.io/npm/v/@xats-org/cli.svg)](https://www.npmjs.com/package/@xats-org/cli)
@@ -103,7 +103,7 @@ xats validate my-textbook.json
 import { validateDocument } from '@xats-org/validator';
 
 const document = {
-  schemaVersion: "0.3.0",
+  schemaVersion: "0.5.0",
   bibliographicEntry: {
     id: "calculus-101",
     type: "book",
@@ -122,7 +122,7 @@ const { valid, errors } = await validateDocument(document);
 
 ```json
 {
-  "schemaVersion": "0.3.0",
+  "schemaVersion": "0.5.0",
   "bibliographicEntry": {
     "id": "biology-fundamentals",
     "type": "book",
@@ -272,7 +272,8 @@ xats-org/core/
 
 | Version | Status | Support Level | Key Features |
 |---------|--------|---------------|--------------|
-| **v0.4.0** | 🚧 Development | Full | AI Integration, Advanced Analytics |
+| **v0.5.0** | 🚧 Development | Full | Enhanced Rendering Hints, Advanced AI Integration, Comprehensive Tooling |
+| **v0.4.0** | ✅ Complete | Full | Monorepo Architecture, Modern Tooling |
 | **v0.3.0** | ✅ Stable | Full | File Modularity, i18n, IndexRun, Case Studies, Metacognitive Prompts |
 | **v0.2.0** | 🔒 Security Only | Security Only | WCAG AA, LTI 1.3, Assessments, Rights Management |
 | **v0.1.0** | 🔒 Security Only | Security Only | Core schema, Basic content types |
@@ -328,7 +329,13 @@ pnpm --filter @xats-org/cli run validate:examples
 - ✅ Enhanced rights management and accessibility features
 - ✅ Comprehensive v0.3.0 documentation
 
-### v0.4.0 (In Development - Target: 2026-03-31)
+### v0.5.0 (In Development - Target: 2026-05-31)
+- 🎨 **Enhanced Rendering Hints**: Advanced rendering intent preservation system
+- 🤖 **AI Integration**: Comprehensive AI-powered content generation and transformation
+- 🔧 **Advanced Tooling**: Sophisticated authoring tools and collaborative features
+- 🌐 **Extended Rendering**: Multiple output format support with high fidelity
+
+### v0.4.0 (Complete - Released: 2025-08-24)
 - 🏗️ **Monorepo Architecture**: Modern TypeScript monorepo with Turborepo
 - 📦 **Modular Packages**: Separate packages for schema, validator, CLI, and utilities
 - 🚀 **Developer Experience**: TypeScript everywhere with intelligent IDE support

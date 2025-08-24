@@ -40,7 +40,7 @@ Every `xats` document starts with a root object that defines its version and cor
 
 ```json
 {
-  "schemaVersion": "0.3.0",
+  "schemaVersion": "0.5.0",
   "bibliographicEntry": {
     "id": "my-first-xats-book",
     "type": "book",
@@ -65,7 +65,7 @@ Every `xats` document starts with a root object that defines its version and cor
 ```
 
 ### Key Points:
-- **`schemaVersion`**: Always use "0.3.0" for the current schema
+- **`schemaVersion`**: Always use "0.5.0" for the current schema
 - **`bibliographicEntry`**: Uses CSL-JSON standard for metadata
 - **`subject`**: A string describing the main topic
 - **`bodyMatter`**: Contains the actual content (chapters or units)
@@ -125,7 +125,7 @@ Sections contain the actual content blocks. Let's add a section with a paragraph
 
 ```json
 {
-  "schemaVersion": "0.2.0",
+  "schemaVersion": "0.5.0",
   "bibliographicEntry": {
     "id": "my-first-xats-book",
     "type": "book",

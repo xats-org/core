@@ -123,7 +123,7 @@ The xats project follows a structured versioning and branching strategy to maint
 ### Branch Structure
 
 #### **main branch**
-- Contains the **latest stable release** (currently v0.1.0)
+- Contains the **latest stable release** (currently v0.3.0)
 - **Protected from force pushes and deletion**
 - Only receives merges from version branches when they are stable
 - Tagged with release versions (e.g., `v0.1.0`, `v0.1.1`)
@@ -264,10 +264,10 @@ git tag v0.2.0-rc1  # Release candidates
 
 ### Current Active Branches
 
-- **main** - v0.1.0 (stable)
-- **v0.2.0** - Assessment framework (feature complete)
-- **v0.3.0** - Extended features (current development)
-- **v0.4.0** - Monorepo infrastructure (planned)
+- **main** - v0.3.0 (stable)
+- **v0.4.0** - Monorepo infrastructure (completed)
+- **v0.5.0** - Enhanced rendering and AI integration (current development)
+- **v0.6.0** - Analytics and advanced internationalization (planned)
 
 ## Key Architecture Principles
 

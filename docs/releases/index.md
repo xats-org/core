@@ -4,6 +4,13 @@ This directory contains release notes for all versions of the xats standard.
 
 ## Available Releases
 
+### Current Development Release
+- **v0.5.0** - In Development (Target: May 31, 2026)
+  - Enhanced rendering hints system for author intent preservation
+  - Advanced AI integration and content transformation
+  - Comprehensive tooling and authoring features
+  - Extended rendering framework with multiple output formats
+
 ### Current Stable Release
 - **[v0.3.0](v0.3.0.md)** - August 19, 2025
   - File modularity for large textbooks
@@ -13,6 +20,12 @@ This directory contains release notes for all versions of the xats standard.
   - Enhanced rights management and accessibility
 
 ### Previous Releases
+- **[v0.4.0](v0.4.0.md)** - August 24, 2025
+  - Monorepo architecture with TypeScript and Turborepo
+  - Modular package structure
+  - Enhanced developer experience
+  - Modern build pipelines and tooling
+
 - **[v0.2.0](v0.2.0.md)** - January 20, 2025
   - 100% WCAG 2.1 AA compliance
   - Native LTI 1.3 integration
