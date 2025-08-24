@@ -92,7 +92,10 @@ export class AnnotationProcessor {
       const [, id, author, dateStr, content] = match;
 
       // Find comment references in document - Fixed ReDoS vulnerability
-      const commentRangeStart = new RegExp(`<w:commentRangeStart[^>]{0,200}w:id="${id}"[^>]{0,200}>`, 'g');
+      const commentRangeStart = new RegExp(
+        `<w:commentRangeStart[^>]{0,200}w:id="${id}"[^>]{0,200}>`,
+        'g'
+      );
       const rangeMatch = commentRangeStart.exec(documentXml);
 
       comments.push({
