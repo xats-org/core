@@ -80,3 +80,15 @@ export {
   type SemanticText,
   type ReviewDecision,
 } from './annotations.js';
+
+// Collaborative project utilities
+export {
+  createCollaborativeProject,
+  createProjectRole,
+  createProjectDeliverable,
+  createProjectPhase,
+  createPeerAssessment,
+  CollaborativeProjectValidator,
+  CollaborativeProjectAnalyzer,
+  CollaborativeProjectTemplates,
+} from './collaborative.js';

@@ -14,6 +14,7 @@ export * from './registry.js';
 export * from './schema.js';
 export * from './common.js';
 export * from './annotations.js';
+export * from './collaborative.js';
 
 // Version information
 export const XATS_VERSION = '0.5.0';

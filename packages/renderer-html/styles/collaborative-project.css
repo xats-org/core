@@ -1,0 +1,818 @@
+/**
+ * CSS styles for collaborative project blocks
+ * 
+ * Provides complete styling for collaborative project rendering including
+ * roles, deliverables, timeline, and peer assessment components.
+ */
+
+/* ===== PROJECT CONTAINER ===== */
+.xats-collab-project {
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+  background: #ffffff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.xats-collab-project[data-project-type="research-project"] {
+  border-left: 4px solid #3b82f6;
+}
+
+.xats-collab-project[data-project-type="case-study-analysis"] {
+  border-left: 4px solid #10b981;
+}
+
+.xats-collab-project[data-project-type="presentation-development"] {
+  border-left: 4px solid #f59e0b;
+}
+
+/* ===== PROJECT HEADER ===== */
+.xats-collab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.xats-collab-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  flex: 1;
+}
+
+.xats-collab-type {
+  background: #e2e8f0;
+  color: #475569;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.xats-collab-type[data-type="research-project"] {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.xats-collab-type[data-type="case-study-analysis"] {
+  background: #d1fae5;
+  color: #047857;
+}
+
+/* ===== PROJECT DESCRIPTION ===== */
+.xats-collab-description {
+  margin-bottom: 24px;
+}
+
+.xats-collab-description p {
+  margin: 0;
+  line-height: 1.6;
+  color: #475569;
+  font-size: 1rem;
+}
+
+/* ===== ROLES SECTION ===== */
+.xats-collab-roles {
+  margin-bottom: 32px;
+}
+
+.xats-collab-roles h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+}
+
+.xats-collab-roles h3::before {
+  content: "👥";
+  margin-right: 8px;
+}
+
+.xats-collab-roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.xats-collab-role {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.xats-collab-role:hover {
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.xats-collab-role-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.xats-collab-role-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.xats-collab-role-capacity {
+  background: #e2e8f0;
+  color: #64748b;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.xats-collab-role-description {
+  margin-bottom: 12px;
+}
+
+.xats-collab-role-description p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.xats-collab-role-responsibilities h5,
+.xats-collab-role-skills h5 {
+  margin: 0 0 8px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.xats-collab-role-responsibilities ul {
+  margin: 0;
+  padding-left: 16px;
+  list-style-type: disc;
+}
+
+.xats-collab-role-responsibilities li {
+  margin-bottom: 4px;
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.4;
+}
+
+.xats-collab-skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.xats-collab-skill-tag {
+  background: #3b82f6;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.xats-collab-role-assignment {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.xats-collab-assigned-members {
+  min-height: 32px;
+  background: #ffffff;
+  border: 2px dashed #cbd5e1;
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.xats-collab-assigned-members:empty::after {
+  content: "Click to assign members";
+  color: #94a3b8;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+.xats-collab-role-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.xats-collab-role-controls button {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.xats-collab-role-controls button:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.xats-collab-assign-roles {
+  background: #3b82f6 !important;
+  color: white !important;
+  border-color: #3b82f6 !important;
+}
+
+.xats-collab-assign-roles:hover {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+}
+
+/* ===== DELIVERABLES SECTION ===== */
+.xats-collab-deliverables {
+  margin-bottom: 32px;
+}
+
+.xats-collab-deliverables h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+}
+
+.xats-collab-deliverables h3::before {
+  content: "📋";
+  margin-right: 8px;
+}
+
+.xats-collab-deliverables-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.xats-collab-deliverable {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.05);
+}
+
+.xats-collab-deliverable-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.xats-collab-deliverable-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  flex: 1;
+}
+
+.xats-collab-deliverable-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.xats-collab-deliverable-format,
+.xats-collab-deliverable-type,
+.xats-collab-deliverable-due {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.xats-collab-deliverable-format {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.xats-collab-deliverable-type {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.xats-collab-deliverable-due {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.xats-collab-deliverable-description p {
+  margin: 0 0 16px 0;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.xats-collab-assessment-criteria {
+  margin: 16px 0;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.xats-collab-assessment-criteria h5 {
+  margin: 0 0 12px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.xats-collab-criteria-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.xats-collab-criterion {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px;
+  background: white;
+  border-radius: 4px;
+}
+
+.xats-collab-criterion-name {
+  font-weight: 500;
+  color: #374151;
+  flex: 1;
+}
+
+.xats-collab-criterion-weight {
+  background: #10b981;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: center;
+}
+
+.xats-collab-criterion-description {
+  margin: 4px 0 0 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* ===== TIMELINE SECTION ===== */
+.xats-collab-timeline {
+  margin-bottom: 32px;
+}
+
+.xats-collab-timeline h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+}
+
+.xats-collab-timeline h3::before {
+  content: "⏰";
+  margin-right: 8px;
+}
+
+.xats-collab-timeline-summary {
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 6px;
+}
+
+.xats-collab-estimated-hours {
+  color: #0284c7;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.xats-collab-timeline-phases {
+  position: relative;
+  padding-left: 32px;
+}
+
+.xats-collab-timeline-phases::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #e2e8f0;
+}
+
+.xats-collab-phase {
+  position: relative;
+  display: flex;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+}
+
+.xats-collab-phase:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.xats-collab-phase-indicator {
+  position: absolute;
+  left: -32px;
+  top: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.xats-collab-phase-number {
+  width: 24px;
+  height: 24px;
+  background: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.xats-collab-phase-content {
+  flex: 1;
+}
+
+.xats-collab-phase-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.xats-collab-phase-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.xats-collab-phase-dates {
+  display: flex;
+  align-items: center;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.xats-collab-phase-description p {
+  margin: 0 0 12px 0;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.xats-collab-phase-activities,
+.xats-collab-phase-deliverables {
+  margin: 12px 0;
+}
+
+.xats-collab-phase-activities h5,
+.xats-collab-phase-deliverables h5 {
+  margin: 0 0 8px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.xats-collab-phase-activities ul,
+.xats-collab-phase-deliverables ul {
+  margin: 0;
+  padding-left: 16px;
+  list-style-type: disc;
+}
+
+.xats-collab-phase-activities li,
+.xats-collab-phase-deliverables li {
+  margin-bottom: 4px;
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.4;
+}
+
+/* ===== PEER ASSESSMENT SECTION ===== */
+.xats-collab-peer-assessment {
+  margin-bottom: 32px;
+  background: #fefce8;
+  border: 1px solid #fde047;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.xats-collab-peer-assessment h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+}
+
+.xats-collab-peer-assessment h3::before {
+  content: "⭐";
+  margin-right: 8px;
+}
+
+.xats-collab-assessment-info {
+  margin-bottom: 20px;
+}
+
+.xats-collab-assessment-info p {
+  margin: 4px 0;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.xats-collab-team-member-selector {
+  margin-bottom: 20px;
+}
+
+.xats-collab-team-member-selector label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.xats-collab-member-select {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.xats-collab-assessment-criteria {
+  margin-bottom: 24px;
+}
+
+.xats-collab-assessment-criterion {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.xats-collab-assessment-criterion h5 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.xats-collab-assessment-criterion p {
+  margin: 0 0 16px 0;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.xats-collab-numeric-scale {
+  margin-bottom: 16px;
+}
+
+.xats-collab-numeric-input {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.xats-collab-scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.xats-collab-categorical-scale {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.xats-collab-binary-scale {
+  display: flex;
+  gap: 16px;
+}
+
+.xats-collab-scale-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.xats-collab-scale-option:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.xats-collab-scale-option input[type="radio"] {
+  margin: 0;
+}
+
+.xats-collab-scale-option span {
+  color: #374151;
+  font-weight: 500;
+}
+
+.xats-collab-assessment-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.xats-collab-submit-assessment,
+.xats-collab-save-draft {
+  padding: 10px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.xats-collab-submit-assessment {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+}
+
+.xats-collab-submit-assessment:hover {
+  background: #059669;
+  border-color: #059669;
+}
+
+.xats-collab-save-draft {
+  background: white;
+  color: #374151;
+}
+
+.xats-collab-save-draft:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+/* ===== INSTRUCTIONS AND CONSTRAINTS ===== */
+.xats-collab-instructions,
+.xats-collab-constraints {
+  margin-bottom: 24px;
+}
+
+.xats-collab-instructions h3,
+.xats-collab-constraints h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.xats-collab-instructions h3::before {
+  content: "📝";
+  margin-right: 8px;
+}
+
+.xats-collab-constraints h3::before {
+  content: "⚠️";
+  margin-right: 8px;
+}
+
+.xats-collab-instructions-content {
+  padding: 16px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 6px;
+}
+
+.xats-collab-instructions-content p {
+  margin: 0;
+  color: #0c4a6e;
+  line-height: 1.6;
+}
+
+.xats-collab-constraints-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xats-collab-constraints-list li {
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+  color: #991b1b;
+  position: relative;
+  padding-left: 32px;
+}
+
+.xats-collab-constraints-list li::before {
+  content: "•";
+  position: absolute;
+  left: 12px;
+  top: 8px;
+  font-weight: bold;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .xats-collab-project {
+    padding: 16px;
+    margin: 16px 0;
+  }
+  
+  .xats-collab-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .xats-collab-roles-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .xats-collab-deliverable-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .xats-collab-phase-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .xats-collab-role-controls {
+    flex-direction: column;
+  }
+  
+  .xats-collab-binary-scale {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+.xats-collab-project *:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xats-collab-role,
+  .xats-collab-role-controls button,
+  .xats-collab-scale-option,
+  .xats-collab-submit-assessment,
+  .xats-collab-save-draft {
+    transition: none;
+  }
+}
