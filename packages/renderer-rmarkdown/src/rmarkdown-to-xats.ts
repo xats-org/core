@@ -449,7 +449,9 @@ export class RMarkdownToXatsParser {
       content: {
         code,
         language,
-        executable: ['r', 'python', 'sql', 'bash'].includes(language.toLowerCase()),
+        // Remove bash from executable languages for security reasons
+        // Only allow safe, sandboxed languages
+        executable: ['r', 'python', 'sql'].includes(language.toLowerCase()),
       },
     };
   }

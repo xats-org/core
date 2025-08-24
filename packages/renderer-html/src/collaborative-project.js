@@ -6,6 +6,9 @@
  * peer assessment forms, and project progress management.
  */
 
+// eslint-disable-next-line import/no-named-as-default
+import DOMPurify from 'dompurify';
+
 class CollaborativeProjectController {
   constructor(projectElement, options = {}) {
     this.projectElement = projectElement;
@@ -43,6 +46,17 @@ class CollaborativeProjectController {
   }
 
   /**
+   * Validate and sanitize ID for safe URL construction
+   */
+  sanitizeId(id) {
+    if (typeof id !== 'string') {
+      return '';
+    }
+    // Only allow alphanumeric characters, hyphens, and underscores
+    return id.replace(/[^a-zA-Z0-9\-_]/g, '');
+  }
+
+  /**
    * Initialize the collaborative project controller
    */
   async init() {
@@ -77,7 +91,8 @@ class CollaborativeProjectController {
     if (!this.options.projectId) return;
 
     try {
-      const response = await fetch(`${this.options.apiEndpoint}/${this.options.projectId}`);
+      const sanitizedProjectId = this.sanitizeId(this.options.projectId);
+      const response = await fetch(`${this.options.apiEndpoint}/${sanitizedProjectId}`);
       if (!response.ok) throw new Error('Failed to load project data');
 
       this.projectData = await response.json();
@@ -217,7 +232,9 @@ class CollaborativeProjectController {
   createRoleAssignmentModal() {
     const modal = document.createElement('div');
     modal.className = 'xats-collab-modal';
-    modal.innerHTML = `
+    
+    // Sanitize HTML content before inserting
+    const modalContent = `
       <div class="xats-collab-modal-content">
         <div class="xats-collab-modal-header">
           <h3>Assign Project Roles</h3>
@@ -245,6 +262,8 @@ class CollaborativeProjectController {
         </div>
       </div>
     `;
+    
+    modal.innerHTML = DOMPurify.sanitize(modalContent);
 
     // Add event listeners
     const closeBtn = modal.querySelector('.xats-collab-modal-close');
@@ -276,7 +295,9 @@ class CollaborativeProjectController {
       const users = await response.json();
 
       const usersList = modal.querySelector('#available-users-list');
-      usersList.innerHTML = users
+      
+      // Build HTML content with proper escaping
+      const usersHtml = users
         .map(
           (user) => `
         <div class="xats-collab-user-card" data-user-id="${this.escapeHtml(user.id)}" draggable="true">
@@ -291,6 +312,9 @@ class CollaborativeProjectController {
       `
         )
         .join('');
+      
+      // Sanitize before inserting into DOM
+      usersList.innerHTML = DOMPurify.sanitize(usersHtml);
 
       // Add drag and drop functionality
       this.setupUserDragAndDrop(modal);
@@ -313,8 +337,9 @@ class CollaborativeProjectController {
     }
 
     try {
+      const sanitizedProjectId = this.sanitizeId(this.options.projectId);
       const response = await fetch(
-        `${this.options.apiEndpoint}/${this.options.projectId}/auto-assign`,
+        `${this.options.apiEndpoint}/${sanitizedProjectId}/auto-assign`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -350,10 +375,13 @@ class CollaborativeProjectController {
 
     this.assignedMembers.clear();
 
-    // Update display
+    // Update display - use textContent for safe clearing
     const assignmentAreas = this.projectElement.querySelectorAll('.xats-collab-assigned-members');
     assignmentAreas.forEach((area) => {
-      area.innerHTML = '';
+      // Remove all child nodes safely
+      while (area.firstChild) {
+        area.removeChild(area.firstChild);
+      }
     });
 
     this.saveData();
@@ -365,22 +393,34 @@ class CollaborativeProjectController {
    */
   updateRoleAssignmentDisplay(roleId, memberIds) {
     const assignmentArea = this.projectElement.querySelector(
-      `[data-role-id="${roleId}"] .xats-collab-assigned-members`
+      `[data-role-id="${this.escapeHtml(roleId)}"] .xats-collab-assigned-members`
     );
     if (!assignmentArea) return;
 
-    assignmentArea.innerHTML = memberIds
+    const membersHtml = memberIds
       .map((userId) => {
         const member = this.getMemberById(userId);
         return `
         <div class="xats-collab-assigned-member" data-user-id="${this.escapeHtml(userId)}">
           <img src="${this.escapeHtml(member.avatar || '/default-avatar.png')}" alt="${this.escapeHtml(member.name)}" class="member-avatar">
           <span>${this.escapeHtml(member.name)}</span>
-          <button class="remove-member" onclick="collaborativeProject.removeMemberFromRole('${this.escapeHtml(roleId)}', '${this.escapeHtml(userId)}')">&times;</button>
+          <button class="remove-member" data-role-id="${this.escapeHtml(roleId)}" data-user-id="${this.escapeHtml(userId)}">&times;</button>
         </div>
       `;
       })
       .join('');
+    
+    // Sanitize and insert HTML
+    assignmentArea.innerHTML = DOMPurify.sanitize(membersHtml);
+    
+    // Add event listeners to remove buttons
+    assignmentArea.querySelectorAll('.remove-member').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const roleId = e.target.dataset.roleId;
+        const userId = e.target.dataset.userId;
+        this.removeMemberFromRole(roleId, userId);
+      });
+    });
   }
 
   /**
@@ -388,7 +428,7 @@ class CollaborativeProjectController {
    */
   updateDeliverableStatusDisplay(deliverableId, status) {
     const statusArea = this.projectElement.querySelector(
-      `[data-deliverable-id="${deliverableId}"] .xats-collab-deliverable-status`
+      `[data-deliverable-id="${this.escapeHtml(deliverableId)}"] .xats-collab-deliverable-status`
     );
     if (!statusArea) return;
 
@@ -401,15 +441,27 @@ class CollaborativeProjectController {
 
     const config = statusConfig[status] || statusConfig['not-started'];
 
-    statusArea.innerHTML = `
+    const statusHtml = `
       <div class="xats-collab-status-indicator ${this.escapeHtml(config.class)}" data-status="${this.escapeHtml(status)}">
         <span class="status-dot" style="background-color: ${this.escapeHtml(config.color)}"></span>
         <span class="status-label">${this.escapeHtml(config.label)}</span>
-        <button class="status-change" onclick="collaborativeProject.changeDeliverableStatus('${this.escapeHtml(deliverableId)}')">
+        <button class="status-change" data-deliverable-id="${this.escapeHtml(deliverableId)}">
           Change Status
         </button>
       </div>
     `;
+    
+    // Sanitize and insert HTML
+    statusArea.innerHTML = DOMPurify.sanitize(statusHtml);
+    
+    // Add event listener to change status button
+    const changeBtn = statusArea.querySelector('.status-change');
+    if (changeBtn) {
+      changeBtn.addEventListener('click', (e) => {
+        const deliverableId = e.target.dataset.deliverableId;
+        this.changeDeliverableStatus(deliverableId);
+      });
+    }
   }
 
   /**
@@ -461,14 +513,15 @@ class CollaborativeProjectController {
       const assessmentData = this.collectAssessmentData(form);
 
       // Submit to server
+      const sanitizedProjectId = this.sanitizeId(this.options.projectId);
       const response = await fetch(
-        `${this.options.apiEndpoint}/${this.options.projectId}/assessments`,
+        `${this.options.apiEndpoint}/${sanitizedProjectId}/assessments`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            assesseeId,
-            assessorId: this.options.userId,
+            assesseeId: this.sanitizeId(assesseeId),
+            assessorId: this.sanitizeId(this.options.userId),
             assessmentData,
           }),
         }
@@ -536,7 +589,8 @@ class CollaborativeProjectController {
         lastUpdated: new Date().toISOString(),
       };
 
-      const response = await fetch(`${this.options.apiEndpoint}/${this.options.projectId}`, {
+      const sanitizedProjectId = this.sanitizeId(this.options.projectId);
+      const response = await fetch(`${this.options.apiEndpoint}/${sanitizedProjectId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
