@@ -6,6 +6,7 @@
  * peer assessment forms, and project progress management.
  */
 
+// eslint-disable-next-line import/no-named-as-default
 import DOMPurify from 'dompurify';
 
 class CollaborativeProjectController {

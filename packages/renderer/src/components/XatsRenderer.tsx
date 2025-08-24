@@ -1,5 +1,6 @@
-import * as React from 'react';
+// eslint-disable-next-line import/no-named-as-default
 import DOMPurify from 'dompurify';
+import * as React from 'react';
 
 import { render, type OutputFormat, type RenderOptions } from '../index.js';
 
@@ -42,31 +43,104 @@ export const XatsRenderer: React.FC<XatsRendererProps> = ({
 
   if (format === 'html') {
     // Sanitize HTML content before rendering to prevent XSS attacks
-    const sanitizedContent = React.useMemo(() => {
-      return DOMPurify.sanitize(renderedContent, {
-        ALLOWED_TAGS: [
-          'p', 'div', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-          'ul', 'ol', 'li', 'a', 'strong', 'em', 'code', 'pre',
-          'blockquote', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
-          'img', 'figure', 'figcaption', 'br', 'hr', 'section', 'article',
-          'nav', 'aside', 'header', 'footer', 'main', 'mark', 'cite',
-          'abbr', 'sup', 'sub', 'math', 'annotation', 'semantics',
-          'mrow', 'mi', 'mo', 'mn', 'msup', 'msub', 'mfrac', 'mroot',
-          'msqrt', 'mtext', 'menclose', 'mtable', 'mtr', 'mtd'
-        ],
-        ALLOWED_ATTR: [
-          'href', 'src', 'alt', 'title', 'class', 'id', 'style',
-          'target', 'rel', 'width', 'height', 'colspan', 'rowspan',
-          'data-*', 'aria-*', 'role', 'tabindex', 'lang', 'dir',
-          'cite', 'datetime', 'for', 'name', 'type', 'value'
-        ],
-        ALLOW_DATA_ATTR: true,
-        ALLOW_ARIA_ATTR: true,
-        KEEP_CONTENT: true,
-        ADD_TAGS: ['math', 'annotation', 'semantics'], // MathML support
-        ADD_ATTR: ['xmlns'], // For MathML namespace
-      });
-    }, [renderedContent]);
+    const sanitizedContent = React.useMemo(
+      () =>
+        DOMPurify.sanitize(renderedContent, {
+          ALLOWED_TAGS: [
+            'p',
+            'div',
+            'span',
+            'h1',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6',
+            'ul',
+            'ol',
+            'li',
+            'a',
+            'strong',
+            'em',
+            'code',
+            'pre',
+            'blockquote',
+            'table',
+            'thead',
+            'tbody',
+            'tr',
+            'th',
+            'td',
+            'img',
+            'figure',
+            'figcaption',
+            'br',
+            'hr',
+            'section',
+            'article',
+            'nav',
+            'aside',
+            'header',
+            'footer',
+            'main',
+            'mark',
+            'cite',
+            'abbr',
+            'sup',
+            'sub',
+            'math',
+            'annotation',
+            'semantics',
+            'mrow',
+            'mi',
+            'mo',
+            'mn',
+            'msup',
+            'msub',
+            'mfrac',
+            'mroot',
+            'msqrt',
+            'mtext',
+            'menclose',
+            'mtable',
+            'mtr',
+            'mtd',
+          ],
+          ALLOWED_ATTR: [
+            'href',
+            'src',
+            'alt',
+            'title',
+            'class',
+            'id',
+            'style',
+            'target',
+            'rel',
+            'width',
+            'height',
+            'colspan',
+            'rowspan',
+            'data-*',
+            'aria-*',
+            'role',
+            'tabindex',
+            'lang',
+            'dir',
+            'cite',
+            'datetime',
+            'for',
+            'name',
+            'type',
+            'value',
+          ],
+          ALLOW_DATA_ATTR: true,
+          ALLOW_ARIA_ATTR: true,
+          KEEP_CONTENT: true,
+          ADD_TAGS: ['math', 'annotation', 'semantics'], // MathML support
+          ADD_ATTR: ['xmlns'], // For MathML namespace
+        }),
+      [renderedContent]
+    );
 
     return (
       <div
