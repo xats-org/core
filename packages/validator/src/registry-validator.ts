@@ -6,7 +6,8 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import Ajv from 'ajv';
+import AjvDefault, { type ErrorObject } from 'ajv';
+const Ajv = AjvDefault;
 import addFormats from 'ajv-formats';
 
 import type {
@@ -34,7 +35,7 @@ const __dirname = dirname(__filename);
  * Registry validator class for validating registry configurations and references
  */
 export class RegistryValidator {
-  private ajv: Ajv;
+  private ajv: InstanceType<typeof Ajv>;
   private registrySchema!: object;
   private cacheSchema!: object;
 
@@ -87,7 +88,7 @@ export class RegistryValidator {
 
     const valid = validate(config);
     const errors = validate.errors
-      ? validate.errors.map((error) => `${error.instancePath}: ${error.message}`)
+      ? validate.errors.map((error: ErrorObject) => `${error.instancePath}: ${error.message}`)
       : [];
 
     return { valid: !!valid, errors };
@@ -104,7 +105,7 @@ export class RegistryValidator {
 
     const valid = validate(config);
     const errors = validate.errors
-      ? validate.errors.map((error) => `${error.instancePath}: ${error.message}`)
+      ? validate.errors.map((error: ErrorObject) => `${error.instancePath}: ${error.message}`)
       : [];
 
     return { valid: !!valid, errors };

@@ -5,7 +5,7 @@ import { join } from 'path';
  * Load a vocabulary definition by category and name
  */
 export function loadVocabulary(
-  category: 'blocks' | 'hints' | 'pathways' | 'placeholders' | 'triggers',
+  category: 'blocks' | 'hints' | 'pathways' | 'placeholders' | 'triggers' | 'ancillary',
   name: string
 ) {
   const vocabularyPath = join(__dirname, '..', 'vocabularies', category, name, 'index.json');
@@ -21,7 +21,7 @@ export function loadVocabulary(
  * Get all available vocabulary names for a category
  */
 export function getVocabularyNames(
-  category: 'blocks' | 'hints' | 'pathways' | 'placeholders' | 'triggers'
+  category: 'blocks' | 'hints' | 'pathways' | 'placeholders' | 'triggers' | 'ancillary'
 ): string[] {
   const categoryPath = join(__dirname, '..', 'vocabularies', category);
   try {
@@ -42,6 +42,7 @@ export const getHintVocabulary = (name: string) => loadVocabulary('hints', name)
 export const getPathwayVocabulary = (name: string) => loadVocabulary('pathways', name);
 export const getPlaceholderVocabulary = (name: string) => loadVocabulary('placeholders', name);
 export const getTriggerVocabulary = (name: string) => loadVocabulary('triggers', name);
+export const getAncillaryVocabulary = (name: string) => loadVocabulary('ancillary', name);
 
 /**
  * Available vocabulary types
@@ -51,6 +52,7 @@ export const hintTypes = getVocabularyNames('hints');
 export const pathwayTypes = getVocabularyNames('pathways');
 export const placeholderTypes = getVocabularyNames('placeholders');
 export const triggerTypes = getVocabularyNames('triggers');
+export const ancillaryTypes = getVocabularyNames('ancillary');
 
 /**
  * Vocabulary URI constants
