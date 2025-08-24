@@ -29,7 +29,7 @@ interface QuestionOption {
 
 interface AnswerKeyItem {
   id: string;
-  correctAnswer?: string | boolean;
+  correctAnswer?: string | boolean | undefined;
   explanation?: string | undefined;
 }
 
@@ -93,7 +93,7 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
           output = this.generateHTMLTestBank(testBank, options);
           break;
         case 'docx':
-          output = await this.generateDOCXTestBank(testBank, options);
+          output = this.generateDOCXTestBank(testBank, options);
           break;
         default:
           return this.createErrorResult(options.format, [`Unsupported format: ${options.format}`]);
@@ -195,8 +195,9 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
         break;
       case 'essay':
         question.rubric =
-          (item.metadata?.rubricGuidance as string) || 'Evaluate based on understanding and clarity';
-        question.sampleAnswer = (item.metadata?.sampleAnswer as string) || '';
+          (item.metadata?.rubricGuidance as string | undefined) ??
+          'Evaluate based on understanding and clarity';
+        question.sampleAnswer = (item.metadata?.sampleAnswer as string | undefined) ?? '';
         break;
     }
 
@@ -222,17 +223,19 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
     const labels = ['B', 'C', 'D', 'E'];
     for (let i = 0; i < Math.min(distractors.length, 4); i++) {
       options.push({
-        label: labels[i],
-        text: distractors[i],
+        label: labels[i] || 'X',
+        text: distractors[i] as string,
         isCorrect: false,
       });
     }
 
     // Fill remaining options if needed
     while (options.length < 4) {
+      const labelIndex = options.length - 1;
+      const label = labels[labelIndex] || 'X';
       options.push({
-        label: labels[options.length - 1],
-        text: `Option ${labels[options.length - 1]}`,
+        label,
+        text: `Option ${label}`,
         isCorrect: false,
       });
     }
@@ -276,8 +279,8 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   private generateAnswerKey(questions: Question[]): AnswerKeyItem[] {
     return questions.map((q) => ({
       id: q.id,
-      correctAnswer: q.correctAnswer || q.expectedAnswer || q.sampleAnswer,
-      explanation: q.explanation,
+      correctAnswer: q.correctAnswer ?? q.expectedAnswer ?? q.sampleAnswer,
+      explanation: q.explanation ?? undefined,
     }));
   }
 
@@ -287,8 +290,8 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   private shuffleArray<T>(array: T[]): void {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      const temp = array[i];
-      array[i] = array[j];
+      const temp = array[i]!;
+      array[i] = array[j]!;
       array[j] = temp;
     }
   }
@@ -367,8 +370,9 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
    */
   private generateHTMLTestBank(testBank: TestBank, options: TestBankOptions): string {
     const questionsHTML = testBank.questions
-      .map(
-        (q, i) => q ? `
+      .map((q, i) =>
+        q
+          ? `
       <div class="question" data-type="${q.type}" data-difficulty="${q.difficulty}">
         <h3>Question ${i + 1}</h3>
         <div class="metadata">
@@ -379,7 +383,8 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
         <p class="question-text">${q.question}</p>
         ${this.formatQuestionHTML(q)}
       </div>
-    ` : ''
+    `
+          : ''
       )
       .join('');
 
@@ -402,7 +407,7 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
     <p>Generated: ${new Date(testBank.generatedAt).toLocaleDateString()}</p>
     <p>Total Questions: ${testBank.totalQuestions}</p>
     ${questionsHTML}
-    ${options.includeAnswerKey ? this.formatAnswerKeyHTML(testBank.answerKey) : ''}
+    ${options.includeAnswerKey && testBank.answerKey ? this.formatAnswerKeyHTML(testBank.answerKey) : ''}
 </body>
 </html>`;
   }
@@ -447,10 +452,10 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Generate DOCX test bank (placeholder)
    */
-  private async generateDOCXTestBank(
+  private generateDOCXTestBank(
     testBank: TestBank,
     options: TestBankOptions
-  ): Promise<Buffer> {
+  ): Buffer {
     const markdown = this.generateMarkdownTestBank(testBank, options);
     return Buffer.from(markdown, 'utf-8');
   }

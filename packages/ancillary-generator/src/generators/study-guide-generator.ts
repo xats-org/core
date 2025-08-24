@@ -22,7 +22,7 @@ interface StudyGuideSection {
   title: string;
   content: unknown[];
   learningObjectives?: string[];
-  summary?: string;
+  summary?: string | undefined;
   keyTerms?: Array<{ term: string; definition: string }>;
   practiceQuestions?: PracticeQuestion[];
   criticalConcepts?: ConceptItem[];
@@ -73,7 +73,7 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
           output = await this.generateHTML(studyGuide, options);
           break;
         case 'docx':
-          output = await this.generateDOCX(studyGuide, options);
+          output = this.generateDOCX(studyGuide, options);
           break;
         case 'pdf':
           output = await this.generatePDF(studyGuide, options);
@@ -114,7 +114,7 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
       } else if (groupBy === 'section' && item.path.length > 2) {
         groupKey = item.path.slice(1, 3).join(' - ');
       } else if (groupBy === 'unit' && item.path.length > 0) {
-        groupKey = item.path[0];
+        groupKey = item.path[0] || 'General';
       }
 
       if (!organized.has(groupKey)) {
@@ -152,9 +152,7 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
       // Add summaries if requested
       if (options.includeSummaries) {
         const summary = this.generateSummary(items);
-        if (summary) {
-          section.summary = summary;
-        }
+        section.summary = summary || undefined;
       }
 
       // Add key terms if requested
@@ -220,7 +218,8 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
     for (const item of items) {
       // Look for content marked as summary-worthy
       const importance =
-        item.metadata?.importance || (item.sourceBlock.extensions as Record<string, any>)?.ancillary?.importance;
+        item.metadata?.importance ||
+        (item.sourceBlock.extensions as Record<string, any>)?.ancillary?.importance;
 
       if (importance === 'critical' || importance === 'important') {
         const text = this.extractPlainText(item.content as SemanticText);
@@ -343,7 +342,7 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
         markdown += `### Summary\n${section.summary}\n\n`;
       }
 
-      if (section.criticalConcepts?.length > 0) {
+      if (section.criticalConcepts && section.criticalConcepts.length > 0) {
         markdown += '### Critical Concepts\n';
         for (const concept of section.criticalConcepts) {
           markdown += `**${concept.text}**\n`;
@@ -354,7 +353,7 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
         }
       }
 
-      if (section.importantConcepts?.length > 0) {
+      if (section.importantConcepts && section.importantConcepts.length > 0) {
         markdown += '### Important Concepts\n';
         for (const concept of section.importantConcepts) {
           markdown += `- ${concept.text}\n`;
@@ -362,18 +361,20 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
         markdown += '\n';
       }
 
-      if (section.keyTerms?.length > 0) {
+      if (section.keyTerms && section.keyTerms.length > 0) {
         markdown += '### Key Terms\n';
         for (const term of section.keyTerms) {
           markdown += `**${term.term}**: ${term.definition}\n\n`;
         }
       }
 
-      if (section.practiceQuestions?.length > 0) {
+      if (section.practiceQuestions && section.practiceQuestions.length > 0) {
         markdown += '### Practice Questions\n';
         for (let i = 0; i < section.practiceQuestions.length; i++) {
           const q = section.practiceQuestions[i];
-          markdown += `${i + 1}. ${q.question} *(${q.difficulty})*\n`;
+          if (q) {
+            markdown += `${i + 1}. ${q.question} *(${q.difficulty})*\n`;
+          }
         }
         markdown += '\n';
       }
@@ -397,9 +398,8 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
     // Use template if provided
     if (options.template) {
       return Mustache.render(options.template.content, {
-        content: htmlContent,
-        title: studyGuide.title,
         ...studyGuide,
+        content: htmlContent,
       });
     }
 
@@ -430,10 +430,10 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
   /**
    * Generate DOCX output (placeholder - would use a library like docx)
    */
-  private async generateDOCX(
+  private generateDOCX(
     studyGuide: StudyGuideStructure,
     _options: StudyGuideOptions
-  ): Promise<Buffer> {
+  ): Buffer {
     // This would use the @xats-org/converter-word package
     // For now, return a placeholder
     const markdown = this.generateMarkdown(studyGuide);

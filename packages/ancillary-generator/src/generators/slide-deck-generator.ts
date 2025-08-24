@@ -49,7 +49,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
           output = this.generateHTMLSlides(slides, options);
           break;
         case 'pptx':
-          output = await this.generatePowerPoint(slides, options);
+          output = this.generatePowerPoint(slides, options);
           break;
         default:
           return this.createErrorResult(options.format, [`Unsupported format: ${options.format}`]);
@@ -183,7 +183,10 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
     // Format content based on slide type
     switch (slideType) {
       case 'bullet-points':
-        slide.points = this.extractBulletPoints(text, (item.metadata?.maxBulletPoints as number) || 5);
+        slide.points = this.extractBulletPoints(
+          text,
+          (item.metadata?.maxBulletPoints as number) || 5
+        );
         break;
       case 'diagram':
       case 'example':
