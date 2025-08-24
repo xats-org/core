@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/blocks/thinkPairShare",
+  "title": "Think-Pair-Share Collaborative Activity Block",
+  "description": "A structured collaborative learning block that implements the Think-Pair-Share pedagogy with individual reflection, peer discussion, and whole-class sharing phases to promote active engagement and peer learning",
+  "type": "object",
+  "properties": {
+    "blockType": {
+      "const": "https://xats.org/vocabularies/blocks/thinkPairShare",
+      "description": "The URI identifier for this block type"
+    },
+    "content": {
+      "$ref": "https://xats.org/schemas/0.5.0/xats.json#/definitions/ThinkPairShareContent",
+      "description": "The Think-Pair-Share activity content including prompt, phase configurations, timing, and assessment integration options"
+    }
+  },
+  "required": ["blockType", "content"],
+  "examples": [
+    {
+      "blockType": "https://xats.org/vocabularies/blocks/thinkPairShare",
+      "content": {
+        "prompt": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "Consider the ethical implications of artificial intelligence in healthcare decision-making. What are the potential benefits and risks when AI systems are used to diagnose diseases or recommend treatments? How should we balance efficiency and human judgment in medical care?"
+            }
+          ]
+        },
+        "context": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "Recent advances in machine learning have enabled AI systems to achieve high accuracy in medical image analysis and diagnostic predictions. However, questions remain about accountability, bias, patient autonomy, and the role of human physicians in AI-assisted healthcare."
+            }
+          ]
+        },
+        "thinkPhase": {
+          "duration": "PT3M",
+          "instructions": {
+            "runs": [
+              {
+                "type": "text",
+                "text": "Take 3 minutes to reflect individually on the prompt. Consider both positive and negative aspects of AI in healthcare. Write down your initial thoughts and any questions that come to mind."
+              }
+            ]
+          },
+          "scaffolding": [
+            {
+              "type": "guiding-question",
+              "content": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "What are the potential advantages of using AI for medical diagnosis?"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "guiding-question",
+              "content": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "What risks or concerns might patients or doctors have about AI-driven healthcare?"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "sentence-starter",
+              "content": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "One benefit of AI in healthcare could be... / One concern I have is..."
+                  }
+                ]
+              }
+            }
+          ],
+          "responseFormat": "bullet-points"
+        },
+        "pairPhase": {
+          "duration": "PT5M",
+          "instructions": {
+            "runs": [
+              {
+                "type": "text",
+                "text": "Share your thoughts with your partner and listen to their perspective. Work together to identify the most important benefits and risks. Try to build on each other's ideas and find points of agreement or interesting disagreements."
+              }
+            ]
+          },
+          "pairingStrategy": "proximity",
+          "discussionPrompts": [
+            {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Which benefits or risks did you both identify? Which ones are unique to each of you?"
+                }
+              ]
+            },
+            {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "How might different stakeholders (patients, doctors, insurance companies) view AI in healthcare differently?"
+                }
+              ]
+            }
+          ],
+          "recordResponse": true,
+          "responseFormat": "key-points"
+        },
+        "sharePhase": {
+          "duration": "PT7M",
+          "format": "volunteer",
+          "instructions": {
+            "runs": [
+              {
+                "type": "text",
+                "text": "We'll hear from several pairs about their key insights. Focus on sharing ideas that haven't been mentioned yet or that offer a unique perspective on the ethical challenges."
+              }
+            ]
+          },
+          "synthesis": {
+            "activity": "categorization",
+            "instructions": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Let's organize the benefits and risks we've identified into categories: technical/accuracy issues, ethical/moral concerns, social/economic impacts, and practical implementation challenges."
+                }
+              ]
+            }
+          },
+          "captureMethod": "board"
+        },
+        "assessmentIntegration": {
+          "formativeAssessment": {
+            "checkUnderstanding": [
+              "Ethical reasoning skills",
+              "Ability to consider multiple perspectives",
+              "Understanding of AI applications in healthcare"
+            ],
+            "feedbackMethod": "immediate"
+          }
+        },
+        "learningObjectives": [
+          "Analyze ethical implications of emerging technologies",
+          "Consider multiple stakeholder perspectives in complex issues",
+          "Engage in respectful dialogue about controversial topics",
+          "Apply ethical frameworks to real-world scenarios"
+        ],
+        "totalDuration": "PT15M",
+        "classSize": {
+          "minimum": 6,
+          "maximum": 40,
+          "optimal": 20
+        },
+        "adaptations": [
+          {
+            "context": "online",
+            "modification": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Use breakout rooms for pair phase, utilize chat for individual think phase responses, and use collaborative documents for sharing key points."
+                }
+              ]
+            }
+          },
+          {
+            "context": "large-class",
+            "modification": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Consider using a gallery walk format for sharing phase, or have pairs post their key points on sticky notes around the room."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
