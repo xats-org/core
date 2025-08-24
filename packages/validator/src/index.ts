@@ -19,7 +19,7 @@ import type {
 } from '@xats-org/types';
 
 export class XatsValidator {
-  private ajv: Ajv;
+  private ajv: InstanceType<typeof Ajv>;
   private validatorCache: Map<string, ValidateFunction> = new Map();
 
   constructor(options: ValidatorOptions = {}) {
@@ -332,7 +332,6 @@ export class XatsValidator {
    * Add custom keyword validator
    */
   addKeyword(keyword: string, definition: Record<string, unknown>): void {
-    // @ts-expect-error - Ajv type definition issue
     this.ajv.addKeyword(keyword, definition);
   }
 }
