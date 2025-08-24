@@ -48,7 +48,6 @@
     "@xats-org/testing": "workspace:*",
     "@xats-org/types": "workspace:*",
     "@xats-org/utils": "workspace:*",
-    "dompurify": "^3.0.0",
     "jsdom": "^23.0.0"
   },
   "devDependencies": {
@@ -59,6 +58,7 @@
     "@vitest/coverage-v8": "^1.2.0",
     "@xats-org/eslint-config": "workspace:*",
     "axe-core": "^4.10.3",
+    "dompurify": "^3.2.6",
     "eslint": "^8.56.0",
     "typescript": "^5.3.3",
     "vitest": "^1.2.0"
