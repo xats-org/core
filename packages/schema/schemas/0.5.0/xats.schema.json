@@ -89,6 +89,11 @@
           "description": "Rights and licensing information for this object. Inherits from parent container if not specified.",
           "$ref": "#/definitions/RightsMetadata"
         },
+        "annotations": {
+          "description": "An array of annotations for peer review workflows and collaborative editing.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/Annotation" }
+        },
         "extensions": { 
           "description": "A container for non-standard, custom data. Common extensions include LTI 1.3 integration metadata.",
           "type": "object",
@@ -3018,6 +3023,187 @@
         }
       },
       "required": ["prompt", "thinkPhase", "pairPhase", "sharePhase"],
+      "additionalProperties": false
+    },
+    "Annotation": {
+      "description": "An annotation for peer review workflows, collaborative editing, and feedback systems. Extends XatsObject for comprehensive metadata support.",
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "annotationType": {
+              "description": "URI identifying the type of annotation (e.g., suggestion, clarification_request, approval).",
+              "type": "string",
+              "format": "uri",
+              "examples": [
+                "https://xats.org/vocabularies/annotations/suggestion",
+                "https://xats.org/vocabularies/annotations/clarification_request",
+                "https://xats.org/vocabularies/annotations/minor_revision_needed",
+                "https://xats.org/vocabularies/annotations/major_revision_needed",
+                "https://xats.org/vocabularies/annotations/approval",
+                "https://xats.org/vocabularies/annotations/rejection"
+              ]
+            },
+            "targetObjectId": {
+              "description": "The ID of the XatsObject this annotation references.",
+              "type": "string"
+            },
+            "targetRange": {
+              "description": "Specific text range within the target object for precise annotation targeting.",
+              "$ref": "#/definitions/TextRange"
+            },
+            "status": {
+              "description": "Current status of the annotation in the review workflow.",
+              "type": "string",
+              "enum": ["open", "resolved", "rejected", "deferred"],
+              "default": "open"
+            },
+            "priority": {
+              "description": "Priority level for addressing this annotation.",
+              "type": "string",
+              "enum": ["low", "medium", "high", "critical"],
+              "default": "medium"
+            },
+            "assignee": {
+              "description": "Identifier for the person assigned to address this annotation.",
+              "type": "string"
+            },
+            "reviewer": {
+              "description": "Identifier for the person who created this annotation.",
+              "type": "string"
+            },
+            "threadId": {
+              "description": "Identifier for grouping related annotations into discussion threads.",
+              "type": "string"
+            },
+            "parentAnnotationId": {
+              "description": "ID of parent annotation for hierarchical discussion threads.",
+              "type": "string"
+            },
+            "content": {
+              "description": "The annotation content (comment, suggestion, etc.).",
+              "$ref": "#/definitions/SemanticText"
+            },
+            "suggestedChange": {
+              "description": "Proposed replacement content for suggestion-type annotations.",
+              "$ref": "#/definitions/SemanticText"
+            },
+            "reviewDecision": {
+              "description": "Formal review decision with criteria and justification.",
+              "$ref": "#/definitions/ReviewDecision"
+            },
+            "createdAt": {
+              "description": "ISO 8601 timestamp when annotation was created.",
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "description": "ISO 8601 timestamp when annotation was last modified.",
+              "type": "string",
+              "format": "date-time"
+            },
+            "resolvedAt": {
+              "description": "ISO 8601 timestamp when annotation was resolved.",
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": ["annotationType", "targetObjectId", "content", "reviewer", "createdAt"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "TextRange": {
+      "description": "Defines a specific text range within a target object for precise annotation targeting.",
+      "type": "object",
+      "properties": {
+        "startOffset": {
+          "description": "Character offset from beginning of target text where range starts.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "endOffset": {
+          "description": "Character offset from beginning of target text where range ends.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "textContent": {
+          "description": "The actual text content being annotated (for validation and display).",
+          "type": "string"
+        },
+        "xpath": {
+          "description": "XPath expression for targeting specific elements in structured content.",
+          "type": "string"
+        },
+        "selector": {
+          "description": "CSS-style selector for web-based targeting.",
+          "type": "string"
+        }
+      },
+      "required": ["startOffset", "endOffset", "textContent"],
+      "additionalProperties": false
+    },
+    "ReviewDecision": {
+      "description": "Structured review decision with criteria, confidence, and justification for formal peer review workflows.",
+      "type": "object",
+      "properties": {
+        "decision": {
+          "description": "The formal review decision outcome.",
+          "type": "string",
+          "enum": ["approve", "reject", "request_changes", "conditional_accept"],
+          "examples": ["approve", "reject", "request_changes", "conditional_accept"]
+        },
+        "confidence": {
+          "description": "Reviewer confidence level in their decision (1-5 scale, 5 = highest confidence).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "default": 3
+        },
+        "criteria": {
+          "description": "Specific review criteria that influenced this decision.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "examples": [
+              "accuracy",
+              "clarity",
+              "completeness",
+              "pedagogical_effectiveness",
+              "technical_correctness",
+              "accessibility_compliance",
+              "alignment_with_objectives"
+            ]
+          }
+        },
+        "justification": {
+          "description": "Detailed explanation for the review decision.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "recommendedActions": {
+          "description": "Specific actions recommended to address review findings.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string",
+                "examples": ["revise_content", "add_examples", "clarify_explanation", "fix_errors"]
+              },
+              "description": { "$ref": "#/definitions/SemanticText" },
+              "priority": {
+                "type": "string",
+                "enum": ["low", "medium", "high", "critical"],
+                "default": "medium"
+              }
+            },
+            "required": ["action", "description"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["decision", "justification"],
       "additionalProperties": false
     }
   }

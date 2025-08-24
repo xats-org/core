@@ -13,7 +13,8 @@ export * from './file-modularity.js';
 export * from './registry.js';
 export * from './schema.js';
 export * from './common.js';
+export * from './annotations.js';
 
 // Version information
-export const XATS_VERSION = '0.4.0';
-export const SCHEMA_VERSION = '0.3.0';
+export const XATS_VERSION = '0.5.0';
+export const SCHEMA_VERSION = '0.5.0';
