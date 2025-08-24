@@ -100,7 +100,7 @@ export class LaTeXConverter implements ILaTeXConverter {
 
     try {
       // Validate input format
-      const validation = this.validate(content);
+      const validation = await this.validate(content);
       if (!validation.isValid) {
         throw new Error(`Invalid LaTeX document: ${validation.errors.join(', ')}`);
       }
@@ -175,7 +175,7 @@ export class LaTeXConverter implements ILaTeXConverter {
   /**
    * Validate LaTeX document format
    */
-  validate(content: string): FormatValidationResult {
+  async validate(content: string): Promise<FormatValidationResult> {
     return this.validator.validate(content);
   }
 
