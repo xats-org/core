@@ -1,0 +1,49 @@
+{
+  "uri": "https://xats.org/vocabularies/ancillary/slide-content",
+  "name": "Slide Content",
+  "description": "Content that should be included in generated presentation slides",
+  "category": "ancillary",
+  "version": "0.5.0",
+  "properties": {
+    "slideType": {
+      "type": "string",
+      "enum": ["title", "bullet-points", "diagram", "example", "summary", "discussion"],
+      "description": "Type of slide to generate from this content",
+      "default": "bullet-points"
+    },
+    "maxBulletPoints": {
+      "type": "integer",
+      "description": "Maximum number of bullet points for this slide",
+      "default": 5,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "speakerNotes": {
+      "type": "string",
+      "description": "Additional notes for the presenter"
+    },
+    "animationHint": {
+      "type": "string",
+      "enum": ["none", "fade-in", "fly-in", "progressive-reveal"],
+      "description": "Animation hint for slide transitions",
+      "default": "none"
+    },
+    "visualPreference": {
+      "type": "string",
+      "enum": ["text-only", "text-with-image", "diagram", "chart", "infographic"],
+      "description": "Preferred visual style for the slide",
+      "default": "text-only"
+    }
+  },
+  "examples": [
+    {
+      "tag": "slide-content",
+      "properties": {
+        "slideType": "bullet-points",
+        "maxBulletPoints": 4,
+        "animationHint": "progressive-reveal",
+        "speakerNotes": "Emphasize the relationship between concepts"
+      }
+    }
+  ]
+}

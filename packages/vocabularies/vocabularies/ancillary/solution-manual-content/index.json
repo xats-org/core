@@ -1,0 +1,78 @@
+{
+  "uri": "https://xats.org/vocabularies/ancillary/solution-manual-content",
+  "name": "Solution Manual Content",
+  "description": "Content that should be included in solution manuals and answer keys",
+  "category": "ancillary",
+  "version": "0.5.0",
+  "properties": {
+    "solutionType": {
+      "type": "string",
+      "enum": ["complete-solution", "answer-only", "hints-only", "worked-example", "step-by-step"],
+      "description": "Type of solution to provide",
+      "default": "complete-solution"
+    },
+    "showWorkRequired": {
+      "type": "boolean",
+      "description": "Whether showing work is required for full credit",
+      "default": true
+    },
+    "alternativeSolutions": {
+      "type": "boolean",
+      "description": "Whether alternative solution methods should be shown",
+      "default": false
+    },
+    "commonErrors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Description of the common error"
+          },
+          "explanation": {
+            "type": "string",
+            "description": "Why this error occurs and how to avoid it"
+          }
+        }
+      },
+      "description": "Common errors students make and how to address them"
+    },
+    "partialCreditGuidance": {
+      "type": "object",
+      "properties": {
+        "criteria": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {"type": "string"},
+              "points": {"type": "number"}
+            }
+          }
+        }
+      },
+      "description": "Guidelines for awarding partial credit"
+    },
+    "pedagogicalNotes": {
+      "type": "string",
+      "description": "Teaching notes about why this problem is important"
+    }
+  },
+  "examples": [
+    {
+      "tag": "solution-manual-content",
+      "properties": {
+        "solutionType": "step-by-step",
+        "showWorkRequired": true,
+        "alternativeSolutions": true,
+        "commonErrors": [
+          {
+            "error": "Forgetting to check boundary conditions",
+            "explanation": "Always verify your solution at the boundaries of the domain"
+          }
+        ]
+      }
+    }
+  ]
+}

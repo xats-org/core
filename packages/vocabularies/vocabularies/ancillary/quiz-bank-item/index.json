@@ -1,0 +1,61 @@
+{
+  "uri": "https://xats.org/vocabularies/ancillary/quiz-bank-item",
+  "name": "Quiz Bank Item",
+  "description": "Content that should be included in generated test banks and quizzes",
+  "category": "ancillary",
+  "version": "0.5.0",
+  "properties": {
+    "questionType": {
+      "type": "string",
+      "enum": ["multiple-choice", "true-false", "short-answer", "essay", "matching", "fill-in-blank"],
+      "description": "Type of question to generate from this content",
+      "default": "multiple-choice"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["easy", "medium", "hard", "expert"],
+      "description": "Difficulty level of the generated question",
+      "default": "medium"
+    },
+    "cognitiveLevel": {
+      "type": "string",
+      "enum": ["remember", "understand", "apply", "analyze", "evaluate", "create"],
+      "description": "Bloom's taxonomy level for the question",
+      "default": "understand"
+    },
+    "timeEstimate": {
+      "type": "string",
+      "description": "Estimated time to answer in ISO 8601 duration format",
+      "default": "PT2M"
+    },
+    "points": {
+      "type": "integer",
+      "description": "Default point value for the question",
+      "default": 1,
+      "minimum": 1
+    },
+    "distractorHints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Hints for generating plausible distractors for multiple choice"
+    },
+    "rubricGuidance": {
+      "type": "string",
+      "description": "Grading guidance for essay or short answer questions"
+    }
+  },
+  "examples": [
+    {
+      "tag": "quiz-bank-item",
+      "properties": {
+        "questionType": "multiple-choice",
+        "difficulty": "medium",
+        "cognitiveLevel": "apply",
+        "points": 2,
+        "distractorHints": ["Common misconception about...", "Partial understanding might lead to..."]
+      }
+    }
+  ]
+}
