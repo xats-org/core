@@ -1,0 +1,187 @@
+{
+  "$schema": "https://xats.org/schemas/0.5.0/schema.json",
+  "schemaVersion": "0.5.0",
+  "bibliographicEntry": {
+    "id": "simple-annotation-demo-2025",
+    "type": "article",
+    "title": "Simple Annotation System Example",
+    "author": [
+      {"family": "xats", "given": "Development Team"}
+    ],
+    "issued": {"date-parts": [[2025, 8, 24]]},
+    "publisher": "xats.org"
+  },
+  "subject": "Schema Documentation",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "chapter-simple",
+        "language": "en",
+        "title": "Basic Annotation Examples",
+        "sections": [
+          {
+            "id": "section-examples",
+            "language": "en",
+            "title": "Annotation Type Examples",
+            "content": [
+              {
+                "id": "suggestion-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "This paragraph demonstrates a suggestion annotation."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "suggestion-1",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "suggestion-example",
+                    "status": "open",
+                    "priority": "medium",
+                    "reviewer": "reviewer-alice",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Consider adding more detail about how suggestions work."}
+                      ]
+                    },
+                    "suggestedChange": {
+                      "runs": [
+                        {"type": "text", "text": "This paragraph demonstrates a suggestion annotation, which allows reviewers to propose specific improvements or alternative content."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T12:00:00Z"
+                  }
+                ]
+              },
+              {
+                "id": "clarification-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "Technical concepts can be complex."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "clarification-1",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/clarification_request",
+                    "targetObjectId": "clarification-example",
+                    "status": "open",
+                    "priority": "high",
+                    "reviewer": "reviewer-bob",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Which technical concepts are you referring to? This needs clarification."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T13:00:00Z"
+                  }
+                ]
+              },
+              {
+                "id": "approval-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "Well-written content that clearly communicates its message."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "approval-1",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/approval",
+                    "targetObjectId": "approval-example",
+                    "status": "resolved",
+                    "priority": "low",
+                    "reviewer": "reviewer-carol",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Perfect! This paragraph is clear and concise."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "approve",
+                      "confidence": 5,
+                      "criteria": ["clarity", "accuracy"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "Content meets all quality standards."}
+                        ]
+                      }
+                    },
+                    "createdAt": "2025-08-24T14:00:00Z",
+                    "resolvedAt": "2025-08-24T14:00:00Z"
+                  }
+                ]
+              },
+              {
+                "id": "revision-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "This needs work."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "major-revision-1",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/major_revision_needed",
+                    "targetObjectId": "revision-example",
+                    "status": "open",
+                    "priority": "critical",
+                    "assignee": "author-david",
+                    "reviewer": "reviewer-eve",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "This paragraph is too brief and lacks substance. Please expand with detailed content."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "request_changes",
+                      "confidence": 5,
+                      "criteria": ["completeness", "value"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "Current content provides no educational value to readers."}
+                        ]
+                      },
+                      "recommendedActions": [
+                        {
+                          "action": "expand_content",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Add at least 3-4 sentences with specific examples"}
+                            ]
+                          },
+                          "priority": "critical"
+                        }
+                      ]
+                    },
+                    "createdAt": "2025-08-24T15:00:00Z"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
