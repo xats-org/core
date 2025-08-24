@@ -1,0 +1,78 @@
+{
+  "name": "@xats-org/converter-word",
+  "version": "0.5.0",
+  "description": "High-fidelity bidirectional conversion between xats and Microsoft Word documents",
+  "keywords": [
+    "xats",
+    "converter",
+    "word",
+    "docx",
+    "educational",
+    "academic"
+  ],
+  "license": "CC-BY-SA-4.0",
+  "author": {
+    "name": "xats-org",
+    "email": "hello@xats.org",
+    "url": "https://xats.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xats-org/core.git",
+    "directory": "packages/converter-word"
+  },
+  "bugs": {
+    "url": "https://github.com/xats-org/core/issues"
+  },
+  "homepage": "https://xats.org/docs/conversion/word",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --tsconfig tsconfig.build.json",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix"
+  },
+  "dependencies": {
+    "@xats-org/types": "workspace:*",
+    "@xats-org/utils": "workspace:*",
+    "@xats-org/validator": "workspace:*",
+    "pizzip": "^3.1.6",
+    "docx": "^8.5.0",
+    "jszip": "^3.10.1",
+    "xml2js": "^0.6.2",
+    "mammoth": "^1.6.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.7",
+    "@types/xml2js": "^0.4.14",
+    "@xats-org/eslint-config": "workspace:*",
+    "@xats-org/vitest-config": "workspace:*",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

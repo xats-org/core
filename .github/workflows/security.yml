@@ -129,10 +129,10 @@ jobs:
       run: |
         # Install license checker at workspace root
         pnpm add -D -w license-checker
-        # Check all package licenses
-        npx license-checker --production --summary
+        # Check all package licenses (exclude private packages like monorepo root)
+        npx license-checker --production --excludePrivatePackages --summary
         # Fail on problematic licenses (allow these checks to pass for now)
-        npx license-checker --production --failOn 'GPL-3.0;AGPL-3.0;LGPL-3.0' || echo "License check completed with warnings"
+        npx license-checker --production --excludePrivatePackages --failOn 'GPL-3.0;AGPL-3.0;LGPL-3.0' || echo "License check completed with warnings"
 
   sast:
     name: Static Application Security Testing
