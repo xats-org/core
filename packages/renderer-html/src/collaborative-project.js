@@ -408,7 +408,7 @@ class CollaborativeProjectController {
     statusOptions.forEach((status) => {
       const option = document.createElement('option');
       option.value = status;
-      option.textContent = status.replace('-', ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+      option.textContent = status.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
       option.selected = status === currentStatus;
       select.appendChild(option);
     });

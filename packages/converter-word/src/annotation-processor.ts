@@ -161,12 +161,12 @@ export class AnnotationProcessor {
       const content = annotation.content;
 
       if (content.startsWith('Suggested addition:')) {
-        const addedText = content.replace('Suggested addition: ', '');
+        const addedText = content.replace(/Suggested addition: /g, '');
         markup += `<w:ins w:id="${annotation.id}" w:author="${author}" w:date="${timestamp}">`;
         markup += `<w:r><w:t>${this.escapeXml(addedText)}</w:t></w:r>`;
         markup += `</w:ins>`;
       } else if (content.startsWith('Suggested deletion:')) {
-        const deletedText = content.replace('Suggested deletion: ', '');
+        const deletedText = content.replace(/Suggested deletion: /g, '');
         markup += `<w:del w:id="${annotation.id}" w:author="${author}" w:date="${timestamp}">`;
         markup += `<w:r><w:t>${this.escapeXml(deletedText)}</w:t></w:r>`;
         markup += `</w:del>`;
