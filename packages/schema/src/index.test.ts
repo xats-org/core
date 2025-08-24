@@ -11,14 +11,14 @@
 import { describe, it, expect } from 'vitest';
 
 // Import all schema test suites
-import './schema-structure.test.js';
-import './definition-references.test.js';
-import './required-fields.test.js';
-import './type-constraints.test.js';
-import './pattern-format.test.js';
-import './example-documents.test.js';
-import './edge-cases.test.js';
-import './performance.test.js';
+import './schema-structure.test';
+import './definition-references.test';
+import './required-fields.test';
+import './type-constraints.test';
+import './pattern-format.test';
+import './example-documents.test';
+import './edge-cases.test';
+import './performance.test';
 
 describe('Schema Validation Test Suite', () => {
   it('should have comprehensive test coverage', () => {

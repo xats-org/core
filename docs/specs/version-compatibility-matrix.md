@@ -60,23 +60,23 @@ v0.1.0 tools → v0.2.0 docs ❌ (May fail on new features)
 
 ### Content Block Types
 
-| Block Type | v0.1.0 | v0.2.0 | v0.3.0 | URI |
-|------------|--------|--------|--------|-----|
-| **Paragraph** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/paragraph` |
-| **Heading** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/heading` |
-| **List** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/list` |
-| **Blockquote** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/blockquote` |
-| **Code Block** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/codeBlock` |
-| **Math Block** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/mathBlock` |
-| **Table** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/table` |
-| **Figure** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/figure` |
-| **Image** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/image` |
-| **Definition** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/definition` |
-| **Example** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/example` |
-| **Theorem** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/theorem` |
-| **Quote** | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/quote` |
-| **Case Study** | ❌ | ❌ | ✅ | `https://xats.org/vocabularies/blocks/caseStudy` |
-| **Metacognitive Prompt** | ❌ | ❌ | ✅ | `https://xats.org/vocabularies/blocks/metacognitivePrompt` |
+| Block Type | v0.1.0 | v0.2.0 | v0.3.0 | v0.4.0 | v0.5.0 | URI |
+|------------|--------|--------|--------|--------|--------|-----|
+| **Paragraph** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/paragraph` |
+| **Heading** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/heading` |
+| **List** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/list` |
+| **Blockquote** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/blockquote` |
+| **Code Block** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/codeBlock` |
+| **Math Block** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/mathBlock` |
+| **Table** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/table` |
+| **Figure** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/figure` |
+| **Image** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/image` |
+| **Definition** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/definition` |
+| **Example** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/example` |
+| **Theorem** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/theorem` |
+| **Quote** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/quote` |
+| **Case Study** | ❌ | ❌ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/caseStudy` |
+| **Metacognitive Prompt** | ❌ | ❌ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/metacognitivePrompt` |
 
 ### SemanticText Runs
 

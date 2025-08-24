@@ -1,0 +1,792 @@
+{
+  "schemaVersion": "0.5.0",
+  "bibliographicEntry": {
+    "id": "collaborative-demo",
+    "title": "Collaborative Project Features Demonstration",
+    "type": "chapter"
+  },
+  "subject": "Educational Technology",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "collaborative-chapter",
+        "language": "en",
+        "title": "Collaborative Learning Projects",
+        "sections": [
+          {
+            "id": "collaborative-section",
+            "language": "en",
+            "title": "Group Research Project Example",
+            "content": [
+              {
+                "id": "intro-paragraph",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "This section demonstrates the collaborative project block type introduced in xats v0.5.0. The collaborative project block enables structured group work with defined roles, deliverables, timelines, and peer assessment capabilities."
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "research-project-demo",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/collaborativeProject",
+                "content": {
+                  "title": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Climate Change Impact Analysis"
+                      }
+                    ]
+                  },
+                  "description": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "A comprehensive research project examining the impacts of climate change on local ecosystems. Students will work in teams to analyze data, conduct literature reviews, and present their findings to the class."
+                      }
+                    ]
+                  },
+                  "projectType": "research-project",
+                  "roles": [
+                    {
+                      "roleId": "research-lead",
+                      "title": "Research Coordinator",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "The research coordinator is responsible for organizing the team's research efforts, ensuring quality control, and maintaining project timelines."
+                          }
+                        ]
+                      },
+                      "responsibilities": [
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Create and maintain project timeline and milestones"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Coordinate team meetings and progress reviews"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Review and validate research methodology"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Ensure quality and consistency across deliverables"
+                            }
+                          ]
+                        }
+                      ],
+                      "requiredSkills": [
+                        "Project management",
+                        "Research methodology",
+                        "Team leadership",
+                        "Critical thinking"
+                      ],
+                      "maxParticipants": 1
+                    },
+                    {
+                      "roleId": "data-analyst",
+                      "title": "Data Analyst",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "The data analyst is responsible for collecting, processing, and analyzing quantitative data related to climate change impacts."
+                          }
+                        ]
+                      },
+                      "responsibilities": [
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Identify and collect relevant climate data from reliable sources"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Clean and process raw data for analysis"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Perform statistical analysis and trend identification"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Create data visualizations and charts"
+                            }
+                          ]
+                        }
+                      ],
+                      "requiredSkills": [
+                        "Statistical analysis",
+                        "Data visualization",
+                        "Spreadsheet software",
+                        "Mathematical reasoning"
+                      ],
+                      "maxParticipants": 2
+                    },
+                    {
+                      "roleId": "literature-reviewer",
+                      "title": "Literature Reviewer",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "The literature reviewer conducts comprehensive research of existing academic literature on climate change impacts."
+                          }
+                        ]
+                      },
+                      "responsibilities": [
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Search and identify relevant academic sources"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Evaluate source credibility and relevance"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Synthesize findings from multiple sources"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Create annotated bibliography"
+                            }
+                          ]
+                        }
+                      ],
+                      "requiredSkills": [
+                        "Academic research",
+                        "Information literacy",
+                        "Academic writing",
+                        "Citation management"
+                      ],
+                      "maxParticipants": 2
+                    },
+                    {
+                      "roleId": "presentation-designer",
+                      "title": "Presentation Designer",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "The presentation designer creates compelling visual presentations and manages the final presentation delivery."
+                          }
+                        ]
+                      },
+                      "responsibilities": [
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Design slide layouts and visual elements"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Integrate data visualizations into presentation"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Coordinate presentation rehearsals"
+                            }
+                          ]
+                        },
+                        {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Deliver final presentation to class"
+                            }
+                          ]
+                        }
+                      ],
+                      "requiredSkills": [
+                        "Presentation software",
+                        "Graphic design",
+                        "Public speaking",
+                        "Visual communication"
+                      ],
+                      "maxParticipants": 1
+                    }
+                  ],
+                  "deliverables": [
+                    {
+                      "deliverableId": "project-proposal",
+                      "title": "Project Proposal",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "A detailed proposal outlining the research question, methodology, and expected outcomes for the climate change impact analysis."
+                          }
+                        ]
+                      },
+                      "format": "document",
+                      "dueDate": "2025-02-15T23:59:59Z",
+                      "isGroupDeliverable": true,
+                      "assessmentCriteria": [
+                        {
+                          "criterion": "Research Question Clarity",
+                          "weight": 0.3,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "The research question is clearly stated, focused, and researchable within the project timeframe."
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "criterion": "Methodology Appropriateness",
+                          "weight": 0.4,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "The proposed methodology is appropriate for the research question and feasible to implement."
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "criterion": "Writing Quality",
+                          "weight": 0.3,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "The proposal is well-written, organized, and free of grammatical errors."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "deliverableId": "literature-review",
+                      "title": "Literature Review",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "A comprehensive review of existing academic literature on climate change impacts, synthesizing key findings and identifying research gaps."
+                          }
+                        ]
+                      },
+                      "format": "document",
+                      "dueDate": "2025-03-01T23:59:59Z",
+                      "isGroupDeliverable": false,
+                      "assessmentCriteria": [
+                        {
+                          "criterion": "Source Quality",
+                          "weight": 0.25,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Sources are credible, recent, and relevant to the research topic."
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "criterion": "Synthesis Quality",
+                          "weight": 0.4,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Literature is well-synthesized, showing connections between sources and identifying key themes."
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "criterion": "Critical Analysis",
+                          "weight": 0.35,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Review demonstrates critical thinking and identifies gaps or limitations in existing research."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "deliverableId": "data-analysis-report",
+                      "title": "Data Analysis Report",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "A comprehensive report presenting the statistical analysis of climate data, including visualizations and interpretation of trends."
+                          }
+                        ]
+                      },
+                      "format": "report",
+                      "dueDate": "2025-03-15T23:59:59Z",
+                      "isGroupDeliverable": false,
+                      "assessmentCriteria": [
+                        {
+                          "criterion": "Data Quality",
+                          "weight": 0.2,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Data sources are reliable and data processing is documented and appropriate."
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "criterion": "Analysis Rigor",
+                          "weight": 0.4,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Statistical analysis is appropriate, well-executed, and clearly explained."
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "criterion": "Visualization Effectiveness",
+                          "weight": 0.4,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Data visualizations are clear, appropriate, and effectively communicate findings."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "deliverableId": "final-presentation",
+                      "title": "Final Presentation",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "A comprehensive presentation of research findings, including methodology, analysis, and conclusions about climate change impacts."
+                          }
+                        ]
+                      },
+                      "format": "presentation",
+                      "dueDate": "2025-03-30T14:00:00Z",
+                      "isGroupDeliverable": true,
+                      "assessmentCriteria": [
+                        {
+                          "criterion": "Content Quality",
+                          "weight": 0.4,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Presentation accurately represents research findings and demonstrates deep understanding of the topic."
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "criterion": "Presentation Delivery",
+                          "weight": 0.3,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Presentation is well-delivered, engaging, and within time limits."
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "criterion": "Visual Design",
+                          "weight": 0.3,
+                          "description": {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Slides are well-designed, visually appealing, and support the presentation content."
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "peerAssessment": {
+                    "enabled": true,
+                    "assessmentType": "peer-evaluation",
+                    "criteria": [
+                      {
+                        "criterionId": "collaboration",
+                        "name": "Collaboration Quality",
+                        "description": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "How effectively did this team member collaborate with others, share ideas, and contribute to group discussions?"
+                            }
+                          ]
+                        },
+                        "scale": {
+                          "type": "likert",
+                          "labels": [
+                            "Poor collaboration",
+                            "Below expectations",
+                            "Meets expectations",
+                            "Above expectations",
+                            "Excellent collaboration"
+                          ]
+                        }
+                      },
+                      {
+                        "criterionId": "contribution",
+                        "name": "Work Contribution",
+                        "description": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "How much did this team member contribute to the overall project deliverables and outcomes?"
+                            }
+                          ]
+                        },
+                        "scale": {
+                          "type": "numeric",
+                          "range": {
+                            "min": 1,
+                            "max": 10
+                          }
+                        }
+                      },
+                      {
+                        "criterionId": "reliability",
+                        "name": "Reliability",
+                        "description": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "How reliable was this team member in meeting deadlines, attending meetings, and following through on commitments?"
+                            }
+                          ]
+                        },
+                        "scale": {
+                          "type": "categorical",
+                          "labels": [
+                            "Unreliable",
+                            "Somewhat reliable",
+                            "Reliable",
+                            "Very reliable",
+                            "Extremely reliable"
+                          ]
+                        }
+                      }
+                    ],
+                    "anonymity": true,
+                    "reciprocity": true
+                  },
+                  "timeline": {
+                    "phases": [
+                      {
+                        "phaseId": "planning",
+                        "title": "Project Planning",
+                        "description": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Initial planning phase where teams form, define roles, and develop their research proposal."
+                            }
+                          ]
+                        },
+                        "startDate": "2025-02-01T00:00:00Z",
+                        "endDate": "2025-02-15T23:59:59Z",
+                        "activities": [
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Form project teams (4-6 members per team)"
+                              }
+                            ]
+                          },
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Assign roles based on interests and skills"
+                              }
+                            ]
+                          },
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Develop research question and methodology"
+                              }
+                            ]
+                          },
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Submit project proposal"
+                              }
+                            ]
+                          }
+                        ],
+                        "deliverableIds": ["project-proposal"]
+                      },
+                      {
+                        "phaseId": "research",
+                        "title": "Research Phase",
+                        "description": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Primary research phase where teams conduct literature review and data collection."
+                            }
+                          ]
+                        },
+                        "startDate": "2025-02-16T00:00:00Z",
+                        "endDate": "2025-03-01T23:59:59Z",
+                        "activities": [
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Conduct comprehensive literature review"
+                              }
+                            ]
+                          },
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Identify and collect relevant climate data"
+                              }
+                            ]
+                          },
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Document sources and methodology"
+                              }
+                            ]
+                          }
+                        ],
+                        "deliverableIds": ["literature-review"]
+                      },
+                      {
+                        "phaseId": "analysis",
+                        "title": "Analysis Phase",
+                        "description": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Data analysis phase where teams process collected data and synthesize findings."
+                            }
+                          ]
+                        },
+                        "startDate": "2025-03-02T00:00:00Z",
+                        "endDate": "2025-03-15T23:59:59Z",
+                        "activities": [
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Process and clean collected data"
+                              }
+                            ]
+                          },
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Perform statistical analysis"
+                              }
+                            ]
+                          },
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Create data visualizations"
+                              }
+                            ]
+                          },
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Synthesize findings with literature review"
+                              }
+                            ]
+                          }
+                        ],
+                        "deliverableIds": ["data-analysis-report"]
+                      },
+                      {
+                        "phaseId": "presentation",
+                        "title": "Presentation Phase",
+                        "description": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Final phase where teams prepare and deliver their research presentations."
+                            }
+                          ]
+                        },
+                        "startDate": "2025-03-16T00:00:00Z",
+                        "endDate": "2025-03-30T23:59:59Z",
+                        "activities": [
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Design presentation slides and visuals"
+                              }
+                            ]
+                          },
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Practice presentation delivery"
+                              }
+                            ]
+                          },
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Deliver final presentation to class"
+                              }
+                            ]
+                          },
+                          {
+                            "runs": [
+                              {
+                                "type": "text",
+                                "text": "Complete peer assessments"
+                              }
+                            ]
+                          }
+                        ],
+                        "deliverableIds": ["final-presentation"]
+                      }
+                    ],
+                    "estimatedHours": 80
+                  },
+                  "instructions": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "This collaborative research project requires teams of 4-6 students to investigate climate change impacts using both literature review and data analysis methods. Each team member will take on a specific role with defined responsibilities. All deliverables must be completed on time, and peer assessments will be conducted at the end of the project. Teams should meet regularly to ensure coordination and progress toward project goals."
+                      }
+                    ]
+                  },
+                  "constraints": [
+                    {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "All data sources must be from peer-reviewed publications or reputable scientific organizations"
+                        }
+                      ]
+                    },
+                    {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "Final presentation must be 15-20 minutes with 5 minutes for questions"
+                        }
+                      ]
+                    },
+                    {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "Teams cannot exceed 6 members due to classroom presentation time constraints"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

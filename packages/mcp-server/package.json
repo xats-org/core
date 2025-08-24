@@ -1,6 +1,6 @@
 {
   "name": "@xats-org/mcp-server",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Model Context Protocol server for xats documents",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 # xats Architectural Decision Record (ADR)
 
-**Version:** 1.0 (for xats schema v0.1.0)
+**Version:** 5.0 (for xats schema v0.5.0)
 **Status:** Living Document
 
 ---
@@ -125,3 +125,81 @@ This document records the major architectural decisions made during the design o
 * **Context:** Within the `SemanticText` model, we needed to handle links to other parts of the same book and links to outside sources.
 * **Decision:** We created two distinct run types: **`ReferenceRun`** for internal links and **`CitationRun`** for external bibliographic links.
 * **Rationale:** This separation is critical for machine readability. It creates a clear, unambiguous signal about the nature of a link. An AI agent knows that a `ReferenceRun` points to another `XatsObject` within the document's own knowledge graph. Conversely, it knows that a `CitationRun` points to an external source in the `bibliography`. A single, generic "link" object would have been too ambiguous.
+
+---
+
+## 15. ADR-014: Monorepo Architecture (v0.4.0)
+
+* **Context:** As the xats ecosystem grew, managing multiple related packages became complex, with version coordination challenges and redundant build processes.
+* **Decision:** We adopted a TypeScript monorepo architecture using Turborepo and pnpm workspaces, organizing the project into modular packages under the @xats-org namespace.
+* **Rationale:**
+    * **Unified Development:** All related packages can be developed, tested, and released together with guaranteed version compatibility.
+    * **Shared Dependencies:** Common dependencies and build tools are consolidated, reducing duplication and maintaining consistency.
+    * **Developer Experience:** Turborepo provides intelligent caching and parallel builds, dramatically improving development workflows.
+    * **Modular Consumption:** Consumers can import only the packages they need (e.g., `@xats-org/validator` vs the entire core library).
+    * **Modern Toolchain:** First-class TypeScript support with strict typing throughout the ecosystem.
+
+---
+
+## 16. ADR-015: Bidirectional Rendering Architecture (v0.5.0)
+
+* **Context:** Educational content needs to be published in multiple formats (HTML, PDF, Word, Markdown, LaTeX) but existing solutions had poor round-trip fidelity and semantic loss.
+* **Decision:** We built a bidirectional rendering system that maintains 95%+ fidelity across all supported formats, with semantic preservation as the primary goal.
+* **Rationale:**
+    * **Format Flexibility:** Educators need to publish the same content across different platforms and mediums without manual reformatting.
+    * **Semantic Preservation:** Unlike traditional conversion tools that focus on visual appearance, our renderer preserves the semantic meaning and structure.
+    * **Round-Trip Integrity:** Authors can convert HTML→Markdown→LaTeX→Word and back to HTML with minimal information loss.
+    * **Future-Proofing:** The semantic-first approach ensures compatibility with future formats and AI processing requirements.
+    * **Quality Control:** High-fidelity rendering means authors spend time on content, not fixing formatting issues.
+
+---
+
+## 17. ADR-016: AI Integration via Model Context Protocol (v0.5.0)
+
+* **Context:** AI tools are becoming essential for educational content creation, but integrations are often fragmented, proprietary, and unreliable.
+* **Decision:** We adopted Anthropic's Model Context Protocol (MCP) as the standard for AI integration, creating a dedicated MCP server for xats documents.
+* **Rationale:**
+    * **Vendor Independence:** MCP provides a standardized interface that works with multiple AI providers (Anthropic, OpenAI, etc.), avoiding vendor lock-in.
+    * **Structured Integration:** Rather than generic text prompts, our MCP server understands xats schema structure and can perform intelligent operations on semantic content.
+    * **Extensibility:** The MCP architecture allows for new AI capabilities to be added without breaking existing integrations.
+    * **Quality Assurance:** AI-generated content maintains schema compliance automatically, reducing the need for manual validation.
+    * **Educational Focus:** The MCP server includes education-specific capabilities like assessment generation, accessibility analysis, and pedagogical content enhancement.
+
+---
+
+## 18. ADR-017: Enhanced Rendering Hints System (v0.5.0)
+
+* **Context:** The original `renderingHints` system was too basic for modern publishing needs, lacking support for responsive design, advanced accessibility, and print optimizations.
+* **Decision:** We expanded `renderingHints` into a comprehensive layout and presentation system that provides semantic guidance without hard-coding specific styles.
+* **Rationale:**
+    * **Responsive Design:** Modern educational content must work across devices from phones to large displays, requiring responsive layout hints.
+    * **Accessibility Integration:** Rendering hints now include accessibility-specific guidance (focus management, color contrast, screen reader optimization) that integrate with WCAG compliance validation.
+    * **Print Optimization:** Academic content often needs print versions, so we added professional typesetting hints (page breaks, margins, orphan/widow control).
+    * **Semantic Intent:** All hints express the author's intent rather than specific implementation details, preserving the separation of content and presentation while providing necessary guidance.
+    * **Progressive Enhancement:** Basic renderers can ignore advanced hints while sophisticated renderers can utilize them for enhanced output quality.
+
+---
+
+## 19. ADR-018: Comprehensive WCAG 2.1 AA Compliance (v0.5.0)
+
+* **Context:** While earlier versions supported accessibility features, there was no systematic validation or enforcement of WCAG compliance standards.
+* **Decision:** We implemented automated WCAG 2.1 AA compliance validation as a core feature, with real-time feedback and remediation suggestions.
+* **Rationale:**
+    * **Legal Compliance:** Educational institutions must meet accessibility requirements; manual compliance checking is error-prone and incomplete.
+    * **Universal Design:** Accessibility benefits all learners, not just those with disabilities, improving the overall learning experience.
+    * **Automated Quality:** Real-time validation prevents accessibility issues from being introduced rather than discovering them after publication.
+    * **Educational Mission:** As a standard for educational content, xats should exemplify best practices in inclusive design.
+    * **Future-Proofing:** Automated compliance checking scales as content volume increases and regulatory requirements evolve.
+
+---
+
+## 20. ADR-019: Forward Compatibility Guarantee
+
+* **Context:** As xats approaches v1.0.0, we needed to establish clear compatibility guarantees for the growing ecosystem of tools and content.
+* **Decision:** We established a formal forward compatibility guarantee: all documents valid in version X.Y.Z remain valid and functional in versions X.Y+N.Z and X+N.Y.Z.
+* **Rationale:**
+    * **Ecosystem Stability:** Tools and content creators need confidence that their investments in xats will not be disrupted by schema updates.
+    * **Adoption Confidence:** Educational institutions require long-term stability guarantees before adopting new standards for their content infrastructure.
+    * **Migration Clarity:** Clear compatibility rules make it straightforward to plan upgrades and understand the impact of schema changes.
+    * **Semantic Versioning:** This guarantee aligns with semantic versioning principles while providing additional assurance for the educational domain.
+    * **Innovation Balance:** Forward compatibility enables innovation in minor versions while preserving stability guarantees.

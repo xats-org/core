@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/hints/prominence",
+  "title": "Prominence Level Rendering Hints",
+  "description": "Rendering hints that indicate the visual prominence level for content (1-5 scale)",
+  "type": "integer",
+  "minimum": 1,
+  "maximum": 5,
+  "definitions": {
+    "prominenceLevels": {
+      "1": {
+        "name": "Subtle",
+        "description": "Minimal visual emphasis, barely noticeable",
+        "visualGuidance": "Very subtle styling (light gray text, small size changes)",
+        "examples": ["fine print", "optional notes", "background information"],
+        "accessibility": "May be skipped by screen readers in summary mode",
+        "useCases": ["legal disclaimers", "technical specifications", "supplementary details"]
+      },
+      "2": {
+        "name": "Mild",
+        "description": "Light visual emphasis, noticeable but not distracting",
+        "visualGuidance": "Gentle styling changes (slightly different color, minor size increase)",
+        "examples": ["side notes", "additional context", "related information"],
+        "accessibility": "Read by screen readers but with lower priority",
+        "useCases": ["editorial comments", "cross-references", "helpful tips"]
+      },
+      "3": {
+        "name": "Normal",
+        "description": "Standard prominence level, typical content emphasis",
+        "visualGuidance": "Standard content styling with moderate emphasis",
+        "examples": ["regular content", "standard paragraphs", "typical examples"],
+        "accessibility": "Standard screen reader treatment",
+        "useCases": ["body text", "regular examples", "standard definitions"]
+      },
+      "4": {
+        "name": "Strong",
+        "description": "High visual emphasis, clearly stands out",
+        "visualGuidance": "Strong styling (bold colors, larger text, borders)",
+        "examples": ["important warnings", "key concepts", "critical information"],
+        "accessibility": "Higher priority for screen readers, may be announced",
+        "useCases": ["safety warnings", "important deadlines", "key learning objectives"]
+      },
+      "5": {
+        "name": "Critical",
+        "description": "Maximum visual emphasis, impossible to miss",
+        "visualGuidance": "Maximum styling (bright colors, large text, animations)",
+        "examples": ["emergency notices", "breaking changes", "critical alerts"],
+        "accessibility": "Highest priority, may interrupt screen reader flow",
+        "useCases": ["system alerts", "breaking news", "critical safety information"]
+      }
+    },
+    "implementationGuidelines": {
+      "html": {
+        "1": "Subtle: opacity: 0.7, font-size: 0.9em, color: #666",
+        "2": "Mild: font-weight: 500, color: #444, margin: small",
+        "3": "Normal: standard body text styling",
+        "4": "Strong: font-weight: bold, color: primary, border-left: 3px solid",
+        "5": "Critical: background: alert color, font-size: 1.2em, padding: large"
+      },
+      "pdf": {
+        "1": "Light gray text, smaller font size",
+        "2": "Medium gray text, standard size",
+        "3": "Black text, standard formatting",
+        "4": "Bold text, possible border or background",
+        "5": "Large bold text, colored background, possible icon"
+      },
+      "docx": {
+        "1": "Character style with reduced emphasis",
+        "2": "Character style with mild emphasis",
+        "3": "Normal paragraph style",
+        "4": "Strong character style or paragraph style",
+        "5": "Heading-level style with maximum emphasis"
+      },
+      "accessibility": {
+        "screenReader": {
+          "1": "aria-level='1' or skip in summary mode",
+          "2": "aria-level='2' or lower priority announcement",
+          "3": "Standard aria treatment",
+          "4": "aria-level='4' or priority announcement",
+          "5": "aria-live='assertive' or immediate announcement"
+        },
+        "cognitiveLoad": {
+          "1": "Low cognitive load - can be safely ignored",
+          "2": "Low-medium cognitive load - optional attention",
+          "3": "Medium cognitive load - standard attention",
+          "4": "High cognitive load - requires attention",
+          "5": "Critical cognitive load - demands immediate attention"
+        }
+      }
+    }
+  },
+  "examples": [1, 2, 3, 4, 5],
+  "default": 3
+}

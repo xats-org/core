@@ -69,9 +69,10 @@ Examples of patch version changes:
 
 ### Current Version Strategy
 
-- **Active Development**: v0.3.0 (in development)
-- **Stable Release**: v0.2.0 (current stable)
-- **Legacy Support**: v0.1.0 (security fixes only)
+- **Active Development**: v0.6.0 (in development, targeting September 2026)
+- **Stable Release**: v0.5.0 (current stable)
+- **Previous Stable**: v0.4.0 (security fixes only)
+- **Legacy Support**: v0.3.0, v0.2.0, v0.1.0 (security fixes only)
 
 ### Pre-1.0 Versioning
 
@@ -211,8 +212,11 @@ Deprecated features are marked in:
 
 | Version | Status | Support Level | End of Life |
 |---------|--------|---------------|-------------|
-| 0.3.0 | Active Development | Full | TBD |
-| 0.2.0 | Stable | Bug fixes + Security | TBD |
+| 0.6.0 | Active Development | Full | TBD |
+| 0.5.0 | Stable | Bug fixes + Security | TBD |
+| 0.4.0 | Security Support | Security only | 2026-06-15 |
+| 0.3.0 | Security Support | Security only | 2026-08-19 |
+| 0.2.0 | Security Support | Security only | 2026-01-20 |
 | 0.1.0 | Security Support | Security only | 2026-01-01 |
 
 ## Schema Evolution Guidelines
@@ -337,7 +341,7 @@ function validateDocument(document) {
     throw new Error('Missing schemaVersion field');
   }
   
-  const supportedVersions = ['0.2.0', '0.3.0'];
+  const supportedVersions = ['0.3.0', '0.4.0', '0.5.0'];
   if (!supportedVersions.includes(version)) {
     throw new Error(`Unsupported schema version: ${version}. Supported: ${supportedVersions.join(', ')}`);
   }
@@ -351,6 +355,22 @@ function validateDocument(document) {
 ### Feature Detection Pattern
 
 ```javascript
+function supportsAIIntegration(document) {
+  const version = document.schemaVersion;
+  const [major, minor] = version.split('.').map(Number);
+  
+  // AI Integration with MCP added in v0.5.0
+  return major > 0 || (major === 0 && minor >= 5);
+}
+
+function supportsBidirectionalRendering(document) {
+  const version = document.schemaVersion;
+  const [major, minor] = version.split('.').map(Number);
+  
+  // Bidirectional rendering added in v0.5.0
+  return major > 0 || (major === 0 && minor >= 5);
+}
+
 function supportsAssessments(document) {
   const version = document.schemaVersion;
   const [major, minor] = version.split('.').map(Number);

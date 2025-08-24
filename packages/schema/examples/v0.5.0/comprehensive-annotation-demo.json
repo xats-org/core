@@ -1,0 +1,756 @@
+{
+  "$schema": "https://xats.org/schemas/0.5.0/schema.json",
+  "schemaVersion": "0.5.0",
+  "bibliographicEntry": {
+    "id": "annotation-system-demo-2025",
+    "type": "book",
+    "title": "Comprehensive Annotation System Demonstration",
+    "subtitle": "Phase 3 Peer Review & Annotation Layer",
+    "author": [
+      {"family": "xats", "given": "Schema Engineering Team"}
+    ],
+    "issued": {"date-parts": [[2025, 8, 24]]},
+    "publisher": "xats.org",
+    "note": "Demonstrates all annotation types and features in the xats v0.5.0 schema"
+  },
+  "subject": "Educational Technology - Schema Design",
+  "targetAudience": "Schema developers and educational content authors",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "chapter-annotation-demo",
+        "language": "en",
+        "title": "Annotation System Feature Demonstration",
+        "label": "Chapter 1",
+        "sections": [
+          {
+            "id": "section-basic-annotations",
+            "language": "en", 
+            "title": "Basic Annotation Types",
+            "label": "1.1",
+            "content": [
+              {
+                "id": "suggestion-example-block",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "This paragraph contains content that could be improved with specific suggestions for enhancement."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "suggestion-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "suggestion-example-block",
+                    "targetRange": {
+                      "startOffset": 45,
+                      "endOffset": 64,
+                      "textContent": "could be improved",
+                      "xpath": "//runs[1]/text()[1]"
+                    },
+                    "status": "open",
+                    "priority": "medium",
+                    "assignee": "content-author-alice",
+                    "reviewer": "content-reviewer-bob",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Consider making this more specific. What kind of improvements are we talking about?"}
+                      ]
+                    },
+                    "suggestedChange": {
+                      "runs": [
+                        {"type": "text", "text": "This paragraph contains content that would benefit from more specific examples and clearer explanations to enhance reader understanding."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T09:00:00Z",
+                    "threadId": "suggestion-thread-001"
+                  }
+                ]
+              },
+              {
+                "id": "clarification-example-block", 
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "Complex technical concepts require careful explanation. The implementation details should be thoroughly documented."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "clarification-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/clarification_request",
+                    "targetObjectId": "clarification-example-block",
+                    "targetRange": {
+                      "startOffset": 0,
+                      "endOffset": 23,
+                      "textContent": "Complex technical concepts"
+                    },
+                    "status": "open",
+                    "priority": "high",
+                    "reviewer": "subject-expert-carol",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Which specific technical concepts are you referring to? This seems vague and could confuse readers."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T09:30:00Z",
+                    "threadId": "clarification-thread-001"
+                  }
+                ]
+              },
+              {
+                "id": "approval-example-block",
+                "language": "en", 
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "Well-structured content that effectively communicates key concepts with appropriate examples and clear language."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "approval-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/approval",
+                    "targetObjectId": "approval-example-block", 
+                    "status": "resolved",
+                    "priority": "low",
+                    "reviewer": "senior-reviewer-david",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Excellent paragraph! Clear, concise, and pedagogically sound."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "approve",
+                      "confidence": 5,
+                      "criteria": ["clarity", "pedagogical_effectiveness", "completeness"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "This paragraph demonstrates best practices in educational content writing with clear structure and appropriate language level."}
+                        ]
+                      }
+                    },
+                    "createdAt": "2025-08-24T10:00:00Z",
+                    "resolvedAt": "2025-08-24T10:00:00Z"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "section-revision-annotations",
+            "language": "en",
+            "title": "Revision-Level Annotations", 
+            "label": "1.2",
+            "content": [
+              {
+                "id": "minor-revision-block",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "This content is generally good but needs small improvements like fixing typos or adjusting wording."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "minor-revision-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/minor_revision_needed",
+                    "targetObjectId": "minor-revision-block",
+                    "targetRange": {
+                      "startOffset": 71,
+                      "endOffset": 82,
+                      "textContent": "fixing typos"
+                    },
+                    "status": "open",
+                    "priority": "low", 
+                    "assignee": "copy-editor-eve",
+                    "reviewer": "proofreader-frank",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Minor wording issues: 'fixing typos' is redundant with 'small improvements'. Consider consolidating."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "request_changes",
+                      "confidence": 3,
+                      "criteria": ["clarity", "style"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "Minor style improvements needed for better flow and conciseness."}
+                        ]
+                      },
+                      "recommendedActions": [
+                        {
+                          "action": "edit_wording",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Revise to avoid redundancy in examples"}
+                            ]
+                          },
+                          "priority": "low"
+                        }
+                      ]
+                    },
+                    "createdAt": "2025-08-24T11:00:00Z"
+                  }
+                ]
+              },
+              {
+                "id": "major-revision-block",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph", 
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "This paragraph lacks substantial content."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "major-revision-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/major_revision_needed",
+                    "targetObjectId": "major-revision-block",
+                    "status": "open",
+                    "priority": "critical",
+                    "assignee": "lead-author-grace", 
+                    "reviewer": "content-specialist-henry",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "This paragraph is far too brief and provides no value to readers. Needs complete rewrite with substantial content addition."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "request_changes",
+                      "confidence": 5,
+                      "criteria": ["completeness", "pedagogical_effectiveness", "value"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "Current content does not meet minimum standards for educational value. Requires extensive development."}
+                        ]
+                      },
+                      "recommendedActions": [
+                        {
+                          "action": "expand_content",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Add comprehensive explanation with examples, context, and learning objectives"}
+                            ]
+                          },
+                          "priority": "critical"
+                        },
+                        {
+                          "action": "add_examples",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Include practical examples and case studies"}
+                            ]
+                          },
+                          "priority": "high"
+                        },
+                        {
+                          "action": "add_references",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Support with academic references and further reading"}
+                            ]
+                          },
+                          "priority": "medium"
+                        }
+                      ]
+                    },
+                    "createdAt": "2025-08-24T12:00:00Z",
+                    "threadId": "major-revision-thread-001"
+                  }
+                ]
+              },
+              {
+                "id": "rejection-example-block",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "This content contains factually incorrect information that contradicts established research and should not be included."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "rejection-001",
+                    "language": "en", 
+                    "annotationType": "https://xats.org/vocabularies/annotations/rejection",
+                    "targetObjectId": "rejection-example-block",
+                    "status": "resolved",
+                    "priority": "critical",
+                    "reviewer": "fact-checker-iris",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "This paragraph contains multiple factual errors and contradicts peer-reviewed research. Must be removed or completely rewritten."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "reject",
+                      "confidence": 5,
+                      "criteria": ["accuracy", "reliability", "evidence_based"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "Content contradicts established scientific consensus and lacks proper evidence. Publication of inaccurate information would undermine educational objectives."}
+                        ]
+                      },
+                      "recommendedActions": [
+                        {
+                          "action": "remove_content",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Delete this paragraph entirely"}
+                            ]
+                          },
+                          "priority": "critical"
+                        },
+                        {
+                          "action": "fact_check",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Verify all similar claims throughout the document"}
+                            ]
+                          },
+                          "priority": "high"
+                        }
+                      ]
+                    },
+                    "createdAt": "2025-08-24T13:00:00Z",
+                    "resolvedAt": "2025-08-24T13:30:00Z"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "section-threading-priority",
+            "language": "en",
+            "title": "Threading and Priority Demonstration",
+            "label": "1.3", 
+            "content": [
+              {
+                "id": "discussion-starter-block",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "This paragraph demonstrates how annotation threading works with multiple reviewers contributing to a collaborative discussion."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "thread-starter-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/clarification_request",
+                    "targetObjectId": "discussion-starter-block",
+                    "targetRange": {
+                      "startOffset": 66,
+                      "endOffset": 85,
+                      "textContent": "annotation threading"
+                    },
+                    "status": "open",
+                    "priority": "medium",
+                    "reviewer": "reviewer-jack",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Could you provide a more concrete example of how annotation threading benefits the review process?"}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T14:00:00Z",
+                    "threadId": "collaborative-discussion-001"
+                  },
+                  {
+                    "id": "thread-response-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "discussion-starter-block",
+                    "parentAnnotationId": "thread-starter-001",
+                    "threadId": "collaborative-discussion-001",
+                    "status": "open", 
+                    "priority": "medium",
+                    "reviewer": "pedagogy-expert-karen",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Great question, Jack! Threading allows us to maintain context in discussions. For example, when multiple experts debate a point, their conversation is grouped together rather than scattered."}
+                      ]
+                    },
+                    "suggestedChange": {
+                      "runs": [
+                        {"type": "text", "text": "This paragraph demonstrates how annotation threading works with multiple reviewers contributing to a collaborative discussion. Threading maintains conversation context by grouping related comments together, enabling productive scholarly discourse about specific content elements."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T14:30:00Z"
+                  },
+                  {
+                    "id": "thread-response-002",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "discussion-starter-block", 
+                    "parentAnnotationId": "thread-starter-001",
+                    "threadId": "collaborative-discussion-001",
+                    "status": "open",
+                    "priority": "low",
+                    "reviewer": "technical-writer-liam",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Building on Karen's point, threading also helps track resolution of complex issues that require back-and-forth discussion."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T15:00:00Z"
+                  },
+                  {
+                    "id": "high-priority-annotation",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/major_revision_needed",
+                    "targetObjectId": "discussion-starter-block",
+                    "status": "open",
+                    "priority": "critical",
+                    "assignee": "lead-author-grace",
+                    "reviewer": "accessibility-expert-maya",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "URGENT: This paragraph has no alt-text consideration for screen readers. The concept of 'annotation threading' needs to be explained without assuming visual metaphors."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "request_changes",
+                      "confidence": 5,
+                      "criteria": ["accessibility_compliance", "inclusive_design"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "Content must be accessible to all users, including those using assistive technologies. Visual metaphors exclude non-visual learners."}
+                        ]
+                      },
+                      "recommendedActions": [
+                        {
+                          "action": "revise_language",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Replace visual metaphors with universal concepts"}
+                            ]
+                          },
+                          "priority": "critical"
+                        },
+                        {
+                          "action": "accessibility_review",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Conduct full accessibility audit of all explanatory content"}
+                            ]
+                          },
+                          "priority": "high"
+                        }
+                      ]
+                    },
+                    "createdAt": "2025-08-24T15:30:00Z",
+                    "threadId": "accessibility-critical-001"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "section-workflow-statuses", 
+            "language": "en",
+            "title": "Annotation Status Workflow",
+            "label": "1.4",
+            "content": [
+              {
+                "id": "status-demo-block",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "This paragraph demonstrates the complete annotation lifecycle with different status values representing workflow progression."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "open-status-demo",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion", 
+                    "targetObjectId": "status-demo-block",
+                    "status": "open",
+                    "priority": "medium",
+                    "reviewer": "new-reviewer-noah",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Consider adding specific examples of each status type for clarity."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T16:00:00Z"
+                  },
+                  {
+                    "id": "resolved-status-demo",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/clarification_request",
+                    "targetObjectId": "status-demo-block",
+                    "status": "resolved",
+                    "priority": "low",
+                    "reviewer": "resolved-reviewer-olivia", 
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "What happens to annotations after they're resolved? Are they archived or maintained for audit purposes?"}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T16:30:00Z",
+                    "resolvedAt": "2025-08-24T17:00:00Z"
+                  },
+                  {
+                    "id": "rejected-status-demo",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "status-demo-block",
+                    "status": "rejected",
+                    "priority": "low",
+                    "reviewer": "rejected-reviewer-paul",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Maybe we should include a glossary of annotation terms?"}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "reject", 
+                      "confidence": 3,
+                      "criteria": ["scope", "priority"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "While useful, a glossary is beyond the scope of this demonstration document and would better fit in comprehensive documentation."}
+                        ]
+                      }
+                    },
+                    "createdAt": "2025-08-24T17:00:00Z",
+                    "resolvedAt": "2025-08-24T17:15:00Z"
+                  },
+                  {
+                    "id": "deferred-status-demo",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/major_revision_needed",
+                    "targetObjectId": "status-demo-block",
+                    "status": "deferred",
+                    "priority": "high",
+                    "assignee": "future-author-quinn",
+                    "reviewer": "strategic-reviewer-rachel",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "This entire section should be expanded into a comprehensive workflow guide, but it's beyond the scope of the current version."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "conditional_accept",
+                      "confidence": 4,
+                      "criteria": ["scope", "version_planning"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "Excellent suggestion that would improve the documentation, but appropriate for a future version rather than current development cycle."}
+                        ]
+                      },
+                      "recommendedActions": [
+                        {
+                          "action": "plan_future_version",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Add comprehensive workflow guide to v0.6.0 roadmap"}
+                            ]
+                          },
+                          "priority": "medium"
+                        }
+                      ]
+                    },
+                    "createdAt": "2025-08-24T18:00:00Z"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "section-complex-scenarios",
+            "language": "en", 
+            "title": "Complex Annotation Scenarios",
+            "label": "1.5",
+            "content": [
+              {
+                "id": "multi-target-block",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "Advanced annotation scenarios involve multiple targets, overlapping concerns, and cross-references between different content sections."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "cross-reference-annotation",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "multi-target-block",
+                    "targetRange": {
+                      "startOffset": 92,
+                      "endOffset": 108, 
+                      "textContent": "cross-references",
+                      "xpath": "//runs[1]/text()[1]"
+                    },
+                    "status": "open",
+                    "priority": "medium",
+                    "reviewer": "system-architect-sam",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "This concept connects to the discussion in section 1.3 about threading. Consider adding an explicit reference."}
+                      ]
+                    },
+                    "suggestedChange": {
+                      "runs": [
+                        {"type": "text", "text": "Advanced annotation scenarios involve multiple targets, overlapping concerns, and cross-references between different content sections (as demonstrated in the threading examples in section 1.3)."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T19:00:00Z"
+                  },
+                  {
+                    "id": "metadata-rich-annotation",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/approval",
+                    "targetObjectId": "multi-target-block",
+                    "status": "resolved",
+                    "priority": "low",
+                    "reviewer": "metadata-specialist-taylor",
+                    "tags": ["metadata", "comprehensive", "best-practice"],
+                    "description": "Example of annotation with rich metadata including tags and custom extensions",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Excellent demonstration of complex annotation capabilities. This paragraph effectively showcases advanced features."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "approve",
+                      "confidence": 5,
+                      "criteria": ["technical_correctness", "comprehensiveness", "clarity"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "This content successfully demonstrates the sophisticated annotation capabilities of the xats schema system."}
+                        ]
+                      }
+                    },
+                    "accessibilityMetadata": {
+                      "hasAltText": true,
+                      "role": "note"
+                    },
+                    "extensions": {
+                      "reviewWorkflow": {
+                        "stage": "final-review",
+                        "reviewer-credentials": "certified-accessibility-expert",
+                        "review-guidelines-version": "2025.1"
+                      },
+                      "annotations": {
+                        "confidence-score": 0.95,
+                        "automated-checks": {
+                          "grammar": "passed",
+                          "accessibility": "passed",
+                          "fact-check": "manual-required"
+                        }
+                      }
+                    },
+                    "createdAt": "2025-08-24T19:30:00Z",
+                    "resolvedAt": "2025-08-24T19:30:00Z"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "backMatter": {
+    "sections": [
+      {
+        "id": "annotation-vocabulary-reference",
+        "language": "en",
+        "title": "Annotation Vocabulary Reference",
+        "content": [
+          {
+            "id": "vocabulary-table",
+            "language": "en",
+            "blockType": "https://xats.org/vocabularies/blocks/table",
+            "content": {
+              "caption": {
+                "runs": [
+                  {"type": "text", "text": "Complete xats Annotation Vocabulary"}
+                ]
+              },
+              "headers": [
+                {"runs": [{"type": "text", "text": "Annotation Type"}]},
+                {"runs": [{"type": "text", "text": "URI"}]},
+                {"runs": [{"type": "text", "text": "Purpose"}]},
+                {"runs": [{"type": "text", "text": "Typical Status Flow"}]}
+              ],
+              "rows": [
+                [
+                  {"runs": [{"type": "text", "text": "Suggestion"}]},
+                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/suggestion"}]},
+                  {"runs": [{"type": "text", "text": "Propose specific improvements or changes"}]},
+                  {"runs": [{"type": "text", "text": "open → resolved"}]}
+                ],
+                [
+                  {"runs": [{"type": "text", "text": "Clarification Request"}]},
+                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/clarification_request"}]},
+                  {"runs": [{"type": "text", "text": "Ask for explanation or additional information"}]},
+                  {"runs": [{"type": "text", "text": "open → resolved"}]}
+                ],
+                [
+                  {"runs": [{"type": "text", "text": "Minor Revision Needed"}]},
+                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/minor_revision_needed"}]},
+                  {"runs": [{"type": "text", "text": "Request small corrections or improvements"}]},
+                  {"runs": [{"type": "text", "text": "open → resolved"}]}
+                ],
+                [
+                  {"runs": [{"type": "text", "text": "Major Revision Needed"}]},
+                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/major_revision_needed"}]},
+                  {"runs": [{"type": "text", "text": "Request substantial changes or additions"}]},
+                  {"runs": [{"type": "text", "text": "open → resolved/deferred"}]}
+                ],
+                [
+                  {"runs": [{"type": "text", "text": "Approval"}]},
+                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/approval"}]},
+                  {"runs": [{"type": "text", "text": "Formally approve content quality"}]},
+                  {"runs": [{"type": "text", "text": "open → resolved"}]}
+                ],
+                [
+                  {"runs": [{"type": "text", "text": "Rejection"}]},
+                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/rejection"}]},
+                  {"runs": [{"type": "text", "text": "Formally reject content for publication"}]},
+                  {"runs": [{"type": "text", "text": "open → resolved"}]}
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

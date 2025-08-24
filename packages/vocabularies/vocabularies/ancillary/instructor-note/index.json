@@ -1,0 +1,56 @@
+{
+  "uri": "https://xats.org/vocabularies/ancillary/instructor-note",
+  "name": "Instructor Note",
+  "description": "Content that should be included in instructor manuals and teaching guides",
+  "category": "ancillary",
+  "version": "0.5.0",
+  "properties": {
+    "noteType": {
+      "type": "string",
+      "enum": ["teaching-tip", "common-misconception", "discussion-prompt", "activity-suggestion", "assessment-guidance", "pacing-note"],
+      "description": "Type of instructor note",
+      "default": "teaching-tip"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": ["instructor-only", "ta-accessible", "public"],
+      "description": "Who can see this note",
+      "default": "instructor-only"
+    },
+    "timing": {
+      "type": "string",
+      "enum": ["before-class", "during-class", "after-class", "any-time"],
+      "description": "When this note is most relevant",
+      "default": "during-class"
+    },
+    "experienceLevel": {
+      "type": "string",
+      "enum": ["new-instructor", "experienced", "all-levels"],
+      "description": "Target instructor experience level",
+      "default": "all-levels"
+    },
+    "classFormat": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["lecture", "discussion", "lab", "online", "hybrid", "flipped"]
+      },
+      "description": "Applicable class formats for this note"
+    },
+    "timeEstimate": {
+      "type": "string",
+      "description": "Estimated class time if this is an activity"
+    }
+  },
+  "examples": [
+    {
+      "tag": "instructor-note",
+      "properties": {
+        "noteType": "common-misconception",
+        "visibility": "instructor-only",
+        "timing": "during-class",
+        "experienceLevel": "new-instructor"
+      }
+    }
+  ]
+}

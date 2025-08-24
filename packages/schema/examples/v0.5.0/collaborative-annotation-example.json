@@ -1,0 +1,264 @@
+{
+  "$schema": "https://xats.org/schemas/0.5.0/schema.json",
+  "schemaVersion": "0.5.0",
+  "bibliographicEntry": {
+    "id": "collab-annotation-demo-2025",
+    "type": "book",
+    "title": "Collaborative Peer Review Example",
+    "author": [
+      {"family": "Lee", "given": "Dr. Jennifer"},
+      {"family": "Rodriguez", "given": "Prof. Carlos"}
+    ],
+    "issued": {"date-parts": [[2025, 8, 24]]},
+    "publisher": "Educational Technology Press"
+  },
+  "subject": "Educational Technology",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "chapter-collab",
+        "language": "en", 
+        "title": "Collaborative Learning Environments",
+        "sections": [
+          {
+            "id": "section-theory",
+            "language": "en",
+            "title": "Theoretical Foundations",
+            "content": [
+              {
+                "id": "theory-block",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "Collaborative learning theory posits that knowledge is constructed through social interaction and shared understanding among peers."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "thread-starter-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/clarification_request",
+                    "targetObjectId": "theory-block",
+                    "targetRange": {
+                      "startOffset": 70,
+                      "endOffset": 92,
+                      "textContent": "social interaction"
+                    },
+                    "status": "open",
+                    "priority": "medium",
+                    "reviewer": "student-reviewer-alex",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "What specific types of social interaction are most effective for learning?"}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T09:00:00Z",
+                    "threadId": "discussion-thread-001"
+                  },
+                  {
+                    "id": "thread-reply-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "theory-block",
+                    "parentAnnotationId": "thread-starter-001",
+                    "threadId": "discussion-thread-001",
+                    "status": "open",
+                    "priority": "medium",
+                    "reviewer": "expert-reviewer-kim",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Good question! The most effective types include: structured discussions, peer tutoring, collaborative problem-solving, and group projects with defined roles."}
+                      ]
+                    },
+                    "suggestedChange": {
+                      "runs": [
+                        {"type": "text", "text": "Collaborative learning theory posits that knowledge is constructed through social interaction and shared understanding among peers. Research shows that structured discussions, peer tutoring, and collaborative problem-solving are particularly effective forms of interaction for knowledge construction."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T10:30:00Z"
+                  },
+                  {
+                    "id": "thread-reply-002", 
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "theory-block",
+                    "parentAnnotationId": "thread-starter-001",
+                    "threadId": "discussion-thread-001",
+                    "status": "open",
+                    "priority": "low",
+                    "reviewer": "pedagogy-specialist-maria",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Building on Kim's point, we should also mention the importance of scaffolding and guided facilitation in these interactions."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T11:15:00Z"
+                  }
+                ]
+              },
+              {
+                "id": "assessment-block",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph", 
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "Assessment in collaborative environments requires careful consideration of both individual contributions and group outcomes."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "assessment-concern-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/major_revision_needed",
+                    "targetObjectId": "assessment-block",
+                    "status": "open",
+                    "priority": "critical",
+                    "assignee": "author-lee",
+                    "reviewer": "assessment-expert-brown",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "This paragraph needs substantial expansion. Current assessment practices, rubric design, and peer assessment strategies are all missing."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "request_changes",
+                      "confidence": 5,
+                      "criteria": ["completeness", "pedagogical_effectiveness", "practical_application"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "Assessment is a critical component that instructors need practical guidance on. The current treatment is too superficial for the intended audience."}
+                        ]
+                      },
+                      "recommendedActions": [
+                        {
+                          "action": "add_examples",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Include specific examples of collaborative assessment rubrics"}
+                            ]
+                          },
+                          "priority": "high"
+                        },
+                        {
+                          "action": "expand_content", 
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Add section on peer assessment strategies and tools"}
+                            ]
+                          },
+                          "priority": "high"
+                        },
+                        {
+                          "action": "add_references",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Include citations to current assessment research"}
+                            ]
+                          },
+                          "priority": "medium"
+                        }
+                      ]
+                    },
+                    "createdAt": "2025-08-24T12:00:00Z",
+                    "threadId": "assessment-discussion-001"
+                  },
+                  {
+                    "id": "assessment-response-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "assessment-block",
+                    "parentAnnotationId": "assessment-concern-001",
+                    "threadId": "assessment-discussion-001",
+                    "status": "open",
+                    "priority": "high",
+                    "reviewer": "co-author-rodriguez",
+                    "assignee": "author-lee",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "I can contribute a section on digital assessment tools that I've been researching. This could include platforms like Peergrade, Coursera's peer assessment system, and custom LMS solutions."}
+                      ]
+                    },
+                    "suggestedChange": {
+                      "runs": [
+                        {"type": "text", "text": "Assessment in collaborative environments requires careful consideration of both individual contributions and group outcomes. Effective collaborative assessment strategies include:\n\n**Individual Accountability**: Use peer evaluation forms, individual reflections, and role-specific deliverables to assess each member's contribution.\n\n**Group Process Assessment**: Evaluate how well the group collaborates through observation checklists, group self-assessments, and communication logs.\n\n**Product Assessment**: Assess the final collaborative output using rubrics that weight both content quality and evidence of collaboration.\n\n**Digital Assessment Tools**: Platforms like Peergrade and integrated LMS peer assessment features can streamline the evaluation process and provide valuable analytics on collaboration patterns."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T13:30:00Z"
+                  }
+                ]
+              },
+              {
+                "id": "technology-integration",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "Modern collaborative learning heavily relies on technology platforms that facilitate communication, resource sharing, and project coordination."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "tech-approval-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/approval",
+                    "targetObjectId": "technology-integration",
+                    "status": "resolved",
+                    "priority": "medium",
+                    "reviewer": "tech-integration-specialist",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Excellent introduction to the technology aspect. This transitions well from theory to practical implementation."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "approve",
+                      "confidence": 4,
+                      "criteria": ["clarity", "flow", "relevance"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "This paragraph effectively bridges theoretical concepts with practical technology applications."}
+                        ]
+                      }
+                    },
+                    "createdAt": "2025-08-24T14:00:00Z",
+                    "resolvedAt": "2025-08-24T14:00:00Z"
+                  },
+                  {
+                    "id": "tech-enhancement-001",
+                    "language": "en", 
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "technology-integration",
+                    "status": "open",
+                    "priority": "low",
+                    "reviewer": "accessibility-reviewer-jones",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Consider mentioning accessibility requirements for technology platforms to ensure inclusive collaborative learning environments."}
+                      ]
+                    },
+                    "suggestedChange": {
+                      "runs": [
+                        {"type": "text", "text": "Modern collaborative learning heavily relies on technology platforms that facilitate communication, resource sharing, and project coordination. When selecting these platforms, consider accessibility features to ensure all students can participate fully, including screen reader compatibility, keyboard navigation, and closed captioning for video communications."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T15:00:00Z"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "backMatter": {
+    "sections": []
+  }
+}

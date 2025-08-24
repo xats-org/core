@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "0.5.0",
+  "bibliographicEntry": {
+    "id": "backward-compat-demo",
+    "type": "book",
+    "title": "Backward Compatibility Demonstration",
+    "author": [
+      { "given": "xats", "family": "Schema Engineer" }
+    ],
+    "issued": { "date-parts": [["2025"]] }
+  },
+  "subject": "Rendering Hints Backward Compatibility",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "compatibility-chapter",
+        "language": "en",
+        "title": "Backward Compatibility Examples",
+        "sections": [
+          {
+            "id": "legacy-format-section",
+            "language": "en",
+            "title": "Legacy v0.3.0 Format Still Works",
+            "content": [
+              {
+                "id": "old-style-hint",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/breakBefore",
+                    "value": "page"
+                  },
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/layoutMode", 
+                    "value": "single-column"
+                  }
+                ],
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "This content uses the old v0.3.0 rendering hint format with simple hintType/value pairs. It remains fully compatible with v0.5.0."
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "mixed-format-section",
+            "language": "en",
+            "title": "Mixed Old and New Formats",
+            "content": [
+              {
+                "id": "mixed-hints",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/layoutMode",
+                    "value": "full-width"
+                  },
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/semantic/highlight",
+                    "value": "highlight",
+                    "priority": 3,
+                    "conditions": {
+                      "outputFormats": ["html", "pdf"]
+                    }
+                  }
+                ],
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "This paragraph mixes old-style hints (layoutMode) with new-style enhanced hints (semantic with priority and conditions). Both work together seamlessly."
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "fallback-demonstration",
+            "language": "en",
+            "title": "Fallback Mechanism Demo", 
+            "content": [
+              {
+                "id": "fallback-example",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "renderingHints": [
+                  {
+                    "hintType": "https://xats.org/vocabularies/hints/accessibility/motion-safe",
+                    "value": "motion-safe",
+                    "priority": 4,
+                    "fallback": {
+                      "hintType": "https://xats.org/vocabularies/hints/semantic/highlight",
+                      "value": "highlight",
+                      "fallback": {
+                        "hintType": "https://xats.org/vocabularies/hints/layoutMode",
+                        "value": "full-width"
+                      }
+                    }
+                  }
+                ],
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "This content demonstrates the fallback chain: motion-safe → highlight → full-width, ensuring graceful degradation for renderers with different capability levels."
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

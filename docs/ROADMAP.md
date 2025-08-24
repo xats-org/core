@@ -1,8 +1,8 @@
 # xats Project Roadmap
 
-**Version:** 4.0 (for xats schema v0.4.0)
+**Version:** 5.0 (for xats schema v0.5.0)
 **Status:** Living Document
-**Last Updated:** 2025-08-20
+**Last Updated:** 2025-08-24
 
 ---
  

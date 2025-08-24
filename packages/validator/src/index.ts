@@ -4,7 +4,8 @@
  * Provides validation capabilities for xats documents against the JSON Schema.
  */
 
-import Ajv, { type ValidateFunction, type ErrorObject } from 'ajv';
+import AjvDefault, { type ValidateFunction, type ErrorObject } from 'ajv';
+const Ajv = AjvDefault;
 import addFormats from 'ajv-formats';
 
 import { loadSchema, getSchemaId, isVersionAvailable, LATEST_VERSION } from '@xats-org/schema';
@@ -18,7 +19,7 @@ import type {
 } from '@xats-org/types';
 
 export class XatsValidator {
-  private ajv: Ajv;
+  private ajv: InstanceType<typeof Ajv>;
   private validatorCache: Map<string, ValidateFunction> = new Map();
 
   constructor(options: ValidatorOptions = {}) {
@@ -331,8 +332,8 @@ export class XatsValidator {
    * Add custom keyword validator
    */
   addKeyword(keyword: string, definition: Record<string, unknown>): void {
-    // @ts-expect-error - Ajv type definition issue
-    this.ajv.addKeyword(keyword, definition);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    this.ajv.addKeyword(keyword, definition as any);
   }
 }
 
@@ -362,6 +363,16 @@ export function validateXatsSync(document: unknown, options?: ValidatorOptions):
   return validator.validateSync(document, options);
 }
 
+// Re-export registry validation functionality
+export {
+  RegistryValidator,
+  RegistryResolver,
+  DependencyResolver,
+  registryValidator,
+  registryResolver,
+  dependencyResolver,
+} from './registry-validator.js';
+
 // Re-export types
 export type {
   ValidationResult,
@@ -369,4 +380,12 @@ export type {
   ValidatorOptions,
   ValidationWarning,
   ValidationMetadata,
+  // Registry types
+  RegistryConfig,
+  CacheConfig,
+  RegistryReference,
+  ResolvedRegistryReference,
+  RegistryResolutionOptions,
+  RegistryResolutionResult,
+  DependencyResolutionResult,
 } from '@xats-org/types';

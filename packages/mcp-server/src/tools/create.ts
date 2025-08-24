@@ -18,7 +18,7 @@ function generateId(): string {
  * Create a minimal xats document template
  */
 function createMinimalTemplate(input: CreateInput): XatsDocument {
-  const schemaVersion = input.schemaVersion || '0.3.0';
+  const schemaVersion = input.schemaVersion || '0.5.0';
 
   return {
     schemaVersion,

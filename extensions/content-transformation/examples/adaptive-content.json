@@ -1,6 +1,6 @@
 {
   "$schema": "https://xats.org/schemas/0.3.0/xats.json",
-  "schemaVersion": "0.3.0",
+  "schemaVersion": "0.5.0",
   "bibliographicEntry": {
     "id": "adaptive-calculus-2025",
     "type": "book",

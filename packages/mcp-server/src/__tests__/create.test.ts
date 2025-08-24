@@ -156,7 +156,7 @@ describe('createTool', () => {
       const result = await createTool(input, mockConfig);
 
       expect(result.success).toBe(true);
-      expect(result.data?.document.schemaVersion).toBe('0.3.0');
+      expect(result.data?.document.schemaVersion).toBe('0.5.0');
     });
   });
 

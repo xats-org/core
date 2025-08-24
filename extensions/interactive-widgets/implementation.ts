@@ -190,6 +190,12 @@ export class DesmoRenderer implements WidgetRenderer {
 
 export class CustomWidgetRenderer implements WidgetRenderer {
   private element: HTMLElement | null = null;
+  private trustedDomains: Set<string> = new Set([
+    'localhost',
+    '127.0.0.1',
+    '::1',
+    window.location.hostname
+  ]);
 
   async render(widget: InteractiveWidget, container: HTMLElement): Promise<void> {
     if (widget.src.startsWith('http')) {
@@ -208,10 +214,18 @@ export class CustomWidgetRenderer implements WidgetRenderer {
       this.element = iframe;
     } else {
       // Local widget - load as module or HTML
+      // WARNING: This loads external content. Only use with trusted sources.
       const response = await fetch(widget.src);
       const content = await response.text();
       
+      // Validate that the src is from a trusted domain before loading HTML
+      const srcUrl = new URL(widget.src, window.location.href);
+      if (!this.isTrustedDomain(srcUrl.origin)) {
+        throw new Error(`Untrusted domain for widget source: ${srcUrl.origin}`);
+      }
+      
       const div = document.createElement('div');
+      // Only set innerHTML for trusted domains and with CSP protection
       div.innerHTML = content;
       div.className = 'custom-widget';
       
@@ -222,6 +236,15 @@ export class CustomWidgetRenderer implements WidgetRenderer {
 
       container.appendChild(div);
       this.element = div;
+    }
+  }
+
+  private isTrustedDomain(origin: string): boolean {
+    try {
+      const url = new URL(origin);
+      return this.trustedDomains.has(url.hostname);
+    } catch {
+      return false;
     }
   }
 
@@ -371,14 +394,25 @@ export class WidgetManager {
     if (widget.fallback) {
       this.renderFallback(widget.fallback, container);
     } else {
-      // Default error message
+      // Default error message - safely create elements to prevent XSS
       const errorDiv = document.createElement('div');
       errorDiv.className = 'widget-error';
-      errorDiv.innerHTML = `
-        <h3>Unable to load interactive content</h3>
-        <p><strong>${widget.title}</strong></p>
-        <p>Error: ${error.message}</p>
-      `;
+      
+      const heading = document.createElement('h3');
+      heading.textContent = 'Unable to load interactive content';
+      
+      const titleParagraph = document.createElement('p');
+      const titleStrong = document.createElement('strong');
+      titleStrong.textContent = widget.title;
+      titleParagraph.appendChild(titleStrong);
+      
+      const errorParagraph = document.createElement('p');
+      errorParagraph.textContent = `Error: ${error.message}`;
+      
+      errorDiv.appendChild(heading);
+      errorDiv.appendChild(titleParagraph);
+      errorDiv.appendChild(errorParagraph);
+      
       container.appendChild(errorDiv);
     }
 
@@ -413,7 +447,8 @@ export class WidgetManager {
         break;
         
       case 'text':
-        fallbackDiv.innerHTML = fallback.content;
+        // Safely set text content to prevent XSS
+        fallbackDiv.textContent = fallback.content;
         break;
         
       case 'link':
@@ -445,6 +480,18 @@ export class WidgetManager {
   }
 }
 
+// Utility function for secure ID generation
+function generateSecureId(): string {
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+    const array = new Uint32Array(1);
+    crypto.getRandomValues(array);
+    return array[0].toString(36);
+  }
+  // Fallback for environments without crypto API
+  console.warn('Cryptographically secure randomness not available for widget ID generation');
+  return Math.random().toString(36).substr(2);
+}
+
 // Usage example
 export function initializeWidgets(): WidgetManager {
   const manager = new WidgetManager();
@@ -455,7 +502,7 @@ export function initializeWidgets(): WidgetManager {
     if (widgetData) {
       try {
         const widget: InteractiveWidget = JSON.parse(widgetData);
-        const widgetId = container.id || `widget-${Date.now()}-${Math.random()}`;
+        const widgetId = container.id || `widget-${Date.now()}-${generateSecureId()}`;
         manager.renderWidget(widgetId, widget, container as HTMLElement);
       } catch (error) {
         console.error('Failed to parse widget data:', error);

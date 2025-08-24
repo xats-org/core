@@ -930,6 +930,14 @@ export class AnalyticsManager {
 
   // Utility methods
   private generateId(): string {
+    // Use cryptographically secure random number generation
+    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+      const array = new Uint32Array(2);
+      crypto.getRandomValues(array);
+      return Date.now().toString(36) + array[0].toString(36) + array[1].toString(36);
+    }
+    // Fallback for environments without crypto API (should be rare in modern browsers)
+    console.warn('Cryptographically secure randomness not available, falling back to Math.random()');
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 

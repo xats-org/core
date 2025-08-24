@@ -1,0 +1,311 @@
+{
+  "$schema": "https://xats.org/schemas/0.5.0/schema.json",
+  "schemaVersion": "0.5.0",
+  "bibliographicEntry": {
+    "id": "peer-review-demo-2025",
+    "type": "book",
+    "title": "Introduction to Machine Learning - Peer Review Demo",
+    "author": [
+      {"family": "Smith", "given": "Dr. Sarah"},
+      {"family": "Johnson", "given": "Prof. Michael"}
+    ],
+    "issued": {"date-parts": [[2025, 8, 24]]},
+    "publisher": "Academic Press",
+    "ISBN": "978-0-123456-78-9"
+  },
+  "subject": "Computer Science",
+  "targetAudience": "Undergraduate students",
+  "frontMatter": {
+    "sections": []
+  },
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "chapter-1",
+        "language": "en",
+        "title": "Foundations of Machine Learning",
+        "label": "Chapter 1",
+        "sections": [
+          {
+            "id": "section-1-1",
+            "language": "en",
+            "title": "What is Machine Learning?",
+            "label": "1.1",
+            "content": [
+              {
+                "id": "intro-paragraph",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "Machine learning is a subset of artificial intelligence (AI) that enables computers to learn and make decisions from data without being explicitly programmed for every possible scenario."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "annotation-001",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/clarification_request",
+                    "targetObjectId": "intro-paragraph",
+                    "targetRange": {
+                      "startOffset": 92,
+                      "endOffset": 106,
+                      "textContent": "without being"
+                    },
+                    "status": "open",
+                    "priority": "medium",
+                    "reviewer": "reviewer-jane-doe",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "This phrasing might be confusing for beginners. Could you clarify what 'explicitly programmed' means in this context? Perhaps provide a contrast with traditional programming?"}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T14:30:00Z",
+                    "threadId": "thread-001"
+                  },
+                  {
+                    "id": "annotation-002",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "intro-paragraph",
+                    "targetRange": {
+                      "startOffset": 0,
+                      "endOffset": 173,
+                      "textContent": "Machine learning is a subset of artificial intelligence (AI) that enables computers to learn and make decisions from data without being explicitly programmed for every possible scenario."
+                    },
+                    "status": "open",
+                    "priority": "medium",
+                    "assignee": "author-smith",
+                    "reviewer": "reviewer-prof-chen",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Consider adding a concrete example to illustrate the concept immediately after the definition."}
+                      ]
+                    },
+                    "suggestedChange": {
+                      "runs": [
+                        {"type": "text", "text": "Machine learning is a subset of artificial intelligence (AI) that enables computers to learn and make decisions from data without being explicitly programmed for every possible scenario. For example, instead of writing specific rules to identify spam emails, a machine learning system can analyze thousands of emails to learn patterns that distinguish spam from legitimate messages."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T15:45:00Z",
+                    "threadId": "thread-002"
+                  }
+                ]
+              },
+              {
+                "id": "definition-paragraph",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "The key distinguishing feature of machine learning is its ability to "},
+                      {"type": "emphasis", "text": "automatically improve"},
+                      {"type": "text", "text": " performance on a specific task through experience, typically measured by some performance metric."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "annotation-003",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/approval",
+                    "targetObjectId": "definition-paragraph",
+                    "status": "resolved",
+                    "priority": "low",
+                    "reviewer": "reviewer-dr-williams",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Excellent emphasis on the 'automatically improve' aspect. This clearly distinguishes ML from traditional programming."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "approve",
+                      "confidence": 5,
+                      "criteria": ["clarity", "accuracy", "pedagogical_effectiveness"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "This paragraph effectively captures the essence of machine learning with appropriate emphasis on key concepts."}
+                        ]
+                      }
+                    },
+                    "createdAt": "2025-08-24T16:00:00Z",
+                    "resolvedAt": "2025-08-24T16:00:00Z"
+                  }
+                ]
+              },
+              {
+                "id": "types-paragraph",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "There are three main types of machine learning: supervised learning, unsupervised learning, and reinforcement learning."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "annotation-004",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/major_revision_needed",
+                    "targetObjectId": "types-paragraph",
+                    "status": "open",
+                    "priority": "high",
+                    "assignee": "author-johnson",
+                    "reviewer": "reviewer-prof-chen",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "This paragraph is too brief and lacks substance. Each type needs at least a basic explanation with examples."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "request_changes",
+                      "confidence": 4,
+                      "criteria": ["completeness", "pedagogical_effectiveness"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "While the categorization is correct, students need more context to understand the differences between these approaches."}
+                        ]
+                      },
+                      "recommendedActions": [
+                        {
+                          "action": "add_examples",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Add a brief explanation and concrete example for each type of learning"}
+                            ]
+                          },
+                          "priority": "high"
+                        },
+                        {
+                          "action": "expand_content",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Consider breaking this into separate paragraphs or a bulleted list"}
+                            ]
+                          },
+                          "priority": "medium"
+                        }
+                      ]
+                    },
+                    "createdAt": "2025-08-24T16:30:00Z",
+                    "threadId": "thread-003"
+                  },
+                  {
+                    "id": "annotation-005",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "targetObjectId": "types-paragraph",
+                    "parentAnnotationId": "annotation-004",
+                    "threadId": "thread-003",
+                    "status": "open",
+                    "priority": "medium",
+                    "reviewer": "reviewer-teaching-assistant",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "I agree with the major revision request. Here's a suggested expansion:"}
+                      ]
+                    },
+                    "suggestedChange": {
+                      "runs": [
+                        {"type": "text", "text": "There are three main types of machine learning:\n\n• **Supervised Learning**: The algorithm learns from labeled training data to make predictions on new data. For example, training a model to recognize handwritten digits using thousands of labeled digit images.\n\n• **Unsupervised Learning**: The algorithm finds patterns in data without labeled examples. For instance, clustering customers based on purchasing behavior without knowing predefined customer types.\n\n• **Reinforcement Learning**: The algorithm learns through trial and error by receiving rewards or penalties for actions. A classic example is training a computer to play chess by playing many games and learning from wins and losses."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T17:00:00Z"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "section-1-2",
+            "language": "en",
+            "title": "Historical Context",
+            "label": "1.2",
+            "content": [
+              {
+                "id": "history-intro",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {"type": "text", "text": "The roots of machine learning trace back to the 1940s and 1950s, with early work by scientists like Alan Turing and Arthur Samuel."}
+                    ]
+                  }
+                },
+                "annotations": [
+                  {
+                    "id": "annotation-006",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/minor_revision_needed",
+                    "targetObjectId": "history-intro",
+                    "targetRange": {
+                      "startOffset": 109,
+                      "endOffset": 123,
+                      "textContent": "Arthur Samuel"
+                    },
+                    "status": "deferred",
+                    "priority": "low",
+                    "reviewer": "reviewer-grad-student",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "Should include Arthur Samuel's dates (1901-1990) and perhaps mention he coined the term 'machine learning' in 1959."}
+                      ]
+                    },
+                    "createdAt": "2025-08-24T17:30:00Z"
+                  },
+                  {
+                    "id": "annotation-007",
+                    "language": "en",
+                    "annotationType": "https://xats.org/vocabularies/annotations/rejection",
+                    "targetObjectId": "history-intro",
+                    "status": "resolved",
+                    "priority": "critical",
+                    "reviewer": "senior-reviewer-prof-taylor",
+                    "content": {
+                      "runs": [
+                        {"type": "text", "text": "This historical section doesn't align with the learning objectives for this introductory chapter."}
+                      ]
+                    },
+                    "reviewDecision": {
+                      "decision": "reject",
+                      "confidence": 4,
+                      "criteria": ["alignment_with_objectives", "pedagogical_effectiveness"],
+                      "justification": {
+                        "runs": [
+                          {"type": "text", "text": "While historically interesting, this content may overwhelm beginning students. Consider moving to an appendix or advanced chapter."}
+                        ]
+                      },
+                      "recommendedActions": [
+                        {
+                          "action": "move_content",
+                          "description": {
+                            "runs": [
+                              {"type": "text", "text": "Move historical context to appendix or later chapter"}
+                            ]
+                          },
+                          "priority": "high"
+                        }
+                      ]
+                    },
+                    "createdAt": "2025-08-24T18:00:00Z",
+                    "resolvedAt": "2025-08-24T18:30:00Z"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "backMatter": {
+    "sections": [],
+    "bibliography": []
+  }
+}

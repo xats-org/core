@@ -17,6 +17,10 @@ coverage/
 *.config.js
 *.config.cjs
 *.config.mjs
+*.config.ts
+*.config.mts
+vitest.config.ts
+vitest.config.mts
 .eslintrc.js
 
 # Generated files

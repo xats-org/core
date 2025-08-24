@@ -1,0 +1,81 @@
+{
+  "name": "@xats-org/testing",
+  "version": "0.5.0",
+  "description": "Testing framework for xats renderer round-trip validation and WCAG compliance",
+  "keywords": [
+    "xats",
+    "testing",
+    "renderer",
+    "round-trip",
+    "wcag",
+    "accessibility"
+  ],
+  "homepage": "https://xats.org",
+  "bugs": {
+    "url": "https://github.com/xats-org/core/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xats-org/core.git",
+    "directory": "packages/testing"
+  },
+  "license": "CC-BY-SA-4.0",
+  "author": "xats Contributors",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./round-trip": {
+      "types": "./dist/round-trip.d.ts",
+      "import": "./dist/round-trip.js"
+    },
+    "./wcag": {
+      "types": "./dist/wcag.d.ts",
+      "import": "./dist/wcag.js"
+    },
+    "./benchmarks": {
+      "types": "./dist/benchmarks.d.ts",
+      "import": "./dist/benchmarks.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist .tsbuildinfo",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@xats-org/types": "workspace:*",
+    "@xats-org/utils": "workspace:*",
+    "axe-core": "^4.10.0",
+    "deep-diff": "^1.0.2",
+    "jsdom": "^22.0.0"
+  },
+  "devDependencies": {
+    "@types/deep-diff": "^1.0.0",
+    "@types/jsdom": "^21.0.0",
+    "@types/node": "^20.11.0",
+    "@vitest/coverage-v8": "^1.2.0",
+    "eslint": "^8.56.0",
+    "@xats-org/eslint-config": "workspace:*",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

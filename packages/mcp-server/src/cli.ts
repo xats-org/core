@@ -189,7 +189,7 @@ program
           name: 'xats-mcp-server',
           version: serverInfo.version,
           description: serverInfo.description,
-          defaultSchemaVersion: options.schemaVersion || '0.3.0',
+          defaultSchemaVersion: options.schemaVersion || '0.5.0',
           validation: {
             strict: options.strict || true,
             allErrors: true,

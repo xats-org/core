@@ -55,3 +55,40 @@ export {
   getStructureDepth,
   type Breadcrumb,
 } from './path.js';
+
+// Annotation utilities
+export {
+  createAnnotation,
+  generateAnnotationId,
+  generateThreadId,
+  updateAnnotationStatus,
+  createAnnotationThread,
+  filterAnnotations,
+  groupAnnotationsByThread,
+  buildThreadHierarchy,
+  calculateReviewProgress,
+  validateAnnotation,
+  isValidAnnotationTypeURI,
+  createAnnotationSemanticText,
+  extractPlainText as extractAnnotationPlainText,
+  ANNOTATION_TYPES,
+  ANNOTATION_STATUS,
+  ANNOTATION_PRIORITY,
+  REVIEW_DECISIONS,
+  type Annotation,
+  type TextRange,
+  type SemanticText,
+  type ReviewDecision,
+} from './annotations.js';
+
+// Collaborative project utilities
+export {
+  createCollaborativeProject,
+  createProjectRole,
+  createProjectDeliverable,
+  createProjectPhase,
+  createPeerAssessment,
+  CollaborativeProjectValidator,
+  CollaborativeProjectAnalyzer,
+  CollaborativeProjectTemplates,
+} from './collaborative.js';

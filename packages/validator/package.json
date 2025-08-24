@@ -1,6 +1,6 @@
 {
   "name": "@xats-org/validator",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Validation logic for xats documents",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,0 +1,216 @@
+{
+  "schemaVersion": "0.5.0",
+  "bibliographicEntry": {
+    "id": "intro-biology-2024",
+    "type": "book",
+    "title": "Introduction to Biology",
+    "author": [
+      {
+        "given": "Sarah",
+        "family": "Chen"
+      },
+      {
+        "given": "Michael", 
+        "family": "Rodriguez"
+      }
+    ],
+    "publisher": "OpenEducation Press",
+    "issued": {
+      "date-parts": [[2024]]
+    },
+    "ISBN": "978-0-123456-78-9"
+  },
+  "subject": "Biology",
+  "targetAudience": "Undergraduate students",
+  "learningOutcomes": [
+    {
+      "id": "lo-cell-structure",
+      "language": "en",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Students will understand the fundamental structures and functions of prokaryotic and eukaryotic cells"
+        }
+      ]
+    }
+  ],
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "chapter-1",
+        "title": "Cell Biology Fundamentals",
+        "language": "en",
+        "introduction": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "This chapter introduces the basic concepts of cell biology using interactive diagrams and terminology from the biology commons registry."
+            }
+          ]
+        },
+        "sections": [
+          {
+            "$ref": "xats://biology-commons/cell-biology/diagrams@1.1.0/diagrams/prokaryotic-cell.json",
+            "xats:refMetadata": {
+              "title": "Prokaryotic Cell Structure",
+              "authors": ["Dr. Sarah Chen"],
+              "lastModified": "2024-05-15T09:20:00Z",
+              "checksum": "sha256-abcd1234efgh5678ijkl9012mnop3456qrst7890uvwx1234yz567890abcdef12",
+              "version": "1.1.0"
+            }
+          },
+          {
+            "$ref": "xats://biology-commons/cell-biology/diagrams@1.1.0/diagrams/eukaryotic-cell.json",
+            "xats:refMetadata": {
+              "title": "Eukaryotic Cell Structure", 
+              "authors": ["Dr. Sarah Chen"],
+              "lastModified": "2024-05-15T09:20:00Z",
+              "checksum": "sha256-2345bcde6789fghi0123jklm4567nopq8901rstu2345vwxy6789za0123bcde",
+              "version": "1.1.0"
+            }
+          },
+          {
+            "id": "organelles-detailed",
+            "title": "Detailed Organelle Structure",
+            "language": "en",
+            "content": [
+              {
+                "id": "organelles-intro",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "language": "en",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Eukaryotic cells contain specialized organelles that perform specific functions. Let's examine two of the most important energy-producing organelles:"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "$ref": "xats://biology-commons/cell-biology/diagrams@1.1.0/diagrams/mitochondria.json",
+                "xats:refMetadata": {
+                  "title": "Mitochondria Structure and Function",
+                  "authors": ["Dr. Sarah Chen"],
+                  "lastModified": "2024-05-15T09:20:00Z", 
+                  "checksum": "sha256-3456cdef789012ab3456789012cdef3456789012abcd56789012ef3456789012",
+                  "version": "1.1.0"
+                }
+              },
+              {
+                "$ref": "xats://biology-commons/cell-biology/diagrams@1.1.0/diagrams/chloroplast.json",
+                "xats:refMetadata": {
+                  "title": "Chloroplast Structure and Function",
+                  "authors": ["Dr. Sarah Chen"],
+                  "lastModified": "2024-05-15T09:20:00Z",
+                  "checksum": "sha256-456789de01234fgh56789012345678cd90123456789efab123456789cdef0123",
+                  "version": "1.1.0"
+                }
+              }
+            ]
+          }
+        ],
+        "keyTerms": [
+          {
+            "$ref": "xats://biology-commons/terminology@2.1.0/definitions/cellular.json",
+            "xats:refMetadata": {
+              "title": "Cellular Biology Terms",
+              "authors": ["Prof. Michael Rodriguez"],
+              "lastModified": "2024-04-10T14:30:00Z",
+              "checksum": "sha256-123456ef789012a3456789b123456ef789012a3456789b123456ef789012a345",
+              "version": "2.1.0"
+            }
+          },
+          {
+            "$ref": "xats://biology-commons/terminology@2.1.0/definitions/organelles.json",
+            "xats:refMetadata": {
+              "title": "Organelle Terminology",
+              "authors": ["Prof. Michael Rodriguez"],
+              "lastModified": "2024-04-10T14:30:00Z",
+              "checksum": "sha256-345678901234c56789d0345678901234c56789d0345678901234c56789d0345678",
+              "version": "2.1.0"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "backMatter": {
+    "sections": [
+      {
+        "id": "glossary-section",
+        "title": "Glossary",
+        "language": "en", 
+        "content": [
+          {
+            "id": "glossary-placeholder",
+            "blockType": "https://xats.org/vocabularies/placeholders/glossary",
+            "language": "en",
+            "content": {
+              "placeholder": true,
+              "source": "xats://biology-commons/terminology@2.1.0/glossary.json",
+              "filter": {
+                "categories": ["cellular", "organelles"],
+                "difficulty": ["beginner", "intermediate"]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "extensions": {
+    "xats:registry": {
+      "registries": [
+        {
+          "name": "biology-commons",
+          "url": "https://registry.xats.org/biology/",
+          "publicKey": "c2hhMjU2LWFiYzEyM2RlZjQ1Njc4OWdoaWprbG1ub3BxcnN0dXZ3eHl6QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo=",
+          "trustLevel": "community"
+        }
+      ],
+      "cacheConfig": {
+        "schemaVersion": "0.5.0",
+        "strategy": "adaptive",
+        "levels": {
+          "memory": {
+            "enabled": true,
+            "maxSize": "64MB",
+            "ttl": "30m",
+            "algorithm": "lru"
+          },
+          "disk": {
+            "enabled": true,
+            "path": "./.xats-cache",
+            "maxSize": "500MB",
+            "ttl": "12h",
+            "compressionEnabled": true
+          }
+        },
+        "invalidation": {
+          "strategy": "dependency-based",
+          "dependencyTracking": {
+            "enabled": true,
+            "trackFileModification": true,
+            "trackContentHash": true,
+            "cascadeInvalidation": true
+          }
+        }
+      },
+      "lazyLoading": {
+        "strategy": "progressive",
+        "chunkSize": 32768,
+        "prefetchDistance": 2,
+        "backgroundLoading": true,
+        "priorities": {
+          "critical": 1,
+          "important": 2,
+          "optional": 3,
+          "deferred": 4
+        }
+      }
+    }
+  }
+}
