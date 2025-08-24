@@ -27,10 +27,10 @@ Please be as detailed as possible. For bugs, include steps to reproduce the issu
 #### For New Features and Enhancements:
 
 1.  **Fork the repository** on GitHub.
-2.  **Check out the current development branch** (e.g., `v0.4.0`):
+2.  **Check out the current development branch** (e.g., `v0.6.0`):
     ```bash
-    git checkout v0.4.0
-    git pull origin v0.4.0
+    git checkout v0.6.0
+    git pull origin v0.6.0
     ```
 3.  **Create a new feature branch** from the version branch:
     ```bash
@@ -39,9 +39,9 @@ Please be as detailed as possible. For bugs, include steps to reproduce the issu
 4.  **Make your changes** to the schema or documentation.
 5.  **Submit a pull request (PR)** targeting the **version branch** (not `main`):
     ```bash
-    gh pr create --base v0.4.0 --title "feat: your feature" --body "Closes #NUMBER"
+    gh pr create --base v0.6.0 --title "feat: your feature" --body "Closes #NUMBER"
     ```
-6.  **Ensure your PR has a milestone** matching the target version (e.g., `v0.4.0`).
+6.  **Ensure your PR has a milestone** matching the target version (e.g., `v0.6.0`).
 
 #### For Hotfixes to Stable Release:
 
@@ -49,7 +49,7 @@ Please be as detailed as possible. For bugs, include steps to reproduce the issu
     ```bash
     git checkout main
     git pull origin main
-    git checkout -b hotfix/v0.3.1-description
+    git checkout -b hotfix/v0.5.1-description
     ```
 2.  **Make your fix** and test thoroughly.
 3.  **Submit a PR** to `main`:
@@ -87,76 +87,97 @@ The **xats** standard follows **Semantic Versioning (SemVer)** with a structured
 - **PATCH** version (e.g., `1.0.0` -> `1.0.1`) for backward-compatible bug fixes or clarifications in the documentation.
 
 ### Branch Structure
-- **`main`** - Contains the latest stable release (currently v0.3.0)
-- **Version branches** (e.g., `v0.4.0`, `v0.5.0`) - Active development for upcoming releases
+- **`main`** - Contains the latest stable release (currently v0.5.0)
+- **Version branches** (e.g., `v0.6.0`, `v0.7.0`) - Active development for upcoming releases
 - **Feature branches** - Created from version branches for specific features
 - **Hotfix branches** - Created from `main` for critical fixes to stable releases
 - **Release candidate branches** (e.g., `v0.2.0-rc1`) - Pre-release testing
 
 ### Current Development Status
-- **Stable Release**: v0.3.0 (on `main`)
-- **Active Development**: v0.4.0 (on `v0.4.0` branch)
-- **Previous Versions**: v0.2.0 (security only), v0.1.0 (security only)
+- **Stable Release**: v0.5.0 (on `main`)
+- **Active Development**: v0.6.0 (on `v0.6.0` branch)
+- **Previous Versions**: v0.4.0 (security only), v0.3.0 (security only), v0.2.0 (security only), v0.1.0 (security only)
 
 All version branches are preserved permanently for historical reference. Schemas are maintained in version-specific directories (e.g., `/schemas/0.1.0/`, `/schemas/0.2.0/`, `/schemas/0.3.0/`).
 
 ### Version Support Policy
-- **Current Stable** (v0.3.0): Full feature development and bug fixes
-- **Previous Stable** (v0.2.0): Security fixes only
-- **Legacy** (v0.1.0): Security fixes only
+- **Current Stable** (v0.5.0): Full feature development and bug fixes
+- **Previous Stable** (v0.4.0): Security fixes only
+- **Legacy** (v0.3.0, v0.2.0, v0.1.0): Security fixes only
 
 See our [Version Compatibility Matrix](./docs/specs/version-compatibility-matrix.md) for feature availability across versions.
 
 ---
 
-## New in v0.3.0
+## New in v0.5.0
 
 The current stable release includes several major new features:
 
-### File Modularity
-Large textbooks can now be split across multiple JSON files for better organization and team collaboration:
+### Bidirectional Rendering Architecture
+Multi-format output with 95%+ round-trip fidelity across HTML, Markdown, LaTeX, Word, and R Markdown:
 
 ```json
 {
-  "bodyMatter": {
-    "contents": [
-      {"$ref": "./chapters/chapter-01.json"},
-      {"$ref": "./chapters/chapter-02.json"}
-    ]
+  "renderingHints": {
+    "formats": ["html", "markdown", "latex", "docx", "rmd"],
+    "fidelity": "high",
+    "roundTrip": true,
+    "preserveSemantics": true
   }
 }
 ```
 
-### Enhanced Internationalization
-Full support for language identification and text direction:
+### AI Integration with Model Context Protocol
+Comprehensive AI-powered content creation and validation:
 
 ```json
 {
-  "language": "ar-SA",
-  "textDirection": "rtl",
-  "content": {"runs": [{"type": "text", "text": "مرحبا"}]}
+  "extensions": {
+    "https://xats.org/extensions/ai": {
+      "version": "0.5.0",
+      "mcp": {
+        "server": "@xats-org/mcp-server",
+        "capabilities": ["content-validation", "assessment-creation"]
+      },
+      "providers": {
+        "anthropic": {"model": "claude-3-5-sonnet"},
+        "openai": {"model": "gpt-4"}
+      }
+    }
+  }
 }
 ```
 
-### Advanced Indexing
-Semantic index entries with the new IndexRun type:
+### Enhanced Rendering Hints System
+Advanced layout and accessibility controls:
 
 ```json
 {
-  "type": "index",
-  "text": "photosynthesis",
-  "indexTerm": "Photosynthesis",
-  "subTerm": "Process",
-  "crossReferences": ["Cellular Respiration"],
-  "indexId": "idx-photo-001"
+  "renderingHints": {
+    "layout": {"columns": 2, "responsive": true},
+    "accessibility": {
+      "focusManagement": true,
+      "colorContrast": "AAA"
+    },
+    "print": {"pageSize": "letter", "margins": "1in"}
+  }
 }
 ```
 
-### New Pedagogical Content Types
-- **Case Study Blocks**: Structured case-based learning support
-- **Metacognitive Prompts**: Self-reflection and learning awareness tools
+### Full WCAG 2.1 AA Compliance
+Automated accessibility validation with real-time feedback:
 
-See the [v0.3.0 Release Notes](./docs/releases/v0.3.0.md) for complete details.
+```json
+{
+  "accessibility": {
+    "wcagLevel": "AA",
+    "validation": {"automated": true},
+    "features": ["altText", "colorContrast", "focusManagement"]
+  }
+}
+```
+
+See the [v0.5.0 Release Notes](../../CHANGELOG.md) for complete details.
 
 ---
 
