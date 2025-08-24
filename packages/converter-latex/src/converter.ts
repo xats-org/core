@@ -176,7 +176,7 @@ export class LaTeXConverter implements ILaTeXConverter {
    * Validate LaTeX document format
    */
   async validate(content: string): Promise<FormatValidationResult> {
-    return this.validator.validate(content);
+    return Promise.resolve(this.validator.validate(content));
   }
 
   /**
@@ -184,7 +184,9 @@ export class LaTeXConverter implements ILaTeXConverter {
    */
   async getMetadata(content: string): Promise<LaTeXRenderMetadata> {
     try {
-      return await this.parser.extractMetadata(content);
+      const metadata = await this.parser.extractMetadata(content);
+      // Since extractMetadata returns LaTeXMetadata (union type), cast to render metadata
+      return metadata as LaTeXRenderMetadata;
     } catch (error) {
       throw new Error(
         `Metadata extraction failed: ${error instanceof Error ? error.message : 'Unknown error'}`

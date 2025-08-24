@@ -34,18 +34,21 @@ export class DocumentParser {
       const customCommands = this.extractCustomCommands(content);
 
       // Extract bibliography if requested
-      let bibliography;
-      if (options.bibliography?.parseBibFiles) {
-        bibliography = await this.extractBibliography(content);
-      }
-
-      return {
+      const result: LaTeXParseResult = {
         document: xatsDocument,
         metadata,
         packages,
-        bibliography,
         customCommands,
       };
+
+      if (options.bibliography?.parseBibFiles) {
+        const bibliography = await this.extractBibliography(content);
+        if (bibliography) {
+          result.bibliography = bibliography;
+        }
+      }
+
+      return result;
     } catch (error) {
       throw new Error(
         `LaTeX parsing failed: ${error instanceof Error ? error.message : 'Unknown error'}`
@@ -57,8 +60,8 @@ export class DocumentParser {
    * Extract metadata from LaTeX document
    */
   async extractMetadata(content: string): Promise<LaTeXMetadata> {
-    const metadata: LaTeXMetadata = {
-      format: 'latex',
+    const metadata: LaTeXParseMetadata = {
+      sourceFormat: 'latex',
       packages: this.extractPackageNames(content),
       commands: this.extractCommandNames(content),
       environments: this.extractEnvironmentNames(content),
@@ -68,7 +71,10 @@ export class DocumentParser {
       tableCount: this.countTables(content),
       crossReferences: this.countCrossReferences(content),
       bibliographyCount: this.countBibliography(content),
-      wordCount: this.estimateWordCount(content),
+      parseTime: Date.now(),
+      mappedElements: 0, // Will be updated during parsing
+      unmappedElements: 0, // Will be updated during parsing  
+      fidelityScore: 1.0, // Will be calculated
     };
 
     // Extract document metadata
@@ -104,7 +110,7 @@ export class DocumentParser {
 
     // Remove preamble if full document
     const documentMatch = content.match(/\\begin\{document\}([\s\S]*?)\\end\{document\}/);
-    if (documentMatch) {
+    if (documentMatch && documentMatch[1] !== undefined) {
       bodyContent = documentMatch[1];
     }
 
@@ -258,14 +264,14 @@ export class DocumentParser {
     }
 
     const [, subs, title] = match;
-    const level = subs.length / 3 + 1; // sub = 3 chars, subsub = 6 chars
+    const level = (subs?.length || 0) / 3 + 1; // sub = 3 chars, subsub = 6 chars
 
     return {
       blockType: 'https://xats.org/vocabularies/blocks/heading',
       content: {
         level,
         text: {
-          runs: [{ text: this.cleanLaTeX(title) }],
+          runs: [{ text: this.cleanLaTeX(title || '') }],
         },
       },
     };
@@ -281,11 +287,10 @@ export class DocumentParser {
     }
 
     const [, , mathContent] = envMatch;
-    const cleanMath = mathContent.trim();
+    const cleanMath = (mathContent || '').trim();
 
     const mathData = await this.mathProcessor.parseMathContent(
       cleanMath,
-      'environment',
       options.mathParsing || { renderer: 'mathjax', preserveLaTeX: true }
     );
 
@@ -303,7 +308,6 @@ export class DocumentParser {
 
     const mathData = await this.mathProcessor.parseMathContent(
       mathContent,
-      'display',
       options.mathParsing || { renderer: 'mathjax', preserveLaTeX: true }
     );
 
@@ -321,7 +325,7 @@ export class DocumentParser {
       blockType: 'https://xats.org/vocabularies/blocks/figure',
       content: {
         src: includeMatch?.[1] || '',
-        caption: captionMatch ? this.cleanLaTeX(captionMatch[1]) : '',
+        caption: captionMatch ? this.cleanLaTeX(captionMatch[1] || '') : '',
       },
     };
   }
@@ -374,7 +378,7 @@ export class DocumentParser {
 
   private parseCodeBlock(content: string): ContentBlock {
     const codeMatch = content.match(/\\begin\{verbatim\}([\s\S]*?)\\end\{verbatim\}/);
-    const code = codeMatch ? codeMatch[1].trim() : content;
+    const code = codeMatch ? (codeMatch[1] || '').trim() : content;
 
     return {
       blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
@@ -456,7 +460,7 @@ export class DocumentParser {
 
     for (const match of matches) {
       const cmdMatch = match.match(/\\newcommand\{\\([^}]+)\}(?:\[[\d]\])?\{([^}]+)\}/);
-      if (cmdMatch) {
+      if (cmdMatch && cmdMatch[1] && cmdMatch[2]) {
         commands[cmdMatch[1]] = cmdMatch[2];
       }
     }

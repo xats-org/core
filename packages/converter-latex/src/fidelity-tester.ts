@@ -15,11 +15,11 @@ export class FidelityTester {
   /**
    * Compare original and converted documents
    */
-  async compare(
+  compare(
     original: XatsDocument,
     converted: XatsDocument,
     options: RoundTripOptions = {}
-  ): Promise<RoundTripResult> {
+  ): RoundTripResult {
     const threshold = options.fidelityThreshold || 0.85;
     const issues: FidelityIssue[] = [];
     const differences: DocumentDifference[] = [];
@@ -55,7 +55,7 @@ export class FidelityTester {
         success,
         fidelityScore: overallScore,
         contentFidelity,
-        formattingFidelity,
+        mathFidelity: formattingFidelity, // Use formattingFidelity as mathFidelity
         structureFidelity,
         issues,
         originalDocument: original,
@@ -67,7 +67,7 @@ export class FidelityTester {
         success: false,
         fidelityScore: 0,
         contentFidelity: 0,
-        formattingFidelity: 0,
+        mathFidelity: 0,
         structureFidelity: 0,
         issues: [
           {
@@ -167,7 +167,7 @@ export class FidelityTester {
     for (const diff of formattingDifferences) {
       score -= 0.1;
       issues.push({
-        type: 'formatting',
+        type: 'content',
         severity: 'minor',
         description: `Formatting difference: ${diff.description}`,
         originalValue: diff.original,
@@ -259,14 +259,23 @@ export class FidelityTester {
       }
     };
 
-    if (document.frontMatter?.contents) {
-      processContents(document.frontMatter.contents);
+    if (document.frontMatter?.preface) {
+      processContents(document.frontMatter.preface);
+    }
+    if (document.frontMatter?.acknowledgments) {
+      processContents(document.frontMatter.acknowledgments);
     }
     if (document.bodyMatter?.contents) {
       processContents(document.bodyMatter.contents);
     }
-    if (document.backMatter?.contents) {
-      processContents(document.backMatter.contents);
+    if (document.backMatter?.appendices) {
+      processContents(document.backMatter.appendices);
+    }
+    if (document.backMatter?.glossary) {
+      processContents(document.backMatter.glossary);
+    }
+    if (document.backMatter?.index) {
+      processContents(document.backMatter.index);
     }
 
     return blocks;

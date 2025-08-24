@@ -264,3 +264,6 @@ export interface LaTeXConverterOptions extends RendererOptions {
   qualityThreshold?: number;
   academicMode?: boolean;
 }
+
+// Union type for LaTeX metadata (can be either render or parse metadata)
+export type LaTeXMetadata = LaTeXRenderMetadata | LaTeXParseMetadata;

@@ -74,32 +74,50 @@ export class MathProcessor {
 
     while ((match = displayMathRegex.exec(latex)) !== null) {
       const [fullMatch, environment, content] = match;
-      expressions.push({
+      const expression: MathExpression = {
         type: 'environment',
-        latex: content.trim(),
-        environment,
-        rendered: options.preserveLaTeX ? fullMatch : undefined,
-      });
+        latex: content?.trim() || '',
+      };
+      
+      if (environment) {
+        expression.environment = environment;
+      }
+      
+      if (options.preserveLaTeX) {
+        expression.rendered = fullMatch;
+      }
+      
+      expressions.push(expression);
     }
 
     // Parse display math delimiters
     const displayDelimRegex = /\\\[(.*?)\\\]/gs;
     while ((match = displayDelimRegex.exec(latex)) !== null) {
-      expressions.push({
+      const expression: MathExpression = {
         type: 'display',
-        latex: match[1].trim(),
-        rendered: options.preserveLaTeX ? match[0] : undefined,
-      });
+        latex: match[1]?.trim() || '',
+      };
+      
+      if (options.preserveLaTeX && match[0]) {
+        expression.rendered = match[0];
+      }
+      
+      expressions.push(expression);
     }
 
     // Parse inline math
     const inlineMathRegex = /\$(.*?)\$/g;
     while ((match = inlineMathRegex.exec(latex)) !== null) {
-      expressions.push({
+      const expression: MathExpression = {
         type: 'inline',
-        latex: match[1].trim(),
-        rendered: options.preserveLaTeX ? match[0] : undefined,
-      });
+        latex: match[1]?.trim() || '',
+      };
+      
+      if (options.preserveLaTeX && match[0]) {
+        expression.rendered = match[0];
+      }
+      
+      expressions.push(expression);
     }
 
     return expressions;
@@ -119,15 +137,19 @@ export class MathProcessor {
       const numbered = star !== '*';
 
       // Extract label if present
-      const labelMatch = content.match(/\\label\{([^}]+)\}/);
-      const label = labelMatch ? labelMatch[1] : undefined;
-
-      environments.push({
-        name: envName,
-        content: content.trim(),
+      const labelMatch = content?.match(/\\label\{([^}]+)\}/);
+      
+      const environment: MathEnvironment = {
+        name: envName || '',
+        content: content?.trim() || '',
         numbered,
-        label,
-      });
+      };
+      
+      if (labelMatch && labelMatch[1]) {
+        environment.label = labelMatch[1];
+      }
+
+      environments.push(environment);
     }
 
     return environments;
@@ -136,7 +158,7 @@ export class MathProcessor {
   /**
    * Wrap display math with appropriate delimiters
    */
-  private wrapDisplayMath(latex: string, delimiters: MathDelimiters, content: any): string {
+  private wrapDisplayMath(latex: string, delimiters: MathDelimiters, content?: { label?: string; numbered?: boolean }): string {
     // Check if it's already an environment
     if (latex.startsWith('\\begin{')) {
       return latex;
@@ -144,12 +166,12 @@ export class MathProcessor {
 
     // Add label if present
     let result = latex;
-    if (content.label) {
+    if (content?.label) {
       result += `\\label{${content.label}}`;
     }
 
     // Use equation environment for numbered equations, or delimiters for unnumbered
-    if (content.numbered) {
+    if (content?.numbered) {
       return `\\begin{equation}\n${result}\n\\end{equation}`;
     } else {
       return delimiters.display.open + result + delimiters.display.close;

@@ -70,9 +70,9 @@ export class DocumentRenderer {
     latex += contentLatex;
 
     // Bibliography
-    if (document.bibliography && options.bibliography) {
+    if (document.backMatter?.bibliography && options.bibliography) {
       const bibLatex = this.bibliographyProcessor.renderBibliography(
-        document.bibliography,
+        document.backMatter.bibliography,
         options.bibliography
       );
       latex += `\n${bibLatex}\n`;
@@ -83,7 +83,7 @@ export class DocumentRenderer {
     }
 
     // Generate metadata
-    const metadata: LaTeXMetadata = {
+    const metadata: LaTeXRenderMetadata = {
       format: 'latex',
       documentClass,
       packages: (options.packages || []).map((p) => p.name),
@@ -94,8 +94,8 @@ export class DocumentRenderer {
       figureCount: this.countFigures(latex),
       tableCount: this.countTables(latex),
       crossReferences: this.countCrossReferences(latex),
-      bibliographyCount: document.bibliography ? 1 : 0,
-      wordCount: this.estimateWordCount(latex),
+      bibliographyCount: document.backMatter?.bibliography ? 1 : 0,
+      renderTime: Date.now(),
     };
 
     return {
@@ -116,8 +116,14 @@ export class DocumentRenderer {
     let latex = '';
 
     // Front matter
-    if (document.frontMatter?.contents) {
-      const frontLatex = await this.processContents(document.frontMatter.contents, options);
+    if (document.frontMatter) {
+      let frontLatex = '';
+      if (document.frontMatter.preface) {
+        frontLatex += await this.processContents(document.frontMatter.preface, options);
+      }
+      if (document.frontMatter.acknowledgments) {
+        frontLatex += await this.processContents(document.frontMatter.acknowledgments, options);
+      }
       if (frontLatex.trim()) {
         latex += `${frontLatex}\n`;
       }
@@ -130,8 +136,18 @@ export class DocumentRenderer {
     }
 
     // Back matter
-    if (document.backMatter?.contents) {
-      const backLatex = await this.processContents(document.backMatter.contents, options);
+    if (document.backMatter) {
+      let backLatex = '';
+      if (document.backMatter.appendices) {
+        backLatex += await this.processContents(document.backMatter.appendices, options);
+      }
+      if (document.backMatter.glossary) {
+        backLatex += await this.processContents(document.backMatter.glossary, options);
+      }
+      if (document.backMatter.index) {
+        backLatex += await this.processContents(document.backMatter.index, options);
+      }
+      // Note: bibliography is handled separately above
       if (backLatex.trim()) {
         latex += `\n${backLatex}`;
       }
@@ -223,7 +239,10 @@ export class DocumentRenderer {
 
   private async renderMathBlock(block: ContentBlock, options: LaTeXRenderOptions): Promise<string> {
     return await this.mathProcessor.renderMathBlock(block.content, {
-      delimiters: options.mathDelimiters,
+      delimiters: options.mathDelimiters || {
+        inline: { open: '$', close: '$' },
+        display: { open: '\\[', close: '\\]' }
+      },
     });
   }
 

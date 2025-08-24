@@ -12,6 +12,44 @@ interface Citation {
   pages?: string;
 }
 
+interface CitationRun {
+  key?: string;
+  id?: string;
+  prefix?: string;
+  suffix?: string;
+  pages?: string;
+}
+
+interface CSLAuthor {
+  family?: string;
+  given?: string;
+  [key: string]: unknown;
+}
+
+interface CSLDate {
+  'date-parts'?: number[][];
+  [key: string]: unknown;
+}
+
+interface CSLEntry {
+  id?: string;
+  type?: string;
+  title?: string;
+  'container-title'?: string;
+  author?: CSLAuthor[] | string;
+  editor?: CSLAuthor[] | string;
+  publisher?: string;
+  'publisher-place'?: string;
+  issued?: CSLDate | string | number;
+  page?: string;
+  volume?: string;
+  issue?: string;
+  ISBN?: string;
+  DOI?: string;
+  URL?: string;
+  [key: string]: unknown;
+}
+
 /**
  * Processes bibliography and citations between xats and LaTeX formats
  */
@@ -78,14 +116,13 @@ export class BibliographyProcessor {
    * Convert xats citation to LaTeX citation
    */
   renderCitation(
-    citationRun: unknown,
+    citationRun: CitationRun,
     style: 'numeric' | 'author-year' | 'alpha' = 'numeric'
   ): string {
-    const citation_run = citationRun as any;
-    const key = citation_run.key || citation_run.id;
-    const prefix = citation_run.prefix;
-    const suffix = citation_run.suffix;
-    const pages = citation_run.pages;
+    const key = citationRun.key || citationRun.id;
+    const prefix = citationRun.prefix;
+    const suffix = citationRun.suffix;
+    const pages = citationRun.pages;
 
     let citation = '';
 
@@ -140,13 +177,27 @@ export class BibliographyProcessor {
       const keyList = keys?.split(',').map((k) => k.trim()) || [];
 
       for (const key of keyList) {
-        citations.push({
+        const citation: Citation = {
           command: command || '',
           key,
-          prefix: firstOpt?.trim(),
-          suffix: secondOpt?.trim() || firstOpt?.trim(),
-          pages: this.extractPages(secondOpt || firstOpt || ''),
-        });
+        };
+
+        const prefix = firstOpt?.trim();
+        if (prefix) {
+          citation.prefix = prefix;
+        }
+
+        const suffix = secondOpt?.trim() || firstOpt?.trim();
+        if (suffix && suffix !== prefix) {
+          citation.suffix = suffix;
+        }
+
+        const pages = this.extractPages(secondOpt || firstOpt || '');
+        if (pages) {
+          citation.pages = pages;
+        }
+
+        citations.push(citation);
       }
     }
 
@@ -210,7 +261,7 @@ export class BibliographyProcessor {
   /**
    * Convert CSL-JSON to BibTeX
    */
-  cslToBibTeX(cslEntry: any): BibliographyEntry {
+  cslToBibTeX(cslEntry: CSLEntry): BibliographyEntry {
     const entry: BibliographyEntry = {
       id: cslEntry.id || 'unknown',
       type: this.mapCSLTypeToBibTeX(cslEntry.type),
@@ -243,10 +294,15 @@ export class BibliographyProcessor {
         if (cslField === 'author' || cslField === 'editor') {
           value = this.formatAuthors(value);
         } else if (cslField === 'issued') {
-          value = this.extractYear(value);
+          value = this.extractYear(value as CSLDate | string | number);
         }
 
-        entry.fields[bibField] = value;
+        // Ensure we only assign string values
+        if (typeof value === 'string') {
+          entry.fields[bibField] = value;
+        } else if (value !== null && value !== undefined) {
+          entry.fields[bibField] = String(value);
+        }
       }
     }
 
@@ -265,7 +321,9 @@ export class BibliographyProcessor {
 
     while ((match = fieldRegex.exec(fieldsString)) !== null) {
       const [, fieldName, fieldValue] = match;
-      fields[fieldName.toLowerCase()] = fieldValue;
+      if (fieldName && fieldValue !== undefined) {
+        fields[fieldName.toLowerCase()] = fieldValue;
+      }
     }
 
     return fields;
@@ -275,7 +333,7 @@ export class BibliographyProcessor {
     const crossRefs: string[] = [];
     const crossrefMatch = fieldsString.match(/crossref\s*=\s*[{"']([^}"']*)[}"']/i);
 
-    if (crossrefMatch) {
+    if (crossrefMatch && crossrefMatch[1]) {
       crossRefs.push(crossrefMatch[1]);
     }
 
@@ -328,7 +386,7 @@ export class BibliographyProcessor {
       .replace(/#/g, '\\#');
   }
 
-  private mapCSLTypeToBibTeX(cslType: string): string {
+  private mapCSLTypeToBibTeX(cslType?: string): string {
     const typeMapping: Record<string, string> = {
       'article-journal': 'article',
       'paper-conference': 'inproceedings',
@@ -338,33 +396,39 @@ export class BibliographyProcessor {
       report: 'techreport',
     };
 
-    return typeMapping[cslType] || 'misc';
+    return (cslType && typeMapping[cslType]) || 'misc';
   }
 
-  private formatAuthors(authors: any[]): string {
+  private formatAuthors(authors: CSLAuthor[] | string): string {
+    if (typeof authors === 'string') return authors;
     if (!Array.isArray(authors)) return String(authors);
 
     return authors
       .map((author) => {
         if (typeof author === 'string') return author;
-
-        const { family, given } = author;
-        if (family && given) {
-          return `${family}, ${given}`;
+        if (typeof author === 'object' && author !== null) {
+          const typedAuthor = author as CSLAuthor;
+          const { family, given } = typedAuthor;
+          if (family && given) {
+            return `${family}, ${given}`;
+          }
+          return family || given || String(author);
         }
-        return family || given || String(author);
+        return String(author);
       })
       .join(' and ');
   }
 
-  private extractYear(issued: any): string {
+  private extractYear(issued: CSLDate | string | number): string {
     if (typeof issued === 'string') return issued;
     if (typeof issued === 'number') return String(issued);
-
-    if (issued && issued['date-parts']) {
-      const dateParts = issued['date-parts'][0];
-      if (dateParts && dateParts[0]) {
-        return String(dateParts[0]);
+    if (typeof issued === 'object' && issued !== null) {
+      // issued is now narrowed to CSLDate
+      if (issued['date-parts'] && Array.isArray(issued['date-parts'])) {
+        const dateParts = issued['date-parts'][0];
+        if (dateParts && dateParts[0]) {
+          return String(dateParts[0]);
+        }
       }
     }
 

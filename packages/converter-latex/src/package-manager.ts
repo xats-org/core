@@ -151,41 +151,49 @@ export class PackageManager {
 
     // Math environments
     if (/\\begin\{align|equation|gather|multline\}/.test(content)) {
-      required.push(this.packageDatabase['amsmath']);
+      const pkg = this.packageDatabase['amsmath'];
+      if (pkg) required.push(pkg);
     }
 
     // Graphics
     if (/\\includegraphics/.test(content)) {
-      required.push(this.packageDatabase['graphicx']);
+      const pkg = this.packageDatabase['graphicx'];
+      if (pkg) required.push(pkg);
     }
 
     // TikZ graphics
     if (/\\begin\{tikzpicture\}/.test(content)) {
-      required.push(this.packageDatabase['tikz']);
+      const pkg = this.packageDatabase['tikz'];
+      if (pkg) required.push(pkg);
     }
 
     // Bibliography
     if (/\\cite/.test(content) && /\\bibliography/.test(content)) {
-      required.push(this.packageDatabase['natbib']);
+      const pkg = this.packageDatabase['natbib'];
+      if (pkg) required.push(pkg);
     }
 
     if (/\\printbibliography/.test(content)) {
-      required.push(this.packageDatabase['biblatex']);
+      const pkg = this.packageDatabase['biblatex'];
+      if (pkg) required.push(pkg);
     }
 
     // Colors
     if (/\\textcolor|\\color\{/.test(content)) {
-      required.push(this.packageDatabase['xcolor']);
+      const pkg = this.packageDatabase['xcolor'];
+      if (pkg) required.push(pkg);
     }
 
     // Hyperlinks
     if (/\\href|\\url/.test(content)) {
-      required.push(this.packageDatabase['hyperref']);
+      const pkg = this.packageDatabase['hyperref'];
+      if (pkg) required.push(pkg);
     }
 
     // Educational content boxes
     if (/\\begin\{tcolorbox\}/.test(content)) {
-      required.push(this.packageDatabase['tcolorbox']);
+      const pkg = this.packageDatabase['tcolorbox'];
+      if (pkg) required.push(pkg);
     }
 
     return required.filter((pkg) => pkg); // Remove undefined entries
@@ -202,15 +210,18 @@ export class PackageManager {
 
     // Add dependencies (simplified logic)
     if (resolved.has('biblatex')) {
-      resolved.set('url', this.packageDatabase['url']);
+      const pkg = this.packageDatabase['url'];
+      if (pkg) resolved.set('url', pkg);
     }
 
     if (resolved.has('tikz')) {
-      resolved.set('xcolor', this.packageDatabase['xcolor']);
+      const pkg = this.packageDatabase['xcolor'];
+      if (pkg) resolved.set('xcolor', pkg);
     }
 
     if (resolved.has('hyperref') && !resolved.has('url')) {
-      resolved.set('url', this.packageDatabase['url']);
+      const pkg = this.packageDatabase['url'];
+      if (pkg) resolved.set('url', pkg);
     }
 
     return [...resolved.values()];
@@ -230,7 +241,7 @@ export class PackageManager {
     ];
 
     for (const [pkg1, pkg2] of conflicts) {
-      if (packageNames.includes(pkg1) && packageNames.includes(pkg2)) {
+      if (pkg1 && pkg2 && packageNames.includes(pkg1) && packageNames.includes(pkg2)) {
         errors.push(`Package conflict: ${pkg1} and ${pkg2} cannot be used together`);
       }
     }
