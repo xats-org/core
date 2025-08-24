@@ -452,10 +452,7 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Generate DOCX test bank (placeholder)
    */
-  private generateDOCXTestBank(
-    testBank: TestBank,
-    options: TestBankOptions
-  ): Buffer {
+  private generateDOCXTestBank(testBank: TestBank, options: TestBankOptions): Buffer {
     const markdown = this.generateMarkdownTestBank(testBank, options);
     return Buffer.from(markdown, 'utf-8');
   }

@@ -430,10 +430,7 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
   /**
    * Generate DOCX output (placeholder - would use a library like docx)
    */
-  private generateDOCX(
-    studyGuide: StudyGuideStructure,
-    _options: StudyGuideOptions
-  ): Buffer {
+  private generateDOCX(studyGuide: StudyGuideStructure, _options: StudyGuideOptions): Buffer {
     // This would use the @xats-org/converter-word package
     // For now, return a placeholder
     const markdown = this.generateMarkdown(studyGuide);
