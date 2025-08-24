@@ -2,7 +2,7 @@ import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { describe, it, expect, beforeAll } from 'vitest';
 
-import schemaV050 from '../../schemas/0.5.0/xats.schema.json';
+import schemaV050 from '../../schemas/0.5.0/xats.json';
 
 describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
   let ajv: Ajv;
