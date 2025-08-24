@@ -64,8 +64,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Include both javascript and typescript for complete coverage
-        language: ['javascript', 'typescript']
+        # Use javascript-typescript combined language as GitHub expects
+        language: ['javascript-typescript']
     
     steps:
     - name: Checkout repository
