@@ -64,8 +64,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Use only typescript since it includes javascript analysis
-        language: ['typescript']
+        # Include both javascript and typescript for complete coverage
+        language: ['javascript', 'typescript']
     
     steps:
     - name: Checkout repository
