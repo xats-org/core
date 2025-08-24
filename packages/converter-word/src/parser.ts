@@ -348,10 +348,10 @@ export class DocumentParser {
     body: any,
     options: WordParseOptions,
     errors: ConversionError[],
-    warnings: ConversionWarning[]
+    _warnings: ConversionWarning[]
   ): Promise<any[]> {
     const contents: any[] = [];
-    const elements = body.p || body.tbl || [];
+    // const elements = body.p || body.tbl || [];
 
     // Collect all elements in order (paragraphs, tables, etc.)
     const allElements: Array<{ type: string; element: any; index: number }> = [];
@@ -417,8 +417,8 @@ export class DocumentParser {
    */
   private async groupListItems(
     elements: Array<{ type: string; element: any; index: number }>,
-    options: WordParseOptions,
-    errors: ConversionError[]
+    _options: WordParseOptions,
+    _errors: ConversionError[]
   ): Promise<Array<any>> {
     const grouped: Array<any> = [];
     let i = 0;
@@ -490,7 +490,7 @@ export class DocumentParser {
    */
   private async convertParagraph(
     para: any,
-    options: WordParseOptions
+    _options: WordParseOptions
   ): Promise<ContentBlock | null> {
     // Extract paragraph properties
     const pPr = para.pPr?.[0];
@@ -573,7 +573,7 @@ export class DocumentParser {
   /**
    * Convert Word table to xats table block
    */
-  private async convertTable(table: any, options: WordParseOptions): Promise<ContentBlock> {
+  private async convertTable(table: any, _options: WordParseOptions): Promise<ContentBlock> {
     const rows: any[] = [];
     const trs = table.tr || [];
     let hasHeader = false;
@@ -671,7 +671,7 @@ export class DocumentParser {
   /**
    * Extract table caption
    */
-  private extractTableCaption(table: any): string | undefined {
+  private extractTableCaption(_table: any): string | undefined {
     // Look for caption in table properties or nearby paragraphs
     // This is a simplified implementation
     return undefined;
@@ -698,7 +698,7 @@ export class DocumentParser {
    */
   private async convertDrawing(
     drawing: any,
-    options: WordParseOptions
+    _options: WordParseOptions
   ): Promise<ContentBlock | null> {
     // Extract image information
     const inline = drawing['wp:inline']?.[0] || drawing['wp:anchor']?.[0];
@@ -816,12 +816,12 @@ export class DocumentParser {
       }
 
       // Handle tabs as spaces
-      for (const tab of tabs) {
+      for (const _tab of tabs) {
         semanticRuns.push({ type: 'text', text: '\t' });
       }
 
       // Handle line breaks
-      for (const br of breaks) {
+      for (const _br of breaks) {
         semanticRuns.push({ type: 'text', text: '\n' });
       }
     }

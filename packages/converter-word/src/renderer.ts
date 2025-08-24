@@ -12,18 +12,18 @@ import {
   TableCell,
   AlignmentType,
   BorderStyle,
-  ShadingType,
-  WidthType,
+  // ShadingType,
+  // WidthType,
   Packer,
-  NumberFormat,
+  // NumberFormat,
   convertMillimetersToTwip,
   LevelFormat,
-  ILevelsOptions,
-  Header,
-  Footer,
-  TextDirection,
-  TabStopPosition,
-  TabStopType,
+  // ILevelsOptions,
+  // Header,
+  // Footer,
+  // TextDirection,
+  // TabStopPosition,
+  // TabStopType,
   UnderlineType,
 } from 'docx';
 
@@ -259,7 +259,7 @@ export class DocumentRenderer {
    */
   private async processContentBlock(
     block: ContentBlock,
-    options: WordRenderOptions
+    _options: WordRenderOptions
   ): Promise<any[]> {
     const elements: any[] = [];
 
@@ -465,7 +465,7 @@ export class DocumentRenderer {
         try {
           const cells = row.cells || [];
 
-          const tableCells = cells.map((cell: any, cellIndex: number) => {
+          const tableCells = cells.map((cell: any, _cellIndex: number) => {
             try {
               const cellText = cell.text || cell.content?.text || '';
               const runs = this.createTextRuns(cellText);

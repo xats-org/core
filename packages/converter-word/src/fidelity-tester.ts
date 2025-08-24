@@ -120,13 +120,13 @@ export class FidelityTester {
     differences: DocumentDifference[]
   ): number {
     let score = 1.0;
-    let _totalChecks = 0;
-    let _passedChecks = 0;
+    // let _totalChecks = 0;
+    // let _passedChecks = 0;
 
     // Check basic document properties
-    _totalChecks++;
+    // _totalChecks++;
     if (original.bibliographicEntry?.title === converted.bibliographicEntry?.title) {
-      _passedChecks++;
+      // _passedChecks++;
     } else {
       score -= 0.1;
       issues.push({
@@ -146,9 +146,9 @@ export class FidelityTester {
     }
 
     // Check subject
-    _totalChecks++;
+    // _totalChecks++;
     if (original.subject === converted.subject) {
-      _passedChecks++;
+      // _passedChecks++;
     } else {
       score -= 0.05;
       issues.push({
