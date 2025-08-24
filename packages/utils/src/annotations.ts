@@ -1,6 +1,6 @@
 /**
  * xats Annotation System Utilities
- * 
+ *
  * Provides utilities for managing peer review workflows, annotation threading,
  * and review decision processing in accordance with xats v0.5.0 schema.
  */
@@ -25,7 +25,7 @@ export interface Annotation {
   updatedAt?: string;
   resolvedAt?: string;
   annotations?: Annotation[];
-  extensions?: Record<string, any>;
+  extensions?: Record<string, unknown>;
   // For thread hierarchy building (not in schema)
   replies?: Annotation[];
 }
@@ -71,7 +71,7 @@ export const ANNOTATION_TYPES = {
 export const ANNOTATION_STATUS = {
   OPEN: 'open',
   RESOLVED: 'resolved',
-  REJECTED: 'rejected',  
+  REJECTED: 'rejected',
   DEFERRED: 'deferred',
 } as const;
 
@@ -108,7 +108,7 @@ export function createAnnotation(params: {
   reviewDecision?: ReviewDecision;
 }): Annotation {
   const now = new Date().toISOString();
-  
+
   const annotation: Annotation = {
     id: generateAnnotationId(),
     language: 'en', // Default, should be configurable
@@ -176,13 +176,13 @@ export function createAnnotationThread(
   replies: Omit<Annotation, 'threadId' | 'parentAnnotationId'>[]
 ): Annotation[] {
   const threadId = parentAnnotation.threadId || generateThreadId();
-  
+
   const threadParent = {
     ...parentAnnotation,
     threadId,
   };
 
-  const threadReplies = replies.map(reply => ({
+  const threadReplies = replies.map((reply) => ({
     ...reply,
     threadId,
     parentAnnotationId: parentAnnotation.id,
@@ -205,13 +205,15 @@ export function filterAnnotations(
     targetObjectId?: string;
   }
 ): Annotation[] {
-  return annotations.filter(annotation => {
+  return annotations.filter((annotation) => {
     if (filters.status && annotation.status !== filters.status) return false;
     if (filters.priority && annotation.priority !== filters.priority) return false;
-    if (filters.annotationType && annotation.annotationType !== filters.annotationType) return false;
+    if (filters.annotationType && annotation.annotationType !== filters.annotationType)
+      return false;
     if (filters.reviewer && annotation.reviewer !== filters.reviewer) return false;
     if (filters.assignee && annotation.assignee !== filters.assignee) return false;
-    if (filters.targetObjectId && annotation.targetObjectId !== filters.targetObjectId) return false;
+    if (filters.targetObjectId && annotation.targetObjectId !== filters.targetObjectId)
+      return false;
     return true;
   });
 }
@@ -221,8 +223,8 @@ export function filterAnnotations(
  */
 export function groupAnnotationsByThread(annotations: Annotation[]): Map<string, Annotation[]> {
   const threads = new Map<string, Annotation[]>();
-  
-  annotations.forEach(annotation => {
+
+  annotations.forEach((annotation) => {
     const threadId = annotation.threadId || annotation.id;
     if (!threads.has(threadId)) {
       threads.set(threadId, []);
@@ -231,7 +233,7 @@ export function groupAnnotationsByThread(annotations: Annotation[]): Map<string,
   });
 
   // Sort each thread by creation time
-  threads.forEach(thread => {
+  threads.forEach((thread) => {
     thread.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   });
 
@@ -246,14 +248,14 @@ export function buildThreadHierarchy(annotations: Annotation[]): Annotation[] {
   const roots: Annotation[] = [];
 
   // First pass: create annotation map
-  annotations.forEach(annotation => {
+  annotations.forEach((annotation) => {
     annotationMap.set(annotation.id, { ...annotation, replies: [] });
   });
 
   // Second pass: build hierarchy
-  annotations.forEach(annotation => {
+  annotations.forEach((annotation) => {
     const annotationWithReplies = annotationMap.get(annotation.id)!;
-    
+
     if (annotation.parentAnnotationId) {
       const parent = annotationMap.get(annotation.parentAnnotationId);
       if (parent) {
@@ -281,17 +283,22 @@ export function calculateReviewProgress(annotations: Annotation[]): {
   criticalIssues: number;
 } {
   const total = annotations.length;
-  const statusCounts = annotations.reduce((counts, annotation) => {
-    counts[annotation.status] = (counts[annotation.status] || 0) + 1;
-    return counts;
-  }, {} as Record<string, number>);
+  const statusCounts = annotations.reduce(
+    (counts, annotation) => {
+      counts[annotation.status] = (counts[annotation.status] || 0) + 1;
+      return counts;
+    },
+    {} as Record<string, number>
+  );
 
   const open = statusCounts.open || 0;
   const resolved = statusCounts.resolved || 0;
   const rejected = statusCounts.rejected || 0;
   const deferred = statusCounts.deferred || 0;
   const completionRate = total > 0 ? ((resolved + rejected) / total) * 100 : 100;
-  const criticalIssues = annotations.filter(a => a.priority === 'critical' && a.status === 'open').length;
+  const criticalIssues = annotations.filter(
+    (a) => a.priority === 'critical' && a.status === 'open'
+  ).length;
 
   return {
     total,
@@ -324,7 +331,10 @@ export function validateAnnotation(annotation: Partial<Annotation>): string[] {
   }
 
   // Validate enum values
-  if (annotation.status && !['open', 'resolved', 'rejected', 'deferred'].includes(annotation.status)) {
+  if (
+    annotation.status &&
+    !['open', 'resolved', 'rejected', 'deferred'].includes(annotation.status)
+  ) {
     errors.push('status must be one of: open, resolved, rejected, deferred');
   }
 
@@ -352,10 +362,18 @@ export function validateAnnotation(annotation: Partial<Annotation>): string[] {
   // Validate ReviewDecision if present
   if (annotation.reviewDecision) {
     const decision = annotation.reviewDecision;
-    if (!['approve', 'reject', 'request_changes', 'conditional_accept'].includes(decision.decision)) {
-      errors.push('reviewDecision.decision must be one of: approve, reject, request_changes, conditional_accept');
+    if (
+      !['approve', 'reject', 'request_changes', 'conditional_accept'].includes(decision.decision)
+    ) {
+      errors.push(
+        'reviewDecision.decision must be one of: approve, reject, request_changes, conditional_accept'
+      );
     }
-    if (typeof decision.confidence !== 'number' || decision.confidence < 1 || decision.confidence > 5) {
+    if (
+      typeof decision.confidence !== 'number' ||
+      decision.confidence < 1 ||
+      decision.confidence > 5
+    ) {
       errors.push('reviewDecision.confidence must be a number between 1 and 5');
     }
     if (!decision.justification) {
@@ -372,9 +390,11 @@ export function validateAnnotation(annotation: Partial<Annotation>): string[] {
 export function isValidAnnotationTypeURI(uri: string): boolean {
   try {
     new URL(uri);
-    return uri.startsWith('https://xats.org/vocabularies/annotations/') || 
-           uri.startsWith('http://xats.org/vocabularies/annotations/') ||
-           /^https?:\/\/[\w.-]+\/vocabularies\/annotations\/\w+$/.test(uri);
+    return (
+      uri.startsWith('https://xats.org/vocabularies/annotations/') ||
+      uri.startsWith('http://xats.org/vocabularies/annotations/') ||
+      /^https?:\/\/[\w.-]+\/vocabularies\/annotations\/\w+$/.test(uri)
+    );
   } catch {
     return false;
   }
@@ -385,7 +405,7 @@ export function isValidAnnotationTypeURI(uri: string): boolean {
  */
 export function createAnnotationSemanticText(text: string): SemanticText {
   return {
-    runs: [{ type: 'text', text }]
+    runs: [{ type: 'text', text }],
   };
 }
 
@@ -394,7 +414,7 @@ export function createAnnotationSemanticText(text: string): SemanticText {
  */
 export function extractPlainText(semanticText: SemanticText): string {
   return semanticText.runs
-    .filter(run => run.text)
-    .map(run => run.text)
+    .filter((run) => run.text)
+    .map((run) => run.text)
     .join('');
 }
