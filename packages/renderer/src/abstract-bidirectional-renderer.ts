@@ -142,7 +142,7 @@ export abstract class AbstractBidirectionalRenderer<
    */
   protected createEmptyDocument(): XatsDocument {
     return {
-      schemaVersion: '0.3.0',
+      schemaVersion: '0.5.0',
       bibliographicEntry: {
         type: 'book',
         title: 'Untitled Document',

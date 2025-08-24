@@ -1197,7 +1197,7 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
     // Create a basic document structure
     const document: XatsDocument = {
-      schemaVersion: '0.3.0',
+      schemaVersion: '0.5.0',
       bibliographicEntry: {
         type: 'book',
         title: this.extractTitleFromHtml(html) || 'Imported Document',
@@ -1274,7 +1274,7 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
   private createEmptyDocument(): XatsDocument {
     return {
-      schemaVersion: '0.3.0',
+      schemaVersion: '0.5.0',
       bibliographicEntry: {
         type: 'book',
         title: 'Empty Document',
