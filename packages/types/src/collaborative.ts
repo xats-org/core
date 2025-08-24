@@ -239,47 +239,43 @@ export interface CollaborativeProjectBlock extends XatsObject {
  * Validate that a collaborative project has required components
  */
 export function validateCollaborativeProject(project: CollaborativeProjectContent): string[] {
-    const errors: string[] = [];
+  const errors: string[] = [];
 
-    if (!project.title || !project.title.runs || project.title.runs.length === 0) {
-      errors.push('Project must have a title');
+  if (!project.title || !project.title.runs || project.title.runs.length === 0) {
+    errors.push('Project must have a title');
+  }
+
+  if (!project.description || !project.description.runs || project.description.runs.length === 0) {
+    errors.push('Project must have a description');
+  }
+
+  if (!project.roles || project.roles.length === 0) {
+    errors.push('Project must define at least one role');
+  }
+
+  if (!project.deliverables || project.deliverables.length === 0) {
+    errors.push('Project must define at least one deliverable');
+  }
+
+  // Validate role IDs are unique
+  const roleIds = new Set<string>();
+  for (const role of project.roles || []) {
+    if (roleIds.has(role.roleId)) {
+      errors.push(`Duplicate role ID: ${role.roleId}`);
     }
+    roleIds.add(role.roleId);
+  }
 
-    if (
-      !project.description ||
-      !project.description.runs ||
-      project.description.runs.length === 0
-    ) {
-      errors.push('Project must have a description');
+  // Validate deliverable IDs are unique
+  const deliverableIds = new Set<string>();
+  for (const deliverable of project.deliverables || []) {
+    if (deliverableIds.has(deliverable.deliverableId)) {
+      errors.push(`Duplicate deliverable ID: ${deliverable.deliverableId}`);
     }
+    deliverableIds.add(deliverable.deliverableId);
+  }
 
-    if (!project.roles || project.roles.length === 0) {
-      errors.push('Project must define at least one role');
-    }
-
-    if (!project.deliverables || project.deliverables.length === 0) {
-      errors.push('Project must define at least one deliverable');
-    }
-
-    // Validate role IDs are unique
-    const roleIds = new Set<string>();
-    for (const role of project.roles || []) {
-      if (roleIds.has(role.roleId)) {
-        errors.push(`Duplicate role ID: ${role.roleId}`);
-      }
-      roleIds.add(role.roleId);
-    }
-
-    // Validate deliverable IDs are unique
-    const deliverableIds = new Set<string>();
-    for (const deliverable of project.deliverables || []) {
-      if (deliverableIds.has(deliverable.deliverableId)) {
-        errors.push(`Duplicate deliverable ID: ${deliverable.deliverableId}`);
-      }
-      deliverableIds.add(deliverable.deliverableId);
-    }
-
-    return errors;
+  return errors;
 }
 
 /**
