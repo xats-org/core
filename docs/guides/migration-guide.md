@@ -20,7 +20,10 @@ This comprehensive guide helps you migrate your xats documents between schema ve
 |---------------|------------|------------------|-------------------|
 | v0.1.0 → v0.2.0 | Easy | None | Manual enhancement |
 | v0.2.0 → v0.3.0 | Easy | None | Manual enhancement |
-| v0.1.0 → v0.3.0 | Easy | None | Incremental migration |
+| v0.3.0 → v0.4.0 | Easy | None | Monorepo transition |
+| v0.4.0 → v0.5.0 | Easy | None | AI integration setup |
+| v0.1.0 → v0.5.0 | Moderate | None | Comprehensive upgrade |
+| v0.3.0 → v0.5.0 | Easy | None | Direct upgrade recommended |
 
 ## v0.1.0 → v0.2.0 Migration
 
@@ -936,6 +939,428 @@ xats extract-i18n textbook.json --target-language=es --output=translation-string
 5. **Enhance Rights Metadata**: Add granular licensing information if needed
 
 6. **Validate Thoroughly**: Use comprehensive validation tools to ensure compliance
+
+---
+
+## v0.3.0 → v0.4.0 Migration
+
+### Breaking Changes
+
+**✅ NO BREAKING CHANGES**
+
+Version 0.4.0 maintains full backward compatibility with v0.3.0 documents. All existing content will continue to validate and function correctly.
+
+### Major Infrastructure Changes in v0.4.0
+
+#### 1. Monorepo Architecture with TypeScript
+
+Version 0.4.0 introduces a comprehensive monorepo structure using Turborepo and pnpm workspaces:
+
+**New Package Structure:**
+```
+xats/
+├── packages/
+│   ├── @xats-org/schema/         # Core JSON Schema definitions
+│   ├── @xats-org/validator/      # Validation logic and error reporting
+│   ├── @xats-org/types/          # Shared TypeScript types
+│   ├── @xats-org/cli/            # Command-line interface
+│   ├── @xats-org/renderer/       # Basic rendering framework
+│   ├── @xats-org/utils/          # Shared utilities
+│   └── @xats-org/examples/       # Example documents
+├── apps/
+│   ├── docs/                     # Documentation site
+│   └── website/                  # xats.org website
+└── turbo.json                    # Turborepo configuration
+```
+
+#### 2. Enhanced Developer Experience
+
+**Modern Build Pipeline:**
+- Turborepo for parallel builds and caching
+- TypeScript-first development with strict type checking  
+- ESLint and Prettier for code quality
+- Comprehensive test suite with coverage reporting
+- Automated dependency management
+
+**Installation for v0.4.0:**
+```bash
+# New installation method
+npm install @xats-org/schema @xats-org/validator @xats-org/cli
+
+# Development setup
+pnpm install  # Use pnpm for monorepo
+pnpm run build
+pnpm run test
+```
+
+### Migration Steps for v0.4.0
+
+#### Step 1: Update Schema Version
+```json
+// Before
+"schemaVersion": "0.3.0"
+
+// After  
+"schemaVersion": "0.4.0"
+```
+
+#### Step 2: Update Dependencies (For Developers)
+```bash
+# Replace old packages
+npm uninstall @xats-org/core
+
+# Install new modular packages
+npm install @xats-org/schema @xats-org/validator @xats-org/cli
+```
+
+#### Step 3: Update Import Statements (For Developers)
+```typescript
+// Before (v0.3.0)
+import { validateDocument } from '@xats-org/core';
+
+// After (v0.4.0)
+import { validateDocument } from '@xats-org/validator';
+import { XatsDocument } from '@xats-org/types';
+```
+
+### Developer Benefits in v0.4.0
+
+1. **Faster Builds**: Turborepo provides parallel execution and intelligent caching
+2. **Better Type Safety**: Enhanced TypeScript definitions with strict null checks
+3. **Modular Architecture**: Import only the packages you need
+4. **Improved Documentation**: Comprehensive API documentation with examples
+5. **Better Testing**: 701 tests with comprehensive coverage
+
+---
+
+## v0.4.0 → v0.5.0 Migration
+
+### Breaking Changes
+
+**✅ NO BREAKING CHANGES**
+
+Version 0.5.0 maintains full backward compatibility with v0.4.0 documents while introducing powerful new capabilities.
+
+### Major Features in v0.5.0
+
+#### 1. Bidirectional Rendering Architecture
+
+**Multi-Format Output Support:**
+- **HTML**: Modern semantic HTML5 with accessibility features
+- **Markdown**: GitHub Flavored Markdown with extensions
+- **LaTeX**: Professional academic typesetting
+- **Microsoft Word**: .docx format with proper styling
+- **R Markdown**: Integration with R statistical environment
+
+**95%+ Round-Trip Fidelity:**
+```json
+{
+  "renderingHints": {
+    "formats": ["html", "markdown", "latex", "docx", "rmd"],
+    "fidelity": "high",
+    "roundTrip": true,
+    "preserveSemantics": true
+  }
+}
+```
+
+#### 2. AI Integration with Model Context Protocol (MCP)
+
+**MCP Server Integration:**
+```json
+{
+  "extensions": {
+    "https://xats.org/extensions/ai": {
+      "version": "0.5.0",
+      "mcp": {
+        "server": "@xats-org/mcp-server",
+        "capabilities": [
+          "content-validation",
+          "content-generation", 
+          "assessment-creation",
+          "accessibility-analysis"
+        ]
+      },
+      "providers": {
+        "anthropic": {
+          "model": "claude-3-5-sonnet",
+          "capabilities": ["content", "assessment"]
+        },
+        "openai": {
+          "model": "gpt-4",
+          "capabilities": ["content", "assessment"]
+        }
+      }
+    }
+  }
+}
+```
+
+#### 3. Enhanced Rendering Hints System
+
+**Advanced Layout Controls:**
+```json
+{
+  "renderingHints": {
+    "layout": {
+      "columns": 2,
+      "columnGap": "2rem",
+      "responsive": true,
+      "breakpoints": {
+        "mobile": "768px",
+        "tablet": "1024px"
+      }
+    },
+    "accessibility": {
+      "focusManagement": true,
+      "screenReaderOptimized": true,
+      "colorContrast": "AAA",
+      "fontSize": "scalable"
+    },
+    "print": {
+      "pageSize": "letter",
+      "margins": "1in",
+      "orphanControl": true,
+      "widowControl": true
+    }
+  }
+}
+```
+
+#### 4. Full WCAG 2.1 AA Compliance Validation
+
+**Automated Accessibility Checking:**
+```json
+{
+  "accessibility": {
+    "wcagLevel": "AA",
+    "features": [
+      "altText", 
+      "structuralNavigation", 
+      "colorContrast",
+      "focusManagement",
+      "keyboardNavigation"
+    ],
+    "validation": {
+      "automated": true,
+      "colorContrast": {
+        "minimum": 4.5,
+        "enhanced": 7.0
+      },
+      "focusIndicators": true
+    }
+  }
+}
+```
+
+### Migration Steps for v0.5.0
+
+#### Step 1: Update Schema Version
+```json
+// Before
+"schemaVersion": "0.4.0"
+
+// After
+"schemaVersion": "0.5.0"
+```
+
+#### Step 2: Install New Packages
+```bash
+# Add new rendering and AI packages
+pnpm add @xats-org/renderer @xats-org/mcp-server
+
+# Update existing packages
+pnpm update @xats-org/schema @xats-org/validator @xats-org/cli
+```
+
+#### Step 3: Configure Rendering (Optional)
+```json
+{
+  "renderingHints": {
+    "formats": ["html", "markdown"],  // Start with basic formats
+    "fidelity": "high"
+  }
+}
+```
+
+#### Step 4: Set Up AI Integration (Optional)
+```bash
+# Install MCP server
+npm install -g @xats-org/mcp-server
+
+# Configure AI providers (requires API keys)
+export ANTHROPIC_API_KEY="your-key"
+export OPENAI_API_KEY="your-key"
+```
+
+#### Step 5: Enable Enhanced Accessibility (Recommended)
+```json
+{
+  "accessibility": {
+    "wcagLevel": "AA",
+    "features": ["altText", "structuralNavigation", "colorContrast"],
+    "validation": {
+      "automated": true
+    }
+  }
+}
+```
+
+### v0.5.0 Usage Examples
+
+#### Multi-Format Rendering
+```typescript
+import { renderDocument } from '@xats-org/renderer';
+
+const document = /* your xats document */;
+
+// Render to multiple formats
+const html = await renderDocument(document, { format: 'html' });
+const markdown = await renderDocument(document, { format: 'markdown' });
+const latex = await renderDocument(document, { format: 'latex' });
+const docx = await renderDocument(document, { format: 'docx' });
+```
+
+#### AI-Powered Content Generation
+```typescript
+import { generateContent } from '@xats-org/mcp-server';
+
+// Generate assessment questions from content
+const questions = await generateContent({
+  type: 'assessment',
+  source: document,
+  questionType: 'multiple-choice',
+  count: 5,
+  difficulty: 'intermediate'
+});
+
+// Generate alt text for images
+const altText = await generateContent({
+  type: 'accessibility',
+  element: imageElement,
+  purpose: 'alt-text'
+});
+```
+
+---
+
+## v0.3.0 → v0.5.0 Migration (Direct Path)
+
+### Why Skip v0.4.0?
+
+For most content authors, migrating directly from v0.3.0 to v0.5.0 is the recommended path because:
+
+1. **v0.4.0** focused on developer infrastructure (monorepo, TypeScript packages)
+2. **v0.5.0** adds significant end-user features (AI integration, multi-format rendering)
+3. **Full compatibility** - v0.5.0 supports all v0.3.0 documents without changes
+
+### Breaking Changes
+
+**✅ NO BREAKING CHANGES**
+
+All v0.3.0 documents work perfectly in v0.5.0 without modification.
+
+### Migration Steps for v0.3.0 → v0.5.0
+
+#### Step 1: Update Schema Version
+```json
+// Before
+"schemaVersion": "0.3.0"
+
+// After
+"schemaVersion": "0.5.0"
+```
+
+#### Step 2: Choose Your Enhancement Level
+
+**Level 1: Basic Compatibility (No Changes Required)**
+Your existing v0.3.0 documents work immediately with v0.5.0 tools.
+
+**Level 2: Add Multi-Format Rendering**
+```json
+{
+  "schemaVersion": "0.5.0",
+  "renderingHints": {
+    "formats": ["html", "markdown", "latex"],
+    "fidelity": "high"
+  }
+  // ... rest of your existing document
+}
+```
+
+**Level 3: Enable AI Integration**
+```json
+{
+  "schemaVersion": "0.5.0",
+  "extensions": {
+    "https://xats.org/extensions/ai": {
+      "version": "0.5.0",
+      "capabilities": ["content-validation", "assessment-creation"],
+      "provider": "anthropic"
+    }
+  }
+  // ... rest of your existing document
+}
+```
+
+**Level 4: Full v0.5.0 Feature Set**
+```json
+{
+  "schemaVersion": "0.5.0",
+  "accessibility": {
+    "wcagLevel": "AA",
+    "validation": { "automated": true }
+  },
+  "renderingHints": {
+    "formats": ["html", "markdown", "latex", "docx"],
+    "fidelity": "high",
+    "accessibility": {
+      "focusManagement": true,
+      "colorContrast": "AAA"
+    }
+  },
+  "extensions": {
+    "https://xats.org/extensions/ai": {
+      "version": "0.5.0",
+      "mcp": {
+        "server": "@xats-org/mcp-server",
+        "capabilities": ["content-validation", "assessment-creation"]
+      }
+    }
+  }
+  // ... rest of your existing document
+}
+```
+
+### Tool Migration for v0.3.0 → v0.5.0
+
+#### Old CLI Usage (v0.3.0)
+```bash
+# v0.3.0 validation
+xats-validate document.json
+```
+
+#### New CLI Usage (v0.5.0)
+```bash
+# Install new CLI
+npm install -g @xats-org/cli
+
+# Enhanced validation with accessibility and AI
+xats validate document.json
+xats validate --accessibility --wcag-level AA document.json
+xats render --format html --format markdown document.json
+xats generate --type assessment --from document.json
+```
+
+### Benefits of Direct v0.3.0 → v0.5.0 Migration
+
+1. **Skip Infrastructure Changes**: Avoid the v0.4.0 developer-focused changes
+2. **Immediate Feature Access**: Get AI integration and multi-format rendering right away
+3. **Future-Proof**: v0.5.0 is stable and production-ready
+4. **Comprehensive Upgrade**: Single migration gives you all modern features
+5. **Better Tooling**: Latest CLI with enhanced capabilities
+
+---
 
 ## General Migration Patterns
 
