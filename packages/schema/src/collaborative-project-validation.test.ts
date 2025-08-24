@@ -99,24 +99,26 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('collaborative project block has required properties', () => {
-    const collaborativeBlock = document.bodyMatter.contents[0].sections[0].content[1];
+    const collaborativeBlock = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1];
 
-    expect(collaborativeBlock.blockType).toBe(
+    expect(collaborativeBlock).toBeDefined();
+    expect(collaborativeBlock?.blockType).toBe(
       'https://xats.org/vocabularies/blocks/collaborativeProject'
     );
-    expect(collaborativeBlock.content).toBeDefined();
-    expect(collaborativeBlock.content.title).toBeDefined();
-    expect(collaborativeBlock.content.description).toBeDefined();
-    expect(collaborativeBlock.content.projectType).toBeDefined();
-    expect(collaborativeBlock.content.roles).toBeDefined();
-    expect(collaborativeBlock.content.deliverables).toBeDefined();
+    expect(collaborativeBlock?.content).toBeDefined();
+    expect(collaborativeBlock?.content?.title).toBeDefined();
+    expect(collaborativeBlock?.content?.description).toBeDefined();
+    expect(collaborativeBlock?.content?.projectType).toBeDefined();
+    expect(collaborativeBlock?.content?.roles).toBeDefined();
+    expect(collaborativeBlock?.content?.deliverables).toBeDefined();
   });
 
   test('project has valid roles structure', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
 
-    expect(Array.isArray(project.roles)).toBe(true);
-    expect(project.roles.length).toBeGreaterThan(0);
+    expect(project).toBeDefined();
+    expect(Array.isArray(project?.roles)).toBe(true);
+    expect(project?.roles?.length).toBeGreaterThan(0);
 
     for (const role of project.roles) {
       expect(role.roleId).toBeDefined();
@@ -128,7 +130,7 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('project has valid deliverables structure', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
 
     expect(Array.isArray(project.deliverables)).toBe(true);
     expect(project.deliverables.length).toBeGreaterThan(0);
@@ -143,7 +145,7 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('project has valid peer assessment configuration', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
 
     expect(project.peerAssessment).toBeDefined();
     expect(typeof project.peerAssessment.enabled).toBe('boolean');
@@ -154,7 +156,7 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('project has valid timeline structure', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
 
     expect(project.timeline).toBeDefined();
     expect(Array.isArray(project.timeline.phases)).toBe(true);
@@ -170,7 +172,7 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('role IDs are unique', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
     const roleIds = project.roles.map((role) => role.roleId);
     const uniqueIds = new Set(roleIds);
 
@@ -178,7 +180,7 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('deliverable IDs are unique', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
     const deliverableIds = project.deliverables.map((deliverable) => deliverable.deliverableId);
     const uniqueIds = new Set(deliverableIds);
 
@@ -186,7 +188,7 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('assessment criteria weights are valid', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
 
     for (const deliverable of project.deliverables) {
       if (deliverable.assessmentCriteria) {
@@ -202,7 +204,7 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('phase deliverable references are valid', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
     const deliverableIds = new Set(project.deliverables.map((d) => d.deliverableId));
 
     for (const phase of project.timeline.phases) {
@@ -215,7 +217,7 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('semantic text structures are valid', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
 
     // Check title and description
     expect(project.title.runs).toBeDefined();
@@ -241,7 +243,7 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('project type is from valid enum', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
     const validTypes = [
       'research-project',
       'case-study-analysis',
@@ -259,7 +261,7 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('deliverable formats are from valid enum', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
     const validFormats = [
       'document',
       'presentation',
@@ -277,7 +279,7 @@ describe('Collaborative Project Block Validation', () => {
   });
 
   test('peer assessment scale types are valid', () => {
-    const project = document.bodyMatter.contents[0].sections[0].content[1].content;
+    const project = document.bodyMatter.contents[0]?.sections?.[0]?.content?.[1]?.content;
     const validScaleTypes = ['numeric', 'likert', 'categorical', 'binary'];
 
     for (const criterion of project.peerAssessment.criteria) {
