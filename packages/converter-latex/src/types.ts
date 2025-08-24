@@ -12,14 +12,14 @@ import type {
   RenderMetadata,
   ParseMetadata,
   RenderError,
-  ParseWarning
+  ParseWarning,
 } from '@xats-org/types';
 
 // Core converter types
 export interface LaTeXConverter {
   readonly format: RenderFormat;
   readonly wcagLevel: 'A' | 'AA' | 'AAA' | null;
-  
+
   render(document: XatsDocument, options?: LaTeXRenderOptions): Promise<LaTeXRenderResult>;
   parse(content: string, options?: LaTeXParseOptions): Promise<LaTeXParseResult>;
   testRoundTrip(document: XatsDocument, options?: RoundTripOptions): Promise<RoundTripResult>;
@@ -199,7 +199,7 @@ export interface LaTeXConversionWarning extends ParseWarning {
   line?: number;
   column?: number;
   impact: 'low' | 'medium' | 'high';
-  // LaTeX-specific warning types mapped to base types  
+  // LaTeX-specific warning types mapped to base types
   latexWarningType?: 'syntax' | 'math' | 'package' | 'bibliography';
 }
 

@@ -2,14 +2,13 @@
  * @fileoverview LaTeX document validation
  */
 
-import type { XatsDocument, ValidationError, ValidationWarning } from '@xats-org/types';
 import type { FormatValidationResult, LaTeXValidationIssue } from './types';
+import type { XatsDocument, ValidationError, ValidationWarning } from '@xats-org/types';
 
 /**
  * Validates LaTeX documents and xats documents for conversion compatibility
  */
 export class LaTeXValidator {
-  
   /**
    * Validate LaTeX document format and structure
    */
@@ -27,7 +26,7 @@ export class LaTeXValidator {
           type: 'syntax',
           severity: 'warning',
           message: 'No \\documentclass found - assuming fragment',
-          suggestion: 'Add \\documentclass for complete document'
+          suggestion: 'Add \\documentclass for complete document',
         });
       }
 
@@ -52,34 +51,37 @@ export class LaTeXValidator {
         bibliographyValid = false;
         issues.push(...bibIssues);
       }
-
     } catch (error) {
       structureValid = false;
       issues.push({
         type: 'syntax',
         severity: 'error',
         message: error instanceof Error ? error.message : 'Unknown validation error',
-        suggestion: 'Check LaTeX syntax and structure'
+        suggestion: 'Check LaTeX syntax and structure',
       });
     }
 
     return {
-      isValid: structureValid && !issues.some(i => i.severity === 'error'),
+      isValid: structureValid && !issues.some((i) => i.severity === 'error'),
       format: 'latex',
       structureValid,
       mathValid,
       bibliographyValid,
-      errors: issues.filter(i => i.severity === 'error').map(i => ({
-        path: 'document',
-        message: i.message,
-        severity: 'error' as const
-      })),
-      warnings: issues.filter(i => i.severity === 'warning').map(i => ({
-        path: 'document',
-        message: i.message,
-        category: 'format' as const
-      })),
-      latexSpecificIssues: issues
+      errors: issues
+        .filter((i) => i.severity === 'error')
+        .map((i) => ({
+          path: 'document',
+          message: i.message,
+          severity: 'error' as const,
+        })),
+      warnings: issues
+        .filter((i) => i.severity === 'warning')
+        .map((i) => ({
+          path: 'document',
+          message: i.message,
+          category: 'format' as const,
+        })),
+      latexSpecificIssues: issues,
     };
   }
 
@@ -99,7 +101,7 @@ export class LaTeXValidator {
           type: 'syntax',
           severity: 'error',
           message: 'Missing schema version',
-          suggestion: 'Add schemaVersion property to document'
+          suggestion: 'Add schemaVersion property to document',
         });
       }
 
@@ -109,7 +111,7 @@ export class LaTeXValidator {
           type: 'syntax',
           severity: 'error',
           message: 'Missing body matter',
-          suggestion: 'Document must have bodyMatter content'
+          suggestion: 'Document must have bodyMatter content',
         });
       }
 
@@ -120,17 +122,16 @@ export class LaTeXValidator {
       // Validate mathematical content
       const mathIssues = this.validateXatsMathContent(document);
       if (mathIssues.length > 0) {
-        mathValid = mathIssues.some(i => i.severity === 'error');
+        mathValid = mathIssues.some((i) => i.severity === 'error');
         issues.push(...mathIssues);
       }
-
     } catch (error) {
       structureValid = false;
       issues.push({
         type: 'syntax',
         severity: 'error',
         message: error instanceof Error ? error.message : 'Document validation failed',
-        suggestion: 'Ensure document follows xats schema'
+        suggestion: 'Ensure document follows xats schema',
       });
     }
 
@@ -140,17 +141,21 @@ export class LaTeXValidator {
       structureValid,
       mathValid,
       bibliographyValid: true,
-      errors: issues.filter(i => i.severity === 'error').map(i => ({
-        path: 'document',
-        message: i.message,
-        severity: 'error' as const
-      })),
-      warnings: issues.filter(i => i.severity === 'warning').map(i => ({
-        path: 'document',
-        message: i.message,
-        category: 'format' as const
-      })),
-      latexSpecificIssues: issues
+      errors: issues
+        .filter((i) => i.severity === 'error')
+        .map((i) => ({
+          path: 'document',
+          message: i.message,
+          severity: 'error' as const,
+        })),
+      warnings: issues
+        .filter((i) => i.severity === 'warning')
+        .map((i) => ({
+          path: 'document',
+          message: i.message,
+          category: 'format' as const,
+        })),
+      latexSpecificIssues: issues,
     };
   }
 
@@ -192,7 +197,7 @@ export class LaTeXValidator {
           severity: 'warning',
           message: 'Use \\[ \\] instead of $$ for display math',
           line: lineNum,
-          suggestion: 'Replace $$ with \\[ and \\]'
+          suggestion: 'Replace $$ with \\[ and \\]',
         });
       }
 
@@ -205,7 +210,7 @@ export class LaTeXValidator {
             severity: 'warning',
             message: `Unknown math command: ${cmd}`,
             line: lineNum,
-            suggestion: 'Ensure command is defined or package is loaded'
+            suggestion: 'Ensure command is defined or package is loaded',
           });
         }
       }
@@ -217,7 +222,7 @@ export class LaTeXValidator {
         type: 'math',
         severity: 'error',
         message: 'Unmatched inline math delimiters ($)',
-        suggestion: 'Ensure all $ signs are properly paired'
+        suggestion: 'Ensure all $ signs are properly paired',
       });
     }
 
@@ -226,7 +231,7 @@ export class LaTeXValidator {
         type: 'math',
         severity: 'error',
         message: 'Unmatched display math delimiters (\\[ \\])',
-        suggestion: 'Ensure all \\[ have matching \\]'
+        suggestion: 'Ensure all \\[ have matching \\]',
       });
     }
 
@@ -252,7 +257,7 @@ export class LaTeXValidator {
           severity: 'warning',
           message: `Unescaped special characters: ${unescapedChars.join(', ')}`,
           line: lineNum,
-          suggestion: 'Escape special characters with backslash'
+          suggestion: 'Escape special characters with backslash',
         });
       }
 
@@ -265,7 +270,7 @@ export class LaTeXValidator {
           severity: 'warning',
           message: 'Unmatched braces on this line',
           line: lineNum,
-          suggestion: 'Check brace matching'
+          suggestion: 'Check brace matching',
         });
       }
     }
@@ -281,7 +286,7 @@ export class LaTeXValidator {
 
     // Extract package names
     const packageMatches = content.match(/\\usepackage(?:\[[^\]]*\])?\{([^}]+)\}/g) || [];
-    const packages = packageMatches.map(match => {
+    const packages = packageMatches.map((match) => {
       const nameMatch = match.match(/\{([^}]+)\}/);
       return nameMatch ? nameMatch[1] : '';
     });
@@ -313,7 +318,7 @@ export class LaTeXValidator {
         type: 'bibliography',
         severity: 'warning',
         message: 'Citations found but no bibliography command',
-        suggestion: 'Add \\bibliography{} or \\printbibliography'
+        suggestion: 'Add \\bibliography{} or \\printbibliography',
       });
     }
 
@@ -326,7 +331,7 @@ export class LaTeXValidator {
           type: 'bibliography',
           severity: 'warning',
           message: `Invalid bibliography key format: ${key}`,
-          suggestion: 'Use alphanumeric characters and underscores only'
+          suggestion: 'Use alphanumeric characters and underscores only',
         });
       }
     }
@@ -345,14 +350,10 @@ export class LaTeXValidator {
       'https://xats.org/vocabularies/blocks/interactive',
       'https://xats.org/vocabularies/blocks/video',
       'https://xats.org/vocabularies/blocks/audio',
-      'https://xats.org/vocabularies/blocks/3dModel'
+      'https://xats.org/vocabularies/blocks/3dModel',
     ];
 
-    this.checkBlockTypesRecursive(
-      document.bodyMatter?.contents || [],
-      incompatibleTypes,
-      issues
-    );
+    this.checkBlockTypesRecursive(document.bodyMatter?.contents || [], incompatibleTypes, issues);
 
     return issues;
   }
@@ -375,23 +376,38 @@ export class LaTeXValidator {
   private isUnknownMathCommand(cmd: string): boolean {
     // List of common math commands - this would be expanded
     const knownCommands = [
-      '\\alpha', '\\beta', '\\gamma', '\\delta', '\\epsilon', '\\theta',
-      '\\sum', '\\int', '\\frac', '\\sqrt', '\\sin', '\\cos', '\\tan',
-      '\\begin', '\\end', '\\left', '\\right', '\\text'
+      '\\alpha',
+      '\\beta',
+      '\\gamma',
+      '\\delta',
+      '\\epsilon',
+      '\\theta',
+      '\\sum',
+      '\\int',
+      '\\frac',
+      '\\sqrt',
+      '\\sin',
+      '\\cos',
+      '\\tan',
+      '\\begin',
+      '\\end',
+      '\\left',
+      '\\right',
+      '\\text',
     ];
     return !knownCommands.includes(cmd);
   }
 
   private checkPackageConflicts(packages: string[]): LaTeXValidationIssue[] {
     const issues: LaTeXValidationIssue[] = [];
-    
+
     // Example conflicts
     if (packages.includes('amsmath') && packages.includes('amstex')) {
       issues.push({
         type: 'package',
         severity: 'warning',
         message: 'amsmath and amstex packages may conflict',
-        suggestion: 'Use amsmath instead of amstex'
+        suggestion: 'Use amsmath instead of amstex',
       });
     }
 
@@ -407,7 +423,7 @@ export class LaTeXValidator {
         type: 'package',
         severity: 'warning',
         message: 'Math environments found but amsmath not loaded',
-        suggestion: 'Add \\usepackage{amsmath}'
+        suggestion: 'Add \\usepackage{amsmath}',
       });
     }
 
@@ -417,7 +433,7 @@ export class LaTeXValidator {
         type: 'package',
         severity: 'error',
         message: 'Graphics commands found but graphicx not loaded',
-        suggestion: 'Add \\usepackage{graphicx}'
+        suggestion: 'Add \\usepackage{graphicx}',
       });
     }
 
@@ -439,7 +455,7 @@ export class LaTeXValidator {
           type: 'syntax',
           severity: 'warning',
           message: `Block type not well-supported in LaTeX: ${item.blockType}`,
-          suggestion: 'Consider alternative representation or skip this block'
+          suggestion: 'Consider alternative representation or skip this block',
         });
       }
 
@@ -457,13 +473,13 @@ export class LaTeXValidator {
           // Simple validation - check for balanced braces
           const openBraces = (latex.match(/{/g) || []).length;
           const closeBraces = (latex.match(/}/g) || []).length;
-          
+
           if (openBraces !== closeBraces) {
             issues.push({
               type: 'math',
               severity: 'error',
               message: 'Unbalanced braces in math block',
-              suggestion: 'Check LaTeX syntax in math content'
+              suggestion: 'Check LaTeX syntax in math content',
             });
           }
         }

@@ -2,20 +2,15 @@
  * @fileoverview Round-trip fidelity testing for LaTeX converter
  */
 
-import type { XatsDocument } from '@xats-org/types';
-import type {
-  RoundTripOptions,
-  RoundTripResult,
-  FidelityIssue,
-  DocumentDifference
-} from './types';
 import { isEqual, difference } from 'lodash';
+
+import type { RoundTripOptions, RoundTripResult, FidelityIssue, DocumentDifference } from './types';
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * Tests round-trip conversion fidelity between xats and LaTeX formats
  */
 export class FidelityTester {
-
   /**
    * Compare original and converted documents
    */
@@ -30,18 +25,28 @@ export class FidelityTester {
 
     try {
       // Calculate fidelity scores
-      const contentFidelity = this.calculateContentFidelity(original, converted, issues, differences);
-      const formattingFidelity = options.ignoreFormatting ? 1.0 : 
-        this.calculateFormattingFidelity(original, converted, issues, differences);
-      const structureFidelity = this.calculateStructureFidelity(original, converted, issues, differences);
+      const contentFidelity = this.calculateContentFidelity(
+        original,
+        converted,
+        issues,
+        differences
+      );
+      const formattingFidelity = options.ignoreFormatting
+        ? 1.0
+        : this.calculateFormattingFidelity(original, converted, issues, differences);
+      const structureFidelity = this.calculateStructureFidelity(
+        original,
+        converted,
+        issues,
+        differences
+      );
 
       // Calculate overall score
       const weights = { content: 0.6, formatting: 0.2, structure: 0.2 };
-      const overallScore = (
+      const overallScore =
         contentFidelity * weights.content +
         formattingFidelity * weights.formatting +
-        structureFidelity * weights.structure
-      );
+        structureFidelity * weights.structure;
 
       const success = overallScore >= threshold;
 
@@ -54,9 +59,8 @@ export class FidelityTester {
         issues,
         originalDocument: original,
         convertedDocument: converted,
-        differences
+        differences,
       };
-
     } catch (error) {
       return {
         success: false,
@@ -64,14 +68,16 @@ export class FidelityTester {
         contentFidelity: 0,
         formattingFidelity: 0,
         structureFidelity: 0,
-        issues: [{
-          type: 'content',
-          severity: 'critical',
-          description: `Fidelity testing failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-        }],
+        issues: [
+          {
+            type: 'content',
+            severity: 'critical',
+            description: `Fidelity testing failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          },
+        ],
         originalDocument: original,
         convertedDocument: converted,
-        differences: []
+        differences: [],
       };
     }
   }
@@ -100,14 +106,14 @@ export class FidelityTester {
         severity: 'minor',
         description: 'Document title mismatch',
         originalValue: original.bibliographicEntry?.title,
-        convertedValue: converted.bibliographicEntry?.title
+        convertedValue: converted.bibliographicEntry?.title,
       });
       differences.push({
         path: 'bibliographicEntry.title',
         type: 'modified',
         original: original.bibliographicEntry?.title,
         converted: converted.bibliographicEntry?.title,
-        impact: 'low'
+        impact: 'low',
       });
     }
 
@@ -122,7 +128,7 @@ export class FidelityTester {
         severity: 'minor',
         description: 'Subject mismatch',
         originalValue: original.subject,
-        convertedValue: converted.subject
+        convertedValue: converted.subject,
       });
     }
 
@@ -130,7 +136,12 @@ export class FidelityTester {
     const originalBlocks = this.extractContentBlocks(original);
     const convertedBlocks = this.extractContentBlocks(converted);
 
-    const blockFidelity = this.compareContentBlocks(originalBlocks, convertedBlocks, issues, differences);
+    const blockFidelity = this.compareContentBlocks(
+      originalBlocks,
+      convertedBlocks,
+      issues,
+      differences
+    );
     score = Math.min(score, blockFidelity);
 
     return Math.max(0, score);
@@ -152,7 +163,7 @@ export class FidelityTester {
     const convertedFormatting = this.extractFormattingInfo(converted);
 
     const formattingDifferences = this.compareFormatting(originalFormatting, convertedFormatting);
-    
+
     for (const diff of formattingDifferences) {
       score -= 0.1;
       issues.push({
@@ -160,14 +171,14 @@ export class FidelityTester {
         severity: 'minor',
         description: `Formatting difference: ${diff.description}`,
         originalValue: diff.original,
-        convertedValue: diff.converted
+        convertedValue: diff.converted,
       });
       differences.push({
         path: diff.path,
         type: 'modified',
         original: diff.original,
         converted: diff.converted,
-        impact: 'medium'
+        impact: 'medium',
       });
     }
 
@@ -194,7 +205,7 @@ export class FidelityTester {
       issues.push({
         type: 'structure',
         severity: 'major',
-        description: 'Body matter presence mismatch'
+        description: 'Body matter presence mismatch',
       });
     }
 
@@ -203,7 +214,7 @@ export class FidelityTester {
       issues.push({
         type: 'structure',
         severity: 'minor',
-        description: 'Front matter presence mismatch'
+        description: 'Front matter presence mismatch',
       });
     }
 
@@ -212,7 +223,7 @@ export class FidelityTester {
       issues.push({
         type: 'structure',
         severity: 'minor',
-        description: 'Back matter presence mismatch'
+        description: 'Back matter presence mismatch',
       });
     }
 
@@ -224,7 +235,7 @@ export class FidelityTester {
         severity: 'major',
         description: 'Document nesting structure significantly changed',
         originalValue: originalStructure.maxNestingLevel,
-        convertedValue: convertedStructure.maxNestingLevel
+        convertedValue: convertedStructure.maxNestingLevel,
       });
     }
 
@@ -274,16 +285,17 @@ export class FidelityTester {
 
     // Check block count
     if (originalBlocks.length !== convertedBlocks.length) {
-      const ratio = Math.min(originalBlocks.length, convertedBlocks.length) / 
-                   Math.max(originalBlocks.length, convertedBlocks.length);
+      const ratio =
+        Math.min(originalBlocks.length, convertedBlocks.length) /
+        Math.max(originalBlocks.length, convertedBlocks.length);
       score *= ratio;
-      
+
       issues.push({
         type: 'content',
         severity: 'major',
         description: `Block count mismatch: ${originalBlocks.length} vs ${convertedBlocks.length}`,
         originalValue: originalBlocks.length,
-        convertedValue: convertedBlocks.length
+        convertedValue: convertedBlocks.length,
       });
     }
 
@@ -303,14 +315,14 @@ export class FidelityTester {
           severity: 'minor',
           description: `Block ${i} content or type mismatch`,
           originalValue: originalBlock.blockType,
-          convertedValue: convertedBlock.blockType
+          convertedValue: convertedBlock.blockType,
         });
         differences.push({
           path: `blocks[${i}]`,
           type: 'modified',
           original: originalBlock,
           converted: convertedBlock,
-          impact: 'medium'
+          impact: 'medium',
         });
       }
     }
@@ -365,19 +377,19 @@ export class FidelityTester {
    */
   private calculateTextSimilarity(text1: string, text2: string): number {
     const normalize = (text: string) => text.toLowerCase().replace(/\s+/g, ' ').trim();
-    
+
     const norm1 = normalize(text1);
     const norm2 = normalize(text2);
 
     if (norm1 === norm2) return 1.0;
-    
+
     // Simple similarity based on common words
     const words1 = new Set(norm1.split(' '));
     const words2 = new Set(norm2.split(' '));
-    
-    const intersection = new Set([...words1].filter(word => words2.has(word)));
+
+    const intersection = new Set([...words1].filter((word) => words2.has(word)));
     const union = new Set([...words1, ...words2]);
-    
+
     return union.size > 0 ? intersection.size / union.size : 0;
   }
 
@@ -395,7 +407,7 @@ export class FidelityTester {
       superscriptCount: 0,
       mathInlineCount: 0,
       referenceCount: 0,
-      citationCount: 0
+      citationCount: 0,
     };
 
     const processBlocks = (blocks: any[]) => {
@@ -403,20 +415,40 @@ export class FidelityTester {
         if (block.content?.text?.runs) {
           for (const run of block.content.text.runs) {
             switch (run.type) {
-              case 'emphasis': info.emphasisCount++; break;
-              case 'strong': info.strongCount++; break;
-              case 'code': info.codeCount++; break;
-              case 'underline': info.underlineCount++; break;
-              case 'strikethrough': info.strikethroughCount++; break;
-              case 'subscript': info.subscriptCount++; break;
-              case 'superscript': info.superscriptCount++; break;
-              case 'mathInline': info.mathInlineCount++; break;
-              case 'reference': info.referenceCount++; break;
-              case 'citation': info.citationCount++; break;
+              case 'emphasis':
+                info.emphasisCount++;
+                break;
+              case 'strong':
+                info.strongCount++;
+                break;
+              case 'code':
+                info.codeCount++;
+                break;
+              case 'underline':
+                info.underlineCount++;
+                break;
+              case 'strikethrough':
+                info.strikethroughCount++;
+                break;
+              case 'subscript':
+                info.subscriptCount++;
+                break;
+              case 'superscript':
+                info.superscriptCount++;
+                break;
+              case 'mathInline':
+                info.mathInlineCount++;
+                break;
+              case 'reference':
+                info.referenceCount++;
+                break;
+              case 'citation':
+                info.citationCount++;
+                break;
             }
           }
         }
-        
+
         // Process nested content
         if (block.contents) {
           processBlocks(block.contents);
@@ -436,24 +468,31 @@ export class FidelityTester {
    */
   private compareFormatting(original: any, converted: any): any[] {
     const differences: any[] = [];
-    
+
     const formatTypes = [
-      'emphasisCount', 'strongCount', 'codeCount', 'underlineCount',
-      'strikethroughCount', 'subscriptCount', 'superscriptCount',
-      'mathInlineCount', 'referenceCount', 'citationCount'
+      'emphasisCount',
+      'strongCount',
+      'codeCount',
+      'underlineCount',
+      'strikethroughCount',
+      'subscriptCount',
+      'superscriptCount',
+      'mathInlineCount',
+      'referenceCount',
+      'citationCount',
     ];
-    
+
     for (const type of formatTypes) {
       if (original[type] !== converted[type]) {
         differences.push({
           path: `formatting.${type}`,
           description: `${type} count mismatch`,
           original: original[type],
-          converted: converted[type]
+          converted: converted[type],
         });
       }
     }
-    
+
     return differences;
   }
 
@@ -465,7 +504,7 @@ export class FidelityTester {
       hasBodyMatter: !!document.bodyMatter,
       hasFrontMatter: !!document.frontMatter,
       hasBackMatter: !!document.backMatter,
-      maxNestingLevel: this.calculateMaxNestingLevel(document)
+      maxNestingLevel: this.calculateMaxNestingLevel(document),
     };
   }
 
@@ -477,7 +516,7 @@ export class FidelityTester {
 
     const calculateLevel = (contents: any[], currentLevel: number) => {
       maxLevel = Math.max(maxLevel, currentLevel);
-      
+
       for (const item of contents || []) {
         if (item.contents) {
           calculateLevel(item.contents, currentLevel + 1);

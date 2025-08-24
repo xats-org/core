@@ -2,12 +2,7 @@
  * @fileoverview Mathematical content processing for LaTeX converter
  */
 
-import type {
-  MathExpression,
-  MathEnvironment,
-  MathParsingOptions,
-  MathDelimiters
-} from './types';
+import type { MathExpression, MathEnvironment, MathParsingOptions, MathDelimiters } from './types';
 
 /**
  * Processes mathematical content between xats and LaTeX formats
@@ -22,10 +17,13 @@ export class MathProcessor {
   /**
    * Convert xats math block to LaTeX
    */
-  async renderMathBlock(content: any, options: { delimiters?: MathDelimiters } = {}): Promise<string> {
+  async renderMathBlock(
+    content: any,
+    options: { delimiters?: MathDelimiters } = {}
+  ): Promise<string> {
     const delimiters = options.delimiters || {
       inline: { open: '$', close: '$' },
-      display: { open: '\\[', close: '\\]' }
+      display: { open: '\\[', close: '\\]' },
     };
 
     if (!content) return '';
@@ -35,7 +33,7 @@ export class MathProcessor {
       // Direct LaTeX content
       const latex = content.latex.trim();
       const isDisplayMath = content.display === true || latex.includes('\\begin{');
-      
+
       if (isDisplayMath) {
         return this.wrapDisplayMath(latex, delimiters, content);
       } else {
@@ -55,27 +53,32 @@ export class MathProcessor {
 
     // Fallback to text content
     const text = content.text || String(content);
-    return content.display ? delimiters.display.open + text + delimiters.display.close 
-                           : delimiters.inline.open + text + delimiters.inline.close;
+    return content.display
+      ? delimiters.display.open + text + delimiters.display.close
+      : delimiters.inline.open + text + delimiters.inline.close;
   }
 
   /**
    * Parse LaTeX math content to xats format
    */
-  async parseMathContent(latex: string, options: MathParsingOptions = {}): Promise<MathExpression[]> {
+  async parseMathContent(
+    latex: string,
+    options: MathParsingOptions = {}
+  ): Promise<MathExpression[]> {
     const expressions: MathExpression[] = [];
-    
+
     // Parse display math environments
-    const displayMathRegex = /\\begin\{(equation|align|alignat|gather|multline|split)\*?\}(.*?)\\end\{\1\*?\}/gs;
+    const displayMathRegex =
+      /\\begin\{(equation|align|alignat|gather|multline|split)\*?\}(.*?)\\end\{\1\*?\}/gs;
     let match;
-    
+
     while ((match = displayMathRegex.exec(latex)) !== null) {
       const [fullMatch, environment, content] = match;
       expressions.push({
         type: 'environment',
         latex: content.trim(),
-        environment: environment,
-        rendered: options.preserveLaTeX ? fullMatch : undefined
+        environment,
+        rendered: options.preserveLaTeX ? fullMatch : undefined,
       });
     }
 
@@ -85,7 +88,7 @@ export class MathProcessor {
       expressions.push({
         type: 'display',
         latex: match[1].trim(),
-        rendered: options.preserveLaTeX ? match[0] : undefined
+        rendered: options.preserveLaTeX ? match[0] : undefined,
       });
     }
 
@@ -95,7 +98,7 @@ export class MathProcessor {
       expressions.push({
         type: 'inline',
         latex: match[1].trim(),
-        rendered: options.preserveLaTeX ? match[0] : undefined
+        rendered: options.preserveLaTeX ? match[0] : undefined,
       });
     }
 
@@ -107,13 +110,14 @@ export class MathProcessor {
    */
   extractMathEnvironments(latex: string): MathEnvironment[] {
     const environments: MathEnvironment[] = [];
-    const envRegex = /\\begin\{(equation|align|alignat|gather|multline|split)(\*?)\}(.*?)\\end\{\1\2\}/gs;
+    const envRegex =
+      /\\begin\{(equation|align|alignat|gather|multline|split)(\*?)\}(.*?)\\end\{\1\2\}/gs;
     let match;
 
     while ((match = envRegex.exec(latex)) !== null) {
       const [, envName, star, content] = match;
       const numbered = star !== '*';
-      
+
       // Extract label if present
       const labelMatch = content.match(/\\label\{([^}]+)\}/);
       const label = labelMatch ? labelMatch[1] : undefined;
@@ -122,7 +126,7 @@ export class MathProcessor {
         name: envName,
         content: content.trim(),
         numbered,
-        label
+        label,
       });
     }
 
@@ -173,9 +177,9 @@ export class MathProcessor {
    */
   private convertAsciiMathToLaTeX(asciimath: string, display = false): string {
     // Basic AsciiMath to LaTeX conversions
-    let latex = asciimath
-      .replace(/\^([^{])/g, '^{$1}')  // Fix exponents
-      .replace(/_([^{])/g, '_{$1}')   // Fix subscripts
+    const latex = asciimath
+      .replace(/\^([^{])/g, '^{$1}') // Fix exponents
+      .replace(/_([^{])/g, '_{$1}') // Fix subscripts
       .replace(/sqrt/g, '\\sqrt')
       .replace(/sum/g, '\\sum')
       .replace(/int/g, '\\int')
@@ -201,18 +205,19 @@ export class MathProcessor {
    */
   assessComplexity(latex: string): 'low' | 'medium' | 'high' {
     const complexFeatures = [
-      /\\begin\{(align|alignat|gather|multline|split)\}/,  // Multi-line equations
-      /\\frac/,                                            // Fractions
-      /\\int|\\sum|\\prod/,                               // Integrals, sums
-      /\\sqrt/,                                           // Square roots
-      /\{.*\{.*\}/,                                      // Nested braces
-      /\\mathbb|\\mathcal|\\mathfrak/,                   // Special fonts
-      /\\matrix|\\pmatrix|\\bmatrix/                     // Matrices
+      /\\begin\{(align|alignat|gather|multline|split)\}/, // Multi-line equations
+      /\\frac/, // Fractions
+      /\\int|\\sum|\\prod/, // Integrals, sums
+      /\\sqrt/, // Square roots
+      /\{.*\{.*\}/, // Nested braces
+      /\\mathbb|\\mathcal|\\mathfrak/, // Special fonts
+      /\\matrix|\\pmatrix|\\bmatrix/, // Matrices
     ];
 
-    const complexCount = complexFeatures.reduce((count, regex) => {
-      return count + (regex.test(latex) ? 1 : 0);
-    }, 0);
+    const complexCount = complexFeatures.reduce(
+      (count, regex) => count + (regex.test(latex) ? 1 : 0),
+      0
+    );
 
     if (complexCount === 0) return 'low';
     if (complexCount <= 2) return 'medium';
@@ -224,8 +229,8 @@ export class MathProcessor {
    */
   cleanupMath(latex: string): string {
     return latex
-      .replace(/\s+/g, ' ')        // Normalize whitespace
-      .replace(/\{\s*\}/g, '{}')   // Clean empty braces
+      .replace(/\s+/g, ' ') // Normalize whitespace
+      .replace(/\{\s*\}/g, '{}') // Clean empty braces
       .replace(/\s*\\\\\s*/g, '\\\\') // Clean line breaks
       .trim();
   }
@@ -261,7 +266,7 @@ export class MathProcessor {
 
     return {
       valid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -270,11 +275,11 @@ export class MathProcessor {
    */
   createNumberedEquation(latex: string, label?: string): string {
     let equation = `\\begin{equation}\n${latex}\n`;
-    
+
     if (label) {
       equation += `\\label{${label}}\n`;
     }
-    
+
     equation += '\\end{equation}';
     return equation;
   }
@@ -284,7 +289,7 @@ export class MathProcessor {
    */
   createAlignedEquations(equations: string[], labels?: string[]): string {
     let align = '\\begin{align}\n';
-    
+
     equations.forEach((eq, index) => {
       align += eq;
       if (labels && labels[index]) {
@@ -296,7 +301,7 @@ export class MathProcessor {
         align += '\n';
       }
     });
-    
+
     align += '\\end{align}';
     return align;
   }

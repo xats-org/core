@@ -19,7 +19,7 @@ export type {
   LaTeXRenderResult,
   LaTeXParseResult,
   LaTeXRenderMetadata,
-  LaTeXParseMetadata
+  LaTeXParseMetadata,
 } from './types';
 export { LaTeXValidator } from './validator';
 export { MathProcessor } from './math-processor';

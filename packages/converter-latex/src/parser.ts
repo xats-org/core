@@ -2,17 +2,16 @@
  * @fileoverview LaTeX document parser - converts LaTeX to xats
  */
 
-import type { XatsDocument, ContentBlock } from '@xats-org/types';
+import type { BibliographyProcessor } from './bibliography-processor';
+import type { MathProcessor } from './math-processor';
+import type { PackageManager } from './package-manager';
 import type { LaTeXParseOptions, LaTeXParseResult, LaTeXMetadata } from './types';
-import { MathProcessor } from './math-processor';
-import { BibliographyProcessor } from './bibliography-processor';
-import { PackageManager } from './package-manager';
+import type { XatsDocument, ContentBlock } from '@xats-org/types';
 
 /**
  * Parses LaTeX documents to xats format
  */
 export class DocumentParser {
-  
   constructor(
     private readonly mathProcessor: MathProcessor,
     private readonly bibliographyProcessor: BibliographyProcessor,
@@ -26,30 +25,31 @@ export class DocumentParser {
     try {
       // Extract metadata first
       const metadata = await this.extractMetadata(content);
-      
+
       // Parse document structure
       const xatsDocument = await this.convertToXats(content, options);
-      
+
       // Extract packages and commands
       const packages = this.extractPackages(content);
       const customCommands = this.extractCustomCommands(content);
-      
+
       // Extract bibliography if requested
       let bibliography;
       if (options.bibliography?.parseBibFiles) {
         bibliography = await this.extractBibliography(content);
       }
-      
+
       return {
         document: xatsDocument,
         metadata,
         packages,
         bibliography,
-        customCommands
+        customCommands,
       };
-      
     } catch (error) {
-      throw new Error(`LaTeX parsing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `LaTeX parsing failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -68,7 +68,7 @@ export class DocumentParser {
       tableCount: this.countTables(content),
       crossReferences: this.countCrossReferences(content),
       bibliographyCount: this.countBibliography(content),
-      wordCount: this.estimateWordCount(content)
+      wordCount: this.estimateWordCount(content),
     };
 
     // Extract document metadata
@@ -101,7 +101,7 @@ export class DocumentParser {
   private async convertToXats(content: string, options: LaTeXParseOptions): Promise<XatsDocument> {
     // Extract document body
     let bodyContent = content;
-    
+
     // Remove preamble if full document
     const documentMatch = content.match(/\\begin\{document\}([\s\S]*?)\\end\{document\}/);
     if (documentMatch) {
@@ -118,12 +118,12 @@ export class DocumentParser {
       schemaVersion: '0.5.0',
       bibliographicEntry: {
         type: 'article',
-        title: this.cleanLaTeX(title)
+        title: this.cleanLaTeX(title),
       },
       subject: 'Converted Content',
       bodyMatter: {
-        contents
-      }
+        contents,
+      },
     };
 
     return xatsDocument;
@@ -134,10 +134,10 @@ export class DocumentParser {
    */
   private async parseContent(content: string, options: LaTeXParseOptions): Promise<any[]> {
     const blocks: any[] = [];
-    
+
     // Split content by paragraphs and major constructs
     const segments = this.segmentContent(content);
-    
+
     for (const segment of segments) {
       const block = await this.parseSegment(segment, options);
       if (block) {
@@ -158,7 +158,7 @@ export class DocumentParser {
 
     for (const line of lines) {
       const trimmedLine = line.trim();
-      
+
       // Check for section headings
       if (/^\\(sub)*section\*?\{/.test(trimmedLine)) {
         if (currentSegment.trim()) {
@@ -168,14 +168,14 @@ export class DocumentParser {
         segments.push(trimmedLine);
         continue;
       }
-      
+
       // Check for environment starts
       if (/^\\begin\{/.test(trimmedLine)) {
         if (currentSegment.trim()) {
           segments.push(currentSegment.trim());
           currentSegment = '';
         }
-        
+
         // Extract full environment
         const envName = trimmedLine.match(/\\begin\{([^}]+)\}/)?.[1];
         if (envName) {
@@ -184,10 +184,10 @@ export class DocumentParser {
         }
         continue;
       }
-      
+
       // Regular content
       if (trimmedLine || currentSegment.trim()) {
-        currentSegment += line + '\n';
+        currentSegment += `${line}\n`;
       } else if (currentSegment.trim()) {
         // Empty line - end of paragraph
         segments.push(currentSegment.trim());
@@ -205,7 +205,10 @@ export class DocumentParser {
   /**
    * Parse individual segment
    */
-  private async parseSegment(segment: string, options: LaTeXParseOptions): Promise<ContentBlock | null> {
+  private async parseSegment(
+    segment: string,
+    options: LaTeXParseOptions
+  ): Promise<ContentBlock | null> {
     const trimmed = segment.trim();
     if (!trimmed) return null;
 
@@ -262,13 +265,16 @@ export class DocumentParser {
       content: {
         level,
         text: {
-          runs: [{ text: this.cleanLaTeX(title) }]
-        }
-      }
+          runs: [{ text: this.cleanLaTeX(title) }],
+        },
+      },
     };
   }
 
-  private async parseMathEnvironment(content: string, options: LaTeXParseOptions): Promise<ContentBlock> {
+  private async parseMathEnvironment(
+    content: string,
+    options: LaTeXParseOptions
+  ): Promise<ContentBlock> {
     const envMatch = content.match(/\\begin\{([^}]+)\}([\s\S]*?)\\end\{\1\}/);
     if (!envMatch) {
       return this.createParagraphBlock(content);
@@ -285,11 +291,14 @@ export class DocumentParser {
 
     return {
       blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
-      content: mathData
+      content: mathData,
     };
   }
 
-  private async parseDisplayMath(content: string, options: LaTeXParseOptions): Promise<ContentBlock> {
+  private async parseDisplayMath(
+    content: string,
+    options: LaTeXParseOptions
+  ): Promise<ContentBlock> {
     const mathContent = content.replace(/^\\\[/, '').replace(/\\\]$/, '').trim();
 
     const mathData = await this.mathProcessor.parseMathContent(
@@ -300,7 +309,7 @@ export class DocumentParser {
 
     return {
       blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
-      content: mathData
+      content: mathData,
     };
   }
 
@@ -312,21 +321,23 @@ export class DocumentParser {
       blockType: 'https://xats.org/vocabularies/blocks/figure',
       content: {
         src: includeMatch?.[1] || '',
-        caption: captionMatch ? this.cleanLaTeX(captionMatch[1]) : ''
-      }
+        caption: captionMatch ? this.cleanLaTeX(captionMatch[1]) : '',
+      },
     };
   }
 
   private parseTable(content: string): ContentBlock {
     // Simple table parsing - would be more sophisticated in practice
     const rows: any[] = [];
-    
-    const tableLines = content.split('\n').filter(line => line.includes('&') || line.includes('\\\\'));
-    
+
+    const tableLines = content
+      .split('\n')
+      .filter((line) => line.includes('&') || line.includes('\\\\'));
+
     for (const line of tableLines) {
       if (line.includes('&')) {
-        const cells = line.split('&').map(cell => ({
-          text: this.cleanLaTeX(cell.replace(/\\\\/g, '').trim())
+        const cells = line.split('&').map((cell) => ({
+          text: this.cleanLaTeX(cell.replace(/\\\\/g, '').trim()),
         }));
         rows.push({ cells });
       }
@@ -336,17 +347,17 @@ export class DocumentParser {
       blockType: 'https://xats.org/vocabularies/blocks/table',
       content: {
         rows,
-        hasHeader: rows.length > 0
-      }
+        hasHeader: rows.length > 0,
+      },
     };
   }
 
   private parseList(content: string): ContentBlock {
     const isOrdered = content.includes('\\begin{enumerate}');
     const items: string[] = [];
-    
+
     const itemMatches = content.match(/\\item\s+([^\n]*(?:\n(?!\\item)[^\n]*)*)/g) || [];
-    
+
     for (const match of itemMatches) {
       const itemText = match.replace(/^\\item\s+/, '').trim();
       items.push(this.cleanLaTeX(itemText));
@@ -356,8 +367,8 @@ export class DocumentParser {
       blockType: 'https://xats.org/vocabularies/blocks/list',
       content: {
         ordered: isOrdered,
-        items
-      }
+        items,
+      },
     };
   }
 
@@ -369,8 +380,8 @@ export class DocumentParser {
       blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
       content: {
         code,
-        language: ''
-      }
+        language: '',
+      },
     };
   }
 
@@ -379,16 +390,16 @@ export class DocumentParser {
 
     return {
       blockType: 'https://xats.org/vocabularies/blocks/paragraph',
-      content: { text }
+      content: { text },
     };
   }
 
   private parseSemanticText(content: string, options: LaTeXParseOptions): any {
     // Simple semantic text parsing - would be more sophisticated
     const cleanText = this.cleanLaTeX(content);
-    
+
     return {
-      runs: [{ text: cleanText }]
+      runs: [{ text: cleanText }],
     };
   }
 
@@ -397,9 +408,9 @@ export class DocumentParser {
       blockType: 'https://xats.org/vocabularies/blocks/paragraph',
       content: {
         text: {
-          runs: [{ text: this.cleanLaTeX(content) }]
-        }
-      }
+          runs: [{ text: this.cleanLaTeX(content) }],
+        },
+      },
     };
   }
 
@@ -408,33 +419,33 @@ export class DocumentParser {
     const lines = content.split('\n');
     const beginPattern = new RegExp(`\\\\begin\\{${envName}\\}`);
     const endPattern = new RegExp(`\\\\end\\{${envName}\\}`);
-    
+
     let depth = 0;
     let result = '';
-    
+
     for (let i = startIndex; i < lines.length; i++) {
       const line = lines[i];
-      result += line + '\n';
-      
+      result += `${line}\n`;
+
       if (beginPattern.test(line)) depth++;
       if (endPattern.test(line)) {
         depth--;
         if (depth === 0) break;
       }
     }
-    
+
     return result.trim();
   }
 
   private extractPackages(content: string): any[] {
     const packageMatches = content.match(/\\usepackage(?:\[[^\]]*\])?\{([^}]+)\}/g) || [];
-    return packageMatches.map(match => {
+    return packageMatches.map((match) => {
       const nameMatch = match.match(/\{([^}]+)\}/);
       const optionsMatch = match.match(/\[([^\]]+)\]/);
-      
+
       return {
         name: nameMatch?.[1] || '',
-        options: optionsMatch?.[1]?.split(',').map(s => s.trim()) || []
+        options: optionsMatch?.[1]?.split(',').map((s) => s.trim()) || [],
       };
     });
   }
@@ -442,14 +453,14 @@ export class DocumentParser {
   private extractCustomCommands(content: string): Record<string, string> {
     const commands: Record<string, string> = {};
     const matches = content.match(/\\newcommand\{\\([^}]+)\}(?:\[[\d]\])?\{([^}]+)\}/g) || [];
-    
+
     for (const match of matches) {
       const cmdMatch = match.match(/\\newcommand\{\\([^}]+)\}(?:\[[\d]\])?\{([^}]+)\}/);
       if (cmdMatch) {
         commands[cmdMatch[1]] = cmdMatch[2];
       }
     }
-    
+
     return commands;
   }
 
@@ -478,17 +489,17 @@ export class DocumentParser {
   // Metadata extraction helpers
   private extractPackageNames(content: string): string[] {
     const matches = content.match(/\\usepackage(?:\[[^\]]*\])?\{([^}]+)\}/g) || [];
-    return matches.map(match => match.match(/\{([^}]+)\}/)?.[1] || '');
+    return matches.map((match) => match.match(/\{([^}]+)\}/)?.[1] || '');
   }
 
   private extractCommandNames(content: string): string[] {
     const matches = content.match(/\\[a-zA-Z]+/g) || [];
-    return [...new Set(matches.map(cmd => cmd.substring(1)))];
+    return [...new Set(matches.map((cmd) => cmd.substring(1)))];
   }
 
   private extractEnvironmentNames(content: string): string[] {
     const matches = content.match(/\\begin\{([^}]+)\}/g) || [];
-    return [...new Set(matches.map(match => match.match(/\{([^}]+)\}/)?.[1] || ''))];
+    return [...new Set(matches.map((match) => match.match(/\{([^}]+)\}/)?.[1] || ''))];
   }
 
   private assessMathComplexity(content: string): 'low' | 'medium' | 'high' {
@@ -520,6 +531,6 @@ export class DocumentParser {
 
   private estimateWordCount(content: string): number {
     const text = content.replace(/\\[a-zA-Z]+(\[[^\]]*\])*(\{[^}]*\})*/g, '').replace(/[{}]/g, '');
-    return text.split(/\s+/).filter(word => word.length > 0).length;
+    return text.split(/\s+/).filter((word) => word.length > 0).length;
   }
 }

@@ -2,7 +2,14 @@
  * @fileoverview Main LaTeX converter implementation
  */
 
-import type { XatsDocument } from '@xats-org/types';
+import { BibliographyProcessor } from './bibliography-processor';
+import { FidelityTester } from './fidelity-tester';
+import { MathProcessor } from './math-processor';
+import { PackageManager } from './package-manager';
+import { DocumentParser } from './parser';
+import { DocumentRenderer } from './renderer';
+import { LaTeXValidator } from './validator';
+
 import type {
   LaTeXConverter as ILaTeXConverter,
   LaTeXRenderOptions,
@@ -14,16 +21,9 @@ import type {
   FormatValidationResult,
   LaTeXRenderMetadata,
   LaTeXParseMetadata,
-  LaTeXConverterOptions
+  LaTeXConverterOptions,
 } from './types';
-
-import { LaTeXValidator } from './validator';
-import { MathProcessor } from './math-processor';
-import { BibliographyProcessor } from './bibliography-processor';
-import { PackageManager } from './package-manager';
-import { DocumentRenderer } from './renderer';
-import { DocumentParser } from './parser';
-import { FidelityTester } from './fidelity-tester';
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * Academic publishing-grade bidirectional converter for LaTeX documents
@@ -83,21 +83,20 @@ export class LaTeXConverter implements ILaTeXConverter {
         ...result,
         metadata: {
           ...result.metadata,
-          renderTime
-        }
+          renderTime,
+        },
       };
     } catch (error) {
-      throw new Error(`LaTeX render failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `LaTeX render failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
   /**
    * Parse LaTeX document to xats format
    */
-  async parse(
-    content: string,
-    options: LaTeXParseOptions = {}
-  ): Promise<LaTeXParseResult> {
+  async parse(content: string, options: LaTeXParseOptions = {}): Promise<LaTeXParseResult> {
     const startTime = performance.now();
 
     try {
@@ -116,11 +115,13 @@ export class LaTeXConverter implements ILaTeXConverter {
         ...result,
         metadata: {
           ...result.metadata,
-          parseTime: parseTime
-        }
+          parseTime,
+        },
       };
     } catch (error) {
-      throw new Error(`LaTeX parse failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `LaTeX parse failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -135,18 +136,18 @@ export class LaTeXConverter implements ILaTeXConverter {
       // Convert xats -> LaTeX -> xats
       const latexResult = await this.render(document, {
         includeDocumentWrapper: true,
-        includeHeaders: true
+        includeHeaders: true,
       });
 
       const xatsResult = await this.parse(latexResult.content, {
         mathParsing: {
           renderer: 'mathjax',
           preserveLaTeX: true,
-          mathML: true
+          mathML: true,
         },
         bibliography: {
-          parseBibFiles: true
-        }
+          parseBibFiles: true,
+        },
       });
 
       // Test fidelity
@@ -158,14 +159,16 @@ export class LaTeXConverter implements ILaTeXConverter {
         mathFidelity: 0,
         contentFidelity: 0,
         structureFidelity: 0,
-        issues: [{
-          type: 'content',
-          severity: 'critical',
-          description: `Round-trip test failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        }],
+        issues: [
+          {
+            type: 'content',
+            severity: 'critical',
+            description: `Round-trip test failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          },
+        ],
         originalDocument: document,
         convertedDocument: document, // fallback
-        differences: []
+        differences: [],
       };
     }
   }
@@ -184,7 +187,9 @@ export class LaTeXConverter implements ILaTeXConverter {
     try {
       return await this.parser.extractMetadata(content);
     } catch (error) {
-      throw new Error(`Metadata extraction failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Metadata extraction failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 }
