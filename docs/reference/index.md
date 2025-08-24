@@ -65,10 +65,21 @@ Use the links below to navigate to the detailed specification for each definitio
 ## Rights and Licensing (v0.2.0/v0.3.0)
 - [RightsMetadata](./RightsMetadata.md) - Comprehensive intellectual property and licensing information *(enhanced in v0.3.0)*
 
-## Pedagogical Content Types (v0.3.0)
+## Active Learning Framework (v0.5.0)
 
-### Case-Based Learning
-- [CaseStudyContent](./CaseStudyContent.md) - Structured case study scenarios with stakeholders and analysis questions
+### Problem-Based Learning
+- [ProblemScenarioContent](./ProblemScenarioContent.md) - Comprehensive problem-based learning scenarios with multi-phase structure, stakeholder analysis, and authentic constraints
+
+### Skill Acquisition and Transfer
+- [WorkedExampleContent](./WorkedExampleContent.md) - Step-by-step worked examples with progressive fading and scaffolded practice problems
+
+### Collaborative Learning
+- [ThinkPairShareContent](./ThinkPairShareContent.md) - Three-phase collaborative activities promoting peer learning and synthesis
+
+### Applied Analysis
+- [CaseStudyContent](./CaseStudyContent.md) - Enhanced case study scenarios with sophisticated stakeholder modeling and professional decision-making contexts *(enhanced in v0.5.0)*
+
+## Pedagogical Content Types (v0.3.0)
 
 ### Reflective Learning 
 - [MetacognitivePromptContent](./MetacognitivePromptContent.md) - Self-reflection prompts with scaffolding and assessment
@@ -83,6 +94,14 @@ Use the links below to navigate to the detailed specification for each definitio
 - [BackMatter](./BackMatter.md) - Appendices, glossary, bibliography
 
 ---
+
+## What's New in v0.5.0
+
+- **Active Learning Framework**: Four new block types for evidence-based active learning methodologies
+- **Problem-Based Learning**: Comprehensive scenarios with multi-phase structure and stakeholder analysis
+- **Worked Examples with Fading**: Progressive scaffolding system for skill acquisition and transfer
+- **Think-Pair-Share Activities**: Structured collaborative learning with three-phase engagement
+- **Enhanced Case Studies**: Professional decision-making scenarios with sophisticated stakeholder modeling
 
 ## What's New in v0.3.0
 

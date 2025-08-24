@@ -1,0 +1,513 @@
+{
+  "schemaVersion": "0.5.0",
+  "bibliographicEntry": {
+    "id": "active-learning-demo",
+    "type": "book",
+    "title": "Active Learning Blocks Demonstration",
+    "author": [
+      {
+        "family": "xats",
+        "given": "Architecture Team"
+      }
+    ],
+    "issued": {
+      "date-parts": [[2025, 1, 17]]
+    }
+  },
+  "subject": "Educational Technology",
+  "bodyMatter": {
+    "contents": [
+      {
+        "id": "demo-chapter",
+        "language": "en",
+        "title": "Active Learning Methodologies",
+        "sections": [
+          {
+            "id": "intro-section",
+            "language": "en",
+            "title": "Introduction to Active Learning",
+            "content": [
+              {
+                "id": "intro-text",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "content": {
+                  "text": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "This chapter demonstrates the four new active learning block types introduced in xats v0.5.0: Problem-Based Learning scenarios, Case Studies, Worked Examples with progressive fading, and Think-Pair-Share activities."
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "tps-climate-ethics",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/thinkPairShare",
+                "content": {
+                  "prompt": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "How should educational institutions balance individual academic freedom with collective responsibility for addressing climate change? Consider both the rights of faculty and students to pursue diverse perspectives, and the institutional obligation to promote scientifically accurate information."
+                      }
+                    ]
+                  },
+                  "thinkPhase": {
+                    "duration": "PT2M",
+                    "instructions": {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "Spend 2 minutes considering your personal views on this tension. What factors would you weigh in making institutional policies?"
+                        }
+                      ]
+                    },
+                    "scaffolding": [
+                      {
+                        "type": "guiding-question",
+                        "content": {
+                          "runs": [
+                            {
+                              "type": "text", 
+                              "text": "What are the benefits and risks of institutional positions on controversial topics?"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "responseFormat": "notes"
+                  },
+                  "pairPhase": {
+                    "duration": "PT4M",
+                    "instructions": {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "Share your perspectives with your partner. Try to understand viewpoints that differ from your own."
+                        }
+                      ]
+                    },
+                    "pairingStrategy": "proximity",
+                    "recordResponse": true,
+                    "responseFormat": "consensus"
+                  },
+                  "sharePhase": {
+                    "duration": "PT6M",
+                    "format": "volunteer",
+                    "instructions": {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "We'll hear from several pairs about the key tensions they identified."
+                        }
+                      ]
+                    },
+                    "captureMethod": "board"
+                  },
+                  "totalDuration": "PT12M"
+                }
+              },
+              {
+                "id": "worked-example-quadratic",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/workedExample",
+                "content": {
+                  "concept": "Solving quadratic equations using the quadratic formula",
+                  "problem": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Solve for x: 2x² + 5x - 3 = 0"
+                      }
+                    ]
+                  },
+                  "solution": {
+                    "steps": [
+                      {
+                        "number": 1,
+                        "action": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Identify the coefficients a, b, and c from the standard form ax² + bx + c = 0"
+                            }
+                          ]
+                        },
+                        "explanation": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "The quadratic formula requires the coefficients from standard form. Here: a = 2, b = 5, c = -3"
+                            }
+                          ]
+                        },
+                        "result": "a = 2, b = 5, c = -3",
+                        "fadingLevel": 0
+                      },
+                      {
+                        "number": 2,
+                        "action": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Apply the quadratic formula: x = (-b ± √(b² - 4ac)) / (2a)"
+                            }
+                          ]
+                        },
+                        "explanation": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Substitute our values into the quadratic formula to find the solutions."
+                            }
+                          ]
+                        },
+                        "result": "x = (-5 ± √(5² - 4(2)(-3))) / (2(2))",
+                        "fadingLevel": 1,
+                        "hints": [
+                          {
+                            "level": 1,
+                            "hint": {
+                              "runs": [
+                                {
+                                  "type": "text",
+                                  "text": "Remember to substitute each coefficient in the correct position."
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "number": 3,
+                        "action": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Simplify the discriminant (the expression under the square root)"
+                            }
+                          ]
+                        },
+                        "explanation": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "Calculate b² - 4ac step by step to avoid arithmetic errors."
+                            }
+                          ]
+                        },
+                        "result": "b² - 4ac = 25 - 4(2)(-3) = 25 + 24 = 49",
+                        "fadingLevel": 2
+                      }
+                    ]
+                  },
+                  "practiceProblems": [
+                    {
+                      "id": "practice-quad-1",
+                      "problem": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Solve: 3x² - 7x + 2 = 0"
+                          }
+                        ]
+                      },
+                      "scaffoldingLevel": 0.6,
+                      "providedSteps": [1],
+                      "studentCompletes": [2, 3],
+                      "expectedSolution": {
+                        "finalAnswer": {
+                          "runs": [
+                            {
+                              "type": "text",
+                              "text": "x = 2 or x = 1/3"
+                            }
+                          ]
+                        }
+                      },
+                      "difficulty": "similar"
+                    }
+                  ],
+                  "learningObjectives": [
+                    "Apply the quadratic formula correctly",
+                    "Identify coefficients in standard form",
+                    "Simplify expressions with square roots"
+                  ],
+                  "cognitiveLoad": "medium",
+                  "estimatedTimeMinutes": 20
+                }
+              },
+              {
+                "id": "case-study-startup",
+                "language": "en",
+                "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
+                "content": {
+                  "title": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "GreenTech Startup: Scaling Sustainable Innovation"
+                      }
+                    ]
+                  },
+                  "industry": "Clean Technology",
+                  "scenario": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "EcoFlow Technologies, a 2-year-old startup, has developed an innovative water purification system that uses solar energy and advanced filtration. The company has successfully piloted the technology in three rural communities but now faces critical decisions about scaling, funding, and market expansion."
+                      }
+                    ]
+                  },
+                  "background": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Founded by Dr. Sarah Chen (environmental engineer) and Marcus Johnson (business development), EcoFlow emerged from university research. They have $500K in seed funding, 8 employees, and proven technology that reduces water treatment costs by 40% while eliminating 99.9% of contaminants."
+                      }
+                    ]
+                  },
+                  "complications": [
+                    {
+                      "type": "financial",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Series A funding round oversubscribed but with competing term sheets from impact investors vs. traditional VCs"
+                          }
+                        ]
+                      },
+                      "severity": "major"
+                    },
+                    {
+                      "type": "operational",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Manufacturing partner cannot meet projected demand for international expansion"
+                          }
+                        ]
+                      },
+                      "severity": "critical"
+                    }
+                  ],
+                  "stakeholders": [
+                    {
+                      "name": "Dr. Sarah Chen",
+                      "role": "Co-founder & CTO",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Passionate about environmental impact, concerned about maintaining technology quality"
+                          }
+                        ]
+                      },
+                      "motivations": ["Environmental impact", "Technology integrity", "Team culture"]
+                    },
+                    {
+                      "name": "Marcus Johnson", 
+                      "role": "Co-founder & CEO",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Focused on business growth and market opportunity"
+                          }
+                        ]
+                      },
+                      "motivations": ["Market expansion", "Financial returns", "Strategic partnerships"]
+                    }
+                  ],
+                  "questions": [
+                    {
+                      "id": "funding-question",
+                      "question": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "How should EcoFlow evaluate the different funding options? What criteria should guide their decision between impact investors and traditional VCs?"
+                          }
+                        ]
+                      },
+                      "type": "decision",
+                      "cognitiveLevel": "analyze"
+                    },
+                    {
+                      "id": "scaling-question",
+                      "question": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "What alternative manufacturing strategies could EcoFlow pursue to overcome the capacity limitations?"
+                          }
+                        ]
+                      },
+                      "type": "recommendation",
+                      "cognitiveLevel": "create"
+                    }
+                  ],
+                  "teachingNotes": {
+                    "objectives": [
+                      "Analyze startup funding decisions",
+                      "Evaluate scaling strategies for sustainable technology",
+                      "Consider stakeholder alignment in growth decisions"
+                    ],
+                    "discussionFlow": {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "Start with funding decision analysis (15 min), then manufacturing challenges (15 min), finish with integrated strategic recommendation (15 min)"
+                        }
+                      ]
+                    },
+                    "timeAllocation": "PT45M"
+                  },
+                  "expertSolution": {
+                    "content": {
+                      "runs": [
+                        {
+                          "type": "text",
+                          "text": "EcoFlow should prioritize impact investors for Series A funding to maintain mission alignment, while pursuing a hybrid manufacturing strategy combining contract manufacturing partnerships with gradual in-house capacity building."
+                        }
+                      ]
+                    },
+                    "revealTiming": "after-discussion"
+                  },
+                  "difficultyLevel": "intermediate",
+                  "estimatedTimeMinutes": 45
+                }
+              },
+              {
+                "id": "pbl-urban-planning",
+                "language": "en", 
+                "blockType": "https://xats.org/vocabularies/blocks/problemScenario",
+                "content": {
+                  "scenario": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "The city of Riverside (population 180,000) is experiencing rapid growth but faces increasing traffic congestion, air pollution, and economic pressure on downtown businesses. The mayor has hired your planning consultancy to develop a comprehensive transportation solution that addresses environmental, economic, and social needs within budget constraints."
+                      }
+                    ]
+                  },
+                  "context": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Riverside has two major highways intersecting downtown, limited public transit, a university campus, and several residential neighborhoods. Recent 40% increase in commute times is affecting quality of life and local business revenue."
+                      }
+                    ]
+                  },
+                  "stakeholders": [
+                    {
+                      "name": "Mayor Patricia Williams",
+                      "role": "City Leader",
+                      "interests": ["Re-election", "Balanced budget", "Community satisfaction"],
+                      "influence": "high"
+                    },
+                    {
+                      "name": "Downtown Business Association",
+                      "role": "Economic Representatives",
+                      "interests": ["Customer access", "Parking", "Economic growth"],
+                      "influence": "medium"
+                    }
+                  ],
+                  "constraints": [
+                    {
+                      "type": "budget",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Maximum budget of $25 million over 5 years"
+                          }
+                        ]
+                      },
+                      "severity": "absolute"
+                    },
+                    {
+                      "type": "time",
+                      "description": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Visible improvements required within 18 months"
+                          }
+                        ]
+                      },
+                      "severity": "critical"
+                    }
+                  ],
+                  "deliverables": [
+                    {
+                      "type": "analysis",
+                      "requirements": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Comprehensive traffic flow analysis and problem assessment"
+                          }
+                        ]
+                      },
+                      "weight": 0.3
+                    },
+                    {
+                      "type": "solution",
+                      "requirements": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "Integrated transportation improvement plan with phased implementation"
+                          }
+                        ]
+                      },
+                      "weight": 0.4
+                    },
+                    {
+                      "type": "presentation",
+                      "requirements": {
+                        "runs": [
+                          {
+                            "type": "text",
+                            "text": "20-minute stakeholder presentation with visual aids and Q&A"
+                          }
+                        ]
+                      },
+                      "weight": 0.3
+                    }
+                  ],
+                  "phases": [
+                    {
+                      "name": "Problem Analysis",
+                      "activities": ["research", "analyze", "document"],
+                      "duration": "PT8H"
+                    },
+                    {
+                      "name": "Solution Development", 
+                      "activities": ["brainstorm", "ideate", "synthesize"],
+                      "duration": "PT12H"
+                    },
+                    {
+                      "name": "Stakeholder Presentation",
+                      "activities": ["present", "reflect"],
+                      "duration": "PT4H"
+                    }
+                  ],
+                  "difficultyLevel": "advanced",
+                  "estimatedTimeHours": 24,
+                  "collaborationType": "small-group"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

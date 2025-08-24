@@ -1,0 +1,210 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/blocks/workedExample",
+  "title": "Worked Example with Progressive Fading Block",
+  "description": "A pedagogical block that demonstrates problem-solving procedures through step-by-step worked examples with progressive fading support and follow-up practice problems to facilitate skill acquisition and transfer",
+  "type": "object",
+  "properties": {
+    "blockType": {
+      "const": "https://xats.org/vocabularies/blocks/workedExample",
+      "description": "The URI identifier for this block type"
+    },
+    "content": {
+      "$ref": "https://xats.org/schemas/0.5.0/xats.json#/definitions/WorkedExampleContent",
+      "description": "The worked example content including concept identification, problem statement, detailed solution steps with fading levels, and scaffolded practice problems"
+    }
+  },
+  "required": ["blockType", "content"],
+  "examples": [
+    {
+      "blockType": "https://xats.org/vocabularies/blocks/workedExample",
+      "content": {
+        "concept": "Solving Linear Equations with Variables on Both Sides",
+        "problem": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "Solve for x: 3x + 7 = 2x + 12"
+            }
+          ]
+        },
+        "solution": {
+          "steps": [
+            {
+              "number": 1,
+              "action": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "Subtract 2x from both sides of the equation"
+                  }
+                ]
+              },
+              "explanation": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "We subtract 2x from both sides to collect all x terms on one side. This maintains the equality while simplifying the equation."
+                  }
+                ]
+              },
+              "result": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "3x - 2x + 7 = 2x - 2x + 12, which simplifies to x + 7 = 12"
+                  }
+                ]
+              },
+              "fadingLevel": 0
+            },
+            {
+              "number": 2,
+              "action": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "Subtract 7 from both sides of the equation"
+                  }
+                ]
+              },
+              "explanation": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "We subtract the constant term (7) from both sides to isolate the variable term x."
+                  }
+                ]
+              },
+              "result": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "x + 7 - 7 = 12 - 7, which simplifies to x = 5"
+                  }
+                ]
+              },
+              "fadingLevel": 0,
+              "hints": [
+                {
+                  "level": 1,
+                  "hint": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "What operation would undo adding 7?"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "level": 2,
+                  "hint": {
+                    "runs": [
+                      {
+                        "type": "text",
+                        "text": "Subtract 7 from both sides to maintain equality."
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "number": 3,
+              "action": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "Check the solution by substituting x = 5 back into the original equation"
+                  }
+                ]
+              },
+              "explanation": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "Verification ensures our solution is correct and helps build confidence in the problem-solving process."
+                  }
+                ]
+              },
+              "result": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "Left side: 3(5) + 7 = 15 + 7 = 22. Right side: 2(5) + 12 = 10 + 12 = 22. ✓ Solution verified!"
+                  }
+                ]
+              },
+              "fadingLevel": 1
+            }
+          ]
+        },
+        "practiceProblems": [
+          {
+            "id": "practice-1",
+            "problem": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Solve for x: 4x + 3 = 2x + 9"
+                }
+              ]
+            },
+            "scaffoldingLevel": 0.8,
+            "providedSteps": [1],
+            "studentCompletes": [2, 3],
+            "expectedSolution": {
+              "finalAnswer": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "x = 3"
+                  }
+                ]
+              }
+            },
+            "difficulty": "similar"
+          },
+          {
+            "id": "practice-2", 
+            "problem": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Solve for y: 5y - 2 = 3y + 8"
+                }
+              ]
+            },
+            "scaffoldingLevel": 0.3,
+            "providedSteps": [],
+            "studentCompletes": [1, 2, 3],
+            "expectedSolution": {
+              "finalAnswer": {
+                "runs": [
+                  {
+                    "type": "text",
+                    "text": "y = 5"
+                  }
+                ]
+              }
+            },
+            "difficulty": "similar"
+          }
+        ],
+        "learningObjectives": [
+          "Apply properties of equality to solve linear equations",
+          "Collect like terms on opposite sides of an equation",
+          "Verify solutions by substitution"
+        ],
+        "prerequisites": [
+          "Basic algebraic operations",
+          "Understanding of equality properties",
+          "Ability to combine like terms"
+        ],
+        "cognitiveLoad": "medium",
+        "estimatedTimeMinutes": 15
+      }
+    }
+  ]
+}
