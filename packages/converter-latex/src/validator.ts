@@ -2,7 +2,7 @@
  * @fileoverview LaTeX document validation
  */
 
-import type { XatsDocument } from '@xats-org/types';
+import type { XatsDocument, ValidationError, ValidationWarning } from '@xats-org/types';
 import type { FormatValidationResult, LaTeXValidationIssue } from './types';
 
 /**
@@ -64,13 +64,21 @@ export class LaTeXValidator {
     }
 
     return {
-      valid: structureValid && !issues.some(i => i.severity === 'error'),
+      isValid: structureValid && !issues.some(i => i.severity === 'error'),
       format: 'latex',
       structureValid,
       mathValid,
       bibliographyValid,
-      errors: issues.filter(i => i.severity === 'error').map(i => i.message),
-      warnings: issues.filter(i => i.severity === 'warning').map(i => i.message),
+      errors: issues.filter(i => i.severity === 'error').map(i => ({
+        path: 'document',
+        message: i.message,
+        severity: 'error' as const
+      })),
+      warnings: issues.filter(i => i.severity === 'warning').map(i => ({
+        path: 'document',
+        message: i.message,
+        category: 'format' as const
+      })),
       latexSpecificIssues: issues
     };
   }
@@ -127,13 +135,21 @@ export class LaTeXValidator {
     }
 
     return {
-      valid: structureValid && mathValid,
+      isValid: structureValid && mathValid,
       format: 'latex',
       structureValid,
       mathValid,
       bibliographyValid: true,
-      errors: issues.filter(i => i.severity === 'error').map(i => i.message),
-      warnings: issues.filter(i => i.severity === 'warning').map(i => i.message),
+      errors: issues.filter(i => i.severity === 'error').map(i => ({
+        path: 'document',
+        message: i.message,
+        severity: 'error' as const
+      })),
+      warnings: issues.filter(i => i.severity === 'warning').map(i => ({
+        path: 'document',
+        message: i.message,
+        category: 'format' as const
+      })),
       latexSpecificIssues: issues
     };
   }

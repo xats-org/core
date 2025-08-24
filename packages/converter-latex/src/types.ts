@@ -8,7 +8,11 @@ import type {
   RendererOptions,
   RenderResult,
   ParseResult,
-  ValidationResult
+  ValidationResult,
+  RenderMetadata,
+  ParseMetadata,
+  RenderError,
+  ParseWarning
 } from '@xats-org/types';
 
 // Core converter types
@@ -20,7 +24,7 @@ export interface LaTeXConverter {
   parse(content: string, options?: LaTeXParseOptions): Promise<LaTeXParseResult>;
   testRoundTrip(document: XatsDocument, options?: RoundTripOptions): Promise<RoundTripResult>;
   validate(content: string): Promise<FormatValidationResult>;
-  getMetadata?(content: string): Promise<LaTeXMetadata>;
+  getMetadata?(content: string): Promise<LaTeXRenderMetadata>;
 }
 
 // Render options
@@ -74,8 +78,8 @@ export interface MathDelimiters {
 
 // Math parsing options
 export interface MathParsingOptions {
-  renderer: 'mathjax' | 'katex' | 'native';
-  preserveLaTeX: boolean;
+  renderer?: 'mathjax' | 'katex' | 'native';
+  preserveLaTeX?: boolean;
   mathML?: boolean;
   customCommands?: Record<string, string>;
   environments?: Record<string, 'preserve' | 'convert'>;
@@ -84,7 +88,7 @@ export interface MathParsingOptions {
 // Bibliography options
 export interface BibliographyOptions {
   style?: string;
-  backend?: 'bibtex' | 'biber';
+  backend?: 'bibtex' | 'biber' | 'biblatex';
   sortOrder?: string;
   includeFiles?: string[];
 }
@@ -92,18 +96,16 @@ export interface BibliographyOptions {
 // Results
 export interface LaTeXRenderResult extends RenderResult {
   content: string;
-  metadata: LaTeXMetadata;
-  errors?: ConversionError[];
-  warnings?: ConversionWarning[];
+  metadata: LaTeXRenderMetadata;
+  errors?: LaTeXConversionError[];
   packages: LaTeXPackage[];
   customCommands: Record<string, string>;
 }
 
 export interface LaTeXParseResult extends ParseResult {
   document: XatsDocument;
-  metadata: LaTeXMetadata;
-  errors?: ConversionError[];
-  warnings?: ConversionWarning[];
+  metadata: LaTeXParseMetadata;
+  warnings?: LaTeXConversionWarning[];
   packages: LaTeXPackage[];
   bibliography?: BibliographyEntry[];
   customCommands: Record<string, string>;
@@ -130,7 +132,7 @@ export interface RoundTripResult {
 }
 
 // Metadata
-export interface LaTeXMetadata {
+export interface LaTeXRenderMetadata extends RenderMetadata {
   format: 'latex';
   documentClass?: string;
   packages: string[];
@@ -142,8 +144,23 @@ export interface LaTeXMetadata {
   tableCount: number;
   crossReferences: number;
   bibliographyCount: number;
-  wordCount: number;
-  renderTime?: number;
+  author?: string;
+  title?: string;
+  date?: string;
+}
+
+export interface LaTeXParseMetadata extends ParseMetadata {
+  sourceFormat: 'latex';
+  documentClass?: string;
+  packages: string[];
+  commands: string[];
+  environments: string[];
+  mathComplexity: 'low' | 'medium' | 'high';
+  equationCount: number;
+  figureCount: number;
+  tableCount: number;
+  crossReferences: number;
+  bibliographyCount: number;
   author?: string;
   title?: string;
   date?: string;
@@ -168,21 +185,22 @@ export interface LaTeXValidationIssue {
 }
 
 // Errors and warnings
-export interface ConversionError {
+export interface LaTeXConversionError extends RenderError {
   code: string;
-  message: string;
-  recoverable: boolean;
   line?: number;
   column?: number;
   suggestion?: string;
+  // LaTeX-specific error types mapped to base types
+  latexErrorType?: 'syntax' | 'math' | 'package' | 'bibliography';
 }
 
-export interface ConversionWarning {
+export interface LaTeXConversionWarning extends ParseWarning {
   code: string;
-  message: string;
   line?: number;
   column?: number;
   impact: 'low' | 'medium' | 'high';
+  // LaTeX-specific warning types mapped to base types  
+  latexWarningType?: 'syntax' | 'math' | 'package' | 'bibliography';
 }
 
 // Bibliography

@@ -12,7 +12,8 @@ import type {
   RoundTripOptions,
   RoundTripResult,
   FormatValidationResult,
-  LaTeXMetadata,
+  LaTeXRenderMetadata,
+  LaTeXParseMetadata,
   LaTeXConverterOptions
 } from './types';
 
@@ -69,7 +70,7 @@ export class LaTeXConverter implements ILaTeXConverter {
     try {
       // Validate input document
       const validation = await this.validator.validateXatsDocument(document);
-      if (!validation.valid) {
+      if (!validation.isValid) {
         throw new Error(`Invalid xats document: ${validation.errors.join(', ')}`);
       }
 
@@ -102,7 +103,7 @@ export class LaTeXConverter implements ILaTeXConverter {
     try {
       // Validate input format
       const validation = await this.validate(content);
-      if (!validation.valid) {
+      if (!validation.isValid) {
         throw new Error(`Invalid LaTeX document: ${validation.errors.join(', ')}`);
       }
 
@@ -115,7 +116,7 @@ export class LaTeXConverter implements ILaTeXConverter {
         ...result,
         metadata: {
           ...result.metadata,
-          renderTime: parseTime
+          parseTime: parseTime
         }
       };
     } catch (error) {
@@ -179,7 +180,7 @@ export class LaTeXConverter implements ILaTeXConverter {
   /**
    * Get LaTeX document metadata
    */
-  async getMetadata(content: string): Promise<LaTeXMetadata> {
+  async getMetadata(content: string): Promise<LaTeXRenderMetadata> {
     try {
       return await this.parser.extractMetadata(content);
     } catch (error) {

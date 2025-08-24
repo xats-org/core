@@ -18,7 +18,8 @@ export type {
   BibliographyOptions,
   LaTeXRenderResult,
   LaTeXParseResult,
-  LaTeXMetadata
+  LaTeXRenderMetadata,
+  LaTeXParseMetadata
 } from './types';
 export { LaTeXValidator } from './validator';
 export { MathProcessor } from './math-processor';
