@@ -1,10 +1,46 @@
 import { BaseAncillaryGenerator } from '../base-generator';
-import type {
-  ExtractedContent,
-  GenerationResult,
-  OutputFormat,
-  TestBankOptions,
-} from '../types';
+
+import type { ExtractedContent, GenerationResult, OutputFormat, TestBankOptions } from '../types';
+
+// Internal types for test bank structure
+interface Question {
+  id: string;
+  type: 'multiple-choice' | 'true-false' | 'short-answer' | 'essay';
+  question: string;
+  difficulty: string;
+  points: number;
+  topic: string;
+  cognitiveLevel: string;
+  timeEstimate: string;
+  options?: QuestionOption[];
+  correctAnswer?: string | boolean;
+  expectedAnswer?: string;
+  acceptableVariations?: string[];
+  rubric?: string;
+  sampleAnswer?: string;
+  explanation?: string;
+}
+
+interface QuestionOption {
+  label: string;
+  text: string;
+  isCorrect: boolean;
+}
+
+interface AnswerKeyItem {
+  id: string;
+  correctAnswer: string | boolean | undefined;
+  explanation?: string;
+}
+
+interface TestBank {
+  title: string;
+  generatedAt: string;
+  totalQuestions: number;
+  questionTypes: Record<string, number>;
+  questions: Question[];
+  answerKey?: AnswerKeyItem[];
+}
 
 /**
  * Extractor for creating test banks from xats documents
@@ -60,9 +96,7 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
           output = await this.generateDOCXTestBank(testBank, options);
           break;
         default:
-          return this.createErrorResult(options.format, [
-            `Unsupported format: ${options.format}`,
-          ]);
+          return this.createErrorResult(options.format, [`Unsupported format: ${options.format}`]);
       }
 
       const timeElapsed = Date.now() - startTime;
@@ -81,19 +115,21 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Extract questions from content
    */
-  private extractQuestions(
-    content: ExtractedContent[],
-    options: TestBankOptions
-  ): any[] {
-    const questions: any[] = [];
-    const allowedTypes = options.questionTypes || ['multiple-choice', 'true-false', 'short-answer', 'essay'];
+  private extractQuestions(content: ExtractedContent[], options: TestBankOptions): Question[] {
+    const questions: Question[] = [];
+    const allowedTypes = options.questionTypes || [
+      'multiple-choice',
+      'true-false',
+      'short-answer',
+      'essay',
+    ];
     const allowedDifficulties = options.difficultyLevels || ['easy', 'medium', 'hard', 'expert'];
 
     for (const item of content) {
       // Only process items tagged as quiz-bank-item
       if (!item.tags.includes('quiz-bank-item')) continue;
 
-      const questionType = item.metadata?.questionType || 'multiple-choice';
+      const questionType = (item.metadata?.questionType || 'multiple-choice') as Question['type'];
       const difficulty = item.metadata?.difficulty || 'medium';
 
       // Filter by type and difficulty
@@ -110,11 +146,11 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
     if (options.questionsPerTopic) {
       const grouped = this.groupQuestionsByTopic(questions);
       const limited: any[] = [];
-      
+
       for (const topicQuestions of grouped.values()) {
         limited.push(...topicQuestions.slice(0, options.questionsPerTopic));
       }
-      
+
       return limited;
     }
 
@@ -124,11 +160,16 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Create a question object from extracted content
    */
-  private createQuestion(item: ExtractedContent, type: string): any {
-    const questionText = this.extractPlainText(item.content);
+  private createQuestion(
+    item: ExtractedContent,
+    type: 'multiple-choice' | 'true-false' | 'short-answer' | 'essay'
+  ): Question | null {
+    const questionText = this.extractPlainText(
+      item.content as Parameters<typeof this.extractPlainText>[0]
+    );
     if (!questionText) return null;
 
-    const question: any = {
+    const question: Question = {
       id: `q_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type,
       question: questionText,
@@ -153,7 +194,8 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
         question.acceptableVariations = item.metadata?.acceptableVariations || [];
         break;
       case 'essay':
-        question.rubric = item.metadata?.rubricGuidance || 'Evaluate based on understanding and clarity';
+        question.rubric =
+          item.metadata?.rubricGuidance || 'Evaluate based on understanding and clarity';
         question.sampleAnswer = item.metadata?.sampleAnswer || '';
         break;
     }
@@ -164,8 +206,8 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Generate multiple choice options
    */
-  private generateOptions(item: ExtractedContent): any[] {
-    const options = [];
+  private generateOptions(item: ExtractedContent): QuestionOption[] {
+    const options: QuestionOption[] = [];
     const correctAnswer = item.metadata?.correctAnswer || 'Option A';
     const distractors = item.metadata?.distractorHints || [];
 
@@ -201,9 +243,9 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Group questions by topic
    */
-  private groupQuestionsByTopic(questions: any[]): Map<string, any[]> {
-    const grouped = new Map<string, any[]>();
-    
+  private groupQuestionsByTopic(questions: Question[]): Map<string, Question[]> {
+    const grouped = new Map<string, Question[]>();
+
     for (const question of questions) {
       const topic = question.topic || 'General';
       if (!grouped.has(topic)) {
@@ -211,28 +253,28 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
       }
       grouped.get(topic)!.push(question);
     }
-    
+
     return grouped;
   }
 
   /**
    * Count questions by type
    */
-  private countQuestionTypes(questions: any[]): Record<string, number> {
+  private countQuestionTypes(questions: Question[]): Record<string, number> {
     const counts: Record<string, number> = {};
-    
+
     for (const question of questions) {
       counts[question.type] = (counts[question.type] || 0) + 1;
     }
-    
+
     return counts;
   }
 
   /**
    * Generate answer key
    */
-  private generateAnswerKey(questions: any[]): any[] {
-    return questions.map(q => ({
+  private generateAnswerKey(questions: Question[]): AnswerKeyItem[] {
+    return questions.map((q) => ({
       id: q.id,
       correctAnswer: q.correctAnswer || q.expectedAnswer || q.sampleAnswer,
       explanation: q.explanation,
@@ -252,7 +294,7 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Generate Markdown test bank
    */
-  private generateMarkdownTestBank(testBank: any, options: TestBankOptions): string {
+  private generateMarkdownTestBank(testBank: TestBank, options: TestBankOptions): string {
     let markdown = `# ${testBank.title}\n\n`;
     markdown += `*Generated: ${new Date(testBank.generatedAt).toLocaleDateString()}*\n\n`;
     markdown += `**Total Questions:** ${testBank.totalQuestions}\n\n`;
@@ -314,8 +356,10 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Generate HTML test bank
    */
-  private generateHTMLTestBank(testBank: any, options: TestBankOptions): string {
-    const questionsHTML = testBank.questions.map((q: any, i: number) => `
+  private generateHTMLTestBank(testBank: TestBank, options: TestBankOptions): string {
+    const questionsHTML = testBank.questions
+      .map(
+        (q, i) => `
       <div class="question" data-type="${q.type}" data-difficulty="${q.difficulty}">
         <h3>Question ${i + 1}</h3>
         <div class="metadata">
@@ -326,7 +370,9 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
         <p class="question-text">${q.question}</p>
         ${this.formatQuestionHTML(q)}
       </div>
-    `).join('');
+    `
+      )
+      .join('');
 
     return `<!DOCTYPE html>
 <html>
@@ -355,11 +401,12 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Format question as HTML
    */
-  private formatQuestionHTML(question: any): string {
+  private formatQuestionHTML(question: Question): string {
     switch (question.type) {
       case 'multiple-choice':
-        return `<ul class="options">${question.options.map((opt: any) => 
-          `<li>${opt.label}. ${opt.text}</li>`).join('')}</ul>`;
+        return `<ul class="options">${
+          question.options?.map((opt) => `<li>${opt.label}. ${opt.text}</li>`).join('') || ''
+        }</ul>`;
       case 'true-false':
         return '<ul class="options"><li>A. True</li><li>B. False</li></ul>';
       case 'short-answer':
@@ -374,11 +421,14 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Format answer key as HTML
    */
-  private formatAnswerKeyHTML(answerKey: any[]): string {
-    const answersHTML = answerKey.map((a: any, i: number) => 
-      `<li>${i + 1}. ${a.correctAnswer}${a.explanation ? ` - ${a.explanation}` : ''}</li>`
-    ).join('');
-    
+  private formatAnswerKeyHTML(answerKey: AnswerKeyItem[]): string {
+    const answersHTML = answerKey
+      .map(
+        (a, i) =>
+          `<li>${i + 1}. ${a.correctAnswer}${a.explanation ? ` - ${a.explanation}` : ''}</li>`
+      )
+      .join('');
+
     return `<div class="answer-key">
       <h2>Answer Key</h2>
       <ol>${answersHTML}</ol>
@@ -388,7 +438,10 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   /**
    * Generate DOCX test bank (placeholder)
    */
-  private async generateDOCXTestBank(testBank: any, options: TestBankOptions): Promise<Buffer> {
+  private async generateDOCXTestBank(
+    testBank: TestBank,
+    options: TestBankOptions
+  ): Promise<Buffer> {
     const markdown = this.generateMarkdownTestBank(testBank, options);
     return Buffer.from(markdown, 'utf-8');
   }

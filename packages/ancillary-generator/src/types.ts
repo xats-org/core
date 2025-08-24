@@ -33,14 +33,7 @@ export interface Template {
 /**
  * Supported output formats
  */
-export type OutputFormat = 
-  | 'html'
-  | 'pdf'
-  | 'docx'
-  | 'pptx'
-  | 'latex'
-  | 'markdown'
-  | 'json';
+export type OutputFormat = 'html' | 'pdf' | 'docx' | 'pptx' | 'latex' | 'markdown' | 'json';
 
 /**
  * Configuration for generating ancillary materials
@@ -103,20 +96,17 @@ export interface GenerationResult {
  */
 export interface AncillaryGenerator {
   /** Extract tagged content from document */
-  extractTaggedContent(
-    document: XatsDocument,
-    options: ExtractionOptions
-  ): ExtractedContent[];
-  
+  extractTaggedContent(document: XatsDocument, options: ExtractionOptions): ExtractedContent[];
+
   /** Generate output from extracted content */
   generateOutput(
     content: ExtractedContent[],
     options: GenerationOptions
   ): Promise<GenerationResult>;
-  
+
   /** Supported output formats */
   supportedFormats: OutputFormat[];
-  
+
   /** Validate generation options */
   validateOptions(options: GenerationOptions): boolean;
 }

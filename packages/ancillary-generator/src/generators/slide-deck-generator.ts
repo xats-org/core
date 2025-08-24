@@ -1,10 +1,19 @@
 import { BaseAncillaryGenerator } from '../base-generator';
-import type {
-  ExtractedContent,
-  GenerationResult,
-  OutputFormat,
-  SlideDeckOptions,
-} from '../types';
+
+import type { ExtractedContent, GenerationResult, OutputFormat, SlideDeckOptions } from '../types';
+
+// Internal types for slide structure
+interface Slide {
+  type: string;
+  title: string;
+  subtitle?: string;
+  date?: string;
+  points?: string[];
+  content?: string;
+  visual?: string;
+  speakerNotes?: string;
+  animation?: string;
+}
 
 /**
  * Generator for creating presentation slides from xats documents
@@ -42,9 +51,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
           output = await this.generatePowerPoint(slides, options);
           break;
         default:
-          return this.createErrorResult(options.format, [
-            `Unsupported format: ${options.format}`,
-          ]);
+          return this.createErrorResult(options.format, [`Unsupported format: ${options.format}`]);
       }
 
       const timeElapsed = Date.now() - startTime;
@@ -63,14 +70,14 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
   /**
    * Create slides from content
    */
-  private createSlides(content: ExtractedContent[], options: SlideDeckOptions): any[] {
-    const slides: any[] = [];
+  private createSlides(content: ExtractedContent[], options: SlideDeckOptions): Slide[] {
+    const slides: Slide[] = [];
     const maxSlides = options.maxSlides || 50;
     const slidesPerSection = options.slidesPerSection || 5;
 
     // Group content by sections
     const sections = this.groupBySection(content);
-    
+
     // Create title slide
     slides.push({
       type: 'title',
@@ -92,7 +99,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
       // Content slides for section
       const sectionSlides = this.createSectionSlides(items, slidesPerSection, options);
       slides.push(...sectionSlides);
-      
+
       if (slides.length >= maxSlides) {
         slides.splice(maxSlides);
         break;
@@ -116,7 +123,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
    */
   private groupBySection(content: ExtractedContent[]): Map<string, ExtractedContent[]> {
     const sections = new Map<string, ExtractedContent[]>();
-    
+
     for (const item of content) {
       const section = item.path[1] || 'Introduction';
       if (!sections.has(section)) {
@@ -124,7 +131,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
       }
       sections.get(section)!.push(item);
     }
-    
+
     return sections;
   }
 
@@ -135,19 +142,19 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
     items: ExtractedContent[],
     maxSlides: number,
     options: SlideDeckOptions
-  ): any[] {
-    const slides: any[] = [];
-    
+  ): Slide[] {
+    const slides: Slide[] = [];
+
     for (const item of items) {
       if (slides.length >= maxSlides) break;
-      
+
       const slideType = item.metadata?.slideType || 'bullet-points';
       const slide = this.createSlide(item, slideType, options);
       if (slide) {
         slides.push(slide);
       }
     }
-    
+
     return slides;
   }
 
@@ -158,11 +165,11 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
     item: ExtractedContent,
     slideType: string,
     options: SlideDeckOptions
-  ): any {
-    const text = this.extractPlainText(item.content);
+  ): Slide | null {
+    const text = this.extractPlainText(item.content as Parameters<typeof this.extractPlainText>[0]);
     if (!text) return null;
 
-    const slide: any = {
+    const slide: Slide = {
       type: slideType,
       title: item.path[item.path.length - 1] || 'Slide',
     };
@@ -199,7 +206,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
    */
   private extractBulletPoints(text: string, maxPoints: number): string[] {
     const sentences = text.match(/[^.!?]+[.!?]/g) || [];
-    return sentences.slice(0, maxPoints).map(s => s.trim());
+    return sentences.slice(0, maxPoints).map((s) => s.trim());
   }
 
   /**
@@ -207,7 +214,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
    */
   private extractKeyPoints(content: ExtractedContent[]): string[] {
     const points: string[] = [];
-    
+
     for (const item of content) {
       if (item.metadata?.importance === 'critical') {
         const text = this.extractPlainText(item.content);
@@ -219,19 +226,19 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
         }
       }
     }
-    
+
     return points.slice(0, 5); // Limit to 5 key points
   }
 
   /**
    * Generate Markdown slides
    */
-  private generateMarkdownSlides(slides: any[], options: SlideDeckOptions): string {
+  private generateMarkdownSlides(slides: Slide[], options: SlideDeckOptions): string {
     let markdown = '';
-    
+
     for (const slide of slides) {
       markdown += '---\n\n';
-      
+
       switch (slide.type) {
         case 'title':
           markdown += `# ${slide.title}\n\n${slide.subtitle}\n\n${slide.date}\n\n`;
@@ -258,24 +265,24 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
         default:
           markdown += `### ${slide.title}\n\n${slide.content || ''}\n\n`;
       }
-      
+
       if (slide.speakerNotes) {
         markdown += `\n<!--\nSpeaker Notes:\n${slide.speakerNotes}\n-->\n`;
       }
     }
-    
+
     return markdown;
   }
 
   /**
    * Generate HTML slides (reveal.js format)
    */
-  private generateHTMLSlides(slides: any[], options: SlideDeckOptions): string {
+  private generateHTMLSlides(slides: Slide[], options: SlideDeckOptions): string {
     let slidesHTML = '';
-    
+
     for (const slide of slides) {
       let slideContent = '';
-      
+
       switch (slide.type) {
         case 'title':
           slideContent = `<h1>${slide.title}</h1><p>${slide.subtitle}</p><p>${slide.date}</p>`;
@@ -295,17 +302,17 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
         default:
           slideContent = `<h3>${slide.title}</h3><p>${slide.content || ''}</p>`;
       }
-      
+
       const animationClass = slide.animation ? ` data-transition="${slide.animation}"` : '';
       slidesHTML += `<section${animationClass}>${slideContent}`;
-      
+
       if (slide.speakerNotes) {
         slidesHTML += `<aside class="notes">${slide.speakerNotes}</aside>`;
       }
-      
+
       slidesHTML += '</section>\n';
     }
-    
+
     // Return basic reveal.js HTML structure
     return `<!DOCTYPE html>
 <html>
@@ -328,7 +335,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
   /**
    * Generate PowerPoint (placeholder)
    */
-  private async generatePowerPoint(slides: any[], options: SlideDeckOptions): Promise<Buffer> {
+  private async generatePowerPoint(slides: Slide[], options: SlideDeckOptions): Promise<Buffer> {
     // This would use a library like pptxgenjs
     // For now, return markdown as placeholder
     const markdown = this.generateMarkdownSlides(slides, options);

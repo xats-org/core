@@ -6,7 +6,18 @@ import type {
   GenerationResult,
   OutputFormat,
 } from './types';
-import type { XatsDocument, ContentBlock } from '@xats-org/types';
+import type {
+  XatsDocument,
+  ContentBlock,
+  SemanticText,
+  Run,
+  Unit,
+  Chapter,
+  Section,
+  FrontMatter,
+  BackMatter,
+  BodyMatter,
+} from '@xats-org/types';
 
 /**
  * Base implementation of ancillary generator
@@ -17,65 +28,94 @@ export abstract class BaseAncillaryGenerator implements AncillaryGenerator {
   /**
    * Extract content blocks that match the specified tags
    */
-  extractTaggedContent(
-    document: XatsDocument,
-    options: ExtractionOptions
-  ): ExtractedContent[] {
+  extractTaggedContent(document: XatsDocument, options: ExtractionOptions): ExtractedContent[] {
     const extracted: ExtractedContent[] = [];
     const { tags, includeNested = true, maxDepth = 10, filter } = options;
 
     // Helper function to recursively extract content
     const extractFromContainer = (
-      container: any,
+      container: Unit | Chapter | Section | BodyMatter | FrontMatter | BackMatter,
       path: string[],
       depth: number
     ): void => {
       if (depth > maxDepth) return;
 
       // Check if container has contents array
-      if (container.contents && Array.isArray(container.contents)) {
+      if ('contents' in container && Array.isArray(container.contents)) {
         for (const item of container.contents) {
           const currentPath = [...path];
-          
+
           // Add container label/title to path if available
-          if (item.label) {
-            currentPath.push(item.label);
-          } else if (item.title) {
-            currentPath.push(this.extractPlainText(item.title));
+          if ('label' in item && typeof (item as Unit | Chapter | Section).label === 'string') {
+            currentPath.push((item as Unit | Chapter | Section).label as string);
+          } else if ('title' in item && (item as Unit | Chapter | Section).title) {
+            currentPath.push(this.extractPlainText((item as Unit | Chapter | Section).title));
           }
 
           // Process content blocks
-          if (item.content && Array.isArray(item.content)) {
-            for (const block of item.content) {
-              if (this.shouldExtractBlock(block, tags, filter)) {
-                extracted.push({
-                  sourceBlock: block,
-                  content: block.content,
-                  tags: block.tags || [],
-                  path: currentPath,
-                  metadata: block.extensions,
-                });
+          if ('blockType' in item) {
+            // Item is a ContentBlock
+            const contentBlock = item as ContentBlock;
+            if (this.shouldExtractBlock(contentBlock, tags, filter)) {
+              extracted.push({
+                sourceBlock: contentBlock,
+                content: contentBlock.content,
+                tags: contentBlock.tags || [],
+                path: currentPath,
+                metadata: contentBlock.extensions as Record<string, unknown>,
+              });
+            }
+          } else if ('contents' in item && Array.isArray(item.contents)) {
+            // Item is a structural container with contents
+            const containerItem = item as Unit | Chapter | Section;
+            for (const block of containerItem.contents) {
+              if ('blockType' in block) {
+                const contentBlock = block;
+                if (this.shouldExtractBlock(contentBlock, tags, filter)) {
+                  extracted.push({
+                    sourceBlock: contentBlock,
+                    content: contentBlock.content,
+                    tags: contentBlock.tags || [],
+                    path: currentPath,
+                    metadata: contentBlock.extensions as Record<string, unknown>,
+                  });
+                }
               }
             }
           }
 
           // Recursively process nested containers if enabled
-          if (includeNested) {
-            extractFromContainer(item, currentPath, depth + 1);
+          if (includeNested && 'contents' in item) {
+            extractFromContainer(item as Unit | Chapter | Section, currentPath, depth + 1);
           }
         }
       }
 
-      // Also check for content array at current level
-      if (container.content && Array.isArray(container.content)) {
-        for (const block of container.content) {
+      // Also check for specific content arrays at current level
+      if ('preface' in container && container.preface) {
+        const frontMatter = container as FrontMatter;
+        for (const block of frontMatter.preface) {
           if (this.shouldExtractBlock(block, tags, filter)) {
             extracted.push({
               sourceBlock: block,
               content: block.content,
               tags: block.tags || [],
               path,
-              metadata: block.extensions,
+              metadata: block.extensions as Record<string, unknown>,
+            });
+          }
+        }
+      }
+      if ('acknowledgments' in container && container.acknowledgments) {
+        const frontMatter = container as FrontMatter;
+        for (const block of frontMatter.acknowledgments) {
+          if (this.shouldExtractBlock(block, tags, filter)) {
+            extracted.push({
+              sourceBlock: block,
+              content: block.content,
+              tags: block.tags || [],
+              path,
+              metadata: block.extensions as Record<string, unknown>,
             });
           }
         }
@@ -116,7 +156,7 @@ export abstract class BaseAncillaryGenerator implements AncillaryGenerator {
     // Check if block has any of the specified tags
     if (block.tags && block.tags.length > 0) {
       const blockTags = new Set(block.tags);
-      return tags.some(tag => blockTags.has(tag));
+      return tags.some((tag) => blockTags.has(tag));
     }
 
     return false;
@@ -125,12 +165,15 @@ export abstract class BaseAncillaryGenerator implements AncillaryGenerator {
   /**
    * Extract plain text from SemanticText
    */
-  protected extractPlainText(semanticText: any): string {
+  protected extractPlainText(semanticText: SemanticText | undefined): string {
     if (!semanticText || !semanticText.runs) return '';
-    
+
     return semanticText.runs
-      .map((run: any) => {
+      .map((run: Run) => {
         if (run.type === 'text') {
+          return run.text;
+        }
+        if ('text' in run) {
           return run.text;
         }
         return '';
@@ -181,10 +224,7 @@ export abstract class BaseAncillaryGenerator implements AncillaryGenerator {
   /**
    * Helper method to create an error result
    */
-  protected createErrorResult(
-    format: OutputFormat,
-    errors: string[]
-  ): GenerationResult {
+  protected createErrorResult(format: OutputFormat, errors: string[]): GenerationResult {
     return {
       success: false,
       format,

@@ -1,12 +1,39 @@
-import { BaseAncillaryGenerator } from '../base-generator';
-import type {
-  ExtractedContent,
-  GenerationResult,
-  OutputFormat,
-  StudyGuideOptions,
-} from '../types';
 import { marked } from 'marked';
 import Mustache from 'mustache';
+
+import { BaseAncillaryGenerator } from '../base-generator';
+
+import type { ExtractedContent, GenerationResult, OutputFormat, StudyGuideOptions } from '../types';
+
+// Internal types for study guide structure
+interface ConceptItem {
+  text: string;
+  tips: string[];
+}
+
+interface PracticeQuestion {
+  question: string;
+  type: string;
+  difficulty: string;
+}
+
+interface StudyGuideSection {
+  title: string;
+  content: unknown[];
+  learningObjectives?: string[];
+  summary?: string;
+  keyTerms?: Array<{ term: string; definition: string }>;
+  practiceQuestions?: PracticeQuestion[];
+  criticalConcepts?: ConceptItem[];
+  importantConcepts?: ConceptItem[];
+  additionalNotes?: ConceptItem[];
+}
+
+interface StudyGuideStructure {
+  title: string;
+  generatedAt: string;
+  sections: StudyGuideSection[];
+}
 
 /**
  * Generator for creating study guides from xats documents
@@ -51,9 +78,7 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
           output = await this.generatePDF(studyGuide, options);
           break;
         default:
-          return this.createErrorResult(options.format, [
-            `Unsupported format: ${options.format}`,
-          ]);
+          return this.createErrorResult(options.format, [`Unsupported format: ${options.format}`]);
       }
 
       const timeElapsed = Date.now() - startTime;
@@ -82,7 +107,7 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
     for (const item of content) {
       // Determine group key based on path
       let groupKey = 'General';
-      
+
       if (groupBy === 'chapter' && item.path.length > 1) {
         groupKey = item.path[1] || 'General';
       } else if (groupBy === 'section' && item.path.length > 2) {
@@ -106,11 +131,11 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
   private buildStudyGuide(
     organized: Map<string, ExtractedContent[]>,
     options: StudyGuideOptions
-  ): any {
-    const sections = [];
+  ): StudyGuideStructure {
+    const sections: StudyGuideSection[] = [];
 
     for (const [groupName, items] of organized.entries()) {
-      const section: any = {
+      const section: StudyGuideSection = {
         title: groupName,
         content: [],
       };
@@ -168,20 +193,20 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
    */
   private extractLearningObjectives(items: ExtractedContent[]): string[] {
     const objectives: string[] = [];
-    
+
     for (const item of items) {
       // Check if block has learning objective metadata
       if (item.metadata?.learningObjective) {
         objectives.push(item.metadata.learningObjective);
       }
-      
+
       // Check for specific learning objective block types
       if (item.sourceBlock.blockType?.includes('learning-objective')) {
         const text = this.extractPlainText(item.content);
         if (text) objectives.push(text);
       }
     }
-    
+
     return objectives;
   }
 
@@ -190,23 +215,23 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
    */
   private generateSummary(items: ExtractedContent[]): string {
     const summaryPoints: string[] = [];
-    
+
     for (const item of items) {
       // Look for content marked as summary-worthy
-      const importance = item.metadata?.importance || 
-                        item.sourceBlock.extensions?.ancillary?.importance;
-      
+      const importance =
+        item.metadata?.importance || item.sourceBlock.extensions?.ancillary?.importance;
+
       if (importance === 'critical' || importance === 'important') {
         const text = this.extractPlainText(item.content);
         if (text && text.length > 20) {
           // Truncate to first sentence or 150 chars
           const firstSentence = text.match(/^[^.!?]+[.!?]/);
-          const summary = firstSentence ? firstSentence[0] : text.substring(0, 150) + '...';
+          const summary = firstSentence ? firstSentence[0] : `${text.substring(0, 150)}...`;
           summaryPoints.push(summary);
         }
       }
     }
-    
+
     return summaryPoints.join(' ');
   }
 
@@ -215,11 +240,13 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
    */
   private extractKeyTerms(items: ExtractedContent[]): Array<{ term: string; definition: string }> {
     const terms: Array<{ term: string; definition: string }> = [];
-    
+
     for (const item of items) {
       // Check for definition block types
-      if (item.sourceBlock.blockType?.includes('definition') ||
-          item.sourceBlock.blockType?.includes('glossary')) {
+      if (
+        item.sourceBlock.blockType?.includes('definition') ||
+        item.sourceBlock.blockType?.includes('glossary')
+      ) {
         const content = item.content;
         if (content?.term && content?.definition) {
           terms.push({
@@ -229,16 +256,16 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
         }
       }
     }
-    
+
     return terms;
   }
 
   /**
    * Extract practice questions from content
    */
-  private extractPracticeQuestions(items: ExtractedContent[]): any[] {
-    const questions: any[] = [];
-    
+  private extractPracticeQuestions(items: ExtractedContent[]): PracticeQuestion[] {
+    const questions: PracticeQuestion[] = [];
+
     for (const item of items) {
       // Check for quiz-bank-item tags
       if (item.tags.includes('quiz-bank-item')) {
@@ -249,7 +276,7 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
         });
       }
     }
-    
+
     return questions;
   }
 
@@ -257,14 +284,14 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
    * Group content by importance level
    */
   private groupByImportance(items: ExtractedContent[]): {
-    critical: any[];
-    important: any[];
-    helpful: any[];
+    critical: ConceptItem[];
+    important: ConceptItem[];
+    helpful: ConceptItem[];
   } {
     const grouped = {
-      critical: [] as any[],
-      important: [] as any[],
-      helpful: [] as any[],
+      critical: [] as ConceptItem[],
+      important: [] as ConceptItem[],
+      helpful: [] as ConceptItem[],
     };
 
     for (const item of items) {
@@ -296,7 +323,7 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
   /**
    * Generate Markdown output
    */
-  private generateMarkdown(studyGuide: any): string {
+  private generateMarkdown(studyGuide: StudyGuideStructure): string {
     let markdown = `# ${studyGuide.title}\n\n`;
     markdown += `*Generated: ${new Date(studyGuide.generatedAt).toLocaleDateString()}*\n\n`;
 
@@ -359,7 +386,10 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
   /**
    * Generate HTML output
    */
-  private async generateHTML(studyGuide: any, options: StudyGuideOptions): Promise<string> {
+  private async generateHTML(
+    studyGuide: StudyGuideStructure,
+    options: StudyGuideOptions
+  ): Promise<string> {
     const markdown = this.generateMarkdown(studyGuide);
     const htmlContent = await marked(markdown);
 
@@ -399,7 +429,10 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
   /**
    * Generate DOCX output (placeholder - would use a library like docx)
    */
-  private async generateDOCX(studyGuide: any, options: StudyGuideOptions): Promise<Buffer> {
+  private async generateDOCX(
+    studyGuide: StudyGuideStructure,
+    options: StudyGuideOptions
+  ): Promise<Buffer> {
     // This would use the @xats-org/converter-word package
     // For now, return a placeholder
     const markdown = this.generateMarkdown(studyGuide);
@@ -409,7 +442,10 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
   /**
    * Generate PDF output (placeholder - would use a library like puppeteer or pdfkit)
    */
-  private async generatePDF(studyGuide: any, options: StudyGuideOptions): Promise<Buffer> {
+  private async generatePDF(
+    studyGuide: StudyGuideStructure,
+    options: StudyGuideOptions
+  ): Promise<Buffer> {
     // This would generate actual PDF
     // For now, return a placeholder
     const html = await this.generateHTML(studyGuide, options);
