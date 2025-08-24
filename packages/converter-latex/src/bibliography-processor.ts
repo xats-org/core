@@ -292,7 +292,7 @@ export class BibliographyProcessor {
 
         // Special handling for certain fields
         if (cslField === 'author' || cslField === 'editor') {
-          value = this.formatAuthors(value);
+          value = this.formatAuthors(value as CSLAuthor[] | string);
         } else if (cslField === 'issued') {
           value = this.extractYear(value as CSLDate | string | number);
         }
@@ -407,8 +407,8 @@ export class BibliographyProcessor {
       .map((author) => {
         if (typeof author === 'string') return author;
         if (typeof author === 'object' && author !== null) {
-          const typedAuthor = author as CSLAuthor;
-          const { family, given } = typedAuthor;
+          // Type narrowing - author is now narrowed to object type
+          const { family, given } = author as CSLAuthor;
           if (family && given) {
             return `${family}, ${given}`;
           }

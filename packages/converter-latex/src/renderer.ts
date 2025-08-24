@@ -5,7 +5,7 @@
 import type { BibliographyProcessor } from './bibliography-processor';
 import type { MathProcessor } from './math-processor';
 import type { PackageManager } from './package-manager';
-import type { LaTeXRenderOptions, LaTeXRenderResult, LaTeXMetadata } from './types';
+import type { LaTeXRenderOptions, LaTeXRenderResult, LaTeXMetadata, LaTeXRenderMetadata } from './types';
 import type { XatsDocument, ContentBlock } from '@xats-org/types';
 
 /**
@@ -100,7 +100,7 @@ export class DocumentRenderer {
 
     return {
       content: latex,
-      metadata,
+      metadata: metadata as LaTeXMetadata, // Cast to union type
       packages: options.packages || [],
       customCommands: options.customCommands || {},
     };

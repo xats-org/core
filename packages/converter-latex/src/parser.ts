@@ -5,7 +5,7 @@
 import type { BibliographyProcessor } from './bibliography-processor';
 import type { MathProcessor } from './math-processor';
 import type { PackageManager } from './package-manager';
-import type { LaTeXParseOptions, LaTeXParseResult, LaTeXMetadata } from './types';
+import type { LaTeXParseOptions, LaTeXParseResult, LaTeXMetadata, LaTeXParseMetadata } from './types';
 import type { XatsDocument, ContentBlock } from '@xats-org/types';
 
 /**
@@ -36,7 +36,7 @@ export class DocumentParser {
       // Extract bibliography if requested
       const result: LaTeXParseResult = {
         document: xatsDocument,
-        metadata,
+        metadata: metadata as LaTeXMetadata, // Cast to union type
         packages,
         customCommands,
       };
@@ -429,6 +429,8 @@ export class DocumentParser {
 
     for (let i = startIndex; i < lines.length; i++) {
       const line = lines[i];
+      if (!line) continue;
+      
       result += `${line}\n`;
 
       if (beginPattern.test(line)) depth++;
