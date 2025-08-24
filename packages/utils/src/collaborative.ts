@@ -4,13 +4,13 @@
  * Utility functions for working with collaborative project blocks
  */
 
-import type { 
-  CollaborativeProjectContent, 
-  CollaborativeProjectBlock, 
-  ProjectRole, 
+import type {
+  CollaborativeProjectContent,
+  CollaborativeProjectBlock,
+  ProjectRole,
   ProjectDeliverable,
   ProjectPhase,
-  PeerAssessmentConfig 
+  PeerAssessmentConfig,
 } from '@xats-org/types';
 
 /**
@@ -33,8 +33,8 @@ export function createCollaborativeProject(
       projectType,
       roles: options.roles || [],
       deliverables: options.deliverables || [],
-      ...options
-    }
+      ...options,
+    },
   } as CollaborativeProjectBlock;
 }
 
@@ -52,10 +52,10 @@ export function createProjectRole(
     roleId,
     title,
     description: { runs: [{ type: 'text', text: description }] },
-    responsibilities: responsibilities.map(resp => ({
-      runs: [{ type: 'text', text: resp }]
+    responsibilities: responsibilities.map((resp) => ({
+      runs: [{ type: 'text', text: resp }],
     })),
-    ...options
+    ...options,
   };
 }
 
@@ -76,7 +76,7 @@ export function createProjectDeliverable(
     description: { runs: [{ type: 'text', text: description }] },
     format,
     isGroupDeliverable,
-    ...options
+    ...options,
   };
 }
 
@@ -93,7 +93,7 @@ export function createProjectPhase(
     phaseId,
     title,
     description: { runs: [{ type: 'text', text: description }] },
-    ...options
+    ...options,
   };
 }
 
@@ -108,7 +108,7 @@ export function createPeerAssessment(
     enabled,
     anonymity: true,
     reciprocity: true,
-    ...options
+    ...options,
   };
 }
 
@@ -122,14 +122,14 @@ export const CollaborativeProjectValidator = {
   validateUniqueRoleIds(roles: ProjectRole[]): string[] {
     const errors: string[] = [];
     const seen = new Set<string>();
-    
+
     for (const role of roles) {
       if (seen.has(role.roleId)) {
         errors.push(`Duplicate role ID: ${role.roleId}`);
       }
       seen.add(role.roleId);
     }
-    
+
     return errors;
   },
 
@@ -139,14 +139,14 @@ export const CollaborativeProjectValidator = {
   validateUniqueDeliverableIds(deliverables: ProjectDeliverable[]): string[] {
     const errors: string[] = [];
     const seen = new Set<string>();
-    
+
     for (const deliverable of deliverables) {
       if (seen.has(deliverable.deliverableId)) {
         errors.push(`Duplicate deliverable ID: ${deliverable.deliverableId}`);
       }
       seen.add(deliverable.deliverableId);
     }
-    
+
     return errors;
   },
 
@@ -155,16 +155,16 @@ export const CollaborativeProjectValidator = {
    */
   validateAssessmentWeights(deliverable: ProjectDeliverable): string[] {
     const errors: string[] = [];
-    
+
     if (!deliverable.assessmentCriteria || deliverable.assessmentCriteria.length === 0) {
       return errors;
     }
-    
+
     const totalWeight = deliverable.assessmentCriteria.reduce(
-      (sum, criterion) => sum + criterion.weight, 
+      (sum, criterion) => sum + criterion.weight,
       0
     );
-    
+
     // Allow small floating point tolerance
     const tolerance = 0.001;
     if (Math.abs(totalWeight - 1.0) > tolerance) {
@@ -172,20 +172,17 @@ export const CollaborativeProjectValidator = {
         `Assessment criteria weights for ${deliverable.deliverableId} sum to ${totalWeight}, should sum to 1.0`
       );
     }
-    
+
     return errors;
   },
 
   /**
    * Validate that phase deliverable references exist
    */
-  validatePhaseDeliverables(
-    phases: ProjectPhase[], 
-    deliverables: ProjectDeliverable[]
-  ): string[] {
+  validatePhaseDeliverables(phases: ProjectPhase[], deliverables: ProjectDeliverable[]): string[] {
     const errors: string[] = [];
-    const deliverableIds = new Set(deliverables.map(d => d.deliverableId));
-    
+    const deliverableIds = new Set(deliverables.map((d) => d.deliverableId));
+
     for (const phase of phases) {
       if (phase.deliverableIds) {
         for (const deliverableId of phase.deliverableIds) {
@@ -197,7 +194,7 @@ export const CollaborativeProjectValidator = {
         }
       }
     }
-    
+
     return errors;
   },
 
@@ -206,38 +203,38 @@ export const CollaborativeProjectValidator = {
    */
   validateProject(project: CollaborativeProjectContent): string[] {
     const errors: string[] = [];
-    
+
     // Basic required field validation
     if (!project.title?.runs?.length) {
       errors.push('Project must have a title');
     }
-    
+
     if (!project.description?.runs?.length) {
       errors.push('Project must have a description');
     }
-    
+
     if (!project.roles?.length) {
       errors.push('Project must define at least one role');
     }
-    
+
     if (!project.deliverables?.length) {
       errors.push('Project must define at least one deliverable');
     }
-    
+
     // Detailed validation
     errors.push(...this.validateUniqueRoleIds(project.roles || []));
     errors.push(...this.validateUniqueDeliverableIds(project.deliverables || []));
-    
+
     for (const deliverable of project.deliverables || []) {
       errors.push(...this.validateAssessmentWeights(deliverable));
     }
-    
+
     if (project.timeline?.phases && project.deliverables) {
       errors.push(...this.validatePhaseDeliverables(project.timeline.phases, project.deliverables));
     }
-    
+
     return errors;
-  }
+  },
 };
 
 /**
@@ -251,11 +248,11 @@ export const CollaborativeProjectAnalyzer = {
     if (project.timeline?.estimatedHours) {
       return project.timeline.estimatedHours;
     }
-    
+
     // Fallback: estimate based on deliverables (rough heuristic)
     const deliverableCount = project.deliverables?.length || 0;
     const roleCount = project.roles?.length || 1;
-    
+
     // Rough estimate: 5-10 hours per deliverable per role
     return deliverableCount * roleCount * 7.5;
   },
@@ -265,13 +262,13 @@ export const CollaborativeProjectAnalyzer = {
    */
   getRequiredSkills(project: CollaborativeProjectContent): string[] {
     const skills = new Set<string>();
-    
+
     for (const role of project.roles || []) {
       if (role.requiredSkills) {
-        role.requiredSkills.forEach(skill => skills.add(skill));
+        role.requiredSkills.forEach((skill) => skills.add(skill));
       }
     }
-    
+
     return Array.from(skills).sort();
   },
 
@@ -288,14 +285,14 @@ export const CollaborativeProjectAnalyzer = {
       phaseCount: Math.min((project.timeline?.phases?.length || 0) * 0.1, 0.5),
       skillDiversity: Math.min(this.getRequiredSkills(project).length * 0.05, 0.5),
       peerAssessment: project.peerAssessment?.enabled ? 0.3 : 0,
-      timeline: project.timeline ? 0.2 : 0
+      timeline: project.timeline ? 0.2 : 0,
     };
-    
+
     const score = Object.values(factors).reduce((sum, val) => sum + val, 0);
-    
+
     return {
       score: Math.min(score, 5.0), // Cap at 5.0
-      factors
+      factors,
     };
   },
 
@@ -306,30 +303,30 @@ export const CollaborativeProjectAnalyzer = {
     const complexity = this.calculateComplexityScore(project);
     const skills = this.getRequiredSkills(project);
     const effort = this.calculateTotalEffort(project);
-    
+
     const firstRun = project.title.runs[0];
     const titleText = firstRun && 'text' in firstRun ? firstRun.text : 'Untitled';
     let report = `# Collaborative Project Summary: ${titleText}\n\n`;
     report += `**Type**: ${project.projectType}\n`;
     report += `**Complexity Score**: ${complexity.score.toFixed(1)}/5.0\n`;
     report += `**Estimated Effort**: ${effort} hours\n\n`;
-    
+
     report += `## Structure\n`;
     report += `- **Roles**: ${project.roles?.length || 0}\n`;
     report += `- **Deliverables**: ${project.deliverables?.length || 0}\n`;
     report += `- **Phases**: ${project.timeline?.phases?.length || 0}\n`;
     report += `- **Peer Assessment**: ${project.peerAssessment?.enabled ? 'Enabled' : 'Disabled'}\n\n`;
-    
+
     if (skills.length > 0) {
       report += `## Required Skills\n`;
-      skills.forEach(skill => {
+      skills.forEach((skill) => {
         report += `- ${skill}\n`;
       });
       report += '\n';
     }
-    
+
     return report;
-  }
+  },
 };
 
 /**
@@ -363,8 +360,12 @@ export const CollaborativeProjectTemplates = {
             'writer',
             'Writer/Editor',
             'Responsible for writing and editing the final report',
-            ['Draft research report', 'Edit and proofread content', 'Ensure academic writing standards']
-          )
+            [
+              'Draft research report',
+              'Edit and proofread content',
+              'Ensure academic writing standards',
+            ]
+          ),
         ],
         deliverables: [
           createProjectDeliverable(
@@ -387,12 +388,12 @@ export const CollaborativeProjectTemplates = {
             'Complete research report with findings and recommendations',
             'document',
             true
-          )
+          ),
         ],
         peerAssessment: createPeerAssessment(true, {
           assessmentType: 'peer-evaluation',
-          anonymity: true
-        })
+          anonymity: true,
+        }),
       }
     );
   },
@@ -412,7 +413,11 @@ export const CollaborativeProjectTemplates = {
             'analyst',
             'Primary Analyst',
             'Leads the case analysis and identifies key issues',
-            ['Identify key problems and stakeholders', 'Analyze root causes', 'Develop solution framework']
+            [
+              'Identify key problems and stakeholders',
+              'Analyze root causes',
+              'Develop solution framework',
+            ]
           ),
           createProjectRole(
             'researcher',
@@ -424,8 +429,12 @@ export const CollaborativeProjectTemplates = {
             'presenter',
             'Presentation Lead',
             'Develops and delivers the final presentation',
-            ['Create presentation slides', 'Practice and deliver presentation', 'Handle Q&A session']
-          )
+            [
+              'Create presentation slides',
+              'Practice and deliver presentation',
+              'Handle Q&A session',
+            ]
+          ),
         ],
         deliverables: [
           createProjectDeliverable(
@@ -441,9 +450,10 @@ export const CollaborativeProjectTemplates = {
             'Presentation of findings and recommendations',
             'presentation',
             true
-          )
-        ]
+          ),
+        ],
       }
     );
-  }
+  },
 };
+
