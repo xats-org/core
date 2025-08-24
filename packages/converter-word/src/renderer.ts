@@ -62,7 +62,9 @@ export class DocumentRenderer {
         title: options.documentTitle || document.bibliographicEntry?.title || 'Untitled',
         subject:
           typeof document.subject === 'string' ? document.subject : String(document.subject || ''),
-        keywords: document.bibliographicEntry?.keyword || [],
+        keywords: Array.isArray(document.bibliographicEntry?.keyword)
+          ? document.bibliographicEntry.keyword.join(', ')
+          : (document.bibliographicEntry?.keyword as string) || '',
         styles: this.createDocumentStyles(options),
         numbering: this.createNumberingDefinitions(),
         sections: [],
@@ -72,7 +74,7 @@ export class DocumentRenderer {
       const paragraphs = await this.processContent(document, options, errors, warnings);
 
       // Add content to document
-      wordDoc.addSection({
+      (wordDoc as any).addSection({
         properties: {},
         children: paragraphs,
       });
@@ -89,21 +91,27 @@ export class DocumentRenderer {
         images: this.countImages(document),
         tables: this.countTables(document),
         equations: this.countEquations(document),
-        author: options.author,
-        title: options.documentTitle,
         fileSize: buffer.length,
       };
 
-      return {
+      // Add optional fields only if they have values
+      if (options.author) metadata.author = options.author;
+      if (options.documentTitle) metadata.title = options.documentTitle;
+
+      const result: WordRenderResult = {
         content: buffer,
         metadata,
-        errors: errors.length > 0 ? errors : undefined,
-        warnings: warnings.length > 0 ? warnings : undefined,
         styleReport: this.styleMapper.generateStyleReport(
           metadata.styles,
           this.extractBlockTypes(document)
         ),
       };
+
+      // Add optional fields only if they have values
+      if (errors.length > 0) result.errors = errors;
+      if (warnings.length > 0) result.warnings = warnings;
+
+      return result;
     } catch (error) {
       throw new Error(
         `Rendering failed: ${error instanceof Error ? error.message : 'Unknown error'}`
@@ -125,7 +133,7 @@ export class DocumentRenderer {
     // Process front matter
     if (document.frontMatter?.contents) {
       const frontElements = await this.processContents(
-        document.frontMatter.contents,
+        document.frontMatter.contents as any[],
         options,
         errors,
         warnings
@@ -152,7 +160,7 @@ export class DocumentRenderer {
     // Process back matter
     if (document.backMatter?.contents) {
       const backElements = await this.processContents(
-        document.backMatter.contents,
+        document.backMatter.contents as any[],
         options,
         errors,
         warnings
@@ -161,8 +169,8 @@ export class DocumentRenderer {
     }
 
     // Add bibliography if requested
-    if (options.includeBibliography && document.bibliography) {
-      elements.push(...this.createBibliography(document.bibliography));
+    if (options.includeBibliography && document.backMatter?.bibliography) {
+      elements.push(...this.createBibliography(document.backMatter.bibliography));
     }
 
     return elements;
@@ -194,7 +202,7 @@ export class DocumentRenderer {
               const titleRuns = this.createTextRuns(item.title);
               elements.push(
                 new Paragraph({
-                  heading: this.getWordHeadingLevel(level),
+                  heading: this.getWordHeadingLevel(level) || HeadingLevel.HEADING_1,
                   children: titleRuns,
                 })
               );
@@ -333,7 +341,8 @@ export class DocumentRenderer {
    */
   private createParagraph(block: ContentBlock): Paragraph {
     try {
-      const textContent = block.content?.text || block.content || '';
+      const content = block.content as { text?: any } | any;
+      const textContent = content?.text || content || '';
       const runs = this.createTextRuns(textContent);
 
       if (runs.length === 0) {
@@ -360,8 +369,9 @@ export class DocumentRenderer {
    */
   private createHeading(block: ContentBlock): Paragraph {
     try {
-      const level = Math.max(1, Math.min(6, block.content?.level || 1)); // Ensure level is 1-6
-      const textContent = block.content?.text || '';
+      const content = block.content as { level?: number; text?: any } | any;
+      const level = Math.max(1, Math.min(6, content?.level || 1)); // Ensure level is 1-6
+      const textContent = content?.text || '';
       const runs = this.createTextRuns(textContent);
 
       if (runs.length === 0) {
@@ -377,7 +387,7 @@ export class DocumentRenderer {
       return new Paragraph({
         children: [
           new TextRun({
-            text: block.content?.text || 'Heading',
+            text: (block.content as { text?: any })?.text || 'Heading',
             bold: true,
             size: 28,
           }),
@@ -390,7 +400,8 @@ export class DocumentRenderer {
    * Create blockquote element
    */
   private createBlockquote(block: ContentBlock): Paragraph {
-    const runs = this.createTextRuns(block.content?.text || '');
+    const content = block.content as { text?: any } | any;
+    const runs = this.createTextRuns(content?.text || '');
 
     return new Paragraph({
       style: 'Quote',
@@ -402,11 +413,12 @@ export class DocumentRenderer {
    * Create list elements
    */
   private createList(block: ContentBlock): Paragraph[] {
-    const items = block.content?.items || [];
-    const isOrdered = block.content?.ordered === true;
-    const startValue = block.content?.start || 1;
+    const content = block.content as { items?: any[]; ordered?: boolean; start?: number } | any;
+    const items = content?.items || [];
+    const isOrdered = content?.ordered === true;
+    // const startValue = content?.start || 1; // TODO: Use for numbering
 
-    return items.map((item: any, index: number) => {
+    return items.map((item: any, _index: number) => {
       // Handle nested lists
       const level = item.level || 0;
       const text = typeof item === 'string' ? item : item.text || item.content?.text || '';
@@ -426,7 +438,8 @@ export class DocumentRenderer {
    */
   private createTable(block: ContentBlock): Table {
     try {
-      const rows = block.content?.rows || [];
+      const content = block.content as { rows?: any[] } | any;
+      const rows = content?.rows || [];
 
       if (rows.length === 0) {
         // Create empty table with one cell
@@ -457,12 +470,21 @@ export class DocumentRenderer {
               const cellText = cell.text || cell.content?.text || '';
               const runs = this.createTextRuns(cellText);
 
-              return new TableCell({
+              const cellOptions: any = {
                 children: [new Paragraph({ children: runs })],
-                width: cell.width ? { size: cell.width, type: 'pct' } : undefined,
-                columnSpan: cell.colspan && cell.colspan > 1 ? cell.colspan : undefined,
-                rowSpan: cell.rowspan && cell.rowspan > 1 ? cell.rowspan : undefined,
-              });
+              };
+
+              if (cell.width) {
+                cellOptions.width = { size: cell.width, type: 'pct' as const };
+              }
+              if (cell.colspan && cell.colspan > 1) {
+                cellOptions.columnSpan = cell.colspan;
+              }
+              if (cell.rowspan && cell.rowspan > 1) {
+                cellOptions.rowSpan = cell.rowspan;
+              }
+
+              return new TableCell(cellOptions);
             } catch (error) {
               // Fallback cell with error message
               return new TableCell({
@@ -556,7 +578,8 @@ export class DocumentRenderer {
    * Create code block element
    */
   private createCodeBlock(block: ContentBlock): Paragraph {
-    const code = block.content?.code || block.content?.text || '';
+    const content = block.content as { code?: string; text?: string } | any;
+    const code = content?.code || content?.text || '';
 
     return new Paragraph({
       style: 'Code',
@@ -573,7 +596,8 @@ export class DocumentRenderer {
    * Create math block element
    */
   private createMathBlock(block: ContentBlock): Paragraph {
-    const latex = block.content?.latex || '';
+    const content = block.content as { latex?: string } | any;
+    const latex = content?.latex || '';
 
     // For now, render as text with note about math content
     return new Paragraph({
@@ -592,13 +616,14 @@ export class DocumentRenderer {
    */
   private async createFigure(block: ContentBlock): Promise<Paragraph[]> {
     const elements: Paragraph[] = [];
+    const content = block.content as { caption?: string } | any;
 
     // Placeholder for image
     elements.push(
       new Paragraph({
         children: [
           new TextRun({
-            text: `[Figure: ${block.content?.caption || 'Image'}]`,
+            text: `[Figure: ${content?.caption || 'Image'}]`,
             italics: true,
             color: '666666',
           }),
@@ -607,12 +632,12 @@ export class DocumentRenderer {
     );
 
     // Add caption if present
-    if (block.content?.caption) {
+    if (content?.caption) {
       elements.push(
         new Paragraph({
           children: [
             new TextRun({
-              text: `Figure: ${block.content.caption}`,
+              text: `Figure: ${content.caption}`,
               italics: true,
             }),
           ],
@@ -628,8 +653,8 @@ export class DocumentRenderer {
    */
   private createEducationalBlock(block: ContentBlock, stylePrefix: string): Paragraph {
     try {
-      const textContent =
-        block.content?.text || block.content?.statement?.text || block.content || '';
+      const content = block.content as { text?: any; statement?: { text?: any } } | any;
+      const textContent = content?.text || content?.statement?.text || content || '';
       const runs = this.createTextRuns(textContent);
 
       // Add prefix with error handling
@@ -646,7 +671,7 @@ export class DocumentRenderer {
       }
 
       // Ensure we have content
-      if (runs.length === 0 || (runs.length === 1 && !runs[0].text)) {
+      if (runs.length === 0 || (runs.length === 1 && runs[0] && !(runs[0] as any).text)) {
         runs.push(new TextRun(`[${stylePrefix} content]`));
       }
 
@@ -788,12 +813,12 @@ export class DocumentRenderer {
   /**
    * Utility methods
    */
-  private determineHeadingLevel(item: any): number {
+  private determineHeadingLevel(_item: any): number {
     // Logic to determine heading level based on nesting
     return 1;
   }
 
-  private getWordHeadingLevel(level: number): HeadingLevel {
+  private getWordHeadingLevel(level: number): (typeof HeadingLevel)[keyof typeof HeadingLevel] {
     const levels = [
       HeadingLevel.HEADING_1,
       HeadingLevel.HEADING_2,
@@ -802,10 +827,12 @@ export class DocumentRenderer {
       HeadingLevel.HEADING_5,
       HeadingLevel.HEADING_6,
     ];
-    return levels[Math.min(level - 1, levels.length - 1)] as HeadingLevel;
+    const index = Math.min(level - 1, levels.length - 1);
+    const safeIndex = Math.max(0, index); // Ensure index is not negative
+    return levels[safeIndex] || HeadingLevel.HEADING_1;
   }
 
-  private createTableOfContents(document: XatsDocument): Paragraph {
+  private createTableOfContents(_document: XatsDocument): Paragraph {
     return new Paragraph({
       children: [
         new TextRun({
@@ -817,7 +844,7 @@ export class DocumentRenderer {
     });
   }
 
-  private createBibliography(bibliography: any): Paragraph[] {
+  private createBibliography(_bibliography: any): Paragraph[] {
     return [
       new Paragraph({
         heading: HeadingLevel.HEADING_1,
@@ -835,39 +862,39 @@ export class DocumentRenderer {
     ];
   }
 
-  private estimateWordCount(document: XatsDocument): number {
+  private estimateWordCount(_document: XatsDocument): number {
     // Rough word count estimation
     return 1000; // Placeholder
   }
 
-  private extractFeatures(document: XatsDocument): string[] {
+  private extractFeatures(_document: XatsDocument): string[] {
     return ['paragraphs', 'headings']; // Placeholder
   }
 
-  private extractUsedStyles(document: XatsDocument): string[] {
+  private extractUsedStyles(_document: XatsDocument): string[] {
     return ['Normal', 'Heading 1']; // Placeholder
   }
 
-  private extractBlockTypes(document: XatsDocument): string[] {
+  private extractBlockTypes(_document: XatsDocument): string[] {
     return ['https://xats.org/vocabularies/blocks/paragraph']; // Placeholder
   }
 
-  private countImages(document: XatsDocument): number {
+  private countImages(_document: XatsDocument): number {
     return 0; // Placeholder
   }
 
-  private countTables(document: XatsDocument): number {
+  private countTables(_document: XatsDocument): number {
     return 0; // Placeholder
   }
 
-  private countEquations(document: XatsDocument): number {
+  private countEquations(_document: XatsDocument): number {
     return 0; // Placeholder
   }
 
   /**
    * Create document styles
    */
-  private createDocumentStyles(options: WordRenderOptions): IStylesOptions {
+  private createDocumentStyles(_options: WordRenderOptions): IStylesOptions {
     return {
       paragraphStyles: [
         {
@@ -959,10 +986,6 @@ export class DocumentRenderer {
               before: 120,
               after: 120,
             },
-            shading: {
-              type: ShadingType.SOLID,
-              color: 'F8F8F8',
-            },
           },
         },
         {
@@ -1021,10 +1044,6 @@ export class DocumentRenderer {
             indent: {
               left: convertMillimetersToTwip(6.35),
             },
-            shading: {
-              type: ShadingType.SOLID,
-              color: 'F0F8FF',
-            },
           },
         },
         {
@@ -1039,10 +1058,6 @@ export class DocumentRenderer {
             },
             indent: {
               left: convertMillimetersToTwip(6.35),
-            },
-            shading: {
-              type: ShadingType.SOLID,
-              color: 'FFF8F0',
             },
           },
         },

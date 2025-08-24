@@ -2,12 +2,7 @@
  * @fileoverview Type definitions for Word converter
  */
 
-import type {
-  XatsDocument,
-  RenderFormat,
-  RendererOptions,
-  RenderResult,
-} from '@xats-org/types';
+import type { XatsDocument, RenderFormat, RendererOptions } from '@xats-org/types';
 
 // Core converter types
 export interface WordConverter {

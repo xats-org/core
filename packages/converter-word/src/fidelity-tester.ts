@@ -120,13 +120,13 @@ export class FidelityTester {
     differences: DocumentDifference[]
   ): number {
     let score = 1.0;
-    let totalChecks = 0;
-    let passedChecks = 0;
+    let _totalChecks = 0;
+    let _passedChecks = 0;
 
     // Check basic document properties
-    totalChecks++;
+    _totalChecks++;
     if (original.bibliographicEntry?.title === converted.bibliographicEntry?.title) {
-      passedChecks++;
+      _passedChecks++;
     } else {
       score -= 0.1;
       issues.push({
@@ -146,9 +146,9 @@ export class FidelityTester {
     }
 
     // Check subject
-    totalChecks++;
+    _totalChecks++;
     if (original.subject === converted.subject) {
-      passedChecks++;
+      _passedChecks++;
     } else {
       score -= 0.05;
       issues.push({
@@ -220,7 +220,7 @@ export class FidelityTester {
     original: XatsDocument,
     converted: XatsDocument,
     issues: FidelityIssue[],
-    differences: DocumentDifference[]
+    _differences: DocumentDifference[]
   ): number {
     let score = 1.0;
 
@@ -287,13 +287,13 @@ export class FidelityTester {
       }
     };
 
-    if (document.frontMatter?.contents) {
+    if (document.frontMatter?.contents && Array.isArray(document.frontMatter.contents)) {
       processContents(document.frontMatter.contents);
     }
-    if (document.bodyMatter?.contents) {
+    if (document.bodyMatter?.contents && Array.isArray(document.bodyMatter.contents)) {
       processContents(document.bodyMatter.contents);
     }
-    if (document.backMatter?.contents) {
+    if (document.backMatter?.contents && Array.isArray(document.backMatter.contents)) {
       processContents(document.backMatter.contents);
     }
 
@@ -335,21 +335,21 @@ export class FidelityTester {
       const originalBlock = originalBlocks[i];
       const convertedBlock = convertedBlocks[i];
 
-      if (this.blocksMatch(originalBlock, convertedBlock)) {
+      if (originalBlock && convertedBlock && this.blocksMatch(originalBlock, convertedBlock)) {
         matchingBlocks++;
       } else {
         issues.push({
           type: 'content',
           severity: 'minor',
           description: `Block ${i} content or type mismatch`,
-          originalValue: originalBlock.blockType,
-          convertedValue: convertedBlock.blockType,
+          originalValue: originalBlock?.blockType,
+          convertedValue: convertedBlock?.blockType,
         });
         differences.push({
           path: `blocks[${i}]`,
           type: 'modified',
-          original: originalBlock,
-          converted: convertedBlock,
+          original: originalBlock || null,
+          converted: convertedBlock || null,
           impact: 'medium',
         });
       }
@@ -447,39 +447,39 @@ export class FidelityTester {
           const contentBlock = block as any;
           if (contentBlock.content?.text?.runs && Array.isArray(contentBlock.content.text.runs)) {
             for (const run of contentBlock.content.text.runs) {
-            switch (run.type) {
-              case 'emphasis':
-                info.emphasisCount++;
-                break;
-              case 'strong':
-                info.strongCount++;
-                break;
-              case 'code':
-                info.codeCount++;
-                break;
-              case 'underline':
-                info.underlineCount++;
-                break;
-              case 'strikethrough':
-                info.strikethroughCount++;
-                break;
-              case 'subscript':
-                info.subscriptCount++;
-                break;
-              case 'superscript':
-                info.superscriptCount++;
-                break;
-              case 'mathInline':
-                info.mathInlineCount++;
-                break;
-              case 'reference':
-                info.referenceCount++;
-                break;
-              case 'citation':
-                info.citationCount++;
-                break;
+              switch (run.type) {
+                case 'emphasis':
+                  info.emphasisCount++;
+                  break;
+                case 'strong':
+                  info.strongCount++;
+                  break;
+                case 'code':
+                  info.codeCount++;
+                  break;
+                case 'underline':
+                  info.underlineCount++;
+                  break;
+                case 'strikethrough':
+                  info.strikethroughCount++;
+                  break;
+                case 'subscript':
+                  info.subscriptCount++;
+                  break;
+                case 'superscript':
+                  info.superscriptCount++;
+                  break;
+                case 'mathInline':
+                  info.mathInlineCount++;
+                  break;
+                case 'reference':
+                  info.referenceCount++;
+                  break;
+                case 'citation':
+                  info.citationCount++;
+                  break;
+              }
             }
-          }
           }
 
           // Process nested content
@@ -500,7 +500,10 @@ export class FidelityTester {
   /**
    * Compare formatting
    */
-  private compareFormatting(original: FormattingInfo, converted: FormattingInfo): FormattingDifference[] {
+  private compareFormatting(
+    original: FormattingInfo,
+    converted: FormattingInfo
+  ): FormattingDifference[] {
     const differences: FormattingDifference[] = [];
 
     const formatTypes: (keyof FormattingInfo)[] = [

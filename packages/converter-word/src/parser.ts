@@ -77,8 +77,8 @@ export class DocumentParser {
       }
 
       if (annotations.length > 0) {
-        xatsDocument.extensions = {
-          ...xatsDocument.extensions,
+        (xatsDocument as any).extensions = {
+          ...(xatsDocument as any).extensions,
           annotations,
         };
       }
@@ -86,11 +86,11 @@ export class DocumentParser {
       return {
         document: xatsDocument,
         metadata,
-        errors: errors.length > 0 ? errors : undefined,
-        warnings: warnings.length > 0 ? warnings : undefined,
-        annotations: annotations.length > 0 ? annotations : undefined,
-        trackChanges: trackChanges.length > 0 ? trackChanges : undefined,
-        comments: comments.length > 0 ? comments : undefined,
+        errors: errors.length > 0 ? errors : [],
+        warnings: warnings.length > 0 ? warnings : [],
+        annotations: annotations.length > 0 ? annotations : [],
+        trackChanges: trackChanges.length > 0 ? trackChanges : [],
+        comments: comments.length > 0 ? comments : [],
       };
     } catch (error) {
       throw new Error(
@@ -129,13 +129,18 @@ export class DocumentParser {
     }
 
     // Extract main document with error handling
-    const documentFile = zip.files['word/document.xml'];
+    let documentFile = zip.files['word/document.xml'];
     if (!documentFile) {
       // Try alternative locations
       const altDocFile = Object.keys(zip.files).find((name) => name.endsWith('document.xml'));
       if (!altDocFile) {
         throw new Error('Invalid Word document: no document.xml found');
       }
+      documentFile = zip.files[altDocFile];
+    }
+
+    if (!documentFile) {
+      throw new Error('Invalid Word document: could not access document.xml');
     }
 
     let documentXml: any;
@@ -203,7 +208,7 @@ export class DocumentParser {
         const appProps = await parseXml(appPropsXml);
 
         // Extract word count, page count, etc.
-        const properties = appProps?.Properties;
+        const properties = (appProps as any)?.Properties;
         if (properties) {
           metadata.wordCount = parseInt(properties.Words?.[0] || '0', 10);
           metadata.pageCount = parseInt(properties.Pages?.[0] || '0', 10);
@@ -216,7 +221,7 @@ export class DocumentParser {
         const corePropsXml = await corePropsFile.async('string');
         const coreProps = await parseXml(corePropsXml);
 
-        const properties = coreProps?.['cp:coreProperties'];
+        const properties = (coreProps as any)?.['cp:coreProperties'];
         if (properties) {
           metadata.title = properties['dc:title']?.[0];
           metadata.author = properties['dc:creator']?.[0];
@@ -224,12 +229,12 @@ export class DocumentParser {
           metadata.keywords = properties['cp:keywords']?.[0]
             ?.split(',')
             .map((k: string) => k.trim());
-          metadata.created = properties['dcterms:created']?.[0]
-            ? new Date(properties['dcterms:created'][0])
-            : undefined;
-          metadata.modified = properties['dcterms:modified']?.[0]
-            ? new Date(properties['dcterms:modified'][0])
-            : undefined;
+          if (properties['dcterms:created']?.[0]) {
+            metadata.created = new Date(properties['dcterms:created'][0]);
+          }
+          if (properties['dcterms:modified']?.[0]) {
+            metadata.modified = new Date(properties['dcterms:modified'][0]);
+          }
         }
       }
 
@@ -421,6 +426,11 @@ export class DocumentParser {
     while (i < elements.length) {
       const element = elements[i];
 
+      if (!element) {
+        i++;
+        continue;
+      }
+
       if (element.type === 'paragraph') {
         const para = element.element;
         const pPr = para.pPr?.[0];
@@ -433,8 +443,10 @@ export class DocumentParser {
           const isOrdered = false; // We'll determine this from the numbering definition
 
           // Collect consecutive list items with same numId
-          while (i < elements.length && elements[i].type === 'paragraph') {
-            const currentPara = elements[i].element;
+          while (i < elements.length && elements[i]?.type === 'paragraph') {
+            const currentElement = elements[i];
+            if (!currentElement) break;
+            const currentPara = currentElement.element;
             const currentPPr = currentPara.pPr?.[0];
             const currentNumPr = currentPPr?.numPr?.[0];
             const currentNumId = currentNumPr?.numId?.[0]?.$?.val;
@@ -827,7 +839,7 @@ export class DocumentParser {
 
     // Simple citation detection
     const citeMatch = text.match(/—\s*(.+)$|\((.+)\)$/);
-    return citeMatch ? (citeMatch[1] || citeMatch[2]).trim() : undefined;
+    return citeMatch ? (citeMatch[1] || citeMatch[2] || '').trim() : undefined;
   }
 
   /**

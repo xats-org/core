@@ -111,7 +111,7 @@ export class StyleMapper {
   createWordStyleName(xatsBlockType: string): string {
     // Extract the last part of the URI and convert to title case
     const parts = xatsBlockType.split('/');
-    const lastPart = parts[parts.length - 1];
+    const lastPart = parts[parts.length - 1] || '';
 
     // Convert camelCase to Title Case
     return lastPart
@@ -214,7 +214,7 @@ export class StyleMapper {
    */
   getHeadingLevel(wordStyle: string): number | null {
     const match = wordStyle.match(/^Heading (\d+)$/);
-    if (match) {
+    if (match && match[1]) {
       return parseInt(match[1], 10);
     }
 

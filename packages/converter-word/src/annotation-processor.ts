@@ -257,11 +257,16 @@ export class AnnotationProcessor {
         threadComments.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
 
         for (let i = 1; i < threadComments.length; i++) {
-          if (!threadComments[0]?.thread) {
-            threadComments[0] = threadComments[0] || { thread: [] };
-            threadComments[0].thread = [];
+          const firstComment = threadComments[0];
+          if (firstComment) {
+            if (!firstComment.thread) {
+              firstComment.thread = [];
+            }
+            const comment = threadComments[i];
+            if (comment) {
+              firstComment.thread.push(comment);
+            }
           }
-          threadComments[0].thread?.push(threadComments[i]);
         }
       }
     }

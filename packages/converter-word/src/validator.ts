@@ -188,12 +188,12 @@ export class WordValidator {
       if (item && typeof item === 'object' && 'blockType' in item) {
         const contentItem = item as any;
         if (contentItem.blockType && unsupportedTypes.includes(contentItem.blockType)) {
-        issues.push({
-          type: 'content',
-          severity: 'warning',
-          message: `Unsupported block type for Word conversion: ${contentItem.blockType}`,
-          suggestion: 'Consider alternative representation or skip this block',
-        });
+          issues.push({
+            type: 'content',
+            severity: 'warning',
+            message: `Unsupported block type for Word conversion: ${contentItem.blockType}`,
+            suggestion: 'Consider alternative representation or skip this block',
+          });
         }
 
         // Check nested contents
