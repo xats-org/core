@@ -217,16 +217,16 @@ export interface FidelityIssue {
   severity: 'minor' | 'major' | 'critical';
   description: string;
   location?: string;
-  originalValue?: any;
-  convertedValue?: any;
+  originalValue?: unknown;
+  convertedValue?: unknown;
   recommendation?: string;
 }
 
 export interface DocumentDifference {
   path: string;
   type: 'added' | 'removed' | 'modified';
-  original?: any;
-  converted?: any;
+  original?: unknown;
+  converted?: unknown;
   impact: 'low' | 'medium' | 'high';
 }
 

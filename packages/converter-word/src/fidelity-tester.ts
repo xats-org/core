@@ -2,10 +2,11 @@
  * @fileoverview Round-trip fidelity testing for Word converter
  */
 
-import { isEqual, difference } from 'lodash';
+// Note: lodash imports commented out as they're not yet used but will be needed for full implementation
+// import { isEqual, difference } from 'lodash';
 
 import type { RoundTripOptions, RoundTripResult, FidelityIssue, DocumentDifference } from './types';
-import type { XatsDocument, ContentBlock, Unit, Chapter } from '@xats-org/types';
+import type { XatsDocument, ContentBlock } from '@xats-org/types';
 
 interface FormattingInfo {
   emphasisCount: number;

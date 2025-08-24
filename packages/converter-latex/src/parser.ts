@@ -186,7 +186,7 @@ export class DocumentParser {
       }
 
       // Regular content
-      if (trimmedLine || currentSegment.trim()) {
+      if (trimmedLine) {
         currentSegment += `${line}\n`;
       } else if (currentSegment.trim()) {
         // Empty line - end of paragraph
@@ -280,7 +280,7 @@ export class DocumentParser {
       return this.createParagraphBlock(content);
     }
 
-    const [, envName, mathContent] = envMatch;
+    const [, , mathContent] = envMatch;
     const cleanMath = mathContent.trim();
 
     const mathData = await this.mathProcessor.parseMathContent(
@@ -394,7 +394,7 @@ export class DocumentParser {
     };
   }
 
-  private parseSemanticText(content: string, options: LaTeXParseOptions): any {
+  private parseSemanticText(content: string, _options: LaTeXParseOptions): any {
     // Simple semantic text parsing - would be more sophisticated
     const cleanText = this.cleanLaTeX(content);
 
@@ -464,7 +464,7 @@ export class DocumentParser {
     return commands;
   }
 
-  private async extractBibliography(content: string): Promise<any[]> {
+  private async extractBibliography(_content: string): Promise<any[]> {
     // Extract bibliography entries from content
     return [];
   }

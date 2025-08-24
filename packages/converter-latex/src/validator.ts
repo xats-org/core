@@ -3,7 +3,7 @@
  */
 
 import type { FormatValidationResult, LaTeXValidationIssue } from './types';
-import type { XatsDocument, ValidationError, ValidationWarning } from '@xats-org/types';
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * Validates LaTeX documents and xats documents for conversion compatibility
@@ -12,7 +12,7 @@ export class LaTeXValidator {
   /**
    * Validate LaTeX document format and structure
    */
-  async validate(content: string): Promise<FormatValidationResult> {
+  validate(content: string): FormatValidationResult {
     const issues: LaTeXValidationIssue[] = [];
     let structureValid = true;
     let mathValid = true;
@@ -88,7 +88,7 @@ export class LaTeXValidator {
   /**
    * Validate xats document for LaTeX conversion compatibility
    */
-  async validateXatsDocument(document: XatsDocument): Promise<FormatValidationResult> {
+  validateXatsDocument(document: XatsDocument): FormatValidationResult {
     const issues: LaTeXValidationIssue[] = [];
     let structureValid = true;
     let mathValid = true;
@@ -445,31 +445,42 @@ export class LaTeXValidator {
   }
 
   private checkBlockTypesRecursive(
-    contents: any[],
+    contents: unknown[],
     incompatibleTypes: string[],
     issues: LaTeXValidationIssue[]
   ): void {
     for (const item of contents) {
-      if (item.blockType && incompatibleTypes.includes(item.blockType)) {
-        issues.push({
-          type: 'syntax',
-          severity: 'warning',
-          message: `Block type not well-supported in LaTeX: ${item.blockType}`,
-          suggestion: 'Consider alternative representation or skip this block',
-        });
+      if (typeof item === 'object' && item !== null && 'blockType' in item) {
+        const blockType = (item as { blockType: string }).blockType;
+        if (incompatibleTypes.includes(blockType)) {
+          issues.push({
+            type: 'syntax',
+            severity: 'warning',
+            message: `Block type not well-supported in LaTeX: ${blockType}`,
+            suggestion: 'Consider alternative representation or skip this block',
+          });
+        }
       }
 
-      if (item.contents) {
-        this.checkBlockTypesRecursive(item.contents, incompatibleTypes, issues);
+      if (typeof item === 'object' && item !== null && 'contents' in item) {
+        const itemContents = (item as { contents: unknown[] }).contents;
+        this.checkBlockTypesRecursive(itemContents, incompatibleTypes, issues);
       }
     }
   }
 
-  private validateMathBlocksRecursive(contents: any[], issues: LaTeXValidationIssue[]): void {
+  private validateMathBlocksRecursive(contents: unknown[], issues: LaTeXValidationIssue[]): void {
     for (const item of contents) {
-      if (item.blockType === 'https://xats.org/vocabularies/blocks/mathBlock') {
-        const latex = item.content?.latex;
-        if (latex) {
+      if (
+        typeof item === 'object' &&
+        item !== null &&
+        'blockType' in item &&
+        (item as { blockType: string }).blockType ===
+          'https://xats.org/vocabularies/blocks/mathBlock'
+      ) {
+        const mathItem = item as { content?: { latex?: string } };
+        const latex = mathItem.content?.latex;
+        if (typeof latex === 'string') {
           // Simple validation - check for balanced braces
           const openBraces = (latex.match(/{/g) || []).length;
           const closeBraces = (latex.match(/}/g) || []).length;
@@ -485,8 +496,9 @@ export class LaTeXValidator {
         }
       }
 
-      if (item.contents) {
-        this.validateMathBlocksRecursive(item.contents, issues);
+      if (typeof item === 'object' && item !== null && 'contents' in item) {
+        const itemContents = (item as { contents: unknown[] }).contents;
+        this.validateMathBlocksRecursive(itemContents, issues);
       }
     }
   }

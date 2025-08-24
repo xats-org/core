@@ -20,7 +20,6 @@ import type {
   RoundTripResult,
   FormatValidationResult,
   LaTeXRenderMetadata,
-  LaTeXParseMetadata,
   LaTeXConverterOptions,
 } from './types';
 import type { XatsDocument } from '@xats-org/types';
@@ -69,7 +68,7 @@ export class LaTeXConverter implements ILaTeXConverter {
 
     try {
       // Validate input document
-      const validation = await this.validator.validateXatsDocument(document);
+      const validation = this.validator.validateXatsDocument(document);
       if (!validation.isValid) {
         throw new Error(`Invalid xats document: ${validation.errors.join(', ')}`);
       }
@@ -101,7 +100,7 @@ export class LaTeXConverter implements ILaTeXConverter {
 
     try {
       // Validate input format
-      const validation = await this.validate(content);
+      const validation = this.validate(content);
       if (!validation.isValid) {
         throw new Error(`Invalid LaTeX document: ${validation.errors.join(', ')}`);
       }
@@ -176,7 +175,7 @@ export class LaTeXConverter implements ILaTeXConverter {
   /**
    * Validate LaTeX document format
    */
-  async validate(content: string): Promise<FormatValidationResult> {
+  validate(content: string): FormatValidationResult {
     return this.validator.validate(content);
   }
 

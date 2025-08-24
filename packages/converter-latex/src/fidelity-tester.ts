@@ -2,7 +2,8 @@
  * @fileoverview Round-trip fidelity testing for LaTeX converter
  */
 
-import { isEqual, difference } from 'lodash';
+// Note: lodash imports commented out as they're not yet used but will be needed for full implementation
+// import { isEqual as _isEqual, difference as _difference } from 'lodash';
 
 import type { RoundTripOptions, RoundTripResult, FidelityIssue, DocumentDifference } from './types';
 import type { XatsDocument } from '@xats-org/types';
@@ -92,13 +93,12 @@ export class FidelityTester {
     differences: DocumentDifference[]
   ): number {
     let score = 1.0;
-    let totalChecks = 0;
-    let passedChecks = 0;
+    // Note: fidelity tracking variables removed - will be implemented with actual usage
 
     // Check basic document properties
-    totalChecks++;
+    // _totalChecks++;
     if (original.bibliographicEntry?.title === converted.bibliographicEntry?.title) {
-      passedChecks++;
+      // _passedChecks++;
     } else {
       score -= 0.1;
       issues.push({
@@ -118,9 +118,9 @@ export class FidelityTester {
     }
 
     // Check subject
-    totalChecks++;
+    // _totalChecks++;
     if (original.subject === converted.subject) {
-      passedChecks++;
+      // _passedChecks++;
     } else {
       score -= 0.05;
       issues.push({
@@ -192,7 +192,7 @@ export class FidelityTester {
     original: XatsDocument,
     converted: XatsDocument,
     issues: FidelityIssue[],
-    differences: DocumentDifference[]
+    _differences: DocumentDifference[]
   ): number {
     let score = 1.0;
 

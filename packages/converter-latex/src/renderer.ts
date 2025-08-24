@@ -71,7 +71,7 @@ export class DocumentRenderer {
 
     // Bibliography
     if (document.bibliography && options.bibliography) {
-      const bibLatex = await this.bibliographyProcessor.renderBibliography(
+      const bibLatex = this.bibliographyProcessor.renderBibliography(
         document.bibliography,
         options.bibliography
       );
@@ -229,7 +229,7 @@ export class DocumentRenderer {
 
   private renderCodeBlock(block: ContentBlock): string {
     const code = block.content?.code || block.content?.text || '';
-    const language = block.content?.language || '';
+    // Note: language information available but not used in basic verbatim rendering
 
     return `\\begin{verbatim}\n${code}\n\\end{verbatim}`;
   }
@@ -311,7 +311,7 @@ export class DocumentRenderer {
     return `${command}{${this.escapeLaTeX(title)}}`;
   }
 
-  private determineStructuralLevel(item: any): number {
+  private determineStructuralLevel(_item: any): number {
     // Simple level determination - would be more sophisticated in practice
     return 1;
   }
@@ -358,7 +358,7 @@ export class DocumentRenderer {
     return [...new Set(envs.map((env) => env.match(/\{([^}]+)\}/)?.[1] || ''))];
   }
 
-  private assessMathComplexity(document: XatsDocument): 'low' | 'medium' | 'high' {
+  private assessMathComplexity(_document: XatsDocument): 'low' | 'medium' | 'high' {
     // Simple heuristic - would be more sophisticated
     return 'low';
   }
