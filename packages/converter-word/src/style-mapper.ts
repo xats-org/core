@@ -15,57 +15,60 @@ export class StyleMapper {
     this.defaultMappings = {
       paragraphs: {
         // Standard Word styles to xats block types
-        'Normal': 'https://xats.org/vocabularies/blocks/paragraph',
+        Normal: 'https://xats.org/vocabularies/blocks/paragraph',
         'Heading 1': 'https://xats.org/vocabularies/blocks/heading',
         'Heading 2': 'https://xats.org/vocabularies/blocks/heading',
         'Heading 3': 'https://xats.org/vocabularies/blocks/heading',
         'Heading 4': 'https://xats.org/vocabularies/blocks/heading',
         'Heading 5': 'https://xats.org/vocabularies/blocks/heading',
         'Heading 6': 'https://xats.org/vocabularies/blocks/heading',
-        'Quote': 'https://xats.org/vocabularies/blocks/blockquote',
+        Quote: 'https://xats.org/vocabularies/blocks/blockquote',
         'Intense Quote': 'https://xats.org/vocabularies/blocks/blockquote',
-        'Code': 'https://xats.org/vocabularies/blocks/codeBlock',
-        
+        Code: 'https://xats.org/vocabularies/blocks/codeBlock',
+
         // Educational-specific styles
         'Learning Objective': 'https://xats.org/vocabularies/blocks/learningObjective',
         'Key Term': 'https://xats.org/vocabularies/blocks/keyTerm',
         'Case Study': 'https://xats.org/vocabularies/blocks/caseStudy',
-        'Definition': 'https://xats.org/vocabularies/blocks/definition',
-        'Example': 'https://xats.org/vocabularies/blocks/example',
-        'Exercise': 'https://xats.org/vocabularies/blocks/exercise',
-        'Note': 'https://xats.org/vocabularies/blocks/note',
-        'Warning': 'https://xats.org/vocabularies/blocks/warning',
-        'Tip': 'https://xats.org/vocabularies/blocks/tip',
-        'Summary': 'https://xats.org/vocabularies/blocks/summary'
+        Definition: 'https://xats.org/vocabularies/blocks/definition',
+        Example: 'https://xats.org/vocabularies/blocks/example',
+        Exercise: 'https://xats.org/vocabularies/blocks/exercise',
+        Note: 'https://xats.org/vocabularies/blocks/note',
+        Warning: 'https://xats.org/vocabularies/blocks/warning',
+        Tip: 'https://xats.org/vocabularies/blocks/tip',
+        Summary: 'https://xats.org/vocabularies/blocks/summary',
       },
       characters: {
         // Character-level formatting
-        'Strong': 'strong',
-        'Emphasis': 'emphasis',
+        Strong: 'strong',
+        Emphasis: 'emphasis',
         'Code Char': 'code',
         'Key Term Char': 'keyTerm',
-        'Hyperlink': 'reference',
-        'Citation': 'citation'
+        Hyperlink: 'reference',
+        Citation: 'citation',
       },
       tables: {
         'Table Grid': 'https://xats.org/vocabularies/blocks/table',
         'Table Professional': 'https://xats.org/vocabularies/blocks/table',
-        'Data Table': 'https://xats.org/vocabularies/blocks/table'
+        'Data Table': 'https://xats.org/vocabularies/blocks/table',
       },
       lists: {
         'List Paragraph': 'https://xats.org/vocabularies/blocks/list',
-        'Bullet': 'https://xats.org/vocabularies/blocks/list',
-        'Number': 'https://xats.org/vocabularies/blocks/list'
-      }
+        Bullet: 'https://xats.org/vocabularies/blocks/list',
+        Number: 'https://xats.org/vocabularies/blocks/list',
+      },
     };
-    
+
     this.customMappings = customMappings;
   }
 
   /**
    * Get xats block type for Word style
    */
-  getXatsBlockType(wordStyle: string, category: keyof WordStyleMappings = 'paragraphs'): string | null {
+  getXatsBlockType(
+    wordStyle: string,
+    category: keyof WordStyleMappings = 'paragraphs'
+  ): string | null {
     // Check custom mappings first
     const customMapping = this.customMappings[category]?.[wordStyle];
     if (customMapping) {
@@ -79,7 +82,10 @@ export class StyleMapper {
   /**
    * Get Word style for xats block type
    */
-  getWordStyle(xatsBlockType: string, category: keyof WordStyleMappings = 'paragraphs'): string | null {
+  getWordStyle(
+    xatsBlockType: string,
+    category: keyof WordStyleMappings = 'paragraphs'
+  ): string | null {
     // Search in custom mappings first
     const customMappings = this.customMappings[category] || {};
     for (const [wordStyle, blockType] of Object.entries(customMappings)) {
@@ -106,21 +112,18 @@ export class StyleMapper {
     // Extract the last part of the URI and convert to title case
     const parts = xatsBlockType.split('/');
     const lastPart = parts[parts.length - 1];
-    
+
     // Convert camelCase to Title Case
     return lastPart
       .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, str => str.toUpperCase())
+      .replace(/^./, (str) => str.toUpperCase())
       .trim();
   }
 
   /**
    * Generate style mappings report
    */
-  generateStyleReport(
-    usedStyles: string[], 
-    requiredBlockTypes: string[]
-  ): StyleReport {
+  generateStyleReport(usedStyles: string[], requiredBlockTypes: string[]): StyleReport {
     const mappedStyles: Record<string, string> = {};
     const unmappedStyles: string[] = [];
     const newStyles: string[] = [];
@@ -142,13 +145,13 @@ export class StyleMapper {
       if (!wordStyle) {
         const newStyleName = this.createWordStyleName(blockType);
         newStyles.push(newStyleName);
-        
+
         // Check for potential conflicts
         if (usedStyles.includes(newStyleName)) {
           conflicts.push({
             styleName: newStyleName,
             conflict: `Style name already exists in document`,
-            resolution: `Will use ${newStyleName}_xats instead`
+            resolution: `Will use ${newStyleName}_xats instead`,
           });
         }
       }
@@ -158,7 +161,7 @@ export class StyleMapper {
       mappedStyles,
       unmappedStyles,
       newStyles,
-      conflicts
+      conflicts,
     };
   }
 
@@ -170,7 +173,7 @@ export class StyleMapper {
       paragraphs: { ...this.customMappings.paragraphs, ...mappings.paragraphs },
       characters: { ...this.customMappings.characters, ...mappings.characters },
       tables: { ...this.customMappings.tables, ...mappings.tables },
-      lists: { ...this.customMappings.lists, ...mappings.lists }
+      lists: { ...this.customMappings.lists, ...mappings.lists },
     };
   }
 
@@ -182,7 +185,7 @@ export class StyleMapper {
       paragraphs: { ...this.defaultMappings.paragraphs, ...this.customMappings.paragraphs },
       characters: { ...this.defaultMappings.characters, ...this.customMappings.characters },
       tables: { ...this.defaultMappings.tables, ...this.customMappings.tables },
-      lists: { ...this.defaultMappings.lists, ...this.customMappings.lists }
+      lists: { ...this.defaultMappings.lists, ...this.customMappings.lists },
     };
   }
 
@@ -200,9 +203,9 @@ export class StyleMapper {
       'Note',
       'Warning',
       'Tip',
-      'Summary'
+      'Summary',
     ];
-    
+
     return educationalStyles.includes(wordStyle);
   }
 
@@ -214,21 +217,21 @@ export class StyleMapper {
     if (match) {
       return parseInt(match[1], 10);
     }
-    
+
     // Check for other heading patterns
     const patterns = [
       { pattern: /^Title$/i, level: 1 },
       { pattern: /^Subtitle$/i, level: 2 },
       { pattern: /^Chapter$/i, level: 1 },
-      { pattern: /^Section$/i, level: 2 }
+      { pattern: /^Section$/i, level: 2 },
     ];
-    
+
     for (const { pattern, level } of patterns) {
       if (pattern.test(wordStyle)) {
         return level;
       }
     }
-    
+
     return null;
   }
 

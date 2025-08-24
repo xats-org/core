@@ -8,14 +8,13 @@ import type {
   Comment,
   AnnotationLocation,
   TrackChangesOptions,
-  CommentsOptions
+  CommentsOptions,
 } from './types';
 
 /**
  * Processes annotations, track changes, and comments between Word and xats
  */
 export class AnnotationProcessor {
-  
   /**
    * Extract track changes from Word document
    */
@@ -30,14 +29,16 @@ export class AnnotationProcessor {
     }
 
     // Parse Word revision markup
-    const insertRegex = /<w:ins[^>]*w:author="([^"]*)"[^>]*w:date="([^"]*)"[^>]*id="([^"]*)"[^>]*>(.*?)<\/w:ins>/gs;
-    const deleteRegex = /<w:del[^>]*w:author="([^"]*)"[^>]*w:date="([^"]*)"[^>]*id="([^"]*)"[^>]*>(.*?)<\/w:del>/gs;
+    const insertRegex =
+      /<w:ins[^>]*w:author="([^"]*)"[^>]*w:date="([^"]*)"[^>]*id="([^"]*)"[^>]*>(.*?)<\/w:ins>/gs;
+    const deleteRegex =
+      /<w:del[^>]*w:author="([^"]*)"[^>]*w:date="([^"]*)"[^>]*id="([^"]*)"[^>]*>(.*?)<\/w:del>/gs;
 
     // Extract insertions
     let match;
     while ((match = insertRegex.exec(documentXml)) !== null) {
       const [, author, dateStr, id, content] = match;
-      
+
       trackChanges.push({
         id: `insert_${id}`,
         type: 'insert',
@@ -45,14 +46,14 @@ export class AnnotationProcessor {
         timestamp: new Date(dateStr),
         content: this.cleanWordContent(content),
         location: this.extractLocation(match.index),
-        status: 'pending'
+        status: 'pending',
       });
     }
 
     // Extract deletions
     while ((match = deleteRegex.exec(documentXml)) !== null) {
       const [, author, dateStr, id, content] = match;
-      
+
       trackChanges.push({
         id: `delete_${id}`,
         type: 'delete',
@@ -61,7 +62,7 @@ export class AnnotationProcessor {
         content: '',
         originalContent: this.cleanWordContent(content),
         location: this.extractLocation(match.index),
-        status: 'pending'
+        status: 'pending',
       });
     }
 
@@ -83,23 +84,24 @@ export class AnnotationProcessor {
     }
 
     // Parse comments.xml for comment definitions
-    const commentRegex = /<w:comment[^>]*w:id="([^"]*)"[^>]*w:author="([^"]*)"[^>]*w:date="([^"]*)"[^>]*>(.*?)<\/w:comment>/gs;
-    
+    const commentRegex =
+      /<w:comment[^>]*w:id="([^"]*)"[^>]*w:author="([^"]*)"[^>]*w:date="([^"]*)"[^>]*>(.*?)<\/w:comment>/gs;
+
     let match;
     while ((match = commentRegex.exec(commentsXml)) !== null) {
       const [, id, author, dateStr, content] = match;
-      
+
       // Find comment references in document
       const commentRangeStart = new RegExp(`<w:commentRangeStart[^>]*w:id="${id}"[^>]*>`, 'g');
       const rangeMatch = commentRangeStart.exec(documentXml);
-      
+
       comments.push({
         id,
         author,
         timestamp: new Date(dateStr),
         content: this.cleanWordContent(content),
         location: this.extractLocation(rangeMatch?.index || 0),
-        status: 'open'
+        status: 'open',
       });
     }
 
@@ -115,17 +117,18 @@ export class AnnotationProcessor {
    * Convert track changes to xats annotations
    */
   convertTrackChangesToAnnotations(trackChanges: TrackChange[]): Annotation[] {
-    return trackChanges.map(change => ({
+    return trackChanges.map((change) => ({
       id: change.id,
       type: change.type === 'insert' ? 'suggestion' : 'suggestion',
-      content: change.type === 'insert' 
-        ? `Suggested addition: ${change.content}`
-        : `Suggested deletion: ${change.originalContent || ''}`,
+      content:
+        change.type === 'insert'
+          ? `Suggested addition: ${change.content}`
+          : `Suggested deletion: ${change.originalContent || ''}`,
       author: change.author,
       timestamp: change.timestamp,
       location: change.location,
       status: change.status === 'pending' ? 'open' : 'resolved',
-      priority: 'medium'
+      priority: 'medium',
     }));
   }
 
@@ -133,7 +136,7 @@ export class AnnotationProcessor {
    * Convert comments to xats annotations
    */
   convertCommentsToAnnotations(comments: Comment[]): Annotation[] {
-    return comments.map(comment => ({
+    return comments.map((comment) => ({
       id: comment.id,
       type: 'comment',
       content: comment.content,
@@ -141,7 +144,7 @@ export class AnnotationProcessor {
       timestamp: comment.timestamp,
       location: comment.location,
       status: comment.status,
-      priority: 'medium'
+      priority: 'medium',
     }));
   }
 
@@ -149,7 +152,7 @@ export class AnnotationProcessor {
    * Generate Word track changes markup from annotations
    */
   generateTrackChangesMarkup(annotations: Annotation[]): string {
-    const trackChanges = annotations.filter(a => a.type === 'suggestion');
+    const trackChanges = annotations.filter((a) => a.type === 'suggestion');
     let markup = '';
 
     for (const annotation of trackChanges) {
@@ -176,14 +179,18 @@ export class AnnotationProcessor {
   /**
    * Generate Word comments markup from annotations
    */
-  generateCommentsMarkup(annotations: Annotation[]): { commentsXml: string; documentMarkup: string } {
-    const comments = annotations.filter(a => a.type === 'comment');
-    let commentsXml = '<w:comments xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">';
+  generateCommentsMarkup(annotations: Annotation[]): {
+    commentsXml: string;
+    documentMarkup: string;
+  } {
+    const comments = annotations.filter((a) => a.type === 'comment');
+    let commentsXml =
+      '<w:comments xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">';
     let documentMarkup = '';
 
     for (const annotation of comments) {
       const timestamp = annotation.timestamp.toISOString();
-      
+
       // Add comment definition
       commentsXml += `<w:comment w:id="${annotation.id}" w:author="${annotation.author}" w:date="${timestamp}">`;
       commentsXml += `<w:p><w:r><w:t>${this.escapeXml(annotation.content)}</w:t></w:r></w:p>`;
@@ -221,8 +228,8 @@ export class AnnotationProcessor {
       characterOffset,
       selection: {
         start: characterOffset,
-        end: characterOffset
-      }
+        end: characterOffset,
+      },
     };
   }
 
@@ -236,11 +243,11 @@ export class AnnotationProcessor {
     for (const comment of comments) {
       // Simple threading logic - could be enhanced
       const threadKey = `${comment.author}_${Math.floor(comment.location.characterOffset! / 1000)}`;
-      
+
       if (!threads.has(threadKey)) {
         threads.set(threadKey, []);
       }
-      
+
       threads.get(threadKey)!.push(comment);
     }
 
@@ -248,7 +255,7 @@ export class AnnotationProcessor {
     for (const threadComments of threads.values()) {
       if (threadComments.length > 1) {
         threadComments.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
-        
+
         for (let i = 1; i < threadComments.length; i++) {
           if (!threadComments[0].thread) {
             threadComments[0].thread = [];

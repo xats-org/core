@@ -18,7 +18,7 @@ export type {
   WordRenderResult,
   WordParseResult,
   RoundTripOptions,
-  RoundTripResult
+  RoundTripResult,
 } from './types';
 export { WordValidator } from './validator';
 export { StyleMapper } from './style-mapper';

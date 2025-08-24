@@ -2,7 +2,13 @@
  * @fileoverview Main Word converter implementation
  */
 
-import type { XatsDocument } from '@xats-org/types';
+import { AnnotationProcessor } from './annotation-processor';
+import { FidelityTester } from './fidelity-tester';
+import { DocumentParser } from './parser';
+import { DocumentRenderer } from './renderer';
+import { StyleMapper } from './style-mapper';
+import { WordValidator } from './validator';
+
 import type {
   WordConverter as IWordConverter,
   WordRenderOptions,
@@ -13,15 +19,9 @@ import type {
   RoundTripResult,
   FormatValidationResult,
   WordMetadata,
-  WordConverterOptions
+  WordConverterOptions,
 } from './types';
-
-import { WordValidator } from './validator';
-import { StyleMapper } from './style-mapper';
-import { AnnotationProcessor } from './annotation-processor';
-import { DocumentRenderer } from './renderer';
-import { DocumentParser } from './parser';
-import { FidelityTester } from './fidelity-tester';
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * High-fidelity bidirectional converter for Microsoft Word documents
@@ -53,10 +53,7 @@ export class WordConverter implements IWordConverter {
   /**
    * Render xats document to Word format
    */
-  async render(
-    document: XatsDocument,
-    options: WordRenderOptions = {}
-  ): Promise<WordRenderResult> {
+  async render(document: XatsDocument, options: WordRenderOptions = {}): Promise<WordRenderResult> {
     const startTime = performance.now();
 
     try {
@@ -75,21 +72,20 @@ export class WordConverter implements IWordConverter {
         ...result,
         metadata: {
           ...result.metadata,
-          renderTime
-        }
+          renderTime,
+        },
       };
     } catch (error) {
-      throw new Error(`Word render failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Word render failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
   /**
    * Parse Word document to xats format
    */
-  async parse(
-    content: string | Buffer,
-    options: WordParseOptions = {}
-  ): Promise<WordParseResult> {
+  async parse(content: string | Buffer, options: WordParseOptions = {}): Promise<WordParseResult> {
     const startTime = performance.now();
 
     try {
@@ -108,11 +104,13 @@ export class WordConverter implements IWordConverter {
         ...result,
         metadata: {
           ...result.metadata,
-          renderTime: parseTime
-        }
+          renderTime: parseTime,
+        },
       };
     } catch (error) {
-      throw new Error(`Word parse failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Word parse failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -126,12 +124,12 @@ export class WordConverter implements IWordConverter {
     try {
       // Convert xats -> Word -> xats
       const wordResult = await this.render(document, {
-        productionMode: true
+        productionMode: true,
       });
 
       const xatsResult = await this.parse(wordResult.content, {
         preserveMetadata: true,
-        productionMode: true
+        productionMode: true,
       });
 
       // Test fidelity
@@ -143,14 +141,16 @@ export class WordConverter implements IWordConverter {
         contentFidelity: 0,
         formattingFidelity: 0,
         structureFidelity: 0,
-        issues: [{
-          type: 'content',
-          severity: 'critical',
-          description: `Round-trip test failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        }],
+        issues: [
+          {
+            type: 'content',
+            severity: 'critical',
+            description: `Round-trip test failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          },
+        ],
         originalDocument: document,
         convertedDocument: document, // fallback
-        differences: []
+        differences: [],
       };
     }
   }
@@ -169,7 +169,9 @@ export class WordConverter implements IWordConverter {
     try {
       return await this.parser.extractMetadata(content);
     } catch (error) {
-      throw new Error(`Metadata extraction failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Metadata extraction failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 }

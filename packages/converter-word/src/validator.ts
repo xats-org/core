@@ -2,15 +2,15 @@
  * @fileoverview Word document validation
  */
 
-import type { XatsDocument } from '@xats-org/types';
-import type { FormatValidationResult, WordValidationIssue } from './types';
 import JSZip from 'jszip';
+
+import type { FormatValidationResult, WordValidationIssue } from './types';
+import type { XatsDocument } from '@xats-org/types';
 
 /**
  * Validates Word documents and xats documents for conversion compatibility
  */
 export class WordValidator {
-  
   /**
    * Validate Word document format and structure
    */
@@ -22,19 +22,13 @@ export class WordValidator {
 
     try {
       // Convert string to buffer if needed
-      const buffer = typeof content === 'string' 
-        ? Buffer.from(content, 'base64') 
-        : content;
+      const buffer = typeof content === 'string' ? Buffer.from(content, 'base64') : content;
 
       // Check if it's a valid ZIP file (docx format)
       const zip = await JSZip.loadAsync(buffer);
 
       // Check for required DOCX structure
-      const requiredFiles = [
-        '[Content_Types].xml',
-        '_rels/.rels',
-        'word/document.xml'
-      ];
+      const requiredFiles = ['[Content_Types].xml', '_rels/.rels', 'word/document.xml'];
 
       for (const file of requiredFiles) {
         if (!zip.files[file]) {
@@ -43,7 +37,7 @@ export class WordValidator {
             type: 'structure',
             severity: 'error',
             message: `Missing required file: ${file}`,
-            suggestion: 'Ensure the document is a valid DOCX file'
+            suggestion: 'Ensure the document is a valid DOCX file',
           });
         }
       }
@@ -51,14 +45,14 @@ export class WordValidator {
       // Validate document.xml content
       if (zip.files['word/document.xml']) {
         const documentXml = await zip.files['word/document.xml'].async('string');
-        
+
         if (!documentXml.includes('<w:document')) {
           contentValid = false;
           issues.push({
             type: 'content',
             severity: 'error',
             message: 'Invalid document.xml structure',
-            suggestion: 'Document must contain valid Word document markup'
+            suggestion: 'Document must contain valid Word document markup',
           });
         }
       }
@@ -70,31 +64,30 @@ export class WordValidator {
           type: 'metadata',
           severity: 'warning',
           message: 'Missing application properties',
-          suggestion: 'Document may be missing important metadata'
+          suggestion: 'Document may be missing important metadata',
         });
       }
 
       // Validate styles if present
       if (zip.files['word/styles.xml']) {
         const stylesXml = await zip.files['word/styles.xml'].async('string');
-        
+
         if (!stylesXml.includes('<w:styles')) {
           issues.push({
             type: 'style',
             severity: 'warning',
             message: 'Invalid styles.xml structure',
-            suggestion: 'Styles may not be preserved correctly'
+            suggestion: 'Styles may not be preserved correctly',
           });
         }
       }
-
     } catch (error) {
       structureValid = false;
       issues.push({
         type: 'structure',
         severity: 'error',
         message: error instanceof Error ? error.message : 'Unknown validation error',
-        suggestion: 'Ensure the file is a valid DOCX document'
+        suggestion: 'Ensure the file is a valid DOCX document',
       });
     }
 
@@ -104,9 +97,9 @@ export class WordValidator {
       structureValid,
       contentValid,
       metadataValid,
-      errors: issues.filter(i => i.severity === 'error').map(i => i.message),
-      warnings: issues.filter(i => i.severity === 'warning').map(i => i.message),
-      wordSpecificIssues: issues
+      errors: issues.filter((i) => i.severity === 'error').map((i) => i.message),
+      warnings: issues.filter((i) => i.severity === 'warning').map((i) => i.message),
+      wordSpecificIssues: issues,
     };
   }
 
@@ -126,7 +119,7 @@ export class WordValidator {
           type: 'structure',
           severity: 'error',
           message: 'Missing schema version',
-          suggestion: 'Add schemaVersion property to document'
+          suggestion: 'Add schemaVersion property to document',
         });
       }
 
@@ -136,7 +129,7 @@ export class WordValidator {
           type: 'structure',
           severity: 'error',
           message: 'Missing body matter',
-          suggestion: 'Document must have bodyMatter content'
+          suggestion: 'Document must have bodyMatter content',
         });
       }
 
@@ -145,7 +138,7 @@ export class WordValidator {
           type: 'metadata',
           severity: 'warning',
           message: 'Missing bibliographic entry',
-          suggestion: 'Add bibliographic entry for proper Word metadata'
+          suggestion: 'Add bibliographic entry for proper Word metadata',
         });
       }
 
@@ -153,7 +146,7 @@ export class WordValidator {
       const unsupportedBlockTypes = [
         'https://xats.org/vocabularies/blocks/interactive',
         'https://xats.org/vocabularies/blocks/3dModel',
-        'https://xats.org/vocabularies/blocks/animation'
+        'https://xats.org/vocabularies/blocks/animation',
       ];
 
       // Recursively check block types
@@ -161,14 +154,13 @@ export class WordValidator {
 
       // Check for complex mathematical content
       this.checkMathComplexity(document.bodyMatter?.contents || [], issues);
-
     } catch (error) {
       contentValid = false;
       issues.push({
         type: 'content',
         severity: 'error',
         message: error instanceof Error ? error.message : 'Document validation failed',
-        suggestion: 'Ensure document follows xats schema'
+        suggestion: 'Ensure document follows xats schema',
       });
     }
 
@@ -178,9 +170,9 @@ export class WordValidator {
       structureValid,
       contentValid,
       metadataValid: true,
-      errors: issues.filter(i => i.severity === 'error').map(i => i.message),
-      warnings: issues.filter(i => i.severity === 'warning').map(i => i.message),
-      wordSpecificIssues: issues
+      errors: issues.filter((i) => i.severity === 'error').map((i) => i.message),
+      warnings: issues.filter((i) => i.severity === 'warning').map((i) => i.message),
+      wordSpecificIssues: issues,
     };
   }
 
@@ -188,8 +180,8 @@ export class WordValidator {
    * Check for unsupported block types recursively
    */
   private checkBlockTypes(
-    contents: any[], 
-    unsupportedTypes: string[], 
+    contents: any[],
+    unsupportedTypes: string[],
     issues: WordValidationIssue[]
   ): void {
     for (const item of contents) {
@@ -198,7 +190,7 @@ export class WordValidator {
           type: 'content',
           severity: 'warning',
           message: `Unsupported block type for Word conversion: ${item.blockType}`,
-          suggestion: 'Consider alternative representation or skip this block'
+          suggestion: 'Consider alternative representation or skip this block',
         });
       }
 
@@ -206,7 +198,7 @@ export class WordValidator {
       if (item.contents) {
         this.checkBlockTypes(item.contents, unsupportedTypes, issues);
       }
-      
+
       if (item.bodyMatter?.contents) {
         this.checkBlockTypes(item.bodyMatter.contents, unsupportedTypes, issues);
       }
@@ -220,15 +212,9 @@ export class WordValidator {
     for (const item of contents) {
       if (item.blockType === 'https://xats.org/vocabularies/blocks/mathBlock') {
         const mathContent = item.content?.latex || item.content?.mathML || '';
-        
+
         // Check for complex LaTeX that might not convert well
-        const complexPatterns = [
-          /\\tikz/,
-          /\\pgfplots/,
-          /\\xy/,
-          /\\diagram/,
-          /\\commutative/
-        ];
+        const complexPatterns = [/\\tikz/, /\\pgfplots/, /\\xy/, /\\diagram/, /\\commutative/];
 
         for (const pattern of complexPatterns) {
           if (pattern.test(mathContent)) {
@@ -236,7 +222,7 @@ export class WordValidator {
               type: 'content',
               severity: 'warning',
               message: 'Complex mathematical diagrams may not convert perfectly to Word',
-              suggestion: 'Consider providing alternative representations for complex diagrams'
+              suggestion: 'Consider providing alternative representations for complex diagrams',
             });
             break;
           }

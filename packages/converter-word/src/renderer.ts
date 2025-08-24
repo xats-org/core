@@ -2,24 +2,14 @@
  * @fileoverview Word document renderer - converts xats to Word
  */
 
-import type { XatsDocument, ContentBlock } from '@xats-org/types';
-import type { 
-  WordRenderOptions, 
-  WordRenderResult, 
-  WordMetadata,
-  ConversionError,
-  ConversionWarning
-} from './types';
-import { StyleMapper } from './style-mapper';
-import { AnnotationProcessor } from './annotation-processor';
-import { 
-  Document, 
-  Paragraph, 
-  TextRun, 
-  HeadingLevel, 
-  Table, 
-  TableRow, 
-  TableCell, 
+import {
+  Document,
+  Paragraph,
+  TextRun,
+  HeadingLevel,
+  Table,
+  TableRow,
+  TableCell,
   AlignmentType,
   BorderStyle,
   ShadingType,
@@ -29,21 +19,30 @@ import {
   convertMillimetersToTwip,
   LevelFormat,
   ILevelsOptions,
-  INumberingOptions,
-  IStylesOptions,
   Header,
   Footer,
   TextDirection,
   TabStopPosition,
   TabStopType,
-  UnderlineType
+  UnderlineType,
 } from 'docx';
+
+import type { AnnotationProcessor } from './annotation-processor';
+import type { StyleMapper } from './style-mapper';
+import type {
+  WordRenderOptions,
+  WordRenderResult,
+  WordMetadata,
+  ConversionError,
+  ConversionWarning,
+} from './types';
+import type { XatsDocument, ContentBlock } from '@xats-org/types';
+import type { INumberingOptions, IStylesOptions } from 'docx';
 
 /**
  * Renders xats documents to Word format
  */
 export class DocumentRenderer {
-  
   constructor(
     private readonly styleMapper: StyleMapper,
     private readonly annotationProcessor: AnnotationProcessor
@@ -52,32 +51,30 @@ export class DocumentRenderer {
   /**
    * Render xats document to Word format
    */
-  async render(
-    document: XatsDocument,
-    options: WordRenderOptions = {}
-  ): Promise<WordRenderResult> {
+  async render(document: XatsDocument, options: WordRenderOptions = {}): Promise<WordRenderResult> {
     const errors: ConversionError[] = [];
     const warnings: ConversionWarning[] = [];
-    
+
     try {
       // Create Word document with proper configuration
       const wordDoc = new Document({
         creator: options.author || 'xats-converter',
         title: options.documentTitle || document.bibliographicEntry?.title || 'Untitled',
-        subject: typeof document.subject === 'string' ? document.subject : String(document.subject || ''),
+        subject:
+          typeof document.subject === 'string' ? document.subject : String(document.subject || ''),
         keywords: document.bibliographicEntry?.keyword || [],
         styles: this.createDocumentStyles(options),
         numbering: this.createNumberingDefinitions(),
-        sections: []
+        sections: [],
       });
 
       // Process document content
       const paragraphs = await this.processContent(document, options, errors, warnings);
-      
+
       // Add content to document
       wordDoc.addSection({
         properties: {},
-        children: paragraphs
+        children: paragraphs,
       });
 
       // Generate buffer
@@ -94,7 +91,7 @@ export class DocumentRenderer {
         equations: this.countEquations(document),
         author: options.author,
         title: options.documentTitle,
-        fileSize: buffer.length
+        fileSize: buffer.length,
       };
 
       return {
@@ -105,11 +102,12 @@ export class DocumentRenderer {
         styleReport: this.styleMapper.generateStyleReport(
           metadata.styles,
           this.extractBlockTypes(document)
-        )
+        ),
       };
-      
     } catch (error) {
-      throw new Error(`Rendering failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Rendering failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -194,35 +192,44 @@ export class DocumentRenderer {
               // Add title as heading
               const level = this.determineHeadingLevel(item);
               const titleRuns = this.createTextRuns(item.title);
-              elements.push(new Paragraph({
-                heading: this.getWordHeadingLevel(level),
-                children: titleRuns
-              }));
+              elements.push(
+                new Paragraph({
+                  heading: this.getWordHeadingLevel(level),
+                  children: titleRuns,
+                })
+              );
             } catch (error) {
               errors.push({
                 code: 'TITLE_RENDER_ERROR',
                 message: `Failed to render structural container title: ${error instanceof Error ? error.message : 'Unknown error'}`,
                 recoverable: true,
-                suggestion: 'Title will be rendered as plain text'
+                suggestion: 'Title will be rendered as plain text',
               });
-              
+
               // Fallback: render as plain text
-              elements.push(new Paragraph({
-                children: [new TextRun(typeof item.title === 'string' ? item.title : 'Untitled')]
-              }));
+              elements.push(
+                new Paragraph({
+                  children: [new TextRun(typeof item.title === 'string' ? item.title : 'Untitled')],
+                })
+              );
             }
           }
-          
+
           // Process nested contents with error handling
           try {
-            const nestedElements = await this.processContents(item.contents, options, errors, warnings);
+            const nestedElements = await this.processContents(
+              item.contents,
+              options,
+              errors,
+              warnings
+            );
             elements.push(...nestedElements);
           } catch (error) {
             errors.push({
               code: 'NESTED_CONTENT_ERROR',
               message: `Failed to process nested contents: ${error instanceof Error ? error.message : 'Unknown error'}`,
               recoverable: true,
-              suggestion: 'Some nested content may be missing'
+              suggestion: 'Some nested content may be missing',
             });
           }
         }
@@ -231,7 +238,7 @@ export class DocumentRenderer {
           code: 'RENDER_ERROR',
           message: `Failed to render item: ${error instanceof Error ? error.message : 'Unknown error'}`,
           recoverable: true,
-          suggestion: 'Item will be skipped'
+          suggestion: 'Item will be skipped',
         });
       }
     }
@@ -252,67 +259,69 @@ export class DocumentRenderer {
       case 'https://xats.org/vocabularies/blocks/paragraph':
         elements.push(this.createParagraph(block));
         break;
-        
+
       case 'https://xats.org/vocabularies/blocks/heading':
         elements.push(this.createHeading(block));
         break;
-        
+
       case 'https://xats.org/vocabularies/blocks/blockquote':
         elements.push(this.createBlockquote(block));
         break;
-        
+
       case 'https://xats.org/vocabularies/blocks/list':
         elements.push(...this.createList(block));
         break;
-        
+
       case 'https://xats.org/vocabularies/blocks/table':
         elements.push(this.createTable(block));
         break;
-        
+
       case 'https://xats.org/vocabularies/blocks/codeBlock':
         elements.push(this.createCodeBlock(block));
         break;
-        
+
       case 'https://xats.org/vocabularies/blocks/mathBlock':
         elements.push(this.createMathBlock(block));
         break;
-        
+
       case 'https://xats.org/vocabularies/blocks/figure':
-        elements.push(...await this.createFigure(block));
+        elements.push(...(await this.createFigure(block)));
         break;
 
       // Educational content blocks
       case 'https://xats.org/vocabularies/blocks/learningObjective':
         elements.push(this.createEducationalBlock(block, 'Learning Objective'));
         break;
-        
+
       case 'https://xats.org/vocabularies/blocks/keyTerm':
         elements.push(this.createEducationalBlock(block, 'Key Term'));
         break;
-        
+
       case 'https://xats.org/vocabularies/blocks/definition':
         elements.push(this.createEducationalBlock(block, 'Definition'));
         break;
-        
+
       case 'https://xats.org/vocabularies/blocks/example':
         elements.push(this.createEducationalBlock(block, 'Example'));
         break;
-        
+
       case 'https://xats.org/vocabularies/blocks/exercise':
         elements.push(this.createEducationalBlock(block, 'Exercise'));
         break;
 
       default:
         // Unknown block type - create as paragraph with note
-        elements.push(new Paragraph({
-          children: [
-            new TextRun({
-              text: `[Unsupported block type: ${block.blockType}]`,
-              italics: true,
-              color: '888888'
-            })
-          ]
-        }));
+        elements.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `[Unsupported block type: ${block.blockType}]`,
+                italics: true,
+                color: '888888',
+              }),
+            ],
+          })
+        );
         break;
     }
 
@@ -326,11 +335,11 @@ export class DocumentRenderer {
     try {
       const textContent = block.content?.text || block.content || '';
       const runs = this.createTextRuns(textContent);
-      
+
       if (runs.length === 0) {
         runs.push(new TextRun(''));
       }
-      
+
       return new Paragraph({ children: runs });
     } catch (error) {
       // Fallback: create simple paragraph with error note
@@ -339,9 +348,9 @@ export class DocumentRenderer {
           new TextRun({
             text: '[Error rendering paragraph content]',
             italics: true,
-            color: 'FF0000'
-          })
-        ]
+            color: 'FF0000',
+          }),
+        ],
       });
     }
   }
@@ -354,14 +363,14 @@ export class DocumentRenderer {
       const level = Math.max(1, Math.min(6, block.content?.level || 1)); // Ensure level is 1-6
       const textContent = block.content?.text || '';
       const runs = this.createTextRuns(textContent);
-      
+
       if (runs.length === 0) {
         runs.push(new TextRun('Untitled Heading'));
       }
-      
+
       return new Paragraph({
         heading: this.getWordHeadingLevel(level),
-        children: runs
+        children: runs,
       });
     } catch (error) {
       // Fallback: create as normal paragraph with bold formatting
@@ -370,9 +379,9 @@ export class DocumentRenderer {
           new TextRun({
             text: block.content?.text || 'Heading',
             bold: true,
-            size: 28
-          })
-        ]
+            size: 28,
+          }),
+        ],
       });
     }
   }
@@ -382,10 +391,10 @@ export class DocumentRenderer {
    */
   private createBlockquote(block: ContentBlock): Paragraph {
     const runs = this.createTextRuns(block.content?.text || '');
-    
+
     return new Paragraph({
       style: 'Quote',
-      children: runs
+      children: runs,
     });
   }
 
@@ -396,18 +405,18 @@ export class DocumentRenderer {
     const items = block.content?.items || [];
     const isOrdered = block.content?.ordered === true;
     const startValue = block.content?.start || 1;
-    
+
     return items.map((item: any, index: number) => {
       // Handle nested lists
       const level = item.level || 0;
-      const text = typeof item === 'string' ? item : (item.text || item.content?.text || '');
-      
+      const text = typeof item === 'string' ? item : item.text || item.content?.text || '';
+
       return new Paragraph({
         numbering: {
           reference: isOrdered ? 'ordered-list' : 'bullet-list',
-          level: Math.min(level, 8) // Word supports up to 9 levels (0-8)
+          level: Math.min(level, 8), // Word supports up to 9 levels (0-8)
         },
-        children: this.createTextRuns(text)
+        children: this.createTextRuns(text),
       });
     });
   }
@@ -418,7 +427,7 @@ export class DocumentRenderer {
   private createTable(block: ContentBlock): Table {
     try {
       const rows = block.content?.rows || [];
-      
+
       if (rows.length === 0) {
         // Create empty table with one cell
         return new Table({
@@ -426,68 +435,80 @@ export class DocumentRenderer {
             new TableRow({
               children: [
                 new TableCell({
-                  children: [new Paragraph({
-                    children: [new TextRun('[Empty table]')]
-                  })]
-                })
-              ]
-            })
+                  children: [
+                    new Paragraph({
+                      children: [new TextRun('[Empty table]')],
+                    }),
+                  ],
+                }),
+              ],
+            }),
           ],
-          width: { size: 100, type: 'pct' }
+          width: { size: 100, type: 'pct' },
         });
       }
-      
+
       const tableRows = rows.map((row: any, rowIndex: number) => {
         try {
           const cells = row.cells || [];
-          
+
           const tableCells = cells.map((cell: any, cellIndex: number) => {
             try {
               const cellText = cell.text || cell.content?.text || '';
               const runs = this.createTextRuns(cellText);
-              
+
               return new TableCell({
                 children: [new Paragraph({ children: runs })],
                 width: cell.width ? { size: cell.width, type: 'pct' } : undefined,
                 columnSpan: cell.colspan && cell.colspan > 1 ? cell.colspan : undefined,
-                rowSpan: cell.rowspan && cell.rowspan > 1 ? cell.rowspan : undefined
+                rowSpan: cell.rowspan && cell.rowspan > 1 ? cell.rowspan : undefined,
               });
             } catch (error) {
               // Fallback cell with error message
               return new TableCell({
-                children: [new Paragraph({
-                  children: [new TextRun({
-                    text: '[Cell error]',
-                    italics: true,
-                    color: 'FF0000'
-                  })]
-                })]
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: '[Cell error]',
+                        italics: true,
+                        color: 'FF0000',
+                      }),
+                    ],
+                  }),
+                ],
               });
             }
           });
-          
+
           // Ensure at least one cell per row
           if (tableCells.length === 0) {
-            tableCells.push(new TableCell({
-              children: [new Paragraph({ children: [new TextRun('')] })]
-            }));
+            tableCells.push(
+              new TableCell({
+                children: [new Paragraph({ children: [new TextRun('')] })],
+              })
+            );
           }
-          
+
           return new TableRow({ children: tableCells });
         } catch (error) {
           // Fallback row
           return new TableRow({
             children: [
               new TableCell({
-                children: [new Paragraph({
-                  children: [new TextRun({
-                    text: `[Row ${rowIndex + 1} error]`,
-                    italics: true,
-                    color: 'FF0000'
-                  })]
-                })]
-              })
-            ]
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: `[Row ${rowIndex + 1} error]`,
+                        italics: true,
+                        color: 'FF0000',
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
           });
         }
       });
@@ -501,8 +522,8 @@ export class DocumentRenderer {
           left: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
           right: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
           insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
-          insideVertical: { style: BorderStyle.SINGLE, size: 1, color: '000000' }
-        }
+          insideVertical: { style: BorderStyle.SINGLE, size: 1, color: '000000' },
+        },
       });
     } catch (error) {
       // Ultimate fallback: create simple table with error message
@@ -511,18 +532,22 @@ export class DocumentRenderer {
           new TableRow({
             children: [
               new TableCell({
-                children: [new Paragraph({
-                  children: [new TextRun({
-                    text: '[Table rendering error]',
-                    italics: true,
-                    color: 'FF0000'
-                  })]
-                })]
-              })
-            ]
-          })
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: '[Table rendering error]',
+                        italics: true,
+                        color: 'FF0000',
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
         ],
-        width: { size: 100, type: 'pct' }
+        width: { size: 100, type: 'pct' },
       });
     }
   }
@@ -532,15 +557,15 @@ export class DocumentRenderer {
    */
   private createCodeBlock(block: ContentBlock): Paragraph {
     const code = block.content?.code || block.content?.text || '';
-    
+
     return new Paragraph({
       style: 'Code',
       children: [
         new TextRun({
           text: code,
-          font: 'Courier New'
-        })
-      ]
+          font: 'Courier New',
+        }),
+      ],
     });
   }
 
@@ -549,16 +574,16 @@ export class DocumentRenderer {
    */
   private createMathBlock(block: ContentBlock): Paragraph {
     const latex = block.content?.latex || '';
-    
+
     // For now, render as text with note about math content
     return new Paragraph({
       children: [
         new TextRun({
           text: `[Math: ${latex}]`,
           italics: true,
-          color: '0066CC'
-        })
-      ]
+          color: '0066CC',
+        }),
+      ],
     });
   }
 
@@ -567,28 +592,32 @@ export class DocumentRenderer {
    */
   private async createFigure(block: ContentBlock): Promise<Paragraph[]> {
     const elements: Paragraph[] = [];
-    
+
     // Placeholder for image
-    elements.push(new Paragraph({
-      children: [
-        new TextRun({
-          text: `[Figure: ${block.content?.caption || 'Image'}]`,
-          italics: true,
-          color: '666666'
-        })
-      ]
-    }));
+    elements.push(
+      new Paragraph({
+        children: [
+          new TextRun({
+            text: `[Figure: ${block.content?.caption || 'Image'}]`,
+            italics: true,
+            color: '666666',
+          }),
+        ],
+      })
+    );
 
     // Add caption if present
     if (block.content?.caption) {
-      elements.push(new Paragraph({
-        children: [
-          new TextRun({
-            text: `Figure: ${block.content.caption}`,
-            italics: true
-          })
-        ]
-      }));
+      elements.push(
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: `Figure: ${block.content.caption}`,
+              italics: true,
+            }),
+          ],
+        })
+      );
     }
 
     return elements;
@@ -599,16 +628,19 @@ export class DocumentRenderer {
    */
   private createEducationalBlock(block: ContentBlock, stylePrefix: string): Paragraph {
     try {
-      const textContent = block.content?.text || block.content?.statement?.text || block.content || '';
+      const textContent =
+        block.content?.text || block.content?.statement?.text || block.content || '';
       const runs = this.createTextRuns(textContent);
-      
+
       // Add prefix with error handling
       try {
-        runs.unshift(new TextRun({
-          text: `${stylePrefix}: `,
-          bold: true,
-          color: '0066CC'
-        }));
+        runs.unshift(
+          new TextRun({
+            text: `${stylePrefix}: `,
+            bold: true,
+            color: '0066CC',
+          })
+        );
       } catch (prefixError) {
         // If prefix addition fails, continue without it
       }
@@ -620,7 +652,7 @@ export class DocumentRenderer {
 
       return new Paragraph({
         style: stylePrefix.replace(/\s+/g, ''), // Remove spaces for style name
-        children: runs
+        children: runs,
       });
     } catch (error) {
       // Fallback: create simple paragraph with error indication
@@ -629,9 +661,9 @@ export class DocumentRenderer {
           new TextRun({
             text: `${stylePrefix}: [Content error]`,
             bold: true,
-            color: 'FF0000'
-          })
-        ]
+            color: 'FF0000',
+          }),
+        ],
       });
     }
   }
@@ -647,7 +679,7 @@ export class DocumentRenderer {
 
       if (content?.runs && Array.isArray(content.runs)) {
         const textRuns: TextRun[] = [];
-        
+
         for (let i = 0; i < content.runs.length; i++) {
           try {
             const run = content.runs[i];
@@ -706,19 +738,21 @@ export class DocumentRenderer {
             textRuns.push(new TextRun(options));
           } catch (runError) {
             // If individual run fails, add error placeholder
-            textRuns.push(new TextRun({
-              text: `[Run error: ${i}]`,
-              italics: true,
-              color: 'FF0000'
-            }));
+            textRuns.push(
+              new TextRun({
+                text: `[Run error: ${i}]`,
+                italics: true,
+                color: 'FF0000',
+              })
+            );
           }
         }
-        
+
         // Ensure we have at least one run
         if (textRuns.length === 0) {
           textRuns.push(new TextRun(''));
         }
-        
+
         return textRuns;
       }
 
@@ -726,11 +760,13 @@ export class DocumentRenderer {
       return [new TextRun(String(content || ''))];
     } catch (error) {
       // Ultimate fallback
-      return [new TextRun({
-        text: '[Text rendering error]',
-        italics: true,
-        color: 'FF0000'
-      })];
+      return [
+        new TextRun({
+          text: '[Text rendering error]',
+          italics: true,
+          color: 'FF0000',
+        }),
+      ];
     }
   }
 
@@ -743,7 +779,9 @@ export class DocumentRenderer {
       const buffer = await Packer.toBuffer(wordDoc);
       return buffer;
     } catch (error) {
-      throw new Error(`Failed to generate DOCX buffer: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to generate DOCX buffer: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -762,7 +800,7 @@ export class DocumentRenderer {
       HeadingLevel.HEADING_3,
       HeadingLevel.HEADING_4,
       HeadingLevel.HEADING_5,
-      HeadingLevel.HEADING_6
+      HeadingLevel.HEADING_6,
     ];
     return levels[Math.min(level - 1, levels.length - 1)] as HeadingLevel;
   }
@@ -773,9 +811,9 @@ export class DocumentRenderer {
         new TextRun({
           text: '[Table of Contents]',
           italics: true,
-          color: '666666'
-        })
-      ]
+          color: '666666',
+        }),
+      ],
     });
   }
 
@@ -783,17 +821,17 @@ export class DocumentRenderer {
     return [
       new Paragraph({
         heading: HeadingLevel.HEADING_1,
-        children: [new TextRun('Bibliography')]
+        children: [new TextRun('Bibliography')],
       }),
       new Paragraph({
         children: [
           new TextRun({
             text: '[Bibliography entries would be rendered here]',
             italics: true,
-            color: '666666'
-          })
-        ]
-      })
+            color: '666666',
+          }),
+        ],
+      }),
     ];
   }
 
@@ -841,14 +879,14 @@ export class DocumentRenderer {
           run: {
             size: 32,
             bold: true,
-            color: '2F5496'
+            color: '2F5496',
           },
           paragraph: {
             spacing: {
               before: 480,
-              after: 120
-            }
-          }
+              after: 120,
+            },
+          },
         },
         {
           id: 'Heading2',
@@ -859,14 +897,14 @@ export class DocumentRenderer {
           run: {
             size: 26,
             bold: true,
-            color: '2F5496'
+            color: '2F5496',
           },
           paragraph: {
             spacing: {
               before: 360,
-              after: 120
-            }
-          }
+              after: 120,
+            },
+          },
         },
         {
           id: 'Heading3',
@@ -877,14 +915,14 @@ export class DocumentRenderer {
           run: {
             size: 24,
             bold: true,
-            color: '1F3864'
+            color: '1F3864',
           },
           paragraph: {
             spacing: {
               before: 240,
-              after: 120
-            }
-          }
+              after: 120,
+            },
+          },
         },
         {
           id: 'Quote',
@@ -893,18 +931,18 @@ export class DocumentRenderer {
           next: 'Normal',
           run: {
             italics: true,
-            color: '666666'
+            color: '666666',
           },
           paragraph: {
             indent: {
               left: convertMillimetersToTwip(12.7),
-              right: convertMillimetersToTwip(12.7)
+              right: convertMillimetersToTwip(12.7),
             },
             spacing: {
               before: 120,
-              after: 120
-            }
-          }
+              after: 120,
+            },
+          },
         },
         {
           id: 'Code',
@@ -914,18 +952,18 @@ export class DocumentRenderer {
           run: {
             font: 'Courier New',
             size: 20,
-            color: '000080'
+            color: '000080',
           },
           paragraph: {
             spacing: {
               before: 120,
-              after: 120
+              after: 120,
             },
             shading: {
               type: ShadingType.SOLID,
-              color: 'F8F8F8'
-            }
-          }
+              color: 'F8F8F8',
+            },
+          },
         },
         {
           id: 'LearningObjective',
@@ -934,17 +972,17 @@ export class DocumentRenderer {
           next: 'Normal',
           run: {
             bold: true,
-            color: '0066CC'
+            color: '0066CC',
           },
           paragraph: {
             spacing: {
               before: 120,
-              after: 120
+              after: 120,
             },
             indent: {
-              left: convertMillimetersToTwip(6.35)
-            }
-          }
+              left: convertMillimetersToTwip(6.35),
+            },
+          },
         },
         {
           id: 'KeyTerm',
@@ -953,8 +991,8 @@ export class DocumentRenderer {
           next: 'Normal',
           run: {
             bold: true,
-            color: '0066CC'
-          }
+            color: '0066CC',
+          },
         },
         {
           id: 'Definition',
@@ -962,13 +1000,13 @@ export class DocumentRenderer {
           basedOn: 'Normal',
           next: 'Normal',
           run: {
-            italics: true
+            italics: true,
           },
           paragraph: {
             indent: {
-              left: convertMillimetersToTwip(6.35)
-            }
-          }
+              left: convertMillimetersToTwip(6.35),
+            },
+          },
         },
         {
           id: 'Example',
@@ -978,16 +1016,16 @@ export class DocumentRenderer {
           paragraph: {
             spacing: {
               before: 120,
-              after: 120
+              after: 120,
             },
             indent: {
-              left: convertMillimetersToTwip(6.35)
+              left: convertMillimetersToTwip(6.35),
             },
             shading: {
               type: ShadingType.SOLID,
-              color: 'F0F8FF'
-            }
-          }
+              color: 'F0F8FF',
+            },
+          },
         },
         {
           id: 'Exercise',
@@ -997,18 +1035,18 @@ export class DocumentRenderer {
           paragraph: {
             spacing: {
               before: 120,
-              after: 120
+              after: 120,
             },
             indent: {
-              left: convertMillimetersToTwip(6.35)
+              left: convertMillimetersToTwip(6.35),
             },
             shading: {
               type: ShadingType.SOLID,
-              color: 'FFF8F0'
-            }
-          }
-        }
-      ]
+              color: 'FFF8F0',
+            },
+          },
+        },
+      ],
     };
   }
 
@@ -1028,9 +1066,12 @@ export class DocumentRenderer {
               alignment: AlignmentType.LEFT,
               style: {
                 paragraph: {
-                  indent: { left: convertMillimetersToTwip(9.5), hanging: convertMillimetersToTwip(6.35) }
-                }
-              }
+                  indent: {
+                    left: convertMillimetersToTwip(9.5),
+                    hanging: convertMillimetersToTwip(6.35),
+                  },
+                },
+              },
             },
             {
               level: 1,
@@ -1039,9 +1080,12 @@ export class DocumentRenderer {
               alignment: AlignmentType.LEFT,
               style: {
                 paragraph: {
-                  indent: { left: convertMillimetersToTwip(19), hanging: convertMillimetersToTwip(6.35) }
-                }
-              }
+                  indent: {
+                    left: convertMillimetersToTwip(19),
+                    hanging: convertMillimetersToTwip(6.35),
+                  },
+                },
+              },
             },
             {
               level: 2,
@@ -1050,11 +1094,14 @@ export class DocumentRenderer {
               alignment: AlignmentType.LEFT,
               style: {
                 paragraph: {
-                  indent: { left: convertMillimetersToTwip(28.5), hanging: convertMillimetersToTwip(6.35) }
-                }
-              }
-            }
-          ]
+                  indent: {
+                    left: convertMillimetersToTwip(28.5),
+                    hanging: convertMillimetersToTwip(6.35),
+                  },
+                },
+              },
+            },
+          ],
         },
         {
           reference: 'ordered-list',
@@ -1066,9 +1113,12 @@ export class DocumentRenderer {
               alignment: AlignmentType.LEFT,
               style: {
                 paragraph: {
-                  indent: { left: convertMillimetersToTwip(9.5), hanging: convertMillimetersToTwip(6.35) }
-                }
-              }
+                  indent: {
+                    left: convertMillimetersToTwip(9.5),
+                    hanging: convertMillimetersToTwip(6.35),
+                  },
+                },
+              },
             },
             {
               level: 1,
@@ -1077,9 +1127,12 @@ export class DocumentRenderer {
               alignment: AlignmentType.LEFT,
               style: {
                 paragraph: {
-                  indent: { left: convertMillimetersToTwip(19), hanging: convertMillimetersToTwip(6.35) }
-                }
-              }
+                  indent: {
+                    left: convertMillimetersToTwip(19),
+                    hanging: convertMillimetersToTwip(6.35),
+                  },
+                },
+              },
             },
             {
               level: 2,
@@ -1088,13 +1141,16 @@ export class DocumentRenderer {
               alignment: AlignmentType.LEFT,
               style: {
                 paragraph: {
-                  indent: { left: convertMillimetersToTwip(28.5), hanging: convertMillimetersToTwip(6.35) }
-                }
-              }
-            }
-          ]
-        }
-      ]
+                  indent: {
+                    left: convertMillimetersToTwip(28.5),
+                    hanging: convertMillimetersToTwip(6.35),
+                  },
+                },
+              },
+            },
+          ],
+        },
+      ],
     };
   }
 }

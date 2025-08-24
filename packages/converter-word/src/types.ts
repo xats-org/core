@@ -8,14 +8,14 @@ import type {
   RendererOptions,
   RenderResult,
   ParseResult,
-  ValidationResult
+  ValidationResult,
 } from '@xats-org/types';
 
 // Core converter types
 export interface WordConverter {
   readonly format: RenderFormat;
   readonly wcagLevel: 'A' | 'AA' | 'AAA' | null;
-  
+
   render(document: XatsDocument, options?: WordRenderOptions): Promise<WordRenderResult>;
   parse(content: string | Buffer, options?: WordParseOptions): Promise<WordParseResult>;
   testRoundTrip(document: XatsDocument, options?: RoundTripOptions): Promise<RoundTripResult>;
@@ -193,7 +193,14 @@ export interface StyleConflict {
 // Annotations and collaboration
 export interface Annotation {
   id: string;
-  type: 'comment' | 'suggestion' | 'clarification_request' | 'minor_revision_needed' | 'major_revision_needed' | 'approval' | 'rejection';
+  type:
+    | 'comment'
+    | 'suggestion'
+    | 'clarification_request'
+    | 'minor_revision_needed'
+    | 'major_revision_needed'
+    | 'approval'
+    | 'rejection';
   content: string;
   author: string;
   timestamp: Date;
