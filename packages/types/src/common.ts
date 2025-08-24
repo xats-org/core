@@ -20,7 +20,7 @@ export interface XatsObject {
 /**
  * Supported xats schema versions
  */
-export type XatsVersion = '0.1.0' | '0.2.0' | '0.3.0' | '0.4.0';
+export type XatsVersion = '0.1.0' | '0.2.0' | '0.3.0' | '0.4.0' | '0.5.0';
 
 /**
  * URI type for controlled vocabularies

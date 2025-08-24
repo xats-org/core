@@ -1,0 +1,43 @@
+{
+  "uri": "https://xats.org/vocabularies/ancillary/study-guide-content",
+  "name": "Study Guide Content",
+  "description": "Content that should be included in generated study guides",
+  "category": "ancillary",
+  "version": "0.5.0",
+  "properties": {
+    "includeInSummary": {
+      "type": "boolean",
+      "description": "Whether this content should appear in chapter summaries",
+      "default": true
+    },
+    "importance": {
+      "type": "string",
+      "enum": ["critical", "important", "helpful", "optional"],
+      "description": "Importance level for study guide prioritization",
+      "default": "important"
+    },
+    "reviewFrequency": {
+      "type": "string",
+      "enum": ["always", "frequently", "occasionally", "rarely"],
+      "description": "How often this content should be reviewed",
+      "default": "frequently"
+    },
+    "studyTips": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Additional study tips or strategies for this content"
+    }
+  },
+  "examples": [
+    {
+      "tag": "study-guide-content",
+      "properties": {
+        "importance": "critical",
+        "reviewFrequency": "always",
+        "studyTips": ["Create flashcards for key terms", "Practice with sample problems"]
+      }
+    }
+  ]
+}

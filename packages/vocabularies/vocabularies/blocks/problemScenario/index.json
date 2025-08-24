@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xats.org/vocabularies/blocks/problemScenario",
+  "title": "Problem-Based Learning Scenario Block",
+  "description": "A comprehensive block for problem-based learning that presents authentic, complex scenarios requiring analysis, collaboration, and solution development across multiple phases",
+  "type": "object",
+  "properties": {
+    "blockType": {
+      "const": "https://xats.org/vocabularies/blocks/problemScenario",
+      "description": "The URI identifier for this block type"
+    },
+    "content": {
+      "$ref": "https://xats.org/schemas/0.5.0/xats.json#/definitions/ProblemScenarioContent",
+      "description": "The problem scenario content including scenario description, context, stakeholders, constraints, deliverables, and structured phases"
+    }
+  },
+  "required": ["blockType", "content"],
+  "examples": [
+    {
+      "blockType": "https://xats.org/vocabularies/blocks/problemScenario",
+      "content": {
+        "scenario": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "Your engineering consultancy firm has been hired by the City of Riverside to address increasing traffic congestion in the downtown core. The city is experiencing 40% longer commute times during peak hours, increased air pollution, and declining local business revenue due to reduced foot traffic. The mayor wants a comprehensive solution that balances transportation efficiency, environmental sustainability, economic vitality, and community needs."
+            }
+          ]
+        },
+        "context": {
+          "runs": [
+            {
+              "type": "text",
+              "text": "Riverside is a mid-sized city (population 180,000) with a historic downtown district, two major highways intersecting the city center, a university campus on the east side, and several residential neighborhoods. The city has limited public transportation and high car dependency. Recent population growth has outpaced infrastructure development."
+            }
+          ]
+        },
+        "stakeholders": [
+          {
+            "name": "Mayor Patricia Williams",
+            "role": "City Leader",
+            "interests": ["Re-election prospects", "Balanced budget", "Community satisfaction"],
+            "influence": "high"
+          },
+          {
+            "name": "Downtown Business Association",
+            "role": "Economic Representatives",
+            "interests": ["Customer accessibility", "Parking availability", "Economic growth"],
+            "influence": "medium"
+          },
+          {
+            "name": "Environmental Action Group",
+            "role": "Community Advocates",
+            "interests": ["Air quality improvement", "Sustainable transportation", "Green infrastructure"],
+            "influence": "medium"
+          }
+        ],
+        "constraints": [
+          {
+            "type": "budget",
+            "description": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Total project budget cannot exceed $25 million over 5 years"
+                }
+              ]
+            },
+            "severity": "absolute"
+          },
+          {
+            "type": "time",
+            "description": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Initial improvements must be visible within 18 months"
+                }
+              ]
+            },
+            "severity": "critical"
+          }
+        ],
+        "deliverables": [
+          {
+            "type": "analysis",
+            "requirements": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Comprehensive traffic flow analysis with current state assessment and problem identification"
+                }
+              ]
+            },
+            "weight": 0.25
+          },
+          {
+            "type": "solution",
+            "requirements": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "Detailed transportation improvement plan with multiple integrated solutions"
+                }
+              ]
+            },
+            "weight": 0.4
+          },
+          {
+            "type": "presentation",
+            "requirements": {
+              "runs": [
+                {
+                  "type": "text",
+                  "text": "20-minute stakeholder presentation with visual aids and Q&A session"
+                }
+              ]
+            },
+            "weight": 0.35
+          }
+        ],
+        "phases": [
+          {
+            "name": "Problem Analysis",
+            "activities": ["research", "analyze", "document"],
+            "duration": "PT8H"
+          },
+          {
+            "name": "Solution Development",
+            "activities": ["brainstorm", "ideate", "synthesize", "prototype"],
+            "duration": "PT12H"
+          },
+          {
+            "name": "Implementation Planning",
+            "activities": ["evaluate", "document", "collaborate"],
+            "duration": "PT6H"
+          },
+          {
+            "name": "Stakeholder Presentation",
+            "activities": ["present", "reflect"],
+            "duration": "PT4H"
+          }
+        ],
+        "difficultyLevel": "advanced",
+        "estimatedTimeHours": 30,
+        "collaborationType": "small-group"
+      }
+    }
+  ]
+}

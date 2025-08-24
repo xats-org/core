@@ -89,6 +89,11 @@
           "description": "Rights and licensing information for this object. Inherits from parent container if not specified.",
           "$ref": "#/definitions/RightsMetadata"
         },
+        "annotations": {
+          "description": "An array of annotations for peer review workflows and collaborative editing.",
+          "type": "array",
+          "items": { "$ref": "#/definitions/Annotation" }
+        },
         "extensions": { 
           "description": "A container for non-standard, custom data. Common extensions include LTI 1.3 integration metadata.",
           "type": "object",
@@ -1271,19 +1276,61 @@
                                     "if": {
                                       "properties": {
                                         "blockType": {
-                                          "type": "string",
-                                          "pattern": "^https://xats\\.org/core/placeholders/"
+                                          "const": "https://xats.org/vocabularies/blocks/problemScenario"
                                         }
                                       }
                                     },
                                     "then": {
                                       "properties": {
-                                        "content": {
-                                          "type": "object",
+                                        "content": { "$ref": "#/definitions/ProblemScenarioContent" }
+                                      }
+                                    },
+                                    "else": {
+                                      "if": {
+                                        "properties": {
+                                          "blockType": {
+                                            "const": "https://xats.org/vocabularies/blocks/workedExample"
+                                          }
+                                        }
+                                      },
+                                      "then": {
+                                        "properties": {
+                                          "content": { "$ref": "#/definitions/WorkedExampleContent" }
+                                        }
+                                      },
+                                      "else": {
+                                        "if": {
                                           "properties": {
-                                            "placeholder": { "type": "boolean" }
+                                            "blockType": {
+                                              "const": "https://xats.org/vocabularies/blocks/thinkPairShare"
+                                            }
+                                          }
+                                        },
+                                        "then": {
+                                          "properties": {
+                                            "content": { "$ref": "#/definitions/ThinkPairShareContent" }
+                                          }
+                                        },
+                                        "else": {
+                                          "if": {
+                                            "properties": {
+                                              "blockType": {
+                                                "type": "string",
+                                                "pattern": "^https://xats\\.org/core/placeholders/"
+                                              }
+                                            }
                                           },
-                                          "additionalProperties": true
+                                          "then": {
+                                            "properties": {
+                                              "content": {
+                                                "type": "object",
+                                                "properties": {
+                                                  "placeholder": { "type": "boolean" }
+                                                },
+                                                "additionalProperties": true
+                                              }
+                                            }
+                                          }
                                         }
                                       }
                                     }
@@ -1958,6 +2005,10 @@
           "description": "Title of the case study.",
           "$ref": "#/definitions/SemanticText"
         },
+        "industry": {
+          "description": "Industry or field context for the case study.",
+          "type": "string"
+        },
         "scenario": {
           "description": "The main case study scenario or situation description.",
           "$ref": "#/definitions/SemanticText"
@@ -1965,6 +2016,69 @@
         "background": {
           "description": "Optional background information and context for the case.",
           "$ref": "#/definitions/SemanticText"
+        },
+        "complications": {
+          "description": "Key challenges, conflicts, or complicating factors in the case.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["technical", "ethical", "financial", "legal", "social", "competitive", "operational", "strategic"]
+              },
+              "description": { "$ref": "#/definitions/SemanticText" },
+              "severity": {
+                "type": "string",
+                "enum": ["minor", "moderate", "major", "critical"]
+              }
+            },
+            "required": ["type", "description"]
+          }
+        },
+        "data": {
+          "description": "Supporting data and evidence for the case study.",
+          "type": "object",
+          "properties": {
+            "quantitative": {
+              "description": "Numerical data, charts, tables, and statistics.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "resourceId": {
+                    "description": "Reference to a resource in the document's resources array.",
+                    "type": "string"
+                  },
+                  "dataType": {
+                    "type": "string",
+                    "enum": ["chart", "table", "graph", "statistics", "financial-data", "survey-results"]
+                  },
+                  "description": { "$ref": "#/definitions/SemanticText" }
+                },
+                "required": ["resourceId", "dataType"]
+              }
+            },
+            "qualitative": {
+              "description": "Interviews, documents, observations, and other qualitative evidence.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "resourceId": {
+                    "description": "Reference to a resource in the document's resources array.",
+                    "type": "string"
+                  },
+                  "dataType": {
+                    "type": "string",
+                    "enum": ["interview", "document", "observation", "testimony", "email", "memo", "report"]
+                  },
+                  "description": { "$ref": "#/definitions/SemanticText" }
+                },
+                "required": ["resourceId", "dataType"]
+              }
+            }
+          }
         },
         "stakeholders": {
           "description": "Key stakeholders or characters involved in the case.",
@@ -2055,6 +2169,85 @@
           "description": "Estimated time to complete the case study analysis.",
           "type": "integer",
           "minimum": 1
+        },
+        "teachingNotes": {
+          "description": "Instructor guidance for facilitating the case study discussion.",
+          "type": "object",
+          "properties": {
+            "objectives": {
+              "description": "Specific learning objectives for this case study.",
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "discussionFlow": {
+              "description": "Suggested flow and structure for case discussion.",
+              "$ref": "#/definitions/SemanticText"
+            },
+            "commonPitfalls": {
+              "description": "Common mistakes or misconceptions students might have.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "pitfall": { "$ref": "#/definitions/SemanticText" },
+                  "guidance": { "$ref": "#/definitions/SemanticText" }
+                },
+                "required": ["pitfall", "guidance"]
+              }
+            },
+            "timeAllocation": {
+              "description": "Suggested time allocation in ISO 8601 duration format.",
+              "type": "string",
+              "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
+            },
+            "facilitationTips": {
+              "description": "Additional tips for effective case study facilitation.",
+              "type": "array",
+              "items": { "$ref": "#/definitions/SemanticText" }
+            }
+          },
+          "additionalProperties": false
+        },
+        "expertSolution": {
+          "description": "Expert analysis or recommended solution for the case study.",
+          "type": "object",
+          "properties": {
+            "content": {
+              "description": "The expert analysis or solution content.",
+              "$ref": "#/definitions/SemanticText"
+            },
+            "revealTiming": {
+              "description": "When the expert solution should be revealed to students.",
+              "type": "string",
+              "enum": ["after-submission", "after-discussion", "manual", "immediately", "never"]
+            },
+            "rationale": {
+              "description": "Explanation of the reasoning behind the expert solution.",
+              "$ref": "#/definitions/SemanticText"
+            },
+            "alternativeSolutions": {
+              "description": "Alternative valid approaches or solutions.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "$ref": "#/definitions/SemanticText" },
+                  "pros": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "cons": {
+                    "type": "array", 
+                    "items": { "type": "string" }
+                  }
+                },
+                "required": ["title", "description"]
+              }
+            }
+          },
+          "required": ["content", "revealTiming"],
+          "additionalProperties": false
         },
         "pedagogicalMetadata": {
           "description": "Pedagogical information about the case study.",
@@ -2239,6 +2432,778 @@
           "additionalProperties": false
         }
       },
+      "additionalProperties": false
+    },
+    "ProblemScenarioContent": {
+      "description": "Content structure for problem-based learning blocks that present authentic, complex scenarios requiring analysis and solution development.",
+      "type": "object",
+      "properties": {
+        "scenario": {
+          "description": "The main problem scenario description.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "context": {
+          "description": "Background information and situational context for the problem.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "stakeholders": {
+          "description": "Individuals or groups affected by or involved in the problem.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "role": { "type": "string" },
+              "interests": {
+                "description": "Stakeholder's interests or concerns related to the problem.",
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "influence": {
+                "description": "Level of influence this stakeholder has on the problem resolution.",
+                "type": "string",
+                "enum": ["low", "medium", "high", "critical"]
+              }
+            },
+            "required": ["name", "role"]
+          }
+        },
+        "constraints": {
+          "description": "Limitations, requirements, or boundaries that must be considered when solving the problem.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["time", "budget", "resource", "regulatory", "technical", "ethical", "environmental"]
+              },
+              "description": { "$ref": "#/definitions/SemanticText" },
+              "severity": {
+                "type": "string",
+                "enum": ["flexible", "important", "critical", "absolute"]
+              }
+            },
+            "required": ["type", "description"]
+          }
+        },
+        "resources": {
+          "description": "Available resources that can be used to address the problem.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "resourceId": {
+                "description": "Reference to a resource in the document's resources array.",
+                "type": "string"
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": ["data", "document", "tool", "expertise", "financial", "material"]
+              },
+              "availability": {
+                "type": "string",
+                "enum": ["unlimited", "limited", "requires-approval", "unavailable"]
+              }
+            },
+            "required": ["resourceId", "resourceType"]
+          }
+        },
+        "deliverables": {
+          "description": "Expected outputs or products that students should create to address the problem.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["report", "presentation", "prototype", "solution", "analysis", "recommendation", "implementation-plan"]
+              },
+              "requirements": {
+                "description": "Specific requirements for this deliverable.",
+                "$ref": "#/definitions/SemanticText"
+              },
+              "format": {
+                "description": "Expected format or structure of the deliverable.",
+                "type": "string"
+              },
+              "dueDate": {
+                "description": "Due date in ISO 8601 format.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "weight": {
+                "description": "Relative weight of this deliverable in assessment (0-1).",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": ["type", "requirements"]
+          }
+        },
+        "phases": {
+          "description": "Structured phases or stages for approaching the problem-solving process.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "$ref": "#/definitions/SemanticText" },
+              "activities": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "brainstorm", "research", "analyze", "synthesize", "ideate", 
+                    "prototype", "test", "evaluate", "document", "present",
+                    "collaborate", "reflect", "iterate"
+                  ]
+                }
+              },
+              "duration": {
+                "description": "Estimated duration in ISO 8601 duration format (e.g., PT2H for 2 hours).",
+                "type": "string",
+                "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
+              },
+              "learningObjectives": {
+                "description": "Specific learning objectives for this phase.",
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            },
+            "required": ["name", "activities"]
+          }
+        },
+        "evaluationCriteria": {
+          "description": "Rubric or criteria for evaluating student work on the problem scenario.",
+          "$ref": "#/definitions/EssayRubric"
+        },
+        "scaffolding": {
+          "description": "Support structures to help students navigate the problem-solving process.",
+          "type": "object",
+          "properties": {
+            "guidingQuestions": {
+              "description": "Questions to help students structure their thinking.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "phase": { "type": "string" },
+                  "question": { "$ref": "#/definitions/SemanticText" },
+                  "purpose": { "type": "string" }
+                },
+                "required": ["question"]
+              }
+            },
+            "templates": {
+              "description": "Document templates or frameworks to support student work.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "$ref": "#/definitions/SemanticText" },
+                  "resourceId": { "type": "string" }
+                },
+                "required": ["name", "resourceId"]
+              }
+            },
+            "checkpoints": {
+              "description": "Intermediate checkpoints for monitoring progress.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "phase": { "type": "string" },
+                  "deliverable": { "type": "string" },
+                  "criteria": { "$ref": "#/definitions/SemanticText" }
+                },
+                "required": ["phase", "criteria"]
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "difficultyLevel": {
+          "description": "Overall complexity level of the problem scenario.",
+          "type": "string",
+          "enum": ["beginner", "intermediate", "advanced", "expert"]
+        },
+        "estimatedTimeHours": {
+          "description": "Estimated total time to complete the problem scenario in hours.",
+          "type": "number",
+          "minimum": 0.5
+        },
+        "collaborationType": {
+          "description": "Expected collaboration model for this problem scenario.",
+          "type": "string",
+          "enum": ["individual", "pair", "small-group", "large-group", "flexible"]
+        },
+        "pedagogicalMetadata": {
+          "description": "Pedagogical information about the problem scenario.",
+          "$ref": "#/definitions/PedagogicalMetadata"
+        }
+      },
+      "required": ["scenario", "context", "deliverables"],
+      "additionalProperties": false
+    },
+    "WorkedExampleContent": {
+      "description": "Content structure for worked examples with progressive fading to support skill acquisition and transfer.",
+      "type": "object",
+      "properties": {
+        "concept": {
+          "description": "The main concept or skill being demonstrated.",
+          "type": "string"
+        },
+        "problem": {
+          "description": "The problem or scenario being solved in the worked example.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "solution": {
+          "description": "The complete solution broken down into steps.",
+          "type": "object",
+          "properties": {
+            "steps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "description": "Step number in the solution sequence.",
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "action": {
+                    "description": "The specific action or operation performed in this step.",
+                    "$ref": "#/definitions/SemanticText"
+                  },
+                  "explanation": {
+                    "description": "Detailed explanation of why this step is necessary and how it works.",
+                    "$ref": "#/definitions/SemanticText"
+                  },
+                  "result": {
+                    "description": "The outcome or result of this step.",
+                    "oneOf": [
+                      { "$ref": "#/definitions/SemanticText" },
+                      { "type": "string" }
+                    ]
+                  },
+                  "fadingLevel": {
+                    "description": "Fading level for this step (0 = fully shown, 1 = partially hidden, 2 = student completes).",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2
+                  },
+                  "hints": {
+                    "description": "Progressive hints available when step is faded.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "level": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 3
+                        },
+                        "hint": { "$ref": "#/definitions/SemanticText" }
+                      },
+                      "required": ["level", "hint"]
+                    }
+                  },
+                  "commonErrors": {
+                    "description": "Common mistakes students make at this step.",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "error": { "$ref": "#/definitions/SemanticText" },
+                        "feedback": { "$ref": "#/definitions/SemanticText" }
+                      },
+                      "required": ["error", "feedback"]
+                    }
+                  }
+                },
+                "required": ["number", "action", "explanation", "result"]
+              }
+            },
+            "alternativeApproaches": {
+              "description": "Alternative methods or approaches to solve the same problem.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "$ref": "#/definitions/SemanticText" },
+                  "whenToUse": { "$ref": "#/definitions/SemanticText" },
+                  "tradeoffs": { "$ref": "#/definitions/SemanticText" }
+                },
+                "required": ["name", "description"]
+              }
+            }
+          },
+          "required": ["steps"]
+        },
+        "practiceProblems": {
+          "description": "Follow-up practice problems with varying levels of scaffolding.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "problem": {
+                "description": "The practice problem statement.",
+                "$ref": "#/definitions/SemanticText"
+              },
+              "scaffoldingLevel": {
+                "description": "Amount of scaffolding provided (0 = none, 1 = full support).",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "providedSteps": {
+                "description": "Step numbers that are provided to the student.",
+                "type": "array",
+                "items": { "type": "integer" }
+              },
+              "studentCompletes": {
+                "description": "Step numbers that the student must complete independently.",
+                "type": "array",
+                "items": { "type": "integer" }
+              },
+              "expectedSolution": {
+                "description": "The expected solution for assessment purposes.",
+                "type": "object",
+                "properties": {
+                  "steps": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "number": { "type": "integer" },
+                        "solution": { "$ref": "#/definitions/SemanticText" }
+                      },
+                      "required": ["number", "solution"]
+                    }
+                  },
+                  "finalAnswer": { "$ref": "#/definitions/SemanticText" }
+                },
+                "required": ["finalAnswer"]
+              },
+              "difficulty": {
+                "description": "Difficulty level relative to the worked example.",
+                "type": "string",
+                "enum": ["easier", "similar", "harder"]
+              }
+            },
+            "required": ["id", "problem", "scaffoldingLevel"]
+          }
+        },
+        "learningObjectives": {
+          "description": "Specific learning objectives addressed by this worked example.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "prerequisites": {
+          "description": "Knowledge or skills students should have before engaging with this example.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "cognitiveLoad": {
+          "description": "Assessment of cognitive load for this worked example.",
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "estimatedTimeMinutes": {
+          "description": "Estimated time to work through the example and practice problems.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "pedagogicalMetadata": {
+          "description": "Pedagogical information about the worked example.",
+          "$ref": "#/definitions/PedagogicalMetadata"
+        }
+      },
+      "required": ["concept", "problem", "solution"],
+      "additionalProperties": false
+    },
+    "ThinkPairShareContent": {
+      "description": "Content structure for Think-Pair-Share collaborative learning activities that promote active engagement and peer learning.",
+      "type": "object",
+      "properties": {
+        "prompt": {
+          "description": "The main question, problem, or topic for the Think-Pair-Share activity.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "context": {
+          "description": "Optional background or contextual information to frame the prompt.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "thinkPhase": {
+          "description": "Configuration for the individual thinking phase.",
+          "type": "object",
+          "properties": {
+            "duration": {
+              "description": "Recommended duration for individual thinking in ISO 8601 format (e.g., PT2M for 2 minutes).",
+              "type": "string",
+              "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
+            },
+            "instructions": {
+              "description": "Specific instructions for the thinking phase.",
+              "$ref": "#/definitions/SemanticText"
+            },
+            "scaffolding": {
+              "description": "Support structures to guide individual thinking.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["guiding-question", "sentence-starter", "framework", "example"]
+                  },
+                  "content": { "$ref": "#/definitions/SemanticText" }
+                },
+                "required": ["type", "content"]
+              }
+            },
+            "responseFormat": {
+              "description": "Suggested format for individual responses.",
+              "type": "string",
+              "enum": ["notes", "bullet-points", "concept-map", "diagram", "free-form"]
+            }
+          },
+          "required": ["duration"]
+        },
+        "pairPhase": {
+          "description": "Configuration for the paired discussion phase.",
+          "type": "object",
+          "properties": {
+            "duration": {
+              "description": "Recommended duration for pair discussion in ISO 8601 format.",
+              "type": "string",
+              "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
+            },
+            "instructions": {
+              "description": "Specific instructions for the pairing phase.",
+              "$ref": "#/definitions/SemanticText"
+            },
+            "pairingStrategy": {
+              "description": "How pairs should be formed.",
+              "type": "string",
+              "enum": ["random", "instructor-assigned", "self-selected", "proximity", "mixed-ability"]
+            },
+            "discussionPrompts": {
+              "description": "Additional prompts to guide pair discussions.",
+              "type": "array",
+              "items": { "$ref": "#/definitions/SemanticText" }
+            },
+            "recordResponse": {
+              "description": "Whether pairs should record their consensus or key points.",
+              "type": "boolean",
+              "default": true
+            },
+            "responseFormat": {
+              "description": "Format for recording pair responses.",
+              "type": "string",
+              "enum": ["summary", "consensus", "key-points", "questions", "diagram", "comparison"]
+            }
+          },
+          "required": ["duration", "instructions"]
+        },
+        "sharePhase": {
+          "description": "Configuration for the whole-class sharing phase.",
+          "type": "object",
+          "properties": {
+            "duration": {
+              "description": "Recommended duration for sharing phase in ISO 8601 format.",
+              "type": "string",
+              "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
+            },
+            "format": {
+              "description": "Method for selecting which pairs share their responses.",
+              "type": "string",
+              "enum": ["volunteer", "random-call", "all-pairs", "rotating", "gallery-walk"]
+            },
+            "instructions": {
+              "description": "Instructions for the sharing phase.",
+              "$ref": "#/definitions/SemanticText"
+            },
+            "synthesis": {
+              "description": "Optional synthesis or wrap-up activity after sharing.",
+              "type": "object",
+              "properties": {
+                "activity": {
+                  "type": "string",
+                  "enum": ["summary", "patterns", "consensus", "vote", "categorization", "prioritization"]
+                },
+                "instructions": { "$ref": "#/definitions/SemanticText" }
+              },
+              "required": ["activity"]
+            },
+            "captureMethod": {
+              "description": "How responses should be captured during sharing.",
+              "type": "string",
+              "enum": ["board", "digital-tool", "notes", "recording", "none"]
+            }
+          },
+          "required": ["duration", "format"]
+        },
+        "assessmentIntegration": {
+          "description": "Optional assessment components integrated with the activity.",
+          "type": "object",
+          "properties": {
+            "formativeAssessment": {
+              "description": "How the activity serves as formative assessment.",
+              "type": "object",
+              "properties": {
+                "checkUnderstanding": {
+                  "description": "What understanding the activity checks.",
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "feedbackMethod": {
+                  "type": "string",
+                  "enum": ["immediate", "written", "verbal", "peer", "self-reflection"]
+                }
+              }
+            },
+            "gradedComponent": {
+              "description": "If part of the activity is graded.",
+              "type": "object",
+              "properties": {
+                "component": {
+                  "type": "string",
+                  "enum": ["individual-response", "pair-response", "participation", "quality-of-thinking"]
+                },
+                "rubric": { "$ref": "#/definitions/EssayRubric" },
+                "points": { "type": "number", "minimum": 0 }
+              },
+              "required": ["component", "points"]
+            }
+          }
+        },
+        "learningObjectives": {
+          "description": "Learning objectives supported by this Think-Pair-Share activity.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "totalDuration": {
+          "description": "Total estimated duration for the complete activity.",
+          "type": "string",
+          "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
+        },
+        "classSize": {
+          "description": "Recommended class size constraints.",
+          "type": "object",
+          "properties": {
+            "minimum": { "type": "integer", "minimum": 2 },
+            "maximum": { "type": "integer", "minimum": 2 },
+            "optimal": { "type": "integer", "minimum": 2 }
+          }
+        },
+        "adaptations": {
+          "description": "Suggested adaptations for different contexts or learner needs.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "context": {
+                "type": "string",
+                "enum": ["large-class", "online", "hybrid", "time-constrained", "accessibility"]
+              },
+              "modification": { "$ref": "#/definitions/SemanticText" }
+            },
+            "required": ["context", "modification"]
+          }
+        },
+        "pedagogicalMetadata": {
+          "description": "Pedagogical information about the Think-Pair-Share activity.",
+          "$ref": "#/definitions/PedagogicalMetadata"
+        }
+      },
+      "required": ["prompt", "thinkPhase", "pairPhase", "sharePhase"],
+      "additionalProperties": false
+    },
+    "Annotation": {
+      "description": "An annotation for peer review workflows, collaborative editing, and feedback systems. Extends XatsObject for comprehensive metadata support.",
+      "allOf": [
+        { "$ref": "#/definitions/XatsObject" },
+        {
+          "type": "object",
+          "properties": {
+            "annotationType": {
+              "description": "URI identifying the type of annotation (e.g., suggestion, clarification_request, approval).",
+              "type": "string",
+              "format": "uri",
+              "examples": [
+                "https://xats.org/vocabularies/annotations/suggestion",
+                "https://xats.org/vocabularies/annotations/clarification_request",
+                "https://xats.org/vocabularies/annotations/minor_revision_needed",
+                "https://xats.org/vocabularies/annotations/major_revision_needed",
+                "https://xats.org/vocabularies/annotations/approval",
+                "https://xats.org/vocabularies/annotations/rejection"
+              ]
+            },
+            "targetObjectId": {
+              "description": "The ID of the XatsObject this annotation references.",
+              "type": "string"
+            },
+            "targetRange": {
+              "description": "Specific text range within the target object for precise annotation targeting.",
+              "$ref": "#/definitions/TextRange"
+            },
+            "status": {
+              "description": "Current status of the annotation in the review workflow.",
+              "type": "string",
+              "enum": ["open", "resolved", "rejected", "deferred"],
+              "default": "open"
+            },
+            "priority": {
+              "description": "Priority level for addressing this annotation.",
+              "type": "string",
+              "enum": ["low", "medium", "high", "critical"],
+              "default": "medium"
+            },
+            "assignee": {
+              "description": "Identifier for the person assigned to address this annotation.",
+              "type": "string"
+            },
+            "reviewer": {
+              "description": "Identifier for the person who created this annotation.",
+              "type": "string"
+            },
+            "threadId": {
+              "description": "Identifier for grouping related annotations into discussion threads.",
+              "type": "string"
+            },
+            "parentAnnotationId": {
+              "description": "ID of parent annotation for hierarchical discussion threads.",
+              "type": "string"
+            },
+            "content": {
+              "description": "The annotation content (comment, suggestion, etc.).",
+              "$ref": "#/definitions/SemanticText"
+            },
+            "suggestedChange": {
+              "description": "Proposed replacement content for suggestion-type annotations.",
+              "$ref": "#/definitions/SemanticText"
+            },
+            "reviewDecision": {
+              "description": "Formal review decision with criteria and justification.",
+              "$ref": "#/definitions/ReviewDecision"
+            },
+            "createdAt": {
+              "description": "ISO 8601 timestamp when annotation was created.",
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "description": "ISO 8601 timestamp when annotation was last modified.",
+              "type": "string",
+              "format": "date-time"
+            },
+            "resolvedAt": {
+              "description": "ISO 8601 timestamp when annotation was resolved.",
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": ["annotationType", "targetObjectId", "content", "reviewer", "createdAt"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "TextRange": {
+      "description": "Defines a specific text range within a target object for precise annotation targeting.",
+      "type": "object",
+      "properties": {
+        "startOffset": {
+          "description": "Character offset from beginning of target text where range starts.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "endOffset": {
+          "description": "Character offset from beginning of target text where range ends.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "textContent": {
+          "description": "The actual text content being annotated (for validation and display).",
+          "type": "string"
+        },
+        "xpath": {
+          "description": "XPath expression for targeting specific elements in structured content.",
+          "type": "string"
+        },
+        "selector": {
+          "description": "CSS-style selector for web-based targeting.",
+          "type": "string"
+        }
+      },
+      "required": ["startOffset", "endOffset", "textContent"],
+      "additionalProperties": false
+    },
+    "ReviewDecision": {
+      "description": "Structured review decision with criteria, confidence, and justification for formal peer review workflows.",
+      "type": "object",
+      "properties": {
+        "decision": {
+          "description": "The formal review decision outcome.",
+          "type": "string",
+          "enum": ["approve", "reject", "request_changes", "conditional_accept"],
+          "examples": ["approve", "reject", "request_changes", "conditional_accept"]
+        },
+        "confidence": {
+          "description": "Reviewer confidence level in their decision (1-5 scale, 5 = highest confidence).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "default": 3
+        },
+        "criteria": {
+          "description": "Specific review criteria that influenced this decision.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "examples": [
+              "accuracy",
+              "clarity",
+              "completeness",
+              "pedagogical_effectiveness",
+              "technical_correctness",
+              "accessibility_compliance",
+              "alignment_with_objectives"
+            ]
+          }
+        },
+        "justification": {
+          "description": "Detailed explanation for the review decision.",
+          "$ref": "#/definitions/SemanticText"
+        },
+        "recommendedActions": {
+          "description": "Specific actions recommended to address review findings.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string",
+                "examples": ["revise_content", "add_examples", "clarify_explanation", "fix_errors"]
+              },
+              "description": { "$ref": "#/definitions/SemanticText" },
+              "priority": {
+                "type": "string",
+                "enum": ["low", "medium", "high", "critical"],
+                "default": "medium"
+              }
+            },
+            "required": ["action", "description"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["decision", "justification"],
       "additionalProperties": false
     }
   }
