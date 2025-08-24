@@ -1,4 +1,4 @@
-import type { XatsDocument, ContentBlock, SemanticText } from '@xats-org/types';
+import type { XatsDocument, ContentBlock } from '@xats-org/types';
 
 /**
  * Options for extracting content based on tags

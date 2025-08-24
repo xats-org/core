@@ -1,6 +1,7 @@
 import { BaseAncillaryGenerator } from '../base-generator';
 
 import type { ExtractedContent, GenerationResult, OutputFormat, SlideDeckOptions } from '../types';
+import type { SemanticText } from '@xats-org/types';
 
 // Internal types for slide structure
 interface Slide {
@@ -148,7 +149,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
     for (const item of items) {
       if (slides.length >= maxSlides) break;
 
-      const slideType = item.metadata?.slideType || 'bullet-points';
+      const slideType = (item.metadata?.slideType as string) || 'bullet-points';
       const slide = this.createSlide(item, slideType, options);
       if (slide) {
         slides.push(slide);
@@ -176,18 +177,18 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
 
     // Add speaker notes if requested
     if (options.includeSpeakerNotes && item.metadata?.speakerNotes) {
-      slide.speakerNotes = item.metadata.speakerNotes;
+      slide.speakerNotes = item.metadata.speakerNotes as string;
     }
 
     // Format content based on slide type
     switch (slideType) {
       case 'bullet-points':
-        slide.points = this.extractBulletPoints(text, item.metadata?.maxBulletPoints || 5);
+        slide.points = this.extractBulletPoints(text, (item.metadata?.maxBulletPoints as number) || 5);
         break;
       case 'diagram':
       case 'example':
         slide.content = text;
-        slide.visual = item.metadata?.visualPreference || 'text-only';
+        slide.visual = (item.metadata?.visualPreference as string) || 'text-only';
         break;
       default:
         slide.content = text;
@@ -195,7 +196,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
 
     // Add animation hint if specified
     if (item.metadata?.animationHint) {
-      slide.animation = item.metadata.animationHint;
+      slide.animation = item.metadata.animationHint as string;
     }
 
     return slide;
@@ -217,7 +218,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
 
     for (const item of content) {
       if (item.metadata?.importance === 'critical') {
-        const text = this.extractPlainText(item.content);
+        const text = this.extractPlainText(item.content as SemanticText);
         if (text) {
           const firstSentence = text.match(/^[^.!?]+[.!?]/);
           if (firstSentence) {
@@ -233,7 +234,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
   /**
    * Generate Markdown slides
    */
-  private generateMarkdownSlides(slides: Slide[], options: SlideDeckOptions): string {
+  private generateMarkdownSlides(slides: Slide[], _options: SlideDeckOptions): string {
     let markdown = '';
 
     for (const slide of slides) {
@@ -335,7 +336,7 @@ export class SlideDeckGenerator extends BaseAncillaryGenerator {
   /**
    * Generate PowerPoint (placeholder)
    */
-  private async generatePowerPoint(slides: Slide[], options: SlideDeckOptions): Promise<Buffer> {
+  private generatePowerPoint(slides: Slide[], options: SlideDeckOptions): Buffer {
     // This would use a library like pptxgenjs
     // For now, return markdown as placeholder
     const markdown = this.generateMarkdownSlides(slides, options);

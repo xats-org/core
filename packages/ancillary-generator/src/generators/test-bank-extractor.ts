@@ -29,8 +29,8 @@ interface QuestionOption {
 
 interface AnswerKeyItem {
   id: string;
-  correctAnswer: string | boolean | undefined;
-  explanation?: string;
+  correctAnswer?: string | boolean;
+  explanation?: string | undefined;
 }
 
 interface TestBank {
@@ -71,13 +71,13 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
       }
 
       // Build test bank structure
-      const testBank = {
+      const testBank: TestBank = {
         title: 'Test Bank',
         generatedAt: new Date().toISOString(),
         totalQuestions: questions.length,
         questionTypes: this.countQuestionTypes(questions),
         questions,
-        answerKey: options.includeAnswerKey ? this.generateAnswerKey(questions) : undefined,
+        ...(options.includeAnswerKey ? { answerKey: this.generateAnswerKey(questions) } : {}),
       };
 
       // Generate output
@@ -184,19 +184,19 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
     switch (type) {
       case 'multiple-choice':
         question.options = this.generateOptions(item);
-        question.correctAnswer = item.metadata?.correctAnswer || 'A';
+        question.correctAnswer = (item.metadata?.correctAnswer as string) || 'A';
         break;
       case 'true-false':
-        question.correctAnswer = item.metadata?.correctAnswer || true;
+        question.correctAnswer = (item.metadata?.correctAnswer as boolean) ?? true;
         break;
       case 'short-answer':
-        question.expectedAnswer = item.metadata?.expectedAnswer || '';
-        question.acceptableVariations = item.metadata?.acceptableVariations || [];
+        question.expectedAnswer = (item.metadata?.expectedAnswer as string) || '';
+        question.acceptableVariations = (item.metadata?.acceptableVariations as string[]) || [];
         break;
       case 'essay':
         question.rubric =
-          item.metadata?.rubricGuidance || 'Evaluate based on understanding and clarity';
-        question.sampleAnswer = item.metadata?.sampleAnswer || '';
+          (item.metadata?.rubricGuidance as string) || 'Evaluate based on understanding and clarity';
+        question.sampleAnswer = (item.metadata?.sampleAnswer as string) || '';
         break;
     }
 
@@ -287,7 +287,9 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   private shuffleArray<T>(array: T[]): void {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
     }
   }
 
@@ -310,31 +312,36 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
     markdown += '## Questions\n\n';
     for (let i = 0; i < testBank.questions.length; i++) {
       const q = testBank.questions[i];
+      if (!q) continue;
       markdown += `### Question ${i + 1} (${q.type}, ${q.difficulty}, ${q.points} pts)\n\n`;
       markdown += `**Topic:** ${q.topic}\n`;
       markdown += `**Cognitive Level:** ${q.cognitiveLevel}\n\n`;
       markdown += `${q.question}\n\n`;
 
       // Type-specific formatting
-      switch (q.type) {
-        case 'multiple-choice':
-          for (const opt of q.options) {
-            markdown += `${opt.label}. ${opt.text}\n`;
-          }
-          markdown += '\n';
-          break;
-        case 'true-false':
-          markdown += 'A. True\nB. False\n\n';
-          break;
-        case 'short-answer':
-          markdown += '_____________________\n\n';
-          break;
-        case 'essay':
-          markdown += `*Essay question - ${q.timeEstimate}*\n\n`;
-          if (options.includeRubrics && q.rubric) {
-            markdown += `**Rubric:** ${q.rubric}\n\n`;
-          }
-          break;
+      if (q) {
+        switch (q.type) {
+          case 'multiple-choice':
+            if (q.options) {
+              for (const opt of q.options) {
+                markdown += `${opt.label}. ${opt.text}\n`;
+              }
+            }
+            markdown += '\n';
+            break;
+          case 'true-false':
+            markdown += 'A. True\nB. False\n\n';
+            break;
+          case 'short-answer':
+            markdown += '_____________________\n\n';
+            break;
+          case 'essay':
+            markdown += `*Essay question - ${q.timeEstimate}*\n\n`;
+            if (options.includeRubrics && q.rubric) {
+              markdown += `**Rubric:** ${q.rubric}\n\n`;
+            }
+            break;
+        }
       }
     }
 
@@ -343,9 +350,11 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
       markdown += '\n---\n\n## Answer Key\n\n';
       for (let i = 0; i < testBank.answerKey.length; i++) {
         const answer = testBank.answerKey[i];
-        markdown += `${i + 1}. ${answer.correctAnswer}\n`;
-        if (answer.explanation) {
-          markdown += `   *${answer.explanation}*\n`;
+        if (answer) {
+          markdown += `${i + 1}. ${answer.correctAnswer ?? 'N/A'}\n`;
+          if (answer.explanation) {
+            markdown += `   *${answer.explanation}*\n`;
+          }
         }
       }
     }
@@ -359,7 +368,7 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
   private generateHTMLTestBank(testBank: TestBank, options: TestBankOptions): string {
     const questionsHTML = testBank.questions
       .map(
-        (q, i) => `
+        (q, i) => q ? `
       <div class="question" data-type="${q.type}" data-difficulty="${q.difficulty}">
         <h3>Question ${i + 1}</h3>
         <div class="metadata">
@@ -370,7 +379,7 @@ export class TestBankExtractor extends BaseAncillaryGenerator {
         <p class="question-text">${q.question}</p>
         ${this.formatQuestionHTML(q)}
       </div>
-    `
+    ` : ''
       )
       .join('');
 

@@ -4,6 +4,7 @@ import Mustache from 'mustache';
 import { BaseAncillaryGenerator } from '../base-generator';
 
 import type { ExtractedContent, GenerationResult, OutputFormat, StudyGuideOptions } from '../types';
+import type { SemanticText } from '@xats-org/types';
 
 // Internal types for study guide structure
 interface ConceptItem {
@@ -197,12 +198,12 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
     for (const item of items) {
       // Check if block has learning objective metadata
       if (item.metadata?.learningObjective) {
-        objectives.push(item.metadata.learningObjective);
+        objectives.push(item.metadata.learningObjective as string);
       }
 
       // Check for specific learning objective block types
       if (item.sourceBlock.blockType?.includes('learning-objective')) {
-        const text = this.extractPlainText(item.content);
+        const text = this.extractPlainText(item.content as SemanticText);
         if (text) objectives.push(text);
       }
     }
@@ -219,10 +220,10 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
     for (const item of items) {
       // Look for content marked as summary-worthy
       const importance =
-        item.metadata?.importance || item.sourceBlock.extensions?.ancillary?.importance;
+        item.metadata?.importance || (item.sourceBlock.extensions as Record<string, any>)?.ancillary?.importance;
 
       if (importance === 'critical' || importance === 'important') {
-        const text = this.extractPlainText(item.content);
+        const text = this.extractPlainText(item.content as SemanticText);
         if (text && text.length > 20) {
           // Truncate to first sentence or 150 chars
           const firstSentence = text.match(/^[^.!?]+[.!?]/);
@@ -247,11 +248,11 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
         item.sourceBlock.blockType?.includes('definition') ||
         item.sourceBlock.blockType?.includes('glossary')
       ) {
-        const content = item.content;
+        const content = item.content as { term?: unknown; definition?: unknown };
         if (content?.term && content?.definition) {
           terms.push({
-            term: this.extractPlainText(content.term),
-            definition: this.extractPlainText(content.definition),
+            term: this.extractPlainText(content.term as SemanticText),
+            definition: this.extractPlainText(content.definition as SemanticText),
           });
         }
       }
@@ -270,9 +271,9 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
       // Check for quiz-bank-item tags
       if (item.tags.includes('quiz-bank-item')) {
         questions.push({
-          question: this.extractPlainText(item.content),
-          type: item.metadata?.questionType || 'review',
-          difficulty: item.metadata?.difficulty || 'medium',
+          question: this.extractPlainText(item.content as SemanticText),
+          type: (item.metadata?.questionType as string) || 'review',
+          difficulty: (item.metadata?.difficulty as string) || 'medium',
         });
       }
     }
@@ -295,10 +296,10 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
     };
 
     for (const item of items) {
-      const importance = item.metadata?.importance || 'important';
+      const importance = (item.metadata?.importance as string) || 'important';
       const content = {
-        text: this.extractPlainText(item.content),
-        tips: item.metadata?.studyTips || [],
+        text: this.extractPlainText(item.content as SemanticText),
+        tips: (item.metadata?.studyTips as string[]) || [],
       };
 
       switch (importance) {
@@ -431,7 +432,7 @@ export class StudyGuideGenerator extends BaseAncillaryGenerator {
    */
   private async generateDOCX(
     studyGuide: StudyGuideStructure,
-    options: StudyGuideOptions
+    _options: StudyGuideOptions
   ): Promise<Buffer> {
     // This would use the @xats-org/converter-word package
     // For now, return a placeholder

@@ -94,29 +94,33 @@ export abstract class BaseAncillaryGenerator implements AncillaryGenerator {
       // Also check for specific content arrays at current level
       if ('preface' in container && container.preface) {
         const frontMatter = container as FrontMatter;
-        for (const block of frontMatter.preface) {
-          if (this.shouldExtractBlock(block, tags, filter)) {
-            extracted.push({
-              sourceBlock: block,
-              content: block.content,
-              tags: block.tags || [],
-              path,
-              metadata: block.extensions as Record<string, unknown>,
-            });
+        if (frontMatter.preface) {
+          for (const block of frontMatter.preface) {
+            if (this.shouldExtractBlock(block, tags, filter)) {
+              extracted.push({
+                sourceBlock: block,
+                content: block.content,
+                tags: block.tags || [],
+                path,
+                metadata: block.extensions as Record<string, unknown>,
+              });
+            }
           }
         }
       }
       if ('acknowledgments' in container && container.acknowledgments) {
         const frontMatter = container as FrontMatter;
-        for (const block of frontMatter.acknowledgments) {
-          if (this.shouldExtractBlock(block, tags, filter)) {
-            extracted.push({
-              sourceBlock: block,
-              content: block.content,
-              tags: block.tags || [],
-              path,
-              metadata: block.extensions as Record<string, unknown>,
-            });
+        if (frontMatter.acknowledgments) {
+          for (const block of frontMatter.acknowledgments) {
+            if (this.shouldExtractBlock(block, tags, filter)) {
+              extracted.push({
+                sourceBlock: block,
+                content: block.content,
+                tags: block.tags || [],
+                path,
+                metadata: block.extensions as Record<string, unknown>,
+              });
+            }
           }
         }
       }
@@ -217,7 +221,7 @@ export abstract class BaseAncillaryGenerator implements AncillaryGenerator {
       success: true,
       output,
       format,
-      stats,
+      ...(stats ? { stats } : {}),
     };
   }
 
