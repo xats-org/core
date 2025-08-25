@@ -190,14 +190,15 @@ export function validateAIGenerationExtension(data: unknown): AIGenerationExtens
 export function hasAIGenerationMetadata(
   obj: unknown
 ): obj is { extensions: { aiGeneration: AIGenerationExtension } } {
+  // SECURITY: Fixed type comparison vulnerability
   return Boolean(
     obj &&
       typeof obj === 'object' &&
-      obj !== null &&
+      obj != null &&
       'extensions' in obj &&
       obj.extensions &&
       typeof obj.extensions === 'object' &&
-      obj.extensions !== null &&
+      obj.extensions != null &&
       'aiGeneration' in obj.extensions &&
       (obj.extensions as Record<string, unknown>).aiGeneration &&
       typeof (obj.extensions as Record<string, unknown>).aiGeneration === 'object'

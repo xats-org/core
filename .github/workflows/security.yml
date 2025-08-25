@@ -64,8 +64,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Use separate javascript and typescript to match main branch configuration
-        language: ['javascript', 'typescript']
+        # Use combined javascript-typescript language to match main branch configuration
+        language: ['javascript-typescript']
     
     steps:
     - name: Checkout repository

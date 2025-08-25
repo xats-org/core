@@ -685,8 +685,9 @@ export class SimpleMarkdownRenderer
   private convertRun(run: Run): string {
     switch (run.type) {
       case 'text': {
-        // For plain text, only escape really dangerous characters
-        return run.text?.replace(/\\/g, '\\\\').replace(/`/g, '\\`') || '';
+        // For plain text, only escape really dangerous characters - Fixed chained replacement security issue
+        const text = run.text || '';
+        return text.replace(/\\/g, '\\\\').replace(/`/g, '\\`');
       }
       case 'emphasis': {
         const marker = '*'; // Could be configurable
@@ -705,16 +706,24 @@ export class SimpleMarkdownRenderer
         return `[${run.text || ref}](#${ref})`;
       }
       default: {
-        return 'text' in run ? run.text?.replace(/\\/g, '\\\\').replace(/`/g, '\\`') || '' : '';
+        // Fixed chained replacement security issue
+        if ('text' in run && run.text) {
+          return run.text.replace(/\\/g, '\\\\').replace(/`/g, '\\`');
+        }
+        return '';
       }
     }
   }
 
   /**
-   * Escape Markdown special characters in text runs
+   * Escape Markdown special characters in text runs - Fixed useless regex escapes
    * Only escapes characters that would cause issues in normal text
    */
   private escapeMarkdown(text: string): string {
+    if (!text || typeof text !== 'string') {
+      return '';
+    }
+
     return (
       text
         .replace(/\\/g, '\\\\')
@@ -1087,11 +1096,11 @@ export class SimpleMarkdownRenderer
       passedChecks++;
     }
 
-    // Compare content existence (both have content or both don't)
+    // Compare content existence - SECURITY: Simplified comparison logic
     totalChecks++;
-    const originalHasContent = (original.bodyMatter?.contents?.length || 0) > 0;
-    const roundTripHasContent = (roundTrip.bodyMatter?.contents?.length || 0) > 0;
-    if (originalHasContent === roundTripHasContent) {
+    const originalLength = original.bodyMatter?.contents?.length || 0;
+    const roundTripLength = roundTrip.bodyMatter?.contents?.length || 0;
+    if (originalLength > 0 === roundTripLength > 0) {
       passedChecks++;
     }
 

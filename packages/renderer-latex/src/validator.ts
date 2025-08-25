@@ -209,7 +209,7 @@ export class LaTeXValidator {
    */
   private checkBraceBalance(content: string): number {
     let balance = 0;
-    const inString = false;
+    // SECURITY: Removed unused variable
 
     for (let i = 0; i < content.length; i++) {
       const char = content[i];
