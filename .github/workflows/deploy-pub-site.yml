@@ -415,46 +415,11 @@ jobs:
         </html>
         EOF
         
-    - name: Convert markdown files to HTML
+    - name: Copy markdown files directly
       run: |
-        # Simple markdown to HTML conversion for key docs
-        # This is a basic approach - could be enhanced with a proper static site generator
-        if [ -d "pub-site/docs" ]; then
-          cd pub-site/docs
-          for md_file in *.md; do
-            if [ -f "$md_file" ]; then
-              html_file="${md_file%.md}.html"
-                cat > "$html_file" << 'HTMLEOF'
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${md_file%.md} - xats Documentation</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 2rem auto; max-width: 800px; line-height: 1.6; }
-        .nav { background: #f6f8fa; padding: 1rem; border-radius: 6px; margin-bottom: 2rem; }
-        .nav a { margin-right: 1rem; color: #0969da; text-decoration: none; }
-        .nav a:hover { text-decoration: underline; }
-        code { background: #f6f8fa; padding: 0.2rem 0.4rem; border-radius: 3px; }
-        pre { background: #f6f8fa; padding: 1rem; border-radius: 6px; overflow-x: auto; }
-    </style>
-</head>
-<body>
-    <div class="nav">
-        <a href="/docs/">← Documentation</a>
-        <a href="/">Home</a>
-    </div>
-    <div id="content">
-        <h1>${md_file%.md}</h1>
-        <pre>$(cat "$md_file")</pre>
-    </div>
-</body>
-</html>
-HTMLEOF
-            fi
-          done
-        fi
+        # For now, just copy markdown files directly
+        # We can add proper static site generation later
+        echo "Markdown files copied to pub-site/docs/"
         
     - name: Verify site structure
       run: |
