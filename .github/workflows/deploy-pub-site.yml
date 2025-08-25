@@ -14,6 +14,19 @@ on:
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'vite.config.pub-site.js'
+  pull_request:
+    branches:
+      - main
+      - 'v*.*.*'
+    paths:
+      - 'packages/**'
+      - '.storybook/**'
+      - 'docs/**'
+      - 'examples/**'
+      - 'static/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/deploy-pub-site.yml'
 
 jobs:
   build-all-assets:
@@ -467,6 +480,7 @@ EOF
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     needs: [build-all-assets]
+    # Only deploy from main branch, PRs will only build artifacts
     if: github.ref == 'refs/heads/main'
     
     permissions:
