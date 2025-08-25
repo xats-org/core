@@ -1,9 +1,9 @@
-import { XatsRenderer } from '../components/XatsRenderer';
-
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { XatsRenderer } from '../components/XatsRenderer';
 import type { XatsDocument } from '@xats-org/types';
 
-const meta = {
+const meta: Meta<typeof XatsRenderer> = {
   title: 'Renderer/XatsRenderer',
   component: XatsRenderer,
   parameters: {
@@ -33,7 +33,7 @@ const meta = {
       description: 'Additional CSS class name',
     },
   },
-} satisfies Meta<typeof XatsRenderer>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -325,11 +325,12 @@ export const StyledHTML: Story = {
     format: 'html',
     options: {},
     className: 'custom-xats-content',
-    style: {
-      backgroundColor: '#f5f5f5',
-      padding: '2rem',
-      borderRadius: '8px',
-      fontFamily: 'Georgia, serif',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'HTML rendering with custom CSS class for styling',
+      },
     },
   },
 };
