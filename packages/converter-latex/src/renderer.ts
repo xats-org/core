@@ -370,7 +370,7 @@ export class DocumentRenderer {
     // Use character-by-character processing to avoid replacement interference
     const chars = Array.from(text);
     const result: string[] = [];
-    
+
     for (const char of chars) {
       switch (char) {
         case '\\':
@@ -423,7 +423,7 @@ export class DocumentRenderer {
           break;
       }
     }
-    
+
     return result.join('');
   }
 
