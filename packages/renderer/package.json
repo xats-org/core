@@ -60,11 +60,13 @@
     "@xats-org/utils": "workspace:*"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.2.0",
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.0",
     "@vitest/coverage-v8": "^1.2.0",
-    "eslint": "^8.56.0",
     "@xats-org/eslint-config": "workspace:*",
+    "dompurify": "^3.2.6",
+    "eslint": "^8.56.0",
     "react": "^18.2.0",
     "typescript": "^5.3.3",
     "vitest": "^1.2.0"

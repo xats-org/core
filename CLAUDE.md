@@ -337,6 +337,7 @@ Common `blockType` URIs:
 - New vocabulary URIs require community discussion and evidence of adoption
 - Changes follow Semantic Versioning (Major.Minor.Patch)
 - All contributions must uphold the Code of Conduct
+- **SECURITY**: All PRs must pass CodeQL security checks - see Security Review Requirements in section 8
 
 ## Core Documentation References
 
@@ -586,6 +587,63 @@ The automated PR validator will verify:
 - ❌ PR must target appropriate branch (version branch for features, main for hotfixes)
 - ℹ️ PR title should use conventional commit format
 - ℹ️ Feature PRs should not target main branch directly
+
+##### Security Review Requirements (MANDATORY)
+
+**⚠️ CRITICAL: ALL pull requests MUST pass security checks before merging!**
+
+Every PR must undergo security review to prevent regressions. The following checks are MANDATORY:
+
+###### 1. CodeQL Security Analysis
+- **MUST check CodeQL results** for every PR
+- **Zero high/critical vulnerabilities allowed** - any error-level alerts must be fixed
+- **Review all new security warnings** - even if they're not blocking
+- Check the CodeQL status in PR checks - should show ✅ SUCCESS
+- If CodeQL shows ⚠️ NEUTRAL, verify it's due to configuration differences, not actual issues
+
+###### 2. Security Checklist for Code Changes
+Before creating a PR, verify:
+- [ ] **No unsafe HTML rendering** - Never use `innerHTML` or `dangerouslySetInnerHTML` without sanitization
+- [ ] **Input validation** - All user inputs are validated and sanitized
+- [ ] **No command injection** - Never pass user input to shell commands or `eval()`
+- [ ] **URL validation** - All URLs and IDs used in API calls are properly sanitized
+- [ ] **Dependencies audited** - Run `pnpm audit` and fix any high/critical vulnerabilities
+- [ ] **No hardcoded secrets** - Check for API keys, passwords, or tokens in code
+
+###### 3. Required Security Tools
+When making code changes, ALWAYS:
+```bash
+# Run security audit before committing
+pnpm audit
+
+# Check for CodeQL alerts locally (if possible)
+gh api repos/xats-org/core/code-scanning/alerts --jq '[.[] | select(.state == "open")] | length'
+
+# Verify no high severity issues
+gh api repos/xats-org/core/code-scanning/alerts --jq '[.[] | select(.state == "open" and .rule.severity == "error")] | length'
+```
+
+###### 4. Security-Sensitive Areas
+Pay extra attention when modifying:
+- **Renderer packages** - Any HTML/DOM manipulation code
+- **Collaborative features** - User input handling and display
+- **File converters** - LaTeX, Word, Markdown processing
+- **API integrations** - External service connections
+- **Authentication/Authorization** - Access control code
+
+###### 5. Response to Security Failures
+If security checks fail:
+1. **DO NOT merge** until all security issues are resolved
+2. **Review CodeQL alerts** in the Security tab
+3. **Fix all high/critical issues** before proceeding
+4. **Document security fixes** in PR description
+5. **Re-run security checks** after fixes
+
+###### 6. Security Regression Prevention
+- **Never disable security checks** to make a PR pass
+- **Don't ignore security warnings** - they often become vulnerabilities later
+- **Update dependencies regularly** to get security patches
+- **Use security-focused code review** for sensitive changes
 
 ---
 
