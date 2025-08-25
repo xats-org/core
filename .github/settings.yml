@@ -1,0 +1,53 @@
+# Repository settings for GitHub Pages deployment
+# This file can be used with the Probot Settings app
+
+repository:
+  name: core
+  description: "eXtensible Academic Text Standard (xats) - Core monorepo with schemas, tools, and renderers"
+  homepage: "https://pub.xats.org"
+  topics: ["xats", "json-schema", "education", "textbook", "monorepo", "typescript"]
+  private: false
+  has_issues: true
+  has_projects: true
+  has_wiki: false
+  has_downloads: true
+  default_branch: main
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: true
+  delete_branch_on_merge: true
+  enable_automated_security_fixes: true
+  enable_vulnerability_alerts: true
+
+# Pages configuration
+pages:
+  source:
+    branch: main
+    path: /
+  cname: pub.xats.org
+
+# Environment protection rules
+environments:
+  - name: github-pages
+    protection_rules:
+      required_reviewers: 0
+      wait_timer: 0
+    deployment_branch_policy:
+      protected_branches: true
+      custom_branch_policies: false
+
+# Branch protection
+branches:
+  - name: main
+    protection:
+      required_status_checks:
+        strict: true
+        contexts:
+          - "Build All Assets for pub.xats.org"
+          - "CI"
+      enforce_admins: false
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: true
+      restrictions: null

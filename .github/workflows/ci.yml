@@ -64,8 +64,19 @@ jobs:
           ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}-
           ${{ runner.os }}-turbo-
         
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+    - name: Install dependencies without bin links
+      run: pnpm install --frozen-lockfile --ignore-scripts
+      
+    - name: Build core packages first
+      run: |
+        # Build dependencies in order
+        pnpm --filter @xats-org/types run build
+        pnpm --filter @xats-org/utils run build
+        pnpm --filter @xats-org/schema run build
+        pnpm --filter @xats-org/validator run build
+        # Now build CLI and MCP server packages
+        pnpm --filter @xats-org/cli run build
+        pnpm --filter @xats-org/mcp-server run build
       
     - name: Build packages with Turborepo
       run: pnpm run build
@@ -106,7 +117,7 @@ jobs:
         cache: 'pnpm'
         
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --ignore-scripts
       
     - name: Download build artifacts
       uses: actions/download-artifact@v5
@@ -140,7 +151,7 @@ jobs:
         cache: 'pnpm'
         
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --ignore-scripts
       
     - name: Download build artifacts
       uses: actions/download-artifact@v5
@@ -180,7 +191,7 @@ jobs:
         cache: 'pnpm'
         
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --ignore-scripts
       
     - name: Download build artifacts
       uses: actions/download-artifact@v5
@@ -224,7 +235,7 @@ jobs:
         cache: 'pnpm'
         
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --ignore-scripts
       
     - name: Download build artifacts
       uses: actions/download-artifact@v5
@@ -271,7 +282,7 @@ jobs:
         cache: 'pnpm'
         
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --ignore-scripts
       
     - name: Download build artifacts
       uses: actions/download-artifact@v5
@@ -306,7 +317,7 @@ jobs:
         cache: 'pnpm'
         
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --ignore-scripts
       
     - name: Run security audit
       run: pnpm audit --audit-level=high || true
@@ -339,7 +350,7 @@ jobs:
         cache: 'pnpm'
         
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --ignore-scripts
       
     - name: Download build artifacts
       uses: actions/download-artifact@v5
@@ -396,7 +407,7 @@ jobs:
         cache: 'pnpm'
         
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --ignore-scripts
       
     - name: Download build artifacts
       uses: actions/download-artifact@v5
@@ -435,7 +446,7 @@ jobs:
         cache: 'pnpm'
         
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --frozen-lockfile --ignore-scripts
       
     - name: Download build artifacts
       uses: actions/download-artifact@v5

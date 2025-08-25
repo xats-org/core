@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xats Public Resources</title>
+    <meta name="description" content="JSON Schemas, documentation, examples, and component library for the eXtensible Academic Text Standard">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='75'>📖</text></svg>">
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+            line-height: 1.6; 
+            color: #24292f;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 2rem;
+        }
+        
+        .header { 
+            text-align: center; 
+            margin-bottom: 4rem; 
+            color: white;
+        }
+        
+        .header h1 { 
+            font-size: 3.5rem; 
+            font-weight: 800; 
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p { 
+            font-size: 1.3rem; 
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 2rem; 
+            margin-bottom: 3rem;
+        }
+        
+        .card { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 2.5rem; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .card:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .card h2 { 
+            font-size: 1.5rem;
+            margin-bottom: 1rem; 
+            color: #24292f;
+            font-weight: 700;
+        }
+        
+        .card p { 
+            color: #57606a; 
+            margin-bottom: 2rem; 
+            line-height: 1.7;
+        }
+        
+        .btn { 
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            padding: 1rem 2rem; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary { 
+            background: linear-gradient(135deg, #0969da 0%, #0860ca 100%); 
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 5px 15px rgba(9, 105, 218, 0.4);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat {
+            text-align: center;
+            color: white;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+        }
+        
+        .stat-label {
+            opacity: 0.9;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .footer { 
+            text-align: center; 
+            margin-top: 4rem; 
+            padding-top: 2rem; 
+            border-top: 1px solid rgba(255, 255, 255, 0.2); 
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .footer a { 
+            color: white; 
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .header p {
+                font-size: 1.1rem;
+            }
+            
+            .card {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>xats Public Resources</h1>
+            <p>JSON Schemas, documentation, examples, and component library for the eXtensible Academic Text Standard</p>
+            <div class="version-badge">v0.5.0</div>
+        </header>
+        
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-number">5+</span>
+                <span class="stat-label">Schema Versions</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">50+</span>
+                <span class="stat-label">Components</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">100+</span>
+                <span class="stat-label">Examples</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">∞</span>
+                <span class="stat-label">Possibilities</span>
+            </div>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <span class="card-icon">🧩</span>
+                <h2>Component Library</h2>
+                <p>Interactive Storybook showcasing xats renderer components with live examples, documentation, and accessibility testing.</p>
+                <a href="/storybook/" class="btn btn-primary">Browse Components</a>
+            </div>
+            
+            <div class="card">
+                <span class="card-icon">📋</span>
+                <h2>JSON Schemas</h2>
+                <p>Official JSON Schema definitions for all versions of the xats standard. Use these for validation, tooling, and IDE support.</p>
+                <a href="/schemas/" class="btn">Download Schemas</a>
+            </div>
+            
+            <div class="card">
+                <span class="card-icon">📚</span>
+                <h2>Documentation</h2>
+                <p>Complete guides, API reference, and specifications for implementing and using the xats standard in your projects.</p>
+                <a href="/docs/" class="btn">Read Documentation</a>
+            </div>
+            
+            <div class="card">
+                <span class="card-icon">💾</span>
+                <h2>Example Documents</h2>
+                <p>Real-world examples demonstrating xats features, from minimal documents to complex interactive textbooks.</p>
+                <a href="/examples/" class="btn">View Examples</a>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p>
+                Part of the <a href="https://xats.org">xats.org</a> ecosystem • 
+                <a href="https://github.com/xats-org/core">Source on GitHub</a> • 
+                <a href="https://github.com/xats-org/core/issues">Report Issues</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

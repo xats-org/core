@@ -38,7 +38,18 @@ jobs:
           cache: "pnpm"
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
+        
+      - name: Build core packages first
+        run: |
+          # Build dependencies in order
+          pnpm --filter @xats-org/types run build
+          pnpm --filter @xats-org/utils run build
+          pnpm --filter @xats-org/schema run build
+          pnpm --filter @xats-org/validator run build
+          # Now build CLI and MCP server packages
+          pnpm --filter @xats-org/cli run build
+          pnpm --filter @xats-org/mcp-server run build
 
       - name: Build Packages
         run: pnpm build
