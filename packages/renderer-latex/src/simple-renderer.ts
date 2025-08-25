@@ -528,33 +528,69 @@ export class SimpleLaTeXRenderer
       return String(text || '');
     }
 
-    // Order is important: escape backslash first to avoid double-escaping
-    return (
-      text
-        .replace(/\\/g, '\\textbackslash{}')
-        .replace(/\{/g, '\\{')
-        .replace(/\}/g, '\\}')
-        .replace(/\$/g, '\\$')
-        .replace(/&/g, '\\&')
-        .replace(/%/g, '\\%')
-        .replace(/#/g, '\\#')
-        .replace(/\^/g, '\\textasciicircum{}')
-        .replace(/_/g, '\\_')
-        .replace(/~/g, '\\textasciitilde{}')
-        // Additional LaTeX special characters
-        .replace(/\|/g, '\\textbar{}')
-        .replace(/</g, '\\textless{}')
-        .replace(/>/g, '\\textgreater{}')
-        .replace(/"/g, '\\textquotedbl{}')
-        // Remove or escape control characters that could cause LaTeX issues
-        // eslint-disable-next-line no-control-regex
-        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
-        // Handle unicode characters that need special treatment in LaTeX
-        .replace(/[\u2013\u2014]/g, '--') // em/en dashes
-        .replace(/[\u2018\u2019]/g, "'") // smart quotes
-        .replace(/[\u201C\u201D]/g, '"') // smart double quotes
-        .replace(/\u00A0/g, '~')
-    ); // non-breaking space
+    // SECURITY: Two-pass escaping system to prevent LaTeX injection attacks
+    // First pass: Replace dangerous characters with safe placeholders
+    // Second pass: Convert placeholders to LaTeX commands
+
+    // Define safe placeholder tokens that cannot conflict with input
+    const PLACEHOLDER_PREFIX = '___XATS_LATEX_ESC_';
+    const PLACEHOLDER_SUFFIX = '___';
+    const dangerousChars = new Map([
+      ['\\', `${PLACEHOLDER_PREFIX}BACKSLASH${PLACEHOLDER_SUFFIX}`],
+      ['{', `${PLACEHOLDER_PREFIX}LBRACE${PLACEHOLDER_SUFFIX}`],
+      ['}', `${PLACEHOLDER_PREFIX}RBRACE${PLACEHOLDER_SUFFIX}`],
+      ['$', `${PLACEHOLDER_PREFIX}DOLLAR${PLACEHOLDER_SUFFIX}`],
+      ['&', `${PLACEHOLDER_PREFIX}AMPERSAND${PLACEHOLDER_SUFFIX}`],
+      ['%', `${PLACEHOLDER_PREFIX}PERCENT${PLACEHOLDER_SUFFIX}`],
+      ['#', `${PLACEHOLDER_PREFIX}HASH${PLACEHOLDER_SUFFIX}`],
+      ['^', `${PLACEHOLDER_PREFIX}CARET${PLACEHOLDER_SUFFIX}`],
+      ['_', `${PLACEHOLDER_PREFIX}UNDERSCORE${PLACEHOLDER_SUFFIX}`],
+      ['~', `${PLACEHOLDER_PREFIX}TILDE${PLACEHOLDER_SUFFIX}`],
+      ['|', `${PLACEHOLDER_PREFIX}PIPE${PLACEHOLDER_SUFFIX}`],
+      ['<', `${PLACEHOLDER_PREFIX}LT${PLACEHOLDER_SUFFIX}`],
+      ['>', `${PLACEHOLDER_PREFIX}GT${PLACEHOLDER_SUFFIX}`],
+      ['"', `${PLACEHOLDER_PREFIX}QUOTE${PLACEHOLDER_SUFFIX}`],
+    ]);
+
+    const latexCommands = new Map([
+      [`${PLACEHOLDER_PREFIX}BACKSLASH${PLACEHOLDER_SUFFIX}`, '\\textbackslash{}'],
+      [`${PLACEHOLDER_PREFIX}LBRACE${PLACEHOLDER_SUFFIX}`, '\\{'],
+      [`${PLACEHOLDER_PREFIX}RBRACE${PLACEHOLDER_SUFFIX}`, '\\}'],
+      [`${PLACEHOLDER_PREFIX}DOLLAR${PLACEHOLDER_SUFFIX}`, '\\$'],
+      [`${PLACEHOLDER_PREFIX}AMPERSAND${PLACEHOLDER_SUFFIX}`, '\\&'],
+      [`${PLACEHOLDER_PREFIX}PERCENT${PLACEHOLDER_SUFFIX}`, '\\%'],
+      [`${PLACEHOLDER_PREFIX}HASH${PLACEHOLDER_SUFFIX}`, '\\#'],
+      [`${PLACEHOLDER_PREFIX}CARET${PLACEHOLDER_SUFFIX}`, '\\textasciicircum{}'],
+      [`${PLACEHOLDER_PREFIX}UNDERSCORE${PLACEHOLDER_SUFFIX}`, '\\_'],
+      [`${PLACEHOLDER_PREFIX}TILDE${PLACEHOLDER_SUFFIX}`, '\\textasciitilde{}'],
+      [`${PLACEHOLDER_PREFIX}PIPE${PLACEHOLDER_SUFFIX}`, '\\textbar{}'],
+      [`${PLACEHOLDER_PREFIX}LT${PLACEHOLDER_SUFFIX}`, '\\textless{}'],
+      [`${PLACEHOLDER_PREFIX}GT${PLACEHOLDER_SUFFIX}`, '\\textgreater{}'],
+      [`${PLACEHOLDER_PREFIX}QUOTE${PLACEHOLDER_SUFFIX}`, '\\textquotedbl{}'],
+    ]);
+
+    // First pass: Character-by-character replacement with safe placeholders
+    let result = '';
+    for (const char of text) {
+      const placeholder = dangerousChars.get(char);
+      result += placeholder || char;
+    }
+
+    // Second pass: Convert placeholders to LaTeX commands
+    for (const [placeholder, command] of latexCommands) {
+      // Use split/join instead of regex to avoid any regex-related vulnerabilities
+      result = result.split(placeholder).join(command);
+    }
+
+    // Handle control characters and unicode characters
+    // eslint-disable-next-line no-control-regex
+    result = result.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+    result = result.replace(/[\u2013\u2014]/g, '--'); // em/en dashes
+    result = result.replace(/[\u2018\u2019]/g, "'"); // smart quotes
+    result = result.replace(/[\u201C\u201D]/g, '"'); // smart double quotes
+    result = result.replace(/\u00A0/g, '~'); // non-breaking space
+
+    return result;
   }
 
   /**
