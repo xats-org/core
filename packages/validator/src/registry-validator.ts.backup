@@ -243,6 +243,22 @@ export class RegistryValidator {
   }
 
   /**
+   * Validate package file MIME type - Fixed ReDoS vulnerability
+   */
+  validateMimeType(mimeType: string): { valid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    if (!mimeType) {
+      return { valid: true, errors: [] }; // MIME type is optional
+    }
+
+    // Fixed ReDoS by limiting MIME type length and quantifiers
+    if (mimeType.length > 100) {
+      errors.push('MIME type is too long (maximum 100 characters)');
+      return { valid: false, errors };
+    }
+    
+    const mimePattern = /^[a-z0-9][a-z0-9!#  /**
    * Validate package file MIME type
    */
   validateMimeType(mimeType: string): { valid: boolean; errors: string[] } {
@@ -257,7 +273,56 @@ export class RegistryValidator {
       errors.push('MIME type is too long (maximum 100 characters)');
       return { valid: false, errors };
     }
-    const mimePattern = /^[a-z0-9][a-z0-9!#$&\-^_]{0,30}\/[a-z0-9][a-z0-9!#$&\-^_.]{0,30}$/;
+    const mimePattern = /^[a-z0-9][a-z0-9!#    // Fixed ReDoS by limiting MIME type length and quantifiers
+    if (mimeType.length > 100) {
+      errors.push('MIME type is too long (maximum 100 characters)');
+      return { valid: false, errors };
+    }
+    const mimePattern = /^[a-z0-9][a-z0-9!#    const mimePattern = /^[a-z0-9][a-z0-9!#$&\-^_]*\/[a-z0-9][a-z0-9!#$&\-^_.]*$/;\-^_]{0,30}\/[a-z0-9][a-z0-9!#    const mimePattern = /^[a-z0-9][a-z0-9!#$&\-^_]*\/[a-z0-9][a-z0-9!#$&\-^_.]*$/;\-^_.]{0,30}$/;\-^_]{0,30}\/[a-z0-9][a-z0-9!#    // Fixed ReDoS by limiting MIME type length and quantifiers
+    if (mimeType.length > 100) {
+      errors.push('MIME type is too long (maximum 100 characters)');
+      return { valid: false, errors };
+    }
+    const mimePattern = /^[a-z0-9][a-z0-9!#    const mimePattern = /^[a-z0-9][a-z0-9!#$&\-^_]*\/[a-z0-9][a-z0-9!#$&\-^_.]*$/;\-^_]{0,30}\/[a-z0-9][a-z0-9!#    const mimePattern = /^[a-z0-9][a-z0-9!#$&\-^_]*\/[a-z0-9][a-z0-9!#$&\-^_.]*$/;\-^_.]{0,30}$/;\-^_.]{0,30}$/;
+
+    if (!mimePattern.test(mimeType)) {
+      errors.push('Invalid MIME type format');
+    }
+
+    return { valid: errors.length === 0, errors };
+  }\-^_]{0,30}\/[a-z0-9][a-z0-9!#  /**
+   * Validate package file MIME type
+   */
+  validateMimeType(mimeType: string): { valid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    if (!mimeType) {
+      return { valid: true, errors: [] }; // MIME type is optional
+    }
+
+    // Fixed ReDoS by limiting MIME type length and quantifiers
+    if (mimeType.length > 100) {
+      errors.push('MIME type is too long (maximum 100 characters)');
+      return { valid: false, errors };
+    }
+    const mimePattern = /^[a-z0-9][a-z0-9!#    // Fixed ReDoS by limiting MIME type length and quantifiers
+    if (mimeType.length > 100) {
+      errors.push('MIME type is too long (maximum 100 characters)');
+      return { valid: false, errors };
+    }
+    const mimePattern = /^[a-z0-9][a-z0-9!#    const mimePattern = /^[a-z0-9][a-z0-9!#$&\-^_]*\/[a-z0-9][a-z0-9!#$&\-^_.]*$/;\-^_]{0,30}\/[a-z0-9][a-z0-9!#    const mimePattern = /^[a-z0-9][a-z0-9!#$&\-^_]*\/[a-z0-9][a-z0-9!#$&\-^_.]*$/;\-^_.]{0,30}$/;\-^_]{0,30}\/[a-z0-9][a-z0-9!#    // Fixed ReDoS by limiting MIME type length and quantifiers
+    if (mimeType.length > 100) {
+      errors.push('MIME type is too long (maximum 100 characters)');
+      return { valid: false, errors };
+    }
+    const mimePattern = /^[a-z0-9][a-z0-9!#    const mimePattern = /^[a-z0-9][a-z0-9!#$&\-^_]*\/[a-z0-9][a-z0-9!#$&\-^_.]*$/;\-^_]{0,30}\/[a-z0-9][a-z0-9!#    const mimePattern = /^[a-z0-9][a-z0-9!#$&\-^_]*\/[a-z0-9][a-z0-9!#$&\-^_.]*$/;\-^_.]{0,30}$/;\-^_.]{0,30}$/;
+
+    if (!mimePattern.test(mimeType)) {
+      errors.push('Invalid MIME type format');
+    }
+
+    return { valid: errors.length === 0, errors };
+  }\-^_.]{0,30}$/;
 
     if (!mimePattern.test(mimeType)) {
       errors.push('Invalid MIME type format');
