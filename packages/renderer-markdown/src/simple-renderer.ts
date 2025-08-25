@@ -1100,7 +1100,7 @@ export class SimpleMarkdownRenderer
     totalChecks++;
     const originalLength = original.bodyMatter?.contents?.length || 0;
     const roundTripLength = roundTrip.bodyMatter?.contents?.length || 0;
-    if ((originalLength > 0) === (roundTripLength > 0)) {
+    if (originalLength > 0 === roundTripLength > 0) {
       passedChecks++;
     }
 
