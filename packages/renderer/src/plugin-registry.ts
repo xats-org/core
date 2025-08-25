@@ -54,7 +54,10 @@ export class PluginRegistry implements IPluginRegistry {
       if (!this.formatIndex.has(format)) {
         this.formatIndex.set(format, new Set());
       }
-      this.formatIndex.get(format)!.add(plugin.id);
+      const formatPlugins = this.formatIndex.get(format);
+      if (formatPlugins) {
+        formatPlugins.add(plugin.id);
+      }
     }
 
     // Log registration
