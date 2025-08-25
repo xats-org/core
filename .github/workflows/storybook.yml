@@ -41,10 +41,16 @@ jobs:
         node-version: 20
         cache: 'pnpm'
         
-    - name: Install dependencies
+    - name: Install dependencies without bin links
       run: pnpm install --frozen-lockfile --ignore-scripts
       
-    - name: Build packages
+    - name: Build CLI packages first
+      run: |
+        # Build CLI and MCP server packages to create their bin files
+        pnpm --filter @xats-org/cli run build
+        pnpm --filter @xats-org/mcp-server run build
+      
+    - name: Build all packages
       run: pnpm run build
       
     - name: Build Storybook

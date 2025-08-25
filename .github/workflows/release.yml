@@ -39,6 +39,12 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts
+        
+      - name: Build CLI packages first
+        run: |
+          # Build CLI and MCP server packages to create their bin files
+          pnpm --filter @xats-org/cli run build
+          pnpm --filter @xats-org/mcp-server run build
 
       - name: Build Packages
         run: pnpm build

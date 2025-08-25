@@ -64,8 +64,14 @@ jobs:
           ${{ runner.os }}-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}-
           ${{ runner.os }}-turbo-
         
-    - name: Install dependencies
+    - name: Install dependencies without bin links
       run: pnpm install --frozen-lockfile --ignore-scripts
+      
+    - name: Build CLI packages first
+      run: |
+        # Build CLI and MCP server packages to create their bin files
+        pnpm --filter @xats-org/cli run build
+        pnpm --filter @xats-org/mcp-server run build
       
     - name: Build packages with Turborepo
       run: pnpm run build
