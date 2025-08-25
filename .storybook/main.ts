@@ -1,16 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import { join, dirname } from 'path';
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
-
-/**
- * This function is used to resolve the absolute path of a package.
- * It is needed in projects that use Yarn PnP or are set up within a monorepo.
- */
-function getAbsolutePath(value: string): string {
-  return dirname(require.resolve(join(value, 'package.json')));
-}
 
 const config: StorybookConfig = {
   stories: [
@@ -18,33 +7,50 @@ const config: StorybookConfig = {
     '../packages/*/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
-    getAbsolutePath('@storybook/addon-links'),
-    getAbsolutePath('@storybook/addon-essentials'),
-    getAbsolutePath('@storybook/addon-interactions'),
-    getAbsolutePath('@storybook/addon-a11y'),
-    getAbsolutePath('@storybook/addon-coverage'),
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+    '@storybook/addon-a11y',
+    '@storybook/addon-coverage',
   ],
   framework: {
-    name: getAbsolutePath('@storybook/react-vite'),
+    name: '@storybook/react-vite' as any,
     options: {},
   },
   docs: {
     autodocs: 'tag',
   },
   viteFinal: async (config) => {
-    const __dirname = dirname(new URL(import.meta.url).pathname);
-    // Customize the Vite config for Storybook
+    const { resolve } = await import('path');
+    const projectRoot = resolve(dirname(import.meta.url.replace('file://', '')), '..');
+    
+    // Set base path for GitHub Pages deployment
+    const isProduction = process.env.NODE_ENV === 'production';
+    const base = isProduction ? '/core/' : '/';
+    
     return {
       ...config,
+      base,
       resolve: {
         ...config.resolve,
         alias: {
           ...config.resolve?.alias,
-          '@xats-org/renderer': join(__dirname, '../packages/renderer/src'),
-          '@xats-org/types': join(__dirname, '../packages/types/src'),
-          '@xats-org/utils': join(__dirname, '../packages/utils/src'),
-          '@xats-org/schema': join(__dirname, '../packages/schema/src'),
-          '@xats-org/validator': join(__dirname, '../packages/validator/src'),
+          '@xats-org/renderer': resolve(projectRoot, 'packages/renderer/src'),
+          '@xats-org/types': resolve(projectRoot, 'packages/types/src'),
+          '@xats-org/utils': resolve(projectRoot, 'packages/utils/src'),
+          '@xats-org/schema': resolve(projectRoot, 'packages/schema/src'),
+          '@xats-org/validator': resolve(projectRoot, 'packages/validator/src'),
+        },
+      },
+      optimizeDeps: {
+        ...config.optimizeDeps,
+        force: true,
+      },
+      server: {
+        ...config.server,
+        fs: {
+          ...config.server?.fs,
+          strict: false,
         },
       },
     };
