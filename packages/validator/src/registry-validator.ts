@@ -121,7 +121,7 @@ export class RegistryValidator {
       return null;
     }
     const match = reference.match(
-      /^xats:\/\/([a-z0-9_-]{1,50})\/([a-z0-9\/_-]{1,200})(?:@([a-zA-Z0-9.-]{1,50}))?(?:\/(.{1,200}))?$/
+      /^xats:\/\/([a-z0-9_-]{1,50})\/([a-z0-9/_-]{1,200})(?:@([a-zA-Z0-9.-]{1,50}))?(?:\/(.{1,200}))?$/
     );
 
     if (!match) {
@@ -173,7 +173,9 @@ export class RegistryValidator {
     if (
       parsed.version &&
       (parsed.version.length > 50 ||
-        !/^\d{1,3}\.\d{1,3}\.\d{1,3}(-[a-zA-Z0-9-]{1,20}(\.[a-zA-Z0-9-]{1,20}){0,5})?$/.test(parsed.version))
+        !/^\d{1,3}\.\d{1,3}\.\d{1,3}(-[a-zA-Z0-9-]{1,20}(\.[a-zA-Z0-9-]{1,20}){0,5})?$/.test(
+          parsed.version
+        ))
     ) {
       errors.push('Version must follow semantic versioning format (e.g., 1.2.3, 1.0.0-alpha.1)');
     }

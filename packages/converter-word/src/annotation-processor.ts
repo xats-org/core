@@ -282,7 +282,7 @@ export class AnnotationProcessor {
     if (typeof text !== 'string') {
       return String(text || '');
     }
-    
+
     // Order is important: escape & first to avoid double-escaping
     return text
       .replace(/&/g, '&amp;')
@@ -290,6 +290,7 @@ export class AnnotationProcessor {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&apos;')
+      // eslint-disable-next-line no-control-regex
       .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ''); // Remove control characters
   }
 }
