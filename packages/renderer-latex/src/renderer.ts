@@ -237,18 +237,49 @@ export class LaTeXRenderer implements BidirectionalRenderer<LaTeXRendererOptions
   }
 
   /**
-   * Estimate word count from LaTeX content
+   * Estimate word count from LaTeX content - Fixed incomplete sanitization vulnerability
    */
   private estimateWordCount(content: string): number {
-    // Remove LaTeX commands and count words in text content
-    const textContent = content
-      .replace(/\\[a-zA-Z]+\*?(?:\[[^\]]*\])?(?:\{[^}]*\})*\s*/g, ' ') // Remove commands
-      .replace(/\$[^$]+\$/g, ' ') // Remove inline math
-      .replace(/\$\$[^$]+\$\$/g, ' ') // Remove display math
-      .replace(/\\begin\{[^}]+\}.*?\\end\{[^}]+\}/gs, ' ') // Remove environments
-      .replace(/%.*/g, '') // Remove comments
-      .replace(/\s+/g, ' ') // Normalize whitespace
+    // Fixed incomplete multi-character sanitization by using a comprehensive approach
+    if (!content || typeof content !== 'string') {
+      return 0;
+    }
+    
+    // Limit input length to prevent excessive processing
+    let safeContent = content.length > 100000 ? content.substring(0, 100000) : content;
+    
+    // Step 1: Remove potentially dangerous content first
+    safeContent = safeContent
+      // Remove comments completely (they might contain misleading content)
+      .replace(/%.*$/gm, '')
+      // Remove verbatim environments completely
+      .replace(/\\begin\{verbatim\}[\s\S]*?\\end\{verbatim\}/g, ' ')
+      .replace(/\\begin\{lstlisting\}[\s\S]*?\\end\{lstlisting\}/g, ' ')
+      // Remove math environments completely (display math)
+      .replace(/\\\[[\s\S]*?\\\]/g, ' ')
+      .replace(/\$\$[\s\S]*?\$\$/g, ' ')
+      // Remove inline math
+      .replace(/\$[^$]*\$/g, ' ')
+      // Remove other environments
+      .replace(/\\begin\{[^}]+\}[\s\S]*?\\end\{[^}]+\}/g, ' ');
+    
+    // Step 2: Remove LaTeX commands systematically
+    safeContent = safeContent
+      // Remove commands with multiple parameters
+      .replace(/\\[a-zA-Z]+\*?(?:\[[^\]]*\])*(?:\{[^}]*\})*/g, ' ')
+      // Remove any remaining braces
+      .replace(/[{}]/g, ' ')
+      // Remove remaining backslashes
+      .replace(/\\/g, ' ');
+    
+    // Step 3: Final cleanup - normalize whitespace completely
+    const textContent = safeContent
+      .replace(/\s+/g, ' ')
       .trim();
+
+    if (!textContent) {
+      return 0;
+    }
 
     return textContent.split(/\s+/).filter((word) => word.length > 0).length;
   }

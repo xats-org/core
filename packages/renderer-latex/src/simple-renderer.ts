@@ -521,20 +521,40 @@ export class SimpleLaTeXRenderer
   }
 
   /**
-   * Escape LaTeX special characters
+   * Escape LaTeX special characters - Fixed incomplete escaping vulnerability
    */
   private escapeLatex(text: string): string {
-    return text
-      .replace(/\\/g, '\\textbackslash{}')
-      .replace(/\{/g, '\\{')
-      .replace(/\}/g, '\\}')
-      .replace(/\$/g, '\\$')
-      .replace(/&/g, '\\&')
-      .replace(/%/g, '\\%')
-      .replace(/#/g, '\\#')
-      .replace(/\^/g, '\\textasciicircum{}')
-      .replace(/_/g, '\\_')
-      .replace(/~/g, '\\textasciitilde{}');
+    if (typeof text !== 'string') {
+      return String(text || '');
+    }
+
+    // Order is important: escape backslash first to avoid double-escaping
+    return (
+      text
+        .replace(/\\/g, '\\textbackslash{}')
+        .replace(/\{/g, '\\{')
+        .replace(/\}/g, '\\}')
+        .replace(/\$/g, '\\$')
+        .replace(/&/g, '\\&')
+        .replace(/%/g, '\\%')
+        .replace(/#/g, '\\#')
+        .replace(/\^/g, '\\textasciicircum{}')
+        .replace(/_/g, '\\_')
+        .replace(/~/g, '\\textasciitilde{}')
+        // Additional LaTeX special characters
+        .replace(/\|/g, '\\textbar{}')
+        .replace(/</g, '\\textless{}')
+        .replace(/>/g, '\\textgreater{}')
+        .replace(/"/g, '\\textquotedbl{}')
+        // Remove or escape control characters that could cause LaTeX issues
+        // eslint-disable-next-line no-control-regex
+        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+        // Handle unicode characters that need special treatment in LaTeX
+        .replace(/[\u2013\u2014]/g, '--') // em/en dashes
+        .replace(/[\u2018\u2019]/g, "'") // smart quotes
+        .replace(/[\u201C\u201D]/g, '"') // smart double quotes
+        .replace(/\u00A0/g, '~')
+    ); // non-breaking space
   }
 
   /**

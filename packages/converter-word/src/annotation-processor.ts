@@ -276,14 +276,23 @@ export class AnnotationProcessor {
   }
 
   /**
-   * Escape XML content
+   * Escape XML content - Fixed incomplete escaping vulnerability
    */
   private escapeXml(text: string): string {
-    return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&apos;');
+    if (typeof text !== 'string') {
+      return String(text || '');
+    }
+
+    // Order is important: escape & first to avoid double-escaping
+    return (
+      text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;')
+        // eslint-disable-next-line no-control-regex
+        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+    ); // Remove control characters
   }
 }
