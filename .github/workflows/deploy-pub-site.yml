@@ -424,7 +424,7 @@ jobs:
           for md_file in *.md; do
             if [ -f "$md_file" ]; then
               html_file="${md_file%.md}.html"
-                cat > "$html_file" << EOF
+                cat > "$html_file" << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -451,7 +451,7 @@ jobs:
     </div>
 </body>
 </html>
-EOF
+HTMLEOF
             fi
           done
         fi
