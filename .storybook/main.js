@@ -1,4 +1,8 @@
-const { join, dirname } = require('path');
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
@@ -20,9 +24,14 @@ const config = {
     autodocs: 'tag',
   },
   async viteFinal(config) {
-    // Set base path for GitHub Pages deployment
+    // Set base path based on deployment target
     const isProduction = process.env.NODE_ENV === 'production';
-    const base = isProduction ? '/core/' : '/';
+    const deployTarget = process.env.DEPLOY_TARGET || 'github-pages';
+    
+    // For pub.xats.org deployment, use /storybook/ as base path
+    // For GitHub Pages deployment, use /core/ (legacy support)
+    const base = isProduction && deployTarget === 'pub-site' ? '/storybook/' : 
+                 isProduction ? '/core/' : '/';
     
     return {
       ...config,
@@ -70,4 +79,4 @@ const config = {
   },
 };
 
-module.exports = config;
+export default config;

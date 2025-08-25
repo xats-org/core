@@ -36,7 +36,9 @@
     "bench": "vitest bench",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "storybook:test": "test-storybook"
+    "storybook:test": "test-storybook",
+    "build:pub-site": "pnpm run build && DEPLOY_TARGET=pub-site NODE_ENV=production pnpm run storybook:build",
+    "serve:pub-site": "npx http-server pub-site -p 8080 -c-1"
   },
   "keywords": [
     "xats",

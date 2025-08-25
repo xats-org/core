@@ -146,4 +146,5 @@ temp/
 # Storybook
 storybook-static/
 screenshots/
+pub-site/
 
