@@ -95,11 +95,33 @@ jobs:
       with:
         fetch-depth: 0  # Full history for better detection
     
+    - name: Check if TruffleHog should run
+      id: should_scan
+      run: |
+        # Get the current branch name
+        CURRENT_BRANCH="${GITHUB_REF#refs/heads/}"
+        DEFAULT_BRANCH="${{ github.event.repository.default_branch }}"
+        
+        # For push events to the default branch, compare with the previous commit
+        if [[ "${{ github.event_name }}" == "push" && "$CURRENT_BRANCH" == "$DEFAULT_BRANCH" ]]; then
+          echo "scan_base=${{ github.event.before }}" >> $GITHUB_OUTPUT
+          echo "should_run=true" >> $GITHUB_OUTPUT
+        # For pull requests, compare with the base branch
+        elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          echo "scan_base=${{ github.event.pull_request.base.sha }}" >> $GITHUB_OUTPUT
+          echo "should_run=true" >> $GITHUB_OUTPUT
+        # For other push events, compare with the default branch
+        else
+          echo "scan_base=$DEFAULT_BRANCH" >> $GITHUB_OUTPUT
+          echo "should_run=true" >> $GITHUB_OUTPUT
+        fi
+    
     - name: TruffleHog OSS
+      if: steps.should_scan.outputs.should_run == 'true'
       uses: trufflesecurity/trufflehog@main
       with:
         path: ./
-        base: ${{ github.event.repository.default_branch }}
+        base: ${{ steps.should_scan.outputs.scan_base }}
         head: HEAD
         extra_args: --debug --only-verified
 
