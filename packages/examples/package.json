@@ -67,7 +67,7 @@
     "@xats-org/validator": "workspace:*",
     "eslint": "^8.56.0",
     "@xats-org/eslint-config": "workspace:*",
-    "tsx": "^4.7.0",
+    "tsx": "^4.20.5",
     "typescript": "^5.3.3"
   },
   "engines": {
