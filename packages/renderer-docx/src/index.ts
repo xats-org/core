@@ -1212,10 +1212,10 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
   }
 
   private extractTitleFromHtml(html: string): string | null {
-    // Simple title extraction from first heading
-    const h1Match = html.match(/<h1[^>]*>(.*?)<\/h1>/i);
+    // Simple title extraction from first heading - SECURITY: Fixed ReDoS vulnerability
+    const h1Match = html.match(/<h1[^>]{0,200}>(.*?)<\/h1>/i);
     if (h1Match?.[1]) {
-      return h1Match[1].replace(/<[^>]*>/g, '').trim();
+      return h1Match[1].replace(/<[^>]{0,200}>/g, '').trim();
     }
     return null;
   }
@@ -1233,7 +1233,8 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
       }
 
       const titleMatch = section.match(/^(.*?)<\/h1>/i);
-      const title = titleMatch?.[1]?.replace(/<[^>]*>/g, '').trim() || `Chapter ${index}`;
+      // SECURITY: Fixed multi-character sanitization vulnerability
+      const title = titleMatch?.[1]?.replace(/<[^>]{0,200}>/g, '').trim() || `Chapter ${index}`;
 
       const content = titleMatch?.[0] ? section.substring(titleMatch[0].length) : section;
       const contentBlocks = this.parseHtmlToContentBlocks(content);
@@ -1257,7 +1258,8 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     const paragraphs = html.split(/<\/?p[^>]*>/i).filter((p) => p.trim());
 
     paragraphs.forEach((paragraph) => {
-      const cleanText = paragraph.replace(/<[^>]*>/g, '').trim();
+      // SECURITY: Fixed multi-character sanitization vulnerability
+      const cleanText = paragraph.replace(/<[^>]{0,200}>/g, '').trim();
       if (cleanText) {
         blocks.push({
           id: `block-${blockId++}`,

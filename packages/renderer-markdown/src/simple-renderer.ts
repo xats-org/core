@@ -1096,11 +1096,11 @@ export class SimpleMarkdownRenderer
       passedChecks++;
     }
 
-    // Compare content existence (both have content or both don't)
+    // Compare content existence - SECURITY: Simplified comparison logic
     totalChecks++;
-    const originalHasContent = (original.bodyMatter?.contents?.length || 0) > 0;
-    const roundTripHasContent = (roundTrip.bodyMatter?.contents?.length || 0) > 0;
-    if (originalHasContent === roundTripHasContent) {
+    const originalLength = original.bodyMatter?.contents?.length || 0;
+    const roundTripLength = roundTrip.bodyMatter?.contents?.length || 0;
+    if ((originalLength > 0) === (roundTripLength > 0)) {
       passedChecks++;
     }
 

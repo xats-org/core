@@ -150,8 +150,8 @@ export class MathProcessor {
       const [, envName, star, content] = match;
       const numbered = star !== '*';
 
-      // Extract label if present
-      const labelMatch = content?.match(/\\label\{([^}]+)\}/);
+      // Extract label if present - SECURITY: Fixed ReDoS vulnerability with length limit
+      const labelMatch = content?.match(/\\label\{([^}]{1,100})\}/);
 
       const environment: MathEnvironment = {
         name: envName || '',
