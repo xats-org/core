@@ -369,11 +369,10 @@ export class DocumentRenderer {
     // SECURITY: Two-pass escaping system to prevent LaTeX injection attacks
     // First pass: Replace dangerous characters with safe placeholders
     // Second pass: Convert placeholders to LaTeX commands
-    
+
     // Define safe placeholder tokens that cannot conflict with input
     const PLACEHOLDER_PREFIX = '___XATS_LATEX_ESC_';
     const PLACEHOLDER_SUFFIX = '___';
-    
     const dangerousChars = new Map([
       ['\\', `${PLACEHOLDER_PREFIX}BACKSLASH${PLACEHOLDER_SUFFIX}`],
       ['{', `${PLACEHOLDER_PREFIX}LBRACE${PLACEHOLDER_SUFFIX}`],
