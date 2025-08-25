@@ -723,7 +723,7 @@ export class SimpleMarkdownRenderer
     if (!text || typeof text !== 'string') {
       return '';
     }
-    
+
     return (
       text
         .replace(/\\/g, '\\\\')
