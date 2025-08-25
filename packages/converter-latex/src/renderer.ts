@@ -366,65 +366,64 @@ export class DocumentRenderer {
   }
 
   private escapeLaTeX(text: string): string {
-    // SECURITY: Comprehensive escaping to prevent LaTeX injection attacks
-    // Use character-by-character processing to avoid replacement interference
-    const chars = Array.from(text);
-    const result: string[] = [];
+    // SECURITY: Two-pass escaping system to prevent LaTeX injection attacks
+    // First pass: Replace dangerous characters with safe placeholders
+    // Second pass: Convert placeholders to LaTeX commands
+    
+    // Define safe placeholder tokens that cannot conflict with input
+    const PLACEHOLDER_PREFIX = '___XATS_LATEX_ESC_';
+    const PLACEHOLDER_SUFFIX = '___';
+    
+    const dangerousChars = new Map([
+      ['\\', `${PLACEHOLDER_PREFIX}BACKSLASH${PLACEHOLDER_SUFFIX}`],
+      ['{', `${PLACEHOLDER_PREFIX}LBRACE${PLACEHOLDER_SUFFIX}`],
+      ['}', `${PLACEHOLDER_PREFIX}RBRACE${PLACEHOLDER_SUFFIX}`],
+      ['$', `${PLACEHOLDER_PREFIX}DOLLAR${PLACEHOLDER_SUFFIX}`],
+      ['&', `${PLACEHOLDER_PREFIX}AMPERSAND${PLACEHOLDER_SUFFIX}`],
+      ['%', `${PLACEHOLDER_PREFIX}PERCENT${PLACEHOLDER_SUFFIX}`],
+      ['#', `${PLACEHOLDER_PREFIX}HASH${PLACEHOLDER_SUFFIX}`],
+      ['^', `${PLACEHOLDER_PREFIX}CARET${PLACEHOLDER_SUFFIX}`],
+      ['_', `${PLACEHOLDER_PREFIX}UNDERSCORE${PLACEHOLDER_SUFFIX}`],
+      ['~', `${PLACEHOLDER_PREFIX}TILDE${PLACEHOLDER_SUFFIX}`],
+      ['[', `${PLACEHOLDER_PREFIX}LBRACKET${PLACEHOLDER_SUFFIX}`],
+      [']', `${PLACEHOLDER_PREFIX}RBRACKET${PLACEHOLDER_SUFFIX}`],
+      ['<', `${PLACEHOLDER_PREFIX}LT${PLACEHOLDER_SUFFIX}`],
+      ['>', `${PLACEHOLDER_PREFIX}GT${PLACEHOLDER_SUFFIX}`],
+      ['|', `${PLACEHOLDER_PREFIX}PIPE${PLACEHOLDER_SUFFIX}`],
+    ]);
 
-    for (const char of chars) {
-      switch (char) {
-        case '\\':
-          result.push('\\textbackslash{}');
-          break;
-        case '{':
-          result.push('\\{');
-          break;
-        case '}':
-          result.push('\\}');
-          break;
-        case '$':
-          result.push('\\$');
-          break;
-        case '&':
-          result.push('\\&');
-          break;
-        case '%':
-          result.push('\\%');
-          break;
-        case '#':
-          result.push('\\#');
-          break;
-        case '^':
-          result.push('\\textasciicircum{}');
-          break;
-        case '_':
-          result.push('\\_');
-          break;
-        case '~':
-          result.push('\\textasciitilde{}');
-          break;
-        case '[':
-          result.push('\\lbrack{}');
-          break;
-        case ']':
-          result.push('\\rbrack{}');
-          break;
-        case '<':
-          result.push('\\textless{}');
-          break;
-        case '>':
-          result.push('\\textgreater{}');
-          break;
-        case '|':
-          result.push('\\textbar{}');
-          break;
-        default:
-          result.push(char);
-          break;
-      }
+    const latexCommands = new Map([
+      [`${PLACEHOLDER_PREFIX}BACKSLASH${PLACEHOLDER_SUFFIX}`, '\\textbackslash{}'],
+      [`${PLACEHOLDER_PREFIX}LBRACE${PLACEHOLDER_SUFFIX}`, '\\{'],
+      [`${PLACEHOLDER_PREFIX}RBRACE${PLACEHOLDER_SUFFIX}`, '\\}'],
+      [`${PLACEHOLDER_PREFIX}DOLLAR${PLACEHOLDER_SUFFIX}`, '\\$'],
+      [`${PLACEHOLDER_PREFIX}AMPERSAND${PLACEHOLDER_SUFFIX}`, '\\&'],
+      [`${PLACEHOLDER_PREFIX}PERCENT${PLACEHOLDER_SUFFIX}`, '\\%'],
+      [`${PLACEHOLDER_PREFIX}HASH${PLACEHOLDER_SUFFIX}`, '\\#'],
+      [`${PLACEHOLDER_PREFIX}CARET${PLACEHOLDER_SUFFIX}`, '\\textasciicircum{}'],
+      [`${PLACEHOLDER_PREFIX}UNDERSCORE${PLACEHOLDER_SUFFIX}`, '\\_'],
+      [`${PLACEHOLDER_PREFIX}TILDE${PLACEHOLDER_SUFFIX}`, '\\textasciitilde{}'],
+      [`${PLACEHOLDER_PREFIX}LBRACKET${PLACEHOLDER_SUFFIX}`, '\\lbrack{}'],
+      [`${PLACEHOLDER_PREFIX}RBRACKET${PLACEHOLDER_SUFFIX}`, '\\rbrack{}'],
+      [`${PLACEHOLDER_PREFIX}LT${PLACEHOLDER_SUFFIX}`, '\\textless{}'],
+      [`${PLACEHOLDER_PREFIX}GT${PLACEHOLDER_SUFFIX}`, '\\textgreater{}'],
+      [`${PLACEHOLDER_PREFIX}PIPE${PLACEHOLDER_SUFFIX}`, '\\textbar{}'],
+    ]);
+
+    // First pass: Character-by-character replacement with safe placeholders
+    let result = '';
+    for (const char of text) {
+      const placeholder = dangerousChars.get(char);
+      result += placeholder || char;
     }
 
-    return result.join('');
+    // Second pass: Convert placeholders to LaTeX commands
+    for (const [placeholder, command] of latexCommands) {
+      // Use split/join instead of regex to avoid any regex-related vulnerabilities
+      result = result.split(placeholder).join(command);
+    }
+
+    return result;
   }
 
   // Utility methods for metadata
