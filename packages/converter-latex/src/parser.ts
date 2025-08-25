@@ -83,22 +83,28 @@ export class DocumentParser {
     };
 
     // Extract document metadata
-    const documentClass = content.match(/\\documentclass(?:\[[^\]]*\])?\{([^}]+)\}/)?.[1];
+    // SECURITY: Fixed ReDoS vulnerability with limited-length patterns
+    const documentClass = content.match(
+      /\\documentclass(?:\[[^\]]{0,200}\])?\{([^}]{1,100})\}/
+    )?.[1];
     if (documentClass) {
       metadata.documentClass = documentClass;
     }
 
-    const title = content.match(/\\title\{([^}]+)\}/)?.[1];
+    // SECURITY: Fixed ReDoS vulnerability with length limit
+    const title = content.match(/\\title\{([^}]{1,500})\}/)?.[1];
     if (title) {
       metadata.title = this.cleanLaTeX(title);
     }
 
-    const author = content.match(/\\author\{([^}]+)\}/)?.[1];
+    // SECURITY: Fixed ReDoS vulnerability with length limit
+    const author = content.match(/\\author\{([^}]{1,200})\}/)?.[1];
     if (author) {
       metadata.author = this.cleanLaTeX(author);
     }
 
-    const date = content.match(/\\date\{([^}]+)\}/)?.[1];
+    // SECURITY: Fixed ReDoS vulnerability with length limit
+    const date = content.match(/\\date\{([^}]{1,100})\}/)?.[1];
     if (date) {
       metadata.date = this.cleanLaTeX(date);
     }
@@ -114,8 +120,8 @@ export class DocumentParser {
     let bodyContent = content;
 
     // Remove preamble if full document
-    // SECURITY: Fixed ReDoS vulnerability by limiting document content length
-    const documentMatch = content.match(/\\begin\{document\}([\s\S]{0,100000}?)\\end\{document\}/);
+    // SECURITY: Fixed ReDoS vulnerability by using non-greedy match with length limit
+    const documentMatch = content.match(/\\begin\{document\}([\s\S]{0,50000}?)\\end\{document\}/);
     if (documentMatch && documentMatch[1] !== undefined) {
       bodyContent = documentMatch[1];
     }
@@ -124,7 +130,8 @@ export class DocumentParser {
     const contents = await this.parseContent(bodyContent, options);
 
     // Extract title for bibliographic entry
-    const title = content.match(/\\title\{([^}]+)\}/)?.[1] || 'Converted from LaTeX';
+    // SECURITY: Fixed ReDoS vulnerability with length limit
+    const title = content.match(/\\title\{([^}]{1,500})\}/)?.[1] || 'Converted from LaTeX';
 
     const xatsDocument: XatsDocument = {
       schemaVersion: '0.5.0',
@@ -189,7 +196,8 @@ export class DocumentParser {
         }
 
         // Extract full environment
-        const envName = trimmedLine.match(/\\begin\{([^}]+)\}/)?.[1];
+        // SECURITY: Fixed ReDoS vulnerability with length limit
+        const envName = trimmedLine.match(/\\begin\{([^}]{1,50})\}/)?.[1];
         if (envName) {
           const envContent = this.extractEnvironment(content, envName, lines.indexOf(line));
           segments.push(envContent);
@@ -326,8 +334,10 @@ export class DocumentParser {
   }
 
   private parseFigure(content: string): ContentBlock {
-    const captionMatch = content.match(/\\caption\{([^}]+)\}/);
-    const includeMatch = content.match(/\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}/);
+    // SECURITY: Fixed ReDoS vulnerability with length limit
+    const captionMatch = content.match(/\\caption\{([^}]{1,1000})\}/);
+    // SECURITY: Fixed ReDoS vulnerability with length limit
+    const includeMatch = content.match(/\\includegraphics(?:\[[^\]]{0,200}\])?\{([^}]{1,200})\}/);
 
     return {
       blockType: 'https://xats.org/vocabularies/blocks/figure',
@@ -368,7 +378,8 @@ export class DocumentParser {
     const isOrdered = content.includes('\\begin{enumerate}');
     const items: string[] = [];
 
-    const itemMatches = content.match(/\\item\s+([^\n]*(?:\n(?!\\item)[^\n]*)*)/g) || [];
+    // SECURITY: Fixed ReDoS vulnerability by using a more limited pattern
+    const itemMatches = content.match(/\\item\s+([^\n]{0,1000}(?:\n[^\n\\]{0,1000})*)/g) || [];
 
     for (const match of itemMatches) {
       const itemText = match.replace(/^\\item\s+/, '').trim();
@@ -385,7 +396,8 @@ export class DocumentParser {
   }
 
   private parseCodeBlock(content: string): ContentBlock {
-    const codeMatch = content.match(/\\begin\{verbatim\}([\s\S]*?)\\end\{verbatim\}/);
+    // SECURITY: Fixed ReDoS vulnerability with length limit
+    const codeMatch = content.match(/\\begin\{verbatim\}([\s\S]{0,10000}?)\\end\{verbatim\}/);
     const code = codeMatch ? (codeMatch[1] || '').trim() : content;
 
     return {

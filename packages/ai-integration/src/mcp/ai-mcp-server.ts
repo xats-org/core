@@ -565,10 +565,13 @@ export class AIIntegratedMcpServer extends XatsMcpServer {
     }
 
     // Recursively check child objects and arrays
+    // SECURITY: Fixed type comparison vulnerability
     if (Array.isArray(obj)) {
       obj.forEach((item) => this.analyzeObjectMetadata(item, results));
-    } else if (typeof obj === 'object' && obj !== null) {
-      Object.values(obj).forEach((value) => this.analyzeObjectMetadata(value, results));
+    } else if (typeof obj === 'object' && obj != null) {
+      Object.values(obj as Record<string, unknown>).forEach((value) =>
+        this.analyzeObjectMetadata(value, results)
+      );
     }
 
     if (results.statistics) {

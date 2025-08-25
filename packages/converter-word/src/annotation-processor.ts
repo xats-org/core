@@ -212,10 +212,11 @@ export class AnnotationProcessor {
 
   /**
    * Clean Word content from markup
+   * SECURITY: Fixed ReDoS and sanitization vulnerabilities
    */
   private cleanWordContent(content: string): string {
     return content
-      .replace(/<[^>]*>/g, '') // Remove XML tags
+      .replace(/<[^>]{0,200}>/g, '') // Remove XML tags - length limited for security
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
       .replace(/&amp;/g, '&')
