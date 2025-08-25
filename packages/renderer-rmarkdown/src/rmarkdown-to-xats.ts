@@ -338,7 +338,8 @@ export class RMarkdownToXatsParser {
       }
 
       // List detection
-      if (/^\s*[-*+]\s/.test(line) || /^\s*\d+\.\s/.test(line)) { // Fixed ReDoS - use test() instead of match()
+      if (/^\s*[-*+]\s/.test(line) || /^\s*\d+\.\s/.test(line)) {
+        // Fixed ReDoS - use test() instead of match()
         if (!inList) {
           if (currentBlock.length > 0) {
             blocks.push(...this.parseTextContent(currentBlock.join('\n')));
@@ -390,7 +391,10 @@ export class RMarkdownToXatsParser {
   private parseTextContent(text: string): ContentBlock[] {
     const blocks: ContentBlock[] = [];
     // Fixed ReDoS vulnerability - limit the number of paragraphs to prevent excessive processing
-    const paragraphs = text.split(/\n\s*\n/).filter((p) => p.trim()).slice(0, 1000);
+    const paragraphs = text
+      .split(/\n\s*\n/)
+      .filter((p) => p.trim())
+      .slice(0, 1000);
 
     for (const paragraph of paragraphs) {
       const trimmed = paragraph.trim();
@@ -398,7 +402,8 @@ export class RMarkdownToXatsParser {
 
       if (trimmed.startsWith('>')) {
         blocks.push(this.parseBlockquoteContent(paragraph));
-      } else if (trimmed.length < 10000 && /^\s*\$\$[\s\S]{0,5000}\$\$\s*$/.test(trimmed)) { // Fixed ReDoS - limit length and use test()
+      } else if (trimmed.length < 10000 && /^\s*\$\$[\s\S]{0,5000}\$\$\s*$/.test(trimmed)) {
+        // Fixed ReDoS - limit length and use test()
         blocks.push(this.parseMathBlockContent(paragraph));
       } else {
         blocks.push(this.parseParagraphContent(paragraph));
@@ -439,7 +444,8 @@ export class RMarkdownToXatsParser {
     const firstLine = lines[0];
 
     // Extract language from first line - Fixed ReDoS by limiting backticks and whitespace
-    const languageMatch = firstLine && firstLine.length < 200 ? firstLine.match(/^`{3,10}\s{0,10}(\w{0,20})?/) : null;
+    const languageMatch =
+      firstLine && firstLine.length < 200 ? firstLine.match(/^`{3,10}\s{0,10}(\w{0,20})?/) : null;
     const language = languageMatch?.[1] || '';
 
     // Extract code (excluding fence lines)
@@ -484,7 +490,8 @@ export class RMarkdownToXatsParser {
 
     for (const line of lines) {
       // Fixed ReDoS - use more specific patterns with length limits
-      const orderedMatch = line.length < 1000 ? line.match(/^\s{0,20}\d{1,3}\.\s+(.{1,500})$/) : null;
+      const orderedMatch =
+        line.length < 1000 ? line.match(/^\s{0,20}\d{1,3}\.\s+(.{1,500})$/) : null;
       const unorderedMatch = line.length < 1000 ? line.match(/^\s{0,20}[-*+]\s+(.{1,500})$/) : null;
 
       if (orderedMatch && orderedMatch[1]) {
@@ -604,9 +611,11 @@ export class RMarkdownToXatsParser {
       // Strong: **text** - Fixed ReDoS by using non-backtracking approach
       if (remaining.startsWith('**')) {
         const closeIndex = remaining.indexOf('**', 2);
-        if (closeIndex > 2 && closeIndex < 502) { // Limit length to prevent ReDoS
+        if (closeIndex > 2 && closeIndex < 502) {
+          // Limit length to prevent ReDoS
           const content = remaining.substring(2, closeIndex);
-          if (content && !content.includes('*')) { // Ensure no nested asterisks
+          if (content && !content.includes('*')) {
+            // Ensure no nested asterisks
             runs.push({
               runType: 'strong',
               text: content,
@@ -621,9 +630,11 @@ export class RMarkdownToXatsParser {
       // Emphasis: *text* - Fixed ReDoS by using non-backtracking approach
       if (remaining.startsWith('*') && !remaining.startsWith('**')) {
         const closeIndex = remaining.indexOf('*', 1);
-        if (closeIndex > 1 && closeIndex < 501) { // Limit length
+        if (closeIndex > 1 && closeIndex < 501) {
+          // Limit length
           const content = remaining.substring(1, closeIndex);
-          if (content && !content.includes('*')) { // Ensure no nested asterisks
+          if (content && !content.includes('*')) {
+            // Ensure no nested asterisks
             runs.push({
               runType: 'emphasis',
               text: content,
@@ -638,7 +649,8 @@ export class RMarkdownToXatsParser {
       // Code: `code` - Fixed ReDoS by using non-backtracking approach
       if (remaining.startsWith('`')) {
         const closeIndex = remaining.indexOf('`', 1);
-        if (closeIndex > 1 && closeIndex < 501) { // Limit length
+        if (closeIndex > 1 && closeIndex < 501) {
+          // Limit length
           const content = remaining.substring(1, closeIndex);
           runs.push({
             runType: 'code',
@@ -654,14 +666,14 @@ export class RMarkdownToXatsParser {
       if (!matched) {
         let nextSpecialIndex = -1;
         const specialChars = ['@', '\\', '*', '`'];
-        
+
         for (const char of specialChars) {
           const index = remaining.indexOf(char);
           if (index >= 0 && (nextSpecialIndex === -1 || index < nextSpecialIndex)) {
             nextSpecialIndex = index;
           }
         }
-        
+
         if (nextSpecialIndex === -1) {
           // No more special characters
           runs.push({
@@ -877,7 +889,8 @@ export class RMarkdownToXatsParser {
     if (this.frontmatter.date) {
       // Fixed ReDoS - add length check and more specific pattern
       const dateStr = String(this.frontmatter.date);
-      const dateMatch = dateStr.length < 50 ? dateStr.match(/^(\d{4})[-]?(\d{2})?[-]?(\d{2})?/) : null;
+      const dateMatch =
+        dateStr.length < 50 ? dateStr.match(/^(\d{4})[-]?(\d{2})?[-]?(\d{2})?/) : null;
       if (dateMatch && dateMatch[1]) {
         entry.issued = {
           'date-parts': [
