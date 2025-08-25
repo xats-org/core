@@ -1,6 +1,6 @@
 import { XatsRenderer, type XatsRendererProps } from '../components/XatsRenderer';
-import type { Story } from '@ladle/react';
 
+import type { Story } from '@ladle/react';
 import type { XatsDocument } from '@xats-org/types';
 
 export default {
