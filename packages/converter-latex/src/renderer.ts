@@ -367,23 +367,64 @@ export class DocumentRenderer {
 
   private escapeLaTeX(text: string): string {
     // SECURITY: Comprehensive escaping to prevent LaTeX injection attacks
-    // Order is important - backslashes must be escaped first
-    return text
-      .replace(/\\/g, '\\textbackslash{}') // Escape backslashes first
-      .replace(/\{/g, '\\{') // Escape opening braces
-      .replace(/\}/g, '\\}') // Escape closing braces
-      .replace(/\$/g, '\\$') // Escape dollar signs (math mode)
-      .replace(/&/g, '\\&') // Escape ampersands (table alignment)
-      .replace(/%/g, '\\%') // Escape percent signs (comments)
-      .replace(/#/g, '\\#') // Escape hash signs (macro parameters)
-      .replace(/\^/g, '\\textasciicircum{}') // Escape carets (superscript)
-      .replace(/_/g, '\\_') // Escape underscores (subscript)
-      .replace(/~/g, '\\textasciitilde{}') // Escape tildes (non-breaking space)
-      .replace(/\[/g, '\\lbrack{}') // Escape square brackets (optional args)
-      .replace(/\]/g, '\\rbrack{}') // Escape square brackets
-      .replace(/</g, '\\textless{}') // Escape less than
-      .replace(/>/g, '\\textgreater{}') // Escape greater than
-      .replace(/\|/g, '\\textbar{}'); // Escape pipe characters
+    // Use character-by-character processing to avoid replacement interference
+    const chars = Array.from(text);
+    const result: string[] = [];
+    
+    for (const char of chars) {
+      switch (char) {
+        case '\\':
+          result.push('\\textbackslash{}');
+          break;
+        case '{':
+          result.push('\\{');
+          break;
+        case '}':
+          result.push('\\}');
+          break;
+        case '$':
+          result.push('\\$');
+          break;
+        case '&':
+          result.push('\\&');
+          break;
+        case '%':
+          result.push('\\%');
+          break;
+        case '#':
+          result.push('\\#');
+          break;
+        case '^':
+          result.push('\\textasciicircum{}');
+          break;
+        case '_':
+          result.push('\\_');
+          break;
+        case '~':
+          result.push('\\textasciitilde{}');
+          break;
+        case '[':
+          result.push('\\lbrack{}');
+          break;
+        case ']':
+          result.push('\\rbrack{}');
+          break;
+        case '<':
+          result.push('\\textless{}');
+          break;
+        case '>':
+          result.push('\\textgreater{}');
+          break;
+        case '|':
+          result.push('\\textbar{}');
+          break;
+        default:
+          result.push(char);
+          break;
+      }
+    }
+    
+    return result.join('');
   }
 
   // Utility methods for metadata
