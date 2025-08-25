@@ -439,7 +439,7 @@ export class RMarkdownToXatsParser {
     const firstLine = lines[0];
 
     // Extract language from first line - Fixed ReDoS by limiting backticks and whitespace
-    const languageMatch = firstLine?.length < 200 ? firstLine.match(/^`{3,10}\s{0,10}(\w{0,20})?/) : null;
+    const languageMatch = firstLine && firstLine.length < 200 ? firstLine.match(/^`{3,10}\s{0,10}(\w{0,20})?/) : null;
     const language = languageMatch?.[1] || '';
 
     // Extract code (excluding fence lines)
