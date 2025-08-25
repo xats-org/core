@@ -17,10 +17,10 @@ pub.xats.org/
 
 ## URL Structure
 
-### Component Library (Storybook)
-- **URL**: `https://pub.xats.org/storybook/`
+### Component Library (Ladle)
+- **URL**: `https://pub.xats.org/storybook/` (URL preserved for backward compatibility)
 - **Purpose**: Interactive documentation for xats renderer components
-- **Built from**: `.storybook/` configuration + `packages/*/src/**/*.stories.tsx`
+- **Built from**: `.ladle/` configuration + `packages/*/src/**/*.stories.tsx`
 
 ### JSON Schemas
 - **URL**: `https://pub.xats.org/schemas/`
@@ -67,7 +67,7 @@ pub.xats.org/
 
 3. **Access locally**:
    - Main site: http://localhost:8080
-   - Storybook: http://localhost:8080/storybook/
+   - Component Library: http://localhost:8080/storybook/
    - Schemas: http://localhost:8080/schemas/
    - Documentation: http://localhost:8080/docs/
    - Examples: http://localhost:8080/examples/
@@ -78,14 +78,14 @@ Deployment is automated via GitHub Actions when changes are pushed to the `main`
 
 1. **Trigger**: Push to `main` with changes to:
    - `packages/**`
-   - `.storybook/**`
+   - `.ladle/**`
    - `docs/**`
    - `examples/**`
    - Build configuration files
 
 2. **Process**:
    - Build all packages (`pnpm run build`)
-   - Build Storybook with `DEPLOY_TARGET=pub-site`
+   - Build Ladle with `DEPLOY_TARGET=pub-site`
    - Copy and organize all assets
    - Generate navigation pages
    - Deploy to GitHub Pages
@@ -94,14 +94,16 @@ Deployment is automated via GitHub Actions when changes are pushed to the `main`
 
 ## Configuration Details
 
-### Storybook Configuration
+### Component Library Configuration
 
-The Storybook build is configured to handle different deployment targets:
+The Ladle build is configured for the production deployment:
 
 ```javascript
-// .storybook/main.js
-const isPubSite = process.env.DEPLOY_TARGET === 'pub-site';
-const base = isPubSite ? '/storybook/' : (isProduction ? '/core/' : '/');
+// .ladle/config.mjs
+export default {
+  stories: 'packages/*/src/stories/*.stories.{ts,tsx}',
+  outDir: 'ladle-build'
+};
 ```
 
 **Environment Variables**:
@@ -111,7 +113,7 @@ const base = isPubSite ? '/storybook/' : (isProduction ? '/core/' : '/');
 ### URL Routing
 
 **Base Paths by Component**:
-- Storybook: `/storybook/` (when `DEPLOY_TARGET=pub-site`)
+- Component Library: `/storybook/` (Ladle build output)
 - Schemas: `/schemas/` (static files)
 - Documentation: `/docs/` (static files)
 - Examples: `/examples/` (static files)
@@ -125,10 +127,10 @@ The custom domain `pub.xats.org` is configured via:
 
 ## Troubleshooting
 
-### Storybook Path Issues
+### Component Library Path Issues
 
-**Problem**: Storybook assets not loading correctly
-**Solution**: Verify `DEPLOY_TARGET=pub-site` is set during build
+**Problem**: Ladle assets not loading correctly
+**Solution**: Verify the build output is correctly copied to `/storybook/` directory
 
 ### Schema URL Access
 
@@ -140,7 +142,7 @@ The custom domain `pub.xats.org` is configured via:
 **Common Issues**:
 1. **Missing dependencies**: Run `pnpm install` before building
 2. **Build errors**: Check individual package builds with `pnpm run build`
-3. **Storybook errors**: Test Storybook separately with `pnpm run storybook`
+3. **Ladle errors**: Test Ladle separately with `pnpm run ladle`
 
 ### Local vs Production Differences
 
@@ -166,11 +168,11 @@ The custom domain `pub.xats.org` is configured via:
 2. Update the documentation index page if needed
 3. The build process will automatically convert and include them
 
-### Updating Storybook
+### Updating Component Library
 
 1. Add new stories to `packages/*/src/**/*.stories.tsx`
 2. The build process will automatically include them
-3. Test with `pnpm run storybook` locally
+3. Test with `pnpm run ladle` locally
 
 ### Adding New Examples
 
@@ -190,4 +192,4 @@ The custom domain `pub.xats.org` is configured via:
 - **CDN**: GitHub Pages serves content via CDN
 - **Caching**: Static assets have appropriate cache headers
 - **Compression**: Assets are automatically compressed
-- **Bundle Size**: Monitor Storybook bundle size in builds
+- **Bundle Size**: Monitor Ladle bundle size in builds (typically smaller than Storybook)

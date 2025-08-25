@@ -1,4 +1,4 @@
-name: Storybook
+name: Component Documentation (Ladle)
 
 on:
   workflow_dispatch:  # Allow manual triggering
@@ -8,7 +8,7 @@ on:
       - 'v*.*.*'
     paths:
       - 'packages/*/src/**'
-      - '.storybook/**'
+      - '.ladle/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
   pull_request:
@@ -17,13 +17,13 @@ on:
       - 'v*.*.*'
     paths:
       - 'packages/*/src/**'
-      - '.storybook/**'
+      - '.ladle/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
 
 jobs:
-  build-storybook:
-    name: Build Storybook
+  build-ladle:
+    name: Build Ladle
     runs-on: ubuntu-latest
     
     steps:
@@ -58,20 +58,20 @@ jobs:
     - name: Build remaining packages
       run: pnpm run build
       
-    - name: Build Storybook
-      run: pnpm run storybook:build
+    - name: Build Ladle
+      run: pnpm run ladle:build
       
-    - name: Upload Storybook artifacts
+    - name: Upload Ladle artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: storybook-static
-        path: storybook-static
+        name: ladle-static
+        path: ladle-build
         retention-days: 7
         
-  test-storybook:
-    name: Test Storybook
+  test-ladle:
+    name: Test Ladle
     runs-on: ubuntu-latest
-    needs: [build-storybook]
+    needs: [build-ladle]
     if: github.event_name == 'pull_request'
     
     steps:
@@ -92,25 +92,25 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile --ignore-scripts
       
-    - name: Download Storybook artifacts
+    - name: Download Ladle artifacts
       uses: actions/download-artifact@v5
       with:
-        name: storybook-static
-        path: storybook-static
+        name: ladle-static
+        path: ladle-build
         
-    - name: Run Storybook tests
+    - name: Run Ladle tests
       run: |
-        echo "Storybook test setup pending - skipping for now"
+        echo "Ladle test setup pending - skipping for now"
         # TODO: Add proper test setup with playwright
         # npx playwright install --with-deps
-        # npx http-server storybook-static --port 6006 --silent &
-        # npx wait-on http://localhost:6006
-        # pnpm run storybook:test
+        # npx http-server ladle-build --port 61000 --silent &
+        # npx wait-on http://localhost:61000
+        # Add custom Ladle testing if needed
         
-  deploy-storybook:
-    name: Deploy Storybook to GitHub Pages
+  deploy-ladle:
+    name: Deploy Ladle to GitHub Pages
     runs-on: ubuntu-latest
-    needs: [build-storybook]
+    needs: [build-ladle]
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     
     permissions:
@@ -123,11 +123,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
       
     steps:
-    - name: Download Storybook artifacts
+    - name: Download Ladle artifacts
       uses: actions/download-artifact@v5
       with:
-        name: storybook-static
-        path: storybook-static
+        name: ladle-static
+        path: ladle-build
         
     - name: Setup Pages
       uses: actions/configure-pages@v5
@@ -135,7 +135,7 @@ jobs:
     - name: Upload to Pages
       uses: actions/upload-pages-artifact@v3
       with:
-        path: storybook-static
+        path: ladle-build
         
     - name: Deploy to GitHub Pages
       id: deployment
