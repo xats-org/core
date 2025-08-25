@@ -1,11 +1,7 @@
-import type { StorybookConfig } from '@storybook/react-vite';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+const { join, dirname } = require('path');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const config: StorybookConfig = {
+/** @type { import('@storybook/react-vite').StorybookConfig } */
+const config = {
   stories: [
     '../packages/*/src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
@@ -17,13 +13,13 @@ const config: StorybookConfig = {
     '@storybook/addon-coverage',
   ],
   framework: {
-    name: '@storybook/react-vite' as any,
+    name: '@storybook/react-vite',
     options: {},
   },
   docs: {
     autodocs: 'tag',
   },
-  viteFinal: async (config) => {
+  async viteFinal(config) {
     // Set base path for GitHub Pages deployment
     const isProduction = process.env.NODE_ENV === 'production';
     const base = isProduction ? '/core/' : '/';
@@ -74,4 +70,4 @@ const config: StorybookConfig = {
   },
 };
 
-export default config;
+module.exports = config;

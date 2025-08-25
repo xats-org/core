@@ -1,7 +1,7 @@
-import type { Preview } from '@storybook/react';
-import React from 'react';
+const React = require('react');
 
-const preview: Preview = {
+/** @type { import('@storybook/react').Preview } */
+const preview = {
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
@@ -25,12 +25,8 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (Story) => (
-      <div style={{ padding: '1rem' }}>
-        <Story />
-      </div>
-    ),
+    (Story) => React.createElement('div', { style: { padding: '1rem' } }, React.createElement(Story)),
   ],
 };
 
-export default preview;
+module.exports = preview;
