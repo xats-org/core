@@ -199,8 +199,7 @@ export class LaTeXParser {
    * Extract xats document from parsed LaTeX
    */
   private async extractDocument(parsed: any, originalContent: string): Promise<XatsDocument> {
-    // Extract metadata
-    const metadata = await this.extractMetadata(originalContent);
+    // SECURITY: Removed unused variable (metadata extraction for future use)
 
     // Create base document
     const document: XatsDocument = {

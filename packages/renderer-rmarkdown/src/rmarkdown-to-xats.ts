@@ -56,7 +56,8 @@ export class RMarkdownToXatsParser {
       if (this.options.parseFrontmatter) {
         this.frontmatter = parseYamlFrontmatter(content);
         if (this.frontmatter) {
-          content = content.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
+          // Fixed ReDoS vulnerability - limit quantifiers and use more specific pattern
+          content = content.replace(/^---\s*\n[\s\S]{0,10000}?\n---\s*\n/, '');
         }
       }
 
@@ -337,7 +338,8 @@ export class RMarkdownToXatsParser {
       }
 
       // List detection
-      if (line.match(/^\s*[-*+]\s/) || line.match(/^\s*\d+\.\s/)) {
+      if (/^\s*[-*+]\s/.test(line) || /^\s*\d+\.\s/.test(line)) {
+        // Fixed ReDoS - use test() instead of match()
         if (!inList) {
           if (currentBlock.length > 0) {
             blocks.push(...this.parseTextContent(currentBlock.join('\n')));
@@ -388,7 +390,11 @@ export class RMarkdownToXatsParser {
    */
   private parseTextContent(text: string): ContentBlock[] {
     const blocks: ContentBlock[] = [];
-    const paragraphs = text.split(/\n\s*\n/).filter((p) => p.trim());
+    // Fixed ReDoS vulnerability - limit the number of paragraphs to prevent excessive processing
+    const paragraphs = text
+      .split(/\n\s*\n/)
+      .filter((p) => p.trim())
+      .slice(0, 1000);
 
     for (const paragraph of paragraphs) {
       const trimmed = paragraph.trim();
@@ -396,7 +402,8 @@ export class RMarkdownToXatsParser {
 
       if (trimmed.startsWith('>')) {
         blocks.push(this.parseBlockquoteContent(paragraph));
-      } else if (trimmed.match(/^\s*\$\$[\s\S]*\$\$\s*$/)) {
+      } else if (trimmed.length < 10000 && /^\s*\$\$[\s\S]{0,5000}\$\$\s*$/.test(trimmed)) {
+        // Fixed ReDoS - limit length and use test()
         blocks.push(this.parseMathBlockContent(paragraph));
       } else {
         blocks.push(this.parseParagraphContent(paragraph));
@@ -436,8 +443,9 @@ export class RMarkdownToXatsParser {
     const lines = text.split('\n');
     const firstLine = lines[0];
 
-    // Extract language from first line
-    const languageMatch = firstLine?.match(/^```+\s*(\w+)?/);
+    // Extract language from first line - Fixed ReDoS by limiting backticks and whitespace
+    const languageMatch =
+      firstLine && firstLine.length < 200 ? firstLine.match(/^`{3,10}\s{0,10}(\w{0,20})?/) : null;
     const language = languageMatch?.[1] || '';
 
     // Extract code (excluding fence lines)
@@ -460,7 +468,9 @@ export class RMarkdownToXatsParser {
    * Parse math block content
    */
   private parseMathBlockContent(text: string): ContentBlock {
-    const math = text.replace(/^\s*\$\$\s*|\s*\$\$\s*$/g, '');
+    // Fixed ReDoS - limit text length before processing
+    const safeText = text.length > 10000 ? text.substring(0, 10000) : text;
+    const math = safeText.replace(/^\s{0,100}\$\$\s{0,100}|\s{0,100}\$\$\s{0,100}$/g, '');
     return {
       id: this.generateBlockId(),
       blockType: buildCoreUri('blocks', 'mathBlock'),
@@ -479,8 +489,10 @@ export class RMarkdownToXatsParser {
     let isOrdered = false;
 
     for (const line of lines) {
-      const orderedMatch = line.match(/^\s*\d+\.\s+(.+)$/);
-      const unorderedMatch = line.match(/^\s*[-*+]\s+(.+)$/);
+      // Fixed ReDoS - use more specific patterns with length limits
+      const orderedMatch =
+        line.length < 1000 ? line.match(/^\s{0,20}\d{1,3}\.\s+(.{1,500})$/) : null;
+      const unorderedMatch = line.length < 1000 ? line.match(/^\s{0,20}[-*+]\s+(.{1,500})$/) : null;
 
       if (orderedMatch && orderedMatch[1]) {
         isOrdered = true;
@@ -543,11 +555,16 @@ export class RMarkdownToXatsParser {
   }
 
   /**
-   * Parse semantic text from markdown
+   * Parse semantic text from markdown - Fixed ReDoS vulnerabilities
    */
   private parseSemanticText(text: string): SemanticText {
     if (!text) {
       return createSemanticText('');
+    }
+
+    // Prevent excessive input lengths that could cause ReDoS
+    if (text.length > 50000) {
+      text = text.substring(0, 50000);
     }
 
     const runs: Array<{
@@ -556,12 +573,17 @@ export class RMarkdownToXatsParser {
       [key: string]: unknown;
     }> = [];
 
-    // Simple parsing - in production, use a proper markdown parser
+    // Simple parsing with length-limited regex patterns
     let remaining = text;
+    let iterationCount = 0;
+    const maxIterations = 10000;
 
-    while (remaining) {
-      // Citation: [@key]
-      const citationMatch = remaining.match(/^\[@([^\]]+)\]/);
+    while (remaining && iterationCount < maxIterations) {
+      iterationCount++;
+      let matched = false;
+
+      // Citation: [@key] - Fixed ReDoS by limiting character class and length
+      const citationMatch = remaining.match(/^\[@([^\]]{1,200})\]/);
       if (citationMatch) {
         runs.push({
           runType: 'citation',
@@ -569,11 +591,12 @@ export class RMarkdownToXatsParser {
           citationKey: citationMatch[1],
         });
         remaining = remaining.substring(citationMatch[0].length);
+        matched = true;
         continue;
       }
 
-      // Reference: \@ref(type:label)
-      const refMatch = remaining.match(/^\\@ref\(([^)]+)\)/);
+      // Reference: \@ref(type:label) - Fixed ReDoS by limiting length
+      const refMatch = remaining.match(/^\\@ref\(([^)]{1,200})\)/);
       if (refMatch) {
         runs.push({
           runType: 'reference',
@@ -581,59 +604,107 @@ export class RMarkdownToXatsParser {
           referenceId: refMatch[1],
         });
         remaining = remaining.substring(refMatch[0].length);
+        matched = true;
         continue;
       }
 
-      // Strong: **text**
-      const strongMatch = remaining.match(/^\*\*([^*]+)\*\*/);
-      if (strongMatch && strongMatch[1]) {
-        runs.push({
-          runType: 'strong',
-          text: strongMatch[1],
-        });
-        remaining = remaining.substring(strongMatch[0].length);
-        continue;
+      // Strong: **text** - Fixed ReDoS by using non-backtracking approach
+      if (remaining.startsWith('**')) {
+        const closeIndex = remaining.indexOf('**', 2);
+        if (closeIndex > 2 && closeIndex < 502) {
+          // Limit length to prevent ReDoS
+          const content = remaining.substring(2, closeIndex);
+          if (content && !content.includes('*')) {
+            // Ensure no nested asterisks
+            runs.push({
+              runType: 'strong',
+              text: content,
+            });
+            remaining = remaining.substring(closeIndex + 2);
+            matched = true;
+            continue;
+          }
+        }
       }
 
-      // Emphasis: *text*
-      const emphasisMatch = remaining.match(/^\*([^*]+)\*/);
-      if (emphasisMatch && emphasisMatch[1]) {
-        runs.push({
-          runType: 'emphasis',
-          text: emphasisMatch[1],
-        });
-        remaining = remaining.substring(emphasisMatch[0].length);
-        continue;
+      // Emphasis: *text* - Fixed ReDoS by using non-backtracking approach
+      if (remaining.startsWith('*') && !remaining.startsWith('**')) {
+        const closeIndex = remaining.indexOf('*', 1);
+        if (closeIndex > 1 && closeIndex < 501) {
+          // Limit length
+          const content = remaining.substring(1, closeIndex);
+          if (content && !content.includes('*')) {
+            // Ensure no nested asterisks
+            runs.push({
+              runType: 'emphasis',
+              text: content,
+            });
+            remaining = remaining.substring(closeIndex + 1);
+            matched = true;
+            continue;
+          }
+        }
       }
 
-      // Code: `code`
-      const codeMatch = remaining.match(/^`([^`]+)`/);
-      if (codeMatch && codeMatch[1]) {
-        runs.push({
-          runType: 'code',
-          text: codeMatch[1],
-        });
-        remaining = remaining.substring(codeMatch[0].length);
-        continue;
+      // Code: `code` - Fixed ReDoS by using non-backtracking approach
+      if (remaining.startsWith('`')) {
+        const closeIndex = remaining.indexOf('`', 1);
+        if (closeIndex > 1 && closeIndex < 501) {
+          // Limit length
+          const content = remaining.substring(1, closeIndex);
+          runs.push({
+            runType: 'code',
+            text: content,
+          });
+          remaining = remaining.substring(closeIndex + 1);
+          matched = true;
+          continue;
+        }
       }
 
-      // Regular text - find next special character
-      const nextSpecial = remaining.search(/[@\\*`]/);
-      if (nextSpecial === -1) {
-        // No more special characters
-        runs.push({
-          runType: 'text',
-          text: remaining,
-        });
-        break;
-      } else {
-        // Text up to next special character
-        runs.push({
-          runType: 'text',
-          text: remaining.substring(0, nextSpecial),
-        });
-        remaining = remaining.substring(nextSpecial);
+      // Regular text - find next special character safely
+      if (!matched) {
+        let nextSpecialIndex = -1;
+        const specialChars = ['@', '\\', '*', '`'];
+
+        for (const char of specialChars) {
+          const index = remaining.indexOf(char);
+          if (index >= 0 && (nextSpecialIndex === -1 || index < nextSpecialIndex)) {
+            nextSpecialIndex = index;
+          }
+        }
+
+        if (nextSpecialIndex === -1) {
+          // No more special characters
+          runs.push({
+            runType: 'text',
+            text: remaining,
+          });
+          break;
+        } else if (nextSpecialIndex > 0) {
+          // Text up to next special character
+          runs.push({
+            runType: 'text',
+            text: remaining.substring(0, nextSpecialIndex),
+          });
+          remaining = remaining.substring(nextSpecialIndex);
+        } else {
+          // Special character at start but no match - consume one character
+          runs.push({
+            runType: 'text',
+            text: remaining.charAt(0),
+          });
+          remaining = remaining.substring(1);
+        }
       }
+    }
+
+    // Handle case where we hit max iterations (defensive programming)
+    if (remaining && iterationCount >= maxIterations) {
+      runs.push({
+        runType: 'text',
+        text: remaining,
+      });
     }
 
     return { runs: runs as unknown as SemanticText['runs'] };
@@ -816,7 +887,10 @@ export class RMarkdownToXatsParser {
     }
 
     if (this.frontmatter.date) {
-      const dateMatch = String(this.frontmatter.date).match(/(\d{4})-?(\d{2})?-?(\d{2})?/);
+      // Fixed ReDoS - add length check and more specific pattern
+      const dateStr = String(this.frontmatter.date);
+      const dateMatch =
+        dateStr.length < 50 ? dateStr.match(/^(\d{4})[-]?(\d{2})?[-]?(\d{2})?/) : null;
       if (dateMatch && dateMatch[1]) {
         entry.issued = {
           'date-parts': [

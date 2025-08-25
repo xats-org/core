@@ -366,24 +366,63 @@ export class DocumentRenderer {
   }
 
   private escapeLaTeX(text: string): string {
-    // SECURITY: Comprehensive escaping to prevent LaTeX injection attacks
-    // Order is important - backslashes must be escaped first
-    return text
-      .replace(/\\/g, '\\textbackslash{}') // Escape backslashes first
-      .replace(/\{/g, '\\{') // Escape opening braces
-      .replace(/\}/g, '\\}') // Escape closing braces
-      .replace(/\$/g, '\\$') // Escape dollar signs (math mode)
-      .replace(/&/g, '\\&') // Escape ampersands (table alignment)
-      .replace(/%/g, '\\%') // Escape percent signs (comments)
-      .replace(/#/g, '\\#') // Escape hash signs (macro parameters)
-      .replace(/\^/g, '\\textasciicircum{}') // Escape carets (superscript)
-      .replace(/_/g, '\\_') // Escape underscores (subscript)
-      .replace(/~/g, '\\textasciitilde{}') // Escape tildes (non-breaking space)
-      .replace(/\[/g, '\\lbrack{}') // Escape square brackets (optional args)
-      .replace(/\]/g, '\\rbrack{}') // Escape square brackets
-      .replace(/</g, '\\textless{}') // Escape less than
-      .replace(/>/g, '\\textgreater{}') // Escape greater than
-      .replace(/\|/g, '\\textbar{}'); // Escape pipe characters
+    // SECURITY: Two-pass escaping system to prevent LaTeX injection attacks
+    // First pass: Replace dangerous characters with safe placeholders
+    // Second pass: Convert placeholders to LaTeX commands
+
+    // Define safe placeholder tokens that cannot conflict with input
+    const PLACEHOLDER_PREFIX = '___XATS_LATEX_ESC_';
+    const PLACEHOLDER_SUFFIX = '___';
+    const dangerousChars = new Map([
+      ['\\', `${PLACEHOLDER_PREFIX}BACKSLASH${PLACEHOLDER_SUFFIX}`],
+      ['{', `${PLACEHOLDER_PREFIX}LBRACE${PLACEHOLDER_SUFFIX}`],
+      ['}', `${PLACEHOLDER_PREFIX}RBRACE${PLACEHOLDER_SUFFIX}`],
+      ['$', `${PLACEHOLDER_PREFIX}DOLLAR${PLACEHOLDER_SUFFIX}`],
+      ['&', `${PLACEHOLDER_PREFIX}AMPERSAND${PLACEHOLDER_SUFFIX}`],
+      ['%', `${PLACEHOLDER_PREFIX}PERCENT${PLACEHOLDER_SUFFIX}`],
+      ['#', `${PLACEHOLDER_PREFIX}HASH${PLACEHOLDER_SUFFIX}`],
+      ['^', `${PLACEHOLDER_PREFIX}CARET${PLACEHOLDER_SUFFIX}`],
+      ['_', `${PLACEHOLDER_PREFIX}UNDERSCORE${PLACEHOLDER_SUFFIX}`],
+      ['~', `${PLACEHOLDER_PREFIX}TILDE${PLACEHOLDER_SUFFIX}`],
+      ['[', `${PLACEHOLDER_PREFIX}LBRACKET${PLACEHOLDER_SUFFIX}`],
+      [']', `${PLACEHOLDER_PREFIX}RBRACKET${PLACEHOLDER_SUFFIX}`],
+      ['<', `${PLACEHOLDER_PREFIX}LT${PLACEHOLDER_SUFFIX}`],
+      ['>', `${PLACEHOLDER_PREFIX}GT${PLACEHOLDER_SUFFIX}`],
+      ['|', `${PLACEHOLDER_PREFIX}PIPE${PLACEHOLDER_SUFFIX}`],
+    ]);
+
+    const latexCommands = new Map([
+      [`${PLACEHOLDER_PREFIX}BACKSLASH${PLACEHOLDER_SUFFIX}`, '\\textbackslash{}'],
+      [`${PLACEHOLDER_PREFIX}LBRACE${PLACEHOLDER_SUFFIX}`, '\\{'],
+      [`${PLACEHOLDER_PREFIX}RBRACE${PLACEHOLDER_SUFFIX}`, '\\}'],
+      [`${PLACEHOLDER_PREFIX}DOLLAR${PLACEHOLDER_SUFFIX}`, '\\$'],
+      [`${PLACEHOLDER_PREFIX}AMPERSAND${PLACEHOLDER_SUFFIX}`, '\\&'],
+      [`${PLACEHOLDER_PREFIX}PERCENT${PLACEHOLDER_SUFFIX}`, '\\%'],
+      [`${PLACEHOLDER_PREFIX}HASH${PLACEHOLDER_SUFFIX}`, '\\#'],
+      [`${PLACEHOLDER_PREFIX}CARET${PLACEHOLDER_SUFFIX}`, '\\textasciicircum{}'],
+      [`${PLACEHOLDER_PREFIX}UNDERSCORE${PLACEHOLDER_SUFFIX}`, '\\_'],
+      [`${PLACEHOLDER_PREFIX}TILDE${PLACEHOLDER_SUFFIX}`, '\\textasciitilde{}'],
+      [`${PLACEHOLDER_PREFIX}LBRACKET${PLACEHOLDER_SUFFIX}`, '\\lbrack{}'],
+      [`${PLACEHOLDER_PREFIX}RBRACKET${PLACEHOLDER_SUFFIX}`, '\\rbrack{}'],
+      [`${PLACEHOLDER_PREFIX}LT${PLACEHOLDER_SUFFIX}`, '\\textless{}'],
+      [`${PLACEHOLDER_PREFIX}GT${PLACEHOLDER_SUFFIX}`, '\\textgreater{}'],
+      [`${PLACEHOLDER_PREFIX}PIPE${PLACEHOLDER_SUFFIX}`, '\\textbar{}'],
+    ]);
+
+    // First pass: Character-by-character replacement with safe placeholders
+    let result = '';
+    for (const char of text) {
+      const placeholder = dangerousChars.get(char);
+      result += placeholder || char;
+    }
+
+    // Second pass: Convert placeholders to LaTeX commands
+    for (const [placeholder, command] of latexCommands) {
+      // Use split/join instead of regex to avoid any regex-related vulnerabilities
+      result = result.split(placeholder).join(command);
+    }
+
+    return result;
   }
 
   // Utility methods for metadata
