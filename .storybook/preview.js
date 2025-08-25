@@ -1,4 +1,4 @@
-const React = require('react');
+import React from 'react';
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
@@ -29,4 +29,4 @@ const preview = {
   ],
 };
 
-module.exports = preview;
+export default preview;
