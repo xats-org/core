@@ -59,12 +59,12 @@ Implement comprehensive rights management through:
 ### 3. License URI Vocabulary
 
 Standardized URIs for common licenses:
-- `https://xats.org/licenses/cc-by-4.0` (Creative Commons)
-- `https://xats.org/licenses/cc-by-sa-4.0` (Share Alike)
-- `https://xats.org/licenses/cc-by-nc-4.0` (Non-Commercial)
-- `https://xats.org/licenses/proprietary` (All rights reserved)
-- `https://xats.org/licenses/public-domain` (No rights reserved)
-- `https://xats.org/licenses/educational-use-only` (Educational restriction)
+- `https://pub.xats.org/licenses/cc-by-4.0` (Creative Commons)
+- `https://pub.xats.org/licenses/cc-by-sa-4.0` (Share Alike)
+- `https://pub.xats.org/licenses/cc-by-nc-4.0` (Non-Commercial)
+- `https://pub.xats.org/licenses/proprietary` (All rights reserved)
+- `https://pub.xats.org/licenses/public-domain` (No rights reserved)
+- `https://pub.xats.org/licenses/educational-use-only` (Educational restriction)
 
 ## Implementation Details
 
@@ -111,7 +111,7 @@ Standardized URIs for common licenses:
 ```json
 {
   "rights": {
-    "license": "https://xats.org/licenses/cc-by-sa-4.0",
+    "license": "https://pub.xats.org/licenses/cc-by-sa-4.0",
     "copyrightHolder": "Academic Press Inc.",
     "copyrightYear": "2023"
   }
@@ -122,7 +122,7 @@ Standardized URIs for common licenses:
 ```json
 {
   "rights": {
-    "license": "https://xats.org/licenses/cc-by-nc-4.0",
+    "license": "https://pub.xats.org/licenses/cc-by-nc-4.0",
     "restrictions": {
       "noCommercialUse": true,
       "educationalUseOnly": true
@@ -136,7 +136,7 @@ Standardized URIs for common licenses:
 ```json
 {
   "resourceRights": {
-    "license": "https://xats.org/licenses/proprietary",
+    "license": "https://pub.xats.org/licenses/proprietary",
     "permissions": {
       "redistribute": false,
       "modify": false,

@@ -2,7 +2,7 @@
 
 **Type:** `object`  
 **Introduced in:** v0.5.0  
-**Block Type URI:** `https://xats.org/vocabularies/blocks/problemScenario`
+**Block Type URI:** `https://pub.xats.org/vocabularies/blocks/problemScenario`
 
 ---
 
@@ -71,7 +71,7 @@ Problem-based learning blocks are designed to engage students with real-world pr
 
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/problemScenario",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/problemScenario",
   "content": {
     "scenario": {
       "runs": [

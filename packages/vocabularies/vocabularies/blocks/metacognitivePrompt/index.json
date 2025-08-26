@@ -1,23 +1,23 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
+  "$id": "https://pub.xats.org/vocabularies/blocks/metacognitivePrompt",
   "title": "Metacognitive Prompt Block",
   "description": "A block for self-reflection prompts that encourage students to think about their own learning process and develop metacognitive awareness",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
+      "const": "https://pub.xats.org/vocabularies/blocks/metacognitivePrompt",
       "description": "The URI identifier for this block type"
     },
     "content": {
-      "$ref": "https://xats.org/schemas/0.3.0/xats.json#/definitions/MetacognitivePromptContent",
+      "$ref": "https://pub.xats.org/schemas/0.3.0/xats.json#/definitions/MetacognitivePromptContent",
       "description": "The metacognitive prompt content including the main prompt, type, and scaffolding support"
     }
   },
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/metacognitivePrompt",
       "content": {
         "prompt": {
           "runs": [
@@ -74,7 +74,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/metacognitivePrompt",
       "content": {
         "prompt": {
           "runs": [

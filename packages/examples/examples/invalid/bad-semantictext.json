@@ -33,7 +33,7 @@
             "content": [
               {
                 "id": "p1",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": "Should be SemanticText object, not string"
                 }

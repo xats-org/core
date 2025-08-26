@@ -23,7 +23,7 @@
             "title": "Semantic Intent Hints",
             "renderingHints": [
               {
-                "hintType": "https://xats.org/vocabularies/hints/pedagogical/introduction",
+                "hintType": "https://pub.xats.org/vocabularies/hints/pedagogical/introduction",
                 "value": "introduction",
                 "priority": 4,
                 "inheritance": "cascade"
@@ -33,10 +33,10 @@
               {
                 "id": "warning-example",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/semantic/warning",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/semantic/warning",
                     "value": "warning",
                     "priority": 5,
                     "conditions": {
@@ -44,12 +44,12 @@
                       "userPreferences": ["high-contrast"]
                     },
                     "fallback": {
-                      "hintType": "https://xats.org/vocabularies/hints/prominence/level",
+                      "hintType": "https://pub.xats.org/vocabularies/hints/prominence/level",
                       "value": 4
                     }
                   },
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/accessibility/screen-reader-priority-high",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/accessibility/screen-reader-priority-high",
                     "value": "screen-reader-priority-high",
                     "priority": 5
                   }
@@ -72,20 +72,20 @@
               {
                 "id": "key-concept-example",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/pedagogical/key-concept",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/pedagogical/key-concept",
                     "value": "key-concept",
                     "priority": 4
                   },
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/semantic/featured",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/semantic/featured",
                     "value": "featured",
                     "priority": 3
                   },
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/layout/keep-together",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/layout/keep-together",
                     "value": "keep-together",
                     "priority": 3,
                     "conditions": {
@@ -111,16 +111,16 @@
               {
                 "id": "prominence-example",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/prominence/level",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/prominence/level",
                     "value": 2,
                     "priority": 2,
                     "inheritance": "no-inherit"
                   },
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/semantic/secondary",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/semantic/secondary",
                     "value": "secondary"
                   }
                 ],
@@ -145,10 +145,10 @@
               {
                 "id": "floating-content",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/figure",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/figure",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/layout/float-right",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/layout/float-right",
                     "value": {
                       "position": "float",
                       "width": "300px", 
@@ -158,12 +158,12 @@
                       "mediaQuery": "screen and (min-width: 768px)"
                     },
                     "fallback": {
-                      "hintType": "https://xats.org/vocabularies/hints/layout/center",
+                      "hintType": "https://pub.xats.org/vocabularies/hints/layout/center",
                       "value": "center"
                     }
                   },
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/media/placement",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/media/placement",
                     "value": {
                       "placement": "float-right",
                       "size": "medium",
@@ -187,10 +187,10 @@
               {
                 "id": "page-break-example",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/heading",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/heading",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/layout/avoid-page-break-after",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/layout/avoid-page-break-after",
                     "value": "avoid-page-break-after",
                     "conditions": {
                       "outputFormats": ["pdf", "print", "docx"]
@@ -211,10 +211,10 @@
               {
                 "id": "related-content",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/layout/keep-together",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/layout/keep-together",
                     "value": "keep-together",
                     "priority": 4,
                     "conditions": {
@@ -241,7 +241,7 @@
             "title": "Accessibility Enhancement Hints",
             "renderingHints": [
               {
-                "hintType": "https://xats.org/vocabularies/hints/accessibility/keyboard-shortcut",
+                "hintType": "https://pub.xats.org/vocabularies/hints/accessibility/keyboard-shortcut",
                 "value": {
                   "keyboardShortcut": "Alt+A",
                   "ariaLabel": "Accessibility examples section"
@@ -252,10 +252,10 @@
               {
                 "id": "high-priority-alert",
                 "language": "en", 
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/accessibility/aria-live-assertive",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/accessibility/aria-live-assertive",
                     "value": {
                       "ariaLabel": "Critical accessibility notice",
                       "cognitiveSupport": {
@@ -266,7 +266,7 @@
                     "priority": 5
                   },
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/semantic/error",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/semantic/error",
                     "value": "error"
                   }
                 ],
@@ -288,10 +288,10 @@
               {
                 "id": "cognitive-support-example",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph", 
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph", 
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/accessibility/cognitive-load-high",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/accessibility/cognitive-load-high",
                     "value": {
                       "cognitiveSupport": {
                         "simplifyLanguage": true,
@@ -323,10 +323,10 @@
               {
                 "id": "inline-math-example",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/mathBlock",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/mathematics/display",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/mathematics/display",
                     "value": {
                       "displayStyle": "inline",
                       "preferredNotation": "latex",
@@ -343,10 +343,10 @@
               {
                 "id": "block-math-example",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/mathBlock",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/mathematics/display",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/mathematics/display",
                     "value": {
                       "displayStyle": "numbered",
                       "preferredNotation": "mathml",
@@ -359,7 +359,7 @@
                       "outputFormats": ["html"]
                     },
                     "fallback": {
-                      "hintType": "https://xats.org/vocabularies/hints/mathematics/display",
+                      "hintType": "https://pub.xats.org/vocabularies/hints/mathematics/display",
                       "value": {
                         "displayStyle": "numbered",
                         "preferredNotation": "latex",
@@ -384,7 +384,7 @@
               {
                 "id": "reference-paragraph",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -398,7 +398,7 @@
                         "refId": "semantic-hints-section",
                         "renderingHints": [
                           {
-                            "hintType": "https://xats.org/vocabularies/hints/cross-reference/style",
+                            "hintType": "https://pub.xats.org/vocabularies/hints/cross-reference/style",
                             "value": {
                               "style": "parenthetical",
                               "includeTitle": true,
@@ -410,7 +410,7 @@
                               "outputFormats": ["html"]
                             },
                             "fallback": {
-                              "hintType": "https://xats.org/vocabularies/hints/cross-reference/style",
+                              "hintType": "https://pub.xats.org/vocabularies/hints/cross-reference/style",
                               "value": {
                                 "style": "parenthetical",
                                 "includePageNumber": true,
@@ -438,7 +438,7 @@
     {
       "id": "demo-chart",
       "language": "en",
-      "type": "https://xats.org/vocabularies/resources/image",
+      "type": "https://pub.xats.org/vocabularies/resources/image",
       "url": "https://example.com/chart.svg",
       "altText": "Chart showing rendering hint usage statistics across HTML, PDF, DOCX, and EPUB formats"
     }

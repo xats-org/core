@@ -12,7 +12,7 @@ This document defines the standard vocabulary URIs for the xats annotation syste
 
 All annotation vocabulary URIs use the base:
 ```
-https://xats.org/vocabularies/annotations/
+https://pub.xats.org/vocabularies/annotations/
 ```
 
 ## Annotation Types
@@ -20,37 +20,37 @@ https://xats.org/vocabularies/annotations/
 ### Core Review Annotations
 
 #### `suggestion`
-**URI:** `https://xats.org/vocabularies/annotations/suggestion`  
+**URI:** `https://pub.xats.org/vocabularies/annotations/suggestion`  
 **Description:** Proposes specific changes to content  
 **Use Case:** Content revision recommendations  
 **Required Properties:** `content`, `suggestedChange` (recommended)  
 
 #### `clarification_request`  
-**URI:** `https://xats.org/vocabularies/annotations/clarification_request`  
+**URI:** `https://pub.xats.org/vocabularies/annotations/clarification_request`  
 **Description:** Requests additional information or explanation  
 **Use Case:** Identifying unclear or ambiguous content  
 **Required Properties:** `content`  
 
 #### `minor_revision_needed`  
-**URI:** `https://xats.org/vocabularies/annotations/minor_revision_needed`  
+**URI:** `https://pub.xats.org/vocabularies/annotations/minor_revision_needed`  
 **Description:** Indicates need for small corrections (typos, formatting, etc.)  
 **Use Case:** Editorial feedback, minor corrections  
 **Required Properties:** `content`  
 
 #### `major_revision_needed`  
-**URI:** `https://xats.org/vocabularies/annotations/major_revision_needed`  
+**URI:** `https://pub.xats.org/vocabularies/annotations/major_revision_needed`  
 **Description:** Indicates need for significant content changes  
 **Use Case:** Structural or substantive content issues  
 **Required Properties:** `content`, `reviewDecision` (recommended)  
 
 #### `approval`  
-**URI:** `https://xats.org/vocabularies/annotations/approval`  
+**URI:** `https://pub.xats.org/vocabularies/annotations/approval`  
 **Description:** Formal approval of content  
 **Use Case:** Peer review sign-off, content validation  
 **Required Properties:** `content`, `reviewDecision`  
 
 #### `rejection`  
-**URI:** `https://xats.org/vocabularies/annotations/rejection`  
+**URI:** `https://pub.xats.org/vocabularies/annotations/rejection`  
 **Description:** Formal rejection of content  
 **Use Case:** Content that doesn't meet standards  
 **Required Properties:** `content`, `reviewDecision`  
@@ -58,22 +58,22 @@ https://xats.org/vocabularies/annotations/
 ### Extended Annotation Types (Future)
 
 #### `question`  
-**URI:** `https://xats.org/vocabularies/annotations/question`  
+**URI:** `https://pub.xats.org/vocabularies/annotations/question`  
 **Description:** Poses a question about the content  
 **Use Case:** Student questions, clarifying discussions  
 
 #### `commendation`  
-**URI:** `https://xats.org/vocabularies/annotations/commendation`  
+**URI:** `https://pub.xats.org/vocabularies/annotations/commendation`  
 **Description:** Positive feedback about content quality  
 **Use Case:** Recognizing excellence, best practices  
 
 #### `accessibility_concern`  
-**URI:** `https://xats.org/vocabularies/annotations/accessibility_concern`  
+**URI:** `https://pub.xats.org/vocabularies/annotations/accessibility_concern`  
 **Description:** Identifies accessibility issues  
 **Use Case:** WCAG compliance review, inclusive design  
 
 #### `pedagogical_concern`  
-**URI:** `https://xats.org/vocabularies/annotations/pedagogical_concern`  
+**URI:** `https://pub.xats.org/vocabularies/annotations/pedagogical_concern`  
 **Description:** Questions about educational effectiveness  
 **Use Case:** Learning objective alignment, instructional design  
 
@@ -166,7 +166,7 @@ Organizations can extend this vocabulary by:
    {
      "renderingHints": [
        {
-         "hintType": "https://xats.org/vocabularies/hints/semantic/annotation",
+         "hintType": "https://pub.xats.org/vocabularies/hints/semantic/annotation",
          "value": "urgent-review"
        }
      ]

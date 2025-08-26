@@ -282,7 +282,7 @@ export class DocumentParser {
     const level = (subs?.length || 0) / 3 + 1; // sub = 3 chars, subsub = 6 chars
 
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/heading',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/heading',
       content: {
         level,
         text: {
@@ -311,7 +311,7 @@ export class DocumentParser {
     );
 
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/mathBlock',
       content: mathData,
     };
   }
@@ -328,7 +328,7 @@ export class DocumentParser {
     );
 
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/mathBlock',
       content: mathData,
     };
   }
@@ -340,7 +340,7 @@ export class DocumentParser {
     const includeMatch = content.match(/\\includegraphics(?:\[[^\]]{0,200}\])?\{([^}]{1,200})\}/);
 
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/figure',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/figure',
       content: {
         src: includeMatch?.[1] || '',
         caption: captionMatch ? this.cleanLaTeX(captionMatch[1] || '') : '',
@@ -366,7 +366,7 @@ export class DocumentParser {
     }
 
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/table',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/table',
       content: {
         rows,
         hasHeader: rows.length > 0,
@@ -387,7 +387,7 @@ export class DocumentParser {
     }
 
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/list',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/list',
       content: {
         ordered: isOrdered,
         items,
@@ -401,7 +401,7 @@ export class DocumentParser {
     const code = codeMatch ? (codeMatch[1] || '').trim() : content;
 
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/codeBlock',
       content: {
         code,
         language: '',
@@ -413,7 +413,7 @@ export class DocumentParser {
     const text = this.parseSemanticText(content, options);
 
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
       content: { text },
     };
   }
@@ -429,7 +429,7 @@ export class DocumentParser {
 
   private createParagraphBlock(content: string): ContentBlock {
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
       content: {
         text: {
           runs: [{ text: this.cleanLaTeX(content) }],

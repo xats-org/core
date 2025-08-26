@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/blocks/list",
+  "$id": "https://pub.xats.org/vocabularies/blocks/list",
   "title": "List Block",
   "description": "A block for ordered or unordered lists",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/blocks/list",
+      "const": "https://pub.xats.org/vocabularies/blocks/list",
       "description": "The URI identifier for this block type"
     },
     "content": {
@@ -20,7 +20,7 @@
         "items": {
           "type": "array",
           "items": {
-            "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText"
+            "$ref": "https://pub.xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText"
           },
           "description": "Array of list items, each as a SemanticText object"
         }
@@ -32,7 +32,7 @@
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/list",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/list",
       "content": {
         "type": "unordered",
         "items": [
@@ -56,7 +56,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/vocabularies/blocks/list",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/list",
       "content": {
         "type": "ordered",
         "items": [

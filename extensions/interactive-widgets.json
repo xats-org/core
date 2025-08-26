@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/extensions/interactive-widgets/schema.json",
+  "$id": "https://pub.xats.org/extensions/interactive-widgets/schema.json",
   "title": "Interactive Widgets Extension for xats",
   "description": "Extension for embedding interactive simulations, diagrams, and visualizations in xats documents.",
   "type": "object",

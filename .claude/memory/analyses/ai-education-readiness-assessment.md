@@ -137,7 +137,7 @@ The xats v0.1.0 schema demonstrates strong foundational design for AI-driven edu
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/learningAnalytics": {
+    "https://pub.xats.org/extensions/learningAnalytics": {
       "trackingLevel": "detailed",
       "metricsToCollect": ["timeOnTask", "attemptCount", "helpRequests"],
       "aiProcessing": {
@@ -181,7 +181,7 @@ The xats v0.1.0 schema demonstrates strong foundational design for AI-driven edu
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/aiGeneration": {
+    "https://pub.xats.org/extensions/aiGeneration": {
       "contentVariation": {
         "difficultyLevels": [1, 2, 3, 4, 5],
         "learningStyles": ["visual", "auditory", "kinesthetic"],

@@ -190,35 +190,35 @@ export class DocumentRenderer {
     options: LaTeXRenderOptions
   ): Promise<string> {
     switch (block.blockType) {
-      case 'https://xats.org/vocabularies/blocks/paragraph':
+      case 'https://pub.xats.org/vocabularies/blocks/paragraph':
         return this.renderParagraph(block);
 
-      case 'https://xats.org/vocabularies/blocks/heading':
+      case 'https://pub.xats.org/vocabularies/blocks/heading':
         return this.renderHeading(block);
 
-      case 'https://xats.org/vocabularies/blocks/mathBlock':
+      case 'https://pub.xats.org/vocabularies/blocks/mathBlock':
         return await this.renderMathBlock(block, options);
 
-      case 'https://xats.org/vocabularies/blocks/codeBlock':
+      case 'https://pub.xats.org/vocabularies/blocks/codeBlock':
         return this.renderCodeBlock(block);
 
-      case 'https://xats.org/vocabularies/blocks/blockquote':
+      case 'https://pub.xats.org/vocabularies/blocks/blockquote':
         return this.renderBlockquote(block);
 
-      case 'https://xats.org/vocabularies/blocks/list':
+      case 'https://pub.xats.org/vocabularies/blocks/list':
         return this.renderList(block);
 
-      case 'https://xats.org/vocabularies/blocks/table':
+      case 'https://pub.xats.org/vocabularies/blocks/table':
         return this.renderTable(block);
 
-      case 'https://xats.org/vocabularies/blocks/figure':
+      case 'https://pub.xats.org/vocabularies/blocks/figure':
         return this.renderFigure(block);
 
       // Educational blocks
-      case 'https://xats.org/vocabularies/blocks/learningObjective':
+      case 'https://pub.xats.org/vocabularies/blocks/learningObjective':
         return this.renderEducationalBlock(block, 'Learning Objective');
 
-      case 'https://xats.org/vocabularies/blocks/definition':
+      case 'https://pub.xats.org/vocabularies/blocks/definition':
         return this.renderEducationalBlock(block, 'Definition');
 
       default:

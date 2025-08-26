@@ -135,7 +135,7 @@ To mark content for ancillary generation, add tags to your xats blocks:
 
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
   "content": {
     "runs": [
       {

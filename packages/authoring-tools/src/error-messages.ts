@@ -83,7 +83,7 @@ export class ErrorMessagesService {
       suggestions.push({
         description: 'Verify that URIs and other formatted fields follow the correct pattern',
         action: 'fix',
-        fix: 'Use valid xats vocabulary URIs like "https://xats.org/vocabularies/blocks/paragraph"',
+        fix: 'Use valid xats vocabulary URIs like "https://pub.xats.org/vocabularies/blocks/paragraph"',
         confidence: 0.85,
       });
     }
@@ -622,7 +622,7 @@ class FormatSuggestionGenerator extends SuggestionGenerator {
       suggestions.push({
         description: 'Use a valid xats vocabulary URI',
         action: 'fix',
-        fix: 'https://xats.org/vocabularies/blocks/paragraph',
+        fix: 'https://pub.xats.org/vocabularies/blocks/paragraph',
         confidence: 0.9,
         automatic: true,
       });

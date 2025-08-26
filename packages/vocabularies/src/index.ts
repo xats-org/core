@@ -57,7 +57,7 @@ export const ancillaryTypes = getVocabularyNames('ancillary');
 /**
  * Vocabulary URI constants
  */
-export const VOCABULARY_BASE_URI = 'https://xats.org/vocabularies';
+export const VOCABULARY_BASE_URI = 'https://pub.xats.org/vocabularies';
 
 export const getVocabularyURI = (category: string, name: string) =>
   `${VOCABULARY_BASE_URI}/${category}/${name}`;

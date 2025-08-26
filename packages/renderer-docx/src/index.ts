@@ -545,30 +545,30 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
     options: Required<DocxRendererOptions>
   ): docx.Paragraph[] {
     switch (block.blockType) {
-      case 'https://xats.org/vocabularies/blocks/paragraph':
+      case 'https://pub.xats.org/vocabularies/blocks/paragraph':
         return this.renderParagraph(block, options);
 
-      case 'https://xats.org/vocabularies/blocks/heading':
+      case 'https://pub.xats.org/vocabularies/blocks/heading':
         return this.renderHeading(block, options);
 
-      case 'https://xats.org/vocabularies/blocks/list':
+      case 'https://pub.xats.org/vocabularies/blocks/list':
         return this.renderList(block, options);
 
-      case 'https://xats.org/vocabularies/blocks/blockquote':
+      case 'https://pub.xats.org/vocabularies/blocks/blockquote':
         return this.renderBlockquote(block, options);
 
-      case 'https://xats.org/vocabularies/blocks/codeBlock':
+      case 'https://pub.xats.org/vocabularies/blocks/codeBlock':
         return this.renderCodeBlock(block, options);
 
-      case 'https://xats.org/vocabularies/blocks/table':
+      case 'https://pub.xats.org/vocabularies/blocks/table':
         return this.renderTable(block, options);
 
-      case 'https://xats.org/vocabularies/blocks/figure':
+      case 'https://pub.xats.org/vocabularies/blocks/figure':
         return this.renderFigure(block, options);
 
-      case 'https://xats.org/vocabularies/placeholders/tableOfContents':
-      case 'https://xats.org/vocabularies/placeholders/bibliography':
-      case 'https://xats.org/vocabularies/placeholders/index':
+      case 'https://pub.xats.org/vocabularies/placeholders/tableOfContents':
+      case 'https://pub.xats.org/vocabularies/placeholders/bibliography':
+      case 'https://pub.xats.org/vocabularies/placeholders/index':
         return this.renderPlaceholder(block, options);
 
       default:
@@ -991,9 +991,9 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
 
   private getPlaceholderType(blockType: string): string {
     const typeMap: Record<string, string> = {
-      'https://xats.org/vocabularies/placeholders/tableOfContents': 'Table of Contents',
-      'https://xats.org/vocabularies/placeholders/bibliography': 'Bibliography',
-      'https://xats.org/vocabularies/placeholders/index': 'Index',
+      'https://pub.xats.org/vocabularies/placeholders/tableOfContents': 'Table of Contents',
+      'https://pub.xats.org/vocabularies/placeholders/bibliography': 'Bibliography',
+      'https://pub.xats.org/vocabularies/placeholders/index': 'Index',
     };
 
     return typeMap[blockType] || 'Placeholder';
@@ -1263,7 +1263,7 @@ export class DocxRenderer implements BidirectionalRenderer<DocxRendererOptions> 
       if (cleanText) {
         blocks.push({
           id: `block-${blockId++}`,
-          blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
           content: {
             text: { runs: [{ type: 'text', text: cleanText }] },
           },

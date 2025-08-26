@@ -103,7 +103,7 @@ describe('Collaborative Project Block Validation', () => {
 
     expect(collaborativeBlock).toBeDefined();
     expect(collaborativeBlock?.blockType).toBe(
-      'https://xats.org/vocabularies/blocks/collaborativeProject'
+      'https://pub.xats.org/vocabularies/blocks/collaborativeProject'
     );
     expect(collaborativeBlock?.content).toBeDefined();
     expect(collaborativeBlock?.content?.title).toBeDefined();

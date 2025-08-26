@@ -42,12 +42,12 @@ The `XatsObject` is the most fundamental base object in the **xats** standard. I
     "landmarkType": "main"
   },
   "rights": {
-    "license": "https://xats.org/licenses/cc-by-4.0",
+    "license": "https://pub.xats.org/licenses/cc-by-4.0",
     "copyrightHolder": "Educational Content Publisher"
   },
   "renderingHints": [
     {
-      "hintType": "https://xats.org/vocabularies/hints/emphasis",
+      "hintType": "https://pub.xats.org/vocabularies/hints/emphasis",
       "value": "important"
     }
   ]

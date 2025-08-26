@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/hints/prominence",
+  "$id": "https://pub.xats.org/vocabularies/hints/prominence",
   "title": "Prominence Level Rendering Hints",
   "description": "Rendering hints that indicate the visual prominence level for content (1-5 scale)",
   "type": "integer",

@@ -22,7 +22,7 @@ describe('WordConverter', () => {
       bodyMatter: {
         contents: [
           {
-            blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+            blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
             content: {
               text: {
                 runs: [{ text: 'This is a test paragraph.' }]
@@ -62,7 +62,7 @@ describe('WordConverter', () => {
         bodyMatter: {
           contents: [
             {
-              blockType: 'https://xats.org/vocabularies/blocks/learningObjective',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/learningObjective',
               content: {
                 text: {
                   runs: [{ text: 'Students will learn about testing.' }]
@@ -108,7 +108,7 @@ describe('WordConverter', () => {
         bodyMatter: {
           contents: [
             {
-              blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/mathBlock',
               content: {
                 latex: '\\int_0^1 x^2 dx',
                 mathML: '<math><mi>x</mi></math>'
@@ -150,7 +150,7 @@ describe('WordConverter', () => {
       const customConverter = new WordConverter({
         defaultStyleMappings: {
           paragraphs: {
-            'CustomStyle': 'https://xats.org/vocabularies/blocks/custom'
+            'CustomStyle': 'https://pub.xats.org/vocabularies/blocks/custom'
           }
         }
       });

@@ -386,7 +386,7 @@ export class RMarkdownRenderer
     return {
       schemaVersion: '0.5.0',
       bibliographicEntry: { type: 'article-journal' },
-      subject: 'https://xats.org/vocabularies/subjects/general',
+      subject: 'https://pub.xats.org/vocabularies/subjects/general',
       bodyMatter: { contents: [] },
     };
   }

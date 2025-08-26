@@ -1,23 +1,23 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/blocks/workedExample",
+  "$id": "https://pub.xats.org/vocabularies/blocks/workedExample",
   "title": "Worked Example with Progressive Fading Block",
   "description": "A pedagogical block that demonstrates problem-solving procedures through step-by-step worked examples with progressive fading support and follow-up practice problems to facilitate skill acquisition and transfer",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/blocks/workedExample",
+      "const": "https://pub.xats.org/vocabularies/blocks/workedExample",
       "description": "The URI identifier for this block type"
     },
     "content": {
-      "$ref": "https://xats.org/schemas/0.5.0/xats.json#/definitions/WorkedExampleContent",
+      "$ref": "https://pub.xats.org/schemas/0.5.0/xats.json#/definitions/WorkedExampleContent",
       "description": "The worked example content including concept identification, problem statement, detailed solution steps with fading levels, and scaffolded practice problems"
     }
   },
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/workedExample",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/workedExample",
       "content": {
         "concept": "Solving Linear Equations with Variables on Both Sides",
         "problem": {

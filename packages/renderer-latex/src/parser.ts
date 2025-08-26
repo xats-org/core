@@ -322,7 +322,7 @@ export class LaTeXParser {
     const unit: Unit = {
       title: { runs: [{ type: 'text', text: unitTitle }] },
       contents: [{
-        blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+        blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
         content: { runs: [{ type: 'text', text: paragraphContent }] }
       }]
     };
@@ -647,7 +647,7 @@ export class LaTeXParser {
    */
   private createContentBlockFromSection(section: { title: string, content: string }): ContentBlock {
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
       content: {
         runs: [{
           type: 'text',

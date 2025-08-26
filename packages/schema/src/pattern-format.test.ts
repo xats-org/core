@@ -83,7 +83,7 @@ describe('Pattern and Format Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/vocabularies/blocks/paragraph', // Valid URI
+                      blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph', // Valid URI
                       content: {
                         text: {
                           runs: [{ type: 'text', text: 'Test content' }],
@@ -157,7 +157,7 @@ describe('Pattern and Format Validation', () => {
               title: 'Chapter 1',
               renderingHints: [
                 {
-                  hintType: 'https://xats.org/vocabularies/hints/breakBefore', // Valid URI
+                  hintType: 'https://pub.xats.org/vocabularies/hints/breakBefore', // Valid URI
                   value: true,
                 },
               ],
@@ -215,7 +215,7 @@ describe('Pattern and Format Validation', () => {
         resources: [
           {
             id: 'resource-1',
-            type: 'https://xats.org/vocabularies/resources/image',
+            type: 'https://pub.xats.org/vocabularies/resources/image',
             url: 'not-a-uri', // Should be valid URI
           },
         ],
@@ -241,7 +241,7 @@ describe('Pattern and Format Validation', () => {
         resources: [
           {
             id: 'resource-1',
-            type: 'https://xats.org/vocabularies/resources/image', // Valid URI
+            type: 'https://pub.xats.org/vocabularies/resources/image', // Valid URI
             url: 'https://example.com/image.png', // Valid URI
           },
         ],
@@ -330,7 +330,7 @@ describe('Pattern and Format Validation', () => {
               pathways: [
                 {
                   trigger: {
-                    triggerType: 'https://xats.org/vocabularies/triggers/onAssessment',
+                    triggerType: 'https://pub.xats.org/vocabularies/triggers/onAssessment',
                     sourceId: 'assessment-1',
                   },
                   rules: [
@@ -378,14 +378,14 @@ describe('Pattern and Format Validation', () => {
               pathways: [
                 {
                   trigger: {
-                    triggerType: 'https://xats.org/vocabularies/triggers/onAssessment', // Valid URI
+                    triggerType: 'https://pub.xats.org/vocabularies/triggers/onAssessment', // Valid URI
                     sourceId: 'assessment-1',
                   },
                   rules: [
                     {
                       condition: 'score >= 70',
                       destinationId: 'next-section',
-                      pathwayType: 'https://xats.org/vocabularies/pathways/standard', // Valid URI
+                      pathwayType: 'https://pub.xats.org/vocabularies/pathways/standard', // Valid URI
                     },
                   ],
                 },
@@ -425,7 +425,7 @@ describe('Pattern and Format Validation', () => {
               pathways: [
                 {
                   trigger: {
-                    triggerType: 'https://xats.org/vocabularies/triggers/onAssessment',
+                    triggerType: 'https://pub.xats.org/vocabularies/triggers/onAssessment',
                     sourceId: 'assessment-1',
                   },
                   rules: [
@@ -485,7 +485,7 @@ describe('Pattern and Format Validation', () => {
                 pathways: [
                   {
                     trigger: {
-                      triggerType: 'https://xats.org/vocabularies/triggers/onAssessment',
+                      triggerType: 'https://pub.xats.org/vocabularies/triggers/onAssessment',
                       sourceId: 'assessment-1',
                     },
                     rules: [
@@ -534,7 +534,7 @@ describe('Pattern and Format Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://xats.org/vocabularies/placeholders/invalidPlaceholder', // Should match placeholder pattern
+                      blockType: 'https://pub.xats.org/vocabularies/placeholders/invalidPlaceholder', // Should match placeholder pattern
                       content: {
                         placeholder: true,
                       },
@@ -555,9 +555,9 @@ describe('Pattern and Format Validation', () => {
 
     it('should accept valid placeholder block type patterns', () => {
       const validPlaceholders = [
-        'https://xats.org/vocabularies/placeholders/tableOfContents',
-        'https://xats.org/vocabularies/placeholders/bibliography',
-        'https://xats.org/vocabularies/placeholders/index',
+        'https://pub.xats.org/vocabularies/placeholders/tableOfContents',
+        'https://pub.xats.org/vocabularies/placeholders/bibliography',
+        'https://pub.xats.org/vocabularies/placeholders/index',
       ];
 
       for (const placeholder of validPlaceholders) {
@@ -613,7 +613,7 @@ describe('Pattern and Format Validation', () => {
         resources: [
           {
             id: 'resource-1',
-            type: 'https://xats.org/vocabularies/resources/image',
+            type: 'https://pub.xats.org/vocabularies/resources/image',
             url: '/relative/path/image.png', // Relative URI - may or may not be valid
           },
         ],
@@ -637,7 +637,7 @@ describe('Pattern and Format Validation', () => {
         resources: [
           {
             id: 'resource-1',
-            type: 'https://xats.org/vocabularies/resources/image',
+            type: 'https://pub.xats.org/vocabularies/resources/image',
             url: '//example.com/image.png', // Scheme-less URI
           },
         ],
@@ -670,7 +670,7 @@ describe('Pattern and Format Validation', () => {
                     {
                       id: 'block-1',
                       blockType:
-                        'https://xats.org/vocabularies/blocks/custom-block?param=value&other=123', // URI with query params
+                        'https://pub.xats.org/vocabularies/blocks/custom-block?param=value&other=123', // URI with query params
                       content: {
                         customField: 'value',
                       },
@@ -699,7 +699,7 @@ describe('Pattern and Format Validation', () => {
         resources: [
           {
             id: 'resource-1',
-            type: 'https://xats.org/vocabularies/resources/image',
+            type: 'https://pub.xats.org/vocabularies/resources/image',
             url: 'https://例え.テスト/image.png', // Internationalized domain
           },
         ],
@@ -731,7 +731,7 @@ describe('Pattern and Format Validation', () => {
           resources: [
             {
               id: 'resource-1',
-              type: 'https://xats.org/vocabularies/resources/image',
+              type: 'https://pub.xats.org/vocabularies/resources/image',
               url: invalidUri, // Invalid URI
             },
           ],
@@ -896,7 +896,7 @@ describe('Pattern and Format Validation', () => {
           resources: [
             {
               id: 'resource-1',
-              type: 'https://xats.org/vocabularies/resources/image',
+              type: 'https://pub.xats.org/vocabularies/resources/image',
               url: uri, // Different protocol
             },
           ],

@@ -370,7 +370,7 @@ export class LaTeXTestSuite {
             title: { runs: [{ type: 'text', text: 'Math Test Unit' }] },
             contents: [
               {
-                blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
+                blockType: 'https://pub.xats.org/vocabularies/blocks/mathBlock',
                 content: math.replace(/\$+/g, ''), // Remove $ delimiters for xats format
               },
             ],
@@ -397,7 +397,7 @@ export class LaTeXTestSuite {
             title: { runs: [{ type: 'text', text: 'Citation Test Unit' }] },
             contents: [
               {
-                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                 content: {
                   runs: [
                     { type: 'text', text: 'This is a citation: ' },

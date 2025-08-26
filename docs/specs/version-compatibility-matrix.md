@@ -62,21 +62,21 @@ v0.1.0 tools → v0.2.0 docs ❌ (May fail on new features)
 
 | Block Type | v0.1.0 | v0.2.0 | v0.3.0 | v0.4.0 | v0.5.0 | URI |
 |------------|--------|--------|--------|--------|--------|-----|
-| **Paragraph** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/paragraph` |
-| **Heading** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/heading` |
-| **List** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/list` |
-| **Blockquote** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/blockquote` |
-| **Code Block** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/codeBlock` |
-| **Math Block** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/mathBlock` |
-| **Table** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/table` |
-| **Figure** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/figure` |
-| **Image** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/image` |
-| **Definition** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/definition` |
-| **Example** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/example` |
-| **Theorem** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/theorem` |
-| **Quote** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/quote` |
-| **Case Study** | ❌ | ❌ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/caseStudy` |
-| **Metacognitive Prompt** | ❌ | ❌ | ✅ | ✅ | ✅ | `https://xats.org/vocabularies/blocks/metacognitivePrompt` |
+| **Paragraph** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/paragraph` |
+| **Heading** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/heading` |
+| **List** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/list` |
+| **Blockquote** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/blockquote` |
+| **Code Block** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/codeBlock` |
+| **Math Block** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/mathBlock` |
+| **Table** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/table` |
+| **Figure** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/figure` |
+| **Image** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/image` |
+| **Definition** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/definition` |
+| **Example** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/example` |
+| **Theorem** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/theorem` |
+| **Quote** | ✅ | ✅ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/quote` |
+| **Case Study** | ❌ | ❌ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/caseStudy` |
+| **Metacognitive Prompt** | ❌ | ❌ | ✅ | ✅ | ✅ | `https://pub.xats.org/vocabularies/blocks/metacognitivePrompt` |
 
 ### SemanticText Runs
 
@@ -130,8 +130,8 @@ v0.1.0 tools → v0.2.0 docs ❌ (May fail on new features)
 
 | Extension | v0.1.0 | v0.2.0 | v0.3.0 | Namespace |
 |-----------|--------|--------|--------|-----------|
-| **LTI 1.3** | ❌ | ✅ v1.3.0 | ✅ v1.3.0 | `https://xats.org/extensions/lti` |
-| **Rights Management** | ❌ | ✅ v0.1.0 | ✅ v0.1.0 | `https://xats.org/extensions/rights` |
+| **LTI 1.3** | ❌ | ✅ v1.3.0 | ✅ v1.3.0 | `https://pub.xats.org/extensions/lti` |
+| **Rights Management** | ❌ | ✅ v0.1.0 | ✅ v0.1.0 | `https://pub.xats.org/extensions/rights` |
 | **Assessment Core** | ❌ | ✅ v0.2.0 | ✅ v0.2.0 | Built-in |
 | **File Modularity** | ❌ | ✅ v0.1.0 | ✅ v0.1.0 | Built-in |
 
@@ -198,7 +198,7 @@ To take advantage of new features, manual updates are required:
 // Add LTI integration
 {
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "configuration": {
         "platformId": "canvas.instructure.com"
       }
@@ -208,7 +208,7 @@ To take advantage of new features, manual updates are required:
 
 // Add assessment capabilities
 {
-  "blockType": "https://xats.org/extensions/assessment/multipleChoice",
+  "blockType": "https://pub.xats.org/extensions/assessment/multipleChoice",
   "content": {
     "prompt": "What is the capital of France?",
     "options": [
@@ -236,7 +236,7 @@ To take advantage of new features, manual updates are required:
 
 // Add case studies
 {
-  "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/caseStudy",
   "content": {
     "scenario": {
       "title": "Climate Change Impact",
@@ -250,7 +250,7 @@ To take advantage of new features, manual updates are required:
 
 // Add metacognitive prompts
 {
-  "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/metacognitivePrompt",
   "content": {
     "promptType": "self-reflection",
     "prompt": "How does this concept connect to what you already know?"

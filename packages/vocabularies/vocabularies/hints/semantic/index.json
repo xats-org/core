@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/hints/semantic",
+  "$id": "https://pub.xats.org/vocabularies/hints/semantic",
   "title": "Semantic Intent Rendering Hints",
   "description": "Rendering hints that convey semantic intent and meaning to help preserve author intention across different output formats",
   "type": "string",

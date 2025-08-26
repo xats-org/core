@@ -1084,33 +1084,33 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         : '';
 
     switch (block.blockType) {
-      case 'https://xats.org/vocabularies/blocks/paragraph':
+      case 'https://pub.xats.org/vocabularies/blocks/paragraph':
         return this.renderParagraph(block, allClasses, blockId, lang, dir, style, attributeString);
 
-      case 'https://xats.org/vocabularies/blocks/heading':
+      case 'https://pub.xats.org/vocabularies/blocks/heading':
         return this.renderHeading(block, allClasses, blockId, lang, dir, style, attributeString);
 
-      case 'https://xats.org/vocabularies/blocks/list':
+      case 'https://pub.xats.org/vocabularies/blocks/list':
         return this.renderList(block, allClasses, blockId, lang, dir, style, attributeString);
 
-      case 'https://xats.org/vocabularies/blocks/blockquote':
+      case 'https://pub.xats.org/vocabularies/blocks/blockquote':
         return this.renderBlockquote(block, allClasses, blockId, lang, dir, style, attributeString);
 
-      case 'https://xats.org/vocabularies/blocks/codeBlock':
+      case 'https://pub.xats.org/vocabularies/blocks/codeBlock':
         return this.renderCodeBlock(block, allClasses, blockId, lang, dir, style, attributeString);
 
-      case 'https://xats.org/vocabularies/blocks/mathBlock':
+      case 'https://pub.xats.org/vocabularies/blocks/mathBlock':
         return this.renderMathBlock(block, allClasses, blockId, lang, dir, style, attributeString);
 
-      case 'https://xats.org/vocabularies/blocks/table':
+      case 'https://pub.xats.org/vocabularies/blocks/table':
         return this.renderTable(block, allClasses, blockId, lang, dir, style, attributeString);
 
-      case 'https://xats.org/vocabularies/blocks/figure':
+      case 'https://pub.xats.org/vocabularies/blocks/figure':
         return this.renderFigure(block, allClasses, blockId, lang, dir, style, attributeString);
 
-      case 'https://xats.org/vocabularies/placeholders/tableOfContents':
-      case 'https://xats.org/vocabularies/placeholders/bibliography':
-      case 'https://xats.org/vocabularies/placeholders/index':
+      case 'https://pub.xats.org/vocabularies/placeholders/tableOfContents':
+      case 'https://pub.xats.org/vocabularies/placeholders/bibliography':
+      case 'https://pub.xats.org/vocabularies/placeholders/index':
         return this.renderPlaceholder(
           block,
           allClasses,
@@ -1419,17 +1419,17 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private getBlockTypeClass(blockType: string): string {
     const typeMap: Record<string, string> = {
-      'https://xats.org/vocabularies/blocks/paragraph': 'block-paragraph',
-      'https://xats.org/vocabularies/blocks/heading': 'block-heading',
-      'https://xats.org/vocabularies/blocks/list': 'block-list',
-      'https://xats.org/vocabularies/blocks/blockquote': 'block-blockquote',
-      'https://xats.org/vocabularies/blocks/codeBlock': 'block-code',
-      'https://xats.org/vocabularies/blocks/mathBlock': 'block-math',
-      'https://xats.org/vocabularies/blocks/table': 'block-table',
-      'https://xats.org/vocabularies/blocks/figure': 'block-figure',
-      'https://xats.org/vocabularies/placeholders/tableOfContents': 'placeholder-toc',
-      'https://xats.org/vocabularies/placeholders/bibliography': 'placeholder-bibliography',
-      'https://xats.org/vocabularies/placeholders/index': 'placeholder-index',
+      'https://pub.xats.org/vocabularies/blocks/paragraph': 'block-paragraph',
+      'https://pub.xats.org/vocabularies/blocks/heading': 'block-heading',
+      'https://pub.xats.org/vocabularies/blocks/list': 'block-list',
+      'https://pub.xats.org/vocabularies/blocks/blockquote': 'block-blockquote',
+      'https://pub.xats.org/vocabularies/blocks/codeBlock': 'block-code',
+      'https://pub.xats.org/vocabularies/blocks/mathBlock': 'block-math',
+      'https://pub.xats.org/vocabularies/blocks/table': 'block-table',
+      'https://pub.xats.org/vocabularies/blocks/figure': 'block-figure',
+      'https://pub.xats.org/vocabularies/placeholders/tableOfContents': 'placeholder-toc',
+      'https://pub.xats.org/vocabularies/placeholders/bibliography': 'placeholder-bibliography',
+      'https://pub.xats.org/vocabularies/placeholders/index': 'placeholder-index',
     };
 
     return typeMap[blockType] || 'block-unknown';
@@ -1437,9 +1437,9 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private getPlaceholderType(blockType: string): string {
     const typeMap: Record<string, string> = {
-      'https://xats.org/vocabularies/placeholders/tableOfContents': 'Table of Contents',
-      'https://xats.org/vocabularies/placeholders/bibliography': 'Bibliography',
-      'https://xats.org/vocabularies/placeholders/index': 'Index',
+      'https://pub.xats.org/vocabularies/placeholders/tableOfContents': 'Table of Contents',
+      'https://pub.xats.org/vocabularies/placeholders/bibliography': 'Bibliography',
+      'https://pub.xats.org/vocabularies/placeholders/index': 'Index',
     };
 
     return typeMap[blockType] || 'Placeholder';
@@ -1760,17 +1760,17 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
 
   private determineBlockType(blockElement: Element): string {
     const classMap: Record<string, string> = {
-      'block-paragraph': 'https://xats.org/vocabularies/blocks/paragraph',
-      'block-heading': 'https://xats.org/vocabularies/blocks/heading',
-      'block-list': 'https://xats.org/vocabularies/blocks/list',
-      'block-blockquote': 'https://xats.org/vocabularies/blocks/blockquote',
-      'block-code': 'https://xats.org/vocabularies/blocks/codeBlock',
-      'block-math': 'https://xats.org/vocabularies/blocks/mathBlock',
-      'block-table': 'https://xats.org/vocabularies/blocks/table',
-      'block-figure': 'https://xats.org/vocabularies/blocks/figure',
-      'placeholder-toc': 'https://xats.org/vocabularies/placeholders/tableOfContents',
-      'placeholder-bibliography': 'https://xats.org/vocabularies/placeholders/bibliography',
-      'placeholder-index': 'https://xats.org/vocabularies/placeholders/index',
+      'block-paragraph': 'https://pub.xats.org/vocabularies/blocks/paragraph',
+      'block-heading': 'https://pub.xats.org/vocabularies/blocks/heading',
+      'block-list': 'https://pub.xats.org/vocabularies/blocks/list',
+      'block-blockquote': 'https://pub.xats.org/vocabularies/blocks/blockquote',
+      'block-code': 'https://pub.xats.org/vocabularies/blocks/codeBlock',
+      'block-math': 'https://pub.xats.org/vocabularies/blocks/mathBlock',
+      'block-table': 'https://pub.xats.org/vocabularies/blocks/table',
+      'block-figure': 'https://pub.xats.org/vocabularies/blocks/figure',
+      'placeholder-toc': 'https://pub.xats.org/vocabularies/placeholders/tableOfContents',
+      'placeholder-bibliography': 'https://pub.xats.org/vocabularies/placeholders/bibliography',
+      'placeholder-index': 'https://pub.xats.org/vocabularies/placeholders/index',
     };
 
     for (const [className, blockType] of Object.entries(classMap)) {
@@ -1785,17 +1785,17 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       return dataBlockType;
     }
 
-    return 'https://xats.org/vocabularies/blocks/paragraph'; // default
+    return 'https://pub.xats.org/vocabularies/blocks/paragraph'; // default
   }
 
   private parseBlockContent(blockElement: Element, blockType: string): Record<string, unknown> {
     switch (blockType) {
-      case 'https://xats.org/vocabularies/blocks/paragraph': {
+      case 'https://pub.xats.org/vocabularies/blocks/paragraph': {
         const p = blockElement.querySelector('p');
         return { text: this.parseTextToSemanticText(p?.textContent || '') };
       }
 
-      case 'https://xats.org/vocabularies/blocks/heading': {
+      case 'https://pub.xats.org/vocabularies/blocks/heading': {
         const heading = blockElement.querySelector('h1, h2, h3, h4, h5, h6');
         const level = heading ? parseInt(heading.tagName.charAt(1)) : 1;
         return {
@@ -1804,7 +1804,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         };
       }
 
-      case 'https://xats.org/vocabularies/blocks/list': {
+      case 'https://pub.xats.org/vocabularies/blocks/list': {
         const list = blockElement.querySelector('ol, ul');
         const listType = list?.tagName.toLowerCase() === 'ol' ? 'ordered' : 'unordered';
         const items = Array.from(list?.querySelectorAll('li') || []).map((li) =>
@@ -1813,7 +1813,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         return { listType, items };
       }
 
-      case 'https://xats.org/vocabularies/blocks/blockquote': {
+      case 'https://pub.xats.org/vocabularies/blocks/blockquote': {
         const blockquote = blockElement.querySelector('blockquote');
         const cite = blockquote?.querySelector('cite');
         const content: Record<string, unknown> = {
@@ -1825,7 +1825,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         return content;
       }
 
-      case 'https://xats.org/vocabularies/blocks/codeBlock': {
+      case 'https://pub.xats.org/vocabularies/blocks/codeBlock': {
         const code = blockElement.querySelector('code');
         const language = code?.getAttribute('data-language') || undefined;
         return {
@@ -1834,15 +1834,15 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         };
       }
 
-      case 'https://xats.org/vocabularies/blocks/mathBlock': {
+      case 'https://pub.xats.org/vocabularies/blocks/mathBlock': {
         const math = blockElement.querySelector('.math-block');
         return { math: math?.textContent || '' };
       }
 
-      case 'https://xats.org/vocabularies/blocks/table':
+      case 'https://pub.xats.org/vocabularies/blocks/table':
         return this.parseTableContent(blockElement);
 
-      case 'https://xats.org/vocabularies/blocks/figure':
+      case 'https://pub.xats.org/vocabularies/blocks/figure':
         return this.parseFigureContent(blockElement);
 
       default:
@@ -1932,7 +1932,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (className.startsWith('semantic-')) {
       const semanticType = className.replace('semantic-', '');
       return {
-        hintType: `https://xats.org/vocabularies/hints/semantic/${semanticType}`,
+        hintType: `https://pub.xats.org/vocabularies/hints/semantic/${semanticType}`,
         value: semanticType,
       };
     }
@@ -1952,7 +1952,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       if (className === 'cognitive-low') accessibilityType = 'cognitive-load-low';
 
       return {
-        hintType: `https://xats.org/vocabularies/hints/accessibility/${accessibilityType}`,
+        hintType: `https://pub.xats.org/vocabularies/hints/accessibility/${accessibilityType}`,
         value: accessibilityType,
       };
     }
@@ -1964,7 +1964,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       if (layoutType === 'new-page') mappedType = 'force-new-page';
 
       return {
-        hintType: `https://xats.org/vocabularies/hints/layout/${mappedType}`,
+        hintType: `https://pub.xats.org/vocabularies/hints/layout/${mappedType}`,
         value: mappedType,
       };
     }
@@ -1973,7 +1973,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     if (className.startsWith('pedagogical-')) {
       const pedagogicalType = className.replace('pedagogical-', '');
       return {
-        hintType: `https://xats.org/vocabularies/hints/pedagogical/${pedagogicalType}`,
+        hintType: `https://pub.xats.org/vocabularies/hints/pedagogical/${pedagogicalType}`,
         value: pedagogicalType,
       };
     }
@@ -1991,12 +1991,12 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const ariaLive = element.getAttribute('aria-live');
     if (ariaLive === 'polite') {
       hints.push({
-        hintType: 'https://xats.org/vocabularies/hints/accessibility/aria-live-polite',
+        hintType: 'https://pub.xats.org/vocabularies/hints/accessibility/aria-live-polite',
         value: 'polite',
       });
     } else if (ariaLive === 'assertive') {
       hints.push({
-        hintType: 'https://xats.org/vocabularies/hints/accessibility/aria-live-assertive',
+        hintType: 'https://pub.xats.org/vocabularies/hints/accessibility/aria-live-assertive',
         value: 'assertive',
       });
     }
@@ -2005,7 +2005,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const ariaHidden = element.getAttribute('aria-hidden');
     if (ariaHidden === 'true') {
       hints.push({
-        hintType: 'https://xats.org/vocabularies/hints/accessibility/skip-screen-reader',
+        hintType: 'https://pub.xats.org/vocabularies/hints/accessibility/skip-screen-reader',
         value: true,
       });
     }
@@ -2014,7 +2014,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const accesskey = element.getAttribute('accesskey');
     if (accesskey) {
       hints.push({
-        hintType: 'https://xats.org/vocabularies/hints/accessibility/keyboard-shortcut',
+        hintType: 'https://pub.xats.org/vocabularies/hints/accessibility/keyboard-shortcut',
         value: accesskey,
       });
     }
@@ -2031,7 +2031,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
       if (tabindex) objectValue.tabIndex = parseInt(tabindex);
 
       hints.push({
-        hintType: 'https://xats.org/vocabularies/hints/accessibility/custom-attributes',
+        hintType: 'https://pub.xats.org/vocabularies/hints/accessibility/custom-attributes',
         value: objectValue,
       });
     }
@@ -2069,7 +2069,7 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
         }
 
         hints.push({
-          hintType: `https://xats.org/vocabularies/hints/${hintType}`,
+          hintType: `https://pub.xats.org/vocabularies/hints/${hintType}`,
           value: value as string | number | boolean | object | unknown[],
         });
       }
@@ -3102,22 +3102,22 @@ export class HtmlRenderer implements BidirectionalRenderer<HtmlRendererOptions>,
     const hintType = hint.hintType;
 
     // Semantic hints
-    if (hintType.startsWith('https://xats.org/vocabularies/hints/semantic/')) {
+    if (hintType.startsWith('https://pub.xats.org/vocabularies/hints/semantic/')) {
       return this.processSemanticHint(hintType, hint.value);
     }
 
     // Accessibility hints
-    if (hintType.startsWith('https://xats.org/vocabularies/hints/accessibility/')) {
+    if (hintType.startsWith('https://pub.xats.org/vocabularies/hints/accessibility/')) {
       return this.processAccessibilityHint(hintType, hint.value);
     }
 
     // Layout hints
-    if (hintType.startsWith('https://xats.org/vocabularies/hints/layout/')) {
+    if (hintType.startsWith('https://pub.xats.org/vocabularies/hints/layout/')) {
       return this.processLayoutHint(hintType, hint.value);
     }
 
     // Pedagogical hints
-    if (hintType.startsWith('https://xats.org/vocabularies/hints/pedagogical/')) {
+    if (hintType.startsWith('https://pub.xats.org/vocabularies/hints/pedagogical/')) {
       return this.processPedagogicalHint(hintType, hint.value);
     }
 

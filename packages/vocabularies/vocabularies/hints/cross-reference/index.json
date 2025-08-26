@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/hints/cross-reference",
+  "$id": "https://pub.xats.org/vocabularies/hints/cross-reference",
   "title": "Cross-Reference Styling Hints",
   "description": "Rendering hints for how cross-references and citations should be displayed and behave",
   "type": "object",

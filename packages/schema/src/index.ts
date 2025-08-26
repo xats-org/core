@@ -96,7 +96,7 @@ export function getVersionFromSchemaId(schemaId: string): XatsVersion | null {
  * Get the schema ID for a version
  */
 export function getSchemaId(version: XatsVersion): string {
-  return `https://xats.org/schemas/${version}/xats.json`;
+  return `https://pub.xats.org/schemas/${version}/xats.json`;
 }
 
 /**

@@ -156,7 +156,7 @@ const { valid, errors } = await validateDocument(document);
               {
                 "id": "para-1",
                 "language": "en-US",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -182,7 +182,7 @@ const { valid, errors } = await validateDocument(document);
               {
                 "id": "assessment-1",
                 "language": "en-US",
-                "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/multipleChoice",
                 "content": {
                   "question": {
                     "runs": [

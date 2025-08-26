@@ -347,14 +347,14 @@ export abstract class AbstractBidirectionalRenderer<
 
     // Count based on block type
     switch (block.blockType) {
-      case 'https://xats.org/vocabularies/blocks/paragraph':
-      case 'https://xats.org/vocabularies/blocks/heading': {
+      case 'https://pub.xats.org/vocabularies/blocks/paragraph':
+      case 'https://pub.xats.org/vocabularies/blocks/heading': {
         const content = block.content as { text: SemanticText };
         wordCount += this.countWordsInSemanticText(content.text);
         break;
       }
 
-      case 'https://xats.org/vocabularies/blocks/list': {
+      case 'https://pub.xats.org/vocabularies/blocks/list': {
         const content = block.content as { items: SemanticText[] };
         for (const item of content.items) {
           wordCount += this.countWordsInSemanticText(item);
@@ -362,7 +362,7 @@ export abstract class AbstractBidirectionalRenderer<
         break;
       }
 
-      case 'https://xats.org/vocabularies/blocks/blockquote': {
+      case 'https://pub.xats.org/vocabularies/blocks/blockquote': {
         const content = block.content as { text: SemanticText; attribution?: SemanticText };
         wordCount += this.countWordsInSemanticText(content.text);
         if (content.attribution) {
@@ -371,7 +371,7 @@ export abstract class AbstractBidirectionalRenderer<
         break;
       }
 
-      case 'https://xats.org/vocabularies/blocks/table': {
+      case 'https://pub.xats.org/vocabularies/blocks/table': {
         const content = block.content as {
           headers?: SemanticText[];
           rows: SemanticText[][];

@@ -36,7 +36,7 @@ describe('LaTeX Round-trip Tests', () => {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     runs: [
                       {
@@ -83,7 +83,7 @@ describe('LaTeX Round-trip Tests', () => {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     runs: [
                       { runType: 'text', text: 'This text has ' },
@@ -125,13 +125,13 @@ describe('LaTeX Round-trip Tests', () => {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     runs: [{ runType: 'text', text: "Einstein's famous equation:" }],
                   },
                 },
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/mathBlock',
                   content: 'E = mc^2',
                   id: 'eq:einstein',
                   renderingHints: [{ hintType: 'numbered', value: true }],
@@ -167,7 +167,7 @@ describe('LaTeX Round-trip Tests', () => {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     runs: [
                       { runType: 'text', text: 'As demonstrated by ' },
@@ -206,7 +206,7 @@ describe('LaTeX Round-trip Tests', () => {
         frontMatter: {
           contents: [
             {
-              blockType: 'https://xats.org/vocabularies/placeholders/tableOfContents',
+              blockType: 'https://pub.xats.org/vocabularies/placeholders/tableOfContents',
             },
           ],
         },
@@ -223,7 +223,7 @@ describe('LaTeX Round-trip Tests', () => {
                   label: 'sec:overview',
                   contents: [
                     {
-                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                      blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                       content: {
                         runs: [
                           { runType: 'text', text: 'This chapter provides an overview. See ' },
@@ -242,7 +242,7 @@ describe('LaTeX Round-trip Tests', () => {
               label: 'ch:methods',
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     runs: [{ runType: 'text', text: 'Methods are described here.' }],
                   },
@@ -254,7 +254,7 @@ describe('LaTeX Round-trip Tests', () => {
         backMatter: {
           contents: [
             {
-              blockType: 'https://xats.org/vocabularies/placeholders/bibliography',
+              blockType: 'https://pub.xats.org/vocabularies/placeholders/bibliography',
             },
           ],
         },
@@ -287,7 +287,7 @@ describe('LaTeX Round-trip Tests', () => {
                 runs: [{ runType: 'text', text: 'Performance Test' }],
               },
               contents: Array.from({ length: 50 }, (_, i) => ({
-                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                 content: {
                   runs: [
                     {
@@ -329,7 +329,7 @@ describe('LaTeX Round-trip Tests', () => {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     runs: [{ runType: 'text', text: 'Test content for difference analysis.' }],
                   },
@@ -390,7 +390,7 @@ describe('LaTeX Round-trip Tests', () => {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     runs: [{ runType: 'text', text: 'Special chars: $ & % # ^ _ { } ~ \\' }],
                   },

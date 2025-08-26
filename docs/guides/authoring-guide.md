@@ -30,7 +30,7 @@ The v0.3.0 assessment framework provides powerful tools for creating pedagogical
 ```json
 {
   "id": "question-1",
-  "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/multipleChoice",
   "language": "en",
   "content": {
     "question": {
@@ -78,7 +78,7 @@ The v0.3.0 assessment framework provides powerful tools for creating pedagogical
 ```json
 {
   "id": "short-answer-1",
-  "blockType": "https://xats.org/vocabularies/blocks/shortAnswer",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/shortAnswer",
   "language": "en",
   "content": {
     "question": {
@@ -190,7 +190,7 @@ The comprehensive rights framework supports commercial publishing and academic i
 ```json
 {
   "rights": {
-    "license": "https://xats.org/licenses/cc-by-sa-4.0",
+    "license": "https://pub.xats.org/licenses/cc-by-sa-4.0",
     "copyrightHolder": "Academic Publishing House",
     "copyrightYear": "2025",
     "permissions": {
@@ -219,7 +219,7 @@ Pathways now support assessment-based branching for adaptive learning.
   "pathways": [
     {
       "id": "remedial-path",
-      "triggerType": "https://xats.org/vocabularies/triggers/onAssessment",
+      "triggerType": "https://pub.xats.org/vocabularies/triggers/onAssessment",
       "sourceId": "assessment-1",
       "rules": [
         {

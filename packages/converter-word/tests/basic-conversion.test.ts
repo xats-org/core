@@ -28,7 +28,7 @@ describe('WordConverter', () => {
         bodyMatter: {
           contents: [
             {
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 text: {
                   runs: [
@@ -42,7 +42,7 @@ describe('WordConverter', () => {
               }
             },
             {
-              blockType: 'https://xats.org/vocabularies/blocks/heading',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/heading',
               content: {
                 level: 1,
                 text: {
@@ -51,7 +51,7 @@ describe('WordConverter', () => {
               }
             },
             {
-              blockType: 'https://xats.org/vocabularies/blocks/list',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/list',
               content: {
                 ordered: false,
                 items: [
@@ -105,7 +105,7 @@ describe('WordConverter', () => {
         bodyMatter: {
           contents: [
             {
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: null // Malformed content
             },
             {
@@ -138,7 +138,7 @@ describe('WordConverter', () => {
         bodyMatter: {
           contents: [
             {
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 text: {
                   runs: [
@@ -180,14 +180,14 @@ describe('StyleMapper', () => {
   });
 
   it('should map Word styles to xats block types', () => {
-    expect(styleMapper.getXatsBlockType('Normal')).toBe('https://xats.org/vocabularies/blocks/paragraph');
-    expect(styleMapper.getXatsBlockType('Heading 1')).toBe('https://xats.org/vocabularies/blocks/heading');
-    expect(styleMapper.getXatsBlockType('Quote')).toBe('https://xats.org/vocabularies/blocks/blockquote');
+    expect(styleMapper.getXatsBlockType('Normal')).toBe('https://pub.xats.org/vocabularies/blocks/paragraph');
+    expect(styleMapper.getXatsBlockType('Heading 1')).toBe('https://pub.xats.org/vocabularies/blocks/heading');
+    expect(styleMapper.getXatsBlockType('Quote')).toBe('https://pub.xats.org/vocabularies/blocks/blockquote');
   });
 
   it('should map xats block types to Word styles', () => {
-    expect(styleMapper.getWordStyle('https://xats.org/vocabularies/blocks/paragraph')).toBe('Normal');
-    expect(styleMapper.getWordStyle('https://xats.org/vocabularies/blocks/heading')).toBe('Heading 1');
+    expect(styleMapper.getWordStyle('https://pub.xats.org/vocabularies/blocks/paragraph')).toBe('Normal');
+    expect(styleMapper.getWordStyle('https://pub.xats.org/vocabularies/blocks/heading')).toBe('Heading 1');
   });
 
   it('should determine heading levels correctly', () => {
@@ -198,9 +198,9 @@ describe('StyleMapper', () => {
   });
 
   it('should create Word style names from xats URIs', () => {
-    expect(styleMapper.createWordStyleName('https://xats.org/vocabularies/blocks/learningObjective'))
+    expect(styleMapper.createWordStyleName('https://pub.xats.org/vocabularies/blocks/learningObjective'))
       .toBe('Learning Objective');
-    expect(styleMapper.createWordStyleName('https://xats.org/vocabularies/blocks/caseStudy'))
+    expect(styleMapper.createWordStyleName('https://pub.xats.org/vocabularies/blocks/caseStudy'))
       .toBe('Case Study');
   });
 });

@@ -31,12 +31,12 @@ The annotation system is fully implemented in `/packages/schema/schemas/0.5.0/xa
 ### Annotation Vocabulary
 
 Complete URI-based vocabulary system:
-- `https://xats.org/vocabularies/annotations/suggestion`
-- `https://xats.org/vocabularies/annotations/clarification_request`
-- `https://xats.org/vocabularies/annotations/minor_revision_needed`
-- `https://xats.org/vocabularies/annotations/major_revision_needed`
-- `https://xats.org/vocabularies/annotations/approval`
-- `https://xats.org/vocabularies/annotations/rejection`
+- `https://pub.xats.org/vocabularies/annotations/suggestion`
+- `https://pub.xats.org/vocabularies/annotations/clarification_request`
+- `https://pub.xats.org/vocabularies/annotations/minor_revision_needed`
+- `https://pub.xats.org/vocabularies/annotations/major_revision_needed`
+- `https://pub.xats.org/vocabularies/annotations/approval`
+- `https://pub.xats.org/vocabularies/annotations/rejection`
 
 ### Status Workflow
 - `open`: Active annotation requiring attention

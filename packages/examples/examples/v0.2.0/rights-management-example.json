@@ -14,7 +14,7 @@
   },
   "subject": "Computer Science",
   "rights": {
-    "license": "https://xats.org/licenses/cc-by-sa-4.0",
+    "license": "https://pub.xats.org/licenses/cc-by-sa-4.0",
     "copyrightHolder": "Academic Press Inc.",
     "copyrightYear": "2023",
     "permissions": {
@@ -41,11 +41,11 @@
     {
       "id": "proprietary-diagram",
       "language": "en",
-      "type": "https://xats.org/vocabularies/resources/image",
+      "type": "https://pub.xats.org/vocabularies/resources/image",
       "url": "https://cdn.example.com/diagram.png",
       "altText": "System architecture diagram showing client-server communication",
       "resourceRights": {
-        "license": "https://xats.org/licenses/proprietary",
+        "license": "https://pub.xats.org/licenses/proprietary",
         "copyrightHolder": "TechCorp Solutions",
         "copyrightYear": "2023",
         "permissions": {
@@ -73,11 +73,11 @@
     {
       "id": "public-domain-chart",
       "language": "en", 
-      "type": "https://xats.org/vocabularies/resources/image",
+      "type": "https://pub.xats.org/vocabularies/resources/image",
       "url": "https://cdn.example.com/chart.png",
       "altText": "Historical timeline of computing milestones",
       "resourceRights": {
-        "license": "https://xats.org/licenses/public-domain",
+        "license": "https://pub.xats.org/licenses/public-domain",
         "copyrightHolder": "US Government",
         "copyrightYear": "2020",
         "permissions": {
@@ -102,7 +102,7 @@
         "title": "Foundations of Computing",
         "label": "Chapter 1",
         "rights": {
-          "license": "https://xats.org/licenses/cc-by-nc-4.0", 
+          "license": "https://pub.xats.org/licenses/cc-by-nc-4.0", 
           "copyrightHolder": "Dr. Alice Cooper",
           "copyrightYear": "2023",
           "additionalCopyrightHolders": [
@@ -143,7 +143,7 @@
               {
                 "id": "intro-paragraph",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -158,7 +158,7 @@
               {
                 "id": "architecture-figure",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/figure",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/figure",
                 "content": {
                   "resourceId": "proprietary-diagram",
                   "altText": "System architecture diagram showing client-server communication",
@@ -175,7 +175,7 @@
               {
                 "id": "timeline-figure", 
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/figure",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/figure",
                 "content": {
                   "resourceId": "public-domain-chart",
                   "altText": "Historical timeline of computing milestones",

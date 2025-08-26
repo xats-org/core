@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/schemas/0.5.0/schema.json",
+  "$id": "https://pub.xats.org/schemas/0.5.0/schema.json",
   "title": "eXtensible Academic Text Standard v0.5.0",
   "description": "The root structure for a textbook, designed for extensibility and machine readability. Version 0.5.0 adds enhanced rendering hints system for author intent preservation, advanced renderer support, and comprehensive pedagogical role classification, while maintaining all v0.4.0 features.",
   "type": "object",
@@ -139,10 +139,10 @@
           "type": "string", 
           "format": "uri",
           "examples": [
-            "https://xats.org/vocabularies/hints/semantic/emphasis",
-            "https://xats.org/vocabularies/hints/pedagogical/key-concept",
-            "https://xats.org/vocabularies/hints/layout/keep-together",
-            "https://xats.org/vocabularies/hints/accessibility/screen-reader-priority"
+            "https://pub.xats.org/vocabularies/hints/semantic/emphasis",
+            "https://pub.xats.org/vocabularies/hints/pedagogical/key-concept",
+            "https://pub.xats.org/vocabularies/hints/layout/keep-together",
+            "https://pub.xats.org/vocabularies/hints/accessibility/screen-reader-priority"
           ]
         },
         "value": { 
@@ -819,7 +819,7 @@
       ]
     },
     "Pathway": {
-      "description": "Defines conditional routing rules for adaptive learning paths. See https://xats.org/specs/pathway-condition-grammar for the complete condition grammar specification.",
+      "description": "Defines conditional routing rules for adaptive learning paths. See https://pub.xats.org/specs/pathway-condition-grammar for the complete condition grammar specification.",
       "type": "object",
       "properties": {
         "trigger": {
@@ -831,8 +831,8 @@
               "type": "string", 
               "format": "uri",
               "examples": [
-                "https://xats.org/vocabularies/triggers/onCompletion",
-                "https://xats.org/vocabularies/triggers/onAssessment"
+                "https://pub.xats.org/vocabularies/triggers/onCompletion",
+                "https://pub.xats.org/vocabularies/triggers/onAssessment"
               ]
             },
             "sourceId": { 
@@ -872,10 +872,10 @@
                 "type": "string", 
                 "format": "uri",
                 "examples": [
-                  "https://xats.org/vocabularies/pathways/remedial",
-                  "https://xats.org/vocabularies/pathways/standard",
-                  "https://xats.org/vocabularies/pathways/enrichment",
-                  "https://xats.org/vocabularies/pathways/prerequisite"
+                  "https://pub.xats.org/vocabularies/pathways/remedial",
+                  "https://pub.xats.org/vocabularies/pathways/standard",
+                  "https://pub.xats.org/vocabularies/pathways/enrichment",
+                  "https://pub.xats.org/vocabularies/pathways/prerequisite"
                 ]
               }
             },
@@ -926,9 +926,9 @@
             "properties": {
               "blockType": {
                 "enum": [
-                  "https://xats.org/vocabularies/blocks/paragraph",
-                  "https://xats.org/vocabularies/blocks/heading",
-                  "https://xats.org/vocabularies/blocks/blockquote"
+                  "https://pub.xats.org/vocabularies/blocks/paragraph",
+                  "https://pub.xats.org/vocabularies/blocks/heading",
+                  "https://pub.xats.org/vocabularies/blocks/blockquote"
                 ]
               }
             }
@@ -950,7 +950,7 @@
               "properties": {
                 "blockType": {
                   "enum": [
-                    "https://xats.org/vocabularies/blocks/list"
+                    "https://pub.xats.org/vocabularies/blocks/list"
                   ]
                 }
               }
@@ -989,7 +989,7 @@
                 "properties": {
                   "blockType": {
                     "enum": [
-                      "https://xats.org/vocabularies/blocks/codeBlock"
+                      "https://pub.xats.org/vocabularies/blocks/codeBlock"
                     ]
                   }
                 }
@@ -1012,7 +1012,7 @@
                   "properties": {
                     "blockType": {
                       "enum": [
-                        "https://xats.org/vocabularies/blocks/mathBlock"
+                        "https://pub.xats.org/vocabularies/blocks/mathBlock"
                       ]
                     }
                   }
@@ -1055,7 +1055,7 @@
                     "properties": {
                       "blockType": {
                         "enum": [
-                          "https://xats.org/vocabularies/blocks/table"
+                          "https://pub.xats.org/vocabularies/blocks/table"
                         ]
                       }
                     }
@@ -1160,7 +1160,7 @@
                       "properties": {
                         "blockType": {
                           "enum": [
-                            "https://xats.org/vocabularies/blocks/figure"
+                            "https://pub.xats.org/vocabularies/blocks/figure"
                           ]
                         }
                       }
@@ -1191,7 +1191,7 @@
                       "if": {
                         "properties": {
                           "blockType": {
-                            "const": "https://xats.org/vocabularies/blocks/multipleChoice"
+                            "const": "https://pub.xats.org/vocabularies/blocks/multipleChoice"
                           }
                         }
                       },
@@ -1204,7 +1204,7 @@
                         "if": {
                           "properties": {
                             "blockType": {
-                              "const": "https://xats.org/vocabularies/blocks/shortAnswer"
+                              "const": "https://pub.xats.org/vocabularies/blocks/shortAnswer"
                             }
                           }
                         },
@@ -1217,7 +1217,7 @@
                           "if": {
                             "properties": {
                               "blockType": {
-                                "const": "https://xats.org/vocabularies/blocks/essayPrompt"
+                                "const": "https://pub.xats.org/vocabularies/blocks/essayPrompt"
                               }
                             }
                           },
@@ -1230,7 +1230,7 @@
                             "if": {
                               "properties": {
                                 "blockType": {
-                                  "const": "https://xats.org/vocabularies/blocks/navigation"
+                                  "const": "https://pub.xats.org/vocabularies/blocks/navigation"
                                 }
                               }
                             },
@@ -1243,7 +1243,7 @@
                               "if": {
                                 "properties": {
                                   "blockType": {
-                                    "const": "https://xats.org/vocabularies/blocks/skipNavigation"
+                                    "const": "https://pub.xats.org/vocabularies/blocks/skipNavigation"
                                   }
                                 }
                               },
@@ -1256,7 +1256,7 @@
                                 "if": {
                                   "properties": {
                                     "blockType": {
-                                      "const": "https://xats.org/vocabularies/blocks/caseStudy"
+                                      "const": "https://pub.xats.org/vocabularies/blocks/caseStudy"
                                     }
                                   }
                                 },
@@ -1269,7 +1269,7 @@
                                   "if": {
                                     "properties": {
                                       "blockType": {
-                                        "const": "https://xats.org/vocabularies/blocks/metacognitivePrompt"
+                                        "const": "https://pub.xats.org/vocabularies/blocks/metacognitivePrompt"
                                       }
                                     }
                                   },
@@ -1282,7 +1282,7 @@
                                     "if": {
                                       "properties": {
                                         "blockType": {
-                                          "const": "https://xats.org/vocabularies/blocks/problemScenario"
+                                          "const": "https://pub.xats.org/vocabularies/blocks/problemScenario"
                                         }
                                       }
                                     },
@@ -1295,7 +1295,7 @@
                                       "if": {
                                         "properties": {
                                           "blockType": {
-                                            "const": "https://xats.org/vocabularies/blocks/workedExample"
+                                            "const": "https://pub.xats.org/vocabularies/blocks/workedExample"
                                           }
                                         }
                                       },
@@ -1308,7 +1308,7 @@
                                         "if": {
                                           "properties": {
                                             "blockType": {
-                                              "const": "https://xats.org/vocabularies/blocks/thinkPairShare"
+                                              "const": "https://pub.xats.org/vocabularies/blocks/thinkPairShare"
                                             }
                                           }
                                         },
@@ -1866,12 +1866,12 @@
           "type": "string",
           "format": "uri",
           "examples": [
-            "https://xats.org/licenses/cc-by-4.0",
-            "https://xats.org/licenses/cc-by-sa-4.0",
-            "https://xats.org/licenses/cc-by-nc-4.0",
-            "https://xats.org/licenses/proprietary",
-            "https://xats.org/licenses/public-domain",
-            "https://xats.org/licenses/educational-use-only"
+            "https://pub.xats.org/licenses/cc-by-4.0",
+            "https://pub.xats.org/licenses/cc-by-sa-4.0",
+            "https://pub.xats.org/licenses/cc-by-nc-4.0",
+            "https://pub.xats.org/licenses/proprietary",
+            "https://pub.xats.org/licenses/public-domain",
+            "https://pub.xats.org/licenses/educational-use-only"
           ]
         },
         "copyrightHolder": {
@@ -3043,12 +3043,12 @@
               "type": "string",
               "format": "uri",
               "examples": [
-                "https://xats.org/vocabularies/annotations/suggestion",
-                "https://xats.org/vocabularies/annotations/clarification_request",
-                "https://xats.org/vocabularies/annotations/minor_revision_needed",
-                "https://xats.org/vocabularies/annotations/major_revision_needed",
-                "https://xats.org/vocabularies/annotations/approval",
-                "https://xats.org/vocabularies/annotations/rejection"
+                "https://pub.xats.org/vocabularies/annotations/suggestion",
+                "https://pub.xats.org/vocabularies/annotations/clarification_request",
+                "https://pub.xats.org/vocabularies/annotations/minor_revision_needed",
+                "https://pub.xats.org/vocabularies/annotations/major_revision_needed",
+                "https://pub.xats.org/vocabularies/annotations/approval",
+                "https://pub.xats.org/vocabularies/annotations/rejection"
               ]
             },
             "targetObjectId": {

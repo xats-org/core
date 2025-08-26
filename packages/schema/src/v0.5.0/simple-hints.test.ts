@@ -93,7 +93,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
   describe('Schema Loading', () => {
     it('should load the v0.5.0 schema successfully', () => {
       expect(schemaV050).toBeDefined();
-      expect(schemaV050.$id).toBe('https://xats.org/schemas/0.5.0/schema.json');
+      expect(schemaV050.$id).toBe('https://pub.xats.org/schemas/0.5.0/schema.json');
       expect(schemaV050.title).toBe('eXtensible Academic Text Standard v0.5.0');
     });
 
@@ -110,7 +110,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
   describe('Basic Rendering Hint Validation', () => {
     it('should validate a simple rendering hint', () => {
       const simpleHint = {
-        hintType: 'https://xats.org/vocabularies/hints/layoutMode',
+        hintType: 'https://pub.xats.org/vocabularies/hints/layoutMode',
         value: 'single-column',
       };
 
@@ -126,7 +126,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
 
     it('should validate a hint with priority', () => {
       const hintWithPriority = {
-        hintType: 'https://xats.org/vocabularies/hints/semantic/warning',
+        hintType: 'https://pub.xats.org/vocabularies/hints/semantic/warning',
         value: 'warning',
         priority: 5,
       };
@@ -143,10 +143,10 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
 
     it('should validate hint with simple fallback', () => {
       const hintWithFallback = {
-        hintType: 'https://xats.org/vocabularies/hints/accessibility/motion-safe',
+        hintType: 'https://pub.xats.org/vocabularies/hints/accessibility/motion-safe',
         value: 'motion-safe',
         fallback: {
-          hintType: 'https://xats.org/vocabularies/hints/semantic/highlight',
+          hintType: 'https://pub.xats.org/vocabularies/hints/semantic/highlight',
           value: 'highlight',
         },
       };
@@ -165,7 +165,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
   describe('Enhanced Features', () => {
     it('should validate conditions object', () => {
       const hintWithConditions = {
-        hintType: 'https://xats.org/vocabularies/hints/layout/position',
+        hintType: 'https://pub.xats.org/vocabularies/hints/layout/position',
         value: 'center',
         conditions: {
           outputFormats: ['html', 'epub'],
@@ -186,7 +186,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
 
     it('should validate inheritance property', () => {
       const hintWithInheritance = {
-        hintType: 'https://xats.org/vocabularies/hints/semantic/emphasis',
+        hintType: 'https://pub.xats.org/vocabularies/hints/semantic/emphasis',
         value: 'emphasis',
         inheritance: 'cascade',
       };
@@ -205,7 +205,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
   describe('Value Type Validation', () => {
     it('should accept string values', () => {
       const hint = {
-        hintType: 'https://xats.org/vocabularies/hints/test',
+        hintType: 'https://pub.xats.org/vocabularies/hints/test',
         value: 'test-string',
       };
 
@@ -215,7 +215,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
 
     it('should accept number values', () => {
       const hint = {
-        hintType: 'https://xats.org/vocabularies/hints/test',
+        hintType: 'https://pub.xats.org/vocabularies/hints/test',
         value: 42,
       };
 
@@ -225,7 +225,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
 
     it('should accept boolean values', () => {
       const hint = {
-        hintType: 'https://xats.org/vocabularies/hints/test',
+        hintType: 'https://pub.xats.org/vocabularies/hints/test',
         value: true,
       };
 
@@ -235,7 +235,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
 
     it('should accept object values', () => {
       const hint = {
-        hintType: 'https://xats.org/vocabularies/hints/test',
+        hintType: 'https://pub.xats.org/vocabularies/hints/test',
         value: {
           position: 'center',
           width: '80%',
@@ -248,7 +248,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
 
     it('should accept array values', () => {
       const hint = {
-        hintType: 'https://xats.org/vocabularies/hints/test',
+        hintType: 'https://pub.xats.org/vocabularies/hints/test',
         value: ['option1', 'option2', 'option3'],
       };
 
@@ -269,7 +269,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
 
     it('should require value', () => {
       const hintWithoutValue = {
-        hintType: 'https://xats.org/vocabularies/hints/test',
+        hintType: 'https://pub.xats.org/vocabularies/hints/test',
       };
 
       const validate = ajv.compile(schemaV050.definitions.RenderingHint);

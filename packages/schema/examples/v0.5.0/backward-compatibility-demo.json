@@ -25,14 +25,14 @@
               {
                 "id": "old-style-hint",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/breakBefore",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/breakBefore",
                     "value": "page"
                   },
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/layoutMode", 
+                    "hintType": "https://pub.xats.org/vocabularies/hints/layoutMode", 
                     "value": "single-column"
                   }
                 ],
@@ -57,14 +57,14 @@
               {
                 "id": "mixed-hints",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/layoutMode",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/layoutMode",
                     "value": "full-width"
                   },
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/semantic/highlight",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/semantic/highlight",
                     "value": "highlight",
                     "priority": 3,
                     "conditions": {
@@ -93,17 +93,17 @@
               {
                 "id": "fallback-example",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "renderingHints": [
                   {
-                    "hintType": "https://xats.org/vocabularies/hints/accessibility/motion-safe",
+                    "hintType": "https://pub.xats.org/vocabularies/hints/accessibility/motion-safe",
                     "value": "motion-safe",
                     "priority": 4,
                     "fallback": {
-                      "hintType": "https://xats.org/vocabularies/hints/semantic/highlight",
+                      "hintType": "https://pub.xats.org/vocabularies/hints/semantic/highlight",
                       "value": "highlight",
                       "fallback": {
-                        "hintType": "https://xats.org/vocabularies/hints/layoutMode",
+                        "hintType": "https://pub.xats.org/vocabularies/hints/layoutMode",
                         "value": "full-width"
                       }
                     }

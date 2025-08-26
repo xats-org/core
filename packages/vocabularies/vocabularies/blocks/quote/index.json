@@ -1,23 +1,23 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/blocks/quote",
+  "$id": "https://pub.xats.org/vocabularies/blocks/quote",
   "title": "Quote Block",
   "description": "A semantic callout block for quotations",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/blocks/quote",
+      "const": "https://pub.xats.org/vocabularies/blocks/quote",
       "description": "The URI identifier for this block type"
     },
     "content": {
       "type": "object",
       "properties": {
         "quote": {
-          "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
+          "$ref": "https://pub.xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
           "description": "The quotation text"
         },
         "attribution": {
-          "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
+          "$ref": "https://pub.xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
           "description": "Optional attribution for the quote (author, source, etc.)"
         }
       },
@@ -28,7 +28,7 @@
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/quote",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/quote",
       "content": {
         "quote": {
           "runs": [
@@ -49,7 +49,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/vocabularies/blocks/quote",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/quote",
       "content": {
         "quote": {
           "runs": [

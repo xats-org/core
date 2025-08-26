@@ -264,56 +264,56 @@ export class DocumentRenderer {
     const elements: any[] = [];
 
     switch (block.blockType) {
-      case 'https://xats.org/vocabularies/blocks/paragraph':
+      case 'https://pub.xats.org/vocabularies/blocks/paragraph':
         elements.push(this.createParagraph(block));
         break;
 
-      case 'https://xats.org/vocabularies/blocks/heading':
+      case 'https://pub.xats.org/vocabularies/blocks/heading':
         elements.push(this.createHeading(block));
         break;
 
-      case 'https://xats.org/vocabularies/blocks/blockquote':
+      case 'https://pub.xats.org/vocabularies/blocks/blockquote':
         elements.push(this.createBlockquote(block));
         break;
 
-      case 'https://xats.org/vocabularies/blocks/list':
+      case 'https://pub.xats.org/vocabularies/blocks/list':
         elements.push(...this.createList(block));
         break;
 
-      case 'https://xats.org/vocabularies/blocks/table':
+      case 'https://pub.xats.org/vocabularies/blocks/table':
         elements.push(this.createTable(block));
         break;
 
-      case 'https://xats.org/vocabularies/blocks/codeBlock':
+      case 'https://pub.xats.org/vocabularies/blocks/codeBlock':
         elements.push(this.createCodeBlock(block));
         break;
 
-      case 'https://xats.org/vocabularies/blocks/mathBlock':
+      case 'https://pub.xats.org/vocabularies/blocks/mathBlock':
         elements.push(this.createMathBlock(block));
         break;
 
-      case 'https://xats.org/vocabularies/blocks/figure':
+      case 'https://pub.xats.org/vocabularies/blocks/figure':
         elements.push(...(await this.createFigure(block)));
         break;
 
       // Educational content blocks
-      case 'https://xats.org/vocabularies/blocks/learningObjective':
+      case 'https://pub.xats.org/vocabularies/blocks/learningObjective':
         elements.push(this.createEducationalBlock(block, 'Learning Objective'));
         break;
 
-      case 'https://xats.org/vocabularies/blocks/keyTerm':
+      case 'https://pub.xats.org/vocabularies/blocks/keyTerm':
         elements.push(this.createEducationalBlock(block, 'Key Term'));
         break;
 
-      case 'https://xats.org/vocabularies/blocks/definition':
+      case 'https://pub.xats.org/vocabularies/blocks/definition':
         elements.push(this.createEducationalBlock(block, 'Definition'));
         break;
 
-      case 'https://xats.org/vocabularies/blocks/example':
+      case 'https://pub.xats.org/vocabularies/blocks/example':
         elements.push(this.createEducationalBlock(block, 'Example'));
         break;
 
-      case 'https://xats.org/vocabularies/blocks/exercise':
+      case 'https://pub.xats.org/vocabularies/blocks/exercise':
         elements.push(this.createEducationalBlock(block, 'Exercise'));
         break;
 
@@ -876,7 +876,7 @@ export class DocumentRenderer {
   }
 
   private extractBlockTypes(_document: XatsDocument): string[] {
-    return ['https://xats.org/vocabularies/blocks/paragraph']; // Placeholder
+    return ['https://pub.xats.org/vocabularies/blocks/paragraph']; // Placeholder
   }
 
   private countImages(_document: XatsDocument): number {

@@ -4,7 +4,7 @@ The Analytics Tracking extension provides comprehensive learner analytics and in
 
 ## Overview
 
-- **Extension ID**: `https://xats.org/extensions/analytics-tracking/schema.json`
+- **Extension ID**: `https://pub.xats.org/extensions/analytics-tracking/schema.json`
 - **Version**: 1.0.0
 - **Compatibility**: xats v0.2.0+
 
@@ -94,7 +94,7 @@ The Analytics Tracking extension provides comprehensive learner analytics and in
   "contents": [
     {
       "id": "quadratic-intro",
-      "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
       "content": {
         "text": {
           "runs": [
@@ -129,7 +129,7 @@ The Analytics Tracking extension provides comprehensive learner analytics and in
     },
     {
       "id": "quadratic-interactive",
-      "blockType": "https://xats.org/vocabularies/blocks/interactive",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/interactive",
       "content": {
         "title": { "runs": [{ "type": "text", "content": "Interactive Quadratic Explorer" }] }
       },
@@ -190,7 +190,7 @@ The Analytics Tracking extension provides comprehensive learner analytics and in
 ```json
 {
   "id": "quadratic-quiz",
-  "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/multipleChoice",
   "content": {
     "question": {
       "runs": [{ "type": "text", "content": "What is the discriminant of x² + 3x - 4 = 0?" }]

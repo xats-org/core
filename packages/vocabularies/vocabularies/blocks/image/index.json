@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/blocks/image",
+  "$id": "https://pub.xats.org/vocabularies/blocks/image",
   "title": "Image Block",
   "description": "A block for displaying images from the resources repository",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/blocks/image",
+      "const": "https://pub.xats.org/vocabularies/blocks/image",
       "description": "The URI identifier for this block type"
     },
     "content": {
@@ -17,7 +17,7 @@
           "description": "Reference ID to an image resource in the resources repository"
         },
         "caption": {
-          "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
+          "$ref": "https://pub.xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
           "description": "Caption for the image as a SemanticText object"
         }
       },
@@ -28,7 +28,7 @@
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/image",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/image",
       "content": {
         "refId": "fig-cell-structure",
         "caption": {
@@ -42,7 +42,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/vocabularies/blocks/image",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/image",
       "content": {
         "refId": "diagram-photosynthesis",
         "caption": {

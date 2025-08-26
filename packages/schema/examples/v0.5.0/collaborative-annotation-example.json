@@ -1,5 +1,5 @@
 {
-  "$schema": "https://xats.org/schemas/0.5.0/schema.json",
+  "$schema": "https://pub.xats.org/schemas/0.5.0/schema.json",
   "schemaVersion": "0.5.0",
   "bibliographicEntry": {
     "id": "collab-annotation-demo-2025",
@@ -28,7 +28,7 @@
               {
                 "id": "theory-block",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -40,7 +40,7 @@
                   {
                     "id": "thread-starter-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/clarification_request",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/clarification_request",
                     "targetObjectId": "theory-block",
                     "targetRange": {
                       "startOffset": 70,
@@ -61,7 +61,7 @@
                   {
                     "id": "thread-reply-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion",
                     "targetObjectId": "theory-block",
                     "parentAnnotationId": "thread-starter-001",
                     "threadId": "discussion-thread-001",
@@ -83,7 +83,7 @@
                   {
                     "id": "thread-reply-002", 
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion",
                     "targetObjectId": "theory-block",
                     "parentAnnotationId": "thread-starter-001",
                     "threadId": "discussion-thread-001",
@@ -102,7 +102,7 @@
               {
                 "id": "assessment-block",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph", 
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph", 
                 "content": {
                   "text": {
                     "runs": [
@@ -114,7 +114,7 @@
                   {
                     "id": "assessment-concern-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/major_revision_needed",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/major_revision_needed",
                     "targetObjectId": "assessment-block",
                     "status": "open",
                     "priority": "critical",
@@ -170,7 +170,7 @@
                   {
                     "id": "assessment-response-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion",
                     "targetObjectId": "assessment-block",
                     "parentAnnotationId": "assessment-concern-001",
                     "threadId": "assessment-discussion-001",
@@ -195,7 +195,7 @@
               {
                 "id": "technology-integration",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -207,7 +207,7 @@
                   {
                     "id": "tech-approval-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/approval",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/approval",
                     "targetObjectId": "technology-integration",
                     "status": "resolved",
                     "priority": "medium",
@@ -233,7 +233,7 @@
                   {
                     "id": "tech-enhancement-001",
                     "language": "en", 
-                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion",
                     "targetObjectId": "technology-integration",
                     "status": "open",
                     "priority": "low",

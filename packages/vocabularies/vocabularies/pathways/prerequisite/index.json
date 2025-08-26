@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/pathways/prerequisite",
+  "$id": "https://pub.xats.org/vocabularies/pathways/prerequisite",
   "title": "Prerequisite Learning Pathway",
   "description": "Pathway to review essential prerequisite knowledge",
   "type": "object",
   "properties": {
     "pathwayType": {
-      "const": "https://xats.org/vocabularies/pathways/prerequisite",
+      "const": "https://pub.xats.org/vocabularies/pathways/prerequisite",
       "description": "URI identifier for prerequisite pathway type"
     },
     "description": {
@@ -38,7 +38,7 @@
   "required": ["pathwayType", "requiredTopics"],
   "examples": [
     {
-      "pathwayType": "https://xats.org/vocabularies/pathways/prerequisite", 
+      "pathwayType": "https://pub.xats.org/vocabularies/pathways/prerequisite", 
       "description": "Master foundational algebra before calculus",
       "requiredTopics": ["linear equations", "quadratic functions", "exponential functions"],
       "masteryThreshold": 0.85,

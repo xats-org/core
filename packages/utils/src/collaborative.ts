@@ -26,7 +26,7 @@ export function createCollaborativeProject(
   return {
     id,
     language: 'en',
-    blockType: 'https://xats.org/vocabularies/blocks/collaborativeProject',
+    blockType: 'https://pub.xats.org/vocabularies/blocks/collaborativeProject',
     content: {
       title: { runs: [{ type: 'text', text: title }] },
       description: { runs: [{ type: 'text', text: description }] },

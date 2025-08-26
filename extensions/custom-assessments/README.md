@@ -4,7 +4,7 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
 
 ## Overview
 
-- **Extension ID**: `https://xats.org/extensions/custom-assessments/schema.json`
+- **Extension ID**: `https://pub.xats.org/extensions/custom-assessments/schema.json`
 - **Version**: 1.0.0
 - **Compatibility**: xats v0.2.0+
 
@@ -49,9 +49,9 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
 ```json
 {
   "id": "algebra-adaptive-test",
-  "blockType": "https://xats.org/vocabularies/blocks/assessment",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/assessment",
   "content": {
-    "assessmentType": "https://xats.org/extensions/custom-assessments/adaptive"
+    "assessmentType": "https://pub.xats.org/extensions/custom-assessments/adaptive"
   },
   "extensions": {
     "adaptiveAssessment": {
@@ -83,7 +83,7 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
           "discrimination": 1.5,
           "content": {
             "id": "alg-q1",
-            "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
+            "blockType": "https://pub.xats.org/vocabularies/blocks/multipleChoice",
             "content": {
               "question": {
                 "runs": [
@@ -158,9 +158,9 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
 ```json
 {
   "id": "essay-peer-review",
-  "blockType": "https://xats.org/vocabularies/blocks/assessment",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/assessment",
   "content": {
-    "assessmentType": "https://xats.org/extensions/custom-assessments/peer"
+    "assessmentType": "https://pub.xats.org/extensions/custom-assessments/peer"
   },
   "extensions": {
     "peerAssessment": {
@@ -340,9 +340,9 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
 ```json
 {
   "id": "design-portfolio",
-  "blockType": "https://xats.org/vocabularies/blocks/assessment",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/assessment",
   "content": {
-    "assessmentType": "https://xats.org/extensions/custom-assessments/portfolio"
+    "assessmentType": "https://pub.xats.org/extensions/custom-assessments/portfolio"
   },
   "extensions": {
     "portfolioAssessment": {
@@ -579,9 +579,9 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
 ```json
 {
   "id": "ecosystem-simulation",
-  "blockType": "https://xats.org/vocabularies/blocks/assessment",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/assessment",
   "content": {
-    "assessmentType": "https://xats.org/extensions/custom-assessments/game-based"
+    "assessmentType": "https://pub.xats.org/extensions/custom-assessments/game-based"
   },
   "extensions": {
     "gameBasedAssessment": {
@@ -793,9 +793,9 @@ The Custom Assessment Types extension provides advanced assessment capabilities 
 ```json
 {
   "id": "leadership-scenarios",
-  "blockType": "https://xats.org/vocabularies/blocks/assessment",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/assessment",
   "content": {
-    "assessmentType": "https://xats.org/extensions/custom-assessments/situational-judgment"
+    "assessmentType": "https://pub.xats.org/extensions/custom-assessments/situational-judgment"
   },
   "extensions": {
     "situationalJudgmentTest": {

@@ -30,7 +30,7 @@
               {
                 "id": "intro-text",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -45,7 +45,7 @@
               {
                 "id": "tps-climate-ethics",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/thinkPairShare",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/thinkPairShare",
                 "content": {
                   "prompt": {
                     "runs": [
@@ -113,7 +113,7 @@
               {
                 "id": "worked-example-quadratic",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/workedExample",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/workedExample",
                 "content": {
                   "concept": "Solving quadratic equations using the quadratic formula",
                   "problem": {
@@ -243,7 +243,7 @@
               {
                 "id": "case-study-startup",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/caseStudy",
                 "content": {
                   "title": {
                     "runs": [
@@ -386,7 +386,7 @@
               {
                 "id": "pbl-urban-planning",
                 "language": "en", 
-                "blockType": "https://xats.org/vocabularies/blocks/problemScenario",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/problemScenario",
                 "content": {
                   "scenario": {
                     "runs": [

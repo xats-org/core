@@ -1,5 +1,5 @@
 {
-  "uri": "https://xats.org/vocabularies/ancillary/quiz-bank-item",
+  "uri": "https://pub.xats.org/vocabularies/ancillary/quiz-bank-item",
   "name": "Quiz Bank Item",
   "description": "Content that should be included in generated test banks and quizzes",
   "category": "ancillary",

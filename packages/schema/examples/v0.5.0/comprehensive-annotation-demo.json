@@ -1,5 +1,5 @@
 {
-  "$schema": "https://xats.org/schemas/0.5.0/schema.json",
+  "$schema": "https://pub.xats.org/schemas/0.5.0/schema.json",
   "schemaVersion": "0.5.0",
   "bibliographicEntry": {
     "id": "annotation-system-demo-2025",
@@ -32,7 +32,7 @@
               {
                 "id": "suggestion-example-block",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -44,7 +44,7 @@
                   {
                     "id": "suggestion-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion",
                     "targetObjectId": "suggestion-example-block",
                     "targetRange": {
                       "startOffset": 45,
@@ -74,7 +74,7 @@
               {
                 "id": "clarification-example-block", 
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -86,7 +86,7 @@
                   {
                     "id": "clarification-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/clarification_request",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/clarification_request",
                     "targetObjectId": "clarification-example-block",
                     "targetRange": {
                       "startOffset": 0,
@@ -109,7 +109,7 @@
               {
                 "id": "approval-example-block",
                 "language": "en", 
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -121,7 +121,7 @@
                   {
                     "id": "approval-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/approval",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/approval",
                     "targetObjectId": "approval-example-block", 
                     "status": "resolved",
                     "priority": "low",
@@ -157,7 +157,7 @@
               {
                 "id": "minor-revision-block",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -169,7 +169,7 @@
                   {
                     "id": "minor-revision-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/minor_revision_needed",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/minor_revision_needed",
                     "targetObjectId": "minor-revision-block",
                     "targetRange": {
                       "startOffset": 71,
@@ -213,7 +213,7 @@
               {
                 "id": "major-revision-block",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph", 
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph", 
                 "content": {
                   "text": {
                     "runs": [
@@ -225,7 +225,7 @@
                   {
                     "id": "major-revision-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/major_revision_needed",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/major_revision_needed",
                     "targetObjectId": "major-revision-block",
                     "status": "open",
                     "priority": "critical",
@@ -283,7 +283,7 @@
               {
                 "id": "rejection-example-block",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -295,7 +295,7 @@
                   {
                     "id": "rejection-001",
                     "language": "en", 
-                    "annotationType": "https://xats.org/vocabularies/annotations/rejection",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/rejection",
                     "targetObjectId": "rejection-example-block",
                     "status": "resolved",
                     "priority": "critical",
@@ -351,7 +351,7 @@
               {
                 "id": "discussion-starter-block",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -363,7 +363,7 @@
                   {
                     "id": "thread-starter-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/clarification_request",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/clarification_request",
                     "targetObjectId": "discussion-starter-block",
                     "targetRange": {
                       "startOffset": 66,
@@ -384,7 +384,7 @@
                   {
                     "id": "thread-response-001",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion",
                     "targetObjectId": "discussion-starter-block",
                     "parentAnnotationId": "thread-starter-001",
                     "threadId": "collaborative-discussion-001",
@@ -406,7 +406,7 @@
                   {
                     "id": "thread-response-002",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion",
                     "targetObjectId": "discussion-starter-block", 
                     "parentAnnotationId": "thread-starter-001",
                     "threadId": "collaborative-discussion-001",
@@ -423,7 +423,7 @@
                   {
                     "id": "high-priority-annotation",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/major_revision_needed",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/major_revision_needed",
                     "targetObjectId": "discussion-starter-block",
                     "status": "open",
                     "priority": "critical",
@@ -480,7 +480,7 @@
               {
                 "id": "status-demo-block",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -492,7 +492,7 @@
                   {
                     "id": "open-status-demo",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion", 
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion", 
                     "targetObjectId": "status-demo-block",
                     "status": "open",
                     "priority": "medium",
@@ -507,7 +507,7 @@
                   {
                     "id": "resolved-status-demo",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/clarification_request",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/clarification_request",
                     "targetObjectId": "status-demo-block",
                     "status": "resolved",
                     "priority": "low",
@@ -523,7 +523,7 @@
                   {
                     "id": "rejected-status-demo",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion",
                     "targetObjectId": "status-demo-block",
                     "status": "rejected",
                     "priority": "low",
@@ -549,7 +549,7 @@
                   {
                     "id": "deferred-status-demo",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/major_revision_needed",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/major_revision_needed",
                     "targetObjectId": "status-demo-block",
                     "status": "deferred",
                     "priority": "high",
@@ -596,7 +596,7 @@
               {
                 "id": "multi-target-block",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -608,7 +608,7 @@
                   {
                     "id": "cross-reference-annotation",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion",
                     "targetObjectId": "multi-target-block",
                     "targetRange": {
                       "startOffset": 92,
@@ -634,7 +634,7 @@
                   {
                     "id": "metadata-rich-annotation",
                     "language": "en",
-                    "annotationType": "https://xats.org/vocabularies/annotations/approval",
+                    "annotationType": "https://pub.xats.org/vocabularies/annotations/approval",
                     "targetObjectId": "multi-target-block",
                     "status": "resolved",
                     "priority": "low",
@@ -696,7 +696,7 @@
           {
             "id": "vocabulary-table",
             "language": "en",
-            "blockType": "https://xats.org/vocabularies/blocks/table",
+            "blockType": "https://pub.xats.org/vocabularies/blocks/table",
             "content": {
               "caption": {
                 "runs": [
@@ -712,37 +712,37 @@
               "rows": [
                 [
                   {"runs": [{"type": "text", "text": "Suggestion"}]},
-                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/suggestion"}]},
+                  {"runs": [{"type": "text", "text": "https://pub.xats.org/vocabularies/annotations/suggestion"}]},
                   {"runs": [{"type": "text", "text": "Propose specific improvements or changes"}]},
                   {"runs": [{"type": "text", "text": "open → resolved"}]}
                 ],
                 [
                   {"runs": [{"type": "text", "text": "Clarification Request"}]},
-                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/clarification_request"}]},
+                  {"runs": [{"type": "text", "text": "https://pub.xats.org/vocabularies/annotations/clarification_request"}]},
                   {"runs": [{"type": "text", "text": "Ask for explanation or additional information"}]},
                   {"runs": [{"type": "text", "text": "open → resolved"}]}
                 ],
                 [
                   {"runs": [{"type": "text", "text": "Minor Revision Needed"}]},
-                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/minor_revision_needed"}]},
+                  {"runs": [{"type": "text", "text": "https://pub.xats.org/vocabularies/annotations/minor_revision_needed"}]},
                   {"runs": [{"type": "text", "text": "Request small corrections or improvements"}]},
                   {"runs": [{"type": "text", "text": "open → resolved"}]}
                 ],
                 [
                   {"runs": [{"type": "text", "text": "Major Revision Needed"}]},
-                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/major_revision_needed"}]},
+                  {"runs": [{"type": "text", "text": "https://pub.xats.org/vocabularies/annotations/major_revision_needed"}]},
                   {"runs": [{"type": "text", "text": "Request substantial changes or additions"}]},
                   {"runs": [{"type": "text", "text": "open → resolved/deferred"}]}
                 ],
                 [
                   {"runs": [{"type": "text", "text": "Approval"}]},
-                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/approval"}]},
+                  {"runs": [{"type": "text", "text": "https://pub.xats.org/vocabularies/annotations/approval"}]},
                   {"runs": [{"type": "text", "text": "Formally approve content quality"}]},
                   {"runs": [{"type": "text", "text": "open → resolved"}]}
                 ],
                 [
                   {"runs": [{"type": "text", "text": "Rejection"}]},
-                  {"runs": [{"type": "text", "text": "https://xats.org/vocabularies/annotations/rejection"}]},
+                  {"runs": [{"type": "text", "text": "https://pub.xats.org/vocabularies/annotations/rejection"}]},
                   {"runs": [{"type": "text", "text": "Formally reject content for publication"}]},
                   {"runs": [{"type": "text", "text": "open → resolved"}]}
                 ]

@@ -49,7 +49,7 @@ Each referenced file contains a complete xats object:
 
 ```json
 {
-  "$schema": "https://xats.org/schemas/0.3.0/xats.json#/definitions/Chapter",
+  "$schema": "https://pub.xats.org/schemas/0.3.0/xats.json#/definitions/Chapter",
   "type": "Chapter",
   "id": "chapter-01",
   "label": "Chapter 1",

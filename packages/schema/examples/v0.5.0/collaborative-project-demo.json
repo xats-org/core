@@ -21,7 +21,7 @@
               {
                 "id": "intro-paragraph",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "text": {
                     "runs": [
@@ -36,7 +36,7 @@
               {
                 "id": "research-project-demo",
                 "language": "en",
-                "blockType": "https://xats.org/vocabularies/blocks/collaborativeProject",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/collaborativeProject",
                 "content": {
                   "title": {
                     "runs": [

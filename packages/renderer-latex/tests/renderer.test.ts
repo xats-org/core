@@ -34,7 +34,7 @@ describe('LaTeXRenderer', () => {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     runs: [{ runType: 'text', text: 'This is a test paragraph.' }],
                   },
@@ -114,7 +114,7 @@ describe('LaTeXRenderer', () => {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     runs: [
                       { runType: 'text', text: 'This is ' },
@@ -151,7 +151,7 @@ describe('LaTeXRenderer', () => {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/mathBlock',
                   content: 'E = mc^2',
                   id: 'equation:einstein',
                   renderingHints: [{ hintType: 'numbered', value: true }],
@@ -187,7 +187,7 @@ describe('LaTeXRenderer', () => {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     runs: [
                       { runType: 'text', text: 'As stated in ' },
@@ -226,7 +226,7 @@ describe('LaTeXRenderer', () => {
               },
               contents: [
                 {
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     runs: [
                       {

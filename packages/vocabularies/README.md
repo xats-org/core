@@ -9,7 +9,7 @@ import { getBlockVocabulary, getHintVocabulary } from '@xats-org/vocabularies';
 
 // Get a specific block vocabulary
 const paragraphBlock = await getBlockVocabulary('paragraph');
-console.log(paragraphBlock.$id); // "https://xats.org/vocabularies/blocks/paragraph"
+console.log(paragraphBlock.$id); // "https://pub.xats.org/vocabularies/blocks/paragraph"
 
 // Get all available vocabularies
 import { blockTypes, hintTypes, pathwayTypes } from '@xats-org/vocabularies';
@@ -35,4 +35,4 @@ vocabularies/
 ```
 
 All vocabulary files follow the JSON Schema format with standardized URIs using the pattern:
-`https://xats.org/vocabularies/{category}/{name}`
+`https://pub.xats.org/vocabularies/{category}/{name}`
