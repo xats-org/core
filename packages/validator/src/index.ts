@@ -54,9 +54,23 @@ export class XatsValidator {
       additionalProperties: true,
     });
 
-    // Also add the resource.citationstyles.org version
+    // Add the v1.0 version used in current schemas
+    this.ajv.addSchema({
+      $id: 'https://raw.githubusercontent.com/citation-style-language/schema/v1.0/schemas/input/csl-data.json',
+      type: 'object',
+      additionalProperties: true,
+    });
+
+    // Also add the resource.citationstyles.org version for backwards compatibility
     this.ajv.addSchema({
       $id: 'https://resource.citationstyles.org/schema/latest/input/json/csl-data.json',
+      type: 'object',
+      additionalProperties: true,
+    });
+
+    // Add the old v1.0 resource.citationstyles.org version for backwards compatibility
+    this.ajv.addSchema({
+      $id: 'https://resource.citationstyles.org/schema/v1.0/input/json/csl-data.json',
       type: 'object',
       additionalProperties: true,
     });

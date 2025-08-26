@@ -156,12 +156,12 @@ describe('Definition Reference Validation', () => {
       expect(cslDataItem).toHaveProperty('allOf');
 
       const externalRef = cslDataItem.allOf.find(
-        (item: any) => item.$ref && item.$ref.includes('citation-style-language')
+        (item: any) => item.$ref && (item.$ref.includes('citation-style-language') || item.$ref.includes('citationstyles'))
       );
 
       expect(externalRef).toBeDefined();
       expect(externalRef.$ref).toBe(
-        'https://raw.githubusercontent.com/citation-style-language/schema/master/csl-data.json'
+        'https://resource.citationstyles.org/schema/v1.0/input/json/csl-data.json'
       );
     });
 
