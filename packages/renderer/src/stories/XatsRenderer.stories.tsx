@@ -1,42 +1,13 @@
-import { XatsRenderer } from '../components/XatsRenderer';
+import { XatsRenderer, type XatsRendererProps } from '../components/XatsRenderer';
 
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Story } from '@ladle/react';
 import type { XatsDocument } from '@xats-org/types';
 
-const meta: Meta<typeof XatsRenderer> = {
+export default {
   title: 'Renderer/XatsRenderer',
-  component: XatsRenderer,
-  parameters: {
-    layout: 'padded',
-    docs: {
-      description: {
-        component:
-          'The XatsRenderer component renders xats documents in various formats (HTML, Markdown, or plain text).',
-      },
-    },
-  },
-  tags: ['autodocs'],
-  argTypes: {
-    format: {
-      control: 'select',
-      options: ['html', 'markdown', 'text'],
-      description: 'Output format for rendering',
-    },
-    document: {
-      description: 'The xats document to render',
-    },
-    options: {
-      description: 'Renderer-specific options',
-    },
-    className: {
-      control: 'text',
-      description: 'Additional CSS class name',
-    },
-  },
 };
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+// Sample xats document for stories
 
 // Sample xats document for stories
 const sampleDocument: XatsDocument = {
@@ -128,30 +99,84 @@ const sampleDocument: XatsDocument = {
 };
 
 // Basic HTML rendering story
-export const HTMLFormat: Story = {
-  args: {
-    document: sampleDocument,
-    format: 'html',
-    options: {},
+export const HTMLFormat: Story<XatsRendererProps> = ({
+  document = sampleDocument,
+  format = 'html',
+  options = {},
+  className,
+}) => (
+  <XatsRenderer
+    document={document}
+    format={format}
+    options={options}
+    {...(className ? { className } : {})}
+  />
+);
+
+HTMLFormat.args = {
+  document: sampleDocument,
+  format: 'html' as const,
+  options: {},
+};
+
+HTMLFormat.argTypes = {
+  format: {
+    control: { type: 'select' },
+    options: ['html', 'markdown', 'text'],
+    description: 'Output format for rendering',
+  },
+  document: {
+    description: 'The xats document to render',
+  },
+  options: {
+    description: 'Renderer-specific options',
+  },
+  className: {
+    control: { type: 'text' },
+    description: 'Additional CSS class name',
   },
 };
 
 // Markdown rendering story
-export const MarkdownFormat: Story = {
-  args: {
-    document: sampleDocument,
-    format: 'markdown',
-    options: {},
-  },
+export const MarkdownFormat: Story<XatsRendererProps> = ({
+  document = sampleDocument,
+  format = 'markdown',
+  options = {},
+  className,
+}) => (
+  <XatsRenderer
+    document={document}
+    format={format}
+    options={options}
+    {...(className ? { className } : {})}
+  />
+);
+
+MarkdownFormat.args = {
+  document: sampleDocument,
+  format: 'markdown' as const,
+  options: {},
 };
 
 // Plain text rendering story
-export const TextFormat: Story = {
-  args: {
-    document: sampleDocument,
-    format: 'text',
-    options: {},
-  },
+export const TextFormat: Story<XatsRendererProps> = ({
+  document = sampleDocument,
+  format = 'text',
+  options = {},
+  className,
+}) => (
+  <XatsRenderer
+    document={document}
+    format={format}
+    options={options}
+    {...(className ? { className } : {})}
+  />
+);
+
+TextFormat.args = {
+  document: sampleDocument,
+  format: 'text' as const,
+  options: {},
 };
 
 // Complex document with math and code
@@ -232,12 +257,24 @@ const complexDocument: XatsDocument = {
   },
 };
 
-export const ComplexDocument: Story = {
-  args: {
-    document: complexDocument,
-    format: 'html',
-    options: {},
-  },
+export const ComplexDocument: Story<XatsRendererProps> = ({
+  document = complexDocument,
+  format = 'html',
+  options = {},
+  className,
+}) => (
+  <XatsRenderer
+    document={document}
+    format={format}
+    options={options}
+    {...(className ? { className } : {})}
+  />
+);
+
+ComplexDocument.args = {
+  document: complexDocument,
+  format: 'html' as const,
+  options: {},
 };
 
 // Document with assessment
@@ -310,27 +347,41 @@ const assessmentDocument: XatsDocument = {
   },
 };
 
-export const AssessmentDocument: Story = {
-  args: {
-    document: assessmentDocument,
-    format: 'html',
-    options: {},
-  },
+export const AssessmentDocument: Story<XatsRendererProps> = ({
+  document = assessmentDocument,
+  format = 'html',
+  options = {},
+  className,
+}) => (
+  <XatsRenderer
+    document={document}
+    format={format}
+    options={options}
+    {...(className ? { className } : {})}
+  />
+);
+
+AssessmentDocument.args = {
+  document: assessmentDocument,
+  format: 'html' as const,
+  options: {},
 };
 
 // Custom styled HTML rendering
-export const StyledHTML: Story = {
-  args: {
-    document: sampleDocument,
-    format: 'html',
-    options: {},
-    className: 'custom-xats-content',
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'HTML rendering with custom CSS class for styling',
-      },
-    },
-  },
+export const StyledHTML: Story<XatsRendererProps> = ({
+  document = sampleDocument,
+  format = 'html',
+  options = {},
+  className = 'custom-xats-content',
+}) => <XatsRenderer document={document} format={format} options={options} className={className} />;
+
+StyledHTML.args = {
+  document: sampleDocument,
+  format: 'html' as const,
+  options: {},
+  className: 'custom-xats-content',
+};
+
+StyledHTML.meta = {
+  description: 'HTML rendering with custom CSS class for styling',
 };
