@@ -59,7 +59,7 @@ export abstract class AbstractBidirectionalRenderer<
   readonly wcagLevel: 'A' | 'AA' | 'AAA' | null = null;
 
   protected options: Required<TOptions>;
-  private roundTripTester?: any; // RoundTripTester - dynamically imported
+  private roundTripTester?: unknown; // RoundTripTester - dynamically imported
 
   constructor(options: TOptions = {} as TOptions) {
     this.options = {
@@ -123,7 +123,8 @@ export abstract class AbstractBidirectionalRenderer<
       await this.initializeRoundTripTester(options);
     }
 
-    return this.roundTripTester.testDocument(document);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+    return (this.roundTripTester as any).testDocument(document);
   }
 
   /**
@@ -294,7 +295,11 @@ export abstract class AbstractBidirectionalRenderer<
       const { RoundTripTester } = await import('@xats-org/testing');
       this.roundTripTester = new RoundTripTester(this, options);
     } catch (error) {
-      throw new Error(`Failed to initialize RoundTripTester: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to initialize RoundTripTester: ${
+          error instanceof Error ? error.message : 'Unknown error'
+        }`
+      );
     }
   }
 
