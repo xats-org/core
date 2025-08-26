@@ -71,17 +71,6 @@ jobs:
         # Copy static files (including CNAME and index.html)
         cp -r static/* pub-site/
       
-    - name: Build Ladle for pub site
-      run: |
-        export DEPLOY_TARGET=pub-site
-        export NODE_ENV=production
-        pnpm run ladle:build
-        
-    - name: Copy Ladle build to pub-site directory
-      run: |
-        mkdir -p pub-site/ladle
-        cp -r ladle-build/* pub-site/ladle/
-        
     - name: Build schemas directory
       run: |
         mkdir -p pub-site/schemas
@@ -124,7 +113,6 @@ jobs:
         <body>
             <div class="nav">
                 <a href="/">← Back to Home</a>
-                <a href="/ladle/">Components</a>
                 <a href="/schemas/">Schemas</a>
                 <a href="/examples/">Examples</a>
             </div>
@@ -132,25 +120,25 @@ jobs:
             <div class="section">
                 <h2>Architecture & Specifications</h2>
                 <ul class="file-list">
-                    <li><a href="ARCHITECTURE.html">Architecture Overview</a></li>
-                    <li><a href="ROADMAP.html">Project Roadmap</a></li>
+                    <li><a href="ARCHITECTURE.md">Architecture Overview</a></li>
+                    <li><a href="ROADMAP.md">Project Roadmap</a></li>
                     <li><a href="specs/">Specifications</a></li>
                 </ul>
             </div>
             <div class="section">
                 <h2>User Guides</h2>
                 <ul class="file-list">
-                    <li><a href="guides/authoring-guide.html">Authoring Guide</a></li>
-                    <li><a href="guides/accessibility-guide.html">Accessibility Guide</a></li>
-                    <li><a href="guides/renderer-guide.html">Renderer Guide</a></li>
+                    <li><a href="guides/authoring-guide.md">Authoring Guide</a></li>
+                    <li><a href="guides/accessibility-guide.md">Accessibility Guide</a></li>
+                    <li><a href="guides/renderer-guide.md">Renderer Guide</a></li>
                     <li><a href="guides/">All Guides</a></li>
                 </ul>
             </div>
             <div class="section">
                 <h2>API Reference</h2>
                 <ul class="file-list">
-                    <li><a href="reference/index.html">Complete API Reference</a></li>
-                    <li><a href="reference/renderer.html">Renderer API</a></li>
+                    <li><a href="reference/index.md">Complete API Reference</a></li>
+                    <li><a href="reference/renderer.md">Renderer API</a></li>
                 </ul>
             </div>
         </body>

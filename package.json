@@ -34,11 +34,8 @@
     "release:minor": "./scripts/release.sh minor",
     "release:major": "./scripts/release.sh major",
     "bench": "vitest bench",
-    "ladle": "ladle serve",
-    "ladle:build": "ladle build",
-    "ladle:preview": "ladle preview",
-    "build:pub-site": "pnpm run build && DEPLOY_TARGET=pub-site NODE_ENV=production pnpm run ladle:build",
-    "serve:pub-site": "npx http-server ladle-build -p 8080 -c-1"
+    "build:pub-site": "pnpm run build",
+    "serve:pub-site": "npx http-server pub-site -p 8080 -c-1"
   },
   "keywords": [
     "xats",
@@ -61,7 +58,6 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.6",
-    "@ladle/react": "^4.1.1",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
