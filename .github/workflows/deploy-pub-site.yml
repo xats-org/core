@@ -79,8 +79,8 @@ jobs:
         
     - name: Copy Ladle build to pub-site directory
       run: |
-        mkdir -p pub-site/storybook
-        cp -r ladle-build/* pub-site/storybook/
+        mkdir -p pub-site/ladle
+        cp -r ladle-build/* pub-site/ladle/
         
     - name: Build schemas directory
       run: |
@@ -124,7 +124,7 @@ jobs:
         <body>
             <div class="nav">
                 <a href="/">← Back to Home</a>
-                <a href="/storybook/">Components</a>
+                <a href="/ladle/">Components</a>
                 <a href="/schemas/">Schemas</a>
                 <a href="/examples/">Examples</a>
             </div>
@@ -190,7 +190,7 @@ jobs:
         <body>
             <div class="nav">
                 <a href="/">← Back to Home</a>
-                <a href="/storybook/">Components</a>
+                <a href="/ladle/">Components</a>
                 <a href="/docs/">Documentation</a>
                 <a href="/examples/">Examples</a>
             </div>
@@ -263,7 +263,7 @@ jobs:
         <body>
             <div class="nav">
                 <a href="/">← Back to Home</a>
-                <a href="/storybook/">Components</a>
+                <a href="/ladle/">Components</a>
                 <a href="/docs/">Documentation</a>
                 <a href="/schemas/">Schemas</a>
             </div>
@@ -384,7 +384,7 @@ jobs:
                     <div class="card">
                         <h2>🧩 Component Library</h2>
                         <p>Interactive component library showcasing xats renderer components with live examples and documentation.</p>
-                        <a href="/storybook/" class="btn btn-primary">Browse Components</a>
+                        <a href="/ladle/" class="btn btn-primary">Browse Components</a>
                     </div>
                     
                     <div class="card">
@@ -426,7 +426,7 @@ jobs:
         echo "Verifying pub-site structure:"
         ls -la pub-site/
         echo "\nComponent library directory:"
-        ls -la pub-site/storybook/ | head -5 || echo "No component library directory"
+        ls -la pub-site/ladle/ | head -5 || echo "No component library directory"
         echo "\nSchemas directory:"
         ls -la pub-site/schemas/ | head -5 || echo "No schemas directory"
         echo "\nDocs directory:"
