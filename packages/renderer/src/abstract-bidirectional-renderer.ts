@@ -6,7 +6,8 @@
  * behavior across different format implementations.
  */
 
-import { RoundTripTester } from '@xats-org/testing';
+// Dynamic import for testing to avoid bundling Node.js dependencies in browser
+// import { RoundTripTester } from '@xats-org/testing';
 
 import type {
   XatsDocument,
@@ -58,7 +59,7 @@ export abstract class AbstractBidirectionalRenderer<
   readonly wcagLevel: 'A' | 'AA' | 'AAA' | null = null;
 
   protected options: Required<TOptions>;
-  private roundTripTester?: RoundTripTester;
+  private roundTripTester?: any; // RoundTripTester - dynamically imported
 
   constructor(options: TOptions = {} as TOptions) {
     this.options = {
@@ -85,10 +86,10 @@ export abstract class AbstractBidirectionalRenderer<
       ...options,
     } as Required<TOptions>;
 
-    // Initialize round-trip tester if needed
-    if (this.options.autoTestRoundTrip) {
-      this.roundTripTester = new RoundTripTester(this);
-    }
+    // Round-trip tester will be initialized on first use (Node.js environment only)
+    // if (this.options.autoTestRoundTrip && this.isNodeEnvironment()) {
+    //   this.initializeRoundTripTester();
+    // }
   }
 
   /**
@@ -113,8 +114,13 @@ export abstract class AbstractBidirectionalRenderer<
     document: XatsDocument,
     options?: RoundTripOptions
   ): Promise<RoundTripResult> {
+    // Only available in Node.js environment
+    if (!this.isNodeEnvironment()) {
+      throw new Error('Round-trip testing is only available in Node.js environment');
+    }
+
     if (!this.roundTripTester) {
-      this.roundTripTester = new RoundTripTester(this, options);
+      await this.initializeRoundTripTester(options);
     }
 
     return this.roundTripTester.testDocument(document);
@@ -263,6 +269,34 @@ export abstract class AbstractBidirectionalRenderer<
   // ============================================================================
   // PRIVATE UTILITY METHODS
   // ============================================================================
+
+  /**
+   * Check if running in Node.js environment
+   */
+  private isNodeEnvironment(): boolean {
+    return (
+      typeof process !== 'undefined' &&
+      process.versions !== null &&
+      typeof process.versions === 'object' &&
+      Boolean(process.versions.node)
+    );
+  }
+
+  /**
+   * Dynamically import and initialize RoundTripTester (Node.js only)
+   */
+  private async initializeRoundTripTester(options?: RoundTripOptions): Promise<void> {
+    if (!this.isNodeEnvironment()) {
+      throw new Error('RoundTripTester is only available in Node.js environment');
+    }
+
+    try {
+      const { RoundTripTester } = await import('@xats-org/testing');
+      this.roundTripTester = new RoundTripTester(this, options);
+    } catch (error) {
+      throw new Error(`Failed to initialize RoundTripTester: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
 
   /**
    * Count words in structural containers (Units, Chapters, Sections)
