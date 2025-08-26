@@ -53,9 +53,9 @@
     "dev": "tsc --watch",
     "lint": "eslint .",
     "validate": "npm run validate:v0.1.0 && npm run validate:v0.2.0 && npm run validate:v0.3.0",
-    "validate:v0.1.0": "node --loader tsx ../cli/dist/cli.js validate examples/v0.1.0/*.json --schema 0.1.0",
-    "validate:v0.2.0": "node --loader tsx ../cli/dist/cli.js validate examples/v0.2.0/*.json --schema 0.2.0",
-    "validate:v0.3.0": "node --loader tsx ../cli/dist/cli.js validate examples/v0.3.0/*.json --schema 0.3.0",
+    "validate:v0.1.0": "node --import tsx ../cli/dist/cli.js validate examples/v0.1.0/*.json --schema 0.1.0",
+    "validate:v0.2.0": "node --import tsx ../cli/dist/cli.js validate examples/v0.2.0/*.json --schema 0.2.0",
+    "validate:v0.3.0": "node --import tsx ../cli/dist/cli.js validate examples/v0.3.0/*.json --schema 0.3.0",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -530,7 +530,7 @@
                         "properties": {
                           "blockType": {
                             "type": "string",
-                            "pattern": "^https://xats\\.org/core/placeholders/"
+                            "pattern": "^https://pub\\.xats\\.org/vocabularies/placeholders/"
                           }
                         }
                       },
