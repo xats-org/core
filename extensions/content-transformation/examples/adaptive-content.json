@@ -1,5 +1,5 @@
 {
-  "$schema": "https://xats.org/schemas/0.3.0/xats.json",
+  "$schema": "https://pub.xats.org/schemas/0.3.0/xats.json",
   "schemaVersion": "0.5.0",
   "bibliographicEntry": {
     "id": "adaptive-calculus-2025",
@@ -31,7 +31,7 @@
             "blocks": [
               {
                 "id": "adaptive-definition",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {"type": "text", "text": "The derivative of a function "},
@@ -42,7 +42,7 @@
                   ]
                 },
                 "extensions": {
-                  "https://xats.org/extensions/content-transformation": {
+                  "https://pub.xats.org/extensions/content-transformation": {
                     "transformations": [
                       {
                         "id": "visual-learner",
@@ -51,7 +51,7 @@
                           "learningStyle": "visual"
                         },
                         "output": {
-                          "blockType": "https://xats.org/vocabularies/blocks/figure",
+                          "blockType": "https://pub.xats.org/vocabularies/blocks/figure",
                           "content": {
                             "mediaUrl": "https://example.edu/derivatives/visual-limit.svg",
                             "altText": "Interactive graph showing the limit definition of a derivative",
@@ -99,13 +99,13 @@
               },
               {
                 "id": "math-block-derivative",
-                "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/mathBlock",
                 "content": {
                   "mathType": "latex",
                   "expression": "f'(x) = \\lim_{h \\to 0} \\frac{f(x + h) - f(x)}{h}"
                 },
                 "extensions": {
-                  "https://xats.org/extensions/content-transformation": {
+                  "https://pub.xats.org/extensions/content-transformation": {
                     "transformations": [
                       {
                         "id": "step-by-step",
@@ -146,7 +146,7 @@
               },
               {
                 "id": "example-problem",
-                "blockType": "https://xats.org/vocabularies/blocks/example",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/example",
                 "content": {
                   "title": {
                     "runs": [{"type": "text", "text": "Example: Finding the Derivative of x²"}]
@@ -156,7 +156,7 @@
                   }
                 },
                 "extensions": {
-                  "https://xats.org/extensions/content-transformation": {
+                  "https://pub.xats.org/extensions/content-transformation": {
                     "transformations": [
                       {
                         "id": "worked-solution",
@@ -223,7 +223,7 @@
           }
         ],
         "extensions": {
-          "https://xats.org/extensions/content-transformation": {
+          "https://pub.xats.org/extensions/content-transformation": {
             "transformationRules": {
               "language": {
                 "supported": ["en", "es", "fr", "de", "zh"],

@@ -76,7 +76,7 @@
             "content": [
               {
                 "id": "organelles-intro",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "language": "en",
                 "content": {
                   "text": {
@@ -146,7 +146,7 @@
         "content": [
           {
             "id": "glossary-placeholder",
-            "blockType": "https://xats.org/vocabularies/placeholders/glossary",
+            "blockType": "https://pub.xats.org/vocabularies/placeholders/glossary",
             "language": "en",
             "content": {
               "placeholder": true,

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/schemas/0.1.0/schema.json",
+  "$id": "https://pub.xats.org/schemas/0.1.0/schema.json",
   "title": "eXtensible Academic Text Standard",
   "description": "The root structure for a textbook, designed for extensibility and machine readability.",
   "type": "object",
@@ -277,7 +277,7 @@
       ]
     },
     "Pathway": {
-      "description": "Defines conditional routing rules for adaptive learning paths. See https://xats.org/specs/pathway-condition-grammar for the complete condition grammar specification.",
+      "description": "Defines conditional routing rules for adaptive learning paths. See https://pub.xats.org/specs/pathway-condition-grammar for the complete condition grammar specification.",
       "type": "object",
       "properties": {
         "trigger": {
@@ -289,8 +289,8 @@
               "type": "string", 
               "format": "uri",
               "examples": [
-                "https://xats.org/vocabularies/triggers/onCompletion",
-                "https://xats.org/vocabularies/triggers/onAssessment"
+                "https://pub.xats.org/vocabularies/triggers/onCompletion",
+                "https://pub.xats.org/vocabularies/triggers/onAssessment"
               ]
             },
             "sourceId": { 
@@ -330,10 +330,10 @@
                 "type": "string", 
                 "format": "uri",
                 "examples": [
-                  "https://xats.org/vocabularies/pathways/remedial",
-                  "https://xats.org/vocabularies/pathways/standard",
-                  "https://xats.org/vocabularies/pathways/enrichment",
-                  "https://xats.org/vocabularies/pathways/prerequisite"
+                  "https://pub.xats.org/vocabularies/pathways/remedial",
+                  "https://pub.xats.org/vocabularies/pathways/standard",
+                  "https://pub.xats.org/vocabularies/pathways/enrichment",
+                  "https://pub.xats.org/vocabularies/pathways/prerequisite"
                 ]
               }
             },
@@ -361,9 +361,9 @@
             "properties": {
               "blockType": {
                 "enum": [
-                  "https://xats.org/vocabularies/blocks/paragraph",
-                  "https://xats.org/vocabularies/blocks/heading",
-                  "https://xats.org/vocabularies/blocks/blockquote"
+                  "https://pub.xats.org/vocabularies/blocks/paragraph",
+                  "https://pub.xats.org/vocabularies/blocks/heading",
+                  "https://pub.xats.org/vocabularies/blocks/blockquote"
                 ]
               }
             }
@@ -385,7 +385,7 @@
               "properties": {
                 "blockType": {
                   "enum": [
-                    "https://xats.org/vocabularies/blocks/list"
+                    "https://pub.xats.org/vocabularies/blocks/list"
                   ]
                 }
               }
@@ -424,7 +424,7 @@
                 "properties": {
                   "blockType": {
                     "enum": [
-                      "https://xats.org/vocabularies/blocks/codeBlock"
+                      "https://pub.xats.org/vocabularies/blocks/codeBlock"
                     ]
                   }
                 }
@@ -447,7 +447,7 @@
                   "properties": {
                     "blockType": {
                       "enum": [
-                        "https://xats.org/vocabularies/blocks/mathBlock"
+                        "https://pub.xats.org/vocabularies/blocks/mathBlock"
                       ]
                     }
                   }
@@ -473,7 +473,7 @@
                     "properties": {
                       "blockType": {
                         "enum": [
-                          "https://xats.org/vocabularies/blocks/table"
+                          "https://pub.xats.org/vocabularies/blocks/table"
                         ]
                       }
                     }
@@ -506,7 +506,7 @@
                       "properties": {
                         "blockType": {
                           "enum": [
-                            "https://xats.org/vocabularies/blocks/figure"
+                            "https://pub.xats.org/vocabularies/blocks/figure"
                           ]
                         }
                       }
@@ -530,7 +530,7 @@
                         "properties": {
                           "blockType": {
                             "type": "string",
-                            "pattern": "^https://xats\\.org/core/placeholders/"
+                            "pattern": "^https://pub\\.xats\\.org/vocabularies/placeholders/"
                           }
                         }
                       },

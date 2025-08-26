@@ -225,7 +225,7 @@ export interface ProjectPhase {
  */
 export interface CollaborativeProjectBlock extends XatsObject {
   /** Block type URI for collaborative projects */
-  blockType: 'https://xats.org/vocabularies/blocks/collaborativeProject';
+  blockType: 'https://pub.xats.org/vocabularies/blocks/collaborativeProject';
 
   /** Collaborative project content */
   content: CollaborativeProjectContent;

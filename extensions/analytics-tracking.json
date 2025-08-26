@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/extensions/analytics-tracking/schema.json",
+  "$id": "https://pub.xats.org/extensions/analytics-tracking/schema.json",
   "title": "Analytics Tracking Extension for xats",
   "description": "Extension for collecting and tracking learner interactions, progress, and performance data in xats educational content.",
   "type": "object",

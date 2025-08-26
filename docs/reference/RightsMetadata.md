@@ -77,7 +77,7 @@ Comprehensive rights and intellectual property metadata for content and resource
 
 ```json
 {
-  "license": "https://xats.org/licenses/cc-by-sa-4.0",
+  "license": "https://pub.xats.org/licenses/cc-by-sa-4.0",
   "copyrightHolder": "State University Educational Content Team",
   "copyrightYear": "2023",
   "additionalCopyrightHolders": [

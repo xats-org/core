@@ -1,7 +1,7 @@
 # xats Pathway System Specification
 
 **Version:** 0.1.0
-**Canonical URL:** `https://xats.org/specs/pathway-system`
+**Canonical URL:** `https://pub.xats.org/specs/pathway-system`
 
 ---
 
@@ -29,8 +29,8 @@ A `Pathway` object is an array item within the `pathways` property of a `Structu
 The `trigger` defines *when* the pathway's rules should be evaluated.
 
 - **`triggerType` (URI, required):** The event that fires the check.
-  - `https://xats.org/vocabularies/triggers/onCompletion`: The pathway is evaluated as soon as the learner finishes the container (e.g., reaches the end of a section).
-  - `https://xats.org/vocabularies/triggers/onAssessment`: The pathway is evaluated upon the submission of a specific assessment.
+  - `https://pub.xats.org/vocabularies/triggers/onCompletion`: The pathway is evaluated as soon as the learner finishes the container (e.g., reaches the end of a section).
+  - `https://pub.xats.org/vocabularies/triggers/onAssessment`: The pathway is evaluated upon the submission of a specific assessment.
 - **`sourceId` (string, optional):** Required if `triggerType` is `onAssessment`. This is the `id` of the `ContentBlock` containing the assessment that provides the data for the rules.
 
 ### b. The `rules`
@@ -54,19 +54,19 @@ At the end of **Section 3.2**, a quiz (`id: "quiz-3-2"`) checks for understandin
 "pathways": [
   {
     "trigger": {
-      "triggerType": "[https://xats.org/vocabularies/triggers/onAssessment](https://xats.org/vocabularies/triggers/onAssessment)",
+      "triggerType": "[https://pub.xats.org/vocabularies/triggers/onAssessment](https://pub.xats.org/vocabularies/triggers/onAssessment)",
       "sourceId": "quiz-3-2"
     },
     "rules": [
       {
         "condition": "score < 70",
         "destinationId": "sec-3-2-remedial",
-        "pathwayType": "[https://xats.org/vocabularies/pathways/remedial](https://xats.org/vocabularies/pathways/remedial)"
+        "pathwayType": "[https://pub.xats.org/vocabularies/pathways/remedial](https://pub.xats.org/vocabularies/pathways/remedial)"
       },
       {
         "condition": "score >= 70",
         "destinationId": "sec-3-3",
-        "pathwayType": "[https://xats.org/vocabularies/pathways/standard](https://xats.org/vocabularies/pathways/standard)"
+        "pathwayType": "[https://pub.xats.org/vocabularies/pathways/standard](https://pub.xats.org/vocabularies/pathways/standard)"
       }
     ]
   }
@@ -82,18 +82,18 @@ At the end of **Chapter 4**, the learner is given a choice to either continue to
 "pathways": [
   {
     "trigger": {
-      "triggerType": "[https://xats.org/vocabularies/triggers/onCompletion](https://xats.org/vocabularies/triggers/onCompletion)"
+      "triggerType": "[https://pub.xats.org/vocabularies/triggers/onCompletion](https://pub.xats.org/vocabularies/triggers/onCompletion)"
     },
     "rules": [
       {
         "condition": "user_choice == 'advanced'",
         "destinationId": "ch-4-enrichment",
-        "pathwayType": "[https://xats.org/vocabularies/pathways/enrichment](https://xats.org/vocabularies/pathways/enrichment)"
+        "pathwayType": "[https://pub.xats.org/vocabularies/pathways/enrichment](https://pub.xats.org/vocabularies/pathways/enrichment)"
       },
       {
         "condition": "user_choice == 'standard'",
         "destinationId": "ch-5",
-        "pathwayType": "[https://xats.org/vocabularies/pathways/standard](https://xats.org/vocabularies/pathways/standard)"
+        "pathwayType": "[https://pub.xats.org/vocabularies/pathways/standard](https://pub.xats.org/vocabularies/pathways/standard)"
       }
     ]
   }

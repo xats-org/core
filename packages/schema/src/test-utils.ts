@@ -72,7 +72,7 @@ export function createValidator(): ValidatorInstance {
 
   // Add LTI extension schema stub to prevent MissingRefError
   const ltiSchema = {
-    $id: 'https://xats.org/extensions/lti-1.3/schema.json',
+    $id: 'https://pub.xats.org/extensions/lti-1.3/schema.json',
     definitions: {
       LtiConfiguration: {
         type: 'object',

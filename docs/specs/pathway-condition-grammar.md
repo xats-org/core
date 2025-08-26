@@ -1,7 +1,7 @@
 # xats Pathway Condition Grammar Specification
 
 **Version:** 0.1.0  
-**Canonical URL:** `https://xats.org/specs/pathway-condition-grammar`  
+**Canonical URL:** `https://pub.xats.org/specs/pathway-condition-grammar`  
 **Status:** Draft
 
 ---

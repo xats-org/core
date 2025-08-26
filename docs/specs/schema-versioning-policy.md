@@ -240,8 +240,8 @@ Always prefer additive changes that enhance functionality:
   "type": "string",
   "format": "uri",
   "examples": [
-    "https://xats.org/vocabularies/blocks/paragraph",
-    "https://xats.org/vocabularies/blocks/newBlockType"  // Added in v0.3.0
+    "https://pub.xats.org/vocabularies/blocks/paragraph",
+    "https://pub.xats.org/vocabularies/blocks/newBlockType"  // Added in v0.3.0
   ]
 }
 ```
@@ -267,11 +267,11 @@ Extend vocabularies through URI namespaces:
 
 ```json
 // Core vocabulary
-"https://xats.org/vocabularies/blocks/paragraph"
+"https://pub.xats.org/vocabularies/blocks/paragraph"
 
 // Extension vocabulary
-"https://xats.org/extensions/assessment/quiz"
-"https://xats.org/extensions/interactive/simulation"
+"https://pub.xats.org/extensions/assessment/quiz"
+"https://pub.xats.org/extensions/interactive/simulation"
 ```
 
 ## Extension Versioning
@@ -284,11 +284,11 @@ Extensions follow their own versioning, independent of core schema:
 {
   "schemaVersion": "0.3.0",
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "version": "1.3.0",
       // ... LTI-specific configuration
     },
-    "https://xats.org/extensions/assessment": {
+    "https://pub.xats.org/extensions/assessment": {
       "version": "0.2.0",
       // ... Assessment-specific configuration
     }

@@ -3,7 +3,7 @@
 **Type:** `object`  
 **Introduced in:** v0.3.0  
 **Enhanced in:** v0.5.0  
-**Block Type URI:** `https://xats.org/vocabularies/blocks/caseStudy`
+**Block Type URI:** `https://pub.xats.org/vocabularies/blocks/caseStudy`
 
 ---
 
@@ -91,7 +91,7 @@ Case study blocks present complex, realistic scenarios that require analysis, ev
 
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/caseStudy",
   "content": {
     "title": {
       "runs": [

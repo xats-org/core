@@ -38,9 +38,10 @@ jobs:
       uses: actions/checkout@v5
       
     - name: Setup pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 10.15.0
+      run: |
+        corepack enable
+        corepack prepare pnpm@10.15.0 --activate
+        pnpm --version
         
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -148,9 +149,13 @@ jobs:
     - name: Build examples directory
       run: |
         mkdir -p pub-site/examples
-        # Copy examples with proper structure
+        # Copy examples from root examples directory
         if [ -d "examples" ]; then
           cp -r examples/* pub-site/examples/
+        fi
+        # Also copy examples from packages/examples/examples
+        if [ -d "packages/examples/examples" ]; then
+          cp -r packages/examples/examples/* pub-site/examples/
         fi
         
     - name: Create schemas index page
@@ -178,7 +183,6 @@ jobs:
         <body>
             <div class="nav">
                 <a href="/">← Back to Home</a>
-                <a href="/ladle/">Components</a>
                 <a href="/docs/">Documentation</a>
                 <a href="/examples/">Examples</a>
             </div>
@@ -251,7 +255,6 @@ jobs:
         <body>
             <div class="nav">
                 <a href="/">← Back to Home</a>
-                <a href="/ladle/">Components</a>
                 <a href="/docs/">Documentation</a>
                 <a href="/schemas/">Schemas</a>
             </div>
@@ -280,7 +283,7 @@ jobs:
                     <div class="example-card">
                         <h4>Multi-File Textbook</h4>
                         <p>Demonstrates file modularity with separate chapters.</p>
-                        <a href="multi-file-textbook/" class="example-link">Browse Structure</a>
+                        <a href="multi-file-textbook/index.json" class="example-link">Main Index</a>
                     </div>
                 </div>
             </div>
@@ -292,11 +295,19 @@ jobs:
                         <h4>Valid Examples</h4>
                         <p>Correctly formatted documents for reference.</p>
                         <a href="minimal.json" class="example-link">Minimal Example</a>
+                        <br/>
+                        <a href="v0.3.0/v0.3.0-features-example.json" class="example-link">v0.3.0 Features</a>
+                        <br/>
+                        <a href="v0.2.0/" class="example-link">v0.2.0 Examples</a>
                     </div>
                     <div class="example-card">
                         <h4>Invalid Examples</h4>
                         <p>Common mistakes and validation errors.</p>
-                        <a href="invalid/" class="example-link">Browse Invalid Examples</a>
+                        <a href="invalid/invalid-references.json" class="example-link">Invalid References</a>
+                        <br/>
+                        <a href="invalid/bad-semantictext.json" class="example-link">Bad SemanticText</a>
+                        <br/>
+                        <a href="invalid/missing-required.json" class="example-link">Missing Required</a>
                     </div>
                 </div>
             </div>
@@ -370,15 +381,9 @@ jobs:
                 
                 <div class="grid">
                     <div class="card">
-                        <h2>🧩 Component Library</h2>
-                        <p>Interactive component library showcasing xats renderer components with live examples and documentation.</p>
-                        <a href="/ladle/" class="btn btn-primary">Browse Components</a>
-                    </div>
-                    
-                    <div class="card">
                         <h2>📋 JSON Schemas</h2>
                         <p>Official JSON Schema definitions for all versions of the xats standard. Use these for validation and tooling.</p>
-                        <a href="/schemas/" class="btn">Download Schemas</a>
+                        <a href="/schemas/" class="btn btn-primary">Download Schemas</a>
                     </div>
                     
                     <div class="card">

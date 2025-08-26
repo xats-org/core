@@ -22,7 +22,7 @@ const sampleDocument: XatsDocument = {
         },
         content: [
           {
-            blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+            blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
             content: {
               runs: [{ type: 'text', text: 'This is important content for study guides.' }],
             },
@@ -35,7 +35,7 @@ const sampleDocument: XatsDocument = {
             },
           },
           {
-            blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+            blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
             content: {
               runs: [{ type: 'text', text: 'This is slide content.' }],
             },
@@ -48,7 +48,7 @@ const sampleDocument: XatsDocument = {
             },
           },
           {
-            blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+            blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
             content: {
               runs: [{ type: 'text', text: 'What is the capital of France?' }],
             },

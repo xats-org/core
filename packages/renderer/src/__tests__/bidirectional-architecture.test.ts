@@ -138,7 +138,7 @@ const testDocument: XatsDocument = {
         contents: [
           {
             id: 'para-1',
-            blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+            blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
             content: {
               text: {
                 runs: [{ type: 'text', text: 'This is a test paragraph.' }],

@@ -45,8 +45,8 @@ const xatsResult = await converter.parse(base64DocxContent, {
   trackChanges: { convertToAnnotations: true },
   styleMappings: {
     paragraphs: {
-      'Heading 1': 'https://xats.org/vocabularies/blocks/heading',
-      'Learning Objective': 'https://xats.org/vocabularies/blocks/learningObjective',
+      'Heading 1': 'https://pub.xats.org/vocabularies/blocks/heading',
+      'Learning Objective': 'https://pub.xats.org/vocabularies/blocks/learningObjective',
     },
   },
 });
@@ -300,11 +300,11 @@ Converters support sophisticated style mapping to preserve semantic meaning:
 const wordOptions = {
   styleMappings: {
     paragraphs: {
-      'Normal': 'https://xats.org/vocabularies/blocks/paragraph',
-      'Heading 1': 'https://xats.org/vocabularies/blocks/heading',
-      'Learning Objective': 'https://xats.org/vocabularies/blocks/learningObjective',
-      'Case Study': 'https://xats.org/vocabularies/blocks/caseStudy',
-      'Definition': 'https://xats.org/vocabularies/blocks/definition',
+      'Normal': 'https://pub.xats.org/vocabularies/blocks/paragraph',
+      'Heading 1': 'https://pub.xats.org/vocabularies/blocks/heading',
+      'Learning Objective': 'https://pub.xats.org/vocabularies/blocks/learningObjective',
+      'Case Study': 'https://pub.xats.org/vocabularies/blocks/caseStudy',
+      'Definition': 'https://pub.xats.org/vocabularies/blocks/definition',
     },
     characters: {
       'Emphasis': 'emphasis',

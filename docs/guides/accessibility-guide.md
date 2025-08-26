@@ -66,7 +66,7 @@ Every document and content element must identify its language:
             "content": [
               {
                 "id": "para-1",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
@@ -98,7 +98,7 @@ All images must have alternative text:
 ```json
 {
   "id": "fig-1",
-  "blockType": "https://xats.org/vocabularies/blocks/figure",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/figure",
   "content": {
     "resourceId": "img-dna-structure",
     "altText": "Double helix structure of DNA molecule",
@@ -114,7 +114,7 @@ Maintain proper heading levels:
 ```json
 {
   "id": "heading-1",
-  "blockType": "https://xats.org/vocabularies/blocks/heading",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/heading",
   "content": {
     "level": 1,  // h1
     "text": {
@@ -129,7 +129,7 @@ Maintain proper heading levels:
 },
 {
   "id": "heading-2",
-  "blockType": "https://xats.org/vocabularies/blocks/heading",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/heading",
   "content": {
     "level": 2,  // h2 - properly nested under h1
     "text": {
@@ -151,7 +151,7 @@ Tables must have proper headers:
 ```json
 {
   "id": "table-1",
-  "blockType": "https://xats.org/vocabularies/blocks/table",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/table",
   "content": {
     "caption": "Comparison of Cell Types",
     "headers": ["Feature", "Plant Cell", "Animal Cell"],
@@ -211,7 +211,7 @@ Provide text alternatives for equations:
 ```json
 {
   "id": "eq-1",
-  "blockType": "https://xats.org/vocabularies/blocks/math",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/math",
   "content": {
     "notation": "latex",
     "expression": "E = mc^2",
@@ -228,7 +228,7 @@ Include captions and transcripts:
 ```json
 {
   "id": "video-1",
-  "blockType": "https://xats.org/vocabularies/blocks/video",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/video",
   "content": {
     "resourceId": "mitosis-animation",
     "captions": [
@@ -316,7 +316,7 @@ xats validate --accessibility my-document.json
 ```json
 {
   "id": "quiz-1",
-  "blockType": "https://xats.org/extensions/assessment/quiz",
+  "blockType": "https://pub.xats.org/extensions/assessment/quiz",
   "content": {
     "title": "Chapter Review Quiz",
     "instructions": "Select the best answer for each question. You have unlimited time.",
@@ -359,7 +359,7 @@ xats validate --accessibility my-document.json
 ```json
 {
   "id": "diagram-1",
-  "blockType": "https://xats.org/vocabularies/blocks/figure",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/figure",
   "content": {
     "resourceId": "water-cycle-diagram",
     "altText": "Diagram of the water cycle",

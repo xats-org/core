@@ -1,23 +1,23 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/blocks/caseStudy",
+  "$id": "https://pub.xats.org/vocabularies/blocks/caseStudy",
   "title": "Case Study Block",
   "description": "A comprehensive block for case-based learning scenarios supporting business, law, medicine, and other professional education contexts",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/blocks/caseStudy",
+      "const": "https://pub.xats.org/vocabularies/blocks/caseStudy",
       "description": "The URI identifier for this block type"
     },
     "content": {
-      "$ref": "https://xats.org/schemas/0.3.0/xats.json#/definitions/CaseStudyContent",
+      "$ref": "https://pub.xats.org/schemas/0.3.0/xats.json#/definitions/CaseStudyContent",
       "description": "The case study content including scenario, stakeholders, timeline, and analysis questions"
     }
   },
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/caseStudy",
       "content": {
         "title": {
           "runs": [

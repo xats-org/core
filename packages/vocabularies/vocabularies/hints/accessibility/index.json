@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/hints/accessibility",
+  "$id": "https://pub.xats.org/vocabularies/hints/accessibility",
   "title": "Accessibility Rendering Hints",
   "description": "Rendering hints that enhance accessibility and provide additional context for assistive technologies",
   "oneOf": [

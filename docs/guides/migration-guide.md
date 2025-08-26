@@ -88,7 +88,7 @@ v0.2.0 includes comprehensive accessibility support:
 ```json
 {
   "id": "fig-1",
-  "blockType": "https://xats.org/vocabularies/blocks/figure",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/figure",
   "content": {
     "resourceId": "img-cell-structure",
     "altText": "Diagram of a plant cell showing organelles",
@@ -104,7 +104,7 @@ Native support for Learning Tools Interoperability:
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "configuration": {
         "platformId": "canvas.instructure.com",
         "clientId": "10000000000001",
@@ -125,7 +125,7 @@ Comprehensive copyright and licensing support:
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/rights": {
+    "https://pub.xats.org/extensions/rights": {
       "copyright": {
         "holder": "Academic Publishers Inc.",
         "year": 2025,
@@ -150,7 +150,7 @@ Enhanced assessment capabilities:
 ```json
 {
   "id": "quiz-1",
-  "blockType": "https://xats.org/extensions/assessment/quiz",
+  "blockType": "https://pub.xats.org/extensions/assessment/quiz",
   "content": {
     "title": "Chapter 1 Quiz",
     "questions": [
@@ -218,10 +218,10 @@ If using LTI or rights management:
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       // LTI configuration
     },
-    "https://xats.org/extensions/rights": {
+    "https://pub.xats.org/extensions/rights": {
       // Rights management
     }
   }
@@ -300,13 +300,13 @@ A complete migration taking advantage of all new features:
     "apis": ["ARIA"]
   },
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "configuration": {
         "platformId": "canvas.instructure.com",
         "clientId": "10000000000001"
       }
     },
-    "https://xats.org/extensions/rights": {
+    "https://pub.xats.org/extensions/rights": {
       "copyright": {
         "holder": "Academic Press",
         "year": 2025
@@ -330,7 +330,7 @@ A complete migration taking advantage of all new features:
             "content": [
               {
                 "id": "para-1",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
@@ -417,7 +417,7 @@ New structured content type for case-based learning:
 ```json
 {
   "id": "case-climate-policy",
-  "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/caseStudy",
   "content": {
     "scenario": {
       "title": "Urban Climate Policy Implementation",
@@ -463,7 +463,7 @@ Support for self-reflection and metacognitive learning:
 ```json
 {
   "id": "reflection-prompt-1",
-  "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/metacognitivePrompt",
   "content": {
     "promptType": "self-reflection",
     "prompt": "How does this new concept of photosynthesis connect to what you already know about energy in living systems?",
@@ -542,7 +542,7 @@ Transform existing narrative content into structured case studies:
 ```json
 // Before: Generic content block
 {
-  "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
   "content": {
     "runs": [
       {
@@ -555,7 +555,7 @@ Transform existing narrative content into structured case studies:
 
 // After: Structured case study
 {
-  "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/caseStudy",
   "content": {
     "scenario": {
       "title": "Genetic Engineering in Agriculture",
@@ -586,7 +586,7 @@ Integrate reflection opportunities throughout your content:
 
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/metacognitivePrompt",
   "content": {
     "promptType": "comprehension-monitoring",
     "prompt": "Before moving to the next section, assess your understanding of cellular respiration. What aspects are clear? What needs more review?",
@@ -635,7 +635,7 @@ Integrate reflection opportunities throughout your content:
             "content": [
               {
                 "id": "para-intro",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {
@@ -654,7 +654,7 @@ Integrate reflection opportunities throughout your content:
               },
               {
                 "id": "case-study-biofuel",
-                "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/caseStudy",
                 "content": {
                   "scenario": {
                     "title": "Optimizing Algae for Biofuel Production",
@@ -688,7 +688,7 @@ Integrate reflection opportunities throughout your content:
               },
               {
                 "id": "metacognitive-connection",
-                "blockType": "https://xats.org/vocabularies/blocks/metacognitivePrompt",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/metacognitivePrompt",
                 "content": {
                   "promptType": "self-reflection",
                   "prompt": "How does understanding photosynthesis change your perspective on the relationship between plants and other organisms in ecosystems?",
@@ -806,7 +806,7 @@ Integrate reflection opportunities throughout your content:
 ```json
 {
   "rights": {
-    "license": "https://xats.org/licenses/cc-by-sa-4.0",
+    "license": "https://pub.xats.org/licenses/cc-by-sa-4.0",
     "copyrightHolder": "Advanced Biology Textbooks Inc.",
     "copyrightYear": "2025",
     "permissions": {
@@ -1070,7 +1070,7 @@ Version 0.5.0 maintains full backward compatibility with v0.4.0 documents while 
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/ai": {
+    "https://pub.xats.org/extensions/ai": {
       "version": "0.5.0",
       "mcp": {
         "server": "@xats-org/mcp-server",
@@ -1293,7 +1293,7 @@ Your existing v0.3.0 documents work immediately with v0.5.0 tools.
 {
   "schemaVersion": "0.5.0",
   "extensions": {
-    "https://xats.org/extensions/ai": {
+    "https://pub.xats.org/extensions/ai": {
       "version": "0.5.0",
       "capabilities": ["content-validation", "assessment-creation"],
       "provider": "anthropic"
@@ -1320,7 +1320,7 @@ Your existing v0.3.0 documents work immediately with v0.5.0 tools.
     }
   },
   "extensions": {
-    "https://xats.org/extensions/ai": {
+    "https://pub.xats.org/extensions/ai": {
       "version": "0.5.0",
       "mcp": {
         "server": "@xats-org/mcp-server",
@@ -1537,7 +1537,7 @@ xats validate --extensions document.json
 **Solution**: Add meaningful descriptions:
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/figure",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/figure",
   "content": {
     "resourceId": "img-cell-diagram",
     "altText": "Cross-section diagram of plant cell showing labeled organelles",
@@ -1569,7 +1569,7 @@ xats validate --extensions document.json
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "configuration": {
         "platformId": "canvas.instructure.com",
         "clientId": "10000000000001",

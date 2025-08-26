@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/schemas/0.5.0/registry/cache.json",
+  "$id": "https://pub.xats.org/schemas/0.5.0/registry/cache.json",
   "title": "xats Cache Configuration Schema v0.5.0",
   "description": "Schema for configuring multi-level caching strategies in xats file modularity system.",
   "type": "object",

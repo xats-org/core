@@ -2,7 +2,7 @@
 
 **Type:** `object`  
 **Introduced in:** v0.5.0  
-**Block Type URI:** `https://xats.org/vocabularies/blocks/workedExample`
+**Block Type URI:** `https://pub.xats.org/vocabularies/blocks/workedExample`
 
 ---
 
@@ -80,7 +80,7 @@ Worked examples are particularly effective for teaching procedural knowledge, pr
 
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/workedExample",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/workedExample",
   "content": {
     "concept": "Solving Linear Equations with Variables on Both Sides",
     "problem": {

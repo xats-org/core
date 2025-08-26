@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/blocks/figure",
+  "$id": "https://pub.xats.org/vocabularies/blocks/figure",
   "title": "Figure Block",
   "description": "A block for figures with captions, supporting images, diagrams, and charts",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/blocks/figure",
+      "const": "https://pub.xats.org/vocabularies/blocks/figure",
       "description": "The URI identifier for this block type"
     },
     "content": {
@@ -17,7 +17,7 @@
           "description": "Reference ID to a resource in the resources repository"
         },
         "caption": {
-          "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
+          "$ref": "https://pub.xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
           "description": "Caption for the figure"
         },
         "label": {
@@ -36,7 +36,7 @@
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/figure",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/figure",
       "content": {
         "refId": "mitosis-stages",
         "label": "Figure 4.3",
@@ -84,7 +84,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/vocabularies/blocks/figure",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/figure",
       "content": {
         "refId": "carbon-cycle-diagram",
         "label": "Figure 12.1",

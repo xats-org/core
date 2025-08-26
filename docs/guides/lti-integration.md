@@ -34,7 +34,7 @@ LTI 1.3 is the latest version of the IMS Global Learning Tools Interoperability 
 {
   "schemaVersion": "0.3.0",
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "configuration": {
         "platformId": "canvas.instructure.com",
         "clientId": "10000000000001",
@@ -123,7 +123,7 @@ Configure LTI at the document level for all content:
 {
   "schemaVersion": "0.2.0",
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "configuration": {
         "platformId": "canvas.instructure.com",
         "clientId": "10000000000001",
@@ -150,7 +150,7 @@ Override configuration for specific content:
   "id": "ch-1",
   "title": "Chapter 1: Introduction",
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "deepLinking": {
         "url": "https://your-tool.com/chapters/1",
         "title": "Chapter 1: Introduction to Biology",
@@ -175,14 +175,14 @@ Configure assessments for automatic grade synchronization:
 ```json
 {
   "id": "quiz-1",
-  "blockType": "https://xats.org/extensions/assessment/quiz",
+  "blockType": "https://pub.xats.org/extensions/assessment/quiz",
   "content": {
     "title": "Chapter 1 Quiz",
     "totalPoints": 100,
     "questions": [/* ... */]
   },
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "gradePassback": {
         "lineItemUrl": "https://canvas.instructure.com/api/lti/courses/123/line_items/456",
         "scoreMaximum": 100,
@@ -225,7 +225,7 @@ Enable instructors to select specific xats content:
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "deepLinking": {
         "acceptTypes": ["link", "file", "html", "ltiResourceLink"],
         "acceptPresentationDocumentTargets": ["iframe", "window"],
@@ -351,7 +351,7 @@ requiredClaims.forEach(claim => {
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "configuration": {
         "platformId": "canvas.instructure.com",
         "authorizationUrl": "https://[your-domain].instructure.com/api/lti/authorize",
@@ -372,7 +372,7 @@ requiredClaims.forEach(claim => {
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "configuration": {
         "platformId": "blackboard.com",
         "authorizationUrl": "https://[your-domain].blackboard.com/learn/api/public/v1/lti/authorize",
@@ -393,7 +393,7 @@ requiredClaims.forEach(claim => {
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "configuration": {
         "platformId": "moodle.org",
         "authorizationUrl": "https://[your-domain]/mod/lti/auth.php",
@@ -444,7 +444,7 @@ Enable debug logging:
 ```json
 {
   "extensions": {
-    "https://xats.org/extensions/lti": {
+    "https://pub.xats.org/extensions/lti": {
       "debug": true,
       "logLevel": "verbose"
     }

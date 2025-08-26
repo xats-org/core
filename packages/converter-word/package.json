@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/xats-org/core/issues"
   },
-  "homepage": "https://xats.org/docs/conversion/word",
+  "homepage": "https://pub.xats.org/docs/conversion/word",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",

@@ -70,9 +70,9 @@ Customize how Word styles map to xats block types:
 const converter = new WordConverter({
   defaultStyleMappings: {
     paragraphs: {
-      'Learning Goal': 'https://xats.org/vocabularies/blocks/learningObjective',
-      'Key Concept': 'https://xats.org/vocabularies/blocks/keyTerm',
-      'Case Study': 'https://xats.org/vocabularies/blocks/caseStudy'
+      'Learning Goal': 'https://pub.xats.org/vocabularies/blocks/learningObjective',
+      'Key Concept': 'https://pub.xats.org/vocabularies/blocks/keyTerm',
+      'Case Study': 'https://pub.xats.org/vocabularies/blocks/caseStudy'
     },
     characters: {
       'Important Term': 'keyTerm',

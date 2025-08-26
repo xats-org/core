@@ -1,5 +1,5 @@
 {
-  "uri": "https://xats.org/vocabularies/ancillary/study-guide-content",
+  "uri": "https://pub.xats.org/vocabularies/ancillary/study-guide-content",
   "name": "Study Guide Content",
   "description": "Content that should be included in generated study guides",
   "category": "ancillary",

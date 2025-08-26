@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/placeholders/index",
+  "$id": "https://pub.xats.org/vocabularies/placeholders/index",
   "title": "Index Placeholder",
   "description": "A marker indicating where a generated index should be inserted",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/placeholders/index",
+      "const": "https://pub.xats.org/vocabularies/placeholders/index",
       "description": "The URI identifier for this placeholder type"
     },
     "content": {
@@ -18,7 +18,7 @@
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/placeholders/index",
+      "blockType": "https://pub.xats.org/vocabularies/placeholders/index",
       "content": {}
     }
   ]

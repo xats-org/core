@@ -509,7 +509,7 @@ export class DocumentParser {
     if (numPr) {
       // This paragraph is part of a list - we'll handle list grouping elsewhere
       return {
-        blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+        blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
         content: {
           text: semanticText,
         },
@@ -525,10 +525,10 @@ export class DocumentParser {
     // Determine block type from style
     const blockType =
       this.styleMapper.getXatsBlockType(styleName) ||
-      'https://xats.org/vocabularies/blocks/paragraph';
+      'https://pub.xats.org/vocabularies/blocks/paragraph';
 
     // Handle headings specially
-    if (blockType === 'https://xats.org/vocabularies/blocks/heading') {
+    if (blockType === 'https://pub.xats.org/vocabularies/blocks/heading') {
       const level = this.styleMapper.getHeadingLevel(styleName) || 1;
       return {
         blockType,
@@ -540,7 +540,7 @@ export class DocumentParser {
     }
 
     // Handle special block types
-    if (blockType === 'https://xats.org/vocabularies/blocks/blockquote') {
+    if (blockType === 'https://pub.xats.org/vocabularies/blocks/blockquote') {
       return {
         blockType,
         content: {
@@ -550,7 +550,7 @@ export class DocumentParser {
       };
     }
 
-    if (blockType === 'https://xats.org/vocabularies/blocks/codeBlock') {
+    if (blockType === 'https://pub.xats.org/vocabularies/blocks/codeBlock') {
       const plainText = semanticText.runs.map((run) => run.text || '').join('');
       return {
         blockType,
@@ -608,7 +608,7 @@ export class DocumentParser {
     const caption = this.extractTableCaption(table);
 
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/table',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/table',
       content: {
         rows,
         hasHeader,
@@ -682,7 +682,7 @@ export class DocumentParser {
    */
   private convertList(items: any[], listType: string): ContentBlock {
     return {
-      blockType: 'https://xats.org/vocabularies/blocks/list',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/list',
       content: {
         ordered: listType === 'ordered',
         items: items.map((item) => ({
@@ -719,7 +719,7 @@ export class DocumentParser {
       const descr = cNvPr?.$?.descr;
 
       return {
-        blockType: 'https://xats.org/vocabularies/blocks/figure',
+        blockType: 'https://pub.xats.org/vocabularies/blocks/figure',
         content: {
           src: `word/media/${embed}`, // Placeholder - would need to resolve actual path
           alt: descr || name,

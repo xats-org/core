@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/blocks/mathBlock",
+  "$id": "https://pub.xats.org/vocabularies/blocks/mathBlock",
   "title": "Math Block",
   "description": "A block for displaying mathematical equations and formulas",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/blocks/mathBlock",
+      "const": "https://pub.xats.org/vocabularies/blocks/mathBlock",
       "description": "The URI identifier for this block type"
     },
     "content": {
@@ -28,7 +28,7 @@
           "description": "Whether to display as a block equation or inline"
         },
         "caption": {
-          "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
+          "$ref": "https://pub.xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
           "description": "Optional caption or equation number"
         }
       },
@@ -39,7 +39,7 @@
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/mathBlock",
       "content": {
         "format": "latex",
         "math": "E = mc^2",
@@ -55,7 +55,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/mathBlock",
       "content": {
         "format": "latex",
         "math": "\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}",
@@ -71,7 +71,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/mathBlock",
       "content": {
         "format": "latex",
         "math": "\\frac{d}{dx} \\sin(x) = \\cos(x)",

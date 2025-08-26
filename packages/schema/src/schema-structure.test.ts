@@ -41,7 +41,7 @@ describe('Schema Structure Validation', () => {
 
     it('should have schema ID', () => {
       expect(schemaContent).toHaveProperty('$id');
-      expect(schemaContent.$id).toBe('https://xats.org/schemas/0.1.0/schema.json');
+      expect(schemaContent.$id).toBe('https://pub.xats.org/schemas/0.1.0/schema.json');
     });
 
     it('should have title and description', () => {
@@ -304,12 +304,14 @@ describe('Schema Structure Validation', () => {
 
     it('should have proper enum constraints', () => {
       // Check list type enum
-      const listBlockContent = getContentBlockSchema('https://xats.org/vocabularies/blocks/list');
+      const listBlockContent = getContentBlockSchema(
+        'https://pub.xats.org/vocabularies/blocks/list'
+      );
       expect(listBlockContent.properties.listType.enum).toEqual(['ordered', 'unordered']);
 
       // Check math notation enum
       const mathBlockContent = getContentBlockSchema(
-        'https://xats.org/vocabularies/blocks/mathBlock'
+        'https://pub.xats.org/vocabularies/blocks/mathBlock'
       );
       expect(mathBlockContent.properties.notation.enum).toEqual(['latex', 'mathml', 'asciimath']);
     });
@@ -333,7 +335,7 @@ describe('Schema Structure Validation', () => {
   function getContentBlockSchema(blockType: string): any {
     // For testing purposes, return a simple mock structure
     // In practice, this would navigate the complex if/then/else chains
-    if (blockType === 'https://xats.org/vocabularies/blocks/list') {
+    if (blockType === 'https://pub.xats.org/vocabularies/blocks/list') {
       return {
         properties: {
           listType: { enum: ['ordered', 'unordered'] },
@@ -341,7 +343,7 @@ describe('Schema Structure Validation', () => {
         },
       };
     }
-    if (blockType === 'https://xats.org/vocabularies/blocks/mathBlock') {
+    if (blockType === 'https://pub.xats.org/vocabularies/blocks/mathBlock') {
       return {
         properties: {
           notation: { enum: ['latex', 'mathml', 'asciimath'] },

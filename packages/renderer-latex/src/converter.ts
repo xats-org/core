@@ -461,37 +461,37 @@ export class LaTeXConverter {
     if (!block.content) return '';
 
     switch (block.blockType) {
-      case 'https://xats.org/vocabularies/blocks/paragraph':
+      case 'https://pub.xats.org/vocabularies/blocks/paragraph':
         return this.convertParagraphBlock(block);
 
-      case 'https://xats.org/vocabularies/blocks/heading':
+      case 'https://pub.xats.org/vocabularies/blocks/heading':
         return this.convertHeadingBlock(block);
 
-      case 'https://xats.org/vocabularies/blocks/list':
+      case 'https://pub.xats.org/vocabularies/blocks/list':
         return this.convertListBlock(block);
 
-      case 'https://xats.org/vocabularies/blocks/blockquote':
+      case 'https://pub.xats.org/vocabularies/blocks/blockquote':
         return this.convertBlockquoteBlock(block);
 
-      case 'https://xats.org/vocabularies/blocks/codeBlock':
+      case 'https://pub.xats.org/vocabularies/blocks/codeBlock':
         return this.convertCodeBlock(block);
 
-      case 'https://xats.org/vocabularies/blocks/mathBlock':
+      case 'https://pub.xats.org/vocabularies/blocks/mathBlock':
         return this.convertMathBlock(block);
 
-      case 'https://xats.org/vocabularies/blocks/table':
+      case 'https://pub.xats.org/vocabularies/blocks/table':
         return this.convertTableBlock(block);
 
-      case 'https://xats.org/vocabularies/blocks/figure':
+      case 'https://pub.xats.org/vocabularies/blocks/figure':
         return this.convertFigureBlock(block);
 
-      case 'https://xats.org/vocabularies/placeholders/tableOfContents':
+      case 'https://pub.xats.org/vocabularies/placeholders/tableOfContents':
         return '\\tableofcontents';
 
-      case 'https://xats.org/vocabularies/placeholders/bibliography':
+      case 'https://pub.xats.org/vocabularies/placeholders/bibliography':
         return this.generateBibliography();
 
-      case 'https://xats.org/vocabularies/placeholders/index':
+      case 'https://pub.xats.org/vocabularies/placeholders/index':
         return '\\printindex';
 
       default:

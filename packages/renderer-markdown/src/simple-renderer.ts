@@ -584,7 +584,7 @@ export class SimpleMarkdownRenderer
     if (!block.content) return '';
 
     switch (block.blockType) {
-      case 'https://xats.org/vocabularies/blocks/paragraph': {
+      case 'https://pub.xats.org/vocabularies/blocks/paragraph': {
         if (
           typeof block.content === 'object' &&
           block.content !== null &&
@@ -595,7 +595,7 @@ export class SimpleMarkdownRenderer
         return '';
       }
 
-      case 'https://xats.org/vocabularies/blocks/heading': {
+      case 'https://pub.xats.org/vocabularies/blocks/heading': {
         if (
           typeof block.content === 'object' &&
           block.content !== null &&
@@ -610,7 +610,7 @@ export class SimpleMarkdownRenderer
         return '';
       }
 
-      case 'https://xats.org/vocabularies/blocks/list': {
+      case 'https://pub.xats.org/vocabularies/blocks/list': {
         if (typeof block.content === 'object' && block.content !== null) {
           const listContent = block.content as { items?: unknown[]; ordered?: boolean };
           if (Array.isArray(listContent.items)) {
@@ -631,7 +631,7 @@ export class SimpleMarkdownRenderer
         return '';
       }
 
-      case 'https://xats.org/vocabularies/blocks/blockquote': {
+      case 'https://pub.xats.org/vocabularies/blocks/blockquote': {
         if (
           typeof block.content === 'object' &&
           block.content !== null &&
@@ -646,7 +646,7 @@ export class SimpleMarkdownRenderer
         return '';
       }
 
-      case 'https://xats.org/vocabularies/blocks/codeBlock': {
+      case 'https://pub.xats.org/vocabularies/blocks/codeBlock': {
         const code =
           typeof block.content === 'string'
             ? block.content
@@ -657,7 +657,7 @@ export class SimpleMarkdownRenderer
         return `${fence}${language}\n${code}\n${fence}`;
       }
 
-      case 'https://xats.org/vocabularies/blocks/mathBlock': {
+      case 'https://pub.xats.org/vocabularies/blocks/mathBlock': {
         const math =
           typeof block.content === 'string' ? block.content : JSON.stringify(block.content);
         return options.variant === 'gfm' || options.enableAcademic
@@ -797,14 +797,14 @@ export class SimpleMarkdownRenderer
       case 'paragraph': {
         return {
           id: this.generateId(),
-          blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
           content: this.convertASTToSemanticText(node),
         };
       }
       case 'heading': {
         const block: ContentBlock & { level?: number } = {
           id: this.generateId(),
-          blockType: 'https://xats.org/vocabularies/blocks/heading',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/heading',
           content: this.convertASTToSemanticText(node),
         };
         // Store level in extensions for heading blocks
@@ -816,14 +816,14 @@ export class SimpleMarkdownRenderer
       case 'blockquote': {
         return {
           id: this.generateId(),
-          blockType: 'https://xats.org/vocabularies/blocks/blockquote',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/blockquote',
           content: this.convertASTToSemanticText(node),
         };
       }
       case 'code': {
         const block: ContentBlock = {
           id: this.generateId(),
-          blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/codeBlock',
           content: node.value || '',
         };
         // Store language in extensions for code blocks

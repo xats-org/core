@@ -41,12 +41,12 @@ The xats annotation system uses URI-based vocabulary for annotation types:
 
 | Type | URI | Purpose |
 |------|-----|---------|
-| Suggestion | `https://xats.org/vocabularies/annotations/suggestion` | Propose specific improvements |
-| Clarification Request | `https://xats.org/vocabularies/annotations/clarification_request` | Request explanation |
-| Minor Revision | `https://xats.org/vocabularies/annotations/minor_revision_needed` | Small corrections needed |
-| Major Revision | `https://xats.org/vocabularies/annotations/major_revision_needed` | Substantial changes needed |
-| Approval | `https://xats.org/vocabularies/annotations/approval` | Formal content approval |
-| Rejection | `https://xats.org/vocabularies/annotations/rejection` | Formal content rejection |
+| Suggestion | `https://pub.xats.org/vocabularies/annotations/suggestion` | Propose specific improvements |
+| Clarification Request | `https://pub.xats.org/vocabularies/annotations/clarification_request` | Request explanation |
+| Minor Revision | `https://pub.xats.org/vocabularies/annotations/minor_revision_needed` | Small corrections needed |
+| Major Revision | `https://pub.xats.org/vocabularies/annotations/major_revision_needed` | Substantial changes needed |
+| Approval | `https://pub.xats.org/vocabularies/annotations/approval` | Formal content approval |
+| Rejection | `https://pub.xats.org/vocabularies/annotations/rejection` | Formal content rejection |
 
 ## Key Features
 

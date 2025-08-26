@@ -1,5 +1,5 @@
 {
-  "uri": "https://xats.org/vocabularies/ancillary/solution-manual-content",
+  "uri": "https://pub.xats.org/vocabularies/ancillary/solution-manual-content",
   "name": "Solution Manual Content",
   "description": "Content that should be included in solution manuals and answer keys",
   "category": "ancillary",

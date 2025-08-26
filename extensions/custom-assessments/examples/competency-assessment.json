@@ -1,5 +1,5 @@
 {
-  "$schema": "https://xats.org/schemas/0.3.0/xats.json",
+  "$schema": "https://pub.xats.org/schemas/0.3.0/xats.json",
   "schemaVersion": "0.5.0",
   "bibliographicEntry": {
     "id": "nursing-competency-2025",
@@ -31,7 +31,7 @@
             "blocks": [
               {
                 "id": "intro-vital-signs",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {"type": "text", "text": "Accurate vital signs assessment is fundamental to patient care. This competency assessment evaluates your ability to measure, interpret, and respond to vital signs."}
@@ -40,7 +40,7 @@
               },
               {
                 "id": "simulation-assessment",
-                "blockType": "https://xats.org/extensions/custom-assessments/simulation",
+                "blockType": "https://pub.xats.org/extensions/custom-assessments/simulation",
                 "content": {
                   "assessmentType": "competency-based",
                   "simulationType": "virtual-patient",
@@ -149,7 +149,7 @@
                   }
                 },
                 "extensions": {
-                  "https://xats.org/extensions/custom-assessments": {
+                  "https://pub.xats.org/extensions/custom-assessments": {
                     "competencyMapping": {
                       "framework": "QSEN",
                       "competencies": [
@@ -202,7 +202,7 @@
               },
               {
                 "id": "portfolio-assessment",
-                "blockType": "https://xats.org/extensions/custom-assessments/portfolio",
+                "blockType": "https://pub.xats.org/extensions/custom-assessments/portfolio",
                 "content": {
                   "assessmentType": "portfolio",
                   "requirements": {
@@ -232,7 +232,7 @@
                   }
                 },
                 "extensions": {
-                  "https://xats.org/extensions/custom-assessments": {
+                  "https://pub.xats.org/extensions/custom-assessments": {
                     "portfolioFeatures": {
                       "collaborativeReview": true,
                       "peerFeedback": true,
@@ -250,7 +250,7 @@
               },
               {
                 "id": "peer-assessment",
-                "blockType": "https://xats.org/extensions/custom-assessments/peer-review",
+                "blockType": "https://pub.xats.org/extensions/custom-assessments/peer-review",
                 "content": {
                   "assessmentType": "peer-evaluation",
                   "structure": {
@@ -288,7 +288,7 @@
                   ]
                 },
                 "extensions": {
-                  "https://xats.org/extensions/custom-assessments": {
+                  "https://pub.xats.org/extensions/custom-assessments": {
                     "qualityAssurance": {
                       "interRaterReliability": true,
                       "biasDetection": true,
@@ -301,7 +301,7 @@
           }
         ],
         "extensions": {
-          "https://xats.org/extensions/custom-assessments": {
+          "https://pub.xats.org/extensions/custom-assessments": {
             "assessmentStrategy": {
               "multiModal": true,
               "authenticAssessment": true,

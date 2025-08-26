@@ -1,12 +1,12 @@
 {
-  "$schema": "https://xats.org/schemas/0.3.0/xats.json#/definitions/Section",
+  "$schema": "https://pub.xats.org/schemas/0.3.0/xats.json#/definitions/Section",
   "type": "Section",
   "id": "ch01-section-01",
   "label": "1.1",
   "title": "Newton's Laws of Motion",
   "contents": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/heading",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/heading",
       "content": {
         "level": 3,
         "text": {
@@ -20,7 +20,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
       "content": {
         "text": {
           "runs": [
@@ -33,7 +33,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/vocabularies/blocks/heading",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/heading",
       "content": {
         "level": 3,
         "text": {
@@ -47,7 +47,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
       "content": {
         "text": {
           "runs": [
@@ -60,7 +60,7 @@
       }
     },
     {
-      "blockType": "https://xats.org/vocabularies/blocks/mathBlock",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/mathBlock",
       "content": {
         "expression": "\\vec{F} = m\\vec{a}",
         "format": "latex"

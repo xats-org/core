@@ -83,12 +83,12 @@ From issue #65, the peer review system must support:
 
 **Decision:** Use the established xats vocabulary pattern with new annotation-specific URIs:
 
-- `https://xats.org/vocabularies/annotations/suggestion`
-- `https://xats.org/vocabularies/annotations/clarification_request`
-- `https://xats.org/vocabularies/annotations/minor_revision_needed`
-- `https://xats.org/vocabularies/annotations/major_revision_needed`
-- `https://xats.org/vocabularies/annotations/approval`
-- `https://xats.org/vocabularies/annotations/rejection`
+- `https://pub.xats.org/vocabularies/annotations/suggestion`
+- `https://pub.xats.org/vocabularies/annotations/clarification_request`
+- `https://pub.xats.org/vocabularies/annotations/minor_revision_needed`
+- `https://pub.xats.org/vocabularies/annotations/major_revision_needed`
+- `https://pub.xats.org/vocabularies/annotations/approval`
+- `https://pub.xats.org/vocabularies/annotations/rejection`
 
 ### 4. Text Range Targeting
 

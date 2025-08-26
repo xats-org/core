@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/extensions/custom-assessments/schema.json",
+  "$id": "https://pub.xats.org/extensions/custom-assessments/schema.json",
   "title": "Custom Assessment Types Extension for xats",
   "description": "Extension for creating advanced assessment types beyond the core xats assessment framework, including adaptive assessments, peer assessments, portfolio assessments, and specialized evaluation methods.",
   "type": "object",
@@ -116,7 +116,7 @@
               },
               "content": {
                 "description": "Question content using xats ContentBlock structure.",
-                "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/ContentBlock"
+                "$ref": "https://pub.xats.org/schemas/0.3.0/schema.json#/definitions/ContentBlock"
               },
               "learningObjectives": {
                 "description": "Learning objectives this question assesses.",
@@ -260,11 +260,11 @@
         },
         "assignmentPrompt": {
           "description": "The task or prompt for learners to complete.",
-          "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+          "$ref": "https://pub.xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
         },
         "submissionGuidelines": {
           "description": "Guidelines for what to submit.",
-          "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+          "$ref": "https://pub.xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
         },
         "peerReviewConfiguration": {
           "description": "Configuration for the peer review process.",
@@ -1047,11 +1047,11 @@
               },
               "context": {
                 "description": "Background and setting for the scenario.",
-                "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+                "$ref": "https://pub.xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
               },
               "situation": {
                 "description": "The specific situation requiring judgment.",
-                "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+                "$ref": "https://pub.xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
               },
               "stakeholders": {
                 "description": "People or groups affected by decisions.",
@@ -1082,7 +1082,7 @@
                     },
                     "action": {
                       "description": "The action being considered.",
-                      "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+                      "$ref": "https://pub.xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
                     },
                     "effectiveness": {
                       "description": "Expert rating of effectiveness (1-5).",
@@ -1127,7 +1127,7 @@
               },
               "expertRationale": {
                 "description": "Expert explanation of best responses.",
-                "$ref": "https://xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
+                "$ref": "https://pub.xats.org/schemas/0.3.0/schema.json#/definitions/SemanticText"
               },
               "metadata": {
                 "type": "object",

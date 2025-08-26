@@ -60,12 +60,12 @@ export interface ReviewDecision {
 
 // Vocabulary Constants
 export const ANNOTATION_TYPES = {
-  SUGGESTION: 'https://xats.org/vocabularies/annotations/suggestion',
-  CLARIFICATION_REQUEST: 'https://xats.org/vocabularies/annotations/clarification_request',
-  MINOR_REVISION_NEEDED: 'https://xats.org/vocabularies/annotations/minor_revision_needed',
-  MAJOR_REVISION_NEEDED: 'https://xats.org/vocabularies/annotations/major_revision_needed',
-  APPROVAL: 'https://xats.org/vocabularies/annotations/approval',
-  REJECTION: 'https://xats.org/vocabularies/annotations/rejection',
+  SUGGESTION: 'https://pub.xats.org/vocabularies/annotations/suggestion',
+  CLARIFICATION_REQUEST: 'https://pub.xats.org/vocabularies/annotations/clarification_request',
+  MINOR_REVISION_NEEDED: 'https://pub.xats.org/vocabularies/annotations/minor_revision_needed',
+  MAJOR_REVISION_NEEDED: 'https://pub.xats.org/vocabularies/annotations/major_revision_needed',
+  APPROVAL: 'https://pub.xats.org/vocabularies/annotations/approval',
+  REJECTION: 'https://pub.xats.org/vocabularies/annotations/rejection',
 } as const;
 
 export const ANNOTATION_STATUS = {
@@ -391,7 +391,7 @@ export function isValidAnnotationTypeURI(uri: string): boolean {
   try {
     new URL(uri);
     return (
-      uri.startsWith('https://xats.org/vocabularies/annotations/') ||
+      uri.startsWith('https://pub.xats.org/vocabularies/annotations/') ||
       uri.startsWith('http://xats.org/vocabularies/annotations/') ||
       /^https?:\/\/[\w.-]+\/vocabularies\/annotations\/\w+$/.test(uri)
     );

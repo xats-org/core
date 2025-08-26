@@ -26,14 +26,14 @@ The xats v0.5.0 peer review and annotation system provides a comprehensive frame
 
 ## Annotation Types
 
-### Suggestion (`https://xats.org/vocabularies/annotations/suggestion`)
+### Suggestion (`https://pub.xats.org/vocabularies/annotations/suggestion`)
 **Purpose**: Propose specific changes to content  
 **Best For**: Content improvements, alternative wordings, structural changes  
 
 **Example**:
 ```json
 {
-  "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+  "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion",
   "content": {
     "runs": [{"type": "text", "text": "Consider adding a concrete example here"}]
   },
@@ -43,32 +43,32 @@ The xats v0.5.0 peer review and annotation system provides a comprehensive frame
 }
 ```
 
-### Clarification Request (`https://xats.org/vocabularies/annotations/clarification_request`)
+### Clarification Request (`https://pub.xats.org/vocabularies/annotations/clarification_request`)
 **Purpose**: Request additional information or explanation  
 **Best For**: Identifying unclear concepts, requesting examples, asking questions  
 
 **Example**:
 ```json
 {
-  "annotationType": "https://xats.org/vocabularies/annotations/clarification_request",
+  "annotationType": "https://pub.xats.org/vocabularies/annotations/clarification_request",
   "content": {
     "runs": [{"type": "text", "text": "What does 'explicitly programmed' mean in this context? Please provide contrast with traditional programming."}]
   }
 }
 ```
 
-### Minor Revision Needed (`https://xats.org/vocabularies/annotations/minor_revision_needed`)
+### Minor Revision Needed (`https://pub.xats.org/vocabularies/annotations/minor_revision_needed`)
 **Purpose**: Indicate need for small corrections  
 **Best For**: Typos, formatting issues, minor factual corrections  
 
-### Major Revision Needed (`https://xats.org/vocabularies/annotations/major_revision_needed`)
+### Major Revision Needed (`https://pub.xats.org/vocabularies/annotations/major_revision_needed`)
 **Purpose**: Indicate need for significant content changes  
 **Best For**: Structural problems, missing content, pedagogical concerns  
 
 **Example with Review Decision**:
 ```json
 {
-  "annotationType": "https://xats.org/vocabularies/annotations/major_revision_needed",
+  "annotationType": "https://pub.xats.org/vocabularies/annotations/major_revision_needed",
   "reviewDecision": {
     "decision": "request_changes",
     "confidence": 4,
@@ -87,11 +87,11 @@ The xats v0.5.0 peer review and annotation system provides a comprehensive frame
 }
 ```
 
-### Approval (`https://xats.org/vocabularies/annotations/approval`)
+### Approval (`https://pub.xats.org/vocabularies/annotations/approval`)
 **Purpose**: Formal approval of content  
 **Best For**: Peer review sign-off, content validation, quality assurance  
 
-### Rejection (`https://xats.org/vocabularies/annotations/rejection`)
+### Rejection (`https://pub.xats.org/vocabularies/annotations/rejection`)
 **Purpose**: Formal rejection of content  
 **Best For**: Content that doesn't meet standards or requires complete rewrite  
 
@@ -152,12 +152,12 @@ Annotations support hierarchical discussions through threading:
 ```json
 {
   "id": "content-paragraph",
-  "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
   "content": {"text": {"runs": [{"type": "text", "text": "Your content here"}]}},
   "annotations": [
     {
       "id": "review-001",
-      "annotationType": "https://xats.org/vocabularies/annotations/suggestion",
+      "annotationType": "https://pub.xats.org/vocabularies/annotations/suggestion",
       "targetObjectId": "content-paragraph",
       "status": "open",
       "priority": "medium",

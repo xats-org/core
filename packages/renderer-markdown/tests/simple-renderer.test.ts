@@ -94,7 +94,7 @@ describe('SimpleMarkdownRenderer', () => {
           contents: [
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [
                   { type: 'text', text: 'This is a test paragraph with ' },
@@ -128,7 +128,7 @@ describe('SimpleMarkdownRenderer', () => {
           contents: [
             {
               id: 'quote1',
-              blockType: 'https://xats.org/vocabularies/blocks/blockquote',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/blockquote',
               content: {
                 runs: [{ type: 'text', text: 'This is a blockquote.' }],
               },
@@ -154,7 +154,7 @@ describe('SimpleMarkdownRenderer', () => {
           contents: [
             {
               id: 'code1',
-              blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/codeBlock',
               content: 'console.log("Hello, world!");',
               extensions: { language: 'javascript' },
             },
@@ -181,7 +181,7 @@ describe('SimpleMarkdownRenderer', () => {
           contents: [
             {
               id: 'math1',
-              blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/mathBlock',
               content: 'E = mc^2',
             },
           ],
@@ -292,7 +292,7 @@ This paragraph has *emphasized* and **strong** text.`;
       expect(unit.contents).toBeDefined();
       const blocks = unit.contents as ContentBlock[];
       const blockquote = blocks.find(
-        (b: ContentBlock) => b.blockType === 'https://xats.org/vocabularies/blocks/blockquote'
+        (b: ContentBlock) => b.blockType === 'https://pub.xats.org/vocabularies/blocks/blockquote'
       );
       expect(blockquote).toBeDefined();
     });
@@ -313,7 +313,7 @@ console.log("Hello");
       expect(unit.contents).toBeDefined();
       const blocks = unit.contents as ContentBlock[];
       const codeBlock = blocks.find(
-        (b: ContentBlock) => b.blockType === 'https://xats.org/vocabularies/blocks/codeBlock'
+        (b: ContentBlock) => b.blockType === 'https://pub.xats.org/vocabularies/blocks/codeBlock'
       );
       expect(codeBlock).toBeDefined();
       expect(codeBlock?.extensions?.language).toBe('javascript');
@@ -333,7 +333,7 @@ console.log("Hello");
           contents: [
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [{ type: 'text', text: 'Test paragraph.' }],
               },
@@ -616,7 +616,7 @@ Some content with accessibility issues:
                       contents: [
                         {
                           id: 'para1',
-                          blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                          blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                           content: {
                             runs: [{ type: 'text', text: 'Complex nested content.' }],
                           },
@@ -654,7 +654,7 @@ Some content with accessibility issues:
           contents: [
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [
                   { type: 'text', text: 'This is a citation ' },
@@ -684,7 +684,7 @@ Some content with accessibility issues:
           contents: [
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [
                   { type: 'text', text: 'See ' },
@@ -714,7 +714,7 @@ Some content with accessibility issues:
           contents: [
             {
               id: 'code1',
-              blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/codeBlock',
               content: 'test code',
               extensions: { language: 'text' },
             },

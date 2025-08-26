@@ -32,7 +32,7 @@ Successfully implemented Phase 3 of issue #65, adding comprehensive peer review 
 ### ✅ Vocabulary Specification
 **File:** `/.claude/memory/contexts/annotation-vocabulary-specification.md`
 
-- **Standardized URI namespace**: `https://xats.org/vocabularies/annotations/`
+- **Standardized URI namespace**: `https://pub.xats.org/vocabularies/annotations/`
 - **6 core annotation types** with clear usage guidelines
 - **Extensibility framework** for custom annotation types
 - **Integration patterns** for existing annotation standards

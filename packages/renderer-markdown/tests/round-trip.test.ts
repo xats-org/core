@@ -30,7 +30,7 @@ describe('Markdown Round-trip Tests', () => {
           contents: [
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [{ type: 'text', text: 'This is a simple paragraph.' }],
               },
@@ -59,7 +59,7 @@ describe('Markdown Round-trip Tests', () => {
           contents: [
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [
                   { type: 'text', text: 'Text with ' },
@@ -94,7 +94,7 @@ describe('Markdown Round-trip Tests', () => {
           contents: [
             {
               id: 'heading1',
-              blockType: 'https://xats.org/vocabularies/blocks/heading',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/heading',
               content: {
                 runs: [{ type: 'text', text: 'Section Header' }],
               },
@@ -102,7 +102,7 @@ describe('Markdown Round-trip Tests', () => {
             },
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [{ type: 'text', text: 'Section content.' }],
               },
@@ -130,7 +130,7 @@ describe('Markdown Round-trip Tests', () => {
           contents: [
             {
               id: 'quote1',
-              blockType: 'https://xats.org/vocabularies/blocks/blockquote',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/blockquote',
               content: {
                 runs: [{ type: 'text', text: 'This is a quoted text.' }],
               },
@@ -158,7 +158,7 @@ describe('Markdown Round-trip Tests', () => {
           contents: [
             {
               id: 'code1',
-              blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/codeBlock',
               content: 'const x = 42;\nconsole.log(x);',
               language: 'javascript',
             },
@@ -195,7 +195,7 @@ describe('Markdown Round-trip Tests', () => {
                   contents: [
                     {
                       id: 'para1',
-                      blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                      blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                       content: {
                         runs: [{ type: 'text', text: 'Nested content paragraph.' }],
                       },
@@ -230,7 +230,7 @@ describe('Markdown Round-trip Tests', () => {
           contents: [
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [{ type: 'text', text: 'Content with metadata.' }],
               },
@@ -298,7 +298,7 @@ describe('Markdown Round-trip Tests', () => {
           contents: [
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [
                   {
@@ -331,7 +331,7 @@ describe('Markdown Round-trip Tests', () => {
           contents: [
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [
                   { type: 'text', text: 'This has ' },
@@ -359,7 +359,7 @@ describe('Markdown Round-trip Tests', () => {
     it('should handle large documents efficiently', async () => {
       const largeContent = Array.from({ length: 100 }, (_, i) => ({
         id: `para${i}`,
-        blockType: 'https://xats.org/vocabularies/blocks/paragraph' as const,
+        blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph' as const,
         content: {
           runs: [
             { type: 'text' as const, text: `This is paragraph ${i + 1} with some test content.` },
@@ -402,7 +402,7 @@ describe('Markdown Round-trip Tests', () => {
           contents: [
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [{ type: 'text', text: 'Performance test content.' }],
               },
@@ -528,7 +528,7 @@ describe('Markdown Round-trip Tests', () => {
           contents: [
             {
               id: 'para1',
-              blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+              blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
               content: {
                 runs: [{ type: 'text', text: 'Simple content.' }],
               },

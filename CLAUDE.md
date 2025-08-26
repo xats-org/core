@@ -312,17 +312,17 @@ When working with xats documents, validate against the JSON Schema to ensure com
 
 ### Core Vocabulary URIs
 Common `blockType` URIs:
-- `https://xats.org/vocabularies/blocks/paragraph`
-- `https://xats.org/vocabularies/blocks/heading`
-- `https://xats.org/vocabularies/blocks/list`
-- `https://xats.org/vocabularies/blocks/blockquote`
-- `https://xats.org/vocabularies/blocks/codeBlock`
-- `https://xats.org/vocabularies/blocks/mathBlock`
-- `https://xats.org/vocabularies/blocks/table`
-- `https://xats.org/vocabularies/blocks/figure`
-- `https://xats.org/vocabularies/placeholders/tableOfContents`
-- `https://xats.org/vocabularies/placeholders/bibliography`
-- `https://xats.org/vocabularies/placeholders/index`
+- `https://pub.xats.org/vocabularies/blocks/paragraph`
+- `https://pub.xats.org/vocabularies/blocks/heading`
+- `https://pub.xats.org/vocabularies/blocks/list`
+- `https://pub.xats.org/vocabularies/blocks/blockquote`
+- `https://pub.xats.org/vocabularies/blocks/codeBlock`
+- `https://pub.xats.org/vocabularies/blocks/mathBlock`
+- `https://pub.xats.org/vocabularies/blocks/table`
+- `https://pub.xats.org/vocabularies/blocks/figure`
+- `https://pub.xats.org/vocabularies/placeholders/tableOfContents`
+- `https://pub.xats.org/vocabularies/placeholders/bibliography`
+- `https://pub.xats.org/vocabularies/placeholders/index`
 
 ### Important Patterns
 

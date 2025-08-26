@@ -1,23 +1,23 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/blocks/thinkPairShare",
+  "$id": "https://pub.xats.org/vocabularies/blocks/thinkPairShare",
   "title": "Think-Pair-Share Collaborative Activity Block",
   "description": "A structured collaborative learning block that implements the Think-Pair-Share pedagogy with individual reflection, peer discussion, and whole-class sharing phases to promote active engagement and peer learning",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/blocks/thinkPairShare",
+      "const": "https://pub.xats.org/vocabularies/blocks/thinkPairShare",
       "description": "The URI identifier for this block type"
     },
     "content": {
-      "$ref": "https://xats.org/schemas/0.5.0/xats.json#/definitions/ThinkPairShareContent",
+      "$ref": "https://pub.xats.org/schemas/0.5.0/xats.json#/definitions/ThinkPairShareContent",
       "description": "The Think-Pair-Share activity content including prompt, phase configurations, timing, and assessment integration options"
     }
   },
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/thinkPairShare",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/thinkPairShare",
       "content": {
         "prompt": {
           "runs": [

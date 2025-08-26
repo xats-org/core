@@ -1,5 +1,5 @@
 {
-  "uri": "https://xats.org/vocabularies/ancillary/slide-content",
+  "uri": "https://pub.xats.org/vocabularies/ancillary/slide-content",
   "name": "Slide Content",
   "description": "Content that should be included in generated presentation slides",
   "category": "ancillary",

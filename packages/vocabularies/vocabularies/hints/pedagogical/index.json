@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/hints/pedagogical",
+  "$id": "https://pub.xats.org/vocabularies/hints/pedagogical",
   "title": "Pedagogical Role Rendering Hints",
   "description": "Rendering hints that classify content based on its pedagogical role and educational purpose",
   "type": "string",

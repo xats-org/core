@@ -1,23 +1,23 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/blocks/problemScenario",
+  "$id": "https://pub.xats.org/vocabularies/blocks/problemScenario",
   "title": "Problem-Based Learning Scenario Block",
   "description": "A comprehensive block for problem-based learning that presents authentic, complex scenarios requiring analysis, collaboration, and solution development across multiple phases",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/blocks/problemScenario",
+      "const": "https://pub.xats.org/vocabularies/blocks/problemScenario",
       "description": "The URI identifier for this block type"
     },
     "content": {
-      "$ref": "https://xats.org/schemas/0.5.0/xats.json#/definitions/ProblemScenarioContent",
+      "$ref": "https://pub.xats.org/schemas/0.5.0/xats.json#/definitions/ProblemScenarioContent",
       "description": "The problem scenario content including scenario description, context, stakeholders, constraints, deliverables, and structured phases"
     }
   },
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/problemScenario",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/problemScenario",
       "content": {
         "scenario": {
           "runs": [

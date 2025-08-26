@@ -91,7 +91,7 @@ Problem-Based Learning (PBL) blocks present authentic, complex scenarios that re
 
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/problemScenario",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/problemScenario",
   "content": {
     "scenario": "The main problem context",
     "context": "Background information and setting",
@@ -149,7 +149,7 @@ Worked Example blocks demonstrate expert problem-solving procedures through deta
 
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/workedExample",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/workedExample",
   "content": {
     "concept": "The skill or procedure being taught",
     "problem": "The example problem to be solved",
@@ -213,7 +213,7 @@ Think-Pair-Share blocks implement a structured collaborative learning strategy t
 
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/thinkPairShare",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/thinkPairShare",
   "content": {
     "prompt": "Central question or scenario",
     "thinkPhase": "Individual reflection with scaffolding",
@@ -290,7 +290,7 @@ Case Study blocks present complex, realistic scenarios that require analysis, ev
 
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/caseStudy",
   "content": {
     "title": "Case identification",
     "industry": "Professional context",
@@ -521,7 +521,7 @@ Case Study blocks present complex, realistic scenarios that require analysis, ev
 **Engineering Problem-Based Learning**:
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/problemScenario",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/problemScenario",
   "content": {
     "scenario": {
       "runs": [{"type": "text", "text": "Your team has been hired to design a sustainable water treatment system for a rural community of 2,000 people in sub-Saharan Africa. The system must be affordable, maintainable with local resources, and capable of treating 50,000 liters per day."}]
@@ -550,7 +550,7 @@ Case Study blocks present complex, realistic scenarios that require analysis, ev
 **Mathematics Worked Example**:
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/workedExample",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/workedExample",
   "content": {
     "concept": "Integration by Parts",
     "solution": {
@@ -580,7 +580,7 @@ Case Study blocks present complex, realistic scenarios that require analysis, ev
 **Case Study Example**:
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/caseStudy",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/caseStudy",
   "content": {
     "title": {"runs": [{"type": "text", "text": "Netflix's Content Strategy Pivot"}]},
     "industry": "Media and Entertainment",
@@ -612,7 +612,7 @@ Case Study blocks present complex, realistic scenarios that require analysis, ev
 **Think-Pair-Share for Psychology**:
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/thinkPairShare",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/thinkPairShare",
   "content": {
     "prompt": {"runs": [{"type": "text", "text": "Consider the ethical implications of using AI in therapy and mental health treatment. What are the potential benefits for accessibility and consistency, and what risks might arise for the therapeutic relationship?"}]},
     "thinkPhase": {

@@ -1,23 +1,23 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/blocks/example",
+  "$id": "https://pub.xats.org/vocabularies/blocks/example",
   "title": "Example Block",
   "description": "A semantic callout block for specific examples",
   "type": "object",
   "properties": {
     "blockType": {
-      "const": "https://xats.org/vocabularies/blocks/example",
+      "const": "https://pub.xats.org/vocabularies/blocks/example",
       "description": "The URI identifier for this block type"
     },
     "content": {
-      "$ref": "https://xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
+      "$ref": "https://pub.xats.org/schemas/0.1.0/xats.json#/definitions/SemanticText",
       "description": "The example content as a SemanticText object"
     }
   },
   "required": ["blockType", "content"],
   "examples": [
     {
-      "blockType": "https://xats.org/vocabularies/blocks/example",
+      "blockType": "https://pub.xats.org/vocabularies/blocks/example",
       "content": {
         "runs": [
           {

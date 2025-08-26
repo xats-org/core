@@ -1,5 +1,5 @@
 {
-  "$schema": "https://xats.org/schemas/0.3.0/xats.json#/definitions/Chapter",
+  "$schema": "https://pub.xats.org/schemas/0.3.0/xats.json#/definitions/Chapter",
   "type": "Chapter",
   "id": "chapter-01",
   "label": "Chapter 1",
@@ -14,7 +14,7 @@
   },
   "learningObjectives": [
     {
-      "objectiveType": "https://xats.org/vocabularies/objectives/understand",
+      "objectiveType": "https://pub.xats.org/vocabularies/objectives/understand",
       "description": {
         "runs": [
           {

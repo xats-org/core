@@ -67,17 +67,17 @@ export type AnnotationPriority = 'low' | 'medium' | 'high' | 'critical';
  */
 export const ANNOTATION_TYPE_URIS = {
   /** Proposed change to content */
-  SUGGESTION: 'https://xats.org/vocabularies/annotations/suggestion',
+  SUGGESTION: 'https://pub.xats.org/vocabularies/annotations/suggestion',
   /** Need for more information */
-  CLARIFICATION_REQUEST: 'https://xats.org/vocabularies/annotations/clarification_request',
+  CLARIFICATION_REQUEST: 'https://pub.xats.org/vocabularies/annotations/clarification_request',
   /** Small fix required */
-  MINOR_REVISION_NEEDED: 'https://xats.org/vocabularies/annotations/minor_revision_needed',
+  MINOR_REVISION_NEEDED: 'https://pub.xats.org/vocabularies/annotations/minor_revision_needed',
   /** Significant change required */
-  MAJOR_REVISION_NEEDED: 'https://xats.org/vocabularies/annotations/major_revision_needed',
+  MAJOR_REVISION_NEEDED: 'https://pub.xats.org/vocabularies/annotations/major_revision_needed',
   /** Content approved */
-  APPROVAL: 'https://xats.org/vocabularies/annotations/approval',
+  APPROVAL: 'https://pub.xats.org/vocabularies/annotations/approval',
   /** Content rejected */
-  REJECTION: 'https://xats.org/vocabularies/annotations/rejection',
+  REJECTION: 'https://pub.xats.org/vocabularies/annotations/rejection',
 } as const;
 
 /**

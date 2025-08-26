@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/hints/layout",
+  "$id": "https://pub.xats.org/vocabularies/hints/layout",
   "title": "Layout Rendering Hints",
   "description": "Rendering hints for layout preferences, positioning, and page breaking behavior",
   "oneOf": [

@@ -16,7 +16,7 @@ xats extensions follow these principles:
 ### LTI 1.3 Integration Extension
 
 **File**: `lti-1.3.json`  
-**Schema ID**: `https://xats.org/extensions/lti-1.3/schema.json`  
+**Schema ID**: `https://pub.xats.org/extensions/lti-1.3/schema.json`  
 **Status**: Stable (v0.2.0)
 
 The LTI 1.3 extension enables seamless integration with Learning Management Systems (LMS) through the IMS Global Learning Tools Interoperability standard.
@@ -81,7 +81,7 @@ For individual assessments with grade passback:
 ```json
 {
   "id": "quiz-chapter-1",
-  "blockType": "https://xats.org/vocabularies/blocks/multipleChoice",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/multipleChoice",
   "content": {
     "question": { /* ... */ },
     "options": [ /* ... */ ]

@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/vocabularies/pathways/remedial",
+  "$id": "https://pub.xats.org/vocabularies/pathways/remedial",
   "title": "Remedial Learning Pathway", 
   "description": "Additional support pathway for learners who need reinforcement",
   "type": "object",
   "properties": {
     "pathwayType": {
-      "const": "https://xats.org/vocabularies/pathways/remedial",
+      "const": "https://pub.xats.org/vocabularies/pathways/remedial",
       "description": "URI identifier for remedial pathway type"
     },
     "description": {
@@ -30,7 +30,7 @@
   "required": ["pathwayType"],
   "examples": [
     {
-      "pathwayType": "https://xats.org/vocabularies/pathways/remedial",
+      "pathwayType": "https://pub.xats.org/vocabularies/pathways/remedial",
       "description": "Review basic concepts before proceeding",
       "prerequisiteTopics": ["algebra basics", "graphing linear equations"],
       "estimatedDuration": 60

@@ -4,7 +4,7 @@ The Interactive Widgets extension enables embedding of interactive simulations, 
 
 ## Overview
 
-- **Extension ID**: `https://xats.org/extensions/interactive-widgets/schema.json`
+- **Extension ID**: `https://pub.xats.org/extensions/interactive-widgets/schema.json`
 - **Version**: 1.0.0
 - **Compatibility**: xats v0.2.0+
 
@@ -37,7 +37,7 @@ The Interactive Widgets extension enables embedding of interactive simulations, 
 ```json
 {
   "id": "pendulum-sim",
-  "blockType": "https://xats.org/vocabularies/blocks/interactive",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/interactive",
   "content": {
     "title": "Simple Pendulum Simulation",
     "description": "Explore how length and gravity affect pendulum motion"
@@ -92,7 +92,7 @@ The Interactive Widgets extension enables embedding of interactive simulations, 
 ```json
 {
   "id": "quadratic-explorer",
-  "blockType": "https://xats.org/vocabularies/blocks/interactive",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/interactive",
   "content": {
     "title": "Quadratic Function Explorer",
     "description": "Visualize how coefficients affect quadratic function graphs"
@@ -142,7 +142,7 @@ The Interactive Widgets extension enables embedding of interactive simulations, 
 ```json
 {
   "id": "water-molecule",
-  "blockType": "https://xats.org/vocabularies/blocks/interactive",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/interactive",
   "content": {
     "title": "Water Molecule Structure",
     "description": "3D interactive model of H₂O showing molecular geometry"

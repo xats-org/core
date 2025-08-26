@@ -435,7 +435,7 @@ export class SimpleLaTeXRenderer
     if (!block.content) return '';
 
     switch (block.blockType) {
-      case 'https://xats.org/vocabularies/blocks/paragraph': {
+      case 'https://pub.xats.org/vocabularies/blocks/paragraph': {
         if (
           typeof block.content === 'object' &&
           block.content !== null &&

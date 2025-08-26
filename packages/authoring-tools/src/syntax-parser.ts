@@ -172,7 +172,7 @@ export class SimplifiedSyntaxParser {
           // Convert heading to content block
           currentBlocks.push({
             id: `block-${blockId++}`,
-            blockType: 'https://xats.org/vocabularies/blocks/heading',
+            blockType: 'https://pub.xats.org/vocabularies/blocks/heading',
             content: {
               text: this.convertTextToSemanticText(this.extractTextFromNode(heading)),
               level: heading.depth,
@@ -239,7 +239,7 @@ export class SimplifiedSyntaxParser {
       case 'paragraph':
         return {
           ...baseBlock,
-          blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
           content: {
             text: this.convertTextToSemanticText(this.extractTextFromNode(node)),
           },
@@ -249,7 +249,7 @@ export class SimplifiedSyntaxParser {
         const listNode = node as List;
         return {
           ...baseBlock,
-          blockType: 'https://xats.org/vocabularies/blocks/list',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/list',
           content: {
             listType: listNode.ordered ? 'ordered' : 'unordered',
             items: listNode.children.map((item) =>
@@ -262,7 +262,7 @@ export class SimplifiedSyntaxParser {
       case 'blockquote':
         return {
           ...baseBlock,
-          blockType: 'https://xats.org/vocabularies/blocks/blockquote',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/blockquote',
           content: {
             text: this.convertTextToSemanticText(this.extractTextFromNode(node)),
           },
@@ -272,7 +272,7 @@ export class SimplifiedSyntaxParser {
         const codeNode = node as Code;
         return {
           ...baseBlock,
-          blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/codeBlock',
           content: {
             code: codeNode.value || '',
             language: codeNode.lang || undefined,
@@ -287,7 +287,7 @@ export class SimplifiedSyntaxParser {
         const imageNode = node as Image;
         return {
           ...baseBlock,
-          blockType: 'https://xats.org/vocabularies/blocks/figure',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/figure',
           content: {
             src: imageNode.url || '',
             alt: imageNode.alt || '',
@@ -302,7 +302,7 @@ export class SimplifiedSyntaxParser {
         if (text.trim()) {
           return {
             ...baseBlock,
-            blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+            blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
             content: {
               text: this.convertTextToSemanticText(text),
             },
@@ -339,7 +339,7 @@ export class SimplifiedSyntaxParser {
 
     return {
       ...baseBlock,
-      blockType: 'https://xats.org/vocabularies/blocks/table',
+      blockType: 'https://pub.xats.org/vocabularies/blocks/table',
       content: {
         headers,
         rows,

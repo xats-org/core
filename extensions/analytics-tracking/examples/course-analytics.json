@@ -1,5 +1,5 @@
 {
-  "$schema": "https://xats.org/schemas/0.3.0/xats.json",
+  "$schema": "https://pub.xats.org/schemas/0.3.0/xats.json",
   "schemaVersion": "0.5.0",
   "bibliographicEntry": {
     "id": "intro-to-data-science-2025",
@@ -31,14 +31,14 @@
             "blocks": [
               {
                 "id": "block-1",
-                "blockType": "https://xats.org/vocabularies/blocks/paragraph",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/paragraph",
                 "content": {
                   "runs": [
                     {"type": "text", "text": "Data science combines mathematics, statistics, and computer science to extract insights from data."}
                   ]
                 },
                 "extensions": {
-                  "https://xats.org/extensions/analytics-tracking": {
+                  "https://pub.xats.org/extensions/analytics-tracking": {
                     "eventTracking": {
                       "enabled": true,
                       "events": [
@@ -64,7 +64,7 @@
               },
               {
                 "id": "interactive-quiz-1",
-                "blockType": "https://xats.org/vocabularies/blocks/assessment",
+                "blockType": "https://pub.xats.org/vocabularies/blocks/assessment",
                 "content": {
                   "assessmentType": "formative",
                   "questions": [
@@ -84,7 +84,7 @@
                   ]
                 },
                 "extensions": {
-                  "https://xats.org/extensions/analytics-tracking": {
+                  "https://pub.xats.org/extensions/analytics-tracking": {
                     "assessmentAnalytics": {
                       "trackAttempts": true,
                       "trackTimeToComplete": true,
@@ -108,7 +108,7 @@
           }
         ],
         "extensions": {
-          "https://xats.org/extensions/analytics-tracking": {
+          "https://pub.xats.org/extensions/analytics-tracking": {
             "chapterAnalytics": {
               "trackingId": "chapter-1-analytics",
               "objectives": [
@@ -134,7 +134,7 @@
     ]
   },
   "extensions": {
-    "https://xats.org/extensions/analytics-tracking": {
+    "https://pub.xats.org/extensions/analytics-tracking": {
       "globalSettings": {
         "provider": "custom",
         "endpoint": "https://analytics.example.edu/api/v1",

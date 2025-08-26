@@ -145,17 +145,17 @@ describe('Schema Validation Test Suite', () => {
     // Document all core block types that should be tested
 
     const coreBlockTypes = [
-      'https://xats.org/vocabularies/blocks/paragraph',
-      'https://xats.org/vocabularies/blocks/heading',
-      'https://xats.org/vocabularies/blocks/blockquote',
-      'https://xats.org/vocabularies/blocks/list',
-      'https://xats.org/vocabularies/blocks/codeBlock',
-      'https://xats.org/vocabularies/blocks/mathBlock',
-      'https://xats.org/vocabularies/blocks/table',
-      'https://xats.org/vocabularies/blocks/figure',
-      'https://xats.org/core/placeholders/tableOfContents',
-      'https://xats.org/vocabularies/placeholders/bibliography',
-      'https://xats.org/vocabularies/placeholders/index',
+      'https://pub.xats.org/vocabularies/blocks/paragraph',
+      'https://pub.xats.org/vocabularies/blocks/heading',
+      'https://pub.xats.org/vocabularies/blocks/blockquote',
+      'https://pub.xats.org/vocabularies/blocks/list',
+      'https://pub.xats.org/vocabularies/blocks/codeBlock',
+      'https://pub.xats.org/vocabularies/blocks/mathBlock',
+      'https://pub.xats.org/vocabularies/blocks/table',
+      'https://pub.xats.org/vocabularies/blocks/figure',
+      'https://pub.xats.org/vocabularies/placeholders/tableOfContents',
+      'https://pub.xats.org/vocabularies/placeholders/bibliography',
+      'https://pub.xats.org/vocabularies/placeholders/index',
     ];
 
     expect(coreBlockTypes.length).toBe(11);
@@ -163,7 +163,7 @@ describe('Schema Validation Test Suite', () => {
     // Each block type should be a valid URI
     coreBlockTypes.forEach((blockType) => {
       expect(blockType).toMatch(
-        /^https:\/\/xats\.org\/(vocabularies|core)\/(blocks|placeholders)\//
+        /^https:\/\/pub\.xats\.org\/(vocabularies|core)\/(blocks|placeholders)\//
       );
     });
   });

@@ -66,7 +66,7 @@ describe('HtmlRenderer', () => {
                 contents: [
                   {
                     id: 'block-1',
-                    blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                    blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                     content: {
                       text: {
                         runs: [{ type: 'text', text: 'This is a test paragraph.' }],
@@ -134,7 +134,7 @@ describe('HtmlRenderer', () => {
       const blocks: ContentBlock[] = [
         {
           id: 'para-1',
-          blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
           content: {
             text: { runs: [{ type: 'text', text: 'Test paragraph content.' }] },
           },
@@ -151,7 +151,7 @@ describe('HtmlRenderer', () => {
       const blocks: ContentBlock[] = [
         {
           id: 'heading-1',
-          blockType: 'https://xats.org/vocabularies/blocks/heading',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/heading',
           content: {
             text: { runs: [{ type: 'text', text: 'Test Heading' }] },
             level: 3,
@@ -169,7 +169,7 @@ describe('HtmlRenderer', () => {
       const blocks: ContentBlock[] = [
         {
           id: 'list-1',
-          blockType: 'https://xats.org/vocabularies/blocks/list',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/list',
           content: {
             listType: 'unordered',
             items: [
@@ -192,7 +192,7 @@ describe('HtmlRenderer', () => {
       const blocks: ContentBlock[] = [
         {
           id: 'quote-1',
-          blockType: 'https://xats.org/vocabularies/blocks/blockquote',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/blockquote',
           content: {
             text: { runs: [{ type: 'text', text: 'This is a quote.' }] },
             attribution: { runs: [{ type: 'text', text: 'Author Name' }] },
@@ -212,7 +212,7 @@ describe('HtmlRenderer', () => {
       const blocks: ContentBlock[] = [
         {
           id: 'code-1',
-          blockType: 'https://xats.org/vocabularies/blocks/codeBlock',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/codeBlock',
           content: {
             code: 'console.log("Hello, world!");',
             language: 'javascript',
@@ -232,7 +232,7 @@ describe('HtmlRenderer', () => {
       const blocks: ContentBlock[] = [
         {
           id: 'math-1',
-          blockType: 'https://xats.org/vocabularies/blocks/mathBlock',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/mathBlock',
           content: {
             math: 'E = mc^2',
           },
@@ -252,7 +252,7 @@ describe('HtmlRenderer', () => {
       const blocks: ContentBlock[] = [
         {
           id: 'table-1',
-          blockType: 'https://xats.org/vocabularies/blocks/table',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/table',
           content: {
             caption: { runs: [{ type: 'text', text: 'Test Table' }] },
             headers: [
@@ -284,7 +284,7 @@ describe('HtmlRenderer', () => {
       const blocks: ContentBlock[] = [
         {
           id: 'figure-1',
-          blockType: 'https://xats.org/vocabularies/blocks/figure',
+          blockType: 'https://pub.xats.org/vocabularies/blocks/figure',
           content: {
             src: '/images/test.jpg',
             alt: 'Test image description',
@@ -310,7 +310,7 @@ describe('HtmlRenderer', () => {
       const blocks: ContentBlock[] = [
         {
           id: 'toc-1',
-          blockType: 'https://xats.org/vocabularies/placeholders/tableOfContents',
+          blockType: 'https://pub.xats.org/vocabularies/placeholders/tableOfContents',
           content: {},
         },
       ];
@@ -338,7 +338,7 @@ describe('HtmlRenderer', () => {
             contents: [
               {
                 id: 'para-1',
-                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                 content: { text: semanticText },
               },
             ],
@@ -555,10 +555,10 @@ describe('HtmlRenderer', () => {
       const firstContent = chapter.contents?.[0];
       const secondContent = chapter.contents?.[1];
       if (firstContent && 'blockType' in firstContent) {
-        expect(firstContent.blockType).toBe('https://xats.org/vocabularies/blocks/list');
+        expect(firstContent.blockType).toBe('https://pub.xats.org/vocabularies/blocks/list');
       }
       if (secondContent && 'blockType' in secondContent) {
-        expect(secondContent.blockType).toBe('https://xats.org/vocabularies/blocks/codeBlock');
+        expect(secondContent.blockType).toBe('https://pub.xats.org/vocabularies/blocks/codeBlock');
       }
     });
   });
@@ -581,7 +581,7 @@ describe('HtmlRenderer', () => {
               contents: [
                 {
                   id: 'para-1',
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     text: { runs: [{ type: 'text', text: 'Test content.' }] },
                   },
@@ -620,7 +620,7 @@ describe('HtmlRenderer', () => {
               contents: [
                 {
                   id: 'para-1',
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     text: { runs: [{ type: 'text', text: 'Content.' }] },
                   },
@@ -660,7 +660,7 @@ describe('HtmlRenderer', () => {
             contents: [
               {
                 id: 'table-1',
-                blockType: 'https://xats.org/vocabularies/blocks/table',
+                blockType: 'https://pub.xats.org/vocabularies/blocks/table',
                 content: {
                   caption: { runs: [{ type: 'text', text: 'Accessible Table' }] },
                   headers: [
@@ -744,7 +744,7 @@ describe('HtmlRenderer', () => {
               contents: [
                 {
                   id: 'para-1',
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     text: { runs: [{ type: 'text', text: 'Valid content.' }] },
                   },
@@ -853,7 +853,7 @@ describe('HtmlRenderer', () => {
             contents: [
               {
                 id: 'para-1',
-                blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                 content: {
                   text: { runs: [{ type: 'text', text: 'Test content with rendering hints.' }] },
                 },
@@ -867,8 +867,11 @@ describe('HtmlRenderer', () => {
 
     it('should render semantic hints correctly', async () => {
       const hints = [
-        { hintType: 'https://xats.org/vocabularies/hints/semantic/warning', value: 'warning' },
-        { hintType: 'https://xats.org/vocabularies/hints/semantic/featured', value: 'featured' },
+        { hintType: 'https://pub.xats.org/vocabularies/hints/semantic/warning', value: 'warning' },
+        {
+          hintType: 'https://pub.xats.org/vocabularies/hints/semantic/featured',
+          value: 'featured',
+        },
       ];
 
       const result = await renderer.render(createDocumentWithHints(hints), { enhancedHints: true });
@@ -881,11 +884,12 @@ describe('HtmlRenderer', () => {
     it('should render accessibility hints correctly', async () => {
       const hints = [
         {
-          hintType: 'https://xats.org/vocabularies/hints/accessibility/screen-reader-priority-high',
+          hintType:
+            'https://pub.xats.org/vocabularies/hints/accessibility/screen-reader-priority-high',
           value: 'high',
         },
         {
-          hintType: 'https://xats.org/vocabularies/hints/accessibility/keyboard-shortcut',
+          hintType: 'https://pub.xats.org/vocabularies/hints/accessibility/keyboard-shortcut',
           value: 'Ctrl+1',
         },
       ];
@@ -900,10 +904,10 @@ describe('HtmlRenderer', () => {
     it('should render layout hints correctly', async () => {
       const hints = [
         {
-          hintType: 'https://xats.org/vocabularies/hints/layout/keep-together',
+          hintType: 'https://pub.xats.org/vocabularies/hints/layout/keep-together',
           value: 'keep-together',
         },
-        { hintType: 'https://xats.org/vocabularies/hints/layout/center', value: 'center' },
+        { hintType: 'https://pub.xats.org/vocabularies/hints/layout/center', value: 'center' },
       ];
 
       const result = await renderer.render(createDocumentWithHints(hints), { enhancedHints: true });
@@ -917,11 +921,11 @@ describe('HtmlRenderer', () => {
     it('should render pedagogical hints correctly', async () => {
       const hints = [
         {
-          hintType: 'https://xats.org/vocabularies/hints/pedagogical/key-concept',
+          hintType: 'https://pub.xats.org/vocabularies/hints/pedagogical/key-concept',
           value: 'key-concept',
         },
         {
-          hintType: 'https://xats.org/vocabularies/hints/pedagogical/learning-objective',
+          hintType: 'https://pub.xats.org/vocabularies/hints/pedagogical/learning-objective',
           value: 'learning-objective',
         },
       ];
@@ -936,7 +940,8 @@ describe('HtmlRenderer', () => {
     it('should handle conditional hints based on user preferences', async () => {
       const hints = [
         {
-          hintType: 'https://xats.org/vocabularies/hints/accessibility/high-contrast-compatible',
+          hintType:
+            'https://pub.xats.org/vocabularies/hints/accessibility/high-contrast-compatible',
           value: 'high-contrast',
           conditions: { userPreferences: ['high-contrast'] },
         },
@@ -959,7 +964,7 @@ describe('HtmlRenderer', () => {
 
     it('should parse rendering hints back from HTML', async () => {
       const originalHints = [
-        { hintType: 'https://xats.org/vocabularies/hints/semantic/warning', value: 'warning' },
+        { hintType: 'https://pub.xats.org/vocabularies/hints/semantic/warning', value: 'warning' },
       ];
 
       // Render with hints
@@ -994,7 +999,7 @@ describe('HtmlRenderer', () => {
     const createLargeDocument = (blockCount: number): XatsDocument => {
       const blocks = Array.from({ length: blockCount }, (_, i) => ({
         id: `block-${i}`,
-        blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+        blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
         content: {
           text: { runs: [{ type: 'text', text: `This is paragraph ${i + 1}.` }] },
         },
@@ -1064,7 +1069,7 @@ describe('HtmlRenderer', () => {
               contents: [
                 {
                   id: 'para-1',
-                  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+                  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
                   content: {
                     text: { runs: [{ type: 'text', text: 'Safe content.' }] },
                   },

@@ -255,7 +255,7 @@ import { createAIGenerationExtension } from '@xats-org/ai-integration';
 
 // Create a content block with AI metadata
 const contentBlock = {
-  blockType: 'https://xats.org/vocabularies/blocks/paragraph',
+  blockType: 'https://pub.xats.org/vocabularies/blocks/paragraph',
   content: {
     runs: [
       { type: 'text', text: 'This is AI-generated educational content.' }

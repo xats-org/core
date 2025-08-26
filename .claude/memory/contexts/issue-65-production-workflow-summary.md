@@ -46,7 +46,7 @@ Issue #65 aimed to implement comprehensive tools and features to integrate xats 
 
 **New Block Type Added**:
 ```
-https://xats.org/vocabularies/blocks/collaborativeProject
+https://pub.xats.org/vocabularies/blocks/collaborativeProject
 ```
 
 **Core Type Definitions** (`packages/types/src/collaborative.ts`):

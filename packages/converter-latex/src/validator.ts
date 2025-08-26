@@ -352,10 +352,10 @@ export class LaTeXValidator {
 
     // Features that don't translate well to LaTeX
     const incompatibleTypes = [
-      'https://xats.org/vocabularies/blocks/interactive',
-      'https://xats.org/vocabularies/blocks/video',
-      'https://xats.org/vocabularies/blocks/audio',
-      'https://xats.org/vocabularies/blocks/3dModel',
+      'https://pub.xats.org/vocabularies/blocks/interactive',
+      'https://pub.xats.org/vocabularies/blocks/video',
+      'https://pub.xats.org/vocabularies/blocks/audio',
+      'https://pub.xats.org/vocabularies/blocks/3dModel',
     ];
 
     this.checkBlockTypesRecursive(document.bodyMatter?.contents || [], incompatibleTypes, issues);
@@ -482,7 +482,7 @@ export class LaTeXValidator {
         item !== null &&
         'blockType' in item &&
         (item as { blockType: string }).blockType ===
-          'https://xats.org/vocabularies/blocks/mathBlock'
+          'https://pub.xats.org/vocabularies/blocks/mathBlock'
       ) {
         const mathItem = item as { content?: { latex?: string } };
         const latex = mathItem.content?.latex;

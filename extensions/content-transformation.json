@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://xats.org/extensions/content-transformation/schema.json",
+  "$id": "https://pub.xats.org/extensions/content-transformation/schema.json",
   "title": "Content Transformation Extension for xats",
   "description": "Extension for transforming content between different formats and xats documents, including markdown conversion, import/export utilities, and content migration tools.",
   "type": "object",
@@ -143,15 +143,15 @@
                   "properties": {
                     "unordered": {
                       "type": "string",
-                      "default": "https://xats.org/vocabularies/blocks/list"
+                      "default": "https://pub.xats.org/vocabularies/blocks/list"
                     },
                     "ordered": {
                       "type": "string", 
-                      "default": "https://xats.org/vocabularies/blocks/list"
+                      "default": "https://pub.xats.org/vocabularies/blocks/list"
                     },
                     "definition": {
                       "type": "string",
-                      "default": "https://xats.org/vocabularies/blocks/list"
+                      "default": "https://pub.xats.org/vocabularies/blocks/list"
                     }
                   }
                 },

@@ -144,9 +144,9 @@ export class WordValidator {
 
       // Check for unsupported features
       const unsupportedBlockTypes = [
-        'https://xats.org/vocabularies/blocks/interactive',
-        'https://xats.org/vocabularies/blocks/3dModel',
-        'https://xats.org/vocabularies/blocks/animation',
+        'https://pub.xats.org/vocabularies/blocks/interactive',
+        'https://pub.xats.org/vocabularies/blocks/3dModel',
+        'https://pub.xats.org/vocabularies/blocks/animation',
       ];
 
       // Recursively check block types
@@ -215,7 +215,7 @@ export class WordValidator {
     for (const item of contents) {
       if (item && typeof item === 'object' && 'blockType' in item) {
         const contentItem = item as any;
-        if (contentItem.blockType === 'https://xats.org/vocabularies/blocks/mathBlock') {
+        if (contentItem.blockType === 'https://pub.xats.org/vocabularies/blocks/mathBlock') {
           const mathContent = contentItem.content?.latex || contentItem.content?.mathML || '';
 
           // Check for complex LaTeX that might not convert well

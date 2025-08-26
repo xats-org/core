@@ -50,7 +50,7 @@ The HTML renderer supports all v0.5.0 enhanced rendering hints:
 {
   renderingHints: [
     {
-      hintType: 'https://xats.org/vocabularies/hints/semantic/warning',
+      hintType: 'https://pub.xats.org/vocabularies/hints/semantic/warning',
       value: 'warning'
     }
   ]
@@ -69,7 +69,7 @@ Generates accessible HTML with appropriate ARIA roles:
 {
   renderingHints: [
     {
-      hintType: 'https://xats.org/vocabularies/hints/accessibility/keyboard-shortcut',
+      hintType: 'https://pub.xats.org/vocabularies/hints/accessibility/keyboard-shortcut',
       value: 'Alt+1'
     }
   ]
@@ -88,7 +88,7 @@ Generates keyboard-accessible HTML:
 {
   renderingHints: [
     {
-      hintType: 'https://xats.org/vocabularies/hints/layout/center',
+      hintType: 'https://pub.xats.org/vocabularies/hints/layout/center',
       value: 'center'
     }
   ]
@@ -107,7 +107,7 @@ Generates styled HTML with CSS classes:
 {
   renderingHints: [
     {
-      hintType: 'https://xats.org/vocabularies/hints/pedagogical/key-concept',
+      hintType: 'https://pub.xats.org/vocabularies/hints/pedagogical/key-concept',
       value: 'key-concept'
     }
   ]

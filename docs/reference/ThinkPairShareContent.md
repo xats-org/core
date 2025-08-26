@@ -2,7 +2,7 @@
 
 **Type:** `object`  
 **Introduced in:** v0.5.0  
-**Block Type URI:** `https://xats.org/vocabularies/blocks/thinkPairShare`
+**Block Type URI:** `https://pub.xats.org/vocabularies/blocks/thinkPairShare`
 
 ---
 
@@ -111,7 +111,7 @@ Think-Pair-Share activities are particularly effective for increasing student pa
 
 ```json
 {
-  "blockType": "https://xats.org/vocabularies/blocks/thinkPairShare",
+  "blockType": "https://pub.xats.org/vocabularies/blocks/thinkPairShare",
   "content": {
     "prompt": {
       "runs": [
