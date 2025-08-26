@@ -102,12 +102,12 @@ async function validateSchema(schemaPath, version) {
       errors.push('Schema contains outdated CSL reference URL');
     }
 
-    // Verify CSL reference URL is accessible
-    if (schemaStr.includes('resource.citationstyles.org')) {
+    // Verify CSL reference URL is accessible and properly formatted
+    const expectedCslUrl = 'https://resource.citationstyles.org/schema/v1.0/input/json/csl-data.json';
+    if (schemaStr.includes(expectedCslUrl)) {
       console.log('  Checking CSL reference URL...');
       try {
-        const cslUrl = 'https://resource.citationstyles.org/schema/v1.0/input/json/csl-data.json';
-        await fetchExternalSchema(cslUrl);
+        await fetchExternalSchema(expectedCslUrl);
         console.log('  ✅ CSL reference URL is accessible');
       } catch (e) {
         errors.push(`CSL reference URL is not accessible: ${e.message}`);
