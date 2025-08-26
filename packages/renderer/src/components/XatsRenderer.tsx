@@ -2,7 +2,12 @@
 import DOMPurify from 'dompurify';
 import * as React from 'react';
 
-import { render, type OutputFormat, type RenderOptions } from '../index.js';
+import { HtmlRenderer, type HtmlRendererOptions } from '../renderers/html.js';
+import { MarkdownRenderer, type MarkdownRendererOptions } from '../renderers/markdown.js';
+import { TextRenderer, type TextRendererOptions } from '../renderers/text.js';
+
+type OutputFormat = 'html' | 'markdown' | 'text';
+type RenderOptions = HtmlRendererOptions | MarkdownRendererOptions | TextRendererOptions;
 
 import type { XatsDocument } from '@xats-org/types';
 
@@ -31,7 +36,16 @@ export const XatsRenderer: React.FC<XatsRendererProps> = ({
 }) => {
   const renderedContent = React.useMemo(() => {
     try {
-      return render(document, format, options);
+      switch (format) {
+        case 'html':
+          return new HtmlRenderer(options as HtmlRendererOptions).render(document);
+        case 'markdown':
+          return new MarkdownRenderer(options as MarkdownRendererOptions).render(document);
+        case 'text':
+          return new TextRenderer(options as TextRendererOptions).render(document);
+        default:
+          throw new Error(`Unsupported output format: ${format as string}`);
+      }
     } catch (error) {
       console.error('Error rendering xats document:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';

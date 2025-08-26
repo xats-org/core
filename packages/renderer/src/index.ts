@@ -20,6 +20,9 @@ export {
   type BidirectionalRendererConfig,
 } from './abstract-bidirectional-renderer.js';
 
+// React component - exported separately to avoid circular dependencies
+export { XatsRenderer, type XatsRendererProps } from './components/XatsRenderer.js';
+
 // Re-export types from @xats-org/types for convenience
 export type {
   BidirectionalRenderer,
