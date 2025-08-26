@@ -67,7 +67,15 @@ export function createValidator(): ValidatorInstance {
   );
   ajv.addSchema(
     cslSchema,
+    'https://resource.citationstyles.org/schema/v1.0/input/json/csl-data.json'
+  );
+  ajv.addSchema(
+    cslSchema,
     'https://raw.githubusercontent.com/citation-style-language/schema/master/csl-data.json'
+  );
+  ajv.addSchema(
+    cslSchema,
+    'https://raw.githubusercontent.com/citation-style-language/schema/v1.0/schemas/input/csl-data.json'
   );
 
   // Add LTI extension schema stub to prevent MissingRefError

@@ -23,7 +23,8 @@
     "format": "prettier --write \"src/**/*.{ts,js,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,js,json}\"",
     "typecheck": "tsc --noEmit -p tsconfig.build.json",
-    "clean": "rm -rf dist .tsbuildinfo"
+    "clean": "rm -rf dist .tsbuildinfo",
+    "validate": "node scripts/validate-schemas.cjs"
   },
   "keywords": [
     "xats",
