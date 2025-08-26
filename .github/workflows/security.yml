@@ -36,7 +36,8 @@ jobs:
       
     - name: Setup pnpm
       run: |
-        npm install -g pnpm@10.15.0
+        corepack enable
+        corepack prepare pnpm@10.15.0 --activate
         pnpm --version
         
     - name: Setup Node.js
@@ -135,7 +136,8 @@ jobs:
       
     - name: Setup pnpm
       run: |
-        npm install -g pnpm@10.15.0
+        corepack enable
+        corepack prepare pnpm@10.15.0 --activate
         pnpm --version
         
     - name: Setup Node.js
@@ -166,7 +168,8 @@ jobs:
       
     - name: Setup pnpm
       run: |
-        npm install -g pnpm@10.15.0
+        corepack enable
+        corepack prepare pnpm@10.15.0 --activate
         pnpm --version
         
     - name: Setup Node.js
@@ -197,7 +200,8 @@ jobs:
       
     - name: Setup pnpm
       run: |
-        npm install -g pnpm@10.15.0
+        corepack enable
+        corepack prepare pnpm@10.15.0 --activate
         pnpm --version
         
     - name: Setup Node.js
