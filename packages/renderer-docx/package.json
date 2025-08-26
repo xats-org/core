@@ -1,6 +1,6 @@
 {
   "name": "@xats-org/renderer-docx",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "DOCX bidirectional renderer for xats documents for Microsoft Word workflows",
   "keywords": [
     "xats",

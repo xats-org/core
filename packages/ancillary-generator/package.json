@@ -1,6 +1,6 @@
 {
   "name": "@xats-org/ancillary-generator",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Automated ancillary material generation for xats documents",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

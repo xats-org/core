@@ -1,6 +1,6 @@
 {
   "name": "@xats-org/ai-integration",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "AI Integration Framework for Multi-Agent Textbook Creation",
   "type": "module",
   "main": "./dist/index.js",
