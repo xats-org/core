@@ -39,7 +39,7 @@ describe('Enhanced Rendering Hints v0.5.0 - Basic Tests', () => {
 
     // Add LTI extension schema stub to prevent external reference resolution errors
     const ltiSchema = {
-      $id: 'https://xats.org/extensions/lti-1.3/schema.json',
+      $id: 'https://pub.xats.org/extensions/lti-1.3/schema.json',
       definitions: {
         LtiConfiguration: {
           type: 'object',

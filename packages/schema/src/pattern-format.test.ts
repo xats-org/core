@@ -534,7 +534,8 @@ describe('Pattern and Format Validation', () => {
                   content: [
                     {
                       id: 'block-1',
-                      blockType: 'https://pub.xats.org/vocabularies/placeholders/invalidPlaceholder', // Should match placeholder pattern
+                      blockType:
+                        'https://pub.xats.org/vocabularies/placeholders/invalidPlaceholder', // Should match placeholder pattern
                       content: {
                         placeholder: true,
                       },

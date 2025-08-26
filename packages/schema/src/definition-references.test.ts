@@ -212,7 +212,9 @@ describe('Definition Reference Validation', () => {
     });
 
     it('should validate list content structure', () => {
-      const listContent = getContentBlockContentSchema('https://pub.xats.org/vocabularies/blocks/list');
+      const listContent = getContentBlockContentSchema(
+        'https://pub.xats.org/vocabularies/blocks/list'
+      );
 
       expect(listContent.required).toContain('listType');
       expect(listContent.required).toContain('items');
@@ -221,7 +223,9 @@ describe('Definition Reference Validation', () => {
     });
 
     it('should validate nested list item structure', () => {
-      const listContent = getContentBlockContentSchema('https://pub.xats.org/vocabularies/blocks/list');
+      const listContent = getContentBlockContentSchema(
+        'https://pub.xats.org/vocabularies/blocks/list'
+      );
       const listItemSchema = listContent.properties.items.items;
 
       expect(listItemSchema.required).toContain('text');

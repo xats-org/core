@@ -304,7 +304,9 @@ describe('Schema Structure Validation', () => {
 
     it('should have proper enum constraints', () => {
       // Check list type enum
-      const listBlockContent = getContentBlockSchema('https://pub.xats.org/vocabularies/blocks/list');
+      const listBlockContent = getContentBlockSchema(
+        'https://pub.xats.org/vocabularies/blocks/list'
+      );
       expect(listBlockContent.properties.listType.enum).toEqual(['ordered', 'unordered']);
 
       // Check math notation enum

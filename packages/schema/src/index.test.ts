@@ -153,7 +153,7 @@ describe('Schema Validation Test Suite', () => {
       'https://pub.xats.org/vocabularies/blocks/mathBlock',
       'https://pub.xats.org/vocabularies/blocks/table',
       'https://pub.xats.org/vocabularies/blocks/figure',
-      'https://xats.org/core/placeholders/tableOfContents',
+      'https://pub.xats.org/vocabularies/placeholders/tableOfContents',
       'https://pub.xats.org/vocabularies/placeholders/bibliography',
       'https://pub.xats.org/vocabularies/placeholders/index',
     ];
@@ -163,7 +163,7 @@ describe('Schema Validation Test Suite', () => {
     // Each block type should be a valid URI
     coreBlockTypes.forEach((blockType) => {
       expect(blockType).toMatch(
-        /^https:\/\/xats\.org\/(vocabularies|core)\/(blocks|placeholders)\//
+        /^https:\/\/pub\.xats\.org\/(vocabularies|core)\/(blocks|placeholders)\//
       );
     });
   });
