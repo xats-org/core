@@ -44,6 +44,7 @@ jobs:
       uses: pnpm/action-setup@v4
       with:
         version: 10.15.0
+        run_install: false
         
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -109,6 +110,7 @@ jobs:
       uses: pnpm/action-setup@v4
       with:
         version: 10.15.0
+        run_install: false
         
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -143,6 +145,7 @@ jobs:
       uses: pnpm/action-setup@v4
       with:
         version: 10.15.0
+        run_install: false
         
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -183,6 +186,7 @@ jobs:
       uses: pnpm/action-setup@v4
       with:
         version: 10.15.0
+        run_install: false
         
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
@@ -227,6 +231,7 @@ jobs:
       uses: pnpm/action-setup@v4
       with:
         version: 10.15.0
+        run_install: false
         
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -274,6 +279,7 @@ jobs:
       uses: pnpm/action-setup@v4
       with:
         version: 10.15.0
+        run_install: false
         
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -309,6 +315,7 @@ jobs:
       uses: pnpm/action-setup@v4
       with:
         version: 10.15.0
+        run_install: false
         
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -342,6 +349,7 @@ jobs:
       uses: pnpm/action-setup@v4
       with:
         version: 10.15.0
+        run_install: false
         
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -399,6 +407,7 @@ jobs:
       uses: pnpm/action-setup@v4
       with:
         version: 10.15.0
+        run_install: false
         
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -438,6 +447,7 @@ jobs:
       uses: pnpm/action-setup@v4
       with:
         version: 10.15.0
+        run_install: false
         
     - name: Setup Node.js
       uses: actions/setup-node@v4
