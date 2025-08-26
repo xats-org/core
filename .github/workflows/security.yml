@@ -36,9 +36,7 @@ jobs:
       
     - name: Setup pnpm
       run: |
-        curl -fsSL https://get.pnpm.io/install.sh | sh -
-        echo "$HOME/.local/share/pnpm" >> $GITHUB_PATH
-        export PATH="$HOME/.local/share/pnpm:$PATH"
+        npm install -g pnpm@10.15.0
         pnpm --version
         
     - name: Setup Node.js
@@ -137,9 +135,7 @@ jobs:
       
     - name: Setup pnpm
       run: |
-        curl -fsSL https://get.pnpm.io/install.sh | sh -
-        echo "$HOME/.local/share/pnpm" >> $GITHUB_PATH
-        export PATH="$HOME/.local/share/pnpm:$PATH"
+        npm install -g pnpm@10.15.0
         pnpm --version
         
     - name: Setup Node.js
@@ -170,9 +166,7 @@ jobs:
       
     - name: Setup pnpm
       run: |
-        curl -fsSL https://get.pnpm.io/install.sh | sh -
-        echo "$HOME/.local/share/pnpm" >> $GITHUB_PATH
-        export PATH="$HOME/.local/share/pnpm:$PATH"
+        npm install -g pnpm@10.15.0
         pnpm --version
         
     - name: Setup Node.js
@@ -203,9 +197,7 @@ jobs:
       
     - name: Setup pnpm
       run: |
-        curl -fsSL https://get.pnpm.io/install.sh | sh -
-        echo "$HOME/.local/share/pnpm" >> $GITHUB_PATH
-        export PATH="$HOME/.local/share/pnpm:$PATH"
+        npm install -g pnpm@10.15.0
         pnpm --version
         
     - name: Setup Node.js
