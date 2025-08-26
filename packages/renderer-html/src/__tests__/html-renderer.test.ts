@@ -868,7 +868,10 @@ describe('HtmlRenderer', () => {
     it('should render semantic hints correctly', async () => {
       const hints = [
         { hintType: 'https://pub.xats.org/vocabularies/hints/semantic/warning', value: 'warning' },
-        { hintType: 'https://pub.xats.org/vocabularies/hints/semantic/featured', value: 'featured' },
+        {
+          hintType: 'https://pub.xats.org/vocabularies/hints/semantic/featured',
+          value: 'featured',
+        },
       ];
 
       const result = await renderer.render(createDocumentWithHints(hints), { enhancedHints: true });
@@ -881,7 +884,8 @@ describe('HtmlRenderer', () => {
     it('should render accessibility hints correctly', async () => {
       const hints = [
         {
-          hintType: 'https://pub.xats.org/vocabularies/hints/accessibility/screen-reader-priority-high',
+          hintType:
+            'https://pub.xats.org/vocabularies/hints/accessibility/screen-reader-priority-high',
           value: 'high',
         },
         {
@@ -936,7 +940,8 @@ describe('HtmlRenderer', () => {
     it('should handle conditional hints based on user preferences', async () => {
       const hints = [
         {
-          hintType: 'https://pub.xats.org/vocabularies/hints/accessibility/high-contrast-compatible',
+          hintType:
+            'https://pub.xats.org/vocabularies/hints/accessibility/high-contrast-compatible',
           value: 'high-contrast',
           conditions: { userPreferences: ['high-contrast'] },
         },
