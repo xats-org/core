@@ -596,7 +596,7 @@
       "description": "A single bibliographic entry that must conform to the Citation Style Language (CSL-JSON) schema. The 'id' property is required for in-line linking.",
       "allOf": [
         {
-          "$ref": "https://raw.githubusercontent.com/citation-style-language/schema/master/csl-data.json"
+          "$ref": "https://resource.citationstyles.org/schema/v1.0/input/json/csl-data.json"
         },
         {
           "type": "object",
