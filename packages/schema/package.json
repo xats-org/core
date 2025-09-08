@@ -48,7 +48,7 @@
     "@xats-org/types": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
+    "@types/node": "^20.19.13",
     "@xats-org/vitest-config": "workspace:*",
     "ajv": "^8.12.0",
     "ajv-formats": "^2.1.1",
