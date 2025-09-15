@@ -65,7 +65,7 @@
   "devDependencies": {
     "@types/deep-diff": "^1.0.0",
     "@types/jsdom": "^21.0.0",
-    "@types/node": "^20.11.0",
+    "@types/node": "^20.19.14",
     "@vitest/coverage-v8": "^1.2.0",
     "eslint": "^8.56.0",
     "@xats-org/eslint-config": "workspace:*",
