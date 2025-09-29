@@ -61,11 +61,11 @@
   },
   "devDependencies": {
     "@types/dompurify": "^3.2.0",
-    "@types/node": "^20.11.0",
+    "@types/node": "^20.19.17",
     "@types/react": "^18.2.0",
     "@vitest/coverage-v8": "^1.2.0",
     "@xats-org/eslint-config": "workspace:*",
-    "dompurify": "^3.2.6",
+    "dompurify": "^3.2.7",
     "eslint": "^8.56.0",
     "react": "^18.2.0",
     "typescript": "^5.3.3",
