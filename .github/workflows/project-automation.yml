@@ -19,7 +19,7 @@ jobs:
     if: github.event.action == 'opened'
     steps:
       - name: Auto-label issues
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             // Auto-label new issues based on title/content
@@ -76,7 +76,7 @@ jobs:
     if: github.event.action == 'opened' && github.event.issue && !github.event.issue.milestone
     steps:
       - name: Remind about milestone assignment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const comment = `👋 Thanks for creating this issue!
@@ -100,7 +100,7 @@ jobs:
     if: github.event.pull_request
     steps:
       - name: Check PR requirements
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const pr = context.payload.pull_request;
