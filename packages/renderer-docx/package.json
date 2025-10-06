@@ -52,11 +52,11 @@
     "mammoth": "^1.6.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.0",
+    "@types/node": "^20.19.19",
     "@vitest/coverage-v8": "^1.2.0",
     "eslint": "^8.56.0",
     "@xats-org/eslint-config": "workspace:*",
-    "typescript": "^5.3.3",
+    "typescript": "^5.9.3",
     "vitest": "^1.2.0"
   },
   "engines": {
