@@ -58,7 +58,7 @@
   "dependencies": {
     "@xats-org/types": "workspace:*",
     "@xats-org/utils": "workspace:*",
-    "axe-core": "^4.10.0",
+    "axe-core": "^4.11.1",
     "deep-diff": "^1.0.2",
     "jsdom": "^22.0.0"
   },

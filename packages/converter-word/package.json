@@ -57,11 +57,11 @@
     "docx": "^8.5.0",
     "jszip": "^3.10.1",
     "xml2js": "^0.6.2",
-    "mammoth": "^1.6.0",
-    "lodash": "^4.17.21"
+    "mammoth": "^1.11.0",
+    "lodash": "^4.17.23"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.7",
+    "@types/lodash": "^4.17.23",
     "@types/xml2js": "^0.4.14",
     "@xats-org/eslint-config": "workspace:*",
     "@xats-org/vitest-config": "workspace:*",
