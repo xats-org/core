@@ -63,8 +63,8 @@
     "@types/lodash": "^4.17.7",
     "@xats-org/eslint-config": "workspace:*",
     "@xats-org/vitest-config": "workspace:*",
-    "tsup": "^8.2.4",
-    "typescript": "^5.5.4",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
     "vitest": "^2.0.5"
   },
   "peerDependencies": {
