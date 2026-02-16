@@ -32,7 +32,7 @@
   "dependencies": {
     "@xats-org/schema": "workspace:*",
     "@xats-org/types": "workspace:*",
-    "ajv": "^8.12.0",
+    "ajv": "^8.18.0",
     "ajv-formats": "^2.1.1"
   },
   "devDependencies": {
