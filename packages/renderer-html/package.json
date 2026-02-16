@@ -57,7 +57,7 @@
     "@types/node": "^20.11.0",
     "@vitest/coverage-v8": "^1.2.0",
     "@xats-org/eslint-config": "workspace:*",
-    "axe-core": "^4.10.3",
+    "axe-core": "^4.11.1",
     "dompurify": "^3.2.6",
     "eslint": "^8.56.0",
     "typescript": "^5.3.3",

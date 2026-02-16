@@ -57,10 +57,10 @@
     "latex-parser": "^0.6.2",
     "mathjax": "^3.2.2",
     "bibtex": "^0.9.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.23"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.7",
+    "@types/lodash": "^4.17.23",
     "@xats-org/eslint-config": "workspace:*",
     "@xats-org/vitest-config": "workspace:*",
     "tsup": "^8.2.4",
